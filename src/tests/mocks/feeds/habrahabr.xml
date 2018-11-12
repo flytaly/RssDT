@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"  >
+  <channel>
+    <title>Хабр / Все / Тематические публикации</title>
+    <link>https://habr.com/posts/collective/all/</link>
+    <description><![CDATA[Все публикации из тематических хабов на Хабре]]></description>
+    <language>ru</language>
+    <managingEditor>editor@habr.com</managingEditor>
+    <generator>habr.com</generator>
+    <pubDate>Mon, 12 Nov 2018 17:01:24 GMT</pubDate>
+    <lastBuildDate></lastBuildDate>
+      <image>
+        <link>https://habr.com/</link>
+        <url>https://habr.com/images/logo.png</url>
+        <title>Хабр</title>
+      </image>
+
+          
+    <item>
+        <title><![CDATA[Шаг за шагом: как легализовать заработок в валюте]]></title>
+        <guid isPermaLink="true">https://habr.com/post/428966/</guid>
+        <link>https://habr.com/post/428966/?utm_campaign=428966</link>
+        <description><![CDATA[Каждый, кто был на Хабре больше одного раза, знает о наших сервисах для профессионалов — Мой круг и Фрилансим. Первый помогает найти друг друга потенциальным работодателям и соискателям вакансий, второй — фрилансерам и заказчикам. Часто с помощью этих сервисов иностранный работодатель или заказчик ищет специалистов в России — порядка 30% пользователей Моего Круга и Фрилансим не из нашей страны. И неудивительно — российские айтишники востребованы за рубежом, и гонорары им переводят неплохие, в валюте. А вот как легализовать эти совершенно законно заработанные деньги — не всегда понятно даже тем, от кого профессия требует каждый день решать сложнейшие задачи. 
+Как правильно оформить валютные платежи и какие налоги при этом заплатить — помогают разобраться эксперты банка Точка.
+ <a href="https://habr.com/post/428966/?utm_campaign=428966#habracut">Подробности — под катом</a>]]></description>
+        
+        <pubDate>Mon, 12 Nov 2018 16:11:15 GMT</pubDate>
+        <dc:creator>megapost</dc:creator>
+        <category><![CDATA[Карьера в IT-индустрии]]></category><category><![CDATA[Законодательство в IT]]></category>
+        <category><![CDATA[Точка банк]]></category><category><![CDATA[валютный контроль]]></category><category><![CDATA[Мой круг]]></category><category><![CDATA[Фрилансим]]></category><category><![CDATA[Upwork]]></category>
+    </item>
+
+
+
+
+
+
+  
+
+    <item>
+      <title><![CDATA[[Из песочницы] Как создать чат-бота для ВКонтакте, используя Python, Django и webhook]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429628/</guid>
+      <link>https://habr.com/post/429628/?utm_campaign=429628</link>
+      <description><![CDATA[<h3>Зачем ещё одна статья про создание чат-бота?</h3><br/>
+Возможно я плохо искал, но я не смог найти подробного руководства по созданию бота на python с применением фреймворка Django и подхода webhook, работающего на хостинге от российской компании. В большинстве материалов говориться о применении фреймворка Flask и использования бесплатных хостингов Heroku и PythonAnywhere. Опыт сообщества Хабр меня выручает, поэтому я решил в знак благодарности потратить время на написание данной статьи. Опишу полученный практический опыт, чтобы дать возможность всем кто в этом заинтересован сэкономить время и лучше понять как сделать бота на Python с применением фреймворка Django на своём хостинге, используя подход webhook.<br/>
+ <a href="https://habr.com/post/429628/?utm_campaign=429628#habracut">Читать дальше &rarr;</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 15:35:24 GMT</pubDate>
+      <dc:creator>Maxim_Mezhov</dc:creator>
+      <category><![CDATA[Django]]></category><category><![CDATA[Python]]></category><category><![CDATA[Вконтакте API]]></category><category><![CDATA[Системы обмена сообщениями]]></category>
+      <category>python</category><category>django</category><category>webhook</category><category>чат-бот</category>
+    </item>
+
+
+
+
+
+      <item>
+      <title><![CDATA[Роботы заменили Amazon 20 000 рабочих]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429622/</guid>
+      <link>https://habr.com/post/429622/?utm_campaign=429622</link>
+      <description><![CDATA[<img src="https://habrastorage.org/webt/of/j3/eo/ofj3eo48xpai8dbvsadbr2w3qi0.jpeg"><br>
+<br>
+<p>Подходит пора предрождественских распродаж, самое горячее время года для всех ритейлеров. В прошлом году за один месяц с конца ноября по конец декабря Amazon продал товаров на $40 млрд. Самым «горячим» днем стал Киберпонедельник, с распродажами различных гаджетов. В 2017-м он впервые обошел Черную пятницу и даже Amazon Prime Day, и принес компании около $2,7 млрд (140 млн проданных товаров). В этом году главный интернет-магазин рассчитывает пробить отметку в $3 млрд. Но помогать ему сделать это будут уже не люди.</p><br>
+<p>После <a href="https://habr.com/company/pochtoy/blog/425849/">фиаско</a> с требованиями о повышении зарплаты сотрудников до $15 в час, IT-гигант окончательно решил, что роботы надежнее. Никто не требует повышения их зарплаты, и в профсоюзы они не собираются. Поэтому в этом году, впервые за всю историю Amazon, несмотря на гигантский рост интернет-супермаркета, людей в нем начнет работать меньше…</p> <a href="https://habr.com/post/429622/?utm_campaign=429622#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 14:56:37 GMT</pubDate>
+      <dc:creator>Pochtoycom</dc:creator>
+      <category><![CDATA[Блог компании Pochtoy.com]]></category><category><![CDATA[Будущее здесь]]></category><category><![CDATA[Робототехника]]></category><category><![CDATA[Управление e-commerce]]></category>
+      <category><![CDATA[amazon]]></category><category><![CDATA[склады]]></category><category><![CDATA[роботы]]></category><category><![CDATA[pochtoy]]></category><category><![CDATA[сша]]></category><category><![CDATA[черная пятница]]></category><category><![CDATA[экономия]]></category><category><![CDATA[безос]]></category>
+    </item>
+
+
+
+
+
+
+
+      <item>
+      <title><![CDATA[Электронная игра XO]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429618/</guid>
+      <link>https://habr.com/post/429618/?utm_campaign=429618</link>
+      <description><![CDATA[Приветствую, Хабр!<br>
+<br>
+<img src="https://habrastorage.org/webt/je/io/pw/jeiopwm4fks7fxsapgubgf-ztjk.jpeg"><br>
+<br>
+Как Вы уже догадались по фотографии, речь сегодня пойдет не о классификации коньяка. Я буду делать игру крестики-нолики… Кому интересно – прошу под кат -&gt;<br> <a href="https://habr.com/post/429618/?utm_campaign=429618#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 14:50:15 GMT</pubDate>
+      <dc:creator>the_bat</dc:creator>
+      <category><![CDATA[DIY или Сделай сам]]></category><category><![CDATA[Электроника для начинающих]]></category>
+      <category><![CDATA[электроника игры крестики нолики]]></category>
+    </item>
+
+
+
+
+
+
+
+      <item>
+      <title><![CDATA[Фулстеки — это вечные мидлы. Не идите по этому пути, если не хотите страдать]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429612/</guid>
+      <link>https://habr.com/post/429612/?utm_campaign=429612</link>
+      <description><![CDATA[<p><img src="https://habrastorage.org/webt/yg/f6/bv/ygf6bvlgbebg3rveevm6nuz-zpc.png"></p><br>
+<p>Когда я только начал учиться кодить, я поверил старым мудрым засранцам с их мантрой «язык программирования не важен». У меня появилась идея фикс — быть разработчиком, который может всё. Парнем, который переносит опыт использования одной технологии на другую и возносится над деталями. Но эта затея с треском провалилась.</p> <a href="https://habr.com/post/429612/?utm_campaign=429612#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 13:44:07 GMT</pubDate>
+      <dc:creator>fillpackart</dc:creator>
+      <category><![CDATA[Карьера в IT-индустрии]]></category><category><![CDATA[Управление персоналом]]></category>
+      <category><![CDATA[.net]]></category><category><![CDATA[js]]></category>
+    </item>
+
+
+
+
+
+
+
+  
+
+    <item>
+      <title><![CDATA[[Из песочницы] История о том, как запустить эмулятор Android или сэкономить на процессоре intel]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429610/</guid>
+      <link>https://habr.com/post/429610/?utm_campaign=429610</link>
+      <description><![CDATA[Здравствуйте! Хочу поделиться решением одной проблемы. Как запустить эмулятор на amd-шном процессоре на Windows 10, используя WHPX. <br/>
+ <a href="https://habr.com/post/429610/?utm_campaign=429610#habracut">Читать дальше &rarr;</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 13:39:50 GMT</pubDate>
+      <dc:creator>lim14</dc:creator>
+      <category><![CDATA[Разработка под Android]]></category>
+      <category>adnroid studio</category><category>android</category><category>WHPX</category>
+    </item>
+
+
+
+
+
+      <item>
+      <title><![CDATA[Чертова дюжина для PM: список книг для проджект-менеджеров]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429606/</guid>
+      <link>https://habr.com/post/429606/?utm_campaign=429606</link>
+      <description><![CDATA[Преподаватели Binary District подготовили список книг для будущих студентов курса <a href="https://binarydistrict.com/ru/course/project-management-in-it-intensive/?utm_source=blogs&amp;utm_medium=habrhabr&amp;utm_campaign=13books_for_pm">Project Management in IT</a>: это база, способная сделать из хорошего управленца лучшего. Список настолько хорош, что по крайней мере половину книг можно смело рекомендовать вообще всем, кто хочет стать лучшей версией себя.<br>
+<br>
+<img src="https://habrastorage.org/webt/li/sn/0r/lisn0rpzqqa9didhsmxcqmd_td8.jpeg"><br> <a href="https://habr.com/post/429606/?utm_campaign=429606#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 13:32:26 GMT</pubDate>
+      <dc:creator>dzakhour</dc:creator>
+      <category><![CDATA[Блог компании Binary District]]></category><category><![CDATA[Профессиональная литература]]></category><category><![CDATA[Управление проектами]]></category>
+      <category><![CDATA[binary district]]></category><category><![CDATA[project management]]></category><category><![CDATA[образование]]></category><category><![CDATA[книги]]></category><category><![CDATA[управление проектами]]></category><category><![CDATA[менеджмент]]></category>
+    </item>
+
+
+
+
+
+
+
+      <item>
+      <title><![CDATA[Обзор ноутбука Lenovo S730-13 (2018): мощное железо в стильном алюминиевом корпусе]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429604/</guid>
+      <link>https://habr.com/post/429604/?utm_campaign=429604</link>
+      <description><![CDATA[Привет, Хабр! Lenovo выпустила новую модель линейки Yoga S730. Модификация, о которой мы сегодня расскажем, получила процессор Intel Core i7 восьмого поколения, аккумулятор на 10 часов работы с возможностью зарядить его до 80% за час, сканер отпечатков пальцев и самый тонкий из всей серии ноутбуков Yoga алюминиевый корпус.<br>
+<br>
+<a href="https://habr.com/company/lenovo/blog/429604/"><img src="https://habrastorage.org/getpro/habr/post_images/537/872/9c9/5378729c96a92c24b2f974c3cd6753ae.png"></a><br> <a href="https://habr.com/post/429604/?utm_campaign=429604#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 13:26:33 GMT</pubDate>
+      <dc:creator>rustyn</dc:creator>
+      <category><![CDATA[Блог компании Lenovo]]></category><category><![CDATA[Ноутбуки]]></category>
+      <category><![CDATA[Lenovo]]></category><category><![CDATA[ноутбук]]></category>
+    </item>
+
+
+
+
+
+
+
+  
+
+
+
+    <item>
+      <title><![CDATA[[Перевод] Неожиданная полнота по Тьюрингу повсюду]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429602/</guid>
+      <link>https://habr.com/post/429602/?utm_campaign=429602</link>
+      <description><![CDATA[<i>Каталог программных конструкций, языков и API, которые неожиданно являются полными по Тьюрингу; последствия этого для безопасности и надёжности. Приложение: сколько компьютеров в вашем компьютере?</i> <br>
+<br>
+<blockquote><b>Любая достаточно сложная программа на Си или Фортране содержит заново написанную, неспецифицированную, глючную и медленную реализацию половины языка Common Lisp</b>. — Десятое правило Гринспена</blockquote><br>
+<a href="https://en.wikipedia.org/wiki/Turing_completeness">Полнота по Тьюрингу</a> (Turing-completeness, TC) — это свойство системы при некотором простом представлении ввода и вывода реализовать любую вычислимую функцию.<br>
+<br>
+Тьюринг-полнота — фундаментальное понятие в информатике. Она помогает ответить на многие ключевые вопросы, например, почему невозможно создание идеальной антивирусной программы. Но в то же время она является поразительно <i>распространённым</i> явлением. Казалось бы, компьютерной системе трудно достичь такой универсальности, чтобы выполнять любую программу, но получается наоборот: трудно написать полезную систему, которая немедленно не обратится в полную по Тьюрингу. Оказывается, что даже небольшой контроль над входными данными и преобразованием их в результат, как правило, позволяет создать тьюринг-полную систему. Это может быть забавным, полезным (хотя <a href="https://en.wikipedia.org/wiki/Turing%20tarpit">обычно нет</a>), вредным или чрезвычайно небезопасным и настоящим подарком для хакера (см. о <a href="http://langsec.org/">«теоретико-языковой безопасности»</a>, которая изучает методы взлома «странных машин»<a href="#1"><sup>1</sup></a><a name="1_1"></a>). Удивительные примеры такого поведения напоминают нам о том, что полнота по Тьюрингу таится повсюду, а защитить систему чрезвычайно сложно.<br> <a href="https://habr.com/post/429602/?utm_campaign=429602#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 13:06:09 GMT</pubDate>
+      <dc:creator>m1rko</dc:creator>
+      <category><![CDATA[Информационная безопасность]]></category><category><![CDATA[Искусственный интеллект]]></category><category><![CDATA[Компьютерное железо]]></category><category><![CDATA[Настольные компьютеры]]></category><category><![CDATA[Процессоры]]></category>
+      <category>вычислительная сложность</category><category>полнота по Тьюрингу</category><category>тьюринг-полные системы</category><category>делегация доверия</category><category>ИИ</category><category>странные машины</category><category>FRACTRAN</category><category>теория алгоритмов</category>
+    </item>
+
+
+
+  
+
+    <item>
+      <title><![CDATA[[Из песочницы] Блеск и нищета 1С для интернет-магазина. Блеск золота для франчайзи и нищета функционала для пользователя]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429600/</guid>
+      <link>https://habr.com/post/429600/?utm_campaign=429600</link>
+      <description><![CDATA[<p>TL;DR или ВКРАТЦЕ: Статья рассказывает о том, что ожидать от использования системы 1С для интернет-магазина. Все знакомы с картинкой-мемом «ожидание-реальность». Автор работает в давно функционирующем интернет-магазине без единой товаро-учетной системы (эксель, макросы и прочий хардкор). Автор поэтому имеет представление нормальной схемы работы интернет-торговли и хорошо сформированное «ожидание» от внедрения нового ПО, а в статье рассказывается как неприглядна «реальность» при внедрении 1С даже для небольшого интернет-магазина.</p> <a href="https://habr.com/post/429600/?utm_campaign=429600#habracut">Читать дальше &rarr;</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:41:27 GMT</pubDate>
+      <dc:creator>copenhagen72</dc:creator>
+      <category><![CDATA[1С-Битрикс]]></category><category><![CDATA[Управление e-commerce]]></category>
+      <category>1с интернет-магазин</category><category>битрикс</category><category>1с предприятие</category><category>управление торговлей</category>
+    </item>
+
+
+
+
+
+      <item>
+      <title><![CDATA[RFID UHF инвентаризация. Как найти все метки?]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429598/</guid>
+      <link>https://habr.com/post/429598/?utm_campaign=429598</link>
+      <description><![CDATA[В данной статье я не буду вдаваться в описания RFID технологии, есть множество ресурсов посвященных этой теме. Я затрону только один нюанс настройки, и алгоритм управления RFID сканером, которым никто не замечает, но который позволяет добиться феноменальной точности и полноты считывания меток в стационарном формате. Когда есть какой-то закрытый объем и в нем необходимо постоянно и точно мониторить все присутствующие метки, их появление и исчезновение. <br>
+<br>
+<img src="https://habrastorage.org/getpro/habr/post_images/bcc/2dd/a6f/bcc2dda6fd823eef265be94abf534c9e.jpg" alt="image"><br> <a href="https://habr.com/post/429598/?utm_campaign=429598#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:30:22 GMT</pubDate>
+      <dc:creator>Migrator</dc:creator>
+      <category><![CDATA[Беспроводные технологии]]></category>
+      <category><![CDATA[RFID UHF]]></category><category><![CDATA[радиочастотная идентификация]]></category><category><![CDATA[EPC Gen2]]></category>
+    </item>
+
+
+
+
+
+
+
+  
+
+
+
+    <item>
+      <title><![CDATA[[Перевод] Что требуется сделать в языке Java для полноценной поддержки машинного обучения]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429596/</guid>
+      <link>https://habr.com/post/429596/?utm_campaign=429596</link>
+      <description><![CDATA[Здравствуйте, коллеги!<br>
+<br>
+Из последних известий по нашим планируемым новинкам из области ML/DL:<br>
+<br>
+Нишант Шакла, "<a href="https://www.amazon.com/Machine-Learning-TensorFlow-Nishant-Shukla/dp/1617293873/">Машинное обучение с Tensorflow</a>" — книга в верстке, ожидается в магазинах в январе<br>
+<br>
+Делип Рао, Брайан Макмахан, "<a href="https://www.amazon.com/Natural-Language-Processing-PyTorch-Applications/dp/1491978236/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1542023024&amp;sr=1-1&amp;keywords=Pytorch">Обработка естественного языка на PyTorch</a>" — контракт подписан, планируем приступать к переводу в январе.<br>
+<br>
+В данном контексте мы хотели в очередной раз вернуться к болезненной теме — слабой проработке темы ML/DL в языке Java. Из-за явной незрелости этих решений и алгоритмов на языке Java мы когда-то приняли решение отказаться от <a href="https://www.amazon.com/Deep-Learning-Practitioners-Josh-Patterson-ebook/dp/B074D5YF1D/">книги</a> Гибсона и Паттерсона по DL4J, и публикуемая сегодня статья Хамфри Шейла (Humphrey Sheil) подсказывает, что мы, вероятно, были правы. Предлагаем познакомиться с мыслями автора о том, каким образом язык Java мог бы наконец составить конкуренцию Python в машинном обучении<br> <a href="https://habr.com/post/429596/?utm_campaign=429596#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:16:33 GMT</pubDate>
+      <dc:creator>ph_piter</dc:creator>
+      <category><![CDATA[Блог компании Издательский дом «Питер»]]></category><category><![CDATA[Java]]></category><category><![CDATA[Python]]></category><category><![CDATA[Машинное обучение]]></category><category><![CDATA[Профессиональная литература]]></category>
+      <category>Java</category><category>Python</category><category>PyTorch</category><category>Tensorflow</category><category>машинное обучение</category><category>CNN</category><category>нейронные сети</category>
+    </item>
+
+
+
+      <item>
+      <title><![CDATA[Как банковские карты влияют на экономику и почему биток не взлетит]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429592/</guid>
+      <link>https://habr.com/post/429592/?utm_campaign=429592</link>
+      <description><![CDATA[<img src="https://habrastorage.org/webt/jv/sh/9w/jvsh9wuv8hy2uevybphouxvroni.png"><br>
+<br>
+На хабре есть скромный юзер <a href="https://habr.com/users/tc40/" class="user_link">TC40</a>, пишущий про реалии эквайринга в России и молчащий о том, что у него вышла книга по электронным платежам, которую я увидел в книжном и не без интереса прочитал. Как я понимаю, это первый учебник в России по электронным платежам. Что бы сэкономить вам время вынесу главное, что понял из книжки. Может и автор подтянется в комментарии.<br>
+<br>
+Больше всего интерес представляют впервые открыто опубликованные внутренние правила платежных систем Visa и Mastercard. Не смотря на то, что формально во всех странах правила одинаковы, в реальности они различаются на западе и в России в маленьких, но принципиальных деталях.<br> <a href="https://habr.com/post/429592/?utm_campaign=429592#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:09:22 GMT</pubDate>
+      <dc:creator>sergeykalenik</dc:creator>
+      <category><![CDATA[Биллинговые системы]]></category><category><![CDATA[Платежные системы]]></category><category><![CDATA[Разработка под e-commerce]]></category>
+      <category><![CDATA[платёжные системы]]></category><category><![CDATA[банковские карты]]></category><category><![CDATA[эквайринг]]></category><category><![CDATA[кредитные карты]]></category><category><![CDATA[visa]]></category><category><![CDATA[mastercard]]></category><category><![CDATA[история]]></category><category><![CDATA[переводы]]></category><category><![CDATA[тразакции]]></category><category><![CDATA[acquiring]]></category>
+    </item>
+
+
+
+
+
+
+
+  
+
+    <item>
+      <title><![CDATA[[Из песочницы] Речевая аналитика для колл-центров на основе SOLR]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429590/</guid>
+      <link>https://habr.com/post/429590/?utm_campaign=429590</link>
+      <description><![CDATA[Хочу рассказать о нашем опыте разработки приложений на основе платформы полнотекстового поиска Apache Solr.<br>
+<br>
+Перед нами стояла задача разработать систему речевой аналитики для контактных центров. В основе системы две базовых технологии: распознавание речи и индексированный поиск. Для распознавания мы использовали свои движки, а для индексации и поиска выбрали Solr.<br>
+<br>
+Почему именно Solr? Собственных сравнительных исследований движков индексированного поиска мы не проводили, но внимательно ознакомились с <a href="https://www.google.ru/search?q=%D1%81%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5+Solr+%D1%81+Elasticsearch&amp;oq=%D1%81%D1%80%D0%B0%D0%B2%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5+Solr+%D1%81++Elasticsearch&amp;aqs=chrome..69i57.6796j0j7&amp;sourceid=chrome&amp;ie=UTF-8">мнением коллег</a>. Конечно, выбор мог состояться и в пользу Elasticsearch или Sphinx, но, видимо, звезды в нашем проекте сложились в пользу Solr, его мы и “пилили”. Уже по ходу проекта мы определили, что имеющихся в Solr настроек достаточно для конфигурирования под наши задачи.<br> <a href="https://habr.com/post/429590/?utm_campaign=429590#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:00:22 GMT</pubDate>
+      <dc:creator>wozeraft</dc:creator>
+      <category><![CDATA[Блог компании Центр речевых технологий (ЦРТ)]]></category><category><![CDATA[Поисковые технологии]]></category>
+      <category>solr</category>
+    </item>
+
+
+
+
+
+  
+
+
+
+    <item>
+      <title><![CDATA[[Перевод] Как на телефонах работает система Night Sight от Google и почему она так хорошо справляется]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429370/</guid>
+      <link>https://habr.com/post/429370/?utm_campaign=429370</link>
+      <description><![CDATA[<div style="text-align:center;"><img src="https://habrastorage.org/getpro/habr/post_images/19d/dc4/57d/19ddc457d8f1d64075791cf016e8b0a0.jpg"></div><br>
+Вас можно простить за то, что после прочтения всех хвалебных отзывов по поводу новой возможности ночной фотографии от Google, Night Sight, вы решите, что компания только что изобрела цветную плёнку. Режимы ночной съёмки появились не вчера, и многим из технологий, на которых они основаны, уже много лет. Но в Google проделали удивительную работу по комбинированию навыков вычислительной фотографии с беспрецедентными способностями в области машинного обучения, чтобы раздвинуть границы возможностей за пределы всего, что мы видели ранее. Давайте рассмотрим историю технологии получения фотографий при низком освещении при помощи нескольких, сделанных подряд снимков, подумаем, как она используется в Google, и предположим, какой вклад в неё вносит ИИ.<br> <a href="https://habr.com/post/429370/?utm_campaign=429370#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 12:00:01 GMT</pubDate>
+      <dc:creator>SLY_G</dc:creator>
+      <category><![CDATA[Обработка изображений]]></category><category><![CDATA[Смартфоны]]></category><category><![CDATA[Фототехника]]></category>
+      <category>Night Sight</category><category>Google</category><category>фотосъёмка</category><category>ночное видение</category>
+    </item>
+
+
+
+      <item>
+      <title><![CDATA[Как определить наилучшее время для сделки на бирже]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429586/</guid>
+      <link>https://habr.com/post/429586/?utm_campaign=429586</link>
+      <description><![CDATA[<a href="https://habr.com/company/iticapital/blog/429586/"><img src="https://habrastorage.org/webt/sr/qh/lm/srqhlmxilu-lamkaq_8pg2hqrws.png"></a><br>
+<br>
+Понять, когда именно стоит покупать, а когда продавать акции на бирже – самая важная задача любого инвестора. От правильного выбора времени зависит как сам факт наличия прибыли, так и ее размер. <br>
+<br>
+Тренд последних лет – появление автоматизированных инструментов, которые помогают поймать такой момент на основе анализа Big Data и машинного обучения. Мы в ITI Capital также разработали такой продукт под названием <a href="https://hello.iticapital.ru/">ITI Global</a>, и в сегодняшнем материале расскажем о том, какие данные анализируют подобные системы. <a href="https://habr.com/post/429586/?utm_campaign=429586#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 11:53:50 GMT</pubDate>
+      <dc:creator>itinvest</dc:creator>
+      <category><![CDATA[Блог компании ITI Capital]]></category><category><![CDATA[Финансы в IT]]></category>
+      <category><![CDATA[финансы]]></category><category><![CDATA[биржа]]></category><category><![CDATA[торговые системы]]></category><category><![CDATA[машинное обучение]]></category><category><![CDATA[big data]]></category>
+    </item>
+
+
+
+
+
+
+
+  
+
+	<item>
+		<title><![CDATA[«Яндекс» запустил рейтинг российских сайтов: аудиторию вычисляет математическая модель на машинном обучении]]></title>
+    <guid isPermaLink="true">https://habr.com/post/429584/</guid>
+		<link>https://habr.com/post/429584/?utm_campaign=429584</link>
+		<description><![CDATA[<img src="https://habrastorage.org/webt/5m/gn/aw/5mgnawkrqfcqjrpjtix9wjau704.png"><br>
+<br>
+После нескольких месяцев бета-тестирования сегодня компания «Яндекс» официально запустила <a href="https://radar.yandex.ru/">«Топ интернет-проектов в России»</a> — список 10 000 наиболее популярных ресурсов у российских пользователей. Все сайты распределены по тематическим категориям. Например, «Хабрахабр» определили в категории «Сообщества» (21 место) и «Техника и технологии» (19 место).<br>
+<br>
+Для каждого ресурса указана недельная аудитория. Для проектов, которые передают данные Метрики и AppMetrica, точное количество посетителей за месяц, дневная аудитория, среднее время, которое посетители провели на сайте и в приложении, и доля пользователей мобильного приложения (если передаются данные AppMetrica). Кроме того, для них поддерживается следующая сегментация:<br>
+<br>
+<ul>
+<li>по регионам;</li>
+<li>типам устройств;</li>
+<li>доходу пользователей;</li>
+<li>возрасту;</li>
+<li>полу.</li>
+</ul> <a href="https://habr.com/post/429584/#habracut">Читать дальше →</a>]]></description>
+		
+		<pubDate>Mon, 12 Nov 2018 11:42:31 GMT</pubDate>
+    <dc:creator>alizar</dc:creator>
+		<category><![CDATA[Машинное обучение]]></category><category><![CDATA[Медийная реклама]]></category><category><![CDATA[Управление медиа]]></category>
+		<category><![CDATA[Яндекс-Браузер]]></category><category><![CDATA[Крипта]]></category><category><![CDATA[топ сайтов]]></category>
+	</item>
+
+
+
+
+
+  
+
+    <item>
+      <title><![CDATA[[Из песочницы] Аналоговый индикатор загруженности компьютера]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429582/</guid>
+      <link>https://habr.com/post/429582/?utm_campaign=429582</link>
+      <description><![CDATA[<p>Встретил я как-то пост от <a href="https://habr.com/users/clusterm/" class="user_link">ClusterM</a> где он сделал виджет в виде старых индикаторов. Мне эта идея безумно понравилась так как есть приятное чувство винтажа в этом проекте. Но вот незадача — я никогда не работал с самим микроконтроллером и программирую я так себе, поэтому идею долго откладывал. Но недавно я натолкнулся на <a href="https://www.youtube.com/watch?v=hCPOQI-eFYs">видео</a> где Алекс доработал с помощью знакомых Open source программу и разработал алгоритм обработки данных со стороны Ардуино. В этой статье я хочу показать как я реализовал эту задачу.</p> <a href="https://habr.com/post/429582/?utm_campaign=429582#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 11:40:36 GMT</pubDate>
+      <dc:creator>gingertorrent</dc:creator>
+      <category><![CDATA[Программирование]]></category><category><![CDATA[Программирование микроконтроллеров]]></category>
+      <category>arduino uno</category><category>c#</category><category>gadget</category><category>индикатор</category><category>ШИМ</category><category>загруженность</category><category>пайка</category><category>транзистор</category>
+    </item>
+
+
+
+
+
+      <item>
+      <title><![CDATA[Микроинтеракции в iOS. Лекция Яндекса]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429580/</guid>
+      <link>https://habr.com/post/429580/?utm_campaign=429580</link>
+      <description><![CDATA[Несколько недель назад в офисе Яндекса прошло специальное мероприятие сообщества CocoaHeads — более масштабное, чем традиционные митапы. Разработчик Антон Сергеев выступил на этой встрече и рассказал о модели микроинтеракций, которой обычно пользуются UX-дизайнеры, а также о том, как применить заложенные в ней идеи на практике. Больше всего внимания Антон уделил анимации.<br>
+<br>
+<div class="oembed"><div><div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.2493%;"><iframe src="https://www.youtube.com/embed/JoVBQCwX8ys?rel=0&amp;showinfo=1&amp;hl=en-US" style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;" allowfullscreen scrolling="no"></iframe></div></div></div><br>
+— Для меня очень важно, что именно мне выпала честь встречать гостей. Я вижу здесь тех, с кем я знаком очень давно, тех, с кем знаком совсем недавно, и тех, с кем еще не знаком. Добро пожаловать на CocoaHeads. <a href="https://habr.com/post/429580/?utm_campaign=429580#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 11:28:39 GMT</pubDate>
+      <dc:creator>Leono</dc:creator>
+      <category><![CDATA[Блог компании Яндекс]]></category><category><![CDATA[Промышленное программирование]]></category><category><![CDATA[Разработка мобильных приложений]]></category><category><![CDATA[Разработка под iOS]]></category>
+      <category><![CDATA[uikit]]></category><category><![CDATA[uiview]]></category><category><![CDATA[calayer]]></category><category><![CDATA[ios]]></category><category><![CDATA[ios разработка]]></category>
+    </item>
+
+
+
+
+
+
+
+      <item>
+      <title><![CDATA[Какие ошибки прячутся в коде Infer.NET?]]></title>
+      <guid isPermaLink="true">https://habr.com/post/429578/</guid>
+      <link>https://habr.com/post/429578/?utm_campaign=429578</link>
+      <description><![CDATA[<p></p><div style="text-align:center;"><img src="https://habrastorage.org/getpro/habr/post_images/d3f/18a/6a6/d3f18a6a6127aceeae10d53591e0ce65.png"></div><br>
+Публикация корпорацией Microsoft исходников своих проектов является вполне хорошим поводом для их проверки. Этот раз исключением не стал, и сегодня мы посмотрим на подозрительные места, найденные в коде Infer.NET. Долой аннотацию – ближе к делу!<br> <a href="https://habr.com/post/429578/?utm_campaign=429578#habracut">Читать дальше →</a>]]></description>
+      
+      <pubDate>Mon, 12 Nov 2018 11:21:35 GMT</pubDate>
+      <dc:creator>foto_shooter</dc:creator>
+      <category><![CDATA[Блог компании PVS-Studio]]></category><category><![CDATA[.NET]]></category><category><![CDATA[C#]]></category><category><![CDATA[Машинное обучение]]></category><category><![CDATA[Программирование]]></category>
+      <category><![CDATA[статический анализ кода]]></category><category><![CDATA[PVS-Studio]]></category><category><![CDATA[static code analysis]]></category><category><![CDATA[open source]]></category><category><![CDATA[C#]]></category><category><![CDATA[.Net]]></category><category><![CDATA[Infer.NET]]></category><category><![CDATA[машинное обучение]]></category><category><![CDATA[machine learning]]></category><category><![CDATA[microsoft]]></category>
+    </item>
+
+
+
+
+
+
+
+
+
+
+
+  </channel>
+</rss>
