@@ -1,0 +1,887 @@
+<?xml version="1.0"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:nyt="http://www.nytimes.com/namespaces/rss/2.0" version="2.0">
+  <channel>
+    <title>NYT &gt; World</title>
+    <link>https://www.nytimes.com/pages/world/index.html?partner=rss&amp;emc=rss</link>
+    <atom:link rel="self" type="application/rss+xml" href="http://www.nytimes.com/services/xml/rss/nyt/World.xml"/>
+    <description/>
+    <language>en-us</language>
+    <copyright>Copyright 2018  The New York Times Company</copyright>
+    <lastBuildDate>Mon, 12 Nov 2018 18:55:27 GMT </lastBuildDate>
+    <image>
+      <title>NYT &gt; World</title>
+      <url>https://static01.nyt.com/images/misc/NYT_logo_rss_250x40.png</url>
+      <link>https://www.nytimes.com/pages/world/index.html?partner=rss&amp;emc=rss</link>
+    </image>
+    <item>
+      <title>In China, Desperate Patients Smuggle Drugs. Or Make Their Own.</title>
+      <link>https://www.nytimes.com/2018/11/11/business/china-drugs-smuggled-homemade.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/business/china-drugs-smuggled-homemade.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/business/china-drugs-smuggled-homemade.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/02/business/00chinadrugs-4/00chinadrugs-4-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Zhang Zhejun, a salesmen in Hebei, China, made his own drugs from ingredients purchased online to give to his mother, who suffered from lung cancer.</media:description>
+      <media:credit>Jonah M. Kessel</media:credit>
+      <description>Despite health insurance, terminally ill patients have to hunt around the world and on the internet for ways to stay alive.</description>
+      <dc:creator>SUI-LEE WEE</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 19:02:06 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Smuggling</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Drugs (Pharmaceuticals)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Health Insurance and Managed Care</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+    </item>
+    <item>
+      <title>Taliban Slaughter Elite Afghan Troops, and a &#x2018;Safe&#x2019; District Is Falling</title>
+      <link>https://www.nytimes.com/2018/11/12/world/asia/afghanistan-taliban-attack-jaghori-district.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/asia/afghanistan-taliban-attack-jaghori-district.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/12/world/asia/afghanistan-taliban-attack-jaghori-district.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12Afghanistan1/12Afghanistan1-moth-v3.jpg" medium="image" height="151" width="151"/>
+      <media:description>The bodies of 20 commandos were lined up outside the governor&#x2019;s office in Sang-e-Masha, Afghanistan, on Sunday. Their company was almost entirely destroyed fighting the Taliban.</media:description>
+      <media:credit>Jim Huylebroek for The New York Times</media:credit>
+      <description>Times journalists traveled to the site of a Taliban assault. Instead of a fierce stand by government commandos, they found a massacre of those American-trained troops.</description>
+      <dc:creator>ROD NORDLAND</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 18:27:40 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Afghanistan War (2001- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Hazaras (Ethnic Group)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Deaths (Fatalities)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Taliban</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Afghanistan</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Ghazni Province (Afghanistan)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Jaghori District</category>
+    </item>
+    <item>
+      <title>Saudis Close to Crown Prince Discussed Killing Other Enemies a Year Before Khashoggi&#x2019;s Death</title>
+      <link>https://www.nytimes.com/2018/11/11/world/middleeast/saudi-iran-assassinations-mohammed-bin-salman.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/middleeast/saudi-iran-assassinations-mohammed-bin-salman.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/world/middleeast/saudi-iran-assassinations-mohammed-bin-salman.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/us/politics/12dc-assassinate-p1/10dc-assassinate1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Top Saudi officials considered using private companies to assassinate political enemies at a time when Crown Prince Mohammed bin Salman was consolidating power.</media:description>
+      <media:credit>Giuseppe Cacace/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>During discussions in Riyadh in 2017, Saudi intelligence officials discussed hiring private companies to kill the head of Iran&#x2019;s Quds force and other Iranian operatives.</description>
+      <dc:creator>MARK MAZZETTI, RONEN BERGMAN and DAVID D. KIRKPATRICK</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 02:09:18 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Saudi Arabia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Assassinations and Attempted Assassinations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Mohammed bin Salman (1985- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Espionage and Intelligence Services</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Assiri, Ahmed al-</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Zamel, Joel</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Nader, George A (1959- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Khashoggi, Jamal</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Suleimani, Qassim</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Iran</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Defense and Military Forces</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Sabotage (Crime)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Islamic Revolutionary Guards Corps</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Prince, Erik D</category>
+    </item>
+    <item>
+      <title>Trump&#x2019;s Nationalism, Rebuked at World War I Ceremony, Is Reshaping Much of Europe</title>
+      <link>https://www.nytimes.com/2018/11/11/us/politics/macron-trump-paris-wwi.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/us/politics/macron-trump-paris-wwi.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/us/politics/macron-trump-paris-wwi.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12armistice1-sub/12armistice1-sub-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Trump arriving at Suresnes American Cemetery outside Paris on Sunday as part of the commemoration the 100th anniversary of the end of World War I.</media:description>
+      <media:credit>Tom Brenner for The New York Times</media:credit>
+      <description>As world leaders marked the 100th anniversary of the Great War&#x2019;s end, President Emmanuel Macron of France declared that &#x201C;nationalism is a betrayal of patriotism.&#x201D;</description>
+      <dc:creator>PETER BAKER and ALISSA J. RUBIN</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 13:27:11 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">United States International Relations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Macron, Emmanuel (1977- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trump, Donald J</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">United States Politics and Government</category>
+    </item>
+    <item>
+      <title>Deadly Gaza Raid by Israel Threatens Nascent Cease-Fire</title>
+      <link>https://www.nytimes.com/2018/11/11/world/middleeast/israel-gaza-raid.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/middleeast/israel-gaza-raid.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/middleeast/israel-gaza-raid.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12Gaza-sub/12Gaza-sub-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A destroyed building on Monday in Khan Yunis, in southern Gaza, after an Israeli airstrike over the weekend.</media:description>
+      <media:credit>Said Khatib/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>A covert mission apparently went awry on Sunday, leaving an Israeli lieutenant colonel and at least seven Palestinians dead and setting off a flurry of rocket fire and airstrikes.</description>
+      <dc:creator>DAVID M. HALBFINGER</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 07:17:30 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gaza Strip</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Israel</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Deaths (Fatalities)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Hamas</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Palestinians</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Khan Younis (Gaza Strip)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Defense and Military Forces</category>
+    </item>
+    <item>
+      <title>In North Korea, Missile Bases Suggest a Great Deception</title>
+      <link>https://www.nytimes.com/2018/11/12/us/politics/north-korea-missile-bases.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/us/politics/north-korea-missile-bases.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/us/politics/north-korea-missile-bases.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/us/politics/11dc-XNUKES-01/11dc-XNUKES-01-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A satellite image of a secret North Korean ballistic missile base. The North has offered to dismantle a different major missile launching site while continuing to make improvements at more than a dozen others.</media:description>
+      <media:credit>CSIS/Beyond Parallel, via DigitalGlobe 2018</media:credit>
+      <description>President Trump says the nuclear threat from North Korea is over. New satellite images of 16 hidden ballistic missile bases suggest that it has worsened since his summit meeting.</description>
+      <dc:creator>DAVID E. SANGER and WILLIAM J. BROAD</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 11:16:34 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">North Korea</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Missiles and Missile Defense Systems</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Nuclear Weapons</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Center for Strategic and International Studies</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">United States International Relations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Bermudez, Joseph S Jr</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Cha, Victor D</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Kim Jong-un</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trump, Donald J</category>
+    </item>
+    <item>
+      <title>APEC Host Country Has Few Good Roads, but It Has Maseratis</title>
+      <link>https://www.nytimes.com/2018/11/12/world/asia/papua-new-guinea-apec-conference.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/asia/papua-new-guinea-apec-conference.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/12/world/asia/papua-new-guinea-apec-conference.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/13papua-1/13papua-1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A banner for the Asia-Pacific Economic Cooperation summit meeting being held this week in Port Moresby, Papua New Guinea. The country is by far the poorest of APEC&#x2019;s 21 member economies.</media:description>
+      <media:credit>Mast Irham/EPA, via Shutterstock</media:credit>
+      <description>The Pacific nation of Papua New Guinea is in the global spotlight as world leaders gather for the annual Asia-Pacific Economic Cooperation summit meeting.</description>
+      <dc:creator>RICHARD C. PADDOCK</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 18:51:05 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Asia-Pacific Economic Cooperation</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Papua New Guinea</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Corruption (Institutional)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">O'Neill, Peter</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">International Trade and World Market</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Xi Jinping</category>
+    </item>
+    <item>
+      <title>Australian Woman Accused of Spiking Strawberries With Needles</title>
+      <link>https://www.nytimes.com/2018/11/11/world/australia/strawberries-needles-woman-arrested.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/australia/strawberries-needles-woman-arrested.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/world/australia/strawberries-needles-woman-arrested.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/130z-strawberry2/130z-strawberry2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>The strawberry contamination scare led Australian supermarkets to post warning notices like the one above in the town of Mudgee in September. Some markets stopped stocking the fruit entirely.</media:description>
+      <media:credit>David Gray/Reuters</media:credit>
+      <description>The tampering fueled a nationwide panic that severely hurt the industry, prompted copycat incidents and led some stores to stop stocking the fruit.</description>
+      <dc:creator>ISABELLA KWAI</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 07:49:49 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Strawberries</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Food Contamination and Poisoning</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Australia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Queensland (Australia)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Agriculture and Farming</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Brisbane (Australia)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Fruit</category>
+    </item>
+    <item>
+      <title>France&#x2019;s Mayors, Feeling the Pinch, Lead a Quiet Rebellion and Quit</title>
+      <link>https://www.nytimes.com/2018/11/11/world/europe/france-mayors-quit-macron.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/europe/france-mayors-quit-macron.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/europe/france-mayors-quit-macron.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/25Mayors2/25Mayors2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>&#x201C;What&#x2019;s the use of giving it your all, when the results just don&#x2019;t come anymore,&#x201D; said Louis Gentilhomme, the ex-mayor of Saint-Seine-sur-Vingeanne, who quit earlier this year.</media:description>
+      <media:credit>Pierre Terdjman for The New York Times</media:credit>
+      <description>More than 150 rural mayors have left this year, saying they feel abandoned by the state in the face of shrinking revenues, declining populations and reforms initiated by President Emmanuel Macron.</description>
+      <dc:creator>ADAM NOSSITER</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 23:01:36 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Mayors</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Taxation</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Macron, Emmanuel (1977- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Burgundy (France)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Legislatures and Parliaments</category>
+    </item>
+    <item>
+      <title>Merkel Antagonist Quits Party Post but Stays On as Interior Minister</title>
+      <link>https://www.nytimes.com/2018/11/12/world/europe/seehofer-merkel-germany-conservatives.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/europe/seehofer-merkel-germany-conservatives.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/world/europe/seehofer-merkel-germany-conservatives.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/13Germany/13Germany-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Horst Seehofer, the German interior minister, in Bautzen, Germany, on Monday. Mr. Seehofer will step down from his post as chairman of the conservative Christian Social Union party in January.</media:description>
+      <media:credit>Filip Singer/EPA, via Shutterstock</media:credit>
+      <description>Horst Seehofer&#x2019;s announcement that he would step down as head of his Bavarian conservative party comes after a similar decision by Chancellor Angela Merkel.</description>
+      <dc:creator>CHRISTOPHER F. SCHUETZE</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 18:15:56 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Merkel, Angela</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Maassen, Hans-Georg</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Seehofer, Horst</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Berlin (Germany)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Bavaria (Germany)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Legislatures and Parliaments</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Refugees and Displaced Persons</category>
+    </item>
+    <item>
+      <title>Rockets Are Fired From Gaza Into Israel After Killing of Palestinian Fighters</title>
+      <link>https://www.nytimes.com/2018/11/12/world/middleeast/israel-gaza-rocket-fire.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/middleeast/israel-gaza-rocket-fire.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/world/middleeast/israel-gaza-rocket-fire.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/13Gaza1/13Gaza1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A bus burns in Israel on Monday after it was hit in a rocket and mortar attack from the Gaza Strip.</media:description>
+      <media:credit>Tsafrir Abayov/Associated Press</media:credit>
+      <description>A covert operation that apparently went awry on Sunday has been followed by retaliatory escalation, with rocket launches from Gaza and airstrikes from Israel.</description>
+      <dc:creator>DAVID M. HALBFINGER</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 17:10:41 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Palestinians</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gaza Strip</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Defense and Military Forces</category>
+    </item>
+    <item>
+      <title>Stimulus Plan or Populist Giveaway? Italy&#x2019;s Budget Sets Up Clash With E.U.</title>
+      <link>https://www.nytimes.com/2018/11/12/world/europe/italy-budget-european-union.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/europe/italy-budget-european-union.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/world/europe/italy-budget-european-union.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/xxitaly-budget1-sub/xxitaly-budget1-sub-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A market in Naples, Italy. The anti-establishment Five Star Movement is looking to rally support in the relatively poor south of the country with a welfare program estimated to cost around $9 billion.</media:description>
+      <media:credit>Gianni Cipriano for The New York Times</media:credit>
+      <description>How best to invigorate the country&#x2019;s economy has reanimated a wrenching debate in Europe about whether it is better to spend or cut in the face of stagnation.</description>
+      <dc:creator>JASON HOROWITZ</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 15:03:45 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">European Sovereign Debt Crisis (2010- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Budgets and Budgeting</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">European Union</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Five Star Movement (Italy)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Di Maio, Luigi</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Salvini, Matteo</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Italy</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">League (Italian Political Party)</category>
+    </item>
+    <item>
+      <title>China, After Outcry, Reinstates Ban on Rhino and Tiger Parts in Medicine</title>
+      <link>https://www.nytimes.com/2018/11/12/world/asia/china-rhino-tiger-ban.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/asia/china-rhino-tiger-ban.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/world/asia/china-rhino-tiger-ban.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/13CHina-Rhino2/13CHina-Rhino2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A market for traditional medicine ingredients in Guangzhou, China. While doctors generally prefer herbal remedies, there is a small but lucrative trade in rhino and tiger parts.</media:description>
+      <media:credit>Fred Dufour/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The State Council said in a rare concession that it had decided to postpone an order to undo a 25-year prohibition on the trade.</description>
+      <dc:creator>JAVIER C. HERN&#xC1;NDEZ</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 14:48:57 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Tigers</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Rhinoceroses</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Poaching (Wildlife)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Environment</category>
+    </item>
+    <item>
+      <title>U.S. Navy Carrier Suffers Second Aircraft Crash in Weeks</title>
+      <link>https://www.nytimes.com/2018/11/12/world/asia/fa18-hornet-crash-philippines.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/12/world/asia/fa18-hornet-crash-philippines.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/12/world/asia/fa18-hornet-crash-philippines.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/13/world/13crash/13crash-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Two aircraft assigned to the U.S.S. Ronald Reagan have crashed in recent months, including an F/A 18 Hornet on Monday.</media:description>
+      <media:credit>Mass Communication Specialist 2nd Class Kaila V. Peters/United States Navy, via Associated Press</media:credit>
+      <description>An F/A-18 Super Hornet, assigned to the U.S.S. Ronald Reagan, on Monday crashed into the sea northeast of the Philippines. The two aviators inside the plane were rescued.</description>
+      <dc:creator>JANE PERLEZ</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 12:07:41 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Aviation Accidents, Safety and Disasters</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">United States Navy</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Philippine Sea</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Maritime Accidents and Safety</category>
+    </item>
+    <item>
+      <title>Portugal Dispatch: This Town Once Feared the 10-Story Waves. Then the Extreme Surfers Showed Up.</title>
+      <link>https://www.nytimes.com/2018/11/11/world/europe/nazare-portugal-surfing-big-waves.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/europe/nazare-portugal-surfing-big-waves.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/world/europe/nazare-portugal-surfing-big-waves.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/08Portugal1/merlin_145918620_8e49c724-3514-42a2-a952-8a1d848a6c7f-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>For centuries, Nazar&#xE9; was a traditional seaside town where Portuguese fishermen taught their children to avoid the huge waves that crashed against the nearby cliffs.</media:description>
+      <media:credit>Ana Brigida for The New York Times</media:credit>
+      <description>The residents of Nazar&#xE9; used to think the immense waves that broke against town&#x2019;s cliffs were deadly to any who braved them. Today, those same waves have made the town a surfers&#x2019; mecca.</description>
+      <dc:creator>PATRICK KINGSLEY</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 13:16:22 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Surfing</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Nazare (Portugal)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Travel and Vacations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">McNamara, Garrett (1967- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">World Surf League</category>
+    </item>
+    <item>
+      <title>Canada&#x2019;s Message to Teenagers: Marijuana Is Legal Now. Please Don&#x2019;t Smoke It.</title>
+      <link>https://www.nytimes.com/2018/11/11/world/canada/marijuana-legalization-teenagers.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/canada/marijuana-legalization-teenagers.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/world/canada/marijuana-legalization-teenagers.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/03/world/00kids-marijuana/00kids-marijuana-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Jenny Hanley, seated in front, and her daughter Shelby Hanley, 17, left, with Kyle Johnston, 16, center, and Jared Kaye, 19, right, who live with Ms. Hanley on her family farm.</media:description>
+      <media:credit>Tara Walton for The New York Times</media:credit>
+      <description>Canadian teenagers use more marijuana than youths anywhere else in the world. The government hopes legalization will change that.</description>
+      <dc:creator>CATHERINE PORTER</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 14:20:49 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Marijuana</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Canada</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Youth</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Drug Abuse and Traffic</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Addiction (Psychology)</category>
+    </item>
+    <item>
+      <title>Poland&#x2019;s Leaders March With Far-Right Groups on Independence Day</title>
+      <link>https://www.nytimes.com/2018/11/11/world/europe/poland-far-right-independence-day.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/europe/poland-far-right-independence-day.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/europe/poland-far-right-independence-day.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12poland1/12poland1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A banner reading &#x201C;Independence March &#x2014; Death to the enemies of the homeland&#x201D; in Warsaw on Sunday.</media:description>
+      <media:credit>Radek Pietruszka/EPA, via Shutterstock</media:credit>
+      <description>The president said the 100th anniversary of Polish independence was &#x201C;for everyone.&#x201D; The march included the far right and omitted opposition leaders.</description>
+      <dc:creator>JOANNA BERENDT</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 23:10:59 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Poland</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Fringe Groups and Movements</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Law and Justice (Poland)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Europe</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+    </item>
+    <item>
+      <title>Iranians Fear Medicine Shortages as U.S. Tightens Sanctions</title>
+      <link>https://www.nytimes.com/2018/11/11/world/middleeast/iran-sanctions.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/middleeast/iran-sanctions.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/11/world/middleeast/iran-sanctions.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/03iran-sanctions2/03iran-sanctions2-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>The drugstore at Nikan Hospital in Tehran. Anxieties over the availability of medicine in Iran are growing.</media:description>
+      <media:credit>Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>Harsh restrictions against doing business with Iran have made it nearly impossible for pharmaceutical companies to continue working in the country.</description>
+      <dc:creator>NILO TABRIZY</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 04:08:15 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Embargoes and Sanctions</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Drugs (Pharmaceuticals)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Shortages</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Iran</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">United States International Relations</category>
+    </item>
+    <item>
+      <title>Young Activists Go Missing in China, Raising Fears of Crackdown</title>
+      <link>https://www.nytimes.com/2018/11/11/world/asia/china-student-activists.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/asia/china-student-activists.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/asia/china-student-activists.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12China-Marxist/12China-Marxist-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Zhang Shengye has been a prominent voice in the activists&#x2019; campaign.</media:description>
+      <media:credit/>
+      <description>The Communist Party appears to be redoubling efforts to quash a movement for workers&#x2019; rights that has spread across Chinese campuses.</description>
+      <dc:creator>JAVIER C. HERN&#xC1;NDEZ</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 16:56:37 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Colleges and Universities</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Demonstrations, Protests and Riots</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Communist Party of China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Political Prisoners</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+    </item>
+    <item>
+      <title>Alibaba&#x2019;s Singles Day Sales Top $30 Billion. The Party May Not Last.</title>
+      <link>https://www.nytimes.com/2018/11/11/business/alibaba-singles-day.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/business/alibaba-singles-day.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/business/alibaba-singles-day.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/business/12singlesday-1/12singlesday-1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Alibaba&#x2019;s sales on Singles Day, which gets its name from the date, Nov. 11, broke the 200 billion yuan, or $28.8 billion, mark near the end of the 24-hour shopping event on Sunday.</media:description>
+      <media:credit>Ng Han Guan/Associated Press</media:credit>
+      <description>China&#x2019;s slowing economic growth and weakening consumer sentiment pose a challenge to an e-commerce giant with world-swallowing ambitions.</description>
+      <dc:creator>RAYMOND ZHONG</dc:creator>
+      <pubDate>Mon, 12 Nov 2018 03:40:51 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Alibaba Group Holding Ltd</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">E-Commerce</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">International Trade and World Market</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Economic Conditions and Trends</category>
+    </item>
+    <item>
+      <title>Remembering the End of World War I, in Photos</title>
+      <link>https://www.nytimes.com/2018/11/11/world/armistice-wwi.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/armistice-wwi.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/armistice-wwi.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/world/12armistice-photoalbum1-sub/12armistice-photoalbum1-sub-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Trump attended a ceremony on Sunday at Suresnes American Cemetery outside Paris.</media:description>
+      <media:credit>Tom Brenner for The New York Times</media:credit>
+      <description>World leaders and ordinary citizens alike commemorated the 100th anniversary of the armistice that ended World War I. Here are the best images of the day.</description>
+      <dc:creator>ILIANA MAGRA</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 16:43:26 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Photography</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Veterans</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Macron, Emmanuel (1977- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Francis</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">May, Theresa M</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Merkel, Angela</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Putin, Vladimir V</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trump, Donald J</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Great Britain</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Europe</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">London (England)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Paris (France)</category>
+    </item>
+    <item>
+      <title>How China Creates Cancer Refugees</title>
+      <link>https://www.nytimes.com/video/world/asia/100000005136275/china-health-care-cancer-refugee.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/video/world/asia/100000005136275/china-health-care-cancer-refugee.html</guid>
+      <description>A rural resident in China is 30 percent more likely to die after a cancer diagnosis than an urban resident. Three rural families trying to beat these odds &#x2014; &#x201C;cancer refugees&#x201D; &#x2014; share their stories of battling the disease far from home and the financial ruin it causes.</description>
+      <dc:creator/>
+      <pubDate>Sun, 11 Nov 2018 09:45:01 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/nyt_geo">China</category>
+      <category domain="http://www.nytimes.com/namespaces/des">Cancer</category>
+      <category domain="http://www.nytimes.com/namespaces/des">Rural Areas</category>
+      <category domain="http://www.nytimes.com/namespaces/des">Children and Childhood</category>
+      <category domain="http://www.nytimes.com/namespaces/des">Health Insurance and Managed Care</category>
+    </item>
+    <item>
+      <title>Russia Dispatch: In Russian Village Swallowed by Sand, Life&#x2019;s a Beach. Just Not in a Good Way.</title>
+      <link>https://www.nytimes.com/2018/11/11/world/europe/russia-white-sea-shoyna.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/11/world/europe/russia-white-sea-shoyna.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/11/world/europe/russia-white-sea-shoyna.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/europe/11sandpeople/xxShoina-slide-DJR8-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A house submerged in sand in Shoyna, Russia.</media:description>
+      <media:credit>Sergey Ponomarev for The New York Times</media:credit>
+      <description>Shoyna, a fishing village in the frigid far north, is slowly vanishing under dunes that engulf entire houses. For children, home is now a giant sandbox. Adults have to &#x201C;say goodbye to my high heels.&#x201D;</description>
+      <dc:creator>Photographs and Text by SERGEY PONOMAREV</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 09:48:17 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">your-feed-photojournalism</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Sand and Gravel</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Russia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Arctic Regions</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Fishing, Commercial</category>
+    </item>
+    <item>
+      <title>Rocket Lab&#x2019;s Modest Launch Is Giant Leap for Small Rocket Business</title>
+      <link>https://www.nytimes.com/2018/11/10/science/rocket-lab-launch.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/science/rocket-lab-launch.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/science/rocket-lab-launch.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/12/science/12smallrocket/12smallrocket-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Rocket Lab&#x2019;s Electron launched from a site in New Zealand on Sunday, local time. The rocket carried seven payloads, all small satellites.</media:description>
+      <media:credit>Rocket Lab</media:credit>
+      <description>The company&#x2019;s Electron rocket carried a batch of small commercial satellites from a launchpad in New Zealand, a harbinger of a major transformation to the space business.</description>
+      <dc:creator>KENNETH CHANG</dc:creator>
+      <pubDate>Sun, 11 Nov 2018 04:50:50 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Rocket Lab</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Private Spaceflight</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Rocket Science and Propulsion</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Satellites</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Space and Astronomy</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">New Zealand</category>
+    </item>
+    <item>
+      <title>Britain&#x2019;s Equal Pay Day Highlights Gender Gap</title>
+      <link>https://www.nytimes.com/2018/11/10/world/europe/britain-equal-pay-day.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/europe/britain-equal-pay-day.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/10/world/europe/britain-equal-pay-day.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11equalpay/11equalpay-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>In January the China editor of the BBC, Carrie Gracie, quit her job to protest unequal wages and donated backdated pay she received from the organization to a legal fund for low-income women.</media:description>
+      <media:credit>Daniel Leal-Olivas/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>Groups around the world highlight a gender gap by noting the day of the year &#x2014; in Britain, it&#x2019;s Nov. 10 &#x2014; when women would start working without pay, relative to men&#x2019;s annual earnings.</description>
+      <dc:creator>PALKO KARASZ</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 20:26:17 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Wages and Salaries</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Women and Girls</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Women's Rights</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Discrimination</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">European Commission</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">European Union</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Great Britain</category>
+    </item>
+    <item>
+      <title>Rome Mayor Acquitted on Lying Charge, to Relief of Five Star Movement</title>
+      <link>https://www.nytimes.com/2018/11/10/world/europe/virginia-raggi-rome-mayor-italy.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/europe/virginia-raggi-rome-mayor-italy.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/world/europe/virginia-raggi-rome-mayor-italy.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11rome/11rome-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>&#x201C;This sentence wipes away two years of political mud,&#x201D; Mayor Virginia Raggi said.</media:description>
+      <media:credit>Alberto Pizzoli/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>The long-running corruption case had threatened both her political career and the credibility of her anti-establishment party.</description>
+      <dc:creator>GAIA PIANIGIANI</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 19:07:43 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Corruption (Institutional)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Mayors</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Five Star Movement (Italy)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Raggi, Virginia (1978- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Rome (Italy)</category>
+    </item>
+    <item>
+      <title>Ma Jian, Exiled Chinese Novelist, Hails Appearance as Victory for Rights</title>
+      <link>https://www.nytimes.com/2018/11/10/world/asia/ma-jian-hong-kong-literary-festival.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/asia/ma-jian-hong-kong-literary-festival.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/10/world/asia/ma-jian-hong-kong-literary-festival.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11hongkong/11hongkong-sub-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Ma Jian, center, said the totalitarian society George Orwell predicted in &#x201C;1984&#x201D; had been &#x201C;completely and totally&#x201D; realized in China.</media:description>
+      <media:credit>Lam Yik Fei for The New York Times</media:credit>
+      <description>The temporary cancellation of his appearance at a literary festival had been seen as the latest sign of erosions of freedom in Hong Kong.</description>
+      <dc:creator>MIKE IVES</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 17:08:04 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Books and Literature</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Censorship</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Ma Jian (1953- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Mallet, Victor (Journalist)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Hong Kong</category>
+    </item>
+    <item>
+      <title>Mexico Gave the Migrant Caravan a Warm Welcome. It Wasn&#x2019;t Always This Way.</title>
+      <link>https://www.nytimes.com/2018/11/10/world/americas/migrant-caravan-mexico-city.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/americas/migrant-caravan-mexico-city.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/10/world/americas/migrant-caravan-mexico-city.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11caravan/11caravan-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Central American migrants riding on the subway on Friday after leaving a temporary shelter at a stadium in Mexico City.</media:description>
+      <media:credit>Rodrigo Abd/Associated Press</media:credit>
+      <description>A caravan of Central American migrants has left Mexico City, bound for the U.S. border. The group has forced a reckoning in Mexico over the treatment of migrants.</description>
+      <dc:creator>ELISABETH MALKIN</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 21:12:21 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Immigration and Emigration</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Illegal Immigration</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Asylum, Right of</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Refugees and Displaced Persons</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Mexico City (Mexico)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">United States</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Honduras</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Central America</category>
+    </item>
+    <item>
+      <title>Afghanistan Is the World&#x2019;s Polio Capital. These Afghans Hope to Fix That.</title>
+      <link>https://www.nytimes.com/2018/11/10/world/asia/afghanistan-polio-vaccines-kandahar.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/asia/afghanistan-polio-vaccines-kandahar.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/10/world/asia/afghanistan-polio-vaccines-kandahar.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11afghan-polio/00afghan-polio-1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A health care worker giving a dose of vaccine  in Kandahar, Afghanistan, in August.</media:description>
+      <media:credit>Jawed Tanveer/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>These Afghans Are Trying to Fix That.</description>
+      <dc:creator>FAHIM ABED</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 15:02:37 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Poliomyelitis</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Vaccination and Immunization</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Taliban</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Afghanistan</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Kandahar (Afghanistan)</category>
+    </item>
+    <item>
+      <title>Turkey&#x2019;s President Says Recording of Khashoggi&#x2019;s Killing Was Given to U.S.</title>
+      <link>https://www.nytimes.com/2018/11/10/world/middleeast/jamal-khashoggi-murder-turkey-recordings.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/middleeast/jamal-khashoggi-murder-turkey-recordings.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/10/world/middleeast/jamal-khashoggi-murder-turkey-recordings.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11erdogan/11erdogan-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Recep Tayyip Erdogan, shown on Saturday in Ankara, said Turkey had shared recordings linked to the murder of the journalist Jamal Khashoggi with Saudi Arabia, the United States and other countries.</media:description>
+      <media:credit>Burhan Ozbilici/Associated Press</media:credit>
+      <description>The recordings would be another piece of evidence in the October killing of the dissident by Saudi agents in the country&#x2019;s consulate in Istanbul.</description>
+      <dc:creator>MARK LANDLER and DAVID D. KIRKPATRICK</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 19:59:52 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Khashoggi, Jamal</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Assassinations and Attempted Assassinations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Erdogan, Recep Tayyip</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Turkey</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Saudi Arabia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">United States International Relations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Mohammed bin Salman (1985- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trump, Donald J</category>
+    </item>
+    <item>
+      <title>As Brazil&#x2019;s Far Right Leader Threatens the Amazon, One Tribe Pushes Back</title>
+      <link>https://www.nytimes.com/2018/11/10/world/americas/brazil-indigenous-mining-bolsonaro.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/americas/brazil-indigenous-mining-bolsonaro.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/world/americas/brazil-indigenous-mining-bolsonaro.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11BrazilMining1/00brazilmining1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Illegal gold miners work at a mine in Posto de Vigilancia.</media:description>
+      <media:credit>Meridith Kohut for The New York Times</media:credit>
+      <description>&#x201C;Where there is indigenous land,&#x201D; newly elected President Jair Bolsonaro has said, &#x201C;there is wealth underneath it.&#x201D;</description>
+      <dc:creator>ERNESTO LONDO&#xD1;O</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 19:28:58 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Amazon River Basin</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Indigenous People</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Mines and Mining</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Brazil</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Gold</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Land Use Policies</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Environment</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Bolsonaro, Jair (1955- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Native Americans</category>
+    </item>
+    <item>
+      <title>After Thousand Oaks Shooting, International Readers Question America's Gun Laws and Culture</title>
+      <link>https://www.nytimes.com/2018/11/10/reader-center/gun-violence-america.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/reader-center/gun-violence-america.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/reader-center/gun-violence-america.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/insider/10readers-shooting/10readers-shooting-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>A vigil held for those killed in a shooting at the Borderline Bar &amp; Grill in Thousand Oaks, Calif.</media:description>
+      <media:credit>Jenna Schoenefeld for The New York Times</media:credit>
+      <description>Our international readers ask Americans to explain gun violence and share their own theories on why it is so common in the United States.</description>
+      <dc:creator>LELA MOORE</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 12:47:37 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">California</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Gun Control</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Murders, Attempted Murders and Homicides</category>
+    </item>
+    <item>
+      <title>Bonhomie? C&#x2019;est Fini as Trump and Macron Seek to Defuse Tension</title>
+      <link>https://www.nytimes.com/2018/11/10/world/europe/world-war-i-trump-macron.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/europe/world-war-i-trump-macron.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/world/europe/world-war-i-trump-macron.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11france/11france1-alt-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>President Emmanuel Macron of France welcomed President Trump at the &#xC9;lys&#xE9;e Palace in Paris on Saturday.</media:description>
+      <media:credit>Tom Brenner for The New York Times</media:credit>
+      <description>President Trump&#x2019;s meeting with President Emmanuel Macron of France appeared far chillier than their earlier warm sessions, demonstrating how the relationship has soured.</description>
+      <dc:creator>PETER BAKER and ADAM NOSSITER</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 21:21:58 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trump, Donald J</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Macron, Emmanuel (1977- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">North Atlantic Treaty Organization</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">United States International Relations</category>
+    </item>
+    <item>
+      <title>News Analysis: Can Europe&#x2019;s Liberal Order Survive as the Memory of War Fades?</title>
+      <link>https://www.nytimes.com/2018/11/10/world/europe/europe-armistice-merkel-macron-peace-war.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/world/europe/europe-armistice-merkel-macron-peace-war.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/world/europe/europe-armistice-merkel-macron-peace-war.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11armistice1/merlin_84474787_0e1bb9fc-62c4-4e5c-af4a-dc72c1520825-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Tyne Cot cemetery in Belgium is the largest Commonwealth cemetery in the world. Nearly 8,400 of roughly 12,000 soldiers buried there remain unidentified.</media:description>
+      <media:credit>Tomas Munita for The New York Times</media:credit>
+      <description>As leaders commemorate the end of World War I, some of the same forces that threatened democracy and peace 100 years ago are resurgent today.</description>
+      <dc:creator>KATRIN BENNHOLD</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 20:45:54 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">European Union</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Europe</category>
+    </item>
+    <item>
+      <title>What You Need to Know About Boeing&#x2019;s 737 Max</title>
+      <link>https://www.nytimes.com/2018/11/10/travel/what-you-need-to-know-about-boeings-737-max.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/10/travel/what-you-need-to-know-about-boeings-737-max.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/10/travel/what-you-need-to-know-about-boeings-737-max.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/travel/10boeingmax4/10boeingmax4-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Boeing employees celebrate the first Max 7 coming off the production line in Renton, Wash. Since its introduction in 2017, the 737 Max series of planes has been bought by dozens of airlines.</media:description>
+      <media:credit>Boeing</media:credit>
+      <description>This popular passenger jet was recently involved in the Lion Air fatal crash. If you&#x2019;re worried about flying one on your next trip, here is a quick guide to the plane and the airlines that fly it.</description>
+      <dc:creator>ZACH WICHTER</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 10:00:04 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Airlines and Airplanes</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Boeing Company</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">American Airlines</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Southwest Airlines Company</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">United Airlines</category>
+    </item>
+    <item>
+      <title>A Joyous Letter Speaks of War&#x2019;s End </title>
+      <link>https://www.nytimes.com/2018/11/09/nyregion/world-war-i-letter.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/nyregion/world-war-i-letter.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/nyregion/world-war-i-letter.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/nyregion/10ww1letter01/10ww1letter01-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Crowds along Fifth Avenue celebrated Armistice Day in November 1918.</media:description>
+      <media:credit>Paul Thompson/FPG, via Getty Images</media:credit>
+      <description>A 100-year-old letter from a New York City police officer to one of his men overseas describes the moment the city heard that World War I was over.</description>
+      <dc:creator>JIM DWYER</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 00:32:13 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">New York City</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Police Department (NYC)</category>
+    </item>
+    <item>
+      <title>Wildfires, Thousand Oaks, Elections: Your Friday Evening Briefing</title>
+      <link>https://www.nytimes.com/2018/11/09/briefing/wildfires-thousand-oaks-elections.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/briefing/wildfires-thousand-oaks-elections.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/briefing/wildfires-thousand-oaks-elections.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/09/briefing/09PMbriefing-US-slide-O5UN/09PMbriefing-US-slide-O5UN-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description/>
+      <media:credit>Jim Wilson/The New York Times</media:credit>
+      <description>Here&#x2019;s what you need to know at the end of the day.</description>
+      <dc:creator>JEAN RUTTER and MARCUS PAYADUE</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 00:05:04 GMT</pubDate>
+    </item>
+    <item>
+      <title>Canada Letter: Americans Cast Their Ballots. The World Had Questions.</title>
+      <link>https://www.nytimes.com/2018/11/09/world/canada/american-election-canada-letter.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/canada/american-election-canada-letter.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/canada/american-election-canada-letter.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10canadaletter/10canadaletter-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Sarah Lyall voting in the midterm election in Brooklyn, New York.</media:description>
+      <media:credit>Holly Pickett for The New York Times</media:credit>
+      <description>Sarah Lyall, author of the Abroad in America newsletter, reflects on explaining the midterm elections to a global audience</description>
+      <dc:creator>IAN AUSTEN</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 23:53:31 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Midterm Elections (2018)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Rebagliati, Ross</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Trudeau, Justin</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Canada</category>
+    </item>
+    <item>
+      <title>Tensions Ease in Gaza, Allowing Money and Fuel to Roll In</title>
+      <link>https://www.nytimes.com/2018/11/09/world/middleeast/gaza-hamas-israel-bordermoney-fuel.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/middleeast/gaza-hamas-israel-bordermoney-fuel.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/middleeast/gaza-hamas-israel-bordermoney-fuel.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10gaza1-print/10gaza1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Since last month, new fuel deliveries have increased electricity in Gaza from just a few hours a day to as many as 12 hours.</media:description>
+      <media:credit>Mahmud Hams/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>But the relaxation of the embargo presents risks for the leaders of both Israel and Hamas, and it has been denounced by the Palestinian Authority.</description>
+      <dc:creator>DAVID M. HALBFINGER</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 00:22:25 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Gaza Strip</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Palestinians</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Israel</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Border Barriers</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Palestinian Authority</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Hamas</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Fatah, Al</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Abbas, Mahmoud</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Netanyahu, Benjamin</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Rafah (Gaza Strip)</category>
+    </item>
+    <item>
+      <title>Car Bombs Kill at Least 20 in Somalia&#x2019;s Capital</title>
+      <link>https://www.nytimes.com/2018/11/09/world/africa/car-bombs-kill-at-least-20-in-somalias-capital.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/africa/car-bombs-kill-at-least-20-in-somalias-capital.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/world/africa/car-bombs-kill-at-least-20-in-somalias-capital.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10somalia/10somalia-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Security officers fleeing the scene of an explosion in Mogadishu, Somalia, on Friday.</media:description>
+      <media:credit>Feisal Omar/Reuters</media:credit>
+      <description>The Islamic extremist group the Shabab claimed responsibility.</description>
+      <dc:creator>THE ASSOCIATED PRESS</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 20:51:43 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Terrorism</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Bombs and Explosives</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Shabab</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Sahafi Hotel (Mogadishu, Somalia, Hotel)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Mogadishu (Somalia)</category>
+    </item>
+    <item>
+      <title>What We Know About the Lion Air Flight 610 Crash</title>
+      <link>https://www.nytimes.com/2018/11/09/world/asia/air-lion-crash-610.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/asia/air-lion-crash-610.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/asia/air-lion-crash-610.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/09/world/10lionair-explainer/09indonesia-plane1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Indonesian rescue personnel recovered the wreckage of an engine from Lion Air Flight 610 and brought it to Tanjung Priok port in Jakarta.</media:description>
+      <media:credit>Ulet Ifansasti/Getty Images</media:credit>
+      <description>The new plane&#x2019;s automated systems may have played a role, but the precise cause remains unknown.</description>
+      <dc:creator>MEGAN SPECIA</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 20:14:00 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Airlines and Airplanes</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Aviation Accidents, Safety and Disasters</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Lion Air</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Boeing Company</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Indonesia</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Jakarta (Indonesia)</category>
+    </item>
+    <item>
+      <title>Past Tense: In Photos Unpublished for 100 Years, the Joy of War&#x2019;s End on Armistice Day</title>
+      <link>https://www.nytimes.com/2018/11/09/world/europe/armistice-day-100th-anniversary-photos.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/europe/armistice-day-100th-anniversary-photos.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/europe/armistice-day-100th-anniversary-photos.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/11/world/11armistice4/11-armistice4-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>&#x201C;Men and women of all classes of society joining in uproarious demonstrations, cheering, singing and flag waving in the Place de la Concorde, Paris.&#x201D; Dec. 12, 1918.</media:description>
+      <media:credit>&#xC9;mile Barri&#xE8;re/Photo Press Service</media:credit>
+      <description>As crowds gathered in New York, Paris and London, photographers captured the public&#x2019;s jubilant mood.</description>
+      <dc:creator>ALEXIS CLARK</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 19:40:58 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Photography</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">New York Times</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">New York City</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Paris (France)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">London (England)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_keyword">Past Tense</category>
+    </item>
+    <item>
+      <title>Britain&#x2019;s Brexit Endgame Is Close. Here&#x2019;s How It May Play Out.</title>
+      <link>https://www.nytimes.com/2018/11/09/world/europe/britain-brexit-endgame.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/europe/britain-brexit-endgame.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/world/europe/britain-brexit-endgame.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10brexit-explainer1/10brexit-explainer1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>An anti-Brexit campaigner outside Parliament last month. Crunch time is arriving for efforts to strike a divorce with the European Union.</media:description>
+      <media:credit>Daniel Leal-Olivas/Agence France-Presse &#x2014; Getty Images</media:credit>
+      <description>Prime Minister Theresa May is walking a very fine line to get a deal done. The resignation of another minister illustrated how hard it is going to be.</description>
+      <dc:creator>STEPHEN CASTLE</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 19:54:34 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Great Britain Withdrawal from EU (Brexit)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Conservative Party (Great Britain)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">Democratic Unionist Party (Northern Ireland)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_org_all">European Union</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Macron, Emmanuel (1977- )</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">May, Theresa M</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Great Britain</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Northern Ireland</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Brussels (Belgium)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Johnson, Jo (1971- )</category>
+    </item>
+    <item>
+      <title>The Saturday Profile: Justice, Italian Style: 9 Years, 13 Trials and Few Answers</title>
+      <link>https://www.nytimes.com/2018/11/09/world/europe/ilaria-cucchi-brother-italy.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/europe/ilaria-cucchi-brother-italy.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/europe/ilaria-cucchi-brother-italy.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10cucchi-print/10cucchi1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Ilaria Cucchi with a photo of her brother Stefano. Her nine-year quest for the truth about his death in police custody has taken her on a labyrinthine trip through Italy&#x2019;s justice system.</media:description>
+      <media:credit>AGF, via Shutterstock</media:credit>
+      <description>The death of her brother in police custody has turned Ilaria Cucchi into a prominent and admired rights activist. But the sprawling case continues to grind through the courts.</description>
+      <dc:creator>ELISABETTA POVOLEDO</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 18:12:16 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Cucchi, Ilaria</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Human Rights and Human Rights Violations</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Torture</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Rome (Italy)</category>
+    </item>
+    <item>
+      <title>Looking to History and Recent Events, German Leaders Defend Democracy and Pluralism</title>
+      <link>https://www.nytimes.com/2018/11/09/world/europe/steinmeier-germany-democratic-patriotism.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/europe/steinmeier-germany-democratic-patriotism.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/world/europe/steinmeier-germany-democratic-patriotism.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10germany-print/10germany1-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>An exhibition at the Topography of Terror museum in Berlin shows a photograph of a burning synagogue during Kristallnacht in 1938.</media:description>
+      <media:credit>Sean Gallup/Getty Images</media:credit>
+      <description>On a date freighted with historic meaning, Germany&#x2019;s president calls for &#x201C;an enlightened patriotism,&#x201D; or national pride without bigotry.</description>
+      <dc:creator>MELISSA EDDY</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 05:05:12 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Jews and Judaism</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Holocaust and the Nazi Era</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Anti-Semitism</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Merkel, Angela</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_per">Steinmeier, Frank-Walter</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Germany</category>
+    </item>
+    <item>
+      <title>Sri Lanka President Dissolves Parliament Amid Power Struggle</title>
+      <link>https://www.nytimes.com/2018/11/09/world/asia/sri-lanka-dissolves-parliament.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/asia/sri-lanka-dissolves-parliament.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/world/asia/sri-lanka-dissolves-parliament.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10lanka/10lanka-moth.jpg" medium="image" height="151" width="151"/>
+      <media:description>Prime minister Mahinda Rajapaksa, center left, and president Maithripala Sirisena, center right, at a rally in Colombo on Monday.</media:description>
+      <media:credit>M a Pushpa Kumara/EPA, via Shutterstock</media:credit>
+      <description>Maithripala Sirisena&#x2019;s move, which critics said was illegal, deepened a two-week-old constitutional crisis over who is the legitimate prime minister of the island nation.</description>
+      <dc:creator>DHARISHA BASTIANS and VINDU GOEL</dc:creator>
+      <pubDate>Sat, 10 Nov 2018 06:09:34 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Politics and Government</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">Sri Lanka</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Legislatures and Parliaments</category>
+    </item>
+    <item>
+      <title>A Somber World War I Memorial in London Seeks to Finally Lay the Fallen to Rest</title>
+      <link>https://www.nytimes.com/2018/11/09/world/europe/world-war-i-shrouds-london.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/world/europe/world-war-i-shrouds-london.html</guid>
+      <atom:link href="https://www.nytimes.com/2018/11/09/world/europe/world-war-i-shrouds-london.html?partner=rss&amp;emc=rss" rel="standout"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/10/world/10shrouds1-print/10shrouds1-moth-v2.jpg" medium="image" height="151" width="151"/>
+      <media:description>Soldiers helped lay out the 72,396 shrouded figures in the Queen Elizabeth Olympic Park in London on Wednesday.</media:description>
+      <media:credit>Matt Dunham/Associated Press</media:credit>
+      <description>The display of 72,396 shrouds, dedicated to soldiers killed in France on the battlefields of the Somme, is tied to the 100th anniversary of the war&#x2019;s armistice.</description>
+      <dc:creator>CEYLAN YEGINSU</dc:creator>
+      <pubDate>Fri, 09 Nov 2018 16:46:31 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">Deaths (Fatalities)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Defense and Military Forces</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">England</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">World War I (1914-18)</category>
+    </item>
+    <item>
+      <title>At War: Remembering World War I, 100 Years Later</title>
+      <link>https://www.nytimes.com/2018/11/09/magazine/remembering-world-war-i-newsletter.html?partner=rss&amp;emc=rss</link>
+      <guid isPermaLink="true">https://www.nytimes.com/2018/11/09/magazine/remembering-world-war-i-newsletter.html</guid>
+      <atom:link rel="standout" href="https://www.nytimes.com/2018/11/09/magazine/remembering-world-war-i-newsletter.html?partner=rss&amp;emc=rss"/>
+      <media:content url="https://static01.nyt.com/images/2018/11/07/magazine/atwar-wwi-archives-3/atwar-wwi-archives-3-moth.png" medium="image" height="151" width="151"/>
+      <media:description>The front page of The New York Times on Nov. 11, 1918. </media:description>
+      <media:credit/>
+      <description>Nov. 11 marks 100 years since the signing of the armistice that ended World War I. Readers share how their families commemorated the centennial.</description>
+      <dc:creator/>
+      <pubDate>Fri, 09 Nov 2018 19:21:58 GMT</pubDate>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">United States Defense and Military Forces</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/mdes">World War I (1914-18)</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/nyt_geo">France</category>
+      <category domain="http://www.nytimes.com/namespaces/keywords/des">Veterans</category>
+    </item>
+  </channel>
+</rss>
