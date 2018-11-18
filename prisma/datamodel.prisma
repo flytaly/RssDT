@@ -1,4 +1,41 @@
 type User {
     id: ID! @unique
     email: String @unique
+    feeds: [Feed!]!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Feed {
+    id: ID! @unique
+    url: String! @unique
+    link: String # link to the website
+    title: String
+    description: String
+    image: String
+    items: [FeedItem!]!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type ItemEnclosure {
+    url: String!
+    type: String
+    length: String
+    item: FeedItem! @relation(name: "ItemEnclosures", onDelete: SET_NULL)
+}
+
+type FeedItem {
+    title: String
+    description: String
+    summary: String
+    date: DateTime
+    link: String
+    guid: String! @unique
+    imageUrl: String
+    imageTitle: String
+    enclosures: [ItemEnclosure!]!
+        @relation(name: "ItemEnclosures", onDelete: CASCADE)
+    createdAt: DateTime!
+    updatedAt: DateTime!
 }
