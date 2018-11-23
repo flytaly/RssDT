@@ -1,9 +1,25 @@
+enum DigestSchedule {
+    REALTIME
+    EVERYHOUR
+    EVERY2HOURS
+    EVERY3HOURS
+    EVERY6HOURS
+    EVERY12HOURS
+    DAILY
+}
+
 type User {
     id: ID! @unique
-    email: String @unique
-    feeds: [Feed!]!
+    email: String! @unique
+    feeds: [UserFeed!]! @relation(name: "UserFeeds", onDelete: CASCADE)
     createdAt: DateTime!
     updatedAt: DateTime!
+}
+
+type UserFeed {
+    feed: Feed!
+    schedule: DigestSchedule @default(value: DAILY)
+    user: User @relation(name: "UserFeeds", onDelete: SET_NULL)
 }
 
 type Feed {
@@ -13,6 +29,7 @@ type Feed {
     title: String
     description: String
     image: String
+    userFeeds: [UserFeed!]!
     items: [FeedItem!]!
     createdAt: DateTime!
     updatedAt: DateTime!

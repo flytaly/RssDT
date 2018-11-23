@@ -3,10 +3,39 @@
 type User {
     id: ID!
     email: String!
+    feeds: [UserFeed!]!
+    createdAt: DateTime!
+}
+
+type UserFeed {
+    feed: Feed!
+    schedule: DigestSchedule
+    user: User
+}
+
+type Feed {
+    url: String!
+    link: String
+    title: String
+    description: String
+    image: String
+    items(
+        where: FeedItemWhereInput
+        orderBy: FeedItemOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [FeedItem!]
 }
 
 type Mutation {
-    createUser(email: String!): User!
+    createUser(
+        email: String!
+        feedUrl: String
+        feedSchedule: DigestSchedule
+    ): User!
 }
 
 type Query {

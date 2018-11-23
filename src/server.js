@@ -11,6 +11,10 @@ const createServer = db => new GraphQLServer({
         Mutation,
         Query,
     },
+    // to hide warning in tests https://github.com/prisma/prisma/issues/2225
+    resolverValidationOptions: {
+        requireResolversForResolveType: false,
+    },
     context: req => ({ ...req, db }),
 });
 

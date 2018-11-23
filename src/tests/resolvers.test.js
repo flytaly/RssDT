@@ -11,11 +11,20 @@ let yogaApp;
 let link;
 
 const initDb = async (prisma) => {
-    const user = await prisma.exists.User({ email: mocks.user.email });
-    if (user) await prisma.mutation.deleteUser({ where: { email: mocks.user.email } });
+    const users = [mocks.user, mocks.userWithFeed];
+    return Promise.all(users.map(async ({ email, feedUrl: url = '' }) => {
+        const userExists = await prisma.exists.User({ email });
+        const feedExists = await prisma.exists.Feed({ url });
+        if (userExists) {
+            await prisma.mutation.deleteUser({ where: { email } });
+        }
+        if (feedExists) {
+            await prisma.mutation.deleteFeed({ where: { url } });
+        }
+    }));
 };
 
-const clearDB = async prisma => prisma.mutation.deleteUser({ where: { email: mocks.user.email } });
+const clearDB = async prisma => initDb(prisma);
 
 beforeAll(async () => {
     const server = createServer(db);
@@ -26,10 +35,13 @@ beforeAll(async () => {
     await initDb(db);
 });
 
-afterAll(async () => { yogaApp.close(); await clearDB(db); });
+afterAll(async () => {
+    yogaApp.close();
+    await clearDB(db);
+});
 
 describe('Test GraphQL mutations:', () => {
-    test('should create user', async () => {
+    test('should create user with email', async () => {
         const CREATE_USER_MUTATION = gql`mutation ($email: String!) {
             createUser(email: $email) {
               id
@@ -38,9 +50,51 @@ describe('Test GraphQL mutations:', () => {
           }`;
         const { data } = await makePromise(execute(link, {
             query: CREATE_USER_MUTATION,
-            variables: { email: mocks.user.email },
+            variables: {
+                email: mocks.user.email,
+            },
         }));
+
         expect(data.createUser).toMatchObject(mocks.user);
+    });
+    test('should create user with email and feed', async () => {
+        const CREATE_USER_WITH_FEED_MUTATION = gql`mutation (
+            $email: String!
+            $feedUrl: String!,
+            $feedSchedule: DigestSchedule,
+            ) {
+            createUser(
+                email: $email
+                feedUrl: $feedUrl
+                feedSchedule: $feedSchedule
+            ) {
+              id
+              email
+              feeds {
+                  schedule
+                  feed {
+                      url
+                  }
+              }
+            }
+          }`;
+
+        const { data: { createUser: user } } = await makePromise(execute(link, {
+            query: CREATE_USER_WITH_FEED_MUTATION,
+            variables: {
+                email: mocks.userWithFeed.email,
+                feedUrl: mocks.userWithFeed.feedUrl,
+                feedSchedule: mocks.userWithFeed.feedSchedule,
+            },
+        }));
+
+        expect(user).toMatchObject({
+            email: mocks.userWithFeed.email,
+            feeds: [{
+                schedule: mocks.userWithFeed.feedSchedule,
+                feed: { url: mocks.userWithFeed.feedUrl },
+            }],
+        });
     });
 });
 
