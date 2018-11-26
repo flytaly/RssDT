@@ -4,6 +4,7 @@ type User {
     id: ID!
     email: String!
     feeds: [UserFeed!]!
+    permissions: [Permission!]!
     createdAt: DateTime!
 }
 
@@ -31,7 +32,11 @@ type Feed {
 }
 
 type Mutation {
-    createUser(
+    """
+    Add feed to user with given email.
+    If user doesn't exist the mutation will create a new user.
+    """
+    addFeed(
         email: String!
         feedUrl: String
         feedSchedule: DigestSchedule

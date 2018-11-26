@@ -1,32 +1,47 @@
 const Mutations = {
-    async createUser(parent, args, ctx, info) {
-        const { email, feedUrl: url, feedSchedule: schedule } = args;
+    async addFeed(parent, args, ctx, info) {
+        const { feedSchedule: schedule } = args;
+        const email = args.email.trim().toLowerCase();
+        const url = args.feedUrl.trim().toLowerCase();
 
-        if (!url) { // create user without feed
-            const user = await ctx.db.mutation.createUser({
-                data: { email },
-            }, info);
-            return user;
+        if (!url) { // TODO: add additional validations
+            throw new Error('Not valid argument: feedUrl');
         }
+        if (!email) { // TODO: add additional validations
+            throw new Error('Not valid argument: email');
+        }
+        const feed = await ctx.db.mutation.upsertFeed({
+            where: { url },
+            create: { url },
+            update: {},
+        });
 
-        const feedExist = await ctx.db.exists.Feed({ url });
-        let feed;
-        if (feedExist) {
-            feed = { connect: { url } };
-        } else {
-            feed = { create: { url } };
-        }
-        const user = await ctx.db.mutation.createUser({
-            data: {
+        const userFeedExists = await ctx.db.exists.UserFeed({
+            user: { email },
+            feed: { url },
+        });
+
+        if (userFeedExists) throw new Error('The feed was already added');
+
+        const createNewUserFeed = {
+            create: {
+                schedule,
+                feed: { connect: { id: feed.id } },
+            },
+        };
+
+        const user = await ctx.db.mutation.upsertUser({
+            where: { email },
+            create: {
                 email,
-                feeds: {
-                    create: {
-                        schedule,
-                        feed,
-                    },
-                },
+                permissions: { set: ['USER'] },
+                feeds: createNewUserFeed,
+            },
+            update: {
+                feeds: createNewUserFeed,
             },
         }, info);
+
         return user;
     },
 };

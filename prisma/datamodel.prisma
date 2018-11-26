@@ -8,18 +8,28 @@ enum DigestSchedule {
     DAILY
 }
 
+enum Permission {
+    ADMIN
+    USER
+}
+
 type User {
     id: ID! @unique
     email: String! @unique
     feeds: [UserFeed!]! @relation(name: "UserFeeds", onDelete: CASCADE)
+    password: String
+    resetToken: String
+    resetTokenExpiry: String
+    permissions: [Permission]
     createdAt: DateTime!
     updatedAt: DateTime!
 }
 
 type UserFeed {
+    id: ID! @unique
     feed: Feed!
     schedule: DigestSchedule @default(value: DAILY)
-    user: User @relation(name: "UserFeeds", onDelete: SET_NULL)
+    user: User! @relation(name: "UserFeeds", onDelete: SET_NULL)
 }
 
 type Feed {
@@ -36,6 +46,7 @@ type Feed {
 }
 
 type ItemEnclosure {
+    id: ID! @unique
     url: String!
     type: String
     length: String
@@ -53,6 +64,4 @@ type FeedItem {
     imageTitle: String
     enclosures: [ItemEnclosure!]!
         @relation(name: "ItemEnclosures", onDelete: CASCADE)
-    createdAt: DateTime!
-    updatedAt: DateTime!
 }

@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Fri Nov 23 2018 19:22:45 GMT+0300 (Moscow Standard Time)
+# timestamp: Mon Nov 26 2018 17:03:52 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -32,8 +32,8 @@ enum DigestSchedule {
   REALTIME
   EVERYHOUR
   EVERY2HOURS
-  EVERY4HOURS
-  EVERY8HOURS
+  EVERY3HOURS
+  EVERY6HOURS
   EVERY12HOURS
   DAILY
 }
@@ -104,8 +104,6 @@ type FeedItem {
   imageUrl: String
   imageTitle: String
   enclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure!]
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -177,12 +175,12 @@ enum FeedItemOrderByInput {
   imageUrl_DESC
   imageTitle_ASC
   imageTitle_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   id_ASC
   id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  createdAt_ASC
+  createdAt_DESC
 }
 
 type FeedItemPreviousValues {
@@ -194,8 +192,6 @@ type FeedItemPreviousValues {
   guid: String!
   imageUrl: String
   imageTitle: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 type FeedItemSubscriptionPayload {
@@ -281,9 +277,32 @@ input FeedItemUpdateManyMutationInput {
   imageTitle: String
 }
 
+input FeedItemUpdateOneRequiredWithoutEnclosuresInput {
+  create: FeedItemCreateWithoutEnclosuresInput
+  connect: FeedItemWhereUniqueInput
+  update: FeedItemUpdateWithoutEnclosuresDataInput
+  upsert: FeedItemUpsertWithoutEnclosuresInput
+}
+
+input FeedItemUpdateWithoutEnclosuresDataInput {
+  title: String
+  description: String
+  summary: String
+  date: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  imageTitle: String
+}
+
 input FeedItemUpdateWithWhereUniqueNestedInput {
   where: FeedItemWhereUniqueInput!
   data: FeedItemUpdateDataInput!
+}
+
+input FeedItemUpsertWithoutEnclosuresInput {
+  update: FeedItemUpdateWithoutEnclosuresDataInput!
+  create: FeedItemCreateWithoutEnclosuresInput!
 }
 
 input FeedItemUpsertWithWhereUniqueNestedInput {
@@ -603,50 +622,6 @@ input FeedItemWhereInput {
 
   """All values not ending with the given string."""
   imageTitle_not_ends_with: String
-  createdAt: DateTime
-
-  """All values that are not equal to given value."""
-  createdAt_not: DateTime
-
-  """All values that are contained in given list."""
-  createdAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  createdAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  createdAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  createdAt_lte: DateTime
-
-  """All values greater than the given value."""
-  createdAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-
-  """All values that are not equal to given value."""
-  updatedAt_not: DateTime
-
-  """All values that are contained in given list."""
-  updatedAt_in: [DateTime!]
-
-  """All values that are not contained in given list."""
-  updatedAt_not_in: [DateTime!]
-
-  """All values less than the given value."""
-  updatedAt_lt: DateTime
-
-  """All values less than or equal the given value."""
-  updatedAt_lte: DateTime
-
-  """All values greater than the given value."""
-  updatedAt_gt: DateTime
-
-  """All values greater than or equal the given value."""
-  updatedAt_gte: DateTime
   enclosures_every: ItemEnclosureWhereInput
   enclosures_some: ItemEnclosureWhereInput
   enclosures_none: ItemEnclosureWhereInput
@@ -741,6 +716,27 @@ input FeedUpdateManyMutationInput {
   title: String
   description: String
   image: String
+}
+
+input FeedUpdateOneRequiredWithoutUserFeedsInput {
+  create: FeedCreateWithoutUserFeedsInput
+  connect: FeedWhereUniqueInput
+  update: FeedUpdateWithoutUserFeedsDataInput
+  upsert: FeedUpsertWithoutUserFeedsInput
+}
+
+input FeedUpdateWithoutUserFeedsDataInput {
+  url: String
+  link: String
+  title: String
+  description: String
+  image: String
+  items: FeedItemUpdateManyInput
+}
+
+input FeedUpsertWithoutUserFeedsInput {
+  update: FeedUpdateWithoutUserFeedsDataInput!
+  create: FeedCreateWithoutUserFeedsInput!
 }
 
 input FeedWhereInput {
@@ -1049,7 +1045,8 @@ input FeedWhereUniqueInput {
   url: String
 }
 
-type ItemEnclosure {
+type ItemEnclosure implements Node {
+  id: ID!
   url: String!
   type: String
   length: String
@@ -1075,6 +1072,7 @@ input ItemEnclosureCreateInput {
 
 input ItemEnclosureCreateManyWithoutItemInput {
   create: [ItemEnclosureCreateWithoutItemInput!]
+  connect: [ItemEnclosureWhereUniqueInput!]
 }
 
 input ItemEnclosureCreateWithoutItemInput {
@@ -1093,14 +1091,14 @@ type ItemEnclosureEdge {
 }
 
 enum ItemEnclosureOrderByInput {
+  id_ASC
+  id_DESC
   url_ASC
   url_DESC
   type_ASC
   type_DESC
   length_ASC
   length_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1108,6 +1106,7 @@ enum ItemEnclosureOrderByInput {
 }
 
 type ItemEnclosurePreviousValues {
+  id: ID!
   url: String!
   type: String
   length: String
@@ -1152,6 +1151,13 @@ input ItemEnclosureSubscriptionWhereInput {
   node: ItemEnclosureWhereInput
 }
 
+input ItemEnclosureUpdateInput {
+  url: String
+  type: String
+  length: String
+  item: FeedItemUpdateOneRequiredWithoutEnclosuresInput
+}
+
 input ItemEnclosureUpdateManyMutationInput {
   url: String
   type: String
@@ -1160,6 +1166,28 @@ input ItemEnclosureUpdateManyMutationInput {
 
 input ItemEnclosureUpdateManyWithoutItemInput {
   create: [ItemEnclosureCreateWithoutItemInput!]
+  connect: [ItemEnclosureWhereUniqueInput!]
+  disconnect: [ItemEnclosureWhereUniqueInput!]
+  delete: [ItemEnclosureWhereUniqueInput!]
+  update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
+  upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
+}
+
+input ItemEnclosureUpdateWithoutItemDataInput {
+  url: String
+  type: String
+  length: String
+}
+
+input ItemEnclosureUpdateWithWhereUniqueWithoutItemInput {
+  where: ItemEnclosureWhereUniqueInput!
+  data: ItemEnclosureUpdateWithoutItemDataInput!
+}
+
+input ItemEnclosureUpsertWithWhereUniqueWithoutItemInput {
+  where: ItemEnclosureWhereUniqueInput!
+  update: ItemEnclosureUpdateWithoutItemDataInput!
+  create: ItemEnclosureCreateWithoutItemInput!
 }
 
 input ItemEnclosureWhereInput {
@@ -1171,6 +1199,46 @@ input ItemEnclosureWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [ItemEnclosureWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   url: String
 
   """All values that are not equal to given value."""
@@ -1294,6 +1362,10 @@ input ItemEnclosureWhereInput {
   item: FeedItemWhereInput
 }
 
+input ItemEnclosureWhereUniqueInput {
+  id: ID
+}
+
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -1307,13 +1379,19 @@ type Mutation {
   createItemEnclosure(data: ItemEnclosureCreateInput!): ItemEnclosure!
   createFeedItem(data: FeedItemCreateInput!): FeedItem!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateUserFeed(data: UserFeedUpdateInput!, where: UserFeedWhereUniqueInput!): UserFeed
   updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
+  updateItemEnclosure(data: ItemEnclosureUpdateInput!, where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
   updateFeedItem(data: FeedItemUpdateInput!, where: FeedItemWhereUniqueInput!): FeedItem
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteUserFeed(where: UserFeedWhereUniqueInput!): UserFeed
   deleteFeed(where: FeedWhereUniqueInput!): Feed
+  deleteItemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
   deleteFeedItem(where: FeedItemWhereUniqueInput!): FeedItem
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertUserFeed(where: UserFeedWhereUniqueInput!, create: UserFeedCreateInput!, update: UserFeedUpdateInput!): UserFeed!
   upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
+  upsertItemEnclosure(where: ItemEnclosureWhereUniqueInput!, create: ItemEnclosureCreateInput!, update: ItemEnclosureUpdateInput!): ItemEnclosure!
   upsertFeedItem(where: FeedItemWhereUniqueInput!, create: FeedItemCreateInput!, update: FeedItemUpdateInput!): FeedItem!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyUserFeeds(data: UserFeedUpdateManyMutationInput!, where: UserFeedWhereInput): BatchPayload!
@@ -1354,6 +1432,11 @@ type PageInfo {
   endCursor: String
 }
 
+enum Permission {
+  ADMIN
+  USER
+}
+
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed]!
@@ -1361,7 +1444,9 @@ type Query {
   itemEnclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure]!
   feedItems(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FeedItem]!
   user(where: UserWhereUniqueInput!): User
+  userFeed(where: UserFeedWhereUniqueInput!): UserFeed
   feed(where: FeedWhereUniqueInput!): Feed
+  itemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
   feedItem(where: FeedItemWhereUniqueInput!): FeedItem
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   userFeedsConnection(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserFeedConnection!
@@ -1388,6 +1473,10 @@ type User implements Node {
   id: ID!
   email: String!
   feeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1404,6 +1493,10 @@ type UserConnection {
 
 input UserCreateInput {
   email: String!
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserCreatepermissionsInput
   feeds: UserFeedCreateManyWithoutUserInput
 }
 
@@ -1412,8 +1505,16 @@ input UserCreateOneWithoutFeedsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreatepermissionsInput {
+  set: [Permission!]
+}
+
 input UserCreateWithoutFeedsInput {
   email: String!
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserCreatepermissionsInput
 }
 
 """An edge in a connection."""
@@ -1425,10 +1526,11 @@ type UserEdge {
   cursor: String!
 }
 
-type UserFeed {
+type UserFeed implements Node {
+  id: ID!
   feed: Feed!
   schedule: DigestSchedule
-  user: User
+  user: User!
 }
 
 """A connection to a list of items."""
@@ -1444,20 +1546,22 @@ type UserFeedConnection {
 input UserFeedCreateInput {
   schedule: DigestSchedule
   feed: FeedCreateOneWithoutUserFeedsInput!
-  user: UserCreateOneWithoutFeedsInput
+  user: UserCreateOneWithoutFeedsInput!
 }
 
 input UserFeedCreateManyWithoutFeedInput {
   create: [UserFeedCreateWithoutFeedInput!]
+  connect: [UserFeedWhereUniqueInput!]
 }
 
 input UserFeedCreateManyWithoutUserInput {
   create: [UserFeedCreateWithoutUserInput!]
+  connect: [UserFeedWhereUniqueInput!]
 }
 
 input UserFeedCreateWithoutFeedInput {
   schedule: DigestSchedule
-  user: UserCreateOneWithoutFeedsInput
+  user: UserCreateOneWithoutFeedsInput!
 }
 
 input UserFeedCreateWithoutUserInput {
@@ -1475,10 +1579,10 @@ type UserFeedEdge {
 }
 
 enum UserFeedOrderByInput {
-  schedule_ASC
-  schedule_DESC
   id_ASC
   id_DESC
+  schedule_ASC
+  schedule_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -1486,6 +1590,7 @@ enum UserFeedOrderByInput {
 }
 
 type UserFeedPreviousValues {
+  id: ID!
   schedule: DigestSchedule
 }
 
@@ -1528,16 +1633,64 @@ input UserFeedSubscriptionWhereInput {
   node: UserFeedWhereInput
 }
 
+input UserFeedUpdateInput {
+  schedule: DigestSchedule
+  feed: FeedUpdateOneRequiredWithoutUserFeedsInput
+  user: UserUpdateOneRequiredWithoutFeedsInput
+}
+
 input UserFeedUpdateManyMutationInput {
   schedule: DigestSchedule
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
   create: [UserFeedCreateWithoutFeedInput!]
+  connect: [UserFeedWhereUniqueInput!]
+  disconnect: [UserFeedWhereUniqueInput!]
+  delete: [UserFeedWhereUniqueInput!]
+  update: [UserFeedUpdateWithWhereUniqueWithoutFeedInput!]
+  upsert: [UserFeedUpsertWithWhereUniqueWithoutFeedInput!]
 }
 
 input UserFeedUpdateManyWithoutUserInput {
   create: [UserFeedCreateWithoutUserInput!]
+  connect: [UserFeedWhereUniqueInput!]
+  disconnect: [UserFeedWhereUniqueInput!]
+  delete: [UserFeedWhereUniqueInput!]
+  update: [UserFeedUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [UserFeedUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input UserFeedUpdateWithoutFeedDataInput {
+  schedule: DigestSchedule
+  user: UserUpdateOneRequiredWithoutFeedsInput
+}
+
+input UserFeedUpdateWithoutUserDataInput {
+  schedule: DigestSchedule
+  feed: FeedUpdateOneRequiredWithoutUserFeedsInput
+}
+
+input UserFeedUpdateWithWhereUniqueWithoutFeedInput {
+  where: UserFeedWhereUniqueInput!
+  data: UserFeedUpdateWithoutFeedDataInput!
+}
+
+input UserFeedUpdateWithWhereUniqueWithoutUserInput {
+  where: UserFeedWhereUniqueInput!
+  data: UserFeedUpdateWithoutUserDataInput!
+}
+
+input UserFeedUpsertWithWhereUniqueWithoutFeedInput {
+  where: UserFeedWhereUniqueInput!
+  update: UserFeedUpdateWithoutFeedDataInput!
+  create: UserFeedCreateWithoutFeedInput!
+}
+
+input UserFeedUpsertWithWhereUniqueWithoutUserInput {
+  where: UserFeedWhereUniqueInput!
+  update: UserFeedUpdateWithoutUserDataInput!
+  create: UserFeedCreateWithoutUserInput!
 }
 
 input UserFeedWhereInput {
@@ -1549,6 +1702,46 @@ input UserFeedWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserFeedWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   schedule: DigestSchedule
 
   """All values that are not equal to given value."""
@@ -1563,11 +1756,21 @@ input UserFeedWhereInput {
   user: UserWhereInput
 }
 
+input UserFeedWhereUniqueInput {
+  id: ID
+}
+
 enum UserOrderByInput {
   id_ASC
   id_DESC
   email_ASC
   email_DESC
+  password_ASC
+  password_DESC
+  resetToken_ASC
+  resetToken_DESC
+  resetTokenExpiry_ASC
+  resetTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1577,6 +1780,10 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   email: String!
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: [Permission!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1622,11 +1829,43 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
   feeds: UserFeedUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
   email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpdateOneRequiredWithoutFeedsInput {
+  create: UserCreateWithoutFeedsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutFeedsDataInput
+  upsert: UserUpsertWithoutFeedsInput
+}
+
+input UserUpdatepermissionsInput {
+  set: [Permission!]
+}
+
+input UserUpdateWithoutFeedsDataInput {
+  email: String
+  password: String
+  resetToken: String
+  resetTokenExpiry: String
+  permissions: UserUpdatepermissionsInput
+}
+
+input UserUpsertWithoutFeedsInput {
+  update: UserUpdateWithoutFeedsDataInput!
+  create: UserCreateWithoutFeedsInput!
 }
 
 input UserWhereInput {
@@ -1718,6 +1957,126 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  resetToken: String
+
+  """All values that are not equal to given value."""
+  resetToken_not: String
+
+  """All values that are contained in given list."""
+  resetToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetToken_not_in: [String!]
+
+  """All values less than the given value."""
+  resetToken_lt: String
+
+  """All values less than or equal the given value."""
+  resetToken_lte: String
+
+  """All values greater than the given value."""
+  resetToken_gt: String
+
+  """All values greater than or equal the given value."""
+  resetToken_gte: String
+
+  """All values containing the given string."""
+  resetToken_contains: String
+
+  """All values not containing the given string."""
+  resetToken_not_contains: String
+
+  """All values starting with the given string."""
+  resetToken_starts_with: String
+
+  """All values not starting with the given string."""
+  resetToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetToken_ends_with: String
+
+  """All values not ending with the given string."""
+  resetToken_not_ends_with: String
+  resetTokenExpiry: String
+
+  """All values that are not equal to given value."""
+  resetTokenExpiry_not: String
+
+  """All values that are contained in given list."""
+  resetTokenExpiry_in: [String!]
+
+  """All values that are not contained in given list."""
+  resetTokenExpiry_not_in: [String!]
+
+  """All values less than the given value."""
+  resetTokenExpiry_lt: String
+
+  """All values less than or equal the given value."""
+  resetTokenExpiry_lte: String
+
+  """All values greater than the given value."""
+  resetTokenExpiry_gt: String
+
+  """All values greater than or equal the given value."""
+  resetTokenExpiry_gte: String
+
+  """All values containing the given string."""
+  resetTokenExpiry_contains: String
+
+  """All values not containing the given string."""
+  resetTokenExpiry_not_contains: String
+
+  """All values starting with the given string."""
+  resetTokenExpiry_starts_with: String
+
+  """All values not starting with the given string."""
+  resetTokenExpiry_not_starts_with: String
+
+  """All values ending with the given string."""
+  resetTokenExpiry_ends_with: String
+
+  """All values not ending with the given string."""
+  resetTokenExpiry_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
