@@ -57,7 +57,7 @@ type FeedItem {
     title: String
     description: String
     summary: String
-    date: DateTime
+    pubDate: DateTime
     link: String
     guid: String! @unique
     imageUrl: String

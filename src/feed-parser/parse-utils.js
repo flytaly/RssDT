@@ -84,7 +84,7 @@ function parseFeed(stream, existingItems = [{ pubDate: 0 }]) {
  */
 async function getNewItems(url, existingItems = [{ pubDate: 0 }]) {
     const feedStream = await getFeedStream(url);
-    const feed = await parseFeed(feedStream, existingItems);
+    const feed = await parseFeed(feedStream, existingItems.length ? existingItems : [{ pubDate: 0 }]);
     return feed;
 }
 

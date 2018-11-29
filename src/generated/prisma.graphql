@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Mon Nov 26 2018 17:03:52 GMT+0300 (Moscow Standard Time)
+# timestamp: Thu Nov 29 2018 18:28:00 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -98,7 +98,7 @@ type FeedItem {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String!
   imageUrl: String
@@ -120,7 +120,7 @@ input FeedItemCreateInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String!
   imageUrl: String
@@ -142,7 +142,7 @@ input FeedItemCreateWithoutEnclosuresInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String!
   imageUrl: String
@@ -165,8 +165,8 @@ enum FeedItemOrderByInput {
   description_DESC
   summary_ASC
   summary_DESC
-  date_ASC
-  date_DESC
+  pubDate_ASC
+  pubDate_DESC
   link_ASC
   link_DESC
   guid_ASC
@@ -187,7 +187,7 @@ type FeedItemPreviousValues {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String!
   imageUrl: String
@@ -237,7 +237,7 @@ input FeedItemUpdateDataInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String
   imageUrl: String
@@ -249,7 +249,7 @@ input FeedItemUpdateInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String
   imageUrl: String
@@ -270,7 +270,7 @@ input FeedItemUpdateManyMutationInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String
   imageUrl: String
@@ -288,7 +288,7 @@ input FeedItemUpdateWithoutEnclosuresDataInput {
   title: String
   description: String
   summary: String
-  date: DateTime
+  pubDate: DateTime
   link: String
   guid: String
   imageUrl: String
@@ -440,28 +440,28 @@ input FeedItemWhereInput {
 
   """All values not ending with the given string."""
   summary_not_ends_with: String
-  date: DateTime
+  pubDate: DateTime
 
   """All values that are not equal to given value."""
-  date_not: DateTime
+  pubDate_not: DateTime
 
   """All values that are contained in given list."""
-  date_in: [DateTime!]
+  pubDate_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  date_not_in: [DateTime!]
+  pubDate_not_in: [DateTime!]
 
   """All values less than the given value."""
-  date_lt: DateTime
+  pubDate_lt: DateTime
 
   """All values less than or equal the given value."""
-  date_lte: DateTime
+  pubDate_lte: DateTime
 
   """All values greater than the given value."""
-  date_gt: DateTime
+  pubDate_gt: DateTime
 
   """All values greater than or equal the given value."""
-  date_gte: DateTime
+  pubDate_gte: DateTime
   link: String
 
   """All values that are not equal to given value."""

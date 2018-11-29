@@ -4,8 +4,9 @@ const Query = require('./resolvers/Query');
 
 /**
  * @param db connection to a database that will be injected into context to have access to it in the resolvers
+ * @param watcher feed watcher instance
  */
-const createServer = db => new GraphQLServer({
+const createServer = (db, watcher) => new GraphQLServer({
     typeDefs: 'src/schema.graphql',
     resolvers: {
         Mutation,
@@ -15,7 +16,7 @@ const createServer = db => new GraphQLServer({
     resolverValidationOptions: {
         requireResolversForResolveType: false,
     },
-    context: req => ({ ...req, db }),
+    context: req => ({ ...req, db, watcher }),
 });
 
 module.exports = createServer;
