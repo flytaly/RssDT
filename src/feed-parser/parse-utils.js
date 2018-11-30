@@ -38,10 +38,15 @@ function getFeedStream(url) {
 function isNewItem(newItem, existingItems) {
     const lastItem = existingItems[existingItems.length - 1];
 
-    if (Number(lastItem.pubDate) > Number(newItem.pubDate)) {
-        return false;
+    if (!lastItem.pubDate || !newItem.pubDate) return existingItems.every(oldItem => oldItem.guid !== newItem.guid);
+
+    const oldDate = new Date(lastItem.pubDate);
+    const newDate = new Date(newItem.pubDate);
+    if (oldDate < newDate) {
+        return true;
     }
-    return existingItems.every(oldItem => oldItem.guid !== newItem.guid);
+
+    return false;
 }
 
 /**

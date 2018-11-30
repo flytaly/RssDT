@@ -59,7 +59,7 @@ type FeedItem {
     summary: String
     pubDate: DateTime
     link: String
-    guid: String! @unique
+    guid: String!
     imageUrl: String
     imageTitle: String
     enclosures: [ItemEnclosure!]!

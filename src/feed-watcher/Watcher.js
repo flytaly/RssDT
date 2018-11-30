@@ -27,11 +27,11 @@ class Watcher {
     async saveFeed(url, newItems) {
         // TODO: Limit number of items in DB
         const items = Watcher.filterFields(newItems);
-
-        return this.db.mutation.updateFeed({
+        const query = {
             where: { url },
             data: { items: { create: items } },
-        });
+        };
+        return this.db.mutation.updateFeed(query);
     }
 
     async update() {
@@ -42,7 +42,8 @@ class Watcher {
                 const items = await this.getItems(url);
 
                 const newItems = await getNewItems(url, items);
-                await this.saveFeed(url, newItems);
+
+                if (newItems.length) await this.saveFeed(url, newItems);
                 console.log(`${new Date().toUTCString()}: ${url} was updated. Saved ${newItems.length} new items`);
             } catch (error) {
                 console.error(`${new Date().toUTCString()}: Couldn't update ${url}. Error: ${error.message}`);
@@ -72,6 +73,8 @@ class Watcher {
     }
 
     static filterFields(items) {
+        // TODO: save images and enclosures
+
         const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
 
         return items

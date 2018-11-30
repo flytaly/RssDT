@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Thu Nov 29 2018 18:28:00 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Nov 30 2018 19:47:45 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -130,12 +130,10 @@ input FeedItemCreateInput {
 
 input FeedItemCreateManyInput {
   create: [FeedItemCreateInput!]
-  connect: [FeedItemWhereUniqueInput!]
 }
 
 input FeedItemCreateOneWithoutEnclosuresInput {
   create: FeedItemCreateWithoutEnclosuresInput
-  connect: FeedItemWhereUniqueInput
 }
 
 input FeedItemCreateWithoutEnclosuresInput {
@@ -233,37 +231,8 @@ input FeedItemSubscriptionWhereInput {
   node: FeedItemWhereInput
 }
 
-input FeedItemUpdateDataInput {
-  title: String
-  description: String
-  summary: String
-  pubDate: DateTime
-  link: String
-  guid: String
-  imageUrl: String
-  imageTitle: String
-  enclosures: ItemEnclosureUpdateManyWithoutItemInput
-}
-
-input FeedItemUpdateInput {
-  title: String
-  description: String
-  summary: String
-  pubDate: DateTime
-  link: String
-  guid: String
-  imageUrl: String
-  imageTitle: String
-  enclosures: ItemEnclosureUpdateManyWithoutItemInput
-}
-
 input FeedItemUpdateManyInput {
   create: [FeedItemCreateInput!]
-  connect: [FeedItemWhereUniqueInput!]
-  disconnect: [FeedItemWhereUniqueInput!]
-  delete: [FeedItemWhereUniqueInput!]
-  update: [FeedItemUpdateWithWhereUniqueNestedInput!]
-  upsert: [FeedItemUpsertWithWhereUniqueNestedInput!]
 }
 
 input FeedItemUpdateManyMutationInput {
@@ -279,7 +248,6 @@ input FeedItemUpdateManyMutationInput {
 
 input FeedItemUpdateOneRequiredWithoutEnclosuresInput {
   create: FeedItemCreateWithoutEnclosuresInput
-  connect: FeedItemWhereUniqueInput
   update: FeedItemUpdateWithoutEnclosuresDataInput
   upsert: FeedItemUpsertWithoutEnclosuresInput
 }
@@ -295,20 +263,9 @@ input FeedItemUpdateWithoutEnclosuresDataInput {
   imageTitle: String
 }
 
-input FeedItemUpdateWithWhereUniqueNestedInput {
-  where: FeedItemWhereUniqueInput!
-  data: FeedItemUpdateDataInput!
-}
-
 input FeedItemUpsertWithoutEnclosuresInput {
   update: FeedItemUpdateWithoutEnclosuresDataInput!
   create: FeedItemCreateWithoutEnclosuresInput!
-}
-
-input FeedItemUpsertWithWhereUniqueNestedInput {
-  where: FeedItemWhereUniqueInput!
-  update: FeedItemUpdateDataInput!
-  create: FeedItemCreateInput!
 }
 
 input FeedItemWhereInput {
@@ -625,10 +582,6 @@ input FeedItemWhereInput {
   enclosures_every: ItemEnclosureWhereInput
   enclosures_some: ItemEnclosureWhereInput
   enclosures_none: ItemEnclosureWhereInput
-}
-
-input FeedItemWhereUniqueInput {
-  guid: String
 }
 
 enum FeedOrderByInput {
@@ -1164,32 +1117,6 @@ input ItemEnclosureUpdateManyMutationInput {
   length: String
 }
 
-input ItemEnclosureUpdateManyWithoutItemInput {
-  create: [ItemEnclosureCreateWithoutItemInput!]
-  connect: [ItemEnclosureWhereUniqueInput!]
-  disconnect: [ItemEnclosureWhereUniqueInput!]
-  delete: [ItemEnclosureWhereUniqueInput!]
-  update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
-  upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
-}
-
-input ItemEnclosureUpdateWithoutItemDataInput {
-  url: String
-  type: String
-  length: String
-}
-
-input ItemEnclosureUpdateWithWhereUniqueWithoutItemInput {
-  where: ItemEnclosureWhereUniqueInput!
-  data: ItemEnclosureUpdateWithoutItemDataInput!
-}
-
-input ItemEnclosureUpsertWithWhereUniqueWithoutItemInput {
-  where: ItemEnclosureWhereUniqueInput!
-  update: ItemEnclosureUpdateWithoutItemDataInput!
-  create: ItemEnclosureCreateWithoutItemInput!
-}
-
 input ItemEnclosureWhereInput {
   """Logical AND on all given filters."""
   AND: [ItemEnclosureWhereInput!]
@@ -1382,17 +1309,14 @@ type Mutation {
   updateUserFeed(data: UserFeedUpdateInput!, where: UserFeedWhereUniqueInput!): UserFeed
   updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
   updateItemEnclosure(data: ItemEnclosureUpdateInput!, where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-  updateFeedItem(data: FeedItemUpdateInput!, where: FeedItemWhereUniqueInput!): FeedItem
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUserFeed(where: UserFeedWhereUniqueInput!): UserFeed
   deleteFeed(where: FeedWhereUniqueInput!): Feed
   deleteItemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-  deleteFeedItem(where: FeedItemWhereUniqueInput!): FeedItem
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertUserFeed(where: UserFeedWhereUniqueInput!, create: UserFeedCreateInput!, update: UserFeedUpdateInput!): UserFeed!
   upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
   upsertItemEnclosure(where: ItemEnclosureWhereUniqueInput!, create: ItemEnclosureCreateInput!, update: ItemEnclosureUpdateInput!): ItemEnclosure!
-  upsertFeedItem(where: FeedItemWhereUniqueInput!, create: FeedItemCreateInput!, update: FeedItemUpdateInput!): FeedItem!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyUserFeeds(data: UserFeedUpdateManyMutationInput!, where: UserFeedWhereInput): BatchPayload!
   updateManyFeeds(data: FeedUpdateManyMutationInput!, where: FeedWhereInput): BatchPayload!
@@ -1447,7 +1371,6 @@ type Query {
   userFeed(where: UserFeedWhereUniqueInput!): UserFeed
   feed(where: FeedWhereUniqueInput!): Feed
   itemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-  feedItem(where: FeedItemWhereUniqueInput!): FeedItem
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   userFeedsConnection(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserFeedConnection!
   feedsConnection(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedConnection!
