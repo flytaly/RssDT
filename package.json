@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "dotenv node src/index.js",
-    "dev": "dotenv -e .env.dev -- nodemon -e js,graphql -x node src/index.js --inspect",
+    "dev": "dotenv -e .env.dev -- nodemon -e js,graphql -x node --inspect src/index.js  | pino-pretty",
     "delete:dev": "prisma delete --env-file .env.dev --force",
     "deploy:prod": "prisma deploy",
     "deploy:dev": "prisma deploy --env-file .env.dev",
@@ -22,7 +22,8 @@
     "jest-cli": "^23.6.0",
     "nock": "^10.0.2",
     "node-fetch": "^2.3.0",
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.7",
+    "pino-pretty": "^2.3.0"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -34,6 +35,7 @@
     "lodash.pick": "^4.4.0",
     "node-schedule": "^1.3.1",
     "p-limit": "^2.0.0",
+    "pino": "^5.9.0",
     "prisma": "^1.21.1",
     "prisma-binding": "^2.2.8"
   }

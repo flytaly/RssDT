@@ -1,6 +1,7 @@
 const schedule = require('node-schedule');
 const pLimit = require('p-limit');
 const pick = require('lodash.pick');
+const logger = require('../logger');
 const { getNewItems } = require('../feed-parser');
 
 class Watcher {
@@ -44,24 +45,22 @@ class Watcher {
                 const newItems = await getNewItems(url, items);
 
                 if (newItems.length) await this.saveFeed(url, newItems);
-                console.log(`${new Date().toUTCString()}: ${url} was updated. Saved ${newItems.length} new items`);
+                logger.info({ url, newItemsNumber: newItems.length }, 'A feed was updated');
             } catch (error) {
-                console.error(`${new Date().toUTCString()}: Couldn't update ${url}. Error: ${error.message}`);
+                logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
             }
         }));
         await Promise.all(processFeeds);
-        console.log(`${new Date().toUTCString()}: Feeds were updated.`);
+        logger.info('Feeds were updated');
     }
 
     start() {
-        this.job = schedule.scheduleJob(this.cron, () => {
-            this.update();
-        });
+        this.job = schedule.scheduleJob(this.cron, () => this.update());
     }
 
     cancel() {
         this.job.cancel();
-        console.log('job stopped');
+        logger.info('Watcher stopped');
     }
 
     reschedule(spec) {
