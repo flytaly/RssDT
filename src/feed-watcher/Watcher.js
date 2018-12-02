@@ -1,7 +1,7 @@
 const schedule = require('node-schedule');
 const pLimit = require('p-limit');
 const pick = require('lodash.pick');
-const { getNewItems } = require('../feed-parser/parse-utils');
+const { getNewItems } = require('../feed-parser');
 
 class Watcher {
     /**

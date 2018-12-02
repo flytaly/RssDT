@@ -7,7 +7,7 @@ const { URL } = require('url');
 const { feeds, updatedFeeds } = require('./mocks/feeds');
 const {
     getNewItems, getFeedStream, parseFeed, isFeed,
-} = require('../feed-parser/parse-utils');
+} = require('../feed-parser');
 
 axios.defaults.adapter = httpAdapter;
 

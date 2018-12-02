@@ -2,12 +2,13 @@ const createServer = require('./server');
 const db = require('./bind-prisma');
 const Watcher = require('./feed-watcher');
 
-const feedWatcher = new Watcher(db, '*/2 * * * * *');
+const feedWatcher = new Watcher(db);
 feedWatcher.start();
 
-setTimeout(() => { // for developing
-    feedWatcher.cancel();
-}, 2300);
+(async () => { // for developing
+    await feedWatcher.update();
+    await feedWatcher.cancel();
+})();
 
 const server = createServer(db, feedWatcher);
 server.start(({ port }) => console.log(
