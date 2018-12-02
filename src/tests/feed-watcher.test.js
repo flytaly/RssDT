@@ -55,3 +55,36 @@ describe('Feed watcher', () => {
         });
     });
 });
+
+describe('Feed watcher: filterFields method', () => {
+    const { filterFields } = Watcher;
+
+    test('should return object with necessary fields', () => {
+        const item = {
+            ...mocks.item,
+            needless: 'Unnecessary field',
+            image: mocks.itemImage,
+        };
+        const resultItem = {
+            ...mocks.item,
+            imageUrl: mocks.itemImage.url,
+        };
+        expect(filterFields([item])).toEqual([resultItem]);
+    });
+
+    test('should return object with enclosures', () => {
+        const item = {
+            ...mocks.item,
+            image: mocks.itemImage,
+            enclosures: mocks.enclosures,
+        };
+        const resultItem = {
+            ...mocks.item,
+            imageUrl: mocks.itemImage.url,
+            enclosures: {
+                create: mocks.enclosures,
+            },
+        };
+        expect(filterFields([item])).toEqual([resultItem]);
+    });
+});

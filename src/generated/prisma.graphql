@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Fri Nov 30 2018 19:47:45 GMT+0300 (Moscow Standard Time)
+# timestamp: Sun Dec 02 2018 19:58:38 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -44,7 +44,9 @@ type Feed implements Node {
   link: String
   title: String
   description: String
-  image: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
   userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
   items(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FeedItem!]
   createdAt: DateTime!
@@ -66,9 +68,16 @@ input FeedCreateInput {
   link: String
   title: String
   description: String
-  image: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
   userFeeds: UserFeedCreateManyWithoutFeedInput
-  items: FeedItemCreateManyInput
+  items: FeedItemCreateManyWithoutFeedInput
+}
+
+input FeedCreateOneWithoutItemsInput {
+  create: FeedCreateWithoutItemsInput
+  connect: FeedWhereUniqueInput
 }
 
 input FeedCreateOneWithoutUserFeedsInput {
@@ -76,13 +85,26 @@ input FeedCreateOneWithoutUserFeedsInput {
   connect: FeedWhereUniqueInput
 }
 
+input FeedCreateWithoutItemsInput {
+  url: String!
+  link: String
+  title: String
+  description: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
+  userFeeds: UserFeedCreateManyWithoutFeedInput
+}
+
 input FeedCreateWithoutUserFeedsInput {
   url: String!
   link: String
   title: String
   description: String
-  image: String
-  items: FeedItemCreateManyInput
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
+  items: FeedItemCreateManyWithoutFeedInput
 }
 
 """An edge in a connection."""
@@ -94,7 +116,9 @@ type FeedEdge {
   cursor: String!
 }
 
-type FeedItem {
+type FeedItem implements Node {
+  id: ID!
+  feed: Feed
   title: String
   description: String
   summary: String
@@ -102,7 +126,6 @@ type FeedItem {
   link: String
   guid: String!
   imageUrl: String
-  imageTitle: String
   enclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure!]
 }
 
@@ -124,16 +147,18 @@ input FeedItemCreateInput {
   link: String
   guid: String!
   imageUrl: String
-  imageTitle: String
+  feed: FeedCreateOneWithoutItemsInput
   enclosures: ItemEnclosureCreateManyWithoutItemInput
 }
 
-input FeedItemCreateManyInput {
-  create: [FeedItemCreateInput!]
+input FeedItemCreateManyWithoutFeedInput {
+  create: [FeedItemCreateWithoutFeedInput!]
+  connect: [FeedItemWhereUniqueInput!]
 }
 
 input FeedItemCreateOneWithoutEnclosuresInput {
   create: FeedItemCreateWithoutEnclosuresInput
+  connect: FeedItemWhereUniqueInput
 }
 
 input FeedItemCreateWithoutEnclosuresInput {
@@ -144,7 +169,18 @@ input FeedItemCreateWithoutEnclosuresInput {
   link: String
   guid: String!
   imageUrl: String
-  imageTitle: String
+  feed: FeedCreateOneWithoutItemsInput
+}
+
+input FeedItemCreateWithoutFeedInput {
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  enclosures: ItemEnclosureCreateManyWithoutItemInput
 }
 
 """An edge in a connection."""
@@ -157,6 +193,8 @@ type FeedItemEdge {
 }
 
 enum FeedItemOrderByInput {
+  id_ASC
+  id_DESC
   title_ASC
   title_DESC
   description_ASC
@@ -171,10 +209,6 @@ enum FeedItemOrderByInput {
   guid_DESC
   imageUrl_ASC
   imageUrl_DESC
-  imageTitle_ASC
-  imageTitle_DESC
-  id_ASC
-  id_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -182,6 +216,7 @@ enum FeedItemOrderByInput {
 }
 
 type FeedItemPreviousValues {
+  id: ID!
   title: String
   description: String
   summary: String
@@ -189,7 +224,6 @@ type FeedItemPreviousValues {
   link: String
   guid: String!
   imageUrl: String
-  imageTitle: String
 }
 
 type FeedItemSubscriptionPayload {
@@ -231,8 +265,16 @@ input FeedItemSubscriptionWhereInput {
   node: FeedItemWhereInput
 }
 
-input FeedItemUpdateManyInput {
-  create: [FeedItemCreateInput!]
+input FeedItemUpdateInput {
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  feed: FeedUpdateOneWithoutItemsInput
+  enclosures: ItemEnclosureUpdateManyWithoutItemInput
 }
 
 input FeedItemUpdateManyMutationInput {
@@ -243,11 +285,20 @@ input FeedItemUpdateManyMutationInput {
   link: String
   guid: String
   imageUrl: String
-  imageTitle: String
+}
+
+input FeedItemUpdateManyWithoutFeedInput {
+  create: [FeedItemCreateWithoutFeedInput!]
+  connect: [FeedItemWhereUniqueInput!]
+  disconnect: [FeedItemWhereUniqueInput!]
+  delete: [FeedItemWhereUniqueInput!]
+  update: [FeedItemUpdateWithWhereUniqueWithoutFeedInput!]
+  upsert: [FeedItemUpsertWithWhereUniqueWithoutFeedInput!]
 }
 
 input FeedItemUpdateOneRequiredWithoutEnclosuresInput {
   create: FeedItemCreateWithoutEnclosuresInput
+  connect: FeedItemWhereUniqueInput
   update: FeedItemUpdateWithoutEnclosuresDataInput
   upsert: FeedItemUpsertWithoutEnclosuresInput
 }
@@ -260,12 +311,34 @@ input FeedItemUpdateWithoutEnclosuresDataInput {
   link: String
   guid: String
   imageUrl: String
-  imageTitle: String
+  feed: FeedUpdateOneWithoutItemsInput
+}
+
+input FeedItemUpdateWithoutFeedDataInput {
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  enclosures: ItemEnclosureUpdateManyWithoutItemInput
+}
+
+input FeedItemUpdateWithWhereUniqueWithoutFeedInput {
+  where: FeedItemWhereUniqueInput!
+  data: FeedItemUpdateWithoutFeedDataInput!
 }
 
 input FeedItemUpsertWithoutEnclosuresInput {
   update: FeedItemUpdateWithoutEnclosuresDataInput!
   create: FeedItemCreateWithoutEnclosuresInput!
+}
+
+input FeedItemUpsertWithWhereUniqueWithoutFeedInput {
+  where: FeedItemWhereUniqueInput!
+  update: FeedItemUpdateWithoutFeedDataInput!
+  create: FeedItemCreateWithoutFeedInput!
 }
 
 input FeedItemWhereInput {
@@ -277,6 +350,46 @@ input FeedItemWhereInput {
 
   """Logical NOT on all given filters combined by AND."""
   NOT: [FeedItemWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
   title: String
 
   """All values that are not equal to given value."""
@@ -539,49 +652,14 @@ input FeedItemWhereInput {
 
   """All values not ending with the given string."""
   imageUrl_not_ends_with: String
-  imageTitle: String
-
-  """All values that are not equal to given value."""
-  imageTitle_not: String
-
-  """All values that are contained in given list."""
-  imageTitle_in: [String!]
-
-  """All values that are not contained in given list."""
-  imageTitle_not_in: [String!]
-
-  """All values less than the given value."""
-  imageTitle_lt: String
-
-  """All values less than or equal the given value."""
-  imageTitle_lte: String
-
-  """All values greater than the given value."""
-  imageTitle_gt: String
-
-  """All values greater than or equal the given value."""
-  imageTitle_gte: String
-
-  """All values containing the given string."""
-  imageTitle_contains: String
-
-  """All values not containing the given string."""
-  imageTitle_not_contains: String
-
-  """All values starting with the given string."""
-  imageTitle_starts_with: String
-
-  """All values not starting with the given string."""
-  imageTitle_not_starts_with: String
-
-  """All values ending with the given string."""
-  imageTitle_ends_with: String
-
-  """All values not ending with the given string."""
-  imageTitle_not_ends_with: String
+  feed: FeedWhereInput
   enclosures_every: ItemEnclosureWhereInput
   enclosures_some: ItemEnclosureWhereInput
   enclosures_none: ItemEnclosureWhereInput
+}
+
+input FeedItemWhereUniqueInput {
+  id: ID
 }
 
 enum FeedOrderByInput {
@@ -595,8 +673,12 @@ enum FeedOrderByInput {
   title_DESC
   description_ASC
   description_DESC
-  image_ASC
-  image_DESC
+  imageLink_ASC
+  imageLink_DESC
+  imageUrl_ASC
+  imageUrl_DESC
+  imageTitle_ASC
+  imageTitle_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -609,7 +691,9 @@ type FeedPreviousValues {
   link: String
   title: String
   description: String
-  image: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -658,9 +742,11 @@ input FeedUpdateInput {
   link: String
   title: String
   description: String
-  image: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
   userFeeds: UserFeedUpdateManyWithoutFeedInput
-  items: FeedItemUpdateManyInput
+  items: FeedItemUpdateManyWithoutFeedInput
 }
 
 input FeedUpdateManyMutationInput {
@@ -668,7 +754,9 @@ input FeedUpdateManyMutationInput {
   link: String
   title: String
   description: String
-  image: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
 }
 
 input FeedUpdateOneRequiredWithoutUserFeedsInput {
@@ -678,13 +766,40 @@ input FeedUpdateOneRequiredWithoutUserFeedsInput {
   upsert: FeedUpsertWithoutUserFeedsInput
 }
 
+input FeedUpdateOneWithoutItemsInput {
+  create: FeedCreateWithoutItemsInput
+  connect: FeedWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: FeedUpdateWithoutItemsDataInput
+  upsert: FeedUpsertWithoutItemsInput
+}
+
+input FeedUpdateWithoutItemsDataInput {
+  url: String
+  link: String
+  title: String
+  description: String
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
+  userFeeds: UserFeedUpdateManyWithoutFeedInput
+}
+
 input FeedUpdateWithoutUserFeedsDataInput {
   url: String
   link: String
   title: String
   description: String
-  image: String
-  items: FeedItemUpdateManyInput
+  imageLink: String
+  imageUrl: String
+  imageTitle: String
+  items: FeedItemUpdateManyWithoutFeedInput
+}
+
+input FeedUpsertWithoutItemsInput {
+  update: FeedUpdateWithoutItemsDataInput!
+  create: FeedCreateWithoutItemsInput!
 }
 
 input FeedUpsertWithoutUserFeedsInput {
@@ -901,46 +1016,126 @@ input FeedWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  image: String
+  imageLink: String
 
   """All values that are not equal to given value."""
-  image_not: String
+  imageLink_not: String
 
   """All values that are contained in given list."""
-  image_in: [String!]
+  imageLink_in: [String!]
 
   """All values that are not contained in given list."""
-  image_not_in: [String!]
+  imageLink_not_in: [String!]
 
   """All values less than the given value."""
-  image_lt: String
+  imageLink_lt: String
 
   """All values less than or equal the given value."""
-  image_lte: String
+  imageLink_lte: String
 
   """All values greater than the given value."""
-  image_gt: String
+  imageLink_gt: String
 
   """All values greater than or equal the given value."""
-  image_gte: String
+  imageLink_gte: String
 
   """All values containing the given string."""
-  image_contains: String
+  imageLink_contains: String
 
   """All values not containing the given string."""
-  image_not_contains: String
+  imageLink_not_contains: String
 
   """All values starting with the given string."""
-  image_starts_with: String
+  imageLink_starts_with: String
 
   """All values not starting with the given string."""
-  image_not_starts_with: String
+  imageLink_not_starts_with: String
 
   """All values ending with the given string."""
-  image_ends_with: String
+  imageLink_ends_with: String
 
   """All values not ending with the given string."""
-  image_not_ends_with: String
+  imageLink_not_ends_with: String
+  imageUrl: String
+
+  """All values that are not equal to given value."""
+  imageUrl_not: String
+
+  """All values that are contained in given list."""
+  imageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imageUrl_lte: String
+
+  """All values greater than the given value."""
+  imageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imageUrl_gte: String
+
+  """All values containing the given string."""
+  imageUrl_contains: String
+
+  """All values not containing the given string."""
+  imageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imageUrl_not_ends_with: String
+  imageTitle: String
+
+  """All values that are not equal to given value."""
+  imageTitle_not: String
+
+  """All values that are contained in given list."""
+  imageTitle_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageTitle_not_in: [String!]
+
+  """All values less than the given value."""
+  imageTitle_lt: String
+
+  """All values less than or equal the given value."""
+  imageTitle_lte: String
+
+  """All values greater than the given value."""
+  imageTitle_gt: String
+
+  """All values greater than or equal the given value."""
+  imageTitle_gte: String
+
+  """All values containing the given string."""
+  imageTitle_contains: String
+
+  """All values not containing the given string."""
+  imageTitle_not_contains: String
+
+  """All values starting with the given string."""
+  imageTitle_starts_with: String
+
+  """All values not starting with the given string."""
+  imageTitle_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageTitle_ends_with: String
+
+  """All values not ending with the given string."""
+  imageTitle_not_ends_with: String
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1115,6 +1310,32 @@ input ItemEnclosureUpdateManyMutationInput {
   url: String
   type: String
   length: String
+}
+
+input ItemEnclosureUpdateManyWithoutItemInput {
+  create: [ItemEnclosureCreateWithoutItemInput!]
+  connect: [ItemEnclosureWhereUniqueInput!]
+  disconnect: [ItemEnclosureWhereUniqueInput!]
+  delete: [ItemEnclosureWhereUniqueInput!]
+  update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
+  upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
+}
+
+input ItemEnclosureUpdateWithoutItemDataInput {
+  url: String
+  type: String
+  length: String
+}
+
+input ItemEnclosureUpdateWithWhereUniqueWithoutItemInput {
+  where: ItemEnclosureWhereUniqueInput!
+  data: ItemEnclosureUpdateWithoutItemDataInput!
+}
+
+input ItemEnclosureUpsertWithWhereUniqueWithoutItemInput {
+  where: ItemEnclosureWhereUniqueInput!
+  update: ItemEnclosureUpdateWithoutItemDataInput!
+  create: ItemEnclosureCreateWithoutItemInput!
 }
 
 input ItemEnclosureWhereInput {
@@ -1309,14 +1530,17 @@ type Mutation {
   updateUserFeed(data: UserFeedUpdateInput!, where: UserFeedWhereUniqueInput!): UserFeed
   updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
   updateItemEnclosure(data: ItemEnclosureUpdateInput!, where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  updateFeedItem(data: FeedItemUpdateInput!, where: FeedItemWhereUniqueInput!): FeedItem
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUserFeed(where: UserFeedWhereUniqueInput!): UserFeed
   deleteFeed(where: FeedWhereUniqueInput!): Feed
   deleteItemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  deleteFeedItem(where: FeedItemWhereUniqueInput!): FeedItem
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertUserFeed(where: UserFeedWhereUniqueInput!, create: UserFeedCreateInput!, update: UserFeedUpdateInput!): UserFeed!
   upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
   upsertItemEnclosure(where: ItemEnclosureWhereUniqueInput!, create: ItemEnclosureCreateInput!, update: ItemEnclosureUpdateInput!): ItemEnclosure!
+  upsertFeedItem(where: FeedItemWhereUniqueInput!, create: FeedItemCreateInput!, update: FeedItemUpdateInput!): FeedItem!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyUserFeeds(data: UserFeedUpdateManyMutationInput!, where: UserFeedWhereInput): BatchPayload!
   updateManyFeeds(data: FeedUpdateManyMutationInput!, where: FeedWhereInput): BatchPayload!
@@ -1371,6 +1595,7 @@ type Query {
   userFeed(where: UserFeedWhereUniqueInput!): UserFeed
   feed(where: FeedWhereUniqueInput!): Feed
   itemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  feedItem(where: FeedItemWhereUniqueInput!): FeedItem
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   userFeedsConnection(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserFeedConnection!
   feedsConnection(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedConnection!

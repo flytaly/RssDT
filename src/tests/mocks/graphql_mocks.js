@@ -20,6 +20,27 @@ const feed = {
 const oldFeedItems = [{ guid: 'guid1', pubDate: 'Fri, 30 Nov 2018 20:00:00 GMT' }];
 const newFeedItems = [{ guid: 'guid2', pubDate: 'Fri, 30 Nov 2018 22:00:00 GMT' }];
 
+const item = {
+    title: 'title',
+    description: 'description',
+    summary: 'summary',
+    pubDate: new Date(),
+    link: 'link',
+    guid: 'item_guid',
+};
+
+const itemImage = { url: 'http://imageurl' };
+
+const enclosures = [{
+    url: 'http://encolsureImg.jpg',
+    type: 'image/jpeg',
+    length: '100000',
+}, {
+    url: 'http://encolsureAudio.mp3',
+    type: 'audio/mpeg',
+    length: '200000000',
+}];
+
 module.exports = {
     user,
     addFeed,
@@ -27,4 +48,7 @@ module.exports = {
     feed,
     oldFeedItems,
     newFeedItems,
+    item,
+    itemImage,
+    enclosures,
 };

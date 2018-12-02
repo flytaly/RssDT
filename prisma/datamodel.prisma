@@ -38,9 +38,11 @@ type Feed {
     link: String # link to the website
     title: String
     description: String
-    image: String
+    imageLink: String
+    imageUrl: String
+    imageTitle: String
     userFeeds: [UserFeed!]!
-    items: [FeedItem!]!
+    items: [FeedItem!]! @relation(name: "FeedItems", onDelete: CASCADE)
     createdAt: DateTime!
     updatedAt: DateTime!
 }
@@ -54,6 +56,8 @@ type ItemEnclosure {
 }
 
 type FeedItem {
+    id: ID! @unique
+    feed: Feed @relation(name: "FeedItems", onDelete: SET_NULL)
     title: String
     description: String
     summary: String
@@ -61,7 +65,6 @@ type FeedItem {
     link: String
     guid: String!
     imageUrl: String
-    imageTitle: String
     enclosures: [ItemEnclosure!]!
         @relation(name: "ItemEnclosures", onDelete: CASCADE)
 }

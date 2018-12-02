@@ -38,20 +38,26 @@ class Watcher {
     async update() {
         const feeds = await this.getFeedsInfo();
         const limit = pLimit(this.maxConnections);
-        const processFeeds = feeds.map(({ url }) => limit(async () => {
-            try {
-                const items = await this.getItems(url);
+        let [totalFeeds, totalNewItems] = [0, 0];
+        await Promise.all(
+            feeds.map(({ url }) => limit(async () => {
+                try {
+                    const items = await this.getItems(url);
 
-                const newItems = await getNewItems(url, items);
+                    const newItems = await getNewItems(url, items);
 
-                if (newItems.length) await this.saveFeed(url, newItems);
-                logger.info({ url, newItemsNumber: newItems.length }, 'A feed was updated');
-            } catch (error) {
-                logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
-            }
-        }));
-        await Promise.all(processFeeds);
-        logger.info('Feeds were updated');
+                    if (newItems.length) {
+                        await this.saveFeed(url, newItems);
+                        totalNewItems += newItems.length;
+                    }
+                    logger.info({ url, newItems: newItems.length }, 'A feed was updated');
+                    totalFeeds += 1;
+                } catch (error) {
+                    logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
+                }
+            })),
+        );
+        logger.info({ totalFeeds, totalNewItems }, 'Feeds were updated');
     }
 
     start() {
@@ -72,13 +78,19 @@ class Watcher {
     }
 
     static filterFields(items) {
-        // TODO: save images and enclosures
-
         const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
+        const encFields = ['url', 'type', 'length'];
 
         return items
             .map((item) => {
                 const obj = pick(item, fields);
+                if (item.image && item.image.url) {
+                    obj.imageUrl = item.image.url;
+                }
+                if (item.enclosures && item.enclosures.length) {
+                    obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
+                }
+
                 return obj;
             })
             .sort((a, b) => a.pubDate - b.pubDate);
