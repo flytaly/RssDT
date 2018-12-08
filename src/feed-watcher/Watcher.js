@@ -14,6 +14,8 @@ class Watcher {
         this.db = db;
         this.maxConnections = maxConnections;
         this.cron = cron;
+        this.maxNewItems = 150; // maximum number of new items saving per feed
+        this.itemMaxTime = (1000 * 60 * 60 * 24) * 2; // maximum time of storing items. 2 days
     }
 
     async getFeedsInfo() {
@@ -25,14 +27,64 @@ class Watcher {
         return items;
     }
 
+    /**
+     * Delete items that are older than this.itemMaxTime except one last item
+     */
+    async deleteOldItems(url) {
+        try {
+            const lastItem = (await this.db.query.feedItems({
+                last: 1,
+                where: { feed: { url } },
+            },
+            '{ id }'));
+            const lastItemId = lastItem[0] ? lastItem[0].id : null;
+            if (lastItemId) {
+                const oldItems = {
+                    AND: [{ createdAt_lt: new Date(Date.now() - this.itemMaxTime) },
+                        { feed: { url } },
+                        { id_not: lastItemId }],
+                };
+                await this.db.mutation.deleteManyItemEnclosures({
+                    where: {
+                        item: oldItems,
+                    },
+                });
+                const { count } = await this.db.mutation.deleteManyFeedItems({
+                    where: oldItems,
+                });
+                if (count) { logger.info({ count, url }, 'items were deleted'); }
+            }
+            /* const { aggregate: { count } } = await this.db.query.feedItemsConnection(
+                { where: { feed: { url } } },
+                '{aggregate {count}}',
+            );
+            logger.info(`total number of ${url} items: ${count}`); */
+        } catch (e) {
+            logger.error(e);
+        }
+    }
+
     async saveFeed(url, newItems) {
-        // TODO: Limit number of items in DB
-        const items = Watcher.filterFields(newItems);
+        const items = newItems
+            .sort((a, b) => a.pubDate - b.pubDate)
+            .slice(-this.maxNewItems);
         const query = {
             where: { url },
             data: { items: { create: items } },
         };
-        return this.db.mutation.updateFeed(query);
+        await this.db.mutation.updateFeed(query);
+        return items.length;
+    }
+
+    async updateMeta(url, feedMeta) {
+        const fields = ['title', 'description', 'link', 'language'];
+        const meta = pick(feedMeta, fields);
+        meta.imageUrl = feedMeta.image.url;
+        meta.imageTitle = feedMeta.image.title;
+        return this.db.mutation.updateFeed({
+            where: { url },
+            data: meta,
+        });
     }
 
     async update() {
@@ -42,15 +94,18 @@ class Watcher {
         await Promise.all(
             feeds.map(({ url }) => limit(async () => {
                 try {
+                    let savedItemsCount = 0;
                     const items = await this.getItems(url);
 
-                    const newItems = await getNewItems(url, items);
-
+                    const { feedItems: newItems, feedMeta } = await getNewItems(url, items, Watcher.filterFields);
+                    this.updateMeta(url, feedMeta);
                     if (newItems.length) {
-                        await this.saveFeed(url, newItems);
-                        totalNewItems += newItems.length;
+                        savedItemsCount = await this.saveFeed(url, newItems);
+                        totalNewItems += savedItemsCount;
                     }
-                    logger.info({ url, newItems: newItems.length }, 'A feed was updated');
+
+                    logger.info({ url, newItems: savedItemsCount }, 'A feed was updated');
+                    this.deleteOldItems(url);
                     totalFeeds += 1;
                 } catch (error) {
                     logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
@@ -77,23 +132,19 @@ class Watcher {
         return this.job.nextInvocation();
     }
 
-    static filterFields(items) {
+    static filterFields(item) {
         const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
         const encFields = ['url', 'type', 'length'];
 
-        return items
-            .map((item) => {
-                const obj = pick(item, fields);
-                if (item.image && item.image.url) {
-                    obj.imageUrl = item.image.url;
-                }
-                if (item.enclosures && item.enclosures.length) {
-                    obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
-                }
+        const obj = pick(item, fields);
+        if (item.image && item.image.url) {
+            obj.imageUrl = item.image.url;
+        }
+        if (item.enclosures && item.enclosures.length) {
+            obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
+        }
 
-                return obj;
-            })
-            .sort((a, b) => a.pubDate - b.pubDate);
+        return obj;
     }
 }
 

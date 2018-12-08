@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Sun Dec 02 2018 19:58:38 GMT+0300 (Moscow Standard Time)
+# timestamp: Sat Dec 08 2018 16:17:23 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -44,7 +44,7 @@ type Feed implements Node {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
@@ -68,7 +68,7 @@ input FeedCreateInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   userFeeds: UserFeedCreateManyWithoutFeedInput
@@ -90,7 +90,7 @@ input FeedCreateWithoutItemsInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   userFeeds: UserFeedCreateManyWithoutFeedInput
@@ -101,7 +101,7 @@ input FeedCreateWithoutUserFeedsInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   items: FeedItemCreateManyWithoutFeedInput
@@ -127,6 +127,7 @@ type FeedItem implements Node {
   guid: String!
   imageUrl: String
   enclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure!]
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -209,10 +210,10 @@ enum FeedItemOrderByInput {
   guid_DESC
   imageUrl_ASC
   imageUrl_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type FeedItemPreviousValues {
@@ -224,6 +225,7 @@ type FeedItemPreviousValues {
   link: String
   guid: String!
   imageUrl: String
+  createdAt: DateTime!
 }
 
 type FeedItemSubscriptionPayload {
@@ -652,6 +654,28 @@ input FeedItemWhereInput {
 
   """All values not ending with the given string."""
   imageUrl_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   feed: FeedWhereInput
   enclosures_every: ItemEnclosureWhereInput
   enclosures_some: ItemEnclosureWhereInput
@@ -673,8 +697,8 @@ enum FeedOrderByInput {
   title_DESC
   description_ASC
   description_DESC
-  imageLink_ASC
-  imageLink_DESC
+  language_ASC
+  language_DESC
   imageUrl_ASC
   imageUrl_DESC
   imageTitle_ASC
@@ -691,7 +715,7 @@ type FeedPreviousValues {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   createdAt: DateTime!
@@ -742,7 +766,7 @@ input FeedUpdateInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   userFeeds: UserFeedUpdateManyWithoutFeedInput
@@ -754,7 +778,7 @@ input FeedUpdateManyMutationInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
 }
@@ -780,7 +804,7 @@ input FeedUpdateWithoutItemsDataInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   userFeeds: UserFeedUpdateManyWithoutFeedInput
@@ -791,7 +815,7 @@ input FeedUpdateWithoutUserFeedsDataInput {
   link: String
   title: String
   description: String
-  imageLink: String
+  language: String
   imageUrl: String
   imageTitle: String
   items: FeedItemUpdateManyWithoutFeedInput
@@ -1016,46 +1040,46 @@ input FeedWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
-  imageLink: String
+  language: String
 
   """All values that are not equal to given value."""
-  imageLink_not: String
+  language_not: String
 
   """All values that are contained in given list."""
-  imageLink_in: [String!]
+  language_in: [String!]
 
   """All values that are not contained in given list."""
-  imageLink_not_in: [String!]
+  language_not_in: [String!]
 
   """All values less than the given value."""
-  imageLink_lt: String
+  language_lt: String
 
   """All values less than or equal the given value."""
-  imageLink_lte: String
+  language_lte: String
 
   """All values greater than the given value."""
-  imageLink_gt: String
+  language_gt: String
 
   """All values greater than or equal the given value."""
-  imageLink_gte: String
+  language_gte: String
 
   """All values containing the given string."""
-  imageLink_contains: String
+  language_contains: String
 
   """All values not containing the given string."""
-  imageLink_not_contains: String
+  language_not_contains: String
 
   """All values starting with the given string."""
-  imageLink_starts_with: String
+  language_starts_with: String
 
   """All values not starting with the given string."""
-  imageLink_not_starts_with: String
+  language_not_starts_with: String
 
   """All values ending with the given string."""
-  imageLink_ends_with: String
+  language_ends_with: String
 
   """All values not ending with the given string."""
-  imageLink_not_ends_with: String
+  language_not_ends_with: String
   imageUrl: String
 
   """All values that are not equal to given value."""

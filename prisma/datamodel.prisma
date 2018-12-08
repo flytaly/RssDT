@@ -38,7 +38,7 @@ type Feed {
     link: String # link to the website
     title: String
     description: String
-    imageLink: String
+    language: String
     imageUrl: String
     imageTitle: String
     userFeeds: [UserFeed!]!
@@ -67,4 +67,5 @@ type FeedItem {
     imageUrl: String
     enclosures: [ItemEnclosure!]!
         @relation(name: "ItemEnclosures", onDelete: CASCADE)
+    createdAt: DateTime!
 }

@@ -69,7 +69,7 @@ describe('Test feed parser', () => {
         it(`should return array of feeds ${url.hostname}`, async () => {
             const feedStream = await getFeedStream(url.href);
 
-            const feed = await parseFeed(feedStream);
+            const { feedItems: feed } = await parseFeed(feedStream);
             expect(Array.isArray(feed)).toBeTruthy();
             expect(feed[0]).toHaveProperty('title');
             expect(feed[0]).toHaveProperty('description');
@@ -79,8 +79,8 @@ describe('Test feed parser', () => {
 
     feedUrls.forEach(({ url }) => {
         it(`should return only new items after update ${url.hostname}`, async () => {
-            const feed = await getNewItems(url.href);
-            const feedUpdate = await getNewItems(url.href, feed);
+            const { feedItems: feed } = await getNewItems(url.href);
+            const { feedItems: feedUpdate } = await getNewItems(url.href, feed);
             const intersect = feedUpdate.filter(({ pubDate }) => feed[feed.length - 1].pubDate > pubDate);
             expect(feed.length).not.toBe(0);
             expect(feedUpdate.length).not.toBe(0);

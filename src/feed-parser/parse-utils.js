@@ -1,7 +1,7 @@
 const axios = require('axios');
 const FeedParser = require('feedparser');
 
-const MAX_ITEMS = 50;
+const MAX_ITEMS = 1000;
 
 /**
  * Generate readable stream with content on given url
@@ -50,13 +50,20 @@ function isNewItem(newItem, existingItems) {
 }
 
 /**
+ * @typedef {Object} FeedObject
+ * @property {Array.<Object>} feedItems - New items of the feed
+ * @property {Object} feedMeta - Feed meta information
+ */
+/**
  * Parse stream and return promise with new feed items if existing items are provided
  * @param stream
  * @param {Array.<Object>} [existingItems]
- * @returns {Promise<Array>}
+ * @param {Function} filter - callback that filters elements in every feed item
+ * @returns {Promise<FeedObject>}
  */
-function parseFeed(stream, existingItems = [{ pubDate: 0 }]) {
+function parseFeed(stream, existingItems = [{ pubDate: 0 }], filter) {
     const feedItems = [];
+    let feedMeta;
     const feedParser = new FeedParser();
 
     return new Promise((resolve, reject) => {
@@ -64,32 +71,38 @@ function parseFeed(stream, existingItems = [{ pubDate: 0 }]) {
             .on('error', (error) => { reject(error); })
             .pipe(feedParser)
             .on('error', (error) => {
-                if (error.message === 'Feed exceeded limit') resolve(feedItems);
+                if (error.message === 'Feed exceeded limit') resolve({ feedItems, feedMeta });
                 else reject(error);
                 feedParser.end();
+            })
+            .on('meta', (meta) => {
+                feedMeta = meta;
             })
             .on('data', (item) => {
                 if (feedItems.length >= MAX_ITEMS) {
                     throw new Error('Feed exceeded limit');
                 }
                 if (item && isNewItem(item, existingItems)) {
-                    feedItems.push(item);
+                    feedItems.push(filter ? filter(item) : item);
                 }
             })
-            .on('end', () => { resolve(feedItems); });
+            .on('end', () => { resolve({ feedItems, feedMeta }); });
     });
 }
 
 
 /**
  * Parse feed on given url and return new items if existing items are provided
- * @param url
+ * @param {string} url
  * @param {Array.<Object>} [existingItems]
- * @returns {Array.<Object>}
+ * @param {function} filter - callback that filters elements in every feed item
+ * @returns {FeedObject}
  */
-async function getNewItems(url, existingItems = [{ pubDate: 0 }]) {
+async function getNewItems(url, existingItems = [{ pubDate: 0 }], filter) {
     const feedStream = await getFeedStream(url);
-    const feed = await parseFeed(feedStream, existingItems.length ? existingItems : [{ pubDate: 0 }]);
+    const feed = await parseFeed(feedStream,
+        existingItems.length ? existingItems : [{ pubDate: 0 }],
+        filter);
     return feed;
 }
 

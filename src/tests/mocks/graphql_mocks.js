@@ -41,6 +41,8 @@ const enclosures = [{
     length: '200000000',
 }];
 
+const id = 'SOME_ID';
+
 module.exports = {
     user,
     addFeed,
@@ -51,4 +53,5 @@ module.exports = {
     item,
     itemImage,
     enclosures,
+    id,
 };

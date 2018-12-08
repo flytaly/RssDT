@@ -5,16 +5,19 @@ const Watcher = require('../feed-watcher');
 const mocks = require('./mocks/graphql_mocks');
 
 jest.mock('../feed-parser/parse-utils', () => ({
-    getNewItems: jest.fn(() => mocks.newFeedItems),
+    getNewItems: jest.fn(() => ({ feedItems: mocks.newFeedItems, feedMeta: null })),
 }));
 
 const db = {
     query: {
         feeds: jest.fn(async () => [mocks.feed]),
         feed: jest.fn(async () => ({ items: mocks.oldFeedItems })),
+        feedItems: jest.fn(async () => [{ id: mocks.id }]),
     },
     mutation: {
         updateFeed: jest.fn(async () => null),
+        deleteManyItemEnclosures: jest.fn(async () => ({ count: 1 })),
+        deleteManyFeedItems: jest.fn(async () => ({ count: 1 })),
     },
 };
 
@@ -48,12 +51,22 @@ describe('Feed watcher', () => {
             { where: { url: mocks.feed.url } },
             '{ items { pubDate guid } }',
         );
-        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems);
+        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems, Watcher.filterFields);
         expect(db.mutation.updateFeed).toHaveBeenCalledWith({
             where: { url: mocks.feed.url },
             data: { items: { create: mocks.newFeedItems } },
         });
     });
+
+    test('should delete old items', () => {
+        const feedWatcher = new Watcher(db);
+        feedWatcher.deleteOldItems(mocks.feed.url);
+
+        expect(db.mutation.deleteManyItemEnclosures).toHaveBeenCalled();
+        expect(db.mutation.deleteManyFeedItems).toHaveBeenCalled();
+    });
+
+
 });
 
 describe('Feed watcher: filterFields method', () => {
@@ -69,7 +82,7 @@ describe('Feed watcher: filterFields method', () => {
             ...mocks.item,
             imageUrl: mocks.itemImage.url,
         };
-        expect(filterFields([item])).toEqual([resultItem]);
+        expect(filterFields(item)).toEqual(resultItem);
     });
 
     test('should return object with enclosures', () => {
@@ -85,6 +98,6 @@ describe('Feed watcher: filterFields method', () => {
                 create: mocks.enclosures,
             },
         };
-        expect(filterFields([item])).toEqual([resultItem]);
+        expect(filterFields(item)).toEqual(resultItem);
     });
 });
