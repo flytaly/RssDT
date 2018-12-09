@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt": "^3.0.2",
     "cookie-parser": "^1.4.3",
     "dotenv-cli": "^1.4.0",
     "feedparser": "^2.2.9",

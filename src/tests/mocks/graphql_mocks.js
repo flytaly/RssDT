@@ -1,9 +1,15 @@
+const bcrypt = require('bcrypt');
+
 const user = {
-    email: 'test@test.com',
+    email: 'testUser@test.com',
+    password: 'userPassword',
 };
 
+const id = 'SOME_ID';
+const passwordHash = bcrypt.hash(user.password, 10);
+
 const addFeed = {
-    email: 'testUser@test.com',
+    email: user.email,
     feedUrl: 'http://testfeed.com',
     feedSchedule: 'EVERY2HOURS',
 };
@@ -41,8 +47,6 @@ const enclosures = [{
     length: '200000000',
 }];
 
-const id = 'SOME_ID';
-
 module.exports = {
     user,
     addFeed,
@@ -54,4 +58,5 @@ module.exports = {
     itemImage,
     enclosures,
     id,
+    passwordHash,
 };

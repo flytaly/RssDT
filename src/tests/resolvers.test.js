@@ -3,6 +3,7 @@ const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
 const gql = require('graphql-tag');
 const { execute, makePromise } = require('apollo-link');
+const bcrypt = require('bcrypt');
 const db = require('../bind-prisma');
 const mocks = require('./mocks/graphql_mocks');
 const createServer = require('../server');
@@ -31,6 +32,7 @@ beforeAll(async () => {
     link = new HttpLink({ uri: `http://127.0.0.1:${port}` }, fetch);
     yogaApp = app;
     await clearTestDB(db);
+    bcrypt.hash = jest.fn(async () => mocks.passwordHash);
 });
 
 afterAll(async () => {
@@ -111,7 +113,7 @@ describe('Test GraphQL mutations:', () => {
         });
     });
     describe('requestPasswordChange', () => {
-        const REQUEST_NEW_PASSWORD_MUTATION = gql`mutation (
+        const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
             $email: String!
             ) {
             requestPasswordChange(
@@ -121,9 +123,9 @@ describe('Test GraphQL mutations:', () => {
             }
           }`;
         test('should generate token and token\'s expiry', async () => {
-            const { email } = mocks.addFeed;
+            const { email } = mocks.user;
             const { data: { requestPasswordChange: message } } = await makePromise(execute(link, {
-                query: REQUEST_NEW_PASSWORD_MUTATION,
+                query: REQUEST_PASSWORD_CHANGE_MUTATION,
                 variables: { email },
             }));
 
@@ -133,6 +135,39 @@ describe('Test GraphQL mutations:', () => {
             expect(setPasswordToken.length >= 16).toBeTruthy();
             expect(setPasswordTokenExpiry).not.toBeNull();
             expect(Date.now() + 1000 * 3600 * 12 - new Date(setPasswordTokenExpiry)).toBeGreaterThanOrEqual(0);
+        });
+    });
+
+    describe('setPassword', () => {
+        const SET_PASSWORD_MUTATION = gql`mutation (
+            $email: String!
+            $password: String!
+            $token: String!
+            ) {
+            setPassword(
+                email: $email
+                password: $password
+                token: $token
+            ) {
+              email
+            }
+          }`;
+        test('should save password\'s hash', async () => {
+            const { email, password } = mocks.user;
+            const { setPasswordToken: token } = await db.query.user({ where: { email } });
+
+            const { data } = await makePromise(execute(link, {
+                query: SET_PASSWORD_MUTATION,
+                variables: { email, password, token },
+            }));
+            expect(data.setPassword.email).toEqual(email.toLowerCase());
+
+            const { password: hashedPassword, setPasswordToken, setPasswordTokenExpiry } = await db.query.user({ where: { email } });
+
+            expect(bcrypt.hash).toHaveBeenCalledWith(password, 10);
+            expect(hashedPassword).toEqual(await mocks.passwordHash);
+            expect(setPasswordToken).toBeNull();
+            expect(setPasswordTokenExpiry).toBeNull();
         });
     });
 });

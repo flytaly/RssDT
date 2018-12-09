@@ -45,11 +45,7 @@ type Mutation {
         feedSchedule: DigestSchedule
     ): User!
     requestPasswordChange(email: String!): Message
-    setPassword(
-        resetToken: String!
-        password: String!
-        confirmPassword: String!
-    ): User!
+    setPassword(token: String!, email: String!, password: String!): User!
 }
 
 type Query {
