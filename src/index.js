@@ -1,3 +1,4 @@
+const cookieParser = require('cookie-parser');
 const createServer = require('./server');
 const db = require('./bind-prisma');
 const Watcher = require('./feed-watcher');
@@ -12,6 +13,8 @@ feedWatcher.start();
 })();
 
 const server = createServer(db, feedWatcher);
+server.express.use(cookieParser());
+
 server.start(({ port }) => logger.info(
     `Server started, listening on port ${port} for incoming requests.`,
 ));

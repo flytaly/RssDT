@@ -4,9 +4,12 @@ const fetch = require('node-fetch');
 const gql = require('graphql-tag');
 const { execute, makePromise } = require('apollo-link');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 const db = require('../bind-prisma');
 const mocks = require('./mocks/graphql_mocks');
 const createServer = require('../server');
+const gq = require('./gql-queries');
 
 let yogaApp;
 let link;
@@ -27,12 +30,19 @@ const clearTestDB = async (prisma) => {
 
 beforeAll(async () => {
     const server = createServer(db);
+    server.express.use(cookieParser());
+
     const app = await server.start({ port: 0 });
     const { port } = app.address();
-    link = new HttpLink({ uri: `http://127.0.0.1:${port}` }, fetch);
+
+    link = new HttpLink({
+        uri: `http://127.0.0.1:${port}`,
+        fetch,
+        credentials: 'same-origin',
+    });
+
     yogaApp = app;
     await clearTestDB(db);
-    bcrypt.hash = jest.fn(async () => mocks.passwordHash);
 });
 
 afterAll(async () => {
@@ -42,30 +52,9 @@ afterAll(async () => {
 
 describe('Test GraphQL mutations:', () => {
     describe('addFeed mutations', () => {
-        const ADD_FEED_MUTATION = gql`mutation (
-        $email: String!
-        $feedUrl: String!,
-        $feedSchedule: DigestSchedule,
-        ) {
-        addFeed(
-            email: $email
-            feedUrl: $feedUrl
-            feedSchedule: $feedSchedule
-        ) {
-          id
-          email
-          permissions
-          feeds {
-              schedule
-              feed {
-                  url
-              }
-          }
-        }
-      }`;
         test('should create user with email and feed', async () => {
             const { data: { addFeed: user } } = await makePromise(execute(link, {
-                query: ADD_FEED_MUTATION,
+                query: gq.ADD_FEED_MUTATION,
                 variables: {
                     email: mocks.addFeed.email,
                     feedUrl: mocks.addFeed.feedUrl,
@@ -85,7 +74,7 @@ describe('Test GraphQL mutations:', () => {
 
         test('should add new feed to existing user', async () => {
             const { data: { addFeed: user } } = await makePromise(execute(link, {
-                query: ADD_FEED_MUTATION,
+                query: gq.ADD_FEED_MUTATION,
                 variables: {
                     email: mocks.addNewFeed.email,
                     feedUrl: mocks.addNewFeed.feedUrl,
@@ -102,7 +91,7 @@ describe('Test GraphQL mutations:', () => {
 
         test('should return error if adding existing feed', async () => {
             const { errors } = await makePromise(execute(link, {
-                query: ADD_FEED_MUTATION,
+                query: gq.ADD_FEED_MUTATION,
                 variables: {
                     email: mocks.addFeed.email,
                     feedUrl: mocks.addFeed.feedUrl,
@@ -113,19 +102,10 @@ describe('Test GraphQL mutations:', () => {
         });
     });
     describe('requestPasswordChange', () => {
-        const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
-            $email: String!
-            ) {
-            requestPasswordChange(
-                email: $email
-            ) {
-              message
-            }
-          }`;
         test('should generate token and token\'s expiry', async () => {
             const { email } = mocks.user;
             const { data: { requestPasswordChange: message } } = await makePromise(execute(link, {
-                query: REQUEST_PASSWORD_CHANGE_MUTATION,
+                query: gq.REQUEST_PASSWORD_CHANGE_MUTATION,
                 variables: { email },
             }));
 
@@ -139,35 +119,90 @@ describe('Test GraphQL mutations:', () => {
     });
 
     describe('setPassword', () => {
-        const SET_PASSWORD_MUTATION = gql`mutation (
-            $email: String!
-            $password: String!
-            $token: String!
-            ) {
-            setPassword(
-                email: $email
-                password: $password
-                token: $token
-            ) {
-              email
-            }
-          }`;
         test('should save password\'s hash', async () => {
             const { email, password } = mocks.user;
             const { setPasswordToken: token } = await db.query.user({ where: { email } });
 
             const { data } = await makePromise(execute(link, {
-                query: SET_PASSWORD_MUTATION,
+                query: gq.SET_PASSWORD_MUTATION,
                 variables: { email, password, token },
             }));
             expect(data.setPassword.email).toEqual(email.toLowerCase());
 
-            const { password: hashedPassword, setPasswordToken, setPasswordTokenExpiry } = await db.query.user({ where: { email } });
+            const user = await db.query.user({ where: { email } });
+            const validPassword = await bcrypt.compare(password, user.password);
 
-            expect(bcrypt.hash).toHaveBeenCalledWith(password, 10);
-            expect(hashedPassword).toEqual(await mocks.passwordHash);
-            expect(setPasswordToken).toBeNull();
-            expect(setPasswordTokenExpiry).toBeNull();
+            expect(validPassword).toBeTruthy();
+            expect(user.setPasswordToken).toBeNull();
+            expect(user.setPasswordTokenExpiry).toBeNull();
+        });
+    });
+
+    describe('signIn', () => {
+        let cookies;
+        let linkCustomFetch;
+
+        beforeAll(() => {
+            const { port } = yogaApp.address();
+            const customFetch = async (uri, options) => {
+                const res = await fetch(uri, options);
+                cookies = res.headers.get('set-cookie');
+                return res;
+            };
+            linkCustomFetch = new HttpLink({
+                uri: `http://127.0.0.1:${port}`,
+                fetch: customFetch,
+                credentials: 'same-origin',
+            });
+        });
+
+        const parseCookies = c => c.split(';').reduce((acc, curr) => {
+            const pair = curr.trim();
+            const [key, value] = pair.split('=');
+            acc[key] = value;
+            return acc;
+        }, {});
+        test('should return token in cookies', async () => {
+            const { email, password } = mocks.user;
+            const operation = {
+                query: gq.SIGNIN_MUTATION,
+                variables: { email, password },
+            };
+            const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
+            expect(data.signIn).toMatchObject({ message: 'OK' });
+            expect(errors).toBeUndefined();
+            const userFromDB = await db.query.user({ where: { email } }, '{ id }');
+            const parsed = parseCookies(cookies);
+            const { userId } = jwt.verify(parsed.token, process.env.APP_SECRET);
+
+            expect(parsed['Max-Age']).toEqual(String(60 * 60 * 24 * 180)); // in seconds
+            expect(userId).toEqual(userFromDB.id);
+        });
+        test('should return error if password is invalid', async () => {
+            const { email } = mocks.user;
+            const password = 'wrongPassword';
+            const operation = {
+                query: gq.SIGNIN_MUTATION,
+                variables: { email, password },
+            };
+            const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
+            expect(cookies).toBeNull();
+            expect(data.signIn).toBeNull();
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual('Invalid Password!');
+        });
+        test('should return error if email is invalid', async () => {
+            const { password } = mocks.user;
+            const email = 'wrongEmail';
+            const operation = {
+                query: gq.SIGNIN_MUTATION,
+                variables: { email, password },
+            };
+            const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
+            expect(cookies).toBeNull();
+            expect(data.signIn).toBeNull();
+            expect(errors.length).toEqual(1);
+            expect(errors[0].message).toEqual(`There is no account for email ${email}`);
         });
     });
 });

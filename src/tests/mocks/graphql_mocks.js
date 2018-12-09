@@ -6,7 +6,6 @@ const user = {
 };
 
 const id = 'SOME_ID';
-const passwordHash = bcrypt.hash(user.password, 10);
 
 const addFeed = {
     email: user.email,
@@ -58,5 +57,4 @@ module.exports = {
     itemImage,
     enclosures,
     id,
-    passwordHash,
 };
