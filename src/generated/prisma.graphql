@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Sat Dec 08 2018 16:17:23 GMT+0300 (Moscow Standard Time)
+# timestamp: Sun Dec 09 2018 16:56:08 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -1646,8 +1646,8 @@ type User implements Node {
   email: String!
   feeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: [Permission!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -1666,8 +1666,8 @@ type UserConnection {
 input UserCreateInput {
   email: String!
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: UserCreatepermissionsInput
   feeds: UserFeedCreateManyWithoutUserInput
 }
@@ -1684,8 +1684,8 @@ input UserCreatepermissionsInput {
 input UserCreateWithoutFeedsInput {
   email: String!
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: UserCreatepermissionsInput
 }
 
@@ -1939,10 +1939,10 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
-  resetToken_ASC
-  resetToken_DESC
-  resetTokenExpiry_ASC
-  resetTokenExpiry_DESC
+  setPasswordToken_ASC
+  setPasswordToken_DESC
+  setPasswordTokenExpiry_ASC
+  setPasswordTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1953,8 +1953,8 @@ type UserPreviousValues {
   id: ID!
   email: String!
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: [Permission!]!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -2002,8 +2002,8 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: UserUpdatepermissionsInput
   feeds: UserFeedUpdateManyWithoutUserInput
 }
@@ -2011,8 +2011,8 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   email: String
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: UserUpdatepermissionsInput
 }
 
@@ -2030,8 +2030,8 @@ input UserUpdatepermissionsInput {
 input UserUpdateWithoutFeedsDataInput {
   email: String
   password: String
-  resetToken: String
-  resetTokenExpiry: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
   permissions: UserUpdatepermissionsInput
 }
 
@@ -2169,86 +2169,68 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  resetToken: String
+  setPasswordToken: String
 
   """All values that are not equal to given value."""
-  resetToken_not: String
+  setPasswordToken_not: String
 
   """All values that are contained in given list."""
-  resetToken_in: [String!]
+  setPasswordToken_in: [String!]
 
   """All values that are not contained in given list."""
-  resetToken_not_in: [String!]
+  setPasswordToken_not_in: [String!]
 
   """All values less than the given value."""
-  resetToken_lt: String
+  setPasswordToken_lt: String
 
   """All values less than or equal the given value."""
-  resetToken_lte: String
+  setPasswordToken_lte: String
 
   """All values greater than the given value."""
-  resetToken_gt: String
+  setPasswordToken_gt: String
 
   """All values greater than or equal the given value."""
-  resetToken_gte: String
+  setPasswordToken_gte: String
 
   """All values containing the given string."""
-  resetToken_contains: String
+  setPasswordToken_contains: String
 
   """All values not containing the given string."""
-  resetToken_not_contains: String
+  setPasswordToken_not_contains: String
 
   """All values starting with the given string."""
-  resetToken_starts_with: String
+  setPasswordToken_starts_with: String
 
   """All values not starting with the given string."""
-  resetToken_not_starts_with: String
+  setPasswordToken_not_starts_with: String
 
   """All values ending with the given string."""
-  resetToken_ends_with: String
+  setPasswordToken_ends_with: String
 
   """All values not ending with the given string."""
-  resetToken_not_ends_with: String
-  resetTokenExpiry: String
+  setPasswordToken_not_ends_with: String
+  setPasswordTokenExpiry: DateTime
 
   """All values that are not equal to given value."""
-  resetTokenExpiry_not: String
+  setPasswordTokenExpiry_not: DateTime
 
   """All values that are contained in given list."""
-  resetTokenExpiry_in: [String!]
+  setPasswordTokenExpiry_in: [DateTime!]
 
   """All values that are not contained in given list."""
-  resetTokenExpiry_not_in: [String!]
+  setPasswordTokenExpiry_not_in: [DateTime!]
 
   """All values less than the given value."""
-  resetTokenExpiry_lt: String
+  setPasswordTokenExpiry_lt: DateTime
 
   """All values less than or equal the given value."""
-  resetTokenExpiry_lte: String
+  setPasswordTokenExpiry_lte: DateTime
 
   """All values greater than the given value."""
-  resetTokenExpiry_gt: String
+  setPasswordTokenExpiry_gt: DateTime
 
   """All values greater than or equal the given value."""
-  resetTokenExpiry_gte: String
-
-  """All values containing the given string."""
-  resetTokenExpiry_contains: String
-
-  """All values not containing the given string."""
-  resetTokenExpiry_not_contains: String
-
-  """All values starting with the given string."""
-  resetTokenExpiry_starts_with: String
-
-  """All values not starting with the given string."""
-  resetTokenExpiry_not_starts_with: String
-
-  """All values ending with the given string."""
-  resetTokenExpiry_ends_with: String
-
-  """All values not ending with the given string."""
-  resetTokenExpiry_not_ends_with: String
+  setPasswordTokenExpiry_gte: DateTime
   createdAt: DateTime
 
   """All values that are not equal to given value."""

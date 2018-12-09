@@ -1,4 +1,7 @@
 # import * from './generated/prisma.graphql'
+type Message {
+    message: String
+}
 
 type User {
     id: ID!
@@ -40,6 +43,12 @@ type Mutation {
         email: String!
         feedUrl: String
         feedSchedule: DigestSchedule
+    ): User!
+    requestPasswordChange(email: String!): Message
+    setPassword(
+        resetToken: String!
+        password: String!
+        confirmPassword: String!
     ): User!
 }
 

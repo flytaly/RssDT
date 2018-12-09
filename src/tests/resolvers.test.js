@@ -110,6 +110,31 @@ describe('Test GraphQL mutations:', () => {
             expect(errors[0].message).toEqual('The feed was already added');
         });
     });
+    describe('requestPasswordChange', () => {
+        const REQUEST_NEW_PASSWORD_MUTATION = gql`mutation (
+            $email: String!
+            ) {
+            requestPasswordChange(
+                email: $email
+            ) {
+              message
+            }
+          }`;
+        test('should generate token and token\'s expiry', async () => {
+            const { email } = mocks.addFeed;
+            const { data: { requestPasswordChange: message } } = await makePromise(execute(link, {
+                query: REQUEST_NEW_PASSWORD_MUTATION,
+                variables: { email },
+            }));
+
+            expect(message).toMatchObject({ message: 'OK' });
+            const { setPasswordToken, setPasswordTokenExpiry } = await db.query.user({ where: { email } });
+            expect(setPasswordToken).not.toBeNull();
+            expect(setPasswordToken.length >= 16).toBeTruthy();
+            expect(setPasswordTokenExpiry).not.toBeNull();
+            expect(Date.now() + 1000 * 3600 * 12 - new Date(setPasswordTokenExpiry)).toBeGreaterThanOrEqual(0);
+        });
+    });
 });
 
 

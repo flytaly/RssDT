@@ -103,10 +103,9 @@ class Watcher {
                         savedItemsCount = await this.saveFeed(url, newItems);
                         totalNewItems += savedItemsCount;
                     }
-
                     logger.info({ url, newItems: savedItemsCount }, 'A feed was updated');
-                    this.deleteOldItems(url);
                     totalFeeds += 1;
+                    this.deleteOldItems(url);
                 } catch (error) {
                     logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
                 }
