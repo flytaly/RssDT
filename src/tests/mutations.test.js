@@ -1,7 +1,6 @@
 /* eslint-env jest */
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
-const gql = require('graphql-tag');
 const { execute, makePromise } = require('apollo-link');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -204,23 +203,5 @@ describe('Test GraphQL mutations:', () => {
             expect(errors.length).toEqual(1);
             expect(errors[0].message).toEqual(`There is no account for email ${email}`);
         });
-    });
-});
-
-
-describe('Test GraphQL queries:', () => {
-    test('should return user', async () => {
-        const USER_QUERY = gql`query ($email: String!) {
-            user(where: { email: $email }) {
-                email
-                id
-            }
-        }`;
-
-        const { data } = await makePromise(execute(link, {
-            query: USER_QUERY,
-            variables: { email: mocks.addFeed.email },
-        }));
-        expect(data.user.email).toEqual(mocks.addFeed.email.toLowerCase());
     });
 });

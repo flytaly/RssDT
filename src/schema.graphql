@@ -22,7 +22,8 @@ type Feed {
     link: String
     title: String
     description: String
-    image: String
+    imageUrl: String
+    imageTitle: String
     items(
         where: FeedItemWhereInput
         orderBy: FeedItemOrderByInput
@@ -50,5 +51,5 @@ type Mutation {
 }
 
 type Query {
-    user(where: UserWhereUniqueInput!): User
+    user: User
 }
