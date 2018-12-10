@@ -3,17 +3,21 @@ const createServer = require('./server');
 const db = require('./bind-prisma');
 const Watcher = require('./feed-watcher');
 const logger = require('./logger');
+const authMiddleware = require('./middlewares/jwtAuth.js');
 
 const feedWatcher = new Watcher(db);
 feedWatcher.start();
 
-(async () => { // for developing
-    await feedWatcher.update();
-    await feedWatcher.cancel();
-})();
+if (process.env.NODE_ENV === 'development') {
+    (async () => {
+        await feedWatcher.update();
+        await feedWatcher.cancel();
+    })();
+}
 
 const server = createServer(db, feedWatcher);
 server.express.use(cookieParser());
+server.express.use(authMiddleware(db));
 
 server.start(({ port }) => logger.info(
     `Server started, listening on port ${port} for incoming requests.`,
