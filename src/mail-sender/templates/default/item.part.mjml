@@ -1,0 +1,23 @@
+<mj-section padding="16px 0px 0px 0px">
+  <mj-column width="75%" vertical-align="middle">
+    <mj-text padding-bottom="0px" padding-top="0px">
+      <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+    </mj-text>
+    <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
+    <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" line-height="20px" color="#505050"><a href="#" style="text-decoration: none; ">share block</a></mj-text>
+  </mj-column>
+  <mj-column width="25%" vertical-align="middle">
+    {{#if imageUrl}}
+      <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
+    {{/if}}
+  </mj-column>
+</mj-section>
+<mj-section>
+  <mj-column width="100%">
+    <mj-text>{{{description}}} {{#if enclosures.length}}
+        <br /><b>Files:</b><br /> {{/if}}
+      {{#each enclosures}}
+        <a href="{{url}}">{{title}}</a> [{{type}}]<br />
+      {{/each}}</mj-text>
+  </mj-column>
+</mj-section>

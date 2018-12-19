@@ -5,6 +5,8 @@ const Watcher = require('./feed-watcher');
 const logger = require('./logger');
 const authMiddleware = require('./middlewares/jwtAuth.js');
 
+require('./mail-sender/themes'); // load email themes from filesystem
+
 const feedWatcher = new Watcher(db);
 feedWatcher.start();
 

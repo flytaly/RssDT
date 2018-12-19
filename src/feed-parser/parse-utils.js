@@ -31,7 +31,7 @@ function getFeedStream(url) {
  * 'existingItems' should be sorted by date, i.e. the last item in array
  * is the newest by date.
  * @param {Object} newItem
- * @param {Object.<Date>} newItem.pubDate
+ * @param {Date} newItem.pubDate
  * @param {Array.<Object>} existingItems
  * @returns {boolean}
  */

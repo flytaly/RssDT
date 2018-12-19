@@ -1,0 +1,56 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{title}} digest</mj-title>
+    <mj-attributes>
+      <mj-text font-weight="300" line-height="18px"></mj-text>
+      <mj-section padding="0px" background-color="#FFFFFF"></mj-section>
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#F2F2F2">
+    <mj-section background-color="#F2F2F2">
+      <mj-column width="100%">
+        <mj-text font-weight="500" font-size="18px">{{title}} digest</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- ======= ITEMS ======= -->
+
+    <mj-section padding="16px 0px 0px 0px">
+      <mj-column width="75%" vertical-align="middle">
+        <mj-text padding-bottom="0px" padding-top="0px">
+          <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+        </mj-text>
+        <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
+        <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" line-height="20px" color="#505050"><a href="#" style="text-decoration: none; ">share block</a></mj-text>
+      </mj-column>
+      <mj-column width="25%" vertical-align="middle">
+        {{#if imageUrl}}
+          <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
+        {{/if}}
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column width="100%">
+        <mj-text>{{{description}}} {{#if enclosures.length}}
+            <br /><b>Files:</b><br /> {{/if}}
+          {{#each enclosures}}
+            <a href="{{url}}">{{title}}</a> [{{type}}]<br />
+          {{/each}}</mj-text>
+      </mj-column>
+    </mj-section>
+
+
+    <!-- ======= ITEMS END ======= -->
+
+    <mj-section>
+      <mj-column width="100%">
+        <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+      </mj-column>
+    </mj-section>
+    <mj-section>
+      <mj-column width="100%">
+        <mj-text padding-bottom="13px" padding-top="0px" font-size="13px" line-height="20px"><a href="http://">Unsubscribe</a> from this feed.</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
