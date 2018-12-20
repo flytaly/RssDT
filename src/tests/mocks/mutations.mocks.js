@@ -4,6 +4,13 @@ const user = {
     email: `${moduleName}TestUser@test.com`,
     password: 'userPassword',
 };
+
+const addNotAFeed = {
+    email: user.email,
+    feedUrl: `http://${moduleName}notafeed.com`,
+    feedSchedule: 'EVERY2HOURS',
+};
+
 const addFeed = {
     email: user.email,
     feedUrl: `http://${moduleName}testfeed.com`,
@@ -18,5 +25,6 @@ const addNewFeed = {
 module.exports = {
     user,
     addFeed,
+    addNotAFeed,
     addNewFeed,
 };

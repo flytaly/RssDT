@@ -13,6 +13,14 @@ const gq = require('./gql-queries');
 let yogaApp;
 let link;
 
+jest.mock('../feed-parser', () => ({
+    getFeedStream: jest.fn((url) => {
+        if (url === mocks.addNotAFeed.feedUrl) return 'fakeFeedStream';
+        return 'feedStream';
+    }),
+    isFeed: jest.fn(stream => stream === 'feedStream'),
+}));
+
 const clearTestDB = async (prisma) => {
     const users = [mocks.addFeed, mocks.addNewFeed];
     return Promise.all(users.map(async ({ email, feedUrl: url = '' }) => {
@@ -98,6 +106,18 @@ describe('Test GraphQL mutations:', () => {
                 },
             }));
             expect(errors[0].message).toEqual('The feed was already added');
+        });
+
+        test('should return error if adding not a feed', async () => {
+            const { errors } = await makePromise(execute(link, {
+                query: gq.ADD_FEED_MUTATION,
+                variables: {
+                    email: mocks.addNotAFeed.email,
+                    feedUrl: mocks.addNotAFeed.feedUrl,
+                    feedSchedule: mocks.addNotAFeed.feedSchedule,
+                },
+            }));
+            expect(errors[0].message).toEqual('Not a feed');
         });
     });
     describe('requestPasswordChange', () => {

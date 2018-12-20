@@ -6,9 +6,10 @@ const MAX_ITEMS = 1000;
 /**
  * Generate readable stream with content on given url
  * @param {string} url
+ * @param {object} [options={}] - axios options
  * @returns {Promise<stream>}
  */
-function getFeedStream(url) {
+function getFeedStream(url, options = {}) {
     const axiosOptions = {
         method: 'get',
         responseType: 'stream',
@@ -17,6 +18,7 @@ function getFeedStream(url) {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
             + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
         },
+        ...options,
     };
 
     return axios({
