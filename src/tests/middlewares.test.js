@@ -1,7 +1,7 @@
 /* eslint-env jest */
 const jwt = require('jsonwebtoken');
 const createAuthMiddleware = require('../middlewares/jwtAuth');
-const mocks = require('./mocks/graphql_mocks');
+const mocks = require('./mocks/middlewares.mocks');
 
 const user = {
     id: mocks.id,
@@ -33,7 +33,7 @@ describe('authMiddleware', () => {
         expect(db.query.user).toBeCalledWith({ where: { id: mocks.id } }, '{ id, permissions, email }');
         expect(req.user).toMatchObject(user);
     });
-    test('should not populate user withouth token', async () => {
+    test('should not populate user without token', async () => {
         const req = { cookies: {} };
         const next = jest.fn();
         await authMiddleware(req, {}, next);

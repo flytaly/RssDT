@@ -8,15 +8,14 @@ const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
 const createServer = require('../server');
 const db = require('../bind-prisma');
-const mocks = require('./mocks/graphql_mocks');
+const mocks = require('./mocks/queries.mocks');
 const createAuthMiddleware = require('../middlewares/jwtAuth');
-
 
 let yogaApp;
 let user;
 
 const addTestData = async (prisma) => {
-    const { feedSchedule: schedule, feedUrl: url } = mocks.addFeed;
+    const { schedule, url } = mocks.feed;
     const email = mocks.user.email.toLowerCase();
     const createFeed = { create: { url } };
     const createUserFeed = { create: { schedule, feed: createFeed } };
@@ -31,7 +30,7 @@ const addTestData = async (prisma) => {
 
 const clearTestDB = async (prisma) => {
     const { email } = mocks.user;
-    const { feedUrl: url } = mocks.addFeed;
+    const { url } = mocks.feed;
     const userExists = await prisma.exists.User({ email });
     const feedExists = await prisma.exists.Feed({ url });
     if (userExists) {
@@ -92,10 +91,10 @@ describe('Test GraphQL queries:', () => {
         test('should return user with feeds', async () => {
             const { data } = await makePromise(execute(linkWithAuthCookies, {
                 query: USER_WITH_FEEDS_QUERY,
-                variables: { email: mocks.addFeed.email },
+                variables: { email: mocks.user.email },
             }));
 
-            const { feedSchedule: schedule, feedUrl: url } = mocks.addFeed;
+            const { schedule, url } = mocks.feed;
             expect(data.user).toMatchObject({
                 id: user.id,
                 email: user.email,
@@ -106,7 +105,7 @@ describe('Test GraphQL queries:', () => {
         test('should return error if user isn\'t authenticated', async () => {
             const { data, errors } = await makePromise(execute(link, {
                 query: USER_WITH_FEEDS_QUERY,
-                variables: { email: mocks.addFeed.email },
+                variables: { email: mocks.user.email },
             }));
             expect(data.user).toBeNull();
             expect(errors[0].message).toEqual('Authentication is required');

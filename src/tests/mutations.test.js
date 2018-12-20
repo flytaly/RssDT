@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const db = require('../bind-prisma');
-const mocks = require('./mocks/graphql_mocks');
+const mocks = require('./mocks/mutations.mocks');
 const createServer = require('../server');
 const gq = require('./gql-queries');
 

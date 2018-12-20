@@ -2,7 +2,7 @@
 
 const { getNewItems } = require('../feed-parser/parse-utils');
 const Watcher = require('../feed-watcher');
-const mocks = require('./mocks/graphql_mocks');
+const mocks = require('./mocks/feed-watcher.mocks');
 
 jest.mock('../feed-parser/parse-utils', () => ({
     getNewItems: jest.fn(() => ({ feedItems: mocks.newFeedItems, feedMeta: null })),
@@ -65,8 +65,6 @@ describe('Feed watcher', () => {
         expect(db.mutation.deleteManyItemEnclosures).toHaveBeenCalled();
         expect(db.mutation.deleteManyFeedItems).toHaveBeenCalled();
     });
-
-
 });
 
 describe('Feed watcher: filterFields method', () => {
