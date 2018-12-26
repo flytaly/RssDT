@@ -1,8 +1,8 @@
 const schedule = require('node-schedule');
 const pLimit = require('p-limit');
-const pick = require('lodash.pick');
 const logger = require('../logger');
 const { getNewItems } = require('../feed-parser');
+const { filterFields, filterMeta } = require('./utils');
 
 class Watcher {
     /**
@@ -85,10 +85,7 @@ class Watcher {
     }
 
     async updateMeta(url, feedMeta) {
-        const fields = ['title', 'description', 'link', 'language'];
-        const meta = pick(feedMeta, fields);
-        meta.imageUrl = feedMeta.image.url;
-        meta.imageTitle = feedMeta.image.title;
+        const meta = filterMeta(feedMeta);
         return this.db.mutation.updateFeed({
             where: { url },
             data: meta,
@@ -105,7 +102,7 @@ class Watcher {
                     let savedItemsCount = 0;
                     const items = await this.getItems(url);
 
-                    const { feedItems: newItems, feedMeta } = await getNewItems(url, items, Watcher.filterFields);
+                    const { feedItems: newItems, feedMeta } = await getNewItems(url, items, filterFields);
                     this.updateMeta(url, feedMeta);
                     if (newItems.length) {
                         savedItemsCount = await this.saveFeed(url, newItems);
@@ -137,21 +134,6 @@ class Watcher {
 
     getNextUpdateTime() {
         return this.job.nextInvocation();
-    }
-
-    static filterFields(item) {
-        const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
-        const encFields = ['url', 'type', 'length'];
-
-        const obj = pick(item, fields);
-        if (item.image && item.image.url) {
-            obj.imageUrl = item.image.url;
-        }
-        if (item.enclosures && item.enclosures.length) {
-            obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
-        }
-
-        return obj;
     }
 }
 

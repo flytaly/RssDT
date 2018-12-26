@@ -6,7 +6,7 @@ const { Readable } = require('stream');
 const { URL } = require('url');
 const { feeds, updatedFeeds } = require('./mocks/feeds');
 const {
-    getNewItems, getFeedStream, parseFeed, isFeed,
+    getNewItems, getFeedStream, parseFeed, checkFeedInfo,
 } = require('../feed-parser');
 
 axios.defaults.adapter = httpAdapter;
@@ -89,7 +89,7 @@ describe('Test feed parser', () => {
     });
 });
 
-describe('Test isFeed function', () => {
+describe('Test checkFeedInfo function', () => {
     const { url, mock } = feedUrls[0];
     nock(url.origin)
         .persist()
@@ -101,20 +101,29 @@ describe('Test isFeed function', () => {
 
     it(`should be a feed ${url.href}`, async () => {
         const feedStream = await getFeedStream(url.href);
-        expect(await isFeed(feedStream)).toBeTruthy();
+        const { isFeed, meta, error } = await checkFeedInfo(feedStream);
+        expect(isFeed).toBeTruthy();
+        expect(typeof meta === 'object').toBeTruthy();
+        expect(error).toBeUndefined();
     });
 
     it('should be broken but still a feed', async () => {
         const stream = new Readable();
         stream.push('<?xml version="1.0"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><item><title>Test</title></item>');
         stream.push(null);
-        expect(await isFeed(stream)).toBeTruthy();
+        const { isFeed, meta, error } = await checkFeedInfo(stream);
+        expect(isFeed).toBeTruthy();
+        expect(typeof meta === 'object').toBeTruthy();
+        expect(error).toBeUndefined();
     });
 
     it('should not be a feed', async () => {
         const stream = new Readable();
         stream.push('<?xml version="1.0"?>Totally not a feed');
         stream.push(null);
-        expect(await isFeed(stream)).toBeFalsy();
+        const { isFeed, meta, error } = await checkFeedInfo(stream);
+        expect(isFeed).toBeFalsy();
+        expect(meta).toBeFalsy();
+        expect(error.message).toEqual('Not a feed');
     });
 });

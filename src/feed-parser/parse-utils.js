@@ -92,7 +92,6 @@ function parseFeed(stream, existingItems = [{ pubDate: 0 }], filter) {
     });
 }
 
-
 /**
  * Parse feed on given url and return new items if existing items are provided
  * @param {string} url
@@ -109,11 +108,12 @@ async function getNewItems(url, existingItems = [{ pubDate: 0 }], filter) {
 }
 
 /**
- * Check if given stream is correct feed stream
+ * Check if given stream is correct feed stream and return its meta
  * @param stream
- * @returns {Promise<boolean>}
+ * @returns {{isFeed: boolean, meta: Object, error: object }
  */
-async function isFeed(stream) {
+async function checkFeedInfo(stream) {
+    let feedMeta;
     try {
         const feedParser = new FeedParser();
 
@@ -128,21 +128,22 @@ async function isFeed(stream) {
                         resolve(true);
                     } else reject(error);
                 })
-                .on('data', (item) => {
-                    if (item) throw new Error('OK');
+                .on('meta', (meta) => {
+                    feedMeta = meta;
+                    throw new Error('OK');
                 })
                 .on('end', () => resolve(true));
         });
-    } catch (err) {
-        //  console.log('Error:', err);
-        return false;
+    } catch (error) {
+        //  console.log('Error:', error);
+        return { isFeed: false, error };
     }
-    return true;
+    return { isFeed: true, meta: feedMeta };
 }
 
 module.exports = {
     getNewItems,
     getFeedStream,
     parseFeed,
-    isFeed,
+    checkFeedInfo,
 };

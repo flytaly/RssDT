@@ -2,6 +2,7 @@
 
 const { getNewItems } = require('../feed-parser/parse-utils');
 const Watcher = require('../feed-watcher');
+const { filterFields } = require('../feed-watcher/utils');
 const mocks = require('./mocks/feed-watcher.mocks');
 
 jest.mock('../feed-parser/parse-utils', () => ({
@@ -51,7 +52,7 @@ describe('Feed watcher', () => {
             { where: { url: mocks.feed.url } },
             '{ items { pubDate guid } }',
         );
-        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems, Watcher.filterFields);
+        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems, filterFields);
         expect(db.mutation.updateFeed).toHaveBeenCalledWith({
             where: { url: mocks.feed.url },
             data: { items: { create: mocks.newFeedItems } },
@@ -68,8 +69,6 @@ describe('Feed watcher', () => {
 });
 
 describe('Feed watcher: filterFields method', () => {
-    const { filterFields } = Watcher;
-
     test('should return object with necessary fields', () => {
         const item = {
             ...mocks.item,
