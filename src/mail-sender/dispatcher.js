@@ -17,7 +17,7 @@ async function sendDigests(db, url) {
  * @param {string} token - confirmation token
  * @param {string} title - subscription's title
  */
-async function confirmSubscription(email, token, title) {
+async function sendConfirmSubscription(email, token, title) {
     const result = await transport.sendMail({
         from: process.env.MAIL_FROM,
         to: email,
@@ -27,4 +27,4 @@ async function confirmSubscription(email, token, title) {
     });
     logger.info(result, 'email has been sent');
 }
-module.exports = { sendDigests, confirmSubscription };
+module.exports = { sendDigests, sendConfirmSubscription };

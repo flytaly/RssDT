@@ -45,8 +45,9 @@ type Mutation {
         feedUrl: String
         feedSchedule: DigestSchedule
     ): Message
+    confirmSubscription(email: String!, token: String!): Message!
     requestPasswordChange(email: String!): Message
-    setPassword(token: String!, email: String!, password: String!): User!
+    setPassword(email: String!, token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message
 }
 

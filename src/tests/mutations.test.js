@@ -9,7 +9,7 @@ const db = require('../bind-prisma');
 const mocks = require('./mocks/mutations.mocks');
 const createServer = require('../server');
 const gq = require('./gql-queries');
-const { confirmSubscription } = require('../mail-sender/dispatcher');
+const { sendConfirmSubscription } = require('../mail-sender/dispatcher');
 
 let yogaApp;
 let link;
@@ -26,7 +26,7 @@ jest.mock('../feed-parser', () => ({
 }));
 
 jest.mock('../mail-sender/dispatcher.js', () => ({
-    confirmSubscription: jest.fn(() => Promise.resolve()),
+    sendConfirmSubscription: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('nanoid', () => jest.fn(async () => mocks.activationToken));
@@ -68,7 +68,7 @@ afterAll(async () => {
 });
 
 describe('Test GraphQL mutations:', () => {
-    describe('addFeed mutations', () => {
+    describe('addFeed mutation', () => {
         test('should create user with email and feed', async () => {
             const { email, feedUrl, feedSchedule } = mocks.addFeed;
             const { data: { addFeed: { message } }, errors } = await makePromise(execute(link, {
@@ -88,7 +88,7 @@ describe('Test GraphQL mutations:', () => {
                     feed: { url: mocks.addFeed.feedUrl.toLowerCase() },
                 }],
             });
-            expect(confirmSubscription).toHaveBeenCalledWith(email.toLowerCase(), mocks.activationToken, mocks.feedTitle);
+            expect(sendConfirmSubscription).toHaveBeenCalledWith(email.toLowerCase(), mocks.activationToken, mocks.feedTitle);
         });
 
         test('should add new feed to existing user', async () => {
@@ -129,6 +129,97 @@ describe('Test GraphQL mutations:', () => {
                 },
             }));
             expect(errors[0].message).toEqual('Not a feed');
+        });
+    });
+
+    describe('confirmSubscription mutation', () => {
+        const DateOriginal = Date;
+
+        function mockDate(date) {
+            global.Date = class extends DateOriginal {
+                constructor(...args) {
+                    if (args.length) return new DateOriginal(...args);
+                    return new DateOriginal(date);
+                }
+            };
+        }
+
+        afterEach(() => {
+            global.Date = DateOriginal;
+        });
+
+        test('should not activate feed with wrong token', async () => {
+            const { email, url } = mocks.addFeed;
+            const userFeeds = await db.query.userFeeds({
+                where: {
+                    user: { email },
+                    feed: { url },
+                    activationToken: mocks.activationToken,
+                },
+            }, '{ id }');
+            expect(userFeeds.length).toBeGreaterThan(0);
+
+            const { errors } = await makePromise(execute(link, {
+                query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
+                variables: { email, token: 'fakeToken' },
+            }));
+            const userFeed = await db.query.userFeed({
+                where: {
+                    id: userFeeds[0].id,
+                },
+            });
+            expect(errors[0].message).toEqual('Wrong or expired token');
+            expect(userFeed.activationToken).toEqual(mocks.activationToken);
+            expect(userFeed.activated).toBeFalsy();
+        });
+
+        test('should not activate feed with expired token', async () => {
+            const { email, url } = mocks.addFeed;
+            const userFeeds = await db.query.userFeeds({
+                where: {
+                    user: { email },
+                    feed: { url },
+                    activationToken: mocks.activationToken,
+                },
+            }, '{ id }');
+            expect(userFeeds.length).toBeGreaterThan(0);
+            mockDate(Date.now() + 1000 * 3600 * 26);
+            const { errors } = await makePromise(execute(link, {
+                query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
+                variables: { email, token: mocks.activationToken },
+            }));
+            const userFeed = await db.query.userFeed({
+                where: {
+                    id: userFeeds[0].id,
+                },
+            });
+            expect(errors[0].message).toEqual('Wrong or expired token');
+            expect(userFeed.activationToken).toEqual(mocks.activationToken);
+            expect(userFeed.activated).toBeFalsy();
+        });
+
+        test('should activate feed', async () => {
+            const { email, url } = mocks.addFeed;
+            const userFeeds = await db.query.userFeeds({
+                where: {
+                    user: { email },
+                    feed: { url },
+                    activationToken: mocks.activationToken,
+                },
+            }, '{ id }');
+            expect(userFeeds.length).toBeGreaterThan(0);
+            const { data: { confirmSubscription: { message } } } = await makePromise(execute(link, {
+                query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
+                variables: { email, token: mocks.activationToken },
+            }));
+            const userFeed = await db.query.userFeed({
+                where: {
+                    id: userFeeds[0].id,
+                },
+            });
+            expect(message).toEqual(`Feed "${mocks.feedTitle}" was activated`);
+            expect(userFeed.activationToken).toBeNull();
+            expect(userFeed.activated).toBeTruthy();
         });
     });
 

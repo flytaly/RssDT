@@ -14,6 +14,18 @@ const ADD_FEED_MUTATION = gql`mutation (
     }
   }`;
 
+const CONFIRM_SUBSCRIPTION_MUTATION = gql`mutation(
+    $email: String!
+    $token: String!
+  ) {
+    confirmSubscription(
+      email: $email
+      token: $token
+    ){
+      message
+    }
+  }`;
+
 const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
     $email: String!
     ) {
@@ -52,6 +64,7 @@ const SIGNIN_MUTATION = gql`mutation (
 
 module.exports = {
     ADD_FEED_MUTATION,
+    CONFIRM_SUBSCRIPTION_MUTATION,
     REQUEST_PASSWORD_CHANGE_MUTATION,
     SET_PASSWORD_MUTATION,
     SIGNIN_MUTATION,

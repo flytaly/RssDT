@@ -2,7 +2,7 @@ const nanoid = require('nanoid');
 const { getFeedStream, checkFeedInfo } = require('../../feed-parser');
 const { filterMeta } = require('../../feed-watcher/utils');
 const logger = require('../../logger');
-const { confirmSubscription } = require('../../mail-sender/dispatcher');
+const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
 
 async function addFeed(parent, args, ctx, info) {
     let feedMeta = {};
@@ -74,9 +74,7 @@ async function addFeed(parent, args, ctx, info) {
     if (!user) throw new Error(`Couldn't save feed to user ${email}`);
 
     const title = feedMeta.title ? feedMeta.title : url;
-    await confirmSubscription(email, activationToken, title);
-
-    // TODO: update feed and then save update time in userFeed
+    await sendConfirmSubscription(email, activationToken, title);
 
     return { message: `Activation link has been sent to ${email}` };
 }
