@@ -9,6 +9,7 @@ const db = require('../bind-prisma');
 const mocks = require('./mocks/mutations.mocks');
 const createServer = require('../server');
 const gq = require('./gql-queries');
+const { confirmSubscription } = require('../mail-sender/dispatcher');
 
 let yogaApp;
 let link;
@@ -18,8 +19,17 @@ jest.mock('../feed-parser', () => ({
         if (url === mocks.addNotAFeed.feedUrl) return 'fakeFeedStream';
         return 'feedStream';
     }),
-    isFeed: jest.fn(stream => stream === 'feedStream'),
+    checkFeedInfo: jest.fn(stream => ({
+        isFeed: stream === 'feedStream',
+        meta: { title: mocks.feedTitle },
+    })),
 }));
+
+jest.mock('../mail-sender/dispatcher.js', () => ({
+    confirmSubscription: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('nanoid', () => jest.fn(async () => mocks.activationToken));
 
 const clearTestDB = async (prisma) => {
     const users = [mocks.addFeed, mocks.addNewFeed];
@@ -60,35 +70,36 @@ afterAll(async () => {
 describe('Test GraphQL mutations:', () => {
     describe('addFeed mutations', () => {
         test('should create user with email and feed', async () => {
-            const { data: { addFeed: user } } = await makePromise(execute(link, {
+            const { email, feedUrl, feedSchedule } = mocks.addFeed;
+            const { data: { addFeed: { message } }, errors } = await makePromise(execute(link, {
                 query: gq.ADD_FEED_MUTATION,
-                variables: {
-                    email: mocks.addFeed.email,
-                    feedUrl: mocks.addFeed.feedUrl,
-                    feedSchedule: mocks.addFeed.feedSchedule,
-                },
+                variables: { email, feedUrl, feedSchedule },
             }));
-
+            const user = await db.query.user({ where: { email } }, '{ email permissions feeds { schedule activated activationToken feed { url } }  }');
+            expect(errors).toBeUndefined();
+            expect(message).toEqual(`Activation link has been sent to ${email.toLowerCase()}`);
             expect(user).toMatchObject({
                 email: mocks.addFeed.email.toLowerCase(),
                 permissions: ['USER'],
                 feeds: [{
                     schedule: mocks.addFeed.feedSchedule,
+                    activated: false,
+                    activationToken: mocks.activationToken,
                     feed: { url: mocks.addFeed.feedUrl.toLowerCase() },
                 }],
             });
+            expect(confirmSubscription).toHaveBeenCalledWith(email.toLowerCase(), mocks.activationToken, mocks.feedTitle);
         });
 
         test('should add new feed to existing user', async () => {
-            const { data: { addFeed: user } } = await makePromise(execute(link, {
+            const { email, feedUrl, feedSchedule } = mocks.addNewFeed;
+            const { data: { addFeed: { message } }, errors } = await makePromise(execute(link, {
                 query: gq.ADD_FEED_MUTATION,
-                variables: {
-                    email: mocks.addNewFeed.email,
-                    feedUrl: mocks.addNewFeed.feedUrl,
-                    feedSchedule: mocks.addNewFeed.feedSchedule,
-                },
+                variables: { email, feedUrl, feedSchedule },
             }));
-
+            const user = await db.query.user({ where: { email } }, '{ feeds { schedule feed { url } }  }');
+            expect(errors).toBeUndefined();
+            expect(message).toEqual(`Activation link has been sent to ${mocks.addNewFeed.email.toLowerCase()}`);
             expect(user.feeds.length).toEqual(2);
             expect(user.feeds[1]).toMatchObject({
                 schedule: mocks.addNewFeed.feedSchedule,
@@ -120,6 +131,7 @@ describe('Test GraphQL mutations:', () => {
             expect(errors[0].message).toEqual('Not a feed');
         });
     });
+
     describe('requestPasswordChange', () => {
         test('should generate token and token\'s expiry', async () => {
             const { email } = mocks.user;

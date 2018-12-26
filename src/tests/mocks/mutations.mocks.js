@@ -5,6 +5,10 @@ const user = {
     password: 'userPassword',
 };
 
+const activationToken = '---activation-token---';
+
+const feedTitle = 'Test Feed Title';
+
 const addNotAFeed = {
     email: user.email,
     feedUrl: `http://${moduleName}notafeed.com`,
@@ -16,6 +20,7 @@ const addFeed = {
     feedUrl: `http://${moduleName}testfeed.com`,
     feedSchedule: 'EVERY2HOURS',
 };
+
 const addNewFeed = {
     ...addFeed,
     feedSchedule: 'EVERYHOUR',
@@ -25,6 +30,8 @@ const addNewFeed = {
 module.exports = {
     user,
     addFeed,
+    feedTitle,
+    activationToken,
     addNotAFeed,
     addNewFeed,
 };

@@ -1,16 +1,6 @@
 const mjml2html = require('mjml');
-const nodemailer = require('nodemailer');
 const url = require('url');
 const themes = require('./themes');
-
-const transport = nodemailer.createTransport({
-    host: process.env.MAIL_SMTP,
-    port: process.env.MAIL_PORT,
-    auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-    },
-});
 
 /**
  * @typedef {Object} enclosure
@@ -53,7 +43,7 @@ const getImageFromEnclosures = (enclosures) => {
  * @param {String} [feedInfo.theme='default'] - email's theme
  * @param {Array.<feedItem>} feedItems
  */
-const composeHTMLEmail = (info, feedItems) => {
+const composeHTML = (info, feedItems) => {
     /* eslint-disable no-param-reassign */
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
@@ -67,4 +57,4 @@ const composeHTMLEmail = (info, feedItems) => {
     return mjml2html(header + items + footer, { minify: true });
 };
 
-module.exports = { transport, composeHTMLEmail };
+module.exports = { composeHTML };

@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Sun Dec 09 2018 16:56:08 GMT+0300 (Moscow Standard Time)
+# timestamp: Wed Dec 26 2018 19:42:41 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -1701,6 +1701,9 @@ type UserEdge {
 type UserFeed implements Node {
   id: ID!
   feed: Feed!
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   user: User!
 }
@@ -1716,6 +1719,9 @@ type UserFeedConnection {
 }
 
 input UserFeedCreateInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
@@ -1732,11 +1738,17 @@ input UserFeedCreateManyWithoutUserInput {
 }
 
 input UserFeedCreateWithoutFeedInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   user: UserCreateOneWithoutFeedsInput!
 }
 
 input UserFeedCreateWithoutUserInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
@@ -1753,6 +1765,12 @@ type UserFeedEdge {
 enum UserFeedOrderByInput {
   id_ASC
   id_DESC
+  activated_ASC
+  activated_DESC
+  activationToken_ASC
+  activationToken_DESC
+  activationTokenExpiry_ASC
+  activationTokenExpiry_DESC
   schedule_ASC
   schedule_DESC
   updatedAt_ASC
@@ -1763,6 +1781,9 @@ enum UserFeedOrderByInput {
 
 type UserFeedPreviousValues {
   id: ID!
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
 }
 
@@ -1806,12 +1827,18 @@ input UserFeedSubscriptionWhereInput {
 }
 
 input UserFeedUpdateInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
 input UserFeedUpdateManyMutationInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
 }
 
@@ -1834,11 +1861,17 @@ input UserFeedUpdateManyWithoutUserInput {
 }
 
 input UserFeedUpdateWithoutFeedDataInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
 input UserFeedUpdateWithoutUserDataInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
   schedule: DigestSchedule
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
@@ -1914,6 +1947,72 @@ input UserFeedWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
+  activated: Boolean
+
+  """All values that are not equal to given value."""
+  activated_not: Boolean
+  activationToken: String
+
+  """All values that are not equal to given value."""
+  activationToken_not: String
+
+  """All values that are contained in given list."""
+  activationToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  activationToken_not_in: [String!]
+
+  """All values less than the given value."""
+  activationToken_lt: String
+
+  """All values less than or equal the given value."""
+  activationToken_lte: String
+
+  """All values greater than the given value."""
+  activationToken_gt: String
+
+  """All values greater than or equal the given value."""
+  activationToken_gte: String
+
+  """All values containing the given string."""
+  activationToken_contains: String
+
+  """All values not containing the given string."""
+  activationToken_not_contains: String
+
+  """All values starting with the given string."""
+  activationToken_starts_with: String
+
+  """All values not starting with the given string."""
+  activationToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  activationToken_ends_with: String
+
+  """All values not ending with the given string."""
+  activationToken_not_ends_with: String
+  activationTokenExpiry: DateTime
+
+  """All values that are not equal to given value."""
+  activationTokenExpiry_not: DateTime
+
+  """All values that are contained in given list."""
+  activationTokenExpiry_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  activationTokenExpiry_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  activationTokenExpiry_lt: DateTime
+
+  """All values less than or equal the given value."""
+  activationTokenExpiry_lte: DateTime
+
+  """All values greater than the given value."""
+  activationTokenExpiry_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  activationTokenExpiry_gte: DateTime
   schedule: DigestSchedule
 
   """All values that are not equal to given value."""

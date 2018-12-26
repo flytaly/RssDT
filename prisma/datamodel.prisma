@@ -28,6 +28,9 @@ type User {
 type UserFeed {
     id: ID! @unique
     feed: Feed!
+    activated: Boolean @default(value: false)
+    activationToken: String
+    activationTokenExpiry: DateTime
     schedule: DigestSchedule @default(value: DAILY)
     user: User! @relation(name: "UserFeeds", onDelete: SET_NULL)
 }

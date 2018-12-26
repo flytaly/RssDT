@@ -1,6 +1,11 @@
-const { getFeedStream, isFeed } = require('../../feed-parser');
+const nanoid = require('nanoid');
+const { getFeedStream, checkFeedInfo } = require('../../feed-parser');
+const { filterMeta } = require('../../feed-watcher/utils');
+const logger = require('../../logger');
+const { confirmSubscription } = require('../../mail-sender/dispatcher');
 
 async function addFeed(parent, args, ctx, info) {
+    let feedMeta = {};
     const { feedSchedule: schedule } = args;
     const email = args.email.trim().toLowerCase();
     const url = args.feedUrl.trim().toLowerCase();
@@ -16,7 +21,11 @@ async function addFeed(parent, args, ctx, info) {
     if (!await ctx.db.exists.Feed({ url })) {
         try {
             const feedStream = await getFeedStream(url, { timeout: 3000 });
-            if (!await isFeed(feedStream)) throw new Error('Not a feed');
+            const { isFeed, meta } = await checkFeedInfo(feedStream);
+
+            if (!isFeed) throw new Error('Not a feed');
+
+            feedMeta = meta;
         } catch (e) {
             if (e.message === 'Not a feed') throw e;
             throw new Error('Couldn\'t get access to feed');
@@ -25,41 +34,51 @@ async function addFeed(parent, args, ctx, info) {
 
     const feed = await ctx.db.mutation.upsertFeed({
         where: { url },
-        create: { url },
+        create: { url, ...filterMeta(feedMeta) },
         update: {},
     });
+    if (!feed) throw new Error(`Couldn't save feed ${url}`);
 
     const userFeedExists = await ctx.db.exists.UserFeed({
         user: { email },
         feed: { url },
     });
-
     if (userFeedExists) throw new Error('The feed was already added');
 
+    const activationToken = await nanoid(20);
     const createNewUserFeed = {
         create: {
             schedule,
-            // TODO: add activation token
+            activationToken,
+            activationTokenExpiry: new Date(Date.now() + 1000 * 3600 * 24), // 24 hours
             feed: { connect: { id: feed.id } },
         },
     };
 
-    const user = await ctx.db.mutation.upsertUser({
-        where: { email },
-        create: {
-            email,
-            permissions: { set: ['USER'] },
-            feeds: createNewUserFeed,
-        },
-        update: {
-            feeds: createNewUserFeed,
-        },
-    }, info);
+    let user;
+    try {
+        user = await ctx.db.mutation.upsertUser({
+            where: { email },
+            create: {
+                email,
+                permissions: { set: ['USER'] },
+                feeds: createNewUserFeed,
+            },
+            update: {
+                feeds: createNewUserFeed,
+            },
+        });
+    } catch (e) {
+        logger.error(e);
+    }
+    if (!user) throw new Error(`Couldn't save feed to user ${email}`);
 
-    // TODO: send email with activation token
+    const title = feedMeta.title ? feedMeta.title : url;
+    await confirmSubscription(email, activationToken, title);
+
     // TODO: update feed and then save update time in userFeed
 
-    return user;
+    return { message: `Activation link has been sent to ${email}` };
 }
 
 module.exports = addFeed;

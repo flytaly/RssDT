@@ -10,15 +10,7 @@ const ADD_FEED_MUTATION = gql`mutation (
         feedUrl: $feedUrl
         feedSchedule: $feedSchedule
     ) {
-      id
-      email
-      permissions
-      feeds {
-          schedule
-          feed {
-              url
-          }
-      }
+      message
     }
   }`;
 

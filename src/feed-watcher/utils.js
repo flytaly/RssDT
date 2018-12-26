@@ -1,10 +1,12 @@
 const pick = require('lodash.pick');
 
 function filterMeta(feedMeta) {
+    if (!feedMeta) return {};
     const fields = ['title', 'description', 'link', 'language'];
     const meta = pick(feedMeta, fields);
-    meta.imageUrl = feedMeta.image.url;
-    meta.imageTitle = feedMeta.image.title;
+    meta.imageUrl = feedMeta.image ? feedMeta.image.url : null;
+    meta.imageTitle = feedMeta.image ? feedMeta.image.title : null;
+
     return meta;
 }
 
