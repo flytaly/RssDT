@@ -35,7 +35,7 @@ describe('Feed watcher', () => {
     });
 
     test('should call update every fixed amount of time', async () => {
-        const feedWatcher = new Watcher(db, '*/1 * * * * *'); // update every second
+        const feedWatcher = new Watcher(db, { cron: '*/1 * * * * *' }); // update every second
         feedWatcher.update = jest.fn();
         feedWatcher.start();
         await new Promise(resolve => setTimeout(resolve, 2010));

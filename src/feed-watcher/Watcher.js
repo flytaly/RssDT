@@ -8,14 +8,22 @@ class Watcher {
     /**
      * @param {object} db - connection to Prisma Binding
      * @param {string} cron - update schedule time in cron format
-     * @param {number} maxConnections - maximum number of concurrent connection
+     * @param {object} [options]
+     * @param {number} options.maxConnections=40 - maximum number of concurrent connection for updating feeds
+     * @param {number} options.maxNewItems=150 - maximum number of new items saving per feed
+     * @param {number} options.itemMaxTime - maximum time of storing items
      */
-    constructor(db, cron = '*/1 * * * *', maxConnections = 40) {
+    constructor(db, {
+        cron = '*/1 * * * *',
+        maxConnections = 40,
+        maxNewItems = 150,
+        itemMaxTime = (1000 * 60 * 60 * 24) * 2, // 2 days
+    } = {}) {
         this.db = db;
-        this.maxConnections = maxConnections;
         this.cron = cron;
-        this.maxNewItems = 150; // maximum number of new items saving per feed
-        this.itemMaxTime = (1000 * 60 * 60 * 24) * 2; // maximum time of storing items. 2 days
+        this.maxConnections = maxConnections;
+        this.maxNewItems = maxNewItems;
+        this.itemMaxTime = itemMaxTime;
     }
 
     async getFeedsInfo() {
