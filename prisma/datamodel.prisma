@@ -27,10 +27,12 @@ type User {
 
 type UserFeed {
     id: ID! @unique
-    feed: Feed!
     activated: Boolean @default(value: false)
     activationToken: String
     activationTokenExpiry: DateTime
+    feed: Feed!
+    createdAt: DateTime!
+    lastUpdate: DateTime # when update was sent to user last time
     schedule: DigestSchedule @default(value: DAILY)
     user: User! @relation(name: "UserFeeds", onDelete: SET_NULL)
 }
@@ -46,6 +48,7 @@ type Feed {
     imageTitle: String
     userFeeds: [UserFeed!]!
     items: [FeedItem!]! @relation(name: "FeedItems", onDelete: CASCADE)
+    lastSuccessful: DateTime # last successful update
     createdAt: DateTime!
     updatedAt: DateTime!
 }

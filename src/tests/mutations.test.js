@@ -45,8 +45,13 @@ const clearTestDB = async (prisma) => {
     }));
 };
 
+const watcher = {
+    updateFeed: jest.fn(async () => 10),
+    setFeedUpdateTime: jest.fn(async () => null),
+};
+
 beforeAll(async () => {
-    const server = createServer(db);
+    const server = createServer(db, watcher);
     server.express.use(cookieParser());
 
     const app = await server.start({ port: 0 });
@@ -149,7 +154,7 @@ describe('Test GraphQL mutations:', () => {
         });
 
         test('should not activate feed with wrong token', async () => {
-            const { email, url } = mocks.addFeed;
+            const { email, feedUrl: url } = mocks.addFeed;
             const userFeeds = await db.query.userFeeds({
                 where: {
                     user: { email },
@@ -174,7 +179,7 @@ describe('Test GraphQL mutations:', () => {
         });
 
         test('should not activate feed with expired token', async () => {
-            const { email, url } = mocks.addFeed;
+            const { email, feedUrl: url } = mocks.addFeed;
             const userFeeds = await db.query.userFeeds({
                 where: {
                     user: { email },
@@ -199,7 +204,7 @@ describe('Test GraphQL mutations:', () => {
         });
 
         test('should activate feed', async () => {
-            const { email, url } = mocks.addFeed;
+            const { email, feedUrl: url } = mocks.addFeed;
             const userFeeds = await db.query.userFeeds({
                 where: {
                     user: { email },
@@ -220,6 +225,8 @@ describe('Test GraphQL mutations:', () => {
             expect(message).toEqual(`Feed "${mocks.feedTitle}" was activated`);
             expect(userFeed.activationToken).toBeNull();
             expect(userFeed.activated).toBeTruthy();
+            expect(watcher.updateFeed).toHaveBeenCalledWith(url);
+            expect(watcher.setFeedUpdateTime).toHaveBeenCalledWith(url);
         });
     });
 

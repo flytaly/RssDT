@@ -84,12 +84,23 @@ class Watcher {
         return items.length;
     }
 
-    async updateMeta(url, feedMeta) {
-        const meta = filterMeta(feedMeta);
+    async setFeedUpdateTime(url) {
         return this.db.mutation.updateFeed({
             where: { url },
-            data: meta,
+            data: { lastSuccessful: new Date() },
         });
+    }
+
+    async updateMeta(url, feedMeta) {
+        try {
+            const meta = filterMeta(feedMeta);
+            await this.db.mutation.updateFeed({
+                where: { url },
+                data: meta,
+            });
+        } catch ({ message }) {
+            logger.warn({ url, message }, 'meta wasn\'t updated');
+        }
     }
 
     async update() {
@@ -99,24 +110,27 @@ class Watcher {
         await Promise.all(
             feeds.map(({ url }) => limit(async () => {
                 try {
-                    let savedItemsCount = 0;
-                    const items = await this.getItems(url);
-
-                    const { feedItems: newItems, feedMeta } = await getNewItems(url, items, filterFields);
-                    this.updateMeta(url, feedMeta);
-                    if (newItems.length) {
-                        savedItemsCount = await this.saveFeed(url, newItems);
-                        totalNewItems += savedItemsCount;
-                    }
-                    logger.info({ url, newItems: savedItemsCount }, 'A feed was updated');
+                    totalNewItems += await this.updateFeed(url);
+                    await this.setFeedUpdateTime(url);
                     totalFeeds += 1;
-                    this.deleteOldItems(url);
                 } catch (error) {
                     logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
                 }
             })),
         );
         logger.info({ totalFeeds, totalNewItems }, 'Feeds were updated');
+    }
+
+    async updateFeed(url) {
+        let newItemsCount = 0;
+        const items = await this.getItems(url);
+        const { feedItems: newItems, feedMeta } = await getNewItems(url, items, filterFields);
+        this.updateMeta(url, feedMeta);
+        if (newItems.length) {
+            newItemsCount = await this.saveFeed(url, newItems);
+        }
+        this.deleteOldItems(url);
+        return newItemsCount;
     }
 
     start() {

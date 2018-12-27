@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Wed Dec 26 2018 19:42:41 GMT+0300 (Moscow Standard Time)
+# timestamp: Thu Dec 27 2018 14:56:44 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -49,6 +49,7 @@ type Feed implements Node {
   imageTitle: String
   userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
   items(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FeedItem!]
+  lastSuccessful: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -71,6 +72,7 @@ input FeedCreateInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   userFeeds: UserFeedCreateManyWithoutFeedInput
   items: FeedItemCreateManyWithoutFeedInput
 }
@@ -93,6 +95,7 @@ input FeedCreateWithoutItemsInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   userFeeds: UserFeedCreateManyWithoutFeedInput
 }
 
@@ -104,6 +107,7 @@ input FeedCreateWithoutUserFeedsInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   items: FeedItemCreateManyWithoutFeedInput
 }
 
@@ -703,6 +707,8 @@ enum FeedOrderByInput {
   imageUrl_DESC
   imageTitle_ASC
   imageTitle_DESC
+  lastSuccessful_ASC
+  lastSuccessful_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -718,6 +724,7 @@ type FeedPreviousValues {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -769,6 +776,7 @@ input FeedUpdateInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   userFeeds: UserFeedUpdateManyWithoutFeedInput
   items: FeedItemUpdateManyWithoutFeedInput
 }
@@ -781,6 +789,7 @@ input FeedUpdateManyMutationInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
 }
 
 input FeedUpdateOneRequiredWithoutUserFeedsInput {
@@ -807,6 +816,7 @@ input FeedUpdateWithoutItemsDataInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   userFeeds: UserFeedUpdateManyWithoutFeedInput
 }
 
@@ -818,6 +828,7 @@ input FeedUpdateWithoutUserFeedsDataInput {
   language: String
   imageUrl: String
   imageTitle: String
+  lastSuccessful: DateTime
   items: FeedItemUpdateManyWithoutFeedInput
 }
 
@@ -1160,6 +1171,28 @@ input FeedWhereInput {
 
   """All values not ending with the given string."""
   imageTitle_not_ends_with: String
+  lastSuccessful: DateTime
+
+  """All values that are not equal to given value."""
+  lastSuccessful_not: DateTime
+
+  """All values that are contained in given list."""
+  lastSuccessful_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastSuccessful_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastSuccessful_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastSuccessful_lte: DateTime
+
+  """All values greater than the given value."""
+  lastSuccessful_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastSuccessful_gte: DateTime
   createdAt: DateTime
 
   """All values that are not equal to given value."""
@@ -1700,10 +1733,12 @@ type UserEdge {
 
 type UserFeed implements Node {
   id: ID!
-  feed: Feed!
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  feed: Feed!
+  createdAt: DateTime!
+  lastUpdate: DateTime
   schedule: DigestSchedule
   user: User!
 }
@@ -1722,6 +1757,7 @@ input UserFeedCreateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
@@ -1741,6 +1777,7 @@ input UserFeedCreateWithoutFeedInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   user: UserCreateOneWithoutFeedsInput!
 }
@@ -1749,6 +1786,7 @@ input UserFeedCreateWithoutUserInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
@@ -1771,12 +1809,14 @@ enum UserFeedOrderByInput {
   activationToken_DESC
   activationTokenExpiry_ASC
   activationTokenExpiry_DESC
+  createdAt_ASC
+  createdAt_DESC
+  lastUpdate_ASC
+  lastUpdate_DESC
   schedule_ASC
   schedule_DESC
   updatedAt_ASC
   updatedAt_DESC
-  createdAt_ASC
-  createdAt_DESC
 }
 
 type UserFeedPreviousValues {
@@ -1784,6 +1824,8 @@ type UserFeedPreviousValues {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  createdAt: DateTime!
+  lastUpdate: DateTime
   schedule: DigestSchedule
 }
 
@@ -1830,6 +1872,7 @@ input UserFeedUpdateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
@@ -1839,6 +1882,7 @@ input UserFeedUpdateManyMutationInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
 }
 
@@ -1864,6 +1908,7 @@ input UserFeedUpdateWithoutFeedDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
@@ -1872,6 +1917,7 @@ input UserFeedUpdateWithoutUserDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  lastUpdate: DateTime
   schedule: DigestSchedule
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
@@ -2013,6 +2059,50 @@ input UserFeedWhereInput {
 
   """All values greater than or equal the given value."""
   activationTokenExpiry_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  lastUpdate: DateTime
+
+  """All values that are not equal to given value."""
+  lastUpdate_not: DateTime
+
+  """All values that are contained in given list."""
+  lastUpdate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastUpdate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastUpdate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastUpdate_lte: DateTime
+
+  """All values greater than the given value."""
+  lastUpdate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastUpdate_gte: DateTime
   schedule: DigestSchedule
 
   """All values that are not equal to given value."""
