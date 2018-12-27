@@ -5,6 +5,11 @@
       <mj-text font-weight="300" line-height="18px"></mj-text>
       <mj-section padding="0px" background-color="#FFFFFF"></mj-section>
     </mj-attributes>
+    <mj-style>
+      img {
+        max-width: 100%
+      }
+    </mj-style>
   </mj-head>
   <mj-body background-color="#F2F2F2">
     <mj-section background-color="#F2F2F2">
@@ -31,7 +36,7 @@
     </mj-section>
     <mj-section>
       <mj-column width="100%">
-        <mj-text>{{{description}}} {{#if enclosures.length}}
+        <mj-text>{{{summary}}} {{#if enclosures.length}}
             <br /><b>Files:</b><br /> {{/if}}
           {{#each enclosures}}
             <a href="{{url}}">{{title}}</a> [{{type}}]<br />

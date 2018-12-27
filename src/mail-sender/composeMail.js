@@ -32,7 +32,7 @@ const getImageFromEnclosures = (enclosures) => {
  * @property {String} title
  * @property {String} link
  * @property {String} [imageUrl]
- * @property {String} description
+ * @property {String} summary
  * @property {String} pubDate
  * @property {enclosures} enclosures
  */
@@ -42,6 +42,7 @@ const getImageFromEnclosures = (enclosures) => {
  * @param {String} feedInfo.title - feed title
  * @param {String} [feedInfo.theme='default'] - email's theme
  * @param {Array.<feedItem>} feedItems
+ * @return {{html: String, errors: Array}}
  */
 const composeHTML = (info, feedItems) => {
     /* eslint-disable no-param-reassign */

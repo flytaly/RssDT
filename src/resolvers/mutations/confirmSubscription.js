@@ -1,4 +1,5 @@
 const logger = require('../../logger');
+const { setUserFeedLastUpdate } = require('../../db-queries');
 
 async function confirmSubscription(parent, args, ctx, info) {
     const { email, token } = args;
@@ -33,14 +34,7 @@ async function confirmSubscription(parent, args, ctx, info) {
             logger.error({ url: userFeed.url, message: error.message }, 'Couldn\'t update a feed');
         }
         // set even if feed wasn't actually updated to have initial time
-        await ctx.db.mutation.updateUserFeed({
-            data: {
-                lastUpdate: new Date(),
-            },
-            where: {
-                id: userFeed.id,
-            },
-        });
+        await setUserFeedLastUpdate(userFeed.id);
     })();
 
     return { message: `Feed "${userFeed.feed.title ? userFeed.feed.title : userFeed.feed.url}" was activated` };

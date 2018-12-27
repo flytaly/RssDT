@@ -12,6 +12,7 @@ const generateHTML = async () => {
         items {
             title
             description
+            summary
             link
             pubDate
             imageUrl

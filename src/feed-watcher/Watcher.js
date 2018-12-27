@@ -3,6 +3,7 @@ const pLimit = require('p-limit');
 const logger = require('../logger');
 const { getNewItems } = require('../feed-parser');
 const { filterFields, filterMeta } = require('./utils');
+const { buildAndSendDigests } = require('../mail-sender/dispatcher');
 
 class Watcher {
     /**
@@ -116,6 +117,7 @@ class Watcher {
                 } catch (error) {
                     logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
                 }
+                buildAndSendDigests(url);
             })),
         );
         logger.info({ totalFeeds, totalNewItems }, 'Feeds were updated');
@@ -130,6 +132,7 @@ class Watcher {
             newItemsCount = await this.saveFeed(url, newItems);
         }
         this.deleteOldItems(url);
+        logger.info({ url, newItems: newItemsCount }, 'A feed was updated');
         return newItemsCount;
     }
 
