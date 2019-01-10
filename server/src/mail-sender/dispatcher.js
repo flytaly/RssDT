@@ -36,20 +36,24 @@ async function buildAndSendDigests(url) {
 
     for (const userFeed of readyUserFeeds) {
         limitEmails(async () => {
-            const items = await getItemsNewerThan(url, userFeed.lastUpdate);
-            if (!items.length) return;
-            const timestamp = new Date();
-            const { html, errors } = composeHTML(feed, items);
-            if (!errors.length) {
-                const result = await transport.sendMail({
-                    from: process.env.MAIL_FROM,
-                    to: userFeed.user.email,
-                    subject: `${feed.title}: ${userFeed.schedule} digest`,
-                    // text:,
-                    html,
-                });
-                logger.info(result, 'digest email has been sent');
-                await setUserFeedLastUpdate(userFeed.id, timestamp);
+            try {
+                const items = await getItemsNewerThan(url, userFeed.lastUpdate);
+                if (!items.length) return;
+                const timestamp = new Date();
+                const { html, errors } = composeHTML(feed, items);
+                if (!errors.length) {
+                    const result = await transport.sendMail({
+                        from: process.env.MAIL_FROM,
+                        to: userFeed.user.email,
+                        subject: `${feed.title}: ${userFeed.schedule} digest`,
+                        // text:,
+                        html,
+                    });
+                    logger.info(result, 'digest email has been sent');
+                    await setUserFeedLastUpdate(userFeed.id, timestamp);
+                }
+            } catch (e) {
+                logger.error(e);
             }
         });
     }

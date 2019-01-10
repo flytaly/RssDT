@@ -9,6 +9,10 @@ jest.mock('../feed-parser/parse-utils', () => ({
     getNewItems: jest.fn(() => ({ feedItems: mocks.newFeedItems, feedMeta: null })),
 }));
 
+jest.mock('../mail-sender/dispatcher.js', () => ({
+    buildAndSendDigests: jest.fn(),
+}));
+
 const db = {
     query: {
         feeds: jest.fn(async () => [mocks.feed]),

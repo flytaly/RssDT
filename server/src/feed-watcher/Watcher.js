@@ -15,7 +15,7 @@ class Watcher {
      * @param {number} options.itemMaxTime - maximum time of storing items
      */
     constructor(db, {
-        cron = '*/1 * * * *',
+        cron = '*/5 * * * *',
         maxConnections = 40,
         maxNewItems = 150,
         itemMaxTime = (1000 * 60 * 60 * 24) * 2, // 2 days

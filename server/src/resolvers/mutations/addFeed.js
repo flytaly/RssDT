@@ -1,4 +1,5 @@
 const nanoid = require('nanoid');
+const normalizeUrl = require('normalize-url');
 const { getFeedStream, checkFeedInfo } = require('../../feed-parser');
 const { filterMeta } = require('../../feed-watcher/utils');
 const logger = require('../../logger');
@@ -8,10 +9,12 @@ async function addFeed(parent, args, ctx, info) {
     let feedMeta = {};
     const { feedSchedule: schedule } = args;
     const email = args.email.trim().toLowerCase();
-    const url = args.feedUrl.trim().toLowerCase();
-
-    if (!url) { // TODO: add additional validations
-        throw new Error('Not valid argument: feedUrl');
+    let url;
+    try {
+        url = normalizeUrl(args.feedUrl);
+        if (!url.includes('.')) throw new Error();
+    } catch (e) {
+        return new Error('Not valid argument: feedUrl');
     }
     if (!email) { // TODO: add additional validations
         throw new Error('Not valid argument: email');

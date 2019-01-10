@@ -13,7 +13,7 @@ feedWatcher.start();
 if (process.env.NODE_ENV === 'development') {
     (async () => {
         await feedWatcher.update();
-        await feedWatcher.cancel();
+        // await feedWatcher.cancel();
     })();
 }
 

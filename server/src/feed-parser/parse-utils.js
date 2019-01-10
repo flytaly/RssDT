@@ -40,15 +40,15 @@ function getFeedStream(url, options = {}) {
 function isNewItem(newItem, existingItems) {
     const lastItem = existingItems[existingItems.length - 1];
 
-    if (!lastItem.pubDate || !newItem.pubDate) return existingItems.every(oldItem => oldItem.guid !== newItem.guid);
-
-    const oldDate = new Date(lastItem.pubDate);
-    const newDate = new Date(newItem.pubDate);
-    if (oldDate < newDate) {
-        return true;
+    if (lastItem.pubDate && newItem.pubDate) {
+        const oldDate = new Date(lastItem.pubDate);
+        const newDate = new Date(newItem.pubDate);
+        if (oldDate > newDate) {
+            return false;
+        }
     }
 
-    return false;
+    return existingItems.every(oldItem => oldItem.guid !== newItem.guid);
 }
 
 /**
