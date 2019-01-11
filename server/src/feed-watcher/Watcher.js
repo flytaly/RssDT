@@ -111,7 +111,9 @@ class Watcher {
         await Promise.all(
             feeds.map(({ url }) => limit(async () => {
                 try {
-                    totalNewItems += await this.updateFeed(url);
+                    /* accumulator += await... -- doesn't work in map because before promise resolves,
+                    accumulation value in every function stays 0 */
+                    totalNewItems = await this.updateFeed(url) + totalNewItems;
                     await this.setFeedUpdateTime(url);
                     totalFeeds += 1;
                 } catch (error) {
