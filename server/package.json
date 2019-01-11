@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "dotenv node src/index.js",
-    "dev": "NODE_ENV=development dotenv -e .env.dev -- nodemon -e js,graphql -x node src/index.js  | pino-pretty",
+    "dev": "NODE_ENV=development dotenv -e .env.dev -- nodemon -e js,graphql -x node src/index.js  | pino-pretty -c -t",
     "delete:dev": "prisma delete --env-file .env.dev --force",
     "deploy:prod": "prisma deploy",
     "deploy:dev": "prisma deploy --env-file .env.dev",
@@ -20,7 +20,7 @@
     "apollo-link-http": "^1.5.9",
     "jest": "^23.6.0",
     "jest-cli": "^23.6.0",
-    "nock": "^10.0.5",
+    "nock": "^10.0.6",
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.9",
     "pino-pretty": "^2.5.0"
@@ -37,14 +37,15 @@
     "handlebars": "^4.0.12",
     "jsonwebtoken": "^8.4.0",
     "lodash.pick": "^4.4.0",
-    "mjml": "^4.2.1",
+    "mjml": "^4.3.1",
     "nanoid": "^2.0.0",
     "node-schedule": "^1.3.1",
-    "nodemailer": "^4.7.0",
+    "nodemailer": "^5.1.1",
     "normalize-url": "^4.1.0",
     "p-limit": "^2.1.0",
-    "pino": "^5.10.5",
-    "prisma": "^1.23.2",
-    "prisma-binding": "^2.2.12"
+    "pino": "^5.10.6",
+    "pino-tee": "^0.2.2",
+    "prisma": "^1.24.0",
+    "prisma-binding": "^2.2.14"
   }
 }
