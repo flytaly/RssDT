@@ -1,2 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-export default () => <div>Welcome!</div>;
+const Index = () => <div>Welcome!</div>;
+
+export default Index;

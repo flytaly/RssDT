@@ -26,6 +26,8 @@
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props":["error", 4],
         "react/jsx-wrap-multilines": "off",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "react/prefer-stateless-function": "off",
+        "no-unused-expressions": "off"
     }
 }
