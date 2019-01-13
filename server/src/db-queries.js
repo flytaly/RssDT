@@ -26,12 +26,13 @@ async function getFeedInfo(url) {
     return db.query.feed({ where: { url } });
 }
 
-async function getItemsNewerThan(url, time) {
+async function getItemsNewerThan(url, time, first) {
     return db.query.feedItems({
         where: {
             feed: { url },
             createdAt_gte: time,
         },
+        ...(first && { first }),
         orderBy: 'pubDate_DESC',
     }, '{ title summary link pubDate imageUrl enclosures { url type length } }');
 }

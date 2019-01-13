@@ -7,6 +7,7 @@ const {
 } = require('../db-queries');
 
 const limitEmails = pLimit(20);
+const maxItemsPerMail = 400;
 const hour = process.env.NODE_ENV === 'development' ? 0 : 1000 * 60 * 60;
 
 const periods = {
@@ -37,7 +38,7 @@ async function buildAndSendDigests(url) {
     for (const userFeed of readyUserFeeds) {
         limitEmails(async () => {
             try {
-                const items = await getItemsNewerThan(url, userFeed.lastUpdate);
+                const items = await getItemsNewerThan(url, userFeed.lastUpdate, maxItemsPerMail);
                 if (!items.length) return;
                 const timestamp = new Date();
                 const { html, errors } = composeHTML(feed, items);
@@ -53,7 +54,7 @@ async function buildAndSendDigests(url) {
                     await setUserFeedLastUpdate(userFeed.id, timestamp);
                 }
             } catch (e) {
-                logger.error(e);
+                logger.error(e.message);
             }
         });
     }
