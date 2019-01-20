@@ -1,3 +1,5 @@
-const Index = () => <div>Welcome!</div>;
+import WelcomeCard from '../components/WelcomeCard';
+
+const Index = () => <WelcomeCard />;
 
 export default Index;
