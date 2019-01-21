@@ -1,10 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import CardHalf from './CardHalf';
+import styled, { withTheme } from 'styled-components';
+import { Formik } from 'formik';
+import CardHalf from './styled/CardHalf';
+import SubmitButton from './styled/SubmitButton';
 
-const StyledCard = styled(CardHalf)`
-    background: #f5f5f5;
-    border: 1px solid #707070;
+const StyledHalf = styled(CardHalf)`
+    background: ${props => props.theme.greyLight};
+    border: 1px solid ${props => props.theme.greyDark};
     border-radius: 10px;
 `;
 
@@ -21,33 +23,68 @@ const AddFeedForm = styled.form`
     align-self: center;
     display: flex;
     flex-direction: column;
+    width: ${props => props.theme.cardWidth / 2 - 6}rem;
 `;
 
-const SubmitButton = styled.button`
-    width: 28rem;
-    height: 4.5rem;
-    max-width: 100%;
-    padding-left: 2rem;
-    padding-right: 1rem;
-    margin-top: 1rem;
-    background-color: #AC247D;
-    color: #FFFFFF;
-    border: 1px solid #E6E6E6;
-    border-radius: 30px;
-    font-size: 2rem;
-`;
 
 const WelcomeLeft = () => (
-    <StyledCard>
+    <StyledHalf>
         <Login href="#">Login</Login>
-        <AddFeedForm>
-            <FeedTitle>Add feed</FeedTitle>
-            <input placeholder="http://..." />
-            <input placeholder="Email" />
-            <input placeholder="Daily" />
-            <SubmitButton type="submit">SUBSCRIBE</SubmitButton>
-        </AddFeedForm>
-    </StyledCard>
+        <Formik
+            initialValues={{ email: '', url: '', period: '24' }}
+            validate={(values) => {
+                console.log(values);
+            }}
+            onSubmit={(values) => {
+                console.log(values);
+            }}
+        >
+            {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+            }) => (
+                <AddFeedForm onSubmit={handleSubmit}>
+                    <FeedTitle>Add feed</FeedTitle>
+                    <input
+                        type="url"
+                        name="url"
+                        placeholder="http://..."
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.url}
+                    />
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.email}
+                    />
+                    <select name="period" defaultValue="24">
+                        <option value="1">Every hour</option>
+                        <option value="2">Every 2 hours</option>
+                        <option value="3">Every 3 hours</option>
+                        <option value="6">Every 6 hours</option>
+                        <option value="12">Every 12 hours</option>
+                        <option value="24">Daily</option>
+                    </select>
+                    <SubmitButton
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        SUBSCRIBE
+                    </SubmitButton>
+                </AddFeedForm>)
+            }
+        </Formik>
+
+    </StyledHalf>
 );
 
-export default WelcomeLeft;
+export default withTheme(WelcomeLeft);

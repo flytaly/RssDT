@@ -1,7 +1,8 @@
 import React from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import Meta from './Meta';
+import theme from './themes/default';
 
 const StyledPage = styled.div`
   color: black;
@@ -17,8 +18,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
   }
   body {
-    background-image: linear-gradient(#D049C5, #262B68);
-    background-attachment: fixed;
+    background: ${props => props.theme.pageBackground};
     height: 100%;
     padding: 0;
     margin: 0;
@@ -29,11 +29,13 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Page = ({ children }) => (
-    <StyledPage>
-        <GlobalStyle />
-        <Meta />
-        {children}
-    </StyledPage>
+    <ThemeProvider theme={theme}>
+        <StyledPage>
+            <GlobalStyle />
+            <Meta />
+            {children}
+        </StyledPage>
+    </ThemeProvider>
 );
 
 Page.propTypes = {
