@@ -3,6 +3,7 @@ import styled, { withTheme } from 'styled-components';
 import { Formik } from 'formik';
 import CardHalf from './styled/CardHalf';
 import SubmitButton from './styled/SubmitButton';
+import Input from './styled/InputWithIcon';
 
 const StyledHalf = styled(CardHalf)`
     background: ${props => props.theme.greyLight};
@@ -50,20 +51,19 @@ const WelcomeLeft = () => (
             }) => (
                 <AddFeedForm onSubmit={handleSubmit}>
                     <FeedTitle>Add feed</FeedTitle>
-                    <input
+                    <Input
+                        touched={touched}
                         type="url"
                         name="url"
                         placeholder="http://..."
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.url}
                     />
-                    <input
+                    <Input
                         type="email"
                         name="email"
                         placeholder="Email"
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         value={values.email}
                     />
                     <select name="period" defaultValue="24">
