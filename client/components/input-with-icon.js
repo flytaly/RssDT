@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Container from './styled/form-element-container';
-import Image from './styled/form-element-image';
-import FormElement from './styled/form-element';
+import { Container, Field, Image } from './styled/form-field';
 
 const icons = {
     email: './static/envelope.svg',
@@ -26,7 +24,7 @@ class Input extends Component {
         return (
             <Container focus={focus} onClick={this.focusTextInput}>
                 <Image src={icons[type]} />
-                <FormElement
+                <Field
                     as="input"
                     {...this.props}
                     onFocus={(...args) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 import CardHalf from './styled/card-half';
 import AddFeedForm from './add-feed-form';
 
@@ -21,4 +21,4 @@ const WelcomeLeft = () => (
     </StyledHalf>
 );
 
-export default withTheme(WelcomeLeft);
+export default WelcomeLeft;

@@ -1,4 +1,4 @@
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 
 const StyledHalf = styled.div`
     display: flex;
@@ -10,4 +10,4 @@ const StyledHalf = styled.div`
     padding: 1rem 3rem;
 `;
 
-export default withTheme(StyledHalf);
+export default StyledHalf;

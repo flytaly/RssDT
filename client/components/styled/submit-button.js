@@ -1,4 +1,4 @@
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 
 const SubmitButton = styled.button`
     width: 100%;
@@ -10,4 +10,4 @@ const SubmitButton = styled.button`
     font-size: 2rem;
 `;
 
-export default withTheme(SubmitButton);
+export default SubmitButton;

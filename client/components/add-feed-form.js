@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 import SubmitButton from './styled/submit-button';
 import Input from './input-with-icon';
 import Select from './select-with-icon';
@@ -29,7 +29,7 @@ const AddFeedForm = () => (
         {({
             values,
             // errors,
-            touched,
+            // touched,
             handleChange,
             // handleBlur,
             handleSubmit,
@@ -38,7 +38,6 @@ const AddFeedForm = () => (
             <Form onSubmit={handleSubmit}>
                 <FeedTitle>Add feed</FeedTitle>
                 <Input
-                    touched={touched}
                     type="url"
                     name="url"
                     placeholder="http://..."
@@ -70,4 +69,4 @@ const AddFeedForm = () => (
         }
     </Formik>);
 
-export default withTheme(AddFeedForm);
+export default AddFeedForm;

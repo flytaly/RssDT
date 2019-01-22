@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import Container from './styled/form-element-container';
-import FormElementImage from './styled/form-element-image';
-import FormElement from './styled/form-element';
+import { Container, Field, Image } from './styled/form-field';
 
 class Select extends Component {
     constructor(props) {
@@ -19,8 +17,8 @@ class Select extends Component {
         const { focus } = this.state;
         return (
             <Container focus={focus} onClick={this.focusSelect}>
-                <FormElementImage src="/static/clock.svg" />
-                <FormElement
+                <Image src="/static/clock.svg" />
+                <Field
                     as="select"
                     {...this.props}
                     onFocus={(...args) => {

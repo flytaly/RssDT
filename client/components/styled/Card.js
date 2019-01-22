@@ -1,4 +1,4 @@
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 
 const StyledCard = styled.div`
     display: flex;
@@ -12,4 +12,4 @@ const StyledCard = styled.div`
     border-radius: 10px;
 `;
 
-export default withTheme(StyledCard);
+export default StyledCard;
