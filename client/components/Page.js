@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
-import Meta from './Meta';
+import Meta from './meta';
 import theme from './themes/default';
 
 const StyledPage = styled.div`

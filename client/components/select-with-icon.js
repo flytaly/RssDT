@@ -1,33 +1,27 @@
 import React, { Component } from 'react';
-import Container from './styled/FormElementContainer';
-import Image from './styled/FormElementImage';
-import FormElement from './styled/FormElement';
+import Container from './styled/form-element-container';
+import FormElementImage from './styled/form-element-image';
+import FormElement from './styled/form-element';
 
-const icons = {
-    email: './static/envelope.svg',
-    url: './static/rss-square.svg',
-};
-
-class Input extends Component {
+class Select extends Component {
     constructor(props) {
         super(props);
         this.state = { focus: false };
         this.textInputRef = React.createRef();
     }
 
-    focusTextInput = () => {
+    focusSelect = () => {
         this.textInputRef.current.focus();
     }
 
     render() {
-        const { type, onFocus, onBlur } = this.props;
+        const { onFocus, onBlur } = this.props;
         const { focus } = this.state;
-
         return (
-            <Container focus={focus} onClick={this.focusTextInput}>
-                <Image src={icons[type]} />
+            <Container focus={focus} onClick={this.focusSelect}>
+                <FormElementImage src="/static/clock.svg" />
                 <FormElement
-                    as="input"
+                    as="select"
                     {...this.props}
                     onFocus={(...args) => {
                         this.setState({ focus: true });
@@ -44,4 +38,4 @@ class Input extends Component {
 }
 
 
-export default Input;
+export default Select;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Formik } from 'formik';
 import styled, { withTheme } from 'styled-components';
-import SubmitButton from './styled/SubmitButton';
-import Input from './InputWithIcon';
-import Select from './SelectWithIcon';
+import SubmitButton from './styled/submit-button';
+import Input from './input-with-icon';
+import Select from './select-with-icon';
 
 const Form = styled.form`
     align-self: center;

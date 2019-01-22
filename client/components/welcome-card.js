@@ -1,7 +1,7 @@
 import React from 'react';
-import StyledCard from './styled/Card';
-import CardLeft from './CardLeft';
-import CardRight from './CardRight';
+import StyledCard from './styled/card';
+import CardLeft from './card-left';
+import CardRight from './card-right';
 
 
 const WelcomeCard = () => (
