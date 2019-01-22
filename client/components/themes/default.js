@@ -1,5 +1,5 @@
 const theme = {
-    pageBackground: 'linear-gradient(#D049C5, #262B68) fixed',
+    pageBackground: 'linear-gradient(black, #D049C5) fixed',
     cardWidth: 72, // rem
     cardBackground: 'white',
     fontColor: 'black',
