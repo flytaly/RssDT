@@ -24,7 +24,7 @@ function Input(props) {
                     onFocus && onFocus(...args);
                 }}
                 onBlur={(...args) => {
-                    setFocus(true);
+                    setFocus(false);
                     onBlur && onBlur(...args);
                 }}
                 ref={inputEl}

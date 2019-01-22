@@ -43,6 +43,7 @@ const AddFeedForm = () => (
                     placeholder="http://..."
                     onChange={handleChange}
                     value={values.url}
+                    required
                 />
                 <Input
                     type="email"
@@ -50,6 +51,7 @@ const AddFeedForm = () => (
                     placeholder="Email"
                     onChange={handleChange}
                     value={values.email}
+                    required
                 />
                 <Select name="period" defaultValue="24">
                     <option value="1">Every hour</option>
@@ -63,7 +65,7 @@ const AddFeedForm = () => (
                     type="submit"
                     disabled={isSubmitting}
                 >
-                    SUBSCRIBE
+                    {isSubmitting ? 'SUBMITTING...' : 'SUBSCRIBE'}
                 </SubmitButton>
             </Form>)
         }

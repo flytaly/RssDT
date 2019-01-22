@@ -7,6 +7,7 @@ const theme = {
     greyMedium: '#e6e6e6',
     greyLight: '#f5f5f5',
     btnColor1: '#ac247d',
+    btnColor1Disable: '#ae7f9e',
 };
 
 export default theme;
