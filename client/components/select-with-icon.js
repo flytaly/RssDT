@@ -1,39 +1,30 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container, Field, Image } from './styled/form-field';
 
-class Select extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { focus: false };
-        this.textInputRef = React.createRef();
-    }
+function Select(props) {
+    const [focus, setFocus] = useState(false);
+    const selectEl = useRef(null);
+    const { onFocus, onBlur } = props;
 
-    focusSelect = () => {
-        this.textInputRef.current.focus();
-    }
+    const onClick = () => selectEl.current.focus();
 
-    render() {
-        const { onFocus, onBlur } = this.props;
-        const { focus } = this.state;
-        return (
-            <Container focus={focus} onClick={this.focusSelect}>
-                <Image src="/static/clock.svg" />
-                <Field
-                    as="select"
-                    {...this.props}
-                    onFocus={(...args) => {
-                        this.setState({ focus: true });
-                        onFocus && onFocus(...args);
-                    }}
-                    onBlur={(...args) => {
-                        this.setState({ focus: false });
-                        onBlur && onBlur(...args);
-                    }}
-                    ref={this.textInputRef}
-                />
-            </Container>);
-    }
+    return (
+        <Container focus={focus} onClick={onClick}>
+            <Image src="/static/clock.svg" />
+            <Field
+                as="select"
+                {...props}
+                onFocus={(...args) => {
+                    setFocus(true);
+                    onFocus && onFocus(...args);
+                }}
+                onBlur={(...args) => {
+                    setFocus(true);
+                    onBlur && onBlur(...args);
+                }}
+                ref={selectEl}
+            />
+        </Container>);
 }
-
 
 export default Select;

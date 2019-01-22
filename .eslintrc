@@ -12,7 +12,9 @@
         "es6": true
     },
     "rules": {
-        "indent": ["error", 4, {"SwitchCase": 1}],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
         "max-len": ["error", 120, 4, {
             "ignoreUrls": true,
             "ignoreComments": false,
@@ -24,10 +26,10 @@
         "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
         "react/jsx-filename-extension": "off",
         "react/jsx-indent": ["error", 4],
-        "react/jsx-indent-props":["error", 4],
+        "react/jsx-indent-props": ["error", 4],
         "react/jsx-wrap-multilines": "off",
         "react/react-in-jsx-scope": "off",
-        "react/prefer-stateless-function": "off",
+        "react/prefer-stateless-function": "on",
         "no-unused-expressions": "off"
     }
 }

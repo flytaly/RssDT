@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container, Field, Image } from './styled/form-field';
 
 const icons = {
@@ -6,40 +6,30 @@ const icons = {
     url: './static/rss-square.svg',
 };
 
-class Input extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { focus: false };
-        this.textInputRef = React.createRef();
-    }
+function Input(props) {
+    const [focus, setFocus] = useState(false);
+    const inputEl = useRef(null);
+    const { type, onFocus, onBlur } = props;
 
-    focusTextInput = () => {
-        this.textInputRef.current.focus();
-    }
+    const onClick = () => inputEl.current.focus();
 
-    render() {
-        const { type, onFocus, onBlur } = this.props;
-        const { focus } = this.state;
-
-        return (
-            <Container focus={focus} onClick={this.focusTextInput}>
-                <Image src={icons[type]} />
-                <Field
-                    as="input"
-                    {...this.props}
-                    onFocus={(...args) => {
-                        this.setState({ focus: true });
-                        onFocus && onFocus(...args);
-                    }}
-                    onBlur={(...args) => {
-                        this.setState({ focus: false });
-                        onBlur && onBlur(...args);
-                    }}
-                    ref={this.textInputRef}
-                />
-            </Container>);
-    }
+    return (
+        <Container focus={focus} onClick={onClick}>
+            <Image src={icons[type]} />
+            <Field
+                as="input"
+                {...props}
+                onFocus={(...args) => {
+                    setFocus(true);
+                    onFocus && onFocus(...args);
+                }}
+                onBlur={(...args) => {
+                    setFocus(true);
+                    onBlur && onBlur(...args);
+                }}
+                ref={inputEl}
+            />
+        </Container>);
 }
-
 
 export default Input;
