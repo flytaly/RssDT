@@ -21,6 +21,13 @@ const server = createServer(db, feedWatcher);
 server.express.use(cookieParser());
 server.express.use(authMiddleware(db));
 
-server.start(({ port }) => logger.info(
+const opts = {
+    cors: {
+        credentials: true,
+        origin: [process.env.FRONTEND_URL],
+    },
+};
+
+server.start(opts, ({ port }) => logger.info(
     `Server started, listening on port ${port} for incoming requests.`,
 ));
