@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik } from 'formik';
 import styled from 'styled-components';
+import * as Yup from 'yup';
 import SubmitButton from './styled/submit-button';
 import Input from './input-with-icon';
 import Select from './select-with-icon';
@@ -16,19 +17,26 @@ const FeedTitle = styled.h2`
     align-self: center;
 `;
 
+const AddFeedSchema = Yup.object().shape({
+    url: Yup.string()
+        .url('Invalid feed address'),
+    // .required('Required'),
+    email: Yup.string()
+        .email('Invalid email address'),
+    // .required('Required'),
+});
+
 const AddFeedForm = () => (
     <Formik
-        initialValues={{ email: '', url: '', period: '24' }}
-        validate={(values) => {
-            console.log(values);
-        }}
+        initialValues={{ email: '', url: 'http://', period: '24' }}
+        validationSchema={AddFeedSchema}
         onSubmit={(values) => {
             console.log(values);
         }}
     >
         {({
             values,
-            // errors,
+            errors,
             // touched,
             handleChange,
             // handleBlur,
@@ -43,6 +51,7 @@ const AddFeedForm = () => (
                     placeholder="http://..."
                     onChange={handleChange}
                     value={values.url}
+                    error={errors.url}
                     required
                 />
                 <Input
@@ -51,6 +60,7 @@ const AddFeedForm = () => (
                     placeholder="Email"
                     onChange={handleChange}
                     value={values.email}
+                    error={errors.email}
                     required
                 />
                 <Select name="period" defaultValue="24">

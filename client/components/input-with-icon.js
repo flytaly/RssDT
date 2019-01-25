@@ -1,5 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { Container, Field, Image } from './styled/form-field';
+import {
+    Container, Field, Image, ErrorMessage,
+} from './styled/form-field';
 
 const icons = {
     email: './static/envelope.svg',
@@ -9,7 +11,9 @@ const icons = {
 function Input(props) {
     const [focus, setFocus] = useState(false);
     const inputEl = useRef(null);
-    const { type, onFocus, onBlur } = props;
+    const {
+        type, onFocus, onBlur, error,
+    } = props;
 
     const onClick = () => inputEl.current.focus();
 
@@ -29,6 +33,7 @@ function Input(props) {
                 }}
                 ref={inputEl}
             />
+            {error ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Container>);
 }
 
