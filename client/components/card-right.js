@@ -14,10 +14,10 @@ const Login = styled.a`
     align-self: flex-end;
 `;
 
-const WelcomeLeft = () => (
+const WelcomeLeft = props => (
     <StyledHalf>
         <Login href="#">Login</Login>
-        <AddFeedForm />
+        <AddFeedForm {...props} />
     </StyledHalf>
 );
 

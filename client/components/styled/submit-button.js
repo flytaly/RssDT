@@ -13,6 +13,16 @@ const SubmitButton = styled.button`
     [disabled] {
         background-color: ${props => props.theme.btnColor1Disable};
         cursor: default;
+
+    }
+    :focus,
+    :hover:not(:disabled) {
+        outline: none;
+        border: 1px solid ${props => props.theme.btnColor1};
+        box-shadow: 0 0 1.5rem ${props => props.theme.btnColor1};
+    }
+    :active{
+        transform: scale(0.96);
     }
 `;
 
