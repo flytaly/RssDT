@@ -25,6 +25,15 @@ async function confirmSubscription(parent, args, ctx, info) {
         },
     });
 
+    await ctx.db.mutation.updateFeed({
+        data: {
+            activated: true,
+        },
+        where: {
+            url: userFeed.feed.url,
+        },
+    });
+
     // concurrent task that updates feed and then sets last update time to userFeed
     (async () => {
         try {

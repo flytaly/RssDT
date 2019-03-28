@@ -43,6 +43,7 @@ async function addFeed(parent, args, ctx, info) {
     if (!feed) throw new Error(`Couldn't save feed ${url}`);
 
     const userFeedExists = await ctx.db.exists.UserFeed({
+        activated: true,
         user: { email },
         feed: { url },
     });

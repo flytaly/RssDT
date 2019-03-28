@@ -28,7 +28,7 @@ class Watcher {
     }
 
     async getFeedsInfo() {
-        return this.db.query.feeds({}, '{ url }');
+        return this.db.query.feeds({ where: { activated: true } }, '{ url }');
     }
 
     async getItems(url) {

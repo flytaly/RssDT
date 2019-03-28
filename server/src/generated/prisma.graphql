@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Thu Dec 27 2018 14:56:44 GMT+0300 (Moscow Standard Time)
+# timestamp: Thu Mar 28 2019 18:47:32 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -44,6 +44,7 @@ type Feed implements Node {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -69,6 +70,7 @@ input FeedCreateInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -92,6 +94,7 @@ input FeedCreateWithoutItemsInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -104,6 +107,7 @@ input FeedCreateWithoutUserFeedsInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -232,6 +236,341 @@ type FeedItemPreviousValues {
   createdAt: DateTime!
 }
 
+input FeedItemScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [FeedItemScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FeedItemScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedItemScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  summary: String
+
+  """All values that are not equal to given value."""
+  summary_not: String
+
+  """All values that are contained in given list."""
+  summary_in: [String!]
+
+  """All values that are not contained in given list."""
+  summary_not_in: [String!]
+
+  """All values less than the given value."""
+  summary_lt: String
+
+  """All values less than or equal the given value."""
+  summary_lte: String
+
+  """All values greater than the given value."""
+  summary_gt: String
+
+  """All values greater than or equal the given value."""
+  summary_gte: String
+
+  """All values containing the given string."""
+  summary_contains: String
+
+  """All values not containing the given string."""
+  summary_not_contains: String
+
+  """All values starting with the given string."""
+  summary_starts_with: String
+
+  """All values not starting with the given string."""
+  summary_not_starts_with: String
+
+  """All values ending with the given string."""
+  summary_ends_with: String
+
+  """All values not ending with the given string."""
+  summary_not_ends_with: String
+  pubDate: DateTime
+
+  """All values that are not equal to given value."""
+  pubDate_not: DateTime
+
+  """All values that are contained in given list."""
+  pubDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  pubDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  pubDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  pubDate_lte: DateTime
+
+  """All values greater than the given value."""
+  pubDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  pubDate_gte: DateTime
+  link: String
+
+  """All values that are not equal to given value."""
+  link_not: String
+
+  """All values that are contained in given list."""
+  link_in: [String!]
+
+  """All values that are not contained in given list."""
+  link_not_in: [String!]
+
+  """All values less than the given value."""
+  link_lt: String
+
+  """All values less than or equal the given value."""
+  link_lte: String
+
+  """All values greater than the given value."""
+  link_gt: String
+
+  """All values greater than or equal the given value."""
+  link_gte: String
+
+  """All values containing the given string."""
+  link_contains: String
+
+  """All values not containing the given string."""
+  link_not_contains: String
+
+  """All values starting with the given string."""
+  link_starts_with: String
+
+  """All values not starting with the given string."""
+  link_not_starts_with: String
+
+  """All values ending with the given string."""
+  link_ends_with: String
+
+  """All values not ending with the given string."""
+  link_not_ends_with: String
+  guid: String
+
+  """All values that are not equal to given value."""
+  guid_not: String
+
+  """All values that are contained in given list."""
+  guid_in: [String!]
+
+  """All values that are not contained in given list."""
+  guid_not_in: [String!]
+
+  """All values less than the given value."""
+  guid_lt: String
+
+  """All values less than or equal the given value."""
+  guid_lte: String
+
+  """All values greater than the given value."""
+  guid_gt: String
+
+  """All values greater than or equal the given value."""
+  guid_gte: String
+
+  """All values containing the given string."""
+  guid_contains: String
+
+  """All values not containing the given string."""
+  guid_not_contains: String
+
+  """All values starting with the given string."""
+  guid_starts_with: String
+
+  """All values not starting with the given string."""
+  guid_not_starts_with: String
+
+  """All values ending with the given string."""
+  guid_ends_with: String
+
+  """All values not ending with the given string."""
+  guid_not_ends_with: String
+  imageUrl: String
+
+  """All values that are not equal to given value."""
+  imageUrl_not: String
+
+  """All values that are contained in given list."""
+  imageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imageUrl_lte: String
+
+  """All values greater than the given value."""
+  imageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imageUrl_gte: String
+
+  """All values containing the given string."""
+  imageUrl_contains: String
+
+  """All values not containing the given string."""
+  imageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imageUrl_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+}
+
 type FeedItemSubscriptionPayload {
   mutation: MutationType!
   node: FeedItem
@@ -283,6 +622,16 @@ input FeedItemUpdateInput {
   enclosures: ItemEnclosureUpdateManyWithoutItemInput
 }
 
+input FeedItemUpdateManyDataInput {
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+}
+
 input FeedItemUpdateManyMutationInput {
   title: String
   description: String
@@ -296,10 +645,18 @@ input FeedItemUpdateManyMutationInput {
 input FeedItemUpdateManyWithoutFeedInput {
   create: [FeedItemCreateWithoutFeedInput!]
   connect: [FeedItemWhereUniqueInput!]
+  set: [FeedItemWhereUniqueInput!]
   disconnect: [FeedItemWhereUniqueInput!]
   delete: [FeedItemWhereUniqueInput!]
   update: [FeedItemUpdateWithWhereUniqueWithoutFeedInput!]
+  updateMany: [FeedItemUpdateManyWithWhereNestedInput!]
+  deleteMany: [FeedItemScalarWhereInput!]
   upsert: [FeedItemUpsertWithWhereUniqueWithoutFeedInput!]
+}
+
+input FeedItemUpdateManyWithWhereNestedInput {
+  where: FeedItemScalarWhereInput!
+  data: FeedItemUpdateManyDataInput!
 }
 
 input FeedItemUpdateOneRequiredWithoutEnclosuresInput {
@@ -701,6 +1058,8 @@ enum FeedOrderByInput {
   title_DESC
   description_ASC
   description_DESC
+  activated_ASC
+  activated_DESC
   language_ASC
   language_DESC
   imageUrl_ASC
@@ -721,6 +1080,7 @@ type FeedPreviousValues {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -773,6 +1133,7 @@ input FeedUpdateInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -786,6 +1147,7 @@ input FeedUpdateManyMutationInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -813,6 +1175,7 @@ input FeedUpdateWithoutItemsDataInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -825,6 +1188,7 @@ input FeedUpdateWithoutUserFeedsDataInput {
   link: String
   title: String
   description: String
+  activated: Boolean
   language: String
   imageUrl: String
   imageTitle: String
@@ -1051,6 +1415,10 @@ input FeedWhereInput {
 
   """All values not ending with the given string."""
   description_not_ends_with: String
+  activated: Boolean
+
+  """All values that are not equal to given value."""
+  activated_not: Boolean
   language: String
 
   """All values that are not equal to given value."""
@@ -1317,6 +1685,177 @@ type ItemEnclosurePreviousValues {
   length: String
 }
 
+input ItemEnclosureScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ItemEnclosureScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ItemEnclosureScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ItemEnclosureScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  length: String
+
+  """All values that are not equal to given value."""
+  length_not: String
+
+  """All values that are contained in given list."""
+  length_in: [String!]
+
+  """All values that are not contained in given list."""
+  length_not_in: [String!]
+
+  """All values less than the given value."""
+  length_lt: String
+
+  """All values less than or equal the given value."""
+  length_lte: String
+
+  """All values greater than the given value."""
+  length_gt: String
+
+  """All values greater than or equal the given value."""
+  length_gte: String
+
+  """All values containing the given string."""
+  length_contains: String
+
+  """All values not containing the given string."""
+  length_not_contains: String
+
+  """All values starting with the given string."""
+  length_starts_with: String
+
+  """All values not starting with the given string."""
+  length_not_starts_with: String
+
+  """All values ending with the given string."""
+  length_ends_with: String
+
+  """All values not ending with the given string."""
+  length_not_ends_with: String
+}
+
 type ItemEnclosureSubscriptionPayload {
   mutation: MutationType!
   node: ItemEnclosure
@@ -1363,6 +1902,12 @@ input ItemEnclosureUpdateInput {
   item: FeedItemUpdateOneRequiredWithoutEnclosuresInput
 }
 
+input ItemEnclosureUpdateManyDataInput {
+  url: String
+  type: String
+  length: String
+}
+
 input ItemEnclosureUpdateManyMutationInput {
   url: String
   type: String
@@ -1372,10 +1917,18 @@ input ItemEnclosureUpdateManyMutationInput {
 input ItemEnclosureUpdateManyWithoutItemInput {
   create: [ItemEnclosureCreateWithoutItemInput!]
   connect: [ItemEnclosureWhereUniqueInput!]
+  set: [ItemEnclosureWhereUniqueInput!]
   disconnect: [ItemEnclosureWhereUniqueInput!]
   delete: [ItemEnclosureWhereUniqueInput!]
   update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
+  updateMany: [ItemEnclosureUpdateManyWithWhereNestedInput!]
+  deleteMany: [ItemEnclosureScalarWhereInput!]
   upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
+}
+
+input ItemEnclosureUpdateManyWithWhereNestedInput {
+  where: ItemEnclosureScalarWhereInput!
+  data: ItemEnclosureUpdateManyDataInput!
 }
 
 input ItemEnclosureUpdateWithoutItemDataInput {
@@ -1829,6 +2382,177 @@ type UserFeedPreviousValues {
   schedule: DigestSchedule
 }
 
+input UserFeedScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserFeedScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserFeedScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserFeedScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  activated: Boolean
+
+  """All values that are not equal to given value."""
+  activated_not: Boolean
+  activationToken: String
+
+  """All values that are not equal to given value."""
+  activationToken_not: String
+
+  """All values that are contained in given list."""
+  activationToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  activationToken_not_in: [String!]
+
+  """All values less than the given value."""
+  activationToken_lt: String
+
+  """All values less than or equal the given value."""
+  activationToken_lte: String
+
+  """All values greater than the given value."""
+  activationToken_gt: String
+
+  """All values greater than or equal the given value."""
+  activationToken_gte: String
+
+  """All values containing the given string."""
+  activationToken_contains: String
+
+  """All values not containing the given string."""
+  activationToken_not_contains: String
+
+  """All values starting with the given string."""
+  activationToken_starts_with: String
+
+  """All values not starting with the given string."""
+  activationToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  activationToken_ends_with: String
+
+  """All values not ending with the given string."""
+  activationToken_not_ends_with: String
+  activationTokenExpiry: DateTime
+
+  """All values that are not equal to given value."""
+  activationTokenExpiry_not: DateTime
+
+  """All values that are contained in given list."""
+  activationTokenExpiry_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  activationTokenExpiry_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  activationTokenExpiry_lt: DateTime
+
+  """All values less than or equal the given value."""
+  activationTokenExpiry_lte: DateTime
+
+  """All values greater than the given value."""
+  activationTokenExpiry_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  activationTokenExpiry_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  lastUpdate: DateTime
+
+  """All values that are not equal to given value."""
+  lastUpdate_not: DateTime
+
+  """All values that are contained in given list."""
+  lastUpdate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastUpdate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastUpdate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastUpdate_lte: DateTime
+
+  """All values greater than the given value."""
+  lastUpdate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastUpdate_gte: DateTime
+  schedule: DigestSchedule
+
+  """All values that are not equal to given value."""
+  schedule_not: DigestSchedule
+
+  """All values that are contained in given list."""
+  schedule_in: [DigestSchedule!]
+
+  """All values that are not contained in given list."""
+  schedule_not_in: [DigestSchedule!]
+}
+
 type UserFeedSubscriptionPayload {
   mutation: MutationType!
   node: UserFeed
@@ -1878,6 +2602,14 @@ input UserFeedUpdateInput {
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
+input UserFeedUpdateManyDataInput {
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+}
+
 input UserFeedUpdateManyMutationInput {
   activated: Boolean
   activationToken: String
@@ -1889,19 +2621,30 @@ input UserFeedUpdateManyMutationInput {
 input UserFeedUpdateManyWithoutFeedInput {
   create: [UserFeedCreateWithoutFeedInput!]
   connect: [UserFeedWhereUniqueInput!]
+  set: [UserFeedWhereUniqueInput!]
   disconnect: [UserFeedWhereUniqueInput!]
   delete: [UserFeedWhereUniqueInput!]
   update: [UserFeedUpdateWithWhereUniqueWithoutFeedInput!]
+  updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserFeedScalarWhereInput!]
   upsert: [UserFeedUpsertWithWhereUniqueWithoutFeedInput!]
 }
 
 input UserFeedUpdateManyWithoutUserInput {
   create: [UserFeedCreateWithoutUserInput!]
   connect: [UserFeedWhereUniqueInput!]
+  set: [UserFeedWhereUniqueInput!]
   disconnect: [UserFeedWhereUniqueInput!]
   delete: [UserFeedWhereUniqueInput!]
   update: [UserFeedUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserFeedScalarWhereInput!]
   upsert: [UserFeedUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input UserFeedUpdateManyWithWhereNestedInput {
+  where: UserFeedScalarWhereInput!
+  data: UserFeedUpdateManyDataInput!
 }
 
 input UserFeedUpdateWithoutFeedDataInput {

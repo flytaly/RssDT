@@ -43,6 +43,7 @@ type Feed {
     link: String # link to the website
     title: String
     description: String
+    activated: Boolean @default(value: false) # feed should be activated at least once
     language: String
     imageUrl: String
     imageTitle: String

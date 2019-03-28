@@ -113,6 +113,15 @@ describe('Test GraphQL mutations:', () => {
         });
 
         test('should return error if adding existing feed', async () => {
+            const { feedUrl: url } = mocks.addFeed;
+            const feeds = await db.query.userFeeds({ where: { feed: { url } } });
+            const { id } = feeds[0];
+
+            await db.mutation.updateUserFeed({
+                data: { activated: true },
+                where: { id },
+            });
+
             const { errors } = await makePromise(execute(link, {
                 query: gq.ADD_FEED_MUTATION,
                 variables: {
@@ -121,7 +130,13 @@ describe('Test GraphQL mutations:', () => {
                     feedSchedule: mocks.addFeed.feedSchedule,
                 },
             }));
+
             expect(errors[0].message).toEqual('The feed was already added');
+
+            await db.mutation.updateUserFeed({
+                where: { id },
+                data: { activated: false },
+            });
         });
 
         test('should return error if adding not a feed', async () => {
