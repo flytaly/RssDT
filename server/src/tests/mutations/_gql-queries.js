@@ -15,11 +15,9 @@ const ADD_FEED_MUTATION = gql`mutation (
   }`;
 
 const CONFIRM_SUBSCRIPTION_MUTATION = gql`mutation(
-    $email: String!
-    $token: String!
+    $token: String!,
   ) {
     confirmSubscription(
-      email: $email
       token: $token
     ){
       message

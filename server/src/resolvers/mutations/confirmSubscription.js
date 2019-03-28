@@ -2,10 +2,10 @@ const logger = require('../../logger');
 const { setUserFeedLastUpdate } = require('../../db-queries');
 
 async function confirmSubscription(parent, args, ctx, info) {
-    const { email, token } = args;
+    const { token } = args;
+
     const userFeeds = await ctx.db.query.userFeeds({
         where: {
-            user: { email },
             activationToken: token,
             activationTokenExpiry_gte: new Date(),
         },

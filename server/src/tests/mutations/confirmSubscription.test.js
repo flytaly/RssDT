@@ -82,7 +82,7 @@ describe('confirmSubscription mutation', () => {
 
         const { errors } = await makePromise(execute(link, {
             query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
-            variables: { email, token: 'fakeToken' },
+            variables: { token: 'fakeToken' },
         }));
         const userFeed = await db.query.userFeed({
             where: {
@@ -107,7 +107,7 @@ describe('confirmSubscription mutation', () => {
         mockDate(Date.now() + 1000 * 3600 * 26);
         const { errors } = await makePromise(execute(link, {
             query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
-            variables: { email, token: mocks.activationToken },
+            variables: { token: mocks.activationToken },
         }));
         const userFeed = await db.query.userFeed({
             where: {
@@ -131,7 +131,7 @@ describe('confirmSubscription mutation', () => {
         expect(userFeeds.length).toBeGreaterThan(0);
         const { data: { confirmSubscription: { message } } } = await makePromise(execute(link, {
             query: gq.CONFIRM_SUBSCRIPTION_MUTATION,
-            variables: { email, token: mocks.activationToken },
+            variables: { token: mocks.activationToken },
         }));
         const userFeed = await db.query.userFeed({
             where: {
