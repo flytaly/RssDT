@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CardHalf from './styled/card-half';
 import AddFeedForm from './add-feed-form';
+import CardHeader from './card-header';
 
 const StyledHalf = styled(CardHalf)`
     background: ${props => props.theme.greyLight};
@@ -9,14 +10,9 @@ const StyledHalf = styled(CardHalf)`
     border-radius: 10px;
 `;
 
-const Login = styled.a`
-    font-size: 1.3rem;
-    align-self: flex-end;
-`;
-
 const WelcomeLeft = props => (
     <StyledHalf>
-        <Login href="#">Login</Login>
+        <CardHeader />
         <AddFeedForm {...props} />
     </StyledHalf>
 );
