@@ -67,11 +67,14 @@ async function buildAndSendDigests(url) {
  * @param {string} title - subscription's title
  */
 async function sendConfirmSubscription(email, token, title) {
+    const url = `${process.env.FRONTEND_URL}/confirm?token=${token}`;
     const result = await transport.sendMail({
         from: process.env.MAIL_FROM,
         to: email,
         subject: `Confirm subscription to ${title}`,
-        text: `Please, confirm subscription to ${title}: ${token}.
+        text: `Please, confirm subscription to ${title}: ${url}
+        Ignore this message if you didn't subscribe`,
+        html: `Please, confirm subscription to <b>${title}</b>: <a href="${url}">${url}</a><br><br>
         Ignore this message if you didn't subscribe`,
     });
     logger.info(result, 'confirmation email has been sent');
