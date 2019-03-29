@@ -2,19 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ConfirmFeed from '../components/confirm-feed';
 
-class Post extends Component {
-    static propTypes = {
-        token: PropTypes.string.isRequired,
-    }
+const ConfirmPage = ({ query }) => <ConfirmFeed token={query.token} />;
 
-    static async getInitialProps({ query }) {
-        return { token: query.token };
-    }
+ConfirmPage.propTypes = {
+    query: PropTypes.shape({ token: PropTypes.string.isRequired }).isRequired,
+};
 
-    render() {
-        const { token } = this.props;
-        return <ConfirmFeed token={token} />;
-    }
-}
-
-export default Post;
+export default ConfirmPage;
