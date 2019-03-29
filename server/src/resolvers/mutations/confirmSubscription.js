@@ -1,7 +1,7 @@
 const logger = require('../../logger');
 const { setUserFeedLastUpdate } = require('../../db-queries');
 
-async function confirmSubscription(parent, args, ctx, info) {
+async function confirmSubscription(parent, args, ctx) {
     const { token } = args;
 
     const userFeeds = await ctx.db.query.userFeeds({

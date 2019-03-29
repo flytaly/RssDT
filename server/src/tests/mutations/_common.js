@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const cookieParser = require('cookie-parser');
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');

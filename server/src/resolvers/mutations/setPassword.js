@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
-async function setPassword(parent, args, ctx, info) {
+async function setPassword(parent, args, ctx) {
     const { token, email, password: plainPassword } = args;
     if (!await ctx.db.exists.User({ email })) {
         throw new Error(`There is no account for email ${email}`);

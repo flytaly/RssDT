@@ -87,7 +87,11 @@ describe('addFeed mutation', () => {
                 feed: { url: mocks.addFeed.feedUrl.toLowerCase() },
             }],
         });
-        expect(sendConfirmSubscription).toHaveBeenCalledWith(email.toLowerCase(), mocks.activationToken, mocks.feedTitle);
+        expect(sendConfirmSubscription).toHaveBeenCalledWith(
+            email.toLowerCase(),
+            mocks.activationToken,
+            mocks.feedTitle,
+        );
     });
 
     test('should add new feed to existing user', async () => {

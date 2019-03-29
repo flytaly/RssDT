@@ -5,6 +5,7 @@
         "ecmaVersion": 8,
         "sourceType": "module"
     },
+    "plugins": ["react-hooks"],
     "env": {
         "node": true,
         "browser": true,
@@ -30,6 +31,8 @@
         "react/jsx-wrap-multilines": "off",
         "react/react-in-jsx-scope": "off",
         "react/prefer-stateless-function": "on",
-        "no-unused-expressions": "off"
+        "no-unused-expressions": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
     }
 }

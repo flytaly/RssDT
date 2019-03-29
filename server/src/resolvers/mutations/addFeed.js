@@ -5,7 +5,7 @@ const { filterMeta } = require('../../feed-watcher/utils');
 const logger = require('../../logger');
 const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
 
-async function addFeed(parent, args, ctx, info) {
+async function addFeed(parent, args, ctx) {
     let feedMeta = {};
     const { feedSchedule: schedule } = args;
     const email = args.email.trim().toLowerCase();

@@ -30,7 +30,8 @@ async function buildAndSendDigests(url) {
 
     const userFeeds = await getActiveUserFeeds(url);
     const time = Date.now();
-    const readyUserFeeds = userFeeds.filter(({ lastUpdate, schedule }) => Date.parse(lastUpdate) <= (time - periods[schedule]));
+    const readyUserFeeds = userFeeds
+        .filter(({ lastUpdate, schedule }) => Date.parse(lastUpdate) <= (time - periods[schedule]));
     if (!readyUserFeeds.length) return;
 
     const feed = await getFeedInfo(url);

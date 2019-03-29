@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-async function signIn(parent, args, ctx, info) {
+async function signIn(parent, args, ctx) {
     const { email, password } = args;
     const user = await ctx.db.query.user({ where: { email } });
     if (!user) {
