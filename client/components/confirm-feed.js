@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -48,22 +48,29 @@ const ConfirmFeed = ({ token }) => {
         }
 
         confirm();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
     return (
         <StyledCard>
             <Container>
                 <CardHeader />
-                {message && <Msg>{message}</Msg>}
-                {errorMsg && <Msg><GraphQLError error={errorMsg} /></Msg>}
+                <div data-testid="message">
+                    {message && <Msg>{message}</Msg>}
+                    {errorMsg && <Msg><GraphQLError error={errorMsg} /></Msg>}
+                </div>
             </Container>
         </StyledCard>
     );
 };
 
 ConfirmFeed.propTypes = {
-    token: PropTypes.string.isRequired,
+    token: PropTypes.string,
+};
+
+ConfirmFeed.defaultProps = {
+    token: '',
 };
 
 export default ConfirmFeed;
+export { CONFIRM_SUBSCRIPTION_MUTATION };

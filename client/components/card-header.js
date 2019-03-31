@@ -6,7 +6,7 @@ const Menu = styled.div`
 `;
 
 const CardHeader = () => (
-    <Menu>
+    <Menu data-testid="card-header">
         <a href="/login">Login</a>
     </Menu>
 );
