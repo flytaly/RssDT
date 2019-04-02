@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -27,8 +27,9 @@ const Container = styled.div`
     padding: 1rem 3rem;
 `;
 
-const Msg = styled.div`
-    padding-top: 4rem;
+const Message = styled.div`
+    margin-top: 4rem;
+    color: ${props => props.color};
 `;
 
 const ConfirmFeed = ({ token }) => {
@@ -55,10 +56,9 @@ const ConfirmFeed = ({ token }) => {
         <StyledCard>
             <Container>
                 <CardHeader />
-                <div data-testid="message">
-                    {message && <Msg>{message}</Msg>}
-                    {errorMsg && <Msg><GraphQLError error={errorMsg} /></Msg>}
-                </div>
+                <Message color={errorMsg ? 'red' : 'inherit'} data-testid="confirm-message">
+                    {errorMsg ? <GraphQLError error={errorMsg} /> : message}
+                </Message>
             </Container>
         </StyledCard>
     );

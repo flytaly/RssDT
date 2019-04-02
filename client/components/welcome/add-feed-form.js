@@ -5,10 +5,10 @@ import * as Yup from 'yup';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import SubmitButton from './styled/submit-button';
-import Input from './input-with-icon';
-import Select from './select-with-icon';
-import periods from '../types/digest-periods';
+import SubmitButton from '../styled/submit-button';
+import Input from '../forms/input-with-icon';
+import Select from '../forms/select-with-icon';
+import periods from '../../types/digest-periods';
 
 const ADD_FEED_MUTATION = gql`
   mutation ADD_FEED_MUTATION(
@@ -74,11 +74,12 @@ const AddFeedForm = ({ setMessages }) => {
                 handleSubmit, isSubmitting,
             }) => (
                 <StyledForm onSubmit={handleSubmit}>
-                    <FeedTitle>Add feed</FeedTitle>
+                    <FeedTitle>Add a feed</FeedTitle>
                     <Input
                         id="url"
                         type="url"
                         name="url"
+                        icon="./static/rss-square.svg"
                         placeholder="http://..."
                         onChange={handleChange}
                         value={values.url}
@@ -91,6 +92,7 @@ const AddFeedForm = ({ setMessages }) => {
                         id="email"
                         type="email"
                         name="email"
+                        icon="./static/envelope.svg"
                         placeholder="Email"
                         onChange={handleChange}
                         value={values.email}
@@ -102,17 +104,18 @@ const AddFeedForm = ({ setMessages }) => {
                     <Select
                         id="period"
                         name="period"
+                        icon="/static/clock.svg"
                         defaultValue={periods.DAILY}
                         disabled={isSubmitting}
                         onChange={handleChange}
-                        title="Send a digest for the period"
+                        title="Select a digest period"
                     >
-                        <option value={periods.EVERYHOUR}>Every hour</option>
-                        <option value={periods.EVERY2HOURS}>Every 2 hours</option>
-                        <option value={periods.EVERY3HOURS}>Every 3 hours</option>
-                        <option value={periods.EVERY6HOURS}>Every 6 hours</option>
-                        <option value={periods.EVERY12HOURS}>Every 12 hours</option>
-                        <option value={periods.DAILY}>Daily</option>
+                        <option value={periods.EVERYHOUR}>1 hour digest</option>
+                        <option value={periods.EVERY2HOURS}>2 hours digest</option>
+                        <option value={periods.EVERY3HOURS}>3 hours digest</option>
+                        <option value={periods.EVERY6HOURS}>6 hours digest</option>
+                        <option value={periods.EVERY12HOURS}>12 hours digest</option>
+                        <option value={periods.DAILY}>Daily digest</option>
                     </Select>
                     <SubmitButton type="submit" disabled={isSubmitting}>
                         {isSubmitting ? 'SUBMITTING...' : 'SUBSCRIBE'}

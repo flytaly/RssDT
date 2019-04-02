@@ -1,25 +1,20 @@
 import React, { useState, useRef } from 'react';
 import {
     Container, Field, Image, ErrorMessage,
-} from './styled/form-field';
-
-const icons = {
-    email: './static/envelope.svg',
-    url: './static/rss-square.svg',
-};
+} from '../styled/form-field';
 
 function Input(props) {
     const [focus, setFocus] = useState(false);
     const inputEl = useRef(null);
     const {
-        type, onFocus, onBlur, error, name, title,
+        icon, onFocus, onBlur, error, name, title,
     } = props;
 
     const onClick = () => inputEl.current.focus();
 
     return (
-        <Container focus={focus} onClick={onClick}>
-            <Image src={icons[type]} alt={name} />
+        <Container focus={focus} onClick={onClick} title={title}>
+            <Image src={icon} alt={name} />
             <Field
                 as="input"
                 {...props}

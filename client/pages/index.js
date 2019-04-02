@@ -1,4 +1,4 @@
-import WelcomeCard from '../components/welcome-card';
+import WelcomeCard from '../components/welcome/welcome-card';
 
 const Index = () => <WelcomeCard />;
 

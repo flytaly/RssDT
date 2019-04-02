@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ConfirmFeed from '../components/confirm-feed';
+import ConfirmFeed from '../components/confirm-feed-card';
 
 const ConfirmPage = ({ query }) => <ConfirmFeed token={query.token} />;
 

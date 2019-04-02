@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Field, Image } from './styled/form-field';
+import { Container, Field, Image } from '../styled/form-field';
 
 function Select(props) {
     const [focus, setFocus] = useState(false);
     const {
-        onFocus, onBlur, name, title,
+        onFocus, onBlur, name, title, icon,
     } = props;
 
     return (
-        <Container focus={focus}>
-            <Image src="/static/clock.svg" alt={name} />
+        <Container focus={focus} title={title}>
+            <Image src={icon} alt={name} />
             <Field
                 as="select"
                 {...props}

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import CardHalf from './styled/card-half';
+import CardHalf from '../styled/card-half';
 import AddFeedForm from './add-feed-form';
-import CardHeader from './card-header';
+import CardHeader from '../card-header';
 
 const StyledHalf = styled(CardHalf)`
     background: ${props => props.theme.greyLight};

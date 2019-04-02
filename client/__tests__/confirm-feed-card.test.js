@@ -1,6 +1,6 @@
 import 'jest-dom/extend-expect';
 import { render } from 'react-testing-library';
-import ConfirmFeed, { CONFIRM_SUBSCRIPTION_MUTATION } from '../components/confirm-feed';
+import ConfirmFeed, { CONFIRM_SUBSCRIPTION_MUTATION } from '../components/confirm-feed-card';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import '../test-utils/disable-act-warning';
 import wait from '../test-utils/wait';
@@ -31,7 +31,7 @@ describe('Confirm a feed subscription', () => {
 
     test('should display response message', async () => {
         await wait();
-        expect(getByTestId('message')).toHaveTextContent(successMessage);
+        expect(getByTestId('confirm-message')).toHaveTextContent(successMessage);
     });
 
     test('should render header', () => {
@@ -45,6 +45,6 @@ describe('Confirm a feed subscription', () => {
             </ApolloMockedProvider>,
         );
         await wait();
-        expect(getByTestId('error-message')).toHaveTextContent(errorMessage);
+        expect(getByTestId('confirm-message')).toHaveTextContent(errorMessage);
     });
 });

@@ -191,9 +191,8 @@ exports[`Snapshot should match snapshot 1`] = `
     class="c1"
   >
     <p>
-      Enter address of desired feed, email and we will send you updates every chosen period.
+      Enter address of a feed (rss, atom) and your email to receive updates every chosen period.
     </p>
-    
     
   </div>
   <div
@@ -215,10 +214,11 @@ exports[`Snapshot should match snapshot 1`] = `
       <h2
         class="c5"
       >
-        Add feed
+        Add a feed
       </h2>
       <label
         class="c6"
+        title="The RSS or Atom feed url"
       >
         <img
           alt="url"
@@ -239,6 +239,7 @@ exports[`Snapshot should match snapshot 1`] = `
       </label>
       <label
         class="c6"
+        title="Email address"
       >
         <img
           alt="email"
@@ -259,6 +260,7 @@ exports[`Snapshot should match snapshot 1`] = `
       </label>
       <label
         class="c6"
+        title="Select a digest period"
       >
         <img
           alt="period"
@@ -266,42 +268,42 @@ exports[`Snapshot should match snapshot 1`] = `
           src="/static/clock.svg"
         />
         <select
-          aria-label="Send a digest for the period"
+          aria-label="Select a digest period"
           class="c9"
           id="period"
           name="period"
-          title="Send a digest for the period"
+          title="Select a digest period"
         >
           <option
             value="EVERYHOUR"
           >
-            Every hour
+            1 hour digest
           </option>
           <option
             value="EVERY2HOURS"
           >
-            Every 2 hours
+            2 hours digest
           </option>
           <option
             value="EVERY3HOURS"
           >
-            Every 3 hours
+            3 hours digest
           </option>
           <option
             value="EVERY6HOURS"
           >
-            Every 6 hours
+            6 hours digest
           </option>
           <option
             value="EVERY12HOURS"
           >
-            Every 12 hours
+            12 hours digest
           </option>
           <option
             selected=""
             value="DAILY"
           >
-            Daily
+            Daily digest
           </option>
         </select>
       </label>

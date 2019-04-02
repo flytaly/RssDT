@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import StyledCard from './styled/card';
+import StyledCard from '../styled/card';
 import CardLeft from './card-left';
 import CardRight from './card-right';
 

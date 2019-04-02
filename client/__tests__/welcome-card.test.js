@@ -3,8 +3,8 @@ import {
     render, cleanup, fireEvent, wait, waitForElement,
 } from 'react-testing-library';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import WelcomeCard from '../components/welcome-card';
-import { ADD_FEED_MUTATION } from '../components/add-feed-form';
+import WelcomeCard from '../components/welcome/welcome-card';
+import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import '../test-utils/disable-act-warning';
 import periods from '../types/digest-periods';
@@ -48,7 +48,7 @@ describe('Add feed form', () => {
     });
 
     test('should show form errors', async () => {
-        const { getByLabelText, getByText, getByTestId } = render(
+        const { getByLabelText, getByText } = render(
             <ApolloMockedProvider mocks={mocks}>
                 <WelcomeCard />
             </ApolloMockedProvider>,
@@ -57,7 +57,7 @@ describe('Add feed form', () => {
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
-            period: getByLabelText(/Send a digest for the period/i),
+            period: getByLabelText(/Select a digest period/i),
         };
         fireEvent.change(inputs.url, { target: { value: 'notAnEmail' } });
         fireEvent.change(inputs.email, { target: { value: 'http:/notaurl' } });
@@ -80,7 +80,7 @@ describe('Submitting data', () => {
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
-            period: getByLabelText(/Send a digest for the period/i),
+            period: getByLabelText(/Select a digest period/i),
         };
 
         fireEvent.change(inputs.url, { target: { value: values.url } });
@@ -97,7 +97,7 @@ describe('Submitting data', () => {
             expect(submitBtn).toBeEnabled();
             expect(submitBtn).toHaveTextContent(/subscribe/i);
 
-            expect(getByTestId('success-message')).toHaveTextContent(`${successMsg}`);
+            expect(getByTestId('add-feed-message')).toHaveTextContent(`${successMsg}`);
         });
     });
 
@@ -122,7 +122,7 @@ describe('Submitting data', () => {
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
-            period: getByLabelText(/Send a digest for the period/i),
+            period: getByLabelText(/Select a digest period/i),
         };
 
         fireEvent.change(inputs.url, { target: { value: wrongFeedUrl } });
@@ -131,7 +131,7 @@ describe('Submitting data', () => {
         fireEvent.click(submitBtn);
 
         await wait(() => {
-            expect(getByTestId('error-message')).toHaveTextContent(errorMsg);
+            expect(getByTestId('add-feed-message')).toHaveTextContent(errorMsg);
         });
     });
 });
