@@ -8,7 +8,7 @@ const CardLeft = ({ messages: { error, success } }) => (
     <CardHalf>
         <p>Enter address of desired feed, email and we will send you updates every chosen period.</p>
         {error && <GraphQLError error={error}>{error}</GraphQLError>}
-        {success && <p style={{ color: 'green' }}>{success}</p>}
+        {success && <p style={{ color: 'green' }} data-testid="success-message">{success}</p>}
     </CardHalf>
 );
 CardLeft.propTypes = {

@@ -35,8 +35,10 @@
     "babel-jest": "^24.5.0",
     "babel-plugin-styled-components": "^1.10.0",
     "jest": "^24.5.0",
+    "jest-axe": "^3.1.1",
     "jest-cli": "^24.5.0",
     "jest-dom": "^3.1.3",
+    "jest-styled-components": "^6.3.1",
     "react-test-renderer": "^16.8.6",
     "react-testing-library": "^6.0.3"
   },
@@ -46,6 +48,9 @@
     ],
     "transform": {
       "^.+\\.js$": "babel-jest"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "./setupTest.js"
+    ]
   }
 }

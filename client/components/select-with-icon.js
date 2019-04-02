@@ -1,16 +1,15 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Container, Field, Image } from './styled/form-field';
 
 function Select(props) {
     const [focus, setFocus] = useState(false);
-    const selectEl = useRef(null);
-    const { onFocus, onBlur } = props;
-
-    const onClick = () => selectEl.current.focus();
+    const {
+        onFocus, onBlur, name, title,
+    } = props;
 
     return (
-        <Container focus={focus} onClick={onClick}>
-            <Image src="/static/clock.svg" />
+        <Container focus={focus}>
+            <Image src="/static/clock.svg" alt={name} />
             <Field
                 as="select"
                 {...props}
@@ -22,7 +21,7 @@ function Select(props) {
                     setFocus(false);
                     onBlur && onBlur(...args);
                 }}
-                ref={selectEl}
+                aria-label={title}
             />
         </Container>);
 }

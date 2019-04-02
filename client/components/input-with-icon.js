@@ -12,14 +12,14 @@ function Input(props) {
     const [focus, setFocus] = useState(false);
     const inputEl = useRef(null);
     const {
-        type, onFocus, onBlur, error,
+        type, onFocus, onBlur, error, name, title,
     } = props;
 
     const onClick = () => inputEl.current.focus();
 
     return (
         <Container focus={focus} onClick={onClick}>
-            <Image src={icons[type]} />
+            <Image src={icons[type]} alt={name} />
             <Field
                 as="input"
                 {...props}
@@ -32,6 +32,7 @@ function Input(props) {
                     onBlur && onBlur(...args);
                 }}
                 ref={inputEl}
+                aria-label={title}
             />
             {error ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Container>);

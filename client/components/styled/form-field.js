@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-const Container = styled.div`
+const Container = styled.label`
     position: relative;
     display: flex;
     align-items: center;
@@ -18,11 +18,9 @@ const Container = styled.div`
         border-width: 2px;
     }
 `;
-
-const Image = styled.div`
+const Image = styled.img`
     width: 2rem;
     height: 2rem;
-    ${props => props.src && css`background: center / contain no-repeat url('${props.src}');`}
 `;
 
 // use 'as' to change tag from div to input, select... https://www.styled-components.com/docs/api#as-polymorphic-prop

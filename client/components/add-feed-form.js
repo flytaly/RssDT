@@ -8,17 +8,18 @@ import PropTypes from 'prop-types';
 import SubmitButton from './styled/submit-button';
 import Input from './input-with-icon';
 import Select from './select-with-icon';
+import periods from '../types/digest-periods';
 
 const ADD_FEED_MUTATION = gql`
   mutation ADD_FEED_MUTATION(
     $email: String!
     $url: String!
-    $schedule: DigestSchedule
+    $period: DigestSchedule
   ) {
     addFeed(
         email: $email
         feedUrl: $url
-        feedSchedule: $schedule
+        feedSchedule: $period
     ) {
         message
     }
@@ -51,7 +52,7 @@ const AddFeedForm = ({ setMessages }) => {
     const addFeed = useMutation(ADD_FEED_MUTATION);
     return (
         <Formik
-            initialValues={{ email: '', url: 'http://', period: '24' }}
+            initialValues={{ email: '', url: 'http://', period: periods.DAILY }}
             validationSchema={AddFeedSchema}
             onSubmit={async (variables, { setSubmitting, resetForm }) => {
                 const { email, url, period } = variables;
@@ -75,6 +76,7 @@ const AddFeedForm = ({ setMessages }) => {
                 <StyledForm onSubmit={handleSubmit}>
                     <FeedTitle>Add feed</FeedTitle>
                     <Input
+                        id="url"
                         type="url"
                         name="url"
                         placeholder="http://..."
@@ -82,9 +84,11 @@ const AddFeedForm = ({ setMessages }) => {
                         value={values.url}
                         error={errors.url}
                         disabled={isSubmitting}
+                        title="The RSS or Atom feed url"
                         required
                     />
                     <Input
+                        id="email"
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -92,15 +96,23 @@ const AddFeedForm = ({ setMessages }) => {
                         value={values.email}
                         error={errors.email}
                         disabled={isSubmitting}
+                        title="Email address"
                         required
                     />
-                    <Select name="period" defaultValue="24" disabled={isSubmitting}>
-                        <option value="1">Every hour</option>
-                        <option value="2">Every 2 hours</option>
-                        <option value="3">Every 3 hours</option>
-                        <option value="6">Every 6 hours</option>
-                        <option value="12">Every 12 hours</option>
-                        <option value="24">Daily</option>
+                    <Select
+                        id="period"
+                        name="period"
+                        defaultValue={periods.DAILY}
+                        disabled={isSubmitting}
+                        onChange={handleChange}
+                        title="Send a digest for the period"
+                    >
+                        <option value={periods.EVERYHOUR}>Every hour</option>
+                        <option value={periods.EVERY2HOURS}>Every 2 hours</option>
+                        <option value={periods.EVERY3HOURS}>Every 3 hours</option>
+                        <option value={periods.EVERY6HOURS}>Every 6 hours</option>
+                        <option value={periods.EVERY12HOURS}>Every 12 hours</option>
+                        <option value={periods.DAILY}>Daily</option>
                     </Select>
                     <SubmitButton type="submit" disabled={isSubmitting}>
                         {isSubmitting ? 'SUBMITTING...' : 'SUBSCRIBE'}
@@ -114,3 +126,4 @@ AddFeedForm.propTypes = {
 };
 
 export default AddFeedForm;
+export { ADD_FEED_MUTATION };
