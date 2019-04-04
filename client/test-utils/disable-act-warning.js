@@ -6,8 +6,6 @@
  * https://github.com/trojanowski/react-apollo-hooks/issues/84
  */
 
-// TODO: Remove this module from tests after the issues will be closed
-
 const errorOrigin = console.error;
 
 console.error = (...args) => {

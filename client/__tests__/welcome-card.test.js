@@ -3,10 +3,10 @@ import {
     render, cleanup, fireEvent, wait, waitForElement,
 } from 'react-testing-library';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import { act } from 'react-dom/test-utils';
 import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
-import '../test-utils/disable-act-warning';
 import periods from '../types/digest-periods';
 
 expect.extend(toHaveNoViolations);
@@ -92,13 +92,13 @@ describe('Submitting data', () => {
         expect(submitBtn).toBeDisabled();
         expect(submitBtn).toHaveTextContent(/submitting/i);
 
-        await wait(() => {
+        await act(() => wait(() => {
             Object.values(inputs).forEach(input => expect(input).toBeEnabled());
             expect(submitBtn).toBeEnabled();
             expect(submitBtn).toHaveTextContent(/subscribe/i);
 
             expect(getByTestId('add-feed-message')).toHaveTextContent(`${successMsg}`);
-        });
+        }));
     });
 
     test('should submit data and display error', async () => {
@@ -130,9 +130,9 @@ describe('Submitting data', () => {
         fireEvent.change(inputs.period, { target: { value: values.period } });
         fireEvent.click(submitBtn);
 
-        await wait(() => {
+        await act(() => wait(() => {
             expect(getByTestId('add-feed-message')).toHaveTextContent(errorMsg);
-        });
+        }));
     });
 });
 
