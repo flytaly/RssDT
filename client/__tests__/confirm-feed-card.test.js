@@ -1,6 +1,5 @@
 import 'jest-dom/extend-expect';
 import { render, wait } from 'react-testing-library';
-import { act } from 'react-dom/test-utils';
 import ConfirmFeed, { CONFIRM_SUBSCRIPTION_MUTATION } from '../components/confirm-feed-card';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 
@@ -29,9 +28,9 @@ describe('Confirm a feed subscription', () => {
     );
 
     test('should display response message', async () => {
-        await act(() => wait(() => {
+        await wait(() => {
             expect(getByTestId('confirm-message')).toHaveTextContent(successMessage);
-        }));
+        });
     });
 
     test('should render header', () => {
@@ -44,8 +43,8 @@ describe('Confirm a feed subscription', () => {
                 <ConfirmFeed token="wrongToken" />
             </ApolloMockedProvider>,
         );
-        await act(() => wait(() => {
+        await wait(() => {
             expect(getByTestId('confirm-message')).toHaveTextContent(errorMessage);
-        }));
+        });
     });
 });

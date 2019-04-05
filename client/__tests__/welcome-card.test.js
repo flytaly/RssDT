@@ -1,9 +1,8 @@
 import 'jest-dom/extend-expect';
 import {
-    render, cleanup, fireEvent, wait, waitForElement,
+    render, cleanup, fireEvent, wait, waitForElement, getByText,
 } from 'react-testing-library';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { act } from 'react-dom/test-utils';
 import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
@@ -48,12 +47,12 @@ describe('Add feed form', () => {
     });
 
     test('should show form errors', async () => {
-        const { getByLabelText, getByText } = render(
+        const { getByLabelText, container } = render(
             <ApolloMockedProvider mocks={mocks}>
                 <WelcomeCard />
             </ApolloMockedProvider>,
         );
-        const submitBtn = getByText(/subscribe/i);
+        const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
@@ -61,9 +60,12 @@ describe('Add feed form', () => {
         };
         fireEvent.change(inputs.url, { target: { value: 'notAnEmail' } });
         fireEvent.change(inputs.email, { target: { value: 'http:/notaurl' } });
+        fireEvent.blur(inputs.url);
+        fireEvent.blur(inputs.email);
+
         await waitForElement(() => [
-            getByText(/invalid feed address/i),
-            getByText(/invalid email address/i),
+            getByText(container, /invalid feed address/i),
+            getByText(container, /invalid email address/i),
         ]);
         fireEvent.click(submitBtn);
     });
@@ -71,12 +73,15 @@ describe('Add feed form', () => {
 
 describe('Submitting data', () => {
     test('should submit valid data and display message', async () => {
-        const { getByLabelText, getByText, getByTestId } = render(
+        const {
+            getByLabelText, getByTestId, container,
+        } = render(
             <ApolloMockedProvider mocks={mocks}>
                 <WelcomeCard />
             </ApolloMockedProvider>,
         );
-        const submitBtn = getByText(/subscribe/i);
+        const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
+
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
@@ -86,19 +91,19 @@ describe('Submitting data', () => {
         fireEvent.change(inputs.url, { target: { value: values.url } });
         fireEvent.change(inputs.email, { target: { value: values.email } });
         fireEvent.change(inputs.period, { target: { value: values.period } });
-        fireEvent.click(getByText(/subscribe/i));
+        fireEvent.click(submitBtn);
 
         Object.values(inputs).forEach(input => expect(input).toBeDisabled());
         expect(submitBtn).toBeDisabled();
         expect(submitBtn).toHaveTextContent(/submitting/i);
 
-        await act(() => wait(() => {
+        await wait(() => {
             Object.values(inputs).forEach(input => expect(input).toBeEnabled());
             expect(submitBtn).toBeEnabled();
             expect(submitBtn).toHaveTextContent(/subscribe/i);
 
             expect(getByTestId('add-feed-message')).toHaveTextContent(`${successMsg}`);
-        }));
+        });
     });
 
     test('should submit data and display error', async () => {
@@ -112,13 +117,13 @@ describe('Submitting data', () => {
             error: new Error(errorMsg),
         }];
 
-        const { getByLabelText, getByText, getByTestId } = render(
+        const { getByLabelText, getByTestId, container } = render(
             <ApolloMockedProvider mocks={errorMocks}>
                 <WelcomeCard />
             </ApolloMockedProvider>,
         );
 
-        const submitBtn = getByText(/subscribe/i);
+        const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
         const inputs = {
             url: getByLabelText(/The RSS or Atom feed url/i),
             email: getByLabelText(/Email/i),
@@ -130,9 +135,9 @@ describe('Submitting data', () => {
         fireEvent.change(inputs.period, { target: { value: values.period } });
         fireEvent.click(submitBtn);
 
-        await act(() => wait(() => {
+        await wait(() => {
             expect(getByTestId('add-feed-message')).toHaveTextContent(errorMsg);
-        }));
+        });
     });
 });
 

@@ -41,11 +41,11 @@ const FeedTitle = styled.h2`
 // VALIDATION
 const AddFeedSchema = Yup.object().shape({
     url: Yup.string()
-        .url('Invalid feed address'),
-    // .required('Required'),
+        .url('Invalid feed address')
+        .required('The field is required'),
     email: Yup.string()
-        .email('Invalid email address'),
-    // .required('Required'),
+        .email('Invalid email address')
+        .required('The field is required'),
 });
 
 const AddFeedForm = ({ setMessages }) => {
@@ -67,11 +67,13 @@ const AddFeedForm = ({ setMessages }) => {
             }}
         >
             {({
-                values, errors,
-                // touched,
+                values,
+                errors,
+                touched,
                 handleChange,
-                // handleBlur,
-                handleSubmit, isSubmitting,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
             }) => (
                 <StyledForm onSubmit={handleSubmit}>
                     <FeedTitle>Add a feed</FeedTitle>
@@ -80,8 +82,10 @@ const AddFeedForm = ({ setMessages }) => {
                         type="url"
                         name="url"
                         icon="./static/rss-square.svg"
+                        touched={touched.url}
                         placeholder="http://..."
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         value={values.url}
                         error={errors.url}
                         disabled={isSubmitting}
@@ -93,8 +97,10 @@ const AddFeedForm = ({ setMessages }) => {
                         type="email"
                         name="email"
                         icon="./static/envelope.svg"
+                        touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         value={values.email}
                         error={errors.email}
                         disabled={isSubmitting}
@@ -108,6 +114,7 @@ const AddFeedForm = ({ setMessages }) => {
                         defaultValue={periods.DAILY}
                         disabled={isSubmitting}
                         onChange={handleChange}
+                        onBlur={handleBlur}
                         title="Select a digest period"
                     >
                         <option value={periods.EVERYHOUR}>1 hour digest</option>

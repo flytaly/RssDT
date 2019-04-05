@@ -7,7 +7,7 @@ function Input(props) {
     const [focus, setFocus] = useState(false);
     const inputEl = useRef(null);
     const {
-        icon, onFocus, onBlur, error, name, title,
+        icon, onFocus, onBlur, error, name, title, touched,
     } = props;
 
     const onClick = () => inputEl.current.focus();
@@ -29,7 +29,7 @@ function Input(props) {
                 ref={inputEl}
                 aria-label={title}
             />
-            {error ? <ErrorMessage>{error}</ErrorMessage> : null}
+            {error && touched ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Container>);
 }
 
