@@ -12,13 +12,11 @@ const Message = styled.div`
     border-radius: 3px;
 `;
 
-const CardLeft = ({ messages: { error, success } }) => (
+const CardLeft = ({ messages: { error } }) => (
     <CardHalf>
-        <p>Enter address of a feed (rss, atom) and your email to receive updates every chosen period.</p>
-        {(error || success) && (
-            <Message color={error ? 'red' : 'green'} data-testid="add-feed-message">
+        {(error) && (
+            <Message color={error ? 'red' : 'green'} data-testid="login-message">
                 {error && <GraphQLError error={error} />}
-                {success && success}
             </Message>)
         }
     </CardHalf>
@@ -26,11 +24,10 @@ const CardLeft = ({ messages: { error, success } }) => (
 CardLeft.propTypes = {
     messages: PropTypes.shape({
         error: PropTypes.string,
-        success: PropTypes.string,
     }),
 };
 CardLeft.defaultProps = {
-    messages: { error: '', success: '' },
+    messages: { error: '' },
 };
 
 export default CardLeft;

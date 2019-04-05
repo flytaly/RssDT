@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledHalf = styled.div`
+const StyledLightHalf = styled.div`
     display: flex;
     flex: 1 0 auto;
     flex-direction: column;
@@ -10,4 +10,10 @@ const StyledHalf = styled.div`
     padding: 1rem 3rem;
 `;
 
-export default StyledHalf;
+const StyledDarkHalf = styled(StyledLightHalf)`
+    background: ${props => props.theme.greyLight};
+    border: 1px solid ${props => props.theme.greyDark};
+    border-radius: 10px;
+`;
+
+export { StyledLightHalf, StyledDarkHalf };
