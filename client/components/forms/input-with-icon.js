@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import {
     Container, Field, Image, ErrorMessage,
 } from '../styled/form-field';
@@ -32,5 +33,23 @@ function Input(props) {
             {error && touched ? <ErrorMessage>{error}</ErrorMessage> : null}
         </Container>);
 }
+
+Input.propTypes = {
+    icon: PropTypes.string.isRequired,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+    error: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    touched: PropTypes.bool,
+};
+
+Input.defaultProps = {
+    onFocus: null,
+    onBlur: null,
+    error: '',
+    title: '',
+    touched: false,
+};
 
 export default Input;

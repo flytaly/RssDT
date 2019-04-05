@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Container, Field, Image } from '../styled/form-field';
 
 function Select(props) {
@@ -25,5 +26,19 @@ function Select(props) {
             />
         </Container>);
 }
+
+Select.propTypes = {
+    icon: PropTypes.string.isRequired,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func,
+    name: PropTypes.string.isRequired,
+    title: PropTypes.string,
+};
+
+Select.defaultProps = {
+    onFocus: null,
+    onBlur: null,
+    title: '',
+};
 
 export default Select;

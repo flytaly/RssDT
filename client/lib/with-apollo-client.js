@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { getDataFromTree } from 'react-apollo';
+// import { getDataFromTree } from 'react-apollo';
 import { getMarkupFromTree } from 'react-apollo-hooks';
 import { renderToStaticMarkup } from 'react-dom/server';
 import initApollo from './init-apollo';
