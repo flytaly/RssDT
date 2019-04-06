@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import Router from 'next/router';
+import { withRouter } from 'next/router';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 import { useMutation } from 'react-apollo-hooks';
@@ -47,7 +47,7 @@ const LogInSchema = Yup.object().shape({
         .required('The field is required'),
 });
 
-const LogInForm = ({ setMessages }) => {
+const LogInForm = ({ setMessages, router }) => {
     const signIn = useMutation(SIGN_IN_MUTATION);
     return (
         <Formik
@@ -59,7 +59,7 @@ const LogInForm = ({ setMessages }) => {
                 try {
                     const { data } = await signIn({ variables: { email, password } });
                     if (data && data.signIn && data.signIn.message) {
-                        Router.replace('/subscriptions');
+                        router.replace('/subscriptions');
                     }
                 } catch (error) {
                     setMessages({ error: error.message });
@@ -117,7 +117,9 @@ const LogInForm = ({ setMessages }) => {
 
 LogInForm.propTypes = {
     setMessages: PropTypes.func.isRequired,
+    router: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
 };
 
-export default LogInForm;
+export default withRouter(LogInForm);
+
 export { SIGN_IN_MUTATION };

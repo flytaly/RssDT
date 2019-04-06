@@ -1,5 +1,5 @@
 const Queries = {
-    async user(parent, args, ctx, info) {
+    async me(parent, args, ctx, info) {
         const { user } = ctx.request;
         if (!user) { throw new Error('Authentication is required'); }
 
