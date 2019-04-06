@@ -182,8 +182,6 @@ exports[`Snapshot should match snapshot 1`] = `
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  -webkit-column-gap: 1rem;
-  column-gap: 1rem;
   font-size: 1.3rem;
   list-style: none;
   margin: 0;
@@ -191,6 +189,10 @@ exports[`Snapshot should match snapshot 1`] = `
   -webkit-align-self: flex-end;
   -ms-flex-item-align: end;
   align-self: flex-end;
+}
+
+.c3 li {
+  margin-left: 1rem;
 }
 
 <div
@@ -215,7 +217,7 @@ exports[`Snapshot should match snapshot 1`] = `
         <a
           href="/"
         >
-          Subscribe
+          Add new feed
         </a>
       </li>
       <li>

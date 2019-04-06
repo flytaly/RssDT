@@ -24,7 +24,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.9.0-alpha.0",
     "react-apollo": "^2.5.3",
-    "react-apollo-hooks": "^0.4.4",
+    "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.9.0-alpha.0",
     "styled-components": "^4.2.0",
     "yup": "^0.27.0"

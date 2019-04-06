@@ -7,6 +7,7 @@ import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import periods from '../types/digest-periods';
+import { ME_QUERY_MOCK } from '../test-utils/qgl-mocks';
 
 expect.extend(toHaveNoViolations);
 
@@ -24,7 +25,9 @@ const mocks = [{
         },
     },
     result: { data: { addFeed: { message: successMsg } } },
-}];
+},
+ME_QUERY_MOCK,
+];
 
 afterEach(cleanup);
 
@@ -115,7 +118,7 @@ describe('Submitting data', () => {
                 variables: { ...values, url: wrongFeedUrl },
             },
             error: new Error(errorMsg),
-        }];
+        }, ME_QUERY_MOCK];
 
         const { getByLabelText, getByTestId, container } = render(
             <ApolloMockedProvider mocks={errorMocks}>
