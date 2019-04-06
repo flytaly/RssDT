@@ -4,7 +4,7 @@ import App, { Container } from 'next/app';
 // import withApollo from '../lib/with-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import Page from '../components/page';
-import withApolloClient from '../lib/with-apollo-client';
+import withApolloHooks from '../lib/with-apollo-hooks';
 
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -31,4 +31,4 @@ class MyApp extends App {
     }
 }
 
-export default withApolloClient(MyApp);
+export default withApolloHooks(MyApp);

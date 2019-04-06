@@ -9,23 +9,25 @@ if (!process.browser) {
     global.fetch = fetch;
 }
 
-function create(initialState) {
+function create(initialState, headers = {}) {
     return new ApolloClient({
         connectToDevTools: process.browser,
         ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
         link: new HttpLink({
             uri: GRAPHQL_URL,
             credentials: 'include',
+            headers,
         }),
         cache: new InMemoryCache().restore(initialState || {}),
     });
 }
 
-export default function initApollo(initialState) {
+
+export default function initApollo(initialState, headers) {
     // Make sure to create a new client for every server-side request so that data
     // isn't shared between connections (which would be bad)
     if (!process.browser) {
-        return create(initialState);
+        return create(initialState, headers); // explicitly pass headers in SSR mode so server has access to cookies
     }
 
     // Reuse client on the client-side
