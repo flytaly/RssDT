@@ -5,12 +5,14 @@ const Watcher = require('./feed-watcher');
 const logger = require('./logger');
 const authMiddleware = require('./middlewares/jwtAuth.js');
 
-require('./mail-sender/themes'); // load email themes from filesystem
-
+require('./mail-sender/themes');
+// load email themes from filesystem
 const feedWatcher = new Watcher(db);
 feedWatcher.start();
 
-if (process.env.NODE_ENV === 'development') {
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+if (isDevelopment) {
     (async () => {
         await feedWatcher.update();
         // await feedWatcher.cancel();
@@ -22,6 +24,7 @@ server.express.use(cookieParser());
 server.express.use(authMiddleware(db));
 
 const opts = {
+    debug: isDevelopment,
     cors: {
         credentials: true,
         origin: [process.env.FRONTEND_URL],
