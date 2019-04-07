@@ -18,12 +18,12 @@
   "devDependencies": {
     "apollo-link": "^1.2.11",
     "apollo-link-http": "^1.5.14",
-    "jest": "^24.5.0",
-    "jest-cli": "^24.5.0",
+    "jest": "^24.7.1",
+    "jest-cli": "^24.7.1",
     "nock": "^10.0.6",
     "node-fetch": "^2.3.0",
     "nodemon": "^1.18.10",
-    "pino-pretty": "^2.5.0"
+    "pino-pretty": "^2.6.0"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -31,7 +31,7 @@
     "cookie-parser": "^1.4.4",
     "dotenv-cli": "^2.0.0",
     "feedparser": "^2.2.9",
-    "graphql": "^14.1.1",
+    "graphql": "^14.2.1",
     "graphql-tag": "^2.10.1",
     "graphql-yoga": "^1.17.4",
     "handlebars": "^4.1.1",
@@ -40,12 +40,12 @@
     "mjml": "^4.4.0-beta.1",
     "nanoid": "^2.0.1",
     "node-schedule": "^1.3.2",
-    "nodemailer": "^6.0.0",
-    "normalize-url": "^4.2.0",
+    "nodemailer": "^6.1.0",
+    "normalize-url": "^4.3.0",
     "p-limit": "^2.2.0",
-    "pino": "^5.11.3",
+    "pino": "^5.12.2",
     "pino-tee": "^0.2.2",
-    "prisma": "^1.29.1",
-    "prisma-binding": "^2.3.9"
+    "prisma": "^1.30.0",
+    "prisma-binding": "^2.3.10"
   }
 }

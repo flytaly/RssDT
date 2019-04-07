@@ -77,7 +77,7 @@ describe('Test GraphQL queries:', () => {
 
     describe('user', () => {
         const USER_WITH_FEEDS_QUERY = gql`query{
-            user {
+            me {
                 email
                 id
                 feeds {
@@ -95,7 +95,7 @@ describe('Test GraphQL queries:', () => {
             }));
 
             const { schedule, url } = mocks.feed;
-            expect(data.user).toMatchObject({
+            expect(data.me).toMatchObject({
                 id: user.id,
                 email: user.email,
                 feeds: [{ schedule, feed: { url } }],
@@ -107,7 +107,7 @@ describe('Test GraphQL queries:', () => {
                 query: USER_WITH_FEEDS_QUERY,
                 variables: { email: mocks.user.email },
             }));
-            expect(data.user).toBeNull();
+            expect(data.me).toBeNull();
             expect(errors[0].message).toEqual('Authentication is required');
         });
     });
