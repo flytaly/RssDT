@@ -9,7 +9,7 @@ const LOGOUT_MUTATION = gql`
     }
 `;
 
-const LoginPage = () => {
+const Logout = () => {
     const logout = useMutation(LOGOUT_MUTATION);
     useEffect(() => {
         logout()
@@ -19,4 +19,4 @@ const LoginPage = () => {
     return null;
 };
 
-export default LoginPage;
+export default Logout;
