@@ -36,7 +36,9 @@ export default App => class Apollo extends React.Component {
                 // Prevent Apollo Client GraphQL errors from crashing SSR.
                 // Handle them in components via the data.error prop:
                 // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
-                console.error('Error while running `getMarkupFromTree`', error);
+                if (error.message !== 'GraphQL error: Authentication is required') {
+                    console.error('Error while running `getMarkupFromTree`', error);
+                }
             }
 
             // getDataFromTree does not call componentWillUnmount

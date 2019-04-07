@@ -1,7 +1,8 @@
 import 'jest-dom/extend-expect';
 import { render, wait, cleanup } from 'react-testing-library';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
-import CardHeader, { ME_QUERY } from '../components/card-header';
+import CardHeader from '../components/card-header';
+import ME_QUERY from '../queries/me-query';
 
 describe('Navigation menu', () => {
     afterEach(cleanup);

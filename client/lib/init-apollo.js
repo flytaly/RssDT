@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
 import fetch from 'isomorphic-unfetch';
 import { GRAPHQL_URL } from '../configs';
+import resolvers from './resolvers';
 
 let apolloClient = null;
 
@@ -19,6 +20,7 @@ function create(initialState, headers = {}) {
             headers,
         }),
         cache: new InMemoryCache().restore(initialState || {}),
+        resolvers,
     });
 }
 

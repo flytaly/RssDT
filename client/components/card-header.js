@@ -1,16 +1,7 @@
 import styled from 'styled-components';
-import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';
 import Link from 'next/link';
-
-const ME_QUERY = gql`
-    query ME_QUERY {
-        me {
-            id
-            email
-        }
-    }
-`;
+import ME_QUERY from '../queries/me-query';
 
 const Menu = styled.ul`
     display: flex;
@@ -36,14 +27,14 @@ const CardHeader = () => {
             <li><a href="/">Add new feed</a></li>
             {!data.me
                 ? <li><Link prefetch href="/login"><a href="/login">Log in</a></Link></li>
-                : <>
-                    <li><Link href="/subscriptions"><a href="/subscriptions">Manage</a></Link></li>
-                    <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
-                </>
+                : (
+                    <>
+                        <li><Link href="/subscriptions"><a href="/subscriptions">Manage</a></Link></li>
+                        <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
+                    </>)
             }
         </Menu>
     );
 };
 
 export default CardHeader;
-export { ME_QUERY };

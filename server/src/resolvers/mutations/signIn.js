@@ -14,7 +14,7 @@ async function signIn(parent, args, ctx) {
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
     ctx.response.cookie('token', token, {
         maxAge: 1000 * 60 * 60 * 24 * 180,
-        httpOnly: true,
+        httpOnly: false,
     });
 
     return { message: 'OK' };
