@@ -18,8 +18,6 @@ const mocks = {
     user: {
         email: `${moduleName}-testuser@test.com`,
         password: `${moduleName}_password`,
-        setPasswordToken: 'setPasswordToken',
-        setPasswordTokenExpiry: new Date(Date.now() + 1000 * 60),
     },
 };
 

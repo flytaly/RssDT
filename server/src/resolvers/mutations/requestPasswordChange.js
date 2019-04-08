@@ -1,10 +1,12 @@
 const nanoid = require('nanoid');
+const { sendSetPasswordLink } = require('../../mail-sender/dispatcher');
 
 async function requestPasswordChange(parent, args, ctx) {
     const { email } = args;
     const userExists = await ctx.db.exists.User({ email });
     if (!userExists) {
-        throw new Error(`There is no account for email ${email}`);
+        // throw new Error(`There is no account for email ${email}`);
+        return { message: 'OK' };
     }
     const setPasswordToken = await nanoid(20);
     const setPasswordTokenExpiry = new Date(Date.now() + 1000 * 3600 * 12); // 12 hours
@@ -13,7 +15,7 @@ async function requestPasswordChange(parent, args, ctx) {
         data: { setPasswordToken, setPasswordTokenExpiry },
     });
 
-    // TODO: send email with token
+    (async () => sendSetPasswordLink(email, setPasswordToken))();
 
     return { message: 'OK' };
 }

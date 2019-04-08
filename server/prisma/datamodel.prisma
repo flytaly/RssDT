@@ -18,7 +18,7 @@ type User {
     email: String! @unique
     feeds: [UserFeed!]! @relation(name: "UserFeeds", onDelete: CASCADE)
     password: String
-    setPasswordToken: String
+    setPasswordToken: String @unique
     setPasswordTokenExpiry: DateTime
     permissions: [Permission]
     createdAt: DateTime!

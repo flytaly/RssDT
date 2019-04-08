@@ -47,7 +47,7 @@ type Mutation {
     ): Message
     confirmSubscription(token: String!): Message!
     requestPasswordChange(email: String!): Message
-    setPassword(email: String!, token: String!, password: String!): User!
+    setPassword(token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message
 }
 

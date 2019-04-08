@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
 const { execute, makePromise } = require('apollo-link');
+const { sendSetPasswordLink } = require('../../mail-sender/dispatcher');
 const { deleteData, runServer, getApolloLink } = require('./_common');
 const db = require('../../bind-prisma');
 const gq = require('./_gql-queries');
@@ -32,6 +33,9 @@ jest.mock('../../feed-parser', () => ({
     })),
 }));
 jest.mock('nanoid', () => jest.fn(async () => mocks.activationToken));
+jest.mock('../../mail-sender/dispatcher.js', () => ({
+    sendSetPasswordLink: jest.fn(() => Promise.resolve()),
+}));
 
 const clearDB = async () => {
     await deleteData(db, { email: mocks.feed.email, url: mocks.feed.feedUrl });
@@ -69,5 +73,6 @@ describe('requestPasswordChange', () => {
         expect(setPasswordToken.length >= 16).toBeTruthy();
         expect(setPasswordTokenExpiry).not.toBeNull();
         expect(Date.now() + 1000 * 3600 * 12 - new Date(setPasswordTokenExpiry)).toBeGreaterThanOrEqual(0);
+        expect(sendSetPasswordLink).toHaveBeenCalledWith(email, setPasswordToken);
     });
 });

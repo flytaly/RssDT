@@ -81,4 +81,26 @@ async function sendConfirmSubscription(email, token, title) {
     logger.info(result, 'confirmation email has been sent');
 }
 
-module.exports = { buildAndSendDigests, sendConfirmSubscription };
+async function sendSetPasswordLink(email, token) {
+    const url = `${process.env.FRONTEND_URL}/reset?token=${token}`;
+    const result = await transport.sendMail({
+        from: process.env.MAIL_FROM,
+        to: email,
+        subject: 'Reset password',
+        text: `A password reset has been requested.
+
+If it was you, visit this link to reset your password: ${url}
+
+Otherwise, ignore this message.`,
+        html: `A password reset has been requested.<br>
+        If it was you, visit this link to reset your password: <a href="${url}">${url}</a><br><br>
+        Otherwise, ignore this message.`,
+    });
+    logger.info(result, 'setting password email has been sent');
+}
+
+module.exports = {
+    buildAndSendDigests,
+    sendConfirmSubscription,
+    sendSetPasswordLink,
+};

@@ -35,12 +35,10 @@ const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
   }`;
 
 const SET_PASSWORD_MUTATION = gql`mutation (
-    $email: String!
     $password: String!
     $token: String!
     ) {
     setPassword(
-        email: $email
         password: $password
         token: $token
     ) {

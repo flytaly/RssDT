@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Thu Mar 28 2019 18:47:32 GMT+0300 (Moscow Standard Time)
+# timestamp: Mon Apr 08 2019 17:16:08 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -588,9 +588,7 @@ input FeedItemSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [FeedItemSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1106,9 +1104,7 @@ input FeedSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [FeedSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -1873,9 +1869,7 @@ input ItemEnclosureSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [ItemEnclosureSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -2570,9 +2564,7 @@ input UserFeedSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserFeedSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -2909,9 +2901,7 @@ input UserSubscriptionWhereInput {
   """Logical NOT on all given filters combined by AND."""
   NOT: [UserSubscriptionWhereInput!]
 
-  """
-  The subscription event gets dispatched when it's listed in mutation_in
-  """
+  """The subscription event gets dispatched when it's listed in mutation_in"""
   mutation_in: [MutationType!]
 
   """
@@ -3215,4 +3205,5 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  setPasswordToken: String
 }

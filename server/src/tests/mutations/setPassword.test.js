@@ -47,7 +47,7 @@ describe('setPassword', () => {
 
         const { data } = await makePromise(execute(link, {
             query: gq.SET_PASSWORD_MUTATION,
-            variables: { email, password, token },
+            variables: { password, token },
         }));
         expect(data.setPassword.email).toEqual(email.toLowerCase());
 
