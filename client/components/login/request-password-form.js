@@ -34,9 +34,9 @@ const getButtonText = (emailSent, isSubmitting) => {
     return 'Email me';
 };
 
-const SetPasswordForm = ({ setMessages, changeForm }) => {
+const RequestPasswordForm = ({ setMessages, changeForm }) => {
     const [emailSent, setEmailSent] = useState(false);
-    const signIn = useMutation(REQUEST_PASSWORD_CHANGE);
+    const requestPassword = useMutation(REQUEST_PASSWORD_CHANGE);
     const handleClick = (e) => {
         e.preventDefault();
         changeForm();
@@ -49,7 +49,7 @@ const SetPasswordForm = ({ setMessages, changeForm }) => {
                 const { email } = variables;
 
                 try {
-                    const { data } = await signIn({ variables: { email } });
+                    const { data } = await requestPassword({ variables: { email } });
                     if (data && data.requestPasswordChange && data.requestPasswordChange.message) {
                         setMessages({ success: 'If provided email is correct reset link has been sent' });
                         setEmailSent(true);
@@ -69,7 +69,7 @@ const SetPasswordForm = ({ setMessages, changeForm }) => {
                 handleSubmit,
                 isSubmitting,
             }) => (
-                <StyledForm onSubmit={handleSubmit}>
+                <StyledForm onSubmit={handleSubmit} data-testid="request_password">
                     <h2>Reset password</h2>
                     <Input
                         id="email"
@@ -94,11 +94,11 @@ const SetPasswordForm = ({ setMessages, changeForm }) => {
         </Formik>);
 };
 
-SetPasswordForm.propTypes = {
+RequestPasswordForm.propTypes = {
     setMessages: PropTypes.func.isRequired,
     changeForm: PropTypes.func.isRequired,
 };
 
-export default SetPasswordForm;
+export default RequestPasswordForm;
 
 export { REQUEST_PASSWORD_CHANGE };

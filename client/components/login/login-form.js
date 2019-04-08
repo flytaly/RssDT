@@ -66,7 +66,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                 handleSubmit,
                 isSubmitting,
             }) => (
-                <StyledForm onSubmit={handleSubmit}>
+                <StyledForm onSubmit={handleSubmit} data-testid="login">
                     <h2>Log in</h2>
                     <Input
                         id="email"

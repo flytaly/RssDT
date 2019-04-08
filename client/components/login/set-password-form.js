@@ -67,7 +67,7 @@ const SetPasswordForm = ({ setMessages, token }) => {
                 handleSubmit,
                 isSubmitting,
             }) => (
-                <StyledForm onSubmit={handleSubmit}>
+                <StyledForm onSubmit={handleSubmit} data-testid="set_password">
                     <h2>Enter new password</h2>
                     <Input
                         id="password"
