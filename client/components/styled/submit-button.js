@@ -21,7 +21,7 @@ const SubmitButton = styled.button`
         border: 1px solid ${props => props.theme.btnColor1};
         box-shadow: 0 0 1.5rem ${props => props.theme.btnColor1};
     }
-    :active{
+    :active:not(:disabled){
         transform: scale(0.96);
     }
 `;

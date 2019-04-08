@@ -3,14 +3,13 @@ import StyledCard from '../styled/card';
 import CardLeft from './login-left';
 import CardRight from './login-right';
 
-
-const WelcomeCard = () => {
+const LoginCard = (props) => {
     const [messages, setMessages] = useState({ error: '', success: '' });
     return (
         <StyledCard>
             <CardLeft messages={messages} />
-            <CardRight setMessages={setMessages} />
+            <CardRight setMessages={setMessages} {...props} />
         </StyledCard>);
 };
 
-export default WelcomeCard;
+export default LoginCard;

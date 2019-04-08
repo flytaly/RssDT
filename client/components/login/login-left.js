@@ -12,11 +12,12 @@ const Message = styled.div`
     border-radius: 3px;
 `;
 
-const CardLeft = ({ messages: { error } }) => (
+const CardLeft = ({ messages: { error, success } }) => (
     <CardHalf>
-        {(error) && (
+        {(error || success) && (
             <Message color={error ? 'red' : 'green'} data-testid="login-message">
                 {error && <GraphQLError error={error} />}
+                {success}
             </Message>)
         }
     </CardHalf>
@@ -24,10 +25,11 @@ const CardLeft = ({ messages: { error } }) => (
 CardLeft.propTypes = {
     messages: PropTypes.shape({
         error: PropTypes.string,
+        success: PropTypes.string,
     }),
 };
 CardLeft.defaultProps = {
-    messages: { error: '' },
+    messages: { error: '', success: '' },
 };
 
 export default CardLeft;

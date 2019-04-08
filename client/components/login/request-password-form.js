@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik } from 'formik';
-import { withRouter } from 'next/router';
 import * as Yup from 'yup';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
@@ -9,47 +8,51 @@ import SubmitButton from '../styled/submit-button';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
 
-const SIGN_IN_MUTATION = gql`
-  mutation SIGN_IN_MUTATION(
+const REQUEST_PASSWORD_CHANGE = gql`
+  mutation REQUEST_PASSWORD_CHANGE(
     $email: String!
-    $password: String!
   ) {
-    signIn(
+    requestPasswordChange(
         email: $email
-        password: $password
     ) {
         message
     }
   }
 `;
 
+
 // VALIDATION
-const LogInSchema = Yup.object().shape({
+const RequestPasswordSchema = Yup.object().shape({
     email: Yup.string()
         .email('Invalid email address')
         .required('The field is required'),
-    password: Yup.string()
-        .min(8)
-        .required('The field is required'),
 });
 
-const LogInForm = ({ setMessages, router, changeForm }) => {
-    const signIn = useMutation(SIGN_IN_MUTATION);
+const getButtonText = (emailSent, isSubmitting) => {
+    if (emailSent) return '✔';
+    if (isSubmitting) return 'Sending...';
+    return 'Email me';
+};
+
+const SetPasswordForm = ({ setMessages, changeForm }) => {
+    const [emailSent, setEmailSent] = useState(false);
+    const signIn = useMutation(REQUEST_PASSWORD_CHANGE);
     const handleClick = (e) => {
         e.preventDefault();
         changeForm();
     };
     return (
         <Formik
-            initialValues={{ email: '', password: '' }}
-            validationSchema={LogInSchema}
+            initialValues={{ email: '' }}
+            validationSchema={RequestPasswordSchema}
             onSubmit={async (variables, { setSubmitting }) => {
-                const { email, password } = variables;
+                const { email } = variables;
 
                 try {
-                    const { data } = await signIn({ variables: { email, password } });
-                    if (data && data.signIn && data.signIn.message) {
-                        router.replace('/subscriptions');
+                    const { data } = await signIn({ variables: { email } });
+                    if (data && data.requestPasswordChange && data.requestPasswordChange.message) {
+                        setMessages({ success: 'If provided email is correct reset link has been sent' });
+                        setEmailSent(true);
                     }
                 } catch (error) {
                     setMessages({ error: error.message });
@@ -67,7 +70,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                 isSubmitting,
             }) => (
                 <StyledForm onSubmit={handleSubmit}>
-                    <h2>Log in</h2>
+                    <h2>Reset password</h2>
                     <Input
                         id="email"
                         type="email"
@@ -83,35 +86,19 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         title="Email address"
                         required
                     />
-                    <Input
-                        id="password"
-                        type="password"
-                        name="password"
-                        icon="./static/key.svg"
-                        touched={touched.password}
-                        placeholder="Password"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.password}
-                        error={errors.password}
-                        disabled={isSubmitting}
-                        title="Password"
-                        required
-                    />
-                    <a onClick={handleClick} href="/login">I forgot or don&apos;t have password</a>
-                    <SubmitButton type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Logging in...' : 'Log in'}
+                    <a onClick={handleClick} href="/login">← back to log in form</a>
+                    <SubmitButton type="submit" disabled={isSubmitting || emailSent}>
+                        {getButtonText(emailSent, isSubmitting)}
                     </SubmitButton>
                 </StyledForm>)}
         </Formik>);
 };
 
-LogInForm.propTypes = {
+SetPasswordForm.propTypes = {
     setMessages: PropTypes.func.isRequired,
-    router: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
     changeForm: PropTypes.func.isRequired,
 };
 
-export default withRouter(LogInForm);
+export default SetPasswordForm;
 
-export { SIGN_IN_MUTATION };
+export { REQUEST_PASSWORD_CHANGE };

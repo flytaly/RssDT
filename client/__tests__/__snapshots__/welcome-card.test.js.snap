@@ -84,7 +84,7 @@ exports[`Snapshot should match snapshot 1`] = `
   box-shadow: 0 0 1.5rem #ac247d;
 }
 
-.c10:active {
+.c10:active:not(:disabled) {
   -webkit-transform: scale(0.96);
   -ms-transform: scale(0.96);
   transform: scale(0.96);
