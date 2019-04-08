@@ -46,7 +46,6 @@ const SetPasswordForm = ({ setMessages, token }) => {
 
                 try {
                     const { data } = await setPassword({ variables: { password, token } });
-                    console.log(data);
 
                     if (data && data.setPassword) {
                         setMessages({ success: 'New password was saved' });
