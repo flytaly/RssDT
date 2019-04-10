@@ -25,6 +25,7 @@ class Watcher {
         this.maxConnections = maxConnections;
         this.maxNewItems = maxNewItems;
         this.itemMaxTime = itemMaxTime;
+        this.isUpdating = false;
     }
 
     async getFeedsInfo() {
@@ -105,6 +106,7 @@ class Watcher {
     }
 
     async update() {
+        logger.info('Start updating...');
         const feeds = await this.getFeedsInfo();
         const limit = pLimit(this.maxConnections);
         let [totalFeeds, totalNewItems] = [0, 0];
@@ -139,7 +141,21 @@ class Watcher {
     }
 
     start() {
-        this.job = schedule.scheduleJob(this.cron, () => this.update());
+        this.job = schedule.scheduleJob(this.cron, async () => {
+            // ! There is a bug when you put OS to sleep and then wake it up
+            // ! the scheduler runs all the missing tasks simultaneously.
+            // ! issue: https://github.com/node-schedule/node-schedule/issues/431
+            // So as a temporary solution I changed this callback into "singleton".
+            // This shouldn't be a problem on 24/7 server though....
+            if (this.isUpdating) return;
+            this.isUpdating = true;
+            try {
+                await this.update();
+            } catch (e) {
+                logger.error({ message: e.message }, 'Error during updating');
+            }
+            this.isUpdating = false;
+        });
     }
 
     cancel() {
