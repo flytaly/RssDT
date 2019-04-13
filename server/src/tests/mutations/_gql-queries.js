@@ -58,10 +58,17 @@ const SIGNIN_MUTATION = gql`mutation (
     }
   }`;
 
+const SIGNOUT_MUTATION = gql`mutation{
+  signOut{
+    message
+  }
+}`;
+
 module.exports = {
     ADD_FEED_MUTATION,
     CONFIRM_SUBSCRIPTION_MUTATION,
     REQUEST_PASSWORD_CHANGE_MUTATION,
     SET_PASSWORD_MUTATION,
     SIGNIN_MUTATION,
+    SIGNOUT_MUTATION,
 };

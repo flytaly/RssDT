@@ -40,15 +40,12 @@ type Mutation {
     Add feed to user with given email.
     If user doesn't exist the mutation will create a new user.
     """
-    addFeed(
-        email: String!
-        feedUrl: String
-        feedSchedule: DigestSchedule
-    ): Message
+    addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule): Message
     confirmSubscription(token: String!): Message!
     requestPasswordChange(email: String!): Message
     setPassword(token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message
+    signOut: Message
 }
 
 type Query {

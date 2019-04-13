@@ -5,8 +5,10 @@ import { useMutation } from 'react-apollo-hooks';
 import StyledCard from '../components/styled/card';
 
 const LOGOUT_MUTATION = gql`
-    mutation LOGOUT_MUTATION{
-        logOut @client
+    mutation LOGOUT_MUTATION {
+        signOut {
+            message
+        }
     }
 `;
 
@@ -18,7 +20,8 @@ const Logout = () => {
             .catch(e => console.error(e));
     });
 
-    return (<StyledCard>Logging out</StyledCard>);
+    return <StyledCard>Logging out...</StyledCard>;
 };
 
 export default Logout;
+export { LOGOUT_MUTATION };
