@@ -2,11 +2,13 @@ import { MockLink } from 'react-apollo/test-links';
 import { ApolloClient, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
+import resolvers from '../lib/resolvers';
 
 function createClient(mocks) {
     return new ApolloClient({
         cache: new InMemoryCache({ addTypename: false }),
         link: new MockLink(mocks),
+        resolvers,
     });
 }
 

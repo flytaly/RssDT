@@ -1,12 +1,13 @@
 import { render, wait } from 'react-testing-library';
 import Router from 'next/router';
-import Logout, { LOGOUT_MUTATION } from '../pages/logout';
+import Logout, { LOGOUT_MUTATION, LOGOUT_CLIENT_MUTATION } from '../pages/logout';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 
 const mocks = [{
-    request: {
-        query: LOGOUT_MUTATION,
-    },
+    request: { query: LOGOUT_MUTATION },
+    result: { data: { logOut: { message: 'OK' } } },
+}, {
+    request: { query: LOGOUT_CLIENT_MUTATION },
     result: { data: { logOut: { message: 'OK' } } },
 }];
 
