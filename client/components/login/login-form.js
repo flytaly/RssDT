@@ -49,7 +49,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                 try {
                     const { data } = await signIn({ variables: { email, password } });
                     if (data && data.signIn && data.signIn.message) {
-                        router.replace('/subscriptions');
+                        router.replace('/feeds');
                     }
                 } catch (error) {
                     setMessages({ error: error.message });

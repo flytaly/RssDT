@@ -29,7 +29,7 @@ const CardHeader = () => {
                 ? <li><Link prefetch href="/login"><a href="/login">Log in</a></Link></li>
                 : (
                     <>
-                        <li><Link href="/subscriptions"><a href="/subscriptions">Manage</a></Link></li>
+                        <li><Link href="/feeds/manage"><a href="/subscriptions">Manage</a></Link></li>
                         <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
                     </>)
             }

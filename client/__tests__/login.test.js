@@ -56,7 +56,7 @@ describe('Log In form', () => {
         fireEvent.click(submitBtn);
 
         await wait(() => {
-            expect(router.replace).toHaveBeenCalledWith('/subscriptions');
+            expect(router.replace).toHaveBeenCalledWith('/feeds');
         });
     });
 

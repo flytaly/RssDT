@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo-hooks';
+import StyledCard from '../components/styled/card';
 
 const LOGOUT_MUTATION = gql`
     mutation LOGOUT_MUTATION{
@@ -16,7 +17,8 @@ const Logout = () => {
             .then(() => Router.replace('/'))
             .catch(e => console.error(e));
     });
-    return null;
+
+    return (<StyledCard>Logging out</StyledCard>);
 };
 
 export default Logout;

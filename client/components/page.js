@@ -9,7 +9,6 @@ const StyledPage = styled.div`
 `;
 
 const GlobalStyle = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto');
   *, *:before, *:after {
     box-sizing: border-box;
   }
