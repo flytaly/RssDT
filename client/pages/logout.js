@@ -5,17 +5,22 @@ import { useMutation } from 'react-apollo-hooks';
 import StyledCard from '../components/styled/card';
 
 const LOGOUT_MUTATION = gql`
-    mutation LOGOUT_MUTATION {
-        signOut {
-            message
-        }
+    mutation {
+        signOut { message }
     }
+`;
+
+// clear local cache
+const LOGOUT_CLIENT_MUTATION = gql`
+    mutation { logOut @client }
 `;
 
 const Logout = () => {
     const logout = useMutation(LOGOUT_MUTATION);
+    const logoutLocal = useMutation(LOGOUT_CLIENT_MUTATION);
+
     useEffect(() => {
-        logout()
+        Promise.all([logoutLocal(), logout()])
             .then(() => Router.replace('/'))
             .catch(e => console.error(e));
     });
@@ -24,4 +29,4 @@ const Logout = () => {
 };
 
 export default Logout;
-export { LOGOUT_MUTATION };
+export { LOGOUT_MUTATION, LOGOUT_CLIENT_MUTATION };
