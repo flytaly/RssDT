@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { useQuery } from 'react-apollo-hooks';
 import Link from 'next/link';
-import ME_QUERY from '../queries/me-query';
+import PropTypes from 'prop-types';
 
 const Menu = styled.ul`
     display: flex;
@@ -15,26 +14,26 @@ const Menu = styled.ul`
     }
 `;
 
-const CardHeader = () => {
-    const { data, error } = useQuery(ME_QUERY);
+const CardHeader = ({ me }) => (
+    <Menu data-testid="card-header">
+        <li><a href="/">Add new feed</a></li>
+        {!me
+            ? <li><Link prefetch href="/login"><a href="/login">Log in</a></Link></li>
+            : (
+                <>
+                    <li><Link href="/feeds/manage"><a href="/feeds/manage">Manage</a></Link></li>
+                    <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
+                </>)
+        }
+    </Menu>
+);
 
-    if (error && error.message !== 'GraphQL error: Authentication is required') {
-        console.error(error.message);
-    }
+CardHeader.propTypes = {
+    me: PropTypes.shape({}),
+};
 
-    return (
-        <Menu data-testid="card-header">
-            <li><a href="/">Add new feed</a></li>
-            {!data.me
-                ? <li><Link prefetch href="/login"><a href="/login">Log in</a></Link></li>
-                : (
-                    <>
-                        <li><Link href="/feeds/manage"><a href="/subscriptions">Manage</a></Link></li>
-                        <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
-                    </>)
-            }
-        </Menu>
-    );
+CardHeader.defaultProps = {
+    me: null,
 };
 
 export default CardHeader;

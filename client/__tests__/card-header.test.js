@@ -3,9 +3,11 @@ import { render, wait, cleanup } from 'react-testing-library';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import CardHeader from '../components/card-header';
 import ME_QUERY from '../queries/me-query';
+import withAuth from '../components/decorators/withAuth';
 
 describe('Navigation menu', () => {
     afterEach(cleanup);
+    const HeaderWithAuth = withAuth(false)(CardHeader);
 
     test('should have "Log out" link if user is logged in', async () => {
         const mocks = [{
@@ -14,7 +16,7 @@ describe('Navigation menu', () => {
         }];
         const { queryByText } = render(
             <ApolloMockedProvider mocks={mocks}>
-                <CardHeader />
+                <HeaderWithAuth />
             </ApolloMockedProvider>,
         );
         await wait(() => {
@@ -33,7 +35,7 @@ describe('Navigation menu', () => {
         }];
         const { queryByText } = render(
             <ApolloMockedProvider mocks={mocks}>
-                <CardHeader />
+                <HeaderWithAuth />
             </ApolloMockedProvider>,
         );
         await wait(() => {
