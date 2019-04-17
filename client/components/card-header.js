@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import withAuth from './decorators/withAuth';
 
 const Menu = styled.ul`
     display: flex;
@@ -36,4 +37,4 @@ CardHeader.defaultProps = {
     me: null,
 };
 
-export default CardHeader;
+export default withAuth(false)(CardHeader);
