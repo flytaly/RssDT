@@ -75,7 +75,7 @@ const RequestPasswordForm = ({ setMessages, changeForm }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="./static/envelope.svg"
+                        icon="/static/envelope.svg"
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}

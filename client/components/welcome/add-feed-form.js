@@ -81,7 +81,7 @@ const AddFeedForm = ({ setMessages }) => {
                         id="url"
                         type="url"
                         name="url"
-                        icon="./static/rss-square.svg"
+                        icon="/static/rss-square.svg"
                         touched={touched.url}
                         placeholder="http://..."
                         onChange={handleChange}
@@ -96,7 +96,7 @@ const AddFeedForm = ({ setMessages }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="./static/envelope.svg"
+                        icon="/static/envelope.svg"
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}

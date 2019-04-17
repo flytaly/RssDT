@@ -73,7 +73,7 @@ const SetPasswordForm = ({ setMessages, token }) => {
                         id="password"
                         type="password"
                         name="password"
-                        icon="./static/key.svg"
+                        icon="/static/key.svg"
                         touched={touched.password}
                         placeholder="Password"
                         onChange={handleChange}
@@ -88,7 +88,7 @@ const SetPasswordForm = ({ setMessages, token }) => {
                         id="confirm"
                         type="password"
                         name="confirm"
-                        icon="./static/key.svg"
+                        icon="/static/key.svg"
                         touched={touched.confirm}
                         placeholder="Confirm password"
                         onChange={handleChange}

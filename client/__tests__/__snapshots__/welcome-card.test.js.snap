@@ -243,7 +243,7 @@ exports[`Snapshot should match snapshot 1`] = `
         <img
           alt="url"
           class="c7"
-          src="./static/rss-square.svg"
+          src="/static/rss-square.svg"
         />
         <input
           aria-label="The RSS or Atom feed url"
@@ -264,7 +264,7 @@ exports[`Snapshot should match snapshot 1`] = `
         <img
           alt="email"
           class="c7"
-          src="./static/envelope.svg"
+          src="/static/envelope.svg"
         />
         <input
           aria-label="Email address"

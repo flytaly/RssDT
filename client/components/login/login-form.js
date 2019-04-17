@@ -72,7 +72,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="./static/envelope.svg"
+                        icon="/static/envelope.svg"
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
@@ -87,7 +87,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         id="password"
                         type="password"
                         name="password"
-                        icon="./static/key.svg"
+                        icon="/static/key.svg"
                         touched={touched.password}
                         placeholder="Password"
                         onChange={handleChange}
