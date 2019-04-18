@@ -12,9 +12,12 @@ type User {
 }
 
 type UserFeed {
+    id: ID!
     feed: Feed!
     schedule: DigestSchedule
     user: User
+    lastUpdate: DateTime
+    createdAt: DateTime
 }
 
 type Feed {
@@ -50,4 +53,5 @@ type Mutation {
 
 type Query {
     me: User
+    myFeeds: [UserFeed!]!
 }

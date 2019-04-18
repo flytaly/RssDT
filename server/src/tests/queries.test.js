@@ -75,7 +75,7 @@ describe('Test GraphQL queries:', () => {
         });
     });
 
-    describe('user', () => {
+    describe('me', () => {
         const USER_WITH_FEEDS_QUERY = gql`query{
             me {
                 email
@@ -108,6 +108,36 @@ describe('Test GraphQL queries:', () => {
                 variables: { email: mocks.user.email },
             }));
             expect(data.me).toBeNull();
+            expect(errors[0].message).toEqual('Authentication is required');
+        });
+    });
+
+    describe('myFeeds', () => {
+        const MY_FEEDS_QUERY = gql`query{
+            myFeeds {
+                    schedule
+                    feed {
+                        url
+                    }
+            }
+        }`;
+        test('should return feeds', async () => {
+            const { data } = await makePromise(execute(linkWithAuthCookies, {
+                query: MY_FEEDS_QUERY,
+            }));
+
+            const { schedule, url } = mocks.feed;
+            expect(data.myFeeds[0]).toMatchObject({
+                schedule,
+                feed: { url },
+            });
+        });
+
+        test('should return error if user isn\'t authenticated', async () => {
+            const { data, errors } = await makePromise(execute(link, {
+                query: MY_FEEDS_QUERY,
+            }));
+            expect(data).toBeNull();
             expect(errors[0].message).toEqual('Authentication is required');
         });
     });
