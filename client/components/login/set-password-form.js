@@ -5,7 +5,7 @@ import { useMutation } from 'react-apollo-hooks';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import SubmitButton from '../styled/submit-button';
+import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
 import passwordIcon from '../../static/key.svg';

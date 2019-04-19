@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 export const Table = styled.ul`
     margin: 0px;
@@ -8,7 +9,7 @@ export const Table = styled.ul`
 export const Tr = styled.li`
     list-style: none;
     display: grid;
-    grid-template-columns: 4fr 1fr 2fr 2fr 1fr;
+    grid-template-columns: 6fr 2fr 4fr 4fr 1fr;
     grid-gap: 5px;
     align-items: center;
     margin-bottom: 0.5rem;
@@ -16,9 +17,9 @@ export const Tr = styled.li`
         outline: ${props => props.theme.tableHoverColor} 1px solid;
         background-color: ${props => props.theme.tableHoverColor};
     }
-    @media all and (max-width: 34em) { // ~ 544px if em=16px
+    @media all and (max-width: ${props => props.theme.tableMinWidth}) {
         grid-template-columns: 1fr;
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         :nth-child(2n+1):not(:first-of-type):not(:hover){
             background-color: ${props => props.theme.tableAltRowColor};
         }
@@ -28,7 +29,7 @@ export const Tr = styled.li`
 export const Td = styled.div`
     min-width: ${props => props.minWidth || '10rem'};
     word-break: break-all;
-    @media all and (max-width: 34em) {
+    @media all and (max-width: ${props => props.theme.tableMinWidth}) {
         :before {
             content: attr(data-name);
             font-size: 1.5rem;
@@ -44,7 +45,7 @@ export const Th = styled.div`
     font-size: 1.5rem;
     font-weight: bold;
     min-width: ${props => props.minWidth || '10rem'};
-    @media all and (max-width: 34em) {
+    @media all and (max-width: ${props => props.theme.tableMinWidth}) {
         display: none;
     }
 `;
@@ -65,10 +66,17 @@ export const Button = styled.button`
     appearance: none;
     :focus,
     :hover{
-        transform: scale(1.05);
+        transform: scale(1.10);
+    }
+    :focus:hover{
+        outline: none;
     }
     :active{
         transform: scale(0.95);
     }
 `;
-export const ButtonWithImg = props => <Button><Img {...props} /></Button>;
+export const ButtonWithImg = ({ clickHandler, ...rest }) => <Button onClick={clickHandler}><Img {...rest} /></Button>;
+
+ButtonWithImg.propTypes = {
+    clickHandler: PropTypes.func.isRequired,
+};

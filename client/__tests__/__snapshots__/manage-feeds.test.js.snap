@@ -10,7 +10,7 @@ exports[`Manage feeds should match snapshot 1`] = `
 .c1 {
   list-style: none;
   display: grid;
-  grid-template-columns: 4fr 1fr 2fr 2fr 1fr;
+  grid-template-columns: 6fr 2fr 4fr 4fr 1fr;
   grid-gap: 5px;
   -webkit-align-items: center;
   -webkit-box-align: center;
@@ -65,9 +65,13 @@ exports[`Manage feeds should match snapshot 1`] = `
 
 .c6:focus,
 .c6:hover {
-  -webkit-transform: scale(1.05);
-  -ms-transform: scale(1.05);
-  transform: scale(1.05);
+  -webkit-transform: scale(1.10);
+  -ms-transform: scale(1.10);
+  transform: scale(1.10);
+}
+
+.c6:focus:hover {
+  outline: none;
 }
 
 .c6:active {
@@ -76,14 +80,14 @@ exports[`Manage feeds should match snapshot 1`] = `
   transform: scale(0.95);
 }
 
-@media all and (max-width:34em) {
+@media all and (max-width:) {
   .c1 {
     grid-template-columns: 1fr;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 }
 
-@media all and (max-width:34em) {
+@media all and (max-width:) {
   .c4 {
     display: grid;
     grid-template-columns: 40% 1fr;
@@ -97,7 +101,7 @@ exports[`Manage feeds should match snapshot 1`] = `
   }
 }
 
-@media all and (max-width:34em) {
+@media all and (max-width:) {
   .c5 {
     display: grid;
     grid-template-columns: 40% 1fr;
@@ -111,13 +115,13 @@ exports[`Manage feeds should match snapshot 1`] = `
   }
 }
 
-@media all and (max-width:34em) {
+@media all and (max-width:) {
   .c2 {
     display: none;
   }
 }
 
-@media all and (max-width:34em) {
+@media all and (max-width:) {
   .c3 {
     display: none;
   }
@@ -154,7 +158,7 @@ exports[`Manage feeds should match snapshot 1`] = `
         DIGEST SCHEDULE
       </div>
       <div
-        class="c2"
+        class="c3"
       >
         ACTIONS
       </div>
@@ -191,7 +195,7 @@ exports[`Manage feeds should match snapshot 1`] = `
         DAILY
       </div>
       <div
-        class="c4"
+        class="c5"
         data-name="ACTIONS"
       >
         <div>

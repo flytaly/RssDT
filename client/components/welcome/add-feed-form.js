@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import SubmitButton from '../styled/submit-button';
+import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import Select from '../forms/select-with-icon';
 import periods from '../../types/digest-periods';

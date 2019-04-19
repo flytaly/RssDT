@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const SubmitButton = styled.button`
+export const SubmitButton = styled.button`
     width: 100%;
     height: 4.5rem;
     margin-top: 1rem;
@@ -26,4 +26,33 @@ const SubmitButton = styled.button`
     }
 `;
 
-export default SubmitButton;
+
+export const DeleteButton = styled.button`
+    background-color: hsl(10, 67%, 56.9%);
+    color: white;
+    padding: 0.6rem;
+    border: none;
+    text-align: center;
+    :focus,
+    :hover{
+        background-color: hsl(10, 67%, 45%);
+    }
+    :active{
+        color: hsl(10, 67%, 90%);
+    }
+`;
+
+export const CancelButton = styled.button`
+    background-color: hsl(0, 0%, 60%);
+    color: white;
+    padding: 0.6rem;
+    border: none;
+    text-align: center;
+    :focus,
+    :hover{
+        background-color: hsl(0, 0%, 45%);
+    }
+    :active{
+        color: hsl(0, 0%, 90%);
+    }
+`;
