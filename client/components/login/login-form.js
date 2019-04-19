@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import SubmitButton from '../styled/submit-button';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
+import emailIcon from '../../static/envelope.svg';
+import passwordIcon from '../../static/key.svg';
 
 const SIGN_IN_MUTATION = gql`
   mutation SIGN_IN_MUTATION(
@@ -72,7 +74,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="/static/envelope.svg"
+                        icon={emailIcon}
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
@@ -87,7 +89,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         id="password"
                         type="password"
                         name="password"
-                        icon="/static/key.svg"
+                        icon={passwordIcon}
                         touched={touched.password}
                         placeholder="Password"
                         onChange={handleChange}

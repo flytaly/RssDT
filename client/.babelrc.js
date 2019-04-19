@@ -12,5 +12,18 @@ const plugins = [[
         "displayName": true,
         "preprocess": false
     }
-]]
+],
+[
+    "file-loader",
+    {
+      "name": "[name].[ext]",
+      "extensions": ["png", "jpg", "jpeg", "gif", "svg"],
+      "publicPath": "/static",
+      "outputPath": null,
+      "context": "",
+      "limit": 0
+    }
+  ]
+]
+
 module.exports = { presets, plugins }

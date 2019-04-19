@@ -4,6 +4,7 @@ exports[`Manage feeds should match snapshot 1`] = `
 .c0 {
   margin: 0px;
   padding: 0px;
+  font-size: 1.4rem;
 }
 
 .c1 {
@@ -42,6 +43,37 @@ exports[`Manage feeds should match snapshot 1`] = `
   font-size: 1.5rem;
   font-weight: bold;
   min-width: 8rem;
+}
+
+.c7 {
+  height: 1.5rem;
+}
+
+.c6 {
+  border: none;
+  padding: 0;
+  margin: 0 0.5rem 0 0;
+  background: none;
+  cursor: pointer;
+  text-align: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.c6:focus,
+.c6:hover {
+  -webkit-transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+.c6:active {
+  -webkit-transform: scale(0.95);
+  -ms-transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 @media all and (max-width:34em) {
@@ -162,7 +194,26 @@ exports[`Manage feeds should match snapshot 1`] = `
         class="c4"
         data-name="ACTIONS"
       >
-        Del
+        <div>
+          <button
+            class="c6"
+          >
+            <img
+              alt="Edit the feed"
+              class="c7"
+              src="/static/edit.svg"
+            />
+          </button>
+          <button
+            class="c6"
+          >
+            <img
+              alt="Delete the feed"
+              class="c7"
+              src="/static/trash.svg"
+            />
+          </button>
+        </div>
       </div>
     </li>
   </ul>

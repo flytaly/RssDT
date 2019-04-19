@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Table = styled.ul`
     margin: 0px;
     padding: 0px;
+    font-size: 1.4rem;
 `;
 export const Tr = styled.li`
     list-style: none;
@@ -47,3 +48,27 @@ export const Th = styled.div`
         display: none;
     }
 `;
+
+export const Img = styled.img`
+    height: 1.5rem;
+`;
+
+export const Button = styled.button`
+    border: none;
+    padding: 0;
+    margin: 0 0.5rem 0 0;
+    background: none;
+    cursor: pointer;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    :focus,
+    :hover{
+        transform: scale(1.05);
+    }
+    :active{
+        transform: scale(0.95);
+    }
+`;
+export const ButtonWithImg = props => <Button><Img {...props} /></Button>;

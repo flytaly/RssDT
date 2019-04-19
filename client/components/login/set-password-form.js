@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import SubmitButton from '../styled/submit-button';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
+import passwordIcon from '../../static/key.svg';
 
 const SET_PASSWORD_MUTATION = gql`
   mutation SET_PASSWORD_MUTATION(
@@ -73,7 +74,7 @@ const SetPasswordForm = ({ setMessages, token }) => {
                         id="password"
                         type="password"
                         name="password"
-                        icon="/static/key.svg"
+                        icon={passwordIcon}
                         touched={touched.password}
                         placeholder="Password"
                         onChange={handleChange}
@@ -88,7 +89,7 @@ const SetPasswordForm = ({ setMessages, token }) => {
                         id="confirm"
                         type="password"
                         name="confirm"
-                        icon="/static/key.svg"
+                        icon={passwordIcon}
                         touched={touched.confirm}
                         placeholder="Confirm password"
                         onChange={handleChange}

@@ -9,6 +9,9 @@ import SubmitButton from '../styled/submit-button';
 import Input from '../forms/input-with-icon';
 import Select from '../forms/select-with-icon';
 import periods from '../../types/digest-periods';
+import rssIcon from '../../static/rss-square.svg';
+import emailIcon from '../../static/envelope.svg';
+import clockIcon from '../../static/clock.svg';
 
 const ADD_FEED_MUTATION = gql`
   mutation ADD_FEED_MUTATION(
@@ -81,7 +84,7 @@ const AddFeedForm = ({ setMessages }) => {
                         id="url"
                         type="url"
                         name="url"
-                        icon="/static/rss-square.svg"
+                        icon={rssIcon}
                         touched={touched.url}
                         placeholder="http://..."
                         onChange={handleChange}
@@ -96,7 +99,7 @@ const AddFeedForm = ({ setMessages }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="/static/envelope.svg"
+                        icon={emailIcon}
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
@@ -110,7 +113,7 @@ const AddFeedForm = ({ setMessages }) => {
                     <Select
                         id="period"
                         name="period"
-                        icon="/static/clock.svg"
+                        icon={clockIcon}
                         defaultValue={periods.DAILY}
                         disabled={isSubmitting}
                         onChange={handleChange}

@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import SubmitButton from '../styled/submit-button';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
+import emailIcon from '../../static/envelope.svg';
 
 const REQUEST_PASSWORD_CHANGE = gql`
   mutation REQUEST_PASSWORD_CHANGE(
@@ -75,7 +76,7 @@ const RequestPasswordForm = ({ setMessages, changeForm }) => {
                         id="email"
                         type="email"
                         name="email"
-                        icon="/static/envelope.svg"
+                        icon={emailIcon}
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
