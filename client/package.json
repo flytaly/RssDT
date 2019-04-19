@@ -1,56 +1,63 @@
 {
-  "name": "feed-digester-client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "next -p 8082",
-    "build": "next build",
-    "start": "next start",
-    "test": "NODE_ENV=test jest --coverage",
-    "test:watch": "NODE_ENV=test jest --watch"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "apollo-boost": "^0.3.1",
-    "formik": "^1.5.2",
-    "graphql": "^14.2.1",
-    "graphql-tag": "^2.10.1",
-    "isomorphic-unfetch": "^3.0.0",
-    "next": "^8.0.4",
-    "next-with-apollo": "^3.4.0",
-    "nprogress": "^0.2.0",
-    "prop-types": "^15.7.2",
-    "react": "^16.9.0-alpha.0",
-    "react-apollo": "^2.5.4",
-    "react-apollo-hooks": "^0.4.5",
-    "react-dom": "^16.9.0-alpha.0",
-    "styled-components": "^4.2.0",
-    "yup": "^0.27.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^24.7.1",
-    "babel-plugin-styled-components": "^1.10.0",
-    "jest": "^24.7.1",
-    "jest-axe": "^3.1.1",
-    "jest-cli": "^24.7.1",
-    "jest-dom": "^3.1.3",
-    "jest-styled-components": "^6.3.1",
-    "react-test-renderer": "^16.8.6",
-    "react-testing-library": "^6.1.2"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
+    "name": "feed-digester-client",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "next -p 8082",
+        "build": "next build",
+        "start": "next start",
+        "test": "NODE_ENV=test jest --coverage",
+        "test:watch": "NODE_ENV=test jest --watch"
     },
-    "setupFilesAfterEnv": [
-      "./setupTest.js"
-    ]
-  }
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-boost": "^0.3.1",
+        "formik": "^1.5.2",
+        "graphql": "^14.2.1",
+        "graphql-tag": "^2.10.1",
+        "isomorphic-unfetch": "^3.0.0",
+        "lodash.get": "^4.4.2",
+        "next": "^8.0.4",
+        "next-with-apollo": "^3.4.0",
+        "nprogress": "^0.2.0",
+        "prop-types": "^15.7.2",
+        "react": "^16.9.0-alpha.0",
+        "react-apollo": "^2.5.4",
+        "react-apollo-hooks": "^0.4.5",
+        "react-dom": "^16.9.0-alpha.0",
+        "styled-components": "^4.2.0",
+        "yup": "^0.27.0"
+    },
+    "devDependencies": {
+        "@types/jest": "^24.0.11",
+        "babel-core": "^6.26.3",
+        "babel-jest": "^24.7.1",
+        "babel-plugin-styled-components": "^1.10.0",
+        "jest": "^24.7.1",
+        "jest-axe": "^3.1.1",
+        "jest-cli": "^24.7.1",
+        "jest-dom": "^3.1.3",
+        "jest-styled-components": "^6.3.1",
+        "react-test-renderer": "^16.8.6",
+        "react-testing-library": "^6.1.2"
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "js"
+        ],
+        "transform": {
+            "^.+\\.js$": "babel-jest"
+        },
+        "setupFilesAfterEnv": [
+            "./setupTest.js"
+        ],
+        "collectCoverageFrom": [
+            "<rootDir>/components/**/*.js",
+            "<rootDir>/queries/**/*.js",
+            "<rootDir>/pages/**/*.js",
+            "!<rootDir>/node_modules/"
+        ]
+    }
 }

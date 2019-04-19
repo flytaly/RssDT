@@ -11,6 +11,8 @@ const theme = {
     btnColor1: '#ac247d',
     btnColor1Disable: '#ae7f9e',
     accentColor1: '#73286D',
+    tableHoverColor: 'rgba(115, 40, 109,0.1)',
+    tableAltRowColor: 'rgba(115, 40, 109,0.06)',
 };
 
 export default theme;
