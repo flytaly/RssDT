@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Link from 'next/link';
-import periods from '../../types/digest-periods';
 import { GreenButtonLink, NoStylesButton, SubmitButton } from '../styled/buttons';
 import arrowLeftImg from '../../static/arrow-left.svg';
+import periods, { periodNames } from '../../types/digest-periods';
 
-const Container = styled.form.attrs({ method: 'POST' })`
+const ContainerForm = styled.form.attrs({ method: 'POST' })`
     display: flex;
     flex-direction: column;
 `;
@@ -29,12 +29,22 @@ const Row = styled.div`
 `;
 const FieldData = styled.div`
     flex-grow: 1;
-    background-color: white;
+    /* background-color: white; */
     border: 1px solid ${props => props.theme.borderColor};
     padding: 0.5rem;
     font-size: 1.3rem;
     min-height: 3rem;
     word-break: break-all;
+`;
+
+const Select = styled(FieldData).attrs({
+    as: 'select',
+})`
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=) #FFFFFF 100% 50% / 1.6rem no-repeat;
+    cursor: pointer;
 `;
 
 const SpaceBetweenRow = styled(Row)`
@@ -60,19 +70,26 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
 
     return (
         <Formik
-            initialValues={{ period: periods.DAILY }}
-            onSubmit={() => {}}
+            initialValues={{ period: schedule }}
+            onSubmit={async (variables, { setSubmitting, resetForm }) => {
+                const { period } = variables;
+                if (period !== schedule) {
+                    // TODO: send data
+                    resetForm();
+                }
+                setSubmitting(false);
+            }}
         >
             {({
                 /* values,
                 errors,
-                touched,
+                touched, */
+                handleSubmit,
                 handleChange,
                 handleBlur,
-                handleSubmit, */
                 isSubmitting,
             }) => (
-                <Container>
+                <ContainerForm onSubmit={handleSubmit}>
                     <SpaceBetweenRow>
                         <ImgContainerButton onClick={() => closeSidebar()}>
                             <img src={arrowLeftImg} alt="Go back" />
@@ -88,7 +105,22 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                     </Row>
                     <Row>
                         <FieldTitle>Schedule</FieldTitle>
-                        <FieldData>{schedule}</FieldData>
+                        <Select
+                            id="period"
+                            name="period"
+                            disabled={isSubmitting}
+                            defaultValue={schedule}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            title="Select a digest period"
+                        >
+                            <option value={periods.EVERYHOUR}>{`${periodNames[periods.EVERYHOUR]} digest`}</option>
+                            <option value={periods.EVERY2HOURS}>{`${periodNames[periods.EVERY2HOURS]} digest`}</option>
+                            <option value={periods.EVERY3HOURS}>{`${periodNames[periods.EVERY3HOURS]} digest`}</option>
+                            <option value={periods.EVERY6HOURS}>{`${periodNames[periods.EVERY6HOURS]} digest`}</option>
+                            <option value={periods.EVERY12HOURS}>{`${periodNames[periods.EVERY12HOURS]} digest`}</option>
+                            <option value={periods.DAILY}>{`${periodNames[periods.DAILY]} digest`}</option>
+                        </Select>
                     </Row>
                     <Row>
                         <FieldTitle>Site Link:</FieldTitle>
@@ -119,7 +151,7 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                             {isSubmitting ? 'Updating...' : 'UPDATE'}
                         </SubmitSideBarButton>
                     </Row>
-                </Container>
+                </ContainerForm>
             )}
         </Formik>
     );

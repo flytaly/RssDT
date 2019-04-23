@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import Select from '../forms/select-with-icon';
-import periods from '../../types/digest-periods';
+import periods, { periodNames } from '../../types/digest-periods';
 import rssIcon from '../../static/rss-square.svg';
 import emailIcon from '../../static/envelope.svg';
 import clockIcon from '../../static/clock.svg';
@@ -120,12 +120,12 @@ const AddFeedForm = ({ setMessages }) => {
                         onBlur={handleBlur}
                         title="Select a digest period"
                     >
-                        <option value={periods.EVERYHOUR}>1 hour digest</option>
-                        <option value={periods.EVERY2HOURS}>2 hours digest</option>
-                        <option value={periods.EVERY3HOURS}>3 hours digest</option>
-                        <option value={periods.EVERY6HOURS}>6 hours digest</option>
-                        <option value={periods.EVERY12HOURS}>12 hours digest</option>
-                        <option value={periods.DAILY}>Daily digest</option>
+                        <option value={periods.EVERYHOUR}>{`${periodNames[periods.EVERYHOUR]} digest`}</option>
+                        <option value={periods.EVERY2HOURS}>{`${periodNames[periods.EVERY2HOURS]} digest`}</option>
+                        <option value={periods.EVERY3HOURS}>{`${periodNames[periods.EVERY3HOURS]} digest`}</option>
+                        <option value={periods.EVERY6HOURS}>{`${periodNames[periods.EVERY6HOURS]} digest`}</option>
+                        <option value={periods.EVERY12HOURS}>{`${periodNames[periods.EVERY12HOURS]} digest`}</option>
+                        <option value={periods.DAILY}>{`${periodNames[periods.DAILY]} digest`}</option>
                     </Select>
                     <SubmitButton type="submit" disabled={isSubmitting}>
                         {isSubmitting ? 'SUBMITTING...' : 'SUBSCRIBE'}
