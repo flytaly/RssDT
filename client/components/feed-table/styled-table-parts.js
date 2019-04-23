@@ -61,4 +61,6 @@ export const Button = styled(NoStylesButton)`
 
 export const ButtonWithImg = ({ clickHandler, ...rest }) => <Button onClick={clickHandler}><Img {...rest} /></Button>;
 
-ButtonWithImg.propTypes = {clickHandler: PropTypes.func.isRequired,};
+ButtonWithImg.propTypes = {
+    clickHandler: PropTypes.func.isRequired,
+};

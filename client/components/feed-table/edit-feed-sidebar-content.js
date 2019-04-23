@@ -64,12 +64,12 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
             onSubmit={() => {}}
         >
             {({
-                values,
+                /* values,
                 errors,
                 touched,
                 handleChange,
                 handleBlur,
-                handleSubmit,
+                handleSubmit, */
                 isSubmitting,
             }) => (
                 <Container>

@@ -4,9 +4,7 @@ import { Container, Field, Image } from '../styled/form-field';
 
 function Select(props) {
     const [focus, setFocus] = useState(false);
-    const {
-        onFocus, onBlur, name, title, icon,
-    } = props;
+    const { onFocus, onBlur, name, title, icon } = props;
 
     return (
         <Container focus={focus} title={title}>

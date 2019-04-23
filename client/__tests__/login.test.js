@@ -1,7 +1,5 @@
 import 'jest-dom/extend-expect';
-import {
-    render, cleanup, fireEvent, wait, waitForElement, getByText,
-} from 'react-testing-library';
+import { render, cleanup, fireEvent, wait, waitForElement, getByText } from 'react-testing-library';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import router from 'next/router';
 import LoginCard from '../components/login/login-card';
@@ -172,7 +170,7 @@ describe('Set password form', () => {
     });
 
     test('should show errors if password is invalid', async () => {
-        const { getByTestId, getByLabelText, container } = render(
+        const { getByLabelText, container } = render(
             <ApolloMockedProvider mocks={setPasswordMocks}>
                 <LoginCard token={token} form="set_password" />
             </ApolloMockedProvider>,

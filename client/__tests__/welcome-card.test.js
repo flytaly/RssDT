@@ -1,7 +1,5 @@
 import 'jest-dom/extend-expect';
-import {
-    render, cleanup, fireEvent, wait, waitForElement, getByText,
-} from 'react-testing-library';
+import { render, cleanup, fireEvent, wait, waitForElement, getByText } from 'react-testing-library';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';

@@ -57,6 +57,7 @@ export default App => class Apollo extends React.Component {
 
     constructor(props) {
         super(props);
+        // eslint-disable-next-line react/prop-types
         this.apolloClient = initApollo(props.apolloState);
     }
 

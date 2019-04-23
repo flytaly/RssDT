@@ -25,7 +25,10 @@
         }],
         "no-console": "off",
         "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
-        "object-curly-newline": ["error", { "multiline": true, "minProperties": 6 }],
+        "object-curly-newline": ["error", {
+                "ObjectPattern": {"multiline": true, "minProperties": 6, "consistent": true},
+                "ImportDeclaration": "never"
+        }],
         "react/jsx-filename-extension": "off",
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],

@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-    Container, Field, Image, ErrorMessage,
-} from '../styled/form-field';
+import { Container, Field, Image, ErrorMessage } from '../styled/form-field';
 
 function Input(props) {
     const [focus, setFocus] = useState(false);
