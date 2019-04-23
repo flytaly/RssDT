@@ -3,12 +3,11 @@ import gql from 'graphql-tag';
 import { useQuery } from 'react-apollo-hooks';
 import get from 'lodash.get';
 import ReactModal from 'react-modal';
-import {
-    Table, Th, Tr, Td, ButtonWithImg,
-} from './styled-table-parts';
+import { Table, Th, Tr, Td, ButtonWithImg } from './styled-table-parts';
 import { DeleteButton, CancelButton } from '../styled/buttons';
 import trashIcon from '../../static/trash.svg';
 import editIcon from '../../static/edit.svg';
+import EditFeedSidebar from './edit-feed-sidebar';
 
 const MY_FEEDS_QUERY = gql`
     query MY_FEEDS_QUERY {
@@ -28,7 +27,7 @@ const MY_FEEDS_QUERY = gql`
     }
 `;
 
-const renderRow = (feedInfo, setConfirmDelete) => {
+const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
     const title = feedInfo.feed.title || feedInfo.feed.link || feedInfo.feed.url;
     return (
         <Tr key={feedInfo.id}>
@@ -38,13 +37,20 @@ const renderRow = (feedInfo, setConfirmDelete) => {
             <Td minWidth="8rem" data-name="ADDED">
                 {new Date(feedInfo.createdAt).toLocaleDateString()}
             </Td>
-            <Td data-name="LAST UPDATE">{new Date(feedInfo.lastUpdate).toLocaleString()}</Td>
+            <Td data-name="LAST DIGEST DATE">{new Date(feedInfo.lastUpdate).toLocaleString()}</Td>
             <Td data-name="DIGEST SCHEDULE">{feedInfo.schedule}</Td>
             <Td minWidth="8rem" data-name="ACTIONS">
                 <div>
                     <ButtonWithImg
-                        clickHandler={() => {
-                            console.log('click');
+                        clickHandler={({ currentTarget }) => {
+                            /* Firefox loses focus after clicking on button
+                             hence ReactModal's 'shouldReturnFocusAfterClose' option doesn't work */
+                            currentTarget.focus();
+
+                            setEditFeed({
+                                isOpen: true,
+                                feedInfo,
+                            });
                         }}
                         src={editIcon}
                         alt="Edit the feed"
@@ -66,6 +72,7 @@ const renderRow = (feedInfo, setConfirmDelete) => {
 const ResponsiveTable = () => {
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
     const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, title: null });
+    const [editFeed, setEditFeed] = useState({ isOpen: false, feedInfo: {} });
     const cancelBtnRef = useRef(null);
     useEffect(() => {
         ReactModal.setAppElement('body');
@@ -82,11 +89,11 @@ const ResponsiveTable = () => {
                 <Tr key="header">
                     <Th>FEED</Th>
                     <Th minWidth="8rem">ADDED</Th>
-                    <Th>LAST UPDATE</Th>
+                    <Th>LAST DIGEST DATE</Th>
                     <Th>DIGEST SCHEDULE</Th>
                     <Th minWidth="8rem">ACTIONS</Th>
                 </Tr>
-                {loading ? 'loading...' : feeds.map(feedInfo => renderRow(feedInfo, setConfirmDelete))}
+                {loading ? 'loading...' : feeds.map(feedInfo => renderRow(feedInfo, { setConfirmDelete, setEditFeed }))}
             </Table>
             <ReactModal
                 isOpen={confirmDelete.isOpen}
@@ -129,6 +136,7 @@ const ResponsiveTable = () => {
                     Delete
                 </DeleteButton>
             </ReactModal>
+            <EditFeedSidebar editFeed={editFeed} setEditFeed={setEditFeed} />
         </React.Fragment>
     );
 };

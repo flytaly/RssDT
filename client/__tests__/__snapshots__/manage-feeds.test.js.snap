@@ -16,7 +16,7 @@ exports[`Manage feeds should match snapshot 1`] = `
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .c1:hover:not(:first-of-type) {
@@ -52,15 +52,14 @@ exports[`Manage feeds should match snapshot 1`] = `
 .c6 {
   border: none;
   padding: 0;
-  margin: 0 0.5rem 0 0;
   background: none;
-  cursor: pointer;
   text-align: center;
   -webkit-appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+  margin: 0 0.5rem 0 0;
 }
 
 .c6:focus,
@@ -83,7 +82,7 @@ exports[`Manage feeds should match snapshot 1`] = `
 @media all and (max-width:) {
   .c1 {
     grid-template-columns: 1fr;
-    margin-bottom: 2rem;
+    padding: 1rem 0;
   }
 }
 
@@ -150,7 +149,7 @@ exports[`Manage feeds should match snapshot 1`] = `
       <div
         class="c2"
       >
-        LAST UPDATE
+        LAST DIGEST DATE
       </div>
       <div
         class="c2"
@@ -184,7 +183,7 @@ exports[`Manage feeds should match snapshot 1`] = `
       </div>
       <div
         class="c4"
-        data-name="LAST UPDATE"
+        data-name="LAST DIGEST DATE"
       >
         4/19/2019, 3:12:00 AM
       </div>
@@ -201,6 +200,7 @@ exports[`Manage feeds should match snapshot 1`] = `
         <div>
           <button
             class="c6"
+            type="button"
           >
             <img
               alt="Edit the feed"
@@ -210,6 +210,7 @@ exports[`Manage feeds should match snapshot 1`] = `
           </button>
           <button
             class="c6"
+            type="button"
           >
             <img
               alt="Delete the feed"

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SubmitButton = styled.button`
     width: 100%;
-    height: 4.5rem;
+    padding: 1rem 0;
     margin-top: 1rem;
     background-color: ${props => props.theme.btnColor1};
     color: #FFFFFF;
@@ -26,13 +26,48 @@ export const SubmitButton = styled.button`
     }
 `;
 
+export const NoStylesButton = styled.button.attrs({ type: 'button' })`
+    border: none;
+    padding: 0;
+    background: none;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    :focus,
+    :hover{
+        transform: scale(1.10);
+    }
+    :focus:hover{
+        outline: none;
+    }
+    :active{
+        transform: scale(0.95);
+    }
+`;
 
-export const DeleteButton = styled.button`
-    background-color: hsl(10, 67%, 56.9%);
+export const Button = styled.button.attrs({ type: 'button' })`
+    background-color: hsl(0, 0%, 60%);
     color: white;
-    padding: 0.6rem;
+    padding: 0.6rem 1rem;
     border: none;
     text-align: center;
+    text-transform: uppercase;
+    border-radius: 5px;
+    min-width: 7rem;
+    font-size: 1.3rem;
+    user-select:none;
+    :focus,
+    :hover{
+        background-color: hsl(0, 0%, 45%);
+    }
+    :active{
+        color: hsl(0, 0%, 90%);
+    }
+`;
+
+export const DeleteButton = styled(Button).attrs({ type: 'button' })`
+    background-color: hsl(10, 67%, 56.9%);
     :focus,
     :hover{
         background-color: hsl(10, 67%, 45%);
@@ -42,17 +77,18 @@ export const DeleteButton = styled.button`
     }
 `;
 
-export const CancelButton = styled.button`
-    background-color: hsl(0, 0%, 60%);
-    color: white;
-    padding: 0.6rem;
-    border: none;
-    text-align: center;
+export const GreenButtonLink = styled(Button).attrs({ as: 'a' })`
+    display: block;
+    background-color: hsl(155, 88%, 33%);
     :focus,
     :hover{
-        background-color: hsl(0, 0%, 45%);
+        background-color: hsl(155, 88%, 23%);
     }
     :active{
-        color: hsl(0, 0%, 90%);
+        color: hsl(155, 88%, 43%);
     }
+`;
+
+export const CancelButton = styled(Button)`
+
 `;
