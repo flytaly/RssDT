@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const { HttpLink } = require('apollo-link-http');
 const fetch = require('node-fetch');
 const createServer = require('../../server');
+const createAuthMiddleware = require('../../middlewares/jwtAuth');
 
 jest.mock('../../mail-sender/dispatcher.js');
 
@@ -18,9 +19,10 @@ const deleteData = async (prisma, { email, url = '' }) => {
 };
 
 
-const runServer = (db, watcher) => {
+const runServer = (db, watcher = {}) => {
     const server = createServer(db, watcher);
     server.express.use(cookieParser());
+    server.express.use(createAuthMiddleware(db));
     return server.start({ port: 0 });
 };
 

@@ -64,6 +64,19 @@ const SIGNOUT_MUTATION = gql`mutation{
   }
 }`;
 
+const UPDATE_MY_FEED_MUTATION = gql`mutation (
+    $data: MyFeedUpdateInput!
+    $id: ID!
+){
+  updateMyFeed (
+    data: $data
+    id: $id
+  ) {
+    id
+    schedule
+  }
+}`;
+
 module.exports = {
     ADD_FEED_MUTATION,
     CONFIRM_SUBSCRIPTION_MUTATION,
@@ -71,4 +84,5 @@ module.exports = {
     SET_PASSWORD_MUTATION,
     SIGNIN_MUTATION,
     SIGNOUT_MUTATION,
+    UPDATE_MY_FEED_MUTATION,
 };

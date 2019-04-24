@@ -4,6 +4,7 @@ const setPassword = require('./mutations/setPassword');
 const signIn = require('./mutations/signIn');
 const signOut = require('./mutations/signOut');
 const confirmSubscription = require('./mutations/confirmSubscription');
+const updateMyFeed = require('./mutations/updateMyFeed');
 
 const Mutations = {
     addFeed,
@@ -12,6 +13,7 @@ const Mutations = {
     signIn,
     signOut,
     confirmSubscription,
+    updateMyFeed,
 };
 
 module.exports = Mutations;

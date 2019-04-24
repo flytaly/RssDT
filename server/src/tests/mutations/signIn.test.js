@@ -83,7 +83,7 @@ describe('signIn', () => {
         };
         const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
         expect(cookies).toBeNull();
-        expect(data.signIn).toBeNull();
+        expect(data).toBeNull();
         expect(errors.length).toEqual(1);
         expect(errors[0].message).toEqual('Invalid Password!');
     });
@@ -96,7 +96,7 @@ describe('signIn', () => {
         };
         const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
         expect(cookies).toBeNull();
-        expect(data.signIn).toBeNull();
+        expect(data).toBeNull();
         expect(errors.length).toEqual(1);
         expect(errors[0].message).toEqual(`There is no account for email ${email}`);
     });
