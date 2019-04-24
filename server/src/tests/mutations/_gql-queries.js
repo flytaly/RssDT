@@ -77,9 +77,20 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
   }
 }`;
 
+const DELETE_MY_FEED_MUTATION = gql`mutation (
+    $id: ID!
+){
+  deleteMyFeed (
+    id: $id
+  ) {
+    id
+  }
+}`;
+
 module.exports = {
     ADD_FEED_MUTATION,
     CONFIRM_SUBSCRIPTION_MUTATION,
+    DELETE_MY_FEED_MUTATION,
     REQUEST_PASSWORD_CHANGE_MUTATION,
     SET_PASSWORD_MUTATION,
     SIGNIN_MUTATION,

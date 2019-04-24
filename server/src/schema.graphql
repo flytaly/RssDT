@@ -49,6 +49,7 @@ type Mutation {
     """
     addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule): Message!
     confirmSubscription(token: String!): Message!
+    deleteMyFeed(id: ID!): UserFeed!
     requestPasswordChange(email: String!): Message!
     setPassword(token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message!
