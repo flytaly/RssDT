@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import get from 'lodash.get';
 import ReactModal from 'react-modal';
 import { Table, Th, Tr, Td, ButtonWithImg } from './styled-table-parts';
@@ -26,6 +26,12 @@ const MY_FEEDS_QUERY = gql`
         }
     }
 `;
+
+
+const DELETE_FEED_MUTATION = gql`mutation ($id: ID!){
+  deleteMyFeed ( id: $id ) { id }
+}`;
+
 
 const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
     const title = feedInfo.feed.title || feedInfo.feed.link || feedInfo.feed.url;
@@ -60,6 +66,7 @@ const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
                             setConfirmDelete({
                                 isOpen: true,
                                 title,
+                                id: feedInfo.id,
                             });
                         }}
                         src={trashIcon}
@@ -69,9 +76,22 @@ const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
             </Td>
         </Tr>);
 };
+
+const updateAfterDeletion = (dataProxy, mutationResult) => {
+    try {
+        const { id } = mutationResult.data.deleteMyFeed;
+        const data = dataProxy.readQuery({ query: MY_FEEDS_QUERY });
+        data.myFeeds = data.myFeeds.filter(feed => feed.id !== id);
+        dataProxy.writeQuery({ query: MY_FEEDS_QUERY, data });
+    } catch (e) {
+        console.error(e);
+    }
+};
+
 const ResponsiveTable = () => {
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
-    const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, title: null });
+    const deleteFeedMutation = useMutation(DELETE_FEED_MUTATION, { update: updateAfterDeletion });
+    const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, title: null, id: null });
     const [editFeed, setEditFeed] = useState({ isOpen: false, feedInfo: {} });
     const cancelBtnRef = useRef(null);
     useEffect(() => {
@@ -128,9 +148,23 @@ const ResponsiveTable = () => {
                     Cancel
                 </CancelButton>
                 <DeleteButton
-                    onClick={() => {
-                        // TODO: run delete mutation
+                    onClick={async () => {
                         setConfirmDelete({ isOpen: false });
+                        const { id } = confirmDelete;
+                        try {
+                            await deleteFeedMutation({
+                                variables: { id },
+                                optimisticResponse: {
+                                    __typename: 'Mutation',
+                                    deleteMyFeed: {
+                                        __typename: 'UserFeed',
+                                        id,
+                                    },
+                                },
+                            });
+                        } catch (e) {
+                            console.error(e);
+                        }
                     }}
                 >
                     Delete
@@ -142,4 +176,4 @@ const ResponsiveTable = () => {
 };
 
 export default ResponsiveTable;
-export { MY_FEEDS_QUERY };
+export { MY_FEEDS_QUERY, DELETE_FEED_MUTATION };
