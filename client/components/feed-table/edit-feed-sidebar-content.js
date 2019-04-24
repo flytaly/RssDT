@@ -3,9 +3,24 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Link from 'next/link';
+import { useMutation } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
 import { GreenButtonLink, NoStylesButton, SubmitButton } from '../styled/buttons';
 import arrowLeftImg from '../../static/arrow-left.svg';
 import periods, { periodNames } from '../../types/digest-periods';
+
+const UPDATE_MY_FEED_MUTATION = gql`mutation (
+    $data: MyFeedUpdateInput!
+    $id: ID!
+){
+  updateMyFeed (
+    data: $data
+    id: $id
+  ) {
+    id
+    schedule
+  }
+}`;
 
 const ContainerForm = styled.form.attrs({ method: 'POST' })`
     display: flex;
@@ -67,6 +82,7 @@ const SubmitSideBarButton = styled(SubmitButton)`
 const EditFeed = ({ feedInfo, closeSidebar }) => {
     const { id, createdAt, lastUpdate, schedule } = feedInfo;
     const { title, link, url, imageTitle = '', imageUrl } = feedInfo.feed || {};
+    const updateFeedMutation = useMutation(UPDATE_MY_FEED_MUTATION);
 
     return (
         <Formik
@@ -74,8 +90,12 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
             onSubmit={async (variables, { setSubmitting, resetForm }) => {
                 const { period } = variables;
                 if (period !== schedule) {
-                    // TODO: send data
-                    resetForm();
+                    try {
+                        await updateFeedMutation({ variables: { data: { schedule: period }, id } });
+                        resetForm();
+                    } catch (e) {
+                        console.error(e);
+                    }
                 }
                 setSubmitting(false);
             }}
