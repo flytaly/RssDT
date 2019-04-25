@@ -8,6 +8,7 @@ import { DeleteButton, CancelButton } from '../styled/buttons';
 import trashIcon from '../../static/trash.svg';
 import editIcon from '../../static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
+import { periodNames } from '../../types/digest-periods';
 
 const MY_FEEDS_QUERY = gql`
     query MY_FEEDS_QUERY {
@@ -44,7 +45,7 @@ const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
                 {new Date(feedInfo.createdAt).toLocaleDateString()}
             </Td>
             <Td data-name="LAST DIGEST DATE">{new Date(feedInfo.lastUpdate).toLocaleString()}</Td>
-            <Td data-name="DIGEST SCHEDULE">{feedInfo.schedule}</Td>
+            <Td data-name="DIGEST SCHEDULE">{`${periodNames[feedInfo.schedule] || feedInfo.schedule} digest` }</Td>
             <Td minWidth="8rem" data-name="ACTIONS">
                 <div>
                     <ButtonWithImg

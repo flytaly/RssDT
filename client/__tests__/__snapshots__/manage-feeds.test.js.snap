@@ -191,7 +191,7 @@ exports[`Manage feeds should match snapshot 1`] = `
         class="c4"
         data-name="DIGEST SCHEDULE"
       >
-        DAILY
+        Daily digest
       </div>
       <div
         class="c5"
