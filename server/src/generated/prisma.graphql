@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Mon Apr 08 2019 17:16:08 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Apr 26 2019 22:34:13 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -66,6 +66,7 @@ type FeedConnection {
 }
 
 input FeedCreateInput {
+  id: ID
   url: String!
   link: String
   title: String
@@ -90,6 +91,7 @@ input FeedCreateOneWithoutUserFeedsInput {
 }
 
 input FeedCreateWithoutItemsInput {
+  id: ID
   url: String!
   link: String
   title: String
@@ -103,6 +105,7 @@ input FeedCreateWithoutItemsInput {
 }
 
 input FeedCreateWithoutUserFeedsInput {
+  id: ID
   url: String!
   link: String
   title: String
@@ -136,6 +139,7 @@ type FeedItem implements Node {
   imageUrl: String
   enclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure!]
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -149,6 +153,7 @@ type FeedItemConnection {
 }
 
 input FeedItemCreateInput {
+  id: ID
   title: String
   description: String
   summary: String
@@ -171,6 +176,7 @@ input FeedItemCreateOneWithoutEnclosuresInput {
 }
 
 input FeedItemCreateWithoutEnclosuresInput {
+  id: ID
   title: String
   description: String
   summary: String
@@ -182,6 +188,7 @@ input FeedItemCreateWithoutEnclosuresInput {
 }
 
 input FeedItemCreateWithoutFeedInput {
+  id: ID
   title: String
   description: String
   summary: String
@@ -234,6 +241,7 @@ type FeedItemPreviousValues {
   guid: String!
   imageUrl: String
   createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input FeedItemScalarWhereInput {
@@ -569,6 +577,28 @@ input FeedItemScalarWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type FeedItemSubscriptionPayload {
@@ -1035,6 +1065,28 @@ input FeedItemWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   feed: FeedWhereInput
   enclosures_every: ItemEnclosureWhereInput
   enclosures_some: ItemEnclosureWhereInput
@@ -1620,6 +1672,8 @@ type ItemEnclosure implements Node {
   type: String
   length: String
   item: FeedItem!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -1633,6 +1687,7 @@ type ItemEnclosureConnection {
 }
 
 input ItemEnclosureCreateInput {
+  id: ID
   url: String!
   type: String
   length: String
@@ -1645,6 +1700,7 @@ input ItemEnclosureCreateManyWithoutItemInput {
 }
 
 input ItemEnclosureCreateWithoutItemInput {
+  id: ID
   url: String!
   type: String
   length: String
@@ -1668,10 +1724,10 @@ enum ItemEnclosureOrderByInput {
   type_DESC
   length_ASC
   length_DESC
-  updatedAt_ASC
-  updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ItemEnclosurePreviousValues {
@@ -1679,6 +1735,8 @@ type ItemEnclosurePreviousValues {
   url: String!
   type: String
   length: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input ItemEnclosureScalarWhereInput {
@@ -1850,6 +1908,50 @@ input ItemEnclosureScalarWhereInput {
 
   """All values not ending with the given string."""
   length_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type ItemEnclosureSubscriptionPayload {
@@ -2111,6 +2213,50 @@ input ItemEnclosureWhereInput {
 
   """All values not ending with the given string."""
   length_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   item: FeedItemWhereInput
 }
 
@@ -2244,6 +2390,7 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
   email: String!
   password: String
   setPasswordToken: String
@@ -2262,6 +2409,7 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutFeedsInput {
+  id: ID
   email: String!
   password: String
   setPasswordToken: String
@@ -2288,6 +2436,7 @@ type UserFeed implements Node {
   lastUpdate: DateTime
   schedule: DigestSchedule
   user: User!
+  updatedAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -2301,6 +2450,7 @@ type UserFeedConnection {
 }
 
 input UserFeedCreateInput {
+  id: ID
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
@@ -2321,6 +2471,7 @@ input UserFeedCreateManyWithoutUserInput {
 }
 
 input UserFeedCreateWithoutFeedInput {
+  id: ID
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
@@ -2330,6 +2481,7 @@ input UserFeedCreateWithoutFeedInput {
 }
 
 input UserFeedCreateWithoutUserInput {
+  id: ID
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
@@ -2374,6 +2526,7 @@ type UserFeedPreviousValues {
   createdAt: DateTime!
   lastUpdate: DateTime
   schedule: DigestSchedule
+  updatedAt: DateTime!
 }
 
 input UserFeedScalarWhereInput {
@@ -2545,6 +2698,28 @@ input UserFeedScalarWhereInput {
 
   """All values that are not contained in given list."""
   schedule_not_in: [DigestSchedule!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type UserFeedSubscriptionPayload {
@@ -2848,6 +3023,28 @@ input UserFeedWhereInput {
 
   """All values that are not contained in given list."""
   schedule_not_in: [DigestSchedule!]
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
   feed: FeedWhereInput
   user: UserWhereInput
 }
