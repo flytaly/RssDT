@@ -1,8 +1,10 @@
 async function deleteMyFeed(parent, args, ctx) {
     const { user } = ctx.request;
-    if (!user) { throw new Error('Authentication is required'); }
-
     const { id } = args;
+
+    if (!await ctx.db.exists.UserFeed({ id, user: { id: user.id } })) {
+        return null;
+    }
 
     const userFeed = await ctx.db.mutation.deleteUserFeed({ where: { id } });
 
