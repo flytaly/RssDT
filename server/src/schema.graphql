@@ -1,4 +1,6 @@
 # import * from './generated/prisma.graphql'
+directive @isAuthenticated(permission: Permission = USER) on FIELD | FIELD_DEFINITION | OBJECT
+
 type Message {
     message: String
 }
@@ -49,15 +51,15 @@ type Mutation {
     """
     addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule): Message!
     confirmSubscription(token: String!): Message!
-    deleteMyFeed(id: ID!): UserFeed!
+    deleteMyFeed(id: ID!): UserFeed! @isAuthenticated
     requestPasswordChange(email: String!): Message!
     setPassword(token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message!
     signOut: Message!
-    updateMyFeed(data: MyFeedUpdateInput!, id: ID!): UserFeed!
+    updateMyFeed(data: MyFeedUpdateInput!, id: ID!): UserFeed! @isAuthenticated
 }
 
 type Query {
-    me: User
-    myFeeds: [UserFeed!]!
+    me: User @isAuthenticated
+    myFeeds: [UserFeed!]! @isAuthenticated
 }
