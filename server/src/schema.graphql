@@ -61,5 +61,21 @@ type Mutation {
 
 type Query {
     me: User @isAuthenticated
-    myFeeds: [UserFeed!]! @isAuthenticated
+    myFeeds(
+        orderBy: UserFeedOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [UserFeed!]! @isAuthenticated
+    myFeedItems(
+        feedId: ID!
+        orderBy: FeedItemOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [FeedItem]! @isAuthenticated
 }
