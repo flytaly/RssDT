@@ -1,4 +1,5 @@
 /* eslint-env jest */
+const moment = require('moment');
 
 const { getNewItems } = require('../feed-parser/parse-utils');
 const Watcher = require('../feed-watcher');
@@ -34,7 +35,8 @@ describe('Feed watcher', () => {
     test('should create watcher\'s instance that has managing methods', () => {
         const feedWatcher = new Watcher(db);
         feedWatcher.start();
-        expect(typeof feedWatcher.getNextUpdateTime().getTime() === 'number').toBeTruthy();
+        expect(moment.isMoment(feedWatcher.getNextUpdateTime())).toBeTruthy();
+
         feedWatcher.cancel();
         expect(feedWatcher.getNextUpdateTime()).toBeNull();
     });
