@@ -17,25 +17,25 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^24.0.11",
+    "@types/jest": "^24.0.12",
     "apollo-link": "^1.2.11",
     "apollo-link-http": "^1.5.14",
-    "jest": "^24.7.1",
-    "jest-cli": "^24.7.1",
+    "jest": "^24.8.0",
+    "jest-cli": "^24.8.0",
     "nock": "^10.0.6",
-    "node-fetch": "^2.3.0",
-    "nodemon": "^1.18.11",
-    "pino-pretty": "^2.6.1"
+    "node-fetch": "^2.5.0",
+    "nodemon": "^1.19.0",
+    "pino-pretty": "^3.0.0"
   },
   "dependencies": {
-    "apollo-server": "^2.4.8",
+    "apollo-server": "^2.5.0",
     "axios": "^0.18.0",
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "cron": "^1.7.1",
     "dotenv-cli": "^2.0.0",
     "feedparser": "^2.2.9",
-    "graphql": "^14.2.1",
+    "graphql": "^14.3.0",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
     "graphql-yoga": "^1.17.4",
@@ -51,7 +51,7 @@
     "p-limit": "^2.2.0",
     "pino": "^5.12.3",
     "pino-tee": "^0.2.2",
-    "prisma": "^1.31.2",
+    "prisma": "^1.32.2",
     "prisma-binding": "^2.3.10"
   },
   "jest": {
