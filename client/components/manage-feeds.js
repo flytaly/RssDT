@@ -1,11 +1,16 @@
 import React from 'react';
+import styled from 'styled-components';
 import ResponsiveTable from './feed-table/feed-table';
 
+const ManageFeedsContainer = styled.main`
+    padding: 0 2rem 1rem;
+`;
+
 const ManageFeeds = () => (
-    <div>
+    <ManageFeedsContainer>
         <h3>Edit subscriptions</h3>
         <ResponsiveTable />
-    </div>
+    </ManageFeedsContainer>
 );
 
 export default ManageFeeds;

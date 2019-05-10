@@ -9,7 +9,8 @@ const Header = styled.header`
   width: 100%;
   font-size: 1.4rem;
   font-family: Helvetica, Roboto, sans-serif;
-  padding-bottom: 0.5rem;
+  padding: 1rem 2rem 0.5rem 2rem;
+  margin-right: 1rem;
   border-bottom: 1px solid ${props => props.theme.borderColor};
 `;
 

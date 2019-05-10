@@ -14,6 +14,11 @@ const theme = {
     tableHoverColor: 'rgba(115, 40, 109,0.1)',
     tableAltRowColor: 'rgba(115, 40, 109,0.03)',
     tableMinWidth: '37em',
+    feedListFontColor: 'white',
+    feedListBgColor: '#37386E',
+    feedListHoverBgColor: '#4E507E',
+    feedViewFontColor: '#000000',
+    feedViewBgColor: '#E9E9E9',
 };
 
 export default theme;

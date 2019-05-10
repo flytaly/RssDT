@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Manage feeds should match snapshot 1`] = `
-.c0 {
+.c1 {
   margin: 0px;
   padding: 0px;
   font-size: 1.4rem;
 }
 
-.c1 {
+.c2 {
   list-style: none;
   display: grid;
   grid-template-columns: 6fr 2fr 4fr 4fr 1fr;
@@ -19,37 +19,37 @@ exports[`Manage feeds should match snapshot 1`] = `
   padding: 0.5rem 0;
 }
 
-.c1:hover:not(:first-of-type) {
+.c2:hover:not(:first-of-type) {
   outline: 1px solid;
 }
 
-.c4 {
+.c5 {
   min-width: 10rem;
   word-break: break-all;
 }
 
-.c5 {
+.c6 {
   min-width: 8rem;
   word-break: break-all;
-}
-
-.c2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  min-width: 10rem;
 }
 
 .c3 {
   font-size: 1.5rem;
   font-weight: bold;
+  min-width: 10rem;
+}
+
+.c4 {
+  font-size: 1.5rem;
+  font-weight: bold;
   min-width: 8rem;
 }
 
-.c7 {
+.c8 {
   height: 1.5rem;
 }
 
-.c6 {
+.c7 {
   border: none;
   padding: 0;
   background: none;
@@ -62,41 +62,31 @@ exports[`Manage feeds should match snapshot 1`] = `
   margin: 0 0.5rem 0 0;
 }
 
-.c6:focus,
-.c6:hover {
+.c7:focus,
+.c7:hover {
   -webkit-transform: scale(1.10);
   -ms-transform: scale(1.10);
   transform: scale(1.10);
 }
 
-.c6:focus:hover {
+.c7:focus:hover {
   outline: none;
 }
 
-.c6:active {
+.c7:active {
   -webkit-transform: scale(0.95);
   -ms-transform: scale(0.95);
   transform: scale(0.95);
 }
 
-@media all and (max-width:) {
-  .c1 {
-    grid-template-columns: 1fr;
-    padding: 1rem 0;
-  }
+.c0 {
+  padding: 0 2rem 1rem;
 }
 
 @media all and (max-width:) {
-  .c4 {
-    display: grid;
-    grid-template-columns: 40% 1fr;
-    grid-gap: 5px;
-  }
-
-  .c4:before {
-    content: attr(data-name);
-    font-size: 1.5rem;
-    font-weight: bold;
+  .c2 {
+    grid-template-columns: 1fr;
+    padding: 1rem 0;
   }
 }
 
@@ -115,8 +105,16 @@ exports[`Manage feeds should match snapshot 1`] = `
 }
 
 @media all and (max-width:) {
-  .c2 {
-    display: none;
+  .c6 {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    grid-gap: 5px;
+  }
+
+  .c6:before {
+    content: attr(data-name);
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 }
 
@@ -126,47 +124,55 @@ exports[`Manage feeds should match snapshot 1`] = `
   }
 }
 
-<div>
+@media all and (max-width:) {
+  .c4 {
+    display: none;
+  }
+}
+
+<main
+  class="c0"
+>
   <h3>
     Edit subscriptions
   </h3>
   <ul
-    class="c0"
+    class="c1"
   >
     <li
-      class="c1"
+      class="c2"
     >
       <div
-        class="c2"
+        class="c3"
       >
         FEED
       </div>
       <div
-        class="c3"
+        class="c4"
       >
         ADDED
       </div>
       <div
-        class="c2"
+        class="c3"
       >
         LAST DIGEST DATE
       </div>
       <div
-        class="c2"
+        class="c3"
       >
         DIGEST SCHEDULE
       </div>
       <div
-        class="c3"
+        class="c4"
       >
         ACTIONS
       </div>
     </li>
     <li
-      class="c1"
+      class="c2"
     >
       <div
-        class="c4"
+        class="c5"
         data-name="FEED"
       >
         <a
@@ -176,45 +182,45 @@ exports[`Manage feeds should match snapshot 1`] = `
         </a>
       </div>
       <div
-        class="c5"
+        class="c6"
         data-name="ADDED"
       >
         4/19/2019
       </div>
       <div
-        class="c4"
+        class="c5"
         data-name="LAST DIGEST DATE"
       >
         4/19/2019, 3:12:00 AM
       </div>
       <div
-        class="c4"
+        class="c5"
         data-name="DIGEST SCHEDULE"
       >
         Daily digest
       </div>
       <div
-        class="c5"
+        class="c6"
         data-name="ACTIONS"
       >
         <div>
           <button
-            class="c6"
+            class="c7"
             type="button"
           >
             <img
               alt="Edit the feed"
-              class="c7"
+              class="c8"
               src="/static/edit.svg"
             />
           </button>
           <button
-            class="c6"
+            class="c7"
             type="button"
           >
             <img
               alt="Delete the feed"
-              class="c7"
+              class="c8"
               src="/static/trash.svg"
             />
           </button>
@@ -222,5 +228,5 @@ exports[`Manage feeds should match snapshot 1`] = `
       </div>
     </li>
   </ul>
-</div>
+</main>
 `;

@@ -12,7 +12,6 @@ const StyledBigCard = styled.div`
     max-width: calc(100vw - 2rem);
     min-height: 40rem;
     margin: 2rem auto;
-    padding: 1rem 2rem;
     border-radius: 10px;
 `;
 
