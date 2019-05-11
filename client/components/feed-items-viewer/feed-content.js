@@ -1,5 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { useApolloClient } from 'react-apollo-hooks';
+import gql from 'graphql-tag';
+
+const feedFragment = gql`
+    fragment feed on UserFeed {
+        feed {
+            title
+            url
+            link
+            imageUrl
+            imageTitle
+        }
+    }
+`;
 
 const Container = styled.section`
     flex-grow: 1;
@@ -10,11 +25,37 @@ const Container = styled.section`
         border-bottom-left-radius: 9px;
     }
 `;
+const FeedTitleH = styled.h2`
+    margin: 0;
+`;
 
-function FeedContent() {
+
+function FeedContent({ id }) {
+    const client = useApolloClient();
+    let feedInfo = {};
+    try {
+        const result = client.readFragment({
+            id: `UserFeed:${id}`,
+            fragment: feedFragment,
+        });
+        feedInfo = result && result.feed ? result.feed : {};
+    } catch (e) { console.error('Error during readFragment:', e); }
+
+    if (!id) return (<Container>Choose a feed to display its items</Container>);
     return (
-        <Container>Feed content</Container>
+        <Container>
+            <FeedTitleH>{feedInfo.title || feedInfo.url}</FeedTitleH>
+        </Container>
     );
 }
+
+FeedContent.propTypes = {
+    id: PropTypes.string,
+};
+
+FeedContent.defaultProps = {
+    id: null,
+};
+
 
 export default FeedContent;

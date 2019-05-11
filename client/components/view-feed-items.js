@@ -13,11 +13,11 @@ const Container = styled.main`
     }
 `;
 
-function ViewFeedItems() {
+function ViewFeedItems(props) {
     return (
         <Container>
             <FeedListSidebar />
-            <FeedContent />
+            <FeedContent {...props} />
         </Container>);
 }
 

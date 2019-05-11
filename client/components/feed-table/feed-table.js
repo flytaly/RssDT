@@ -9,25 +9,7 @@ import trashIcon from '../../static/trash.svg';
 import editIcon from '../../static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
 import { periodNames } from '../../types/digest-periods';
-
-const MY_FEEDS_QUERY = gql`
-    query MY_FEEDS_QUERY {
-        myFeeds {
-            id
-            feed {
-                url
-                link
-                title
-                imageUrl
-                imageTitle
-            }
-            schedule
-            lastUpdate
-            createdAt
-        }
-    }
-`;
-
+import { MY_FEEDS_QUERY } from '../../queries';
 
 const DELETE_FEED_MUTATION = gql`mutation ($id: ID!){
   deleteMyFeed ( id: $id ) { id }
@@ -177,4 +159,4 @@ const ResponsiveTable = () => {
 };
 
 export default ResponsiveTable;
-export { MY_FEEDS_QUERY, DELETE_FEED_MUTATION };
+export { DELETE_FEED_MUTATION };

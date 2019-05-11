@@ -1,5 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import get from 'lodash.get';
+import Link from 'next/link';
+import { useQuery } from 'react-apollo-hooks';
+import { MY_FEEDS_QUERY } from '../../queries';
 
 const StyledFeedList = styled.ul`
     display: flex;
@@ -8,7 +12,7 @@ const StyledFeedList = styled.ul`
     padding: 0;
     margin: 0;
     li {
-        padding: 0 1rem 0 1.5rem;
+        padding: 2px 1rem 2px 1.5rem;
         overflow-x: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -23,11 +27,22 @@ const StyledFeedList = styled.ul`
 `;
 
 function FeedList() {
+    const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
+    const feeds = get(data, 'myFeeds', []);
+    if (loading) return <div>Loading...</div>;
+    if (error) console.error(error);
+
     return (
         <StyledFeedList>
-            <li><a href="#">Feed name 1</a></li>
-            <li><a href="#">Very very very very long feed name</a></li>
-            <li><a href="#">Feed name 3</a></li>
+            {feeds.map((feedInfo) => {
+                const { id, feed: { title, url } } = feedInfo;
+                return (
+                    <li key={id}>
+                        <Link href={`/feeds/view?id=${id}`}>
+                            <a href={`/feeds/view?id=${id}`}>{title || url}</a>
+                        </Link>
+                    </li>);
+            })}
         </StyledFeedList>
     );
 }

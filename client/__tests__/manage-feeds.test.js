@@ -1,6 +1,6 @@
 import { render, wait } from 'react-testing-library';
 import ManageFeeds from '../components/manage-feeds';
-import { MY_FEEDS_QUERY } from '../components/feed-table/feed-table';
+import { MY_FEEDS_QUERY } from '../queries';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import types from '../types/digest-periods';
 
