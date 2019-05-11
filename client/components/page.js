@@ -20,7 +20,7 @@ const GlobalStyle = createGlobalStyle`
     background: ${props => props.theme.pageBackground};
     padding: 0;
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-family: Roboto, sans-serif;
     line-height: normal;
   }

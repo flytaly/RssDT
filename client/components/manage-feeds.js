@@ -6,9 +6,13 @@ const ManageFeedsContainer = styled.main`
     padding: 0 2rem 1rem;
 `;
 
+const StyledH1 = styled.h1`
+    font-size: 1.8rem;
+`;
+
 const ManageFeeds = () => (
     <ManageFeedsContainer>
-        <h3>Edit subscriptions</h3>
+        <StyledH1>Edit subscriptions</StyledH1>
         <ResponsiveTable />
     </ManageFeedsContainer>
 );
