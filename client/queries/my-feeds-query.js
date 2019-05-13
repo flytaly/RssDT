@@ -5,6 +5,7 @@ const MY_FEEDS_QUERY = gql`
         myFeeds {
             id
             feed {
+                id
                 url
                 link
                 title

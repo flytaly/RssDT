@@ -14,6 +14,7 @@ const mocks = [{
                 lastUpdate: new Date('2019-04-19T00:12:00.000Z'),
                 schedule: types.DAILY,
                 feed: {
+                    id: 'testFeedId',
                     title: 'Test Feed Title',
                     link: 'http://testfeed.com',
                     url: 'http://testfeed.com/feed',
