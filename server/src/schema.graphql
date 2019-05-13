@@ -27,6 +27,7 @@ input MyFeedUpdateInput {
 }
 
 type Feed {
+    id: ID!
     url: String!
     link: String
     title: String
@@ -78,4 +79,13 @@ type Query {
         first: Int
         last: Int
     ): [FeedItem]! @isAuthenticated
+    feedItemsConnection(
+        where: FeedItemWhereInput
+        orderBy: FeedItemOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): FeedItemConnection! @isAuthenticated
 }
