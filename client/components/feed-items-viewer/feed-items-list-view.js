@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import throttle from 'lodash.throttle';
 import Spinner from '../spinner';
 
 const StyledItemContainer = styled.div`
@@ -30,24 +31,30 @@ const SpinnerContainer = styled.div`
 `;
 
 function FeedItemsListView({ items, fetchMore, loading, canFetchMore }) {
-    const list = useRef(null);
+    const loadMoreRef = useRef(null);
     const lastId = items.length ? items[items.length - 1].id : null;
 
     useEffect(() => {
-        if (!lastId || !canFetchMore) return;
-
-        const { clientHeight } = document.documentElement;
-        const { bottom } = list.current.getBoundingClientRect();
-        if (bottom < clientHeight) {
-            fetchMore({ after: lastId });
-        }
-    }, [lastId, canFetchMore, fetchMore]);
-
-    // TODO: Add resize and scroll listener that call fetchMore
+        const fetchItemsIfNeeded = throttle(() => {
+            if (!lastId || !canFetchMore || loading) return;
+            const { top } = loadMoreRef.current.getBoundingClientRect();
+            const { clientHeight } = document.documentElement;
+            if (top <= clientHeight) {
+                fetchMore(lastId);
+            }
+        }, 400);
+        if (!window.pageYOffset) fetchItemsIfNeeded();
+        window.addEventListener('scroll', fetchItemsIfNeeded);
+        window.addEventListener('resize', fetchItemsIfNeeded);
+        return () => {
+            window.removeEventListener('scroll', fetchItemsIfNeeded);
+            window.removeEventListener('resize', fetchItemsIfNeeded);
+        };
+    }, [lastId, canFetchMore, fetchMore, loading]);
 
     return (
         <StyledItemContainer>
-            <StyledItemList ref={list}>
+            <StyledItemList>
                 {items.map(item => (
                     <li key={item.id}>
                         <h4>{item.title}</h4>
@@ -55,7 +62,13 @@ function FeedItemsListView({ items, fetchMore, loading, canFetchMore }) {
                     </li>
                 ))}
             </StyledItemList>
-            {(canFetchMore || loading) && <SpinnerContainer><Spinner /></SpinnerContainer>}
+            <div ref={loadMoreRef}>
+                {
+                    (canFetchMore || loading)
+                        ? <SpinnerContainer><Spinner /></SpinnerContainer>
+                        : 'All items have been loaded'
+                }
+            </div>
         </StyledItemContainer>
     );
 }
