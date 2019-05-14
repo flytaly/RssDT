@@ -31,6 +31,7 @@ async function addFeed(parent, args, ctx) {
             feedMeta = meta;
         } catch (e) {
             if (e.message === 'Not a feed') throw e;
+            logger.error(e);
             throw new Error('Couldn\'t get access to feed');
         }
     }

@@ -14,7 +14,7 @@ function getFeedStream(url, options = {}) {
         method: 'get',
         responseType: 'stream',
         headers: {
-            Accept: 'text/html,application/xhtml+xml,application/xml',
+            Accept: '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
             + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
         },
