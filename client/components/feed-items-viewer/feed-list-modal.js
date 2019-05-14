@@ -53,7 +53,12 @@ const FeedListModalSidebar = ({ modalInfo, setModalInfo, children }) => {
             }}
         >
             <StyledModalContent>
-                {children}
+                {
+                    // Add an additional prop to children
+                    React.Children.map(children, child => React.cloneElement(child, {
+                        linkClickHandler: () => { setModalInfo({ isOpen: false }); },
+                    }))
+                }
             </StyledModalContent>
         </ReactModal>
     );

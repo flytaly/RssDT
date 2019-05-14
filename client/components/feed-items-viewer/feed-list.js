@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import get from 'lodash.get';
 import Link from 'next/link';
 import { useQuery } from 'react-apollo-hooks';
+import PropTypes from 'prop-types';
 import { MY_FEEDS_QUERY } from '../../queries';
 
 const StyledFeedList = styled.ul`
@@ -26,7 +27,7 @@ const StyledFeedList = styled.ul`
     }
 `;
 
-function FeedList() {
+function FeedList({ linkClickHandler }) {
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
     const feeds = get(data, 'myFeeds', []);
     if (loading) return <div>Loading...</div>;
@@ -39,12 +40,21 @@ function FeedList() {
                 return (
                     <li key={id}>
                         <Link href={`/feeds/view?id=${id}`}>
-                            <a href={`/feeds/view?id=${id}`}>{title || url}</a>
+                            <a href={`/feeds/view?id=${id}`} onClick={linkClickHandler}>
+                                {title || url}
+                            </a>
                         </Link>
                     </li>);
             })}
         </StyledFeedList>
     );
 }
+
+FeedList.propTypes = {
+    linkClickHandler: PropTypes.func,
+};
+FeedList.defaultProps = {
+    linkClickHandler: null,
+};
 
 export default FeedList;
