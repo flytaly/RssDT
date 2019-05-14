@@ -176,7 +176,7 @@ describe('Set password form', () => {
             </ApolloMockedProvider>,
         );
         const inputs = {
-            password: getByLabelText(/Password/i),
+            password: getByLabelText(/^Password/i),
             confirm: getByLabelText(/Confirm password/i),
         };
         fireEvent.change(inputs.password, { target: { value: 'short' } });
@@ -196,7 +196,7 @@ describe('Set password form', () => {
             </ApolloMockedProvider>,
         );
         const inputs = {
-            password: getByLabelText(/Password/i),
+            password: getByLabelText(/^Password/i),
             confirm: getByLabelText(/Confirm password/i),
         };
         fireEvent.change(inputs.password, { target: { value: password } });
