@@ -1,7 +1,41 @@
 const axios = require('axios');
 const FeedParser = require('feedparser');
+const iconv = require('iconv-lite');
+const { Readable } = require('stream');
 
 const MAX_ITEMS = 1000;
+
+/**
+ * Some feeds have an encoding in their declaration (like <?xml version="1.0" encoding="windows-1251"?>)
+ * so they should be converted to a string in which declaration can be found
+ * and then converted to a string again with the correct encoding.
+ * The function was taken from github.com/szwacz/sputnik:
+ * https://github.com/szwacz/sputnik/blob/5a68359a920aa3c1be4684c1f12b0d0d64e5745d/app/core/helpers/feed_parser.js#L42
+ * @param {ArrayBuffer} bodyBuf
+ * @return {String}
+ */
+const normalizeEncoding = (bodyBuf) => {
+    let body = bodyBuf.toString();
+    let encoding;
+
+    const xmlDeclaration = body.match(/^<\?xml .*\?>/);
+    if (xmlDeclaration) {
+        const encodingDeclaration = xmlDeclaration[0].match(/encoding=("|').*?("|')/);
+        if (encodingDeclaration) {
+            encoding = encodingDeclaration[0].substring(10, encodingDeclaration[0].length - 1);
+        }
+    }
+
+    if (encoding && encoding.toLowerCase() !== 'utf-8') {
+        try {
+            body = iconv.decode(bodyBuf, encoding);
+        } catch (err) {
+            // detected encoding is not supported, leave it as it is
+        }
+    }
+
+    return body;
+};
 
 /**
  * Generate readable stream with content on given url
@@ -12,7 +46,7 @@ const MAX_ITEMS = 1000;
 function getFeedStream(url, options = {}) {
     const axiosOptions = {
         method: 'get',
-        responseType: 'stream',
+        responseType: 'arraybuffer',
         headers: {
             Accept: '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
@@ -25,7 +59,14 @@ function getFeedStream(url, options = {}) {
         ...axiosOptions,
         url,
     })
-        .then(response => response.data);
+        .then(response => response.data)
+        .then(buf => normalizeEncoding(buf))
+        .then((data) => {
+            const stream = new Readable();
+            stream.push(data);
+            stream.push(null);
+            return stream;
+        });
 }
 
 /**

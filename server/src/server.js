@@ -14,7 +14,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
     // Visitor methods for nested types like fields and arguments
     // also receive a details object that provides information about
     // the parent and grandparent types.
-    visitFieldDefinition(field, details) {
+    visitFieldDefinition(field/* , details */) {
         const { resolve = defaultFieldResolver } = field;
         const { permission } = this.args;
         field.resolve = async function (...args) {
