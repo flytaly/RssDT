@@ -92,7 +92,7 @@ const FeedItemsListElement = ({ item }) => {
                         <img src={imageUrl} alt="Open the item" title={title} />
                     </a>) }
             </ElementTitle>
-            <ElementBody dangerouslySetInnerHTML={{ __html: description }} />
+            {description ? <ElementBody dangerouslySetInnerHTML={{ __html: description }} /> : null}
             {enclosures && enclosures.length
                 ? (
                     <React.Fragment>
