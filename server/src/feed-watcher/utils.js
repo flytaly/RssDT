@@ -1,3 +1,4 @@
+const sanitizeHtml = require('sanitize-html');
 const pick = require('lodash.pick');
 
 function filterMeta(feedMeta) {
@@ -10,7 +11,9 @@ function filterMeta(feedMeta) {
     return meta;
 }
 
-function filterFields(item) {
+function filterAndClearHtml(item) {
+    const cleanHtml = dirty => sanitizeHtml(dirty, { allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']) });
+
     const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
     const encFields = ['url', 'type', 'length'];
 
@@ -21,8 +24,11 @@ function filterFields(item) {
     if (item.enclosures && item.enclosures.length) {
         obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
     }
+    obj.description = cleanHtml(obj.description);
+    obj.summary = cleanHtml(obj.summary);
 
     return obj;
 }
 
-module.exports = { filterFields, filterMeta };
+
+module.exports = { filterAndClearHtml, filterMeta };

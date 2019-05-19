@@ -3,7 +3,7 @@ const moment = require('moment');
 
 const { getNewItems } = require('../feed-parser/parse-utils');
 const Watcher = require('../feed-watcher');
-const { filterFields } = require('../feed-watcher/utils');
+const { filterAndClearHtml } = require('../feed-watcher/utils');
 const mocks = require('./mocks/feed-watcher.mocks');
 
 jest.mock('../feed-parser/parse-utils', () => ({
@@ -58,7 +58,7 @@ describe('Feed watcher', () => {
             { where: { url: mocks.feed.url } },
             '{ items { pubDate guid } }',
         );
-        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems, filterFields);
+        expect(getNewItems).toHaveBeenCalledWith(mocks.feed.url, mocks.oldFeedItems, filterAndClearHtml);
         expect(db.mutation.updateFeed).toHaveBeenCalledWith({
             where: { url: mocks.feed.url },
             data: { items: { create: mocks.newFeedItems } },
@@ -75,17 +75,17 @@ describe('Feed watcher', () => {
 });
 
 describe('Feed watcher: filterFields method', () => {
-    test('should return object with necessary fields', () => {
+    test('should return object with necessary fields and clean dirty HTML', () => {
         const item = {
             ...mocks.item,
             needless: 'Unnecessary field',
             image: mocks.itemImage,
         };
         const resultItem = {
-            ...mocks.item,
+            ...mocks.itemClean,
             imageUrl: mocks.itemImage.url,
         };
-        expect(filterFields(item)).toEqual(resultItem);
+        expect(filterAndClearHtml(item)).toEqual(resultItem);
     });
 
     test('should return object with enclosures', () => {
@@ -95,12 +95,12 @@ describe('Feed watcher: filterFields method', () => {
             enclosures: mocks.enclosures,
         };
         const resultItem = {
-            ...mocks.item,
+            ...mocks.itemClean,
             imageUrl: mocks.itemImage.url,
             enclosures: {
                 create: mocks.enclosures,
             },
         };
-        expect(filterFields(item)).toEqual(resultItem);
+        expect(filterAndClearHtml(item)).toEqual(resultItem);
     });
 });

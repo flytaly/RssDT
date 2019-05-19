@@ -54,7 +54,8 @@
     "pino": "^5.12.5",
     "pino-tee": "^0.2.2",
     "prisma": "^1.33.0",
-    "prisma-binding": "^2.3.10"
+    "prisma-binding": "^2.3.10",
+    "sanitize-html": "^1.20.1"
   },
   "jest": {
     "moduleFileExtensions": [

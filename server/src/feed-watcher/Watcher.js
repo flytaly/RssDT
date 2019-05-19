@@ -2,7 +2,7 @@ const { CronJob } = require('cron');
 const pLimit = require('p-limit');
 const logger = require('../logger');
 const { getNewItems } = require('../feed-parser');
-const { filterFields, filterMeta } = require('./utils');
+const { filterAndClearHtml, filterMeta } = require('./utils');
 const { buildAndSendDigests } = require('../mail-sender/dispatcher');
 
 class Watcher {
@@ -131,7 +131,7 @@ class Watcher {
     async updateFeed(url) {
         let newItemsCount = 0;
         const items = await this.getItems(url);
-        const { feedItems: newItems, feedMeta } = await getNewItems(url, items, filterFields);
+        const { feedItems: newItems, feedMeta } = await getNewItems(url, items, filterAndClearHtml);
         this.updateMeta(url, feedMeta);
         if (newItems.length) {
             newItemsCount = await this.saveFeed(url, newItems);

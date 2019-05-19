@@ -9,13 +9,21 @@ const feed = {
 const oldFeedItems = [{ guid: `${moduleName}_guid1`, pubDate: 'Fri, 30 Nov 2018 20:00:00 GMT' }];
 const newFeedItems = [{ guid: `${moduleName}_guid2`, pubDate: 'Fri, 30 Nov 2018 22:00:00 GMT' }];
 
+const descriptionDirty = '<b class="some-class">description</b><video width="320"><source src="movie.mp4" type="video/mp4"></video><script>document.getElementById("id").innerHTML = "Hello";</script><ul><li>List Element</li></ul>';
+const descriptionClean = '<b>description</b><ul><li>List Element</li></ul>';
 const item = {
     title: 'title',
-    description: 'description',
-    summary: 'summary',
+    description: descriptionDirty,
+    summary: descriptionDirty,
     pubDate: new Date(),
     link: 'link',
     guid: `${moduleName}_item_guid`,
+};
+
+const itemClean = {
+    ...item,
+    description: descriptionClean,
+    summary: descriptionClean,
 };
 
 const itemImage = { url: `http://${moduleName}imageurl` };
@@ -35,6 +43,7 @@ module.exports = {
     oldFeedItems,
     newFeedItems,
     item,
+    itemClean,
     itemImage,
     enclosures,
     id,
