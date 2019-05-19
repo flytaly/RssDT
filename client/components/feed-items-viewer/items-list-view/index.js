@@ -2,7 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import throttle from 'lodash.throttle';
-import Spinner from '../spinner';
+import Spinner from '../../spinner';
+import FeedItem from './item';
 
 const StyledItemContainer = styled.div`
     display: flex;
@@ -12,17 +13,11 @@ const StyledItemContainer = styled.div`
 const StyledItemList = styled.ul`
     display: flex;
     flex-direction: column;
+    width: 100%;
     max-width: 90rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    li {
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-        margin: 1rem 0;
-        padding: 1rem;
-    }
 `;
 
 const SpinnerContainer = styled.div`
@@ -30,7 +25,7 @@ const SpinnerContainer = styled.div`
     margin: 0 auto;
 `;
 
-function FeedItemsListView({ items, fetchMore, loading, canFetchMore }) {
+function ItemsListView({ items, fetchMore, loading, canFetchMore }) {
     const loadMoreRef = useRef(null);
     const lastId = items.length ? items[items.length - 1].id : null;
 
@@ -55,12 +50,7 @@ function FeedItemsListView({ items, fetchMore, loading, canFetchMore }) {
     return (
         <StyledItemContainer>
             <StyledItemList>
-                {items.map(item => (
-                    <li key={item.id}>
-                        <h4>{item.title}</h4>
-                        <div>{item.description}</div>
-                    </li>
-                ))}
+                {items.map(item => <FeedItem item={item} key={item.id} />)}
             </StyledItemList>
             <div ref={loadMoreRef}>
                 {
@@ -73,17 +63,17 @@ function FeedItemsListView({ items, fetchMore, loading, canFetchMore }) {
     );
 }
 
-FeedItemsListView.propTypes = {
+ItemsListView.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})),
     fetchMore: PropTypes.func,
     loading: PropTypes.bool,
     canFetchMore: PropTypes.bool,
 };
-FeedItemsListView.defaultProps = {
+ItemsListView.defaultProps = {
     items: [],
     fetchMore: () => {},
     loading: false,
     canFetchMore: false,
 };
 
-export default FeedItemsListView;
+export default ItemsListView;

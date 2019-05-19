@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import get from 'lodash.get';
 import { MY_FEED_ITEMS_QUERY, FEED_ITEMS_CONNECTION } from '../../queries';
-import FeedItemsListView from './feed-items-list-view';
+import ItemsListView from './items-list-view';
 
 const useQueryWithPagination = ({ feedId, first = 20, orderBy = 'pubDate_DESC' }) => {
     const variables = { feedId, first, orderBy };
@@ -73,7 +73,7 @@ function FeedItems({ feedId }) {
         if (state.prevAfter) { dispatch({ type: 'setPrevAfter', payload: null }); }
     }
     return (
-        <FeedItemsListView
+        <ItemsListView
             items={items}
             fetchMore={memoizedFetchMore}
             canFetchMore={canFetchMore}

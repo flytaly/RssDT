@@ -19,6 +19,7 @@ const theme = {
     feedListHoverBgColor: '#4E507E',
     feedViewFontColor: '#000000',
     feedViewBgColor: '#E9E9E9',
+    feedViewLinkColor: '#3498db',
 };
 
 export default theme;
