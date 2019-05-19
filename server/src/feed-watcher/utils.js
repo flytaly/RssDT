@@ -24,8 +24,8 @@ function filterAndClearHtml(item) {
     if (item.enclosures && item.enclosures.length) {
         obj.enclosures = { create: item.enclosures.map(e => pick(e, encFields)) };
     }
-    obj.description = cleanHtml(obj.description);
-    obj.summary = cleanHtml(obj.summary);
+    obj.description = obj.description ? cleanHtml(obj.description) : null;
+    obj.summary = obj.summary ? cleanHtml(obj.summary) : null;
 
     return obj;
 }
