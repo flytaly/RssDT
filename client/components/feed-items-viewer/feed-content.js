@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useApolloClient } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import FeedItems from './feed-items';
+import LoginPage from '../../pages/login';
 
 const feedFragment = gql`
     fragment feed on UserFeed {
@@ -27,9 +28,12 @@ const Container = styled.section`
         border-bottom-left-radius: 9px;
     }
 `;
-const FeedTitleH = styled.h2`
+const FeedTitle = styled.h2`
     font-size: 1.6rem;
     margin: 0;
+    a {
+        color: inherit;
+    }
 `;
 
 function FeedContent({ id }) {
@@ -44,10 +48,10 @@ function FeedContent({ id }) {
     } catch (e) { console.error('Error during readFragment:', e); }
 
     if (!id || !feedInfo.id) return (<Container>Choose a feed to display its items</Container>);
-
+    const link = feedInfo.link || feedInfo.url;
     return (
         <Container>
-            <FeedTitleH>{feedInfo.title || feedInfo.url}</FeedTitleH>
+            <FeedTitle><a href={link}>{feedInfo.title || link}</a></FeedTitle>
             <FeedItems feedId={feedInfo.id} />
         </Container>
     );

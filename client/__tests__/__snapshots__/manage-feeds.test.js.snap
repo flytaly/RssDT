@@ -182,7 +182,8 @@ exports[`Manage feeds should match snapshot 1`] = `
         data-name="FEED"
       >
         <a
-          href="http://testfeed.com/feed"
+          href="/feeds/view?id=id1"
+          title="View items"
         >
           Test Feed Title
         </a>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo-hooks';
+import Link from 'next/link';
 import get from 'lodash.get';
 import ReactModal from 'react-modal';
 import { Table, Th, Tr, Td, ButtonWithImg } from './styled-table-parts';
@@ -21,7 +22,7 @@ const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
     return (
         <Tr key={feedInfo.id}>
             <Td data-name="FEED">
-                <a href={feedInfo.feed.url}>{title}</a>
+                <Link href={`/feeds/view?id=${feedInfo.id}`}><a href={`/feeds/view?id=${feedInfo.id}`} title="View items">{title}</a></Link>
             </Td>
             <Td minWidth="8rem" data-name="ADDED">
                 {new Date(feedInfo.createdAt).toLocaleDateString()}
