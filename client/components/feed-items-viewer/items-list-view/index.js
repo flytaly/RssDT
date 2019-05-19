@@ -14,7 +14,7 @@ const StyledItemList = styled.ul`
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 90rem;
+    max-width: 70rem;
     list-style: none;
     margin: 0;
     padding: 0;

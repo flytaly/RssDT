@@ -17,6 +17,7 @@ const theme = {
     feedListFontColor: 'white',
     feedListBgColor: '#37386E',
     feedListHoverBgColor: '#4E507E',
+    feedListActiveBgColor: '#3A1437',
     feedViewFontColor: '#000000',
     feedViewBgColor: '#E9E9E9',
     feedViewLinkColor: '#3498db',
