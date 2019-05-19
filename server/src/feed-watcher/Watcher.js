@@ -13,18 +13,21 @@ class Watcher {
      * @param {number} options.maxConnections=40 - maximum number of concurrent connection for updating feeds
      * @param {number} options.maxNewItems=150 - maximum number of new items saving per feed
      * @param {number} options.itemMaxTime - maximum time of storing items
+     * @param {number} options.storeNumberOfItems - number of items to store after itemMaxTime
      */
     constructor(db, {
         cron = '*/5 * * * *',
         maxConnections = 40,
         maxNewItems = 150,
         itemMaxTime = (1000 * 60 * 60 * 24) * 2, // 2 days
+        storeNumberOfItems = 30,
     } = {}) {
         this.db = db;
         this.cron = cron;
         this.maxConnections = maxConnections;
         this.maxNewItems = maxNewItems;
         this.itemMaxTime = itemMaxTime;
+        this.storeNumberOfItems = storeNumberOfItems;
         this.isUpdating = false;
         this.initJob();
     }
@@ -39,11 +42,12 @@ class Watcher {
     }
 
     /**
-     * Delete items that are older than this.itemMaxTime except one last item
+     * Delete items that are older than this.itemMaxTime except this.storeNumberOfItems last items
      */
     async deleteOldItems(url) {
         try {
             const lastItem = (await this.db.query.feedItems({
+                skip: this.storeNumberOfItems,
                 last: 1,
                 where: { feed: { url } },
             },
@@ -53,7 +57,7 @@ class Watcher {
                 const oldItems = {
                     AND: [{ createdAt_lt: new Date(Date.now() - this.itemMaxTime) },
                         { feed: { url } },
-                        { id_not: lastItemId }],
+                        { id_lte: lastItemId }],
                 };
                 await this.db.mutation.deleteManyItemEnclosures({
                     where: {
@@ -65,11 +69,6 @@ class Watcher {
                 });
                 if (count) { logger.info({ count, url }, 'items were deleted'); }
             }
-            /* const { aggregate: { count } } = await this.db.query.feedItemsConnection(
-                { where: { feed: { url } } },
-                '{aggregate {count}}',
-            );
-            logger.info(`total number of ${url} items: ${count}`); */
         } catch (e) {
             logger.error(e);
         }
