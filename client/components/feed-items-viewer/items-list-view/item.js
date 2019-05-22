@@ -17,6 +17,9 @@ const ListElement = styled.article`
         text-decoration: none;
         color: ${props => props.theme.feedViewLinkColor};
     }
+    pre {
+        overflow-x: scroll;
+    }
 `;
 
 const ElementBody = styled.div`

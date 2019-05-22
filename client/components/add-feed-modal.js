@@ -5,6 +5,13 @@ import { useGlobalState, useDispatch, types } from './state';
 import AddFeedForm from './welcome/add-feed-form';
 import GraphQLError from './graphql-error';
 
+const FormContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: ${props => props.theme.cardWidth / 2}rem;
+`;
+
 const Message = styled.div`
     border: 1px solid ${props => props.color};
     color: ${props => props.color};
@@ -40,13 +47,15 @@ const AddNewFeedModal = () => {
                 },
             }}
         >
-            {(error || success) && (
-                <Message color={error ? 'red' : 'green'}>
-                    {error && <GraphQLError error={error} />}
-                    {success}
-                </Message>)
-            }
-            <AddFeedForm setMessages={setMessages} />
+            <FormContainer>
+                {(error || success) && (
+                    <Message color={error ? 'red' : 'green'}>
+                        {error && <GraphQLError error={error} />}
+                        {success}
+                    </Message>)
+                }
+                <AddFeedForm setMessages={setMessages} />
+            </FormContainer>
         </ReactModal>
     );
 };
