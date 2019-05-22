@@ -43,20 +43,30 @@ async function addFeed(parent, args, ctx) {
     });
     if (!feed) throw new Error(`Couldn't save feed ${url}`);
 
-    const userFeedExists = await ctx.db.exists.UserFeed({
-        activated: true,
+    const userFeeds = await ctx.db.query.userFeeds({ where: {
         user: { email },
         feed: { url },
-    });
-    if (userFeedExists) throw new Error('The feed was already added');
+    } }, '{ id activated }');
+    const userFeed = userFeeds && userFeeds.length && userFeeds[0];
+
+    if (userFeed && userFeed.activated) throw new Error('The feed was already added');
 
     const activationToken = await nanoid(20);
+    const activationTokenExpiry = new Date(Date.now() + 1000 * 3600 * 24); // 24 hours
     const createNewUserFeed = {
         create: {
             schedule,
             activationToken,
-            activationTokenExpiry: new Date(Date.now() + 1000 * 3600 * 24), // 24 hours
+            activationTokenExpiry,
             feed: { connect: { id: feed.id } },
+        },
+    };
+
+    const upsertUserFeed = {
+        upsert: {
+            where: { id: userFeed && userFeed.id },
+            update: { schedule, activationToken, activationTokenExpiry },
+            create: createNewUserFeed.create,
         },
     };
 
@@ -70,7 +80,7 @@ async function addFeed(parent, args, ctx) {
                 feeds: createNewUserFeed,
             },
             update: {
-                feeds: createNewUserFeed,
+                feeds: upsertUserFeed,
             },
         });
     } catch (e) {
