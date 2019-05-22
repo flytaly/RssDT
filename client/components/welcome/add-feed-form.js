@@ -51,11 +51,11 @@ const AddFeedSchema = Yup.object().shape({
         .required('The field is required'),
 });
 
-const AddFeedForm = ({ setMessages }) => {
+const AddFeedForm = ({ setMessages, user }) => {
     const addFeed = useMutation(ADD_FEED_MUTATION);
     return (
         <Formik
-            initialValues={{ email: '', url: 'http://', period: periods.DAILY }}
+            initialValues={{ email: user.email, url: 'http://', period: periods.DAILY }}
             validationSchema={AddFeedSchema}
             onSubmit={async (variables, { setSubmitting, resetForm }) => {
                 const { email, url, period } = variables;
@@ -106,7 +106,7 @@ const AddFeedForm = ({ setMessages }) => {
                         onBlur={handleBlur}
                         value={values.email}
                         error={errors.email}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || user.email}
                         title="Email address"
                         required
                     />
@@ -135,7 +135,11 @@ const AddFeedForm = ({ setMessages }) => {
 };
 
 AddFeedForm.propTypes = {
+    user: PropTypes.shape({ email: PropTypes.string }),
     setMessages: PropTypes.func.isRequired,
+};
+AddFeedForm.defaultProps = {
+    user: { email: '' },
 };
 
 export default AddFeedForm;

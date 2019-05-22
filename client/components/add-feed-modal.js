@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
 import styled from 'styled-components';
+import { useQuery } from 'react-apollo-hooks';
 import { useGlobalState, useDispatch, types } from './state';
 import AddFeedForm from './welcome/add-feed-form';
 import GraphQLError from './graphql-error';
+import ME_QUERY from '../queries/me-query';
 
 const FormContainer = styled.div`
     display: flex;
@@ -21,6 +23,8 @@ const Message = styled.div`
 `;
 
 const AddNewFeedModal = () => {
+    const { data = { me: {} } } = useQuery(ME_QUERY);
+    const user = data.me;
     const [messages, setMessages] = useState({ error: '', success: '' });
     const { error, success } = messages;
     const modal = useGlobalState('newFeedModal');
@@ -54,7 +58,7 @@ const AddNewFeedModal = () => {
                         {success}
                     </Message>)
                 }
-                <AddFeedForm setMessages={setMessages} />
+                <AddFeedForm setMessages={setMessages} user={user} />
             </FormContainer>
         </ReactModal>
     );
