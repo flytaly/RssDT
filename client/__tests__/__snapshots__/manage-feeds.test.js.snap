@@ -87,6 +87,42 @@ exports[`Manage feeds should match snapshot 1`] = `
   font-size: 1.8rem;
 }
 
+.c10 {
+  background-color: hsl(0,0%,60%);
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 5px;
+  min-width: 7rem;
+  font-size: 1.3rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: hsl(200,100%,40%);
+  margin-top: 1rem;
+}
+
+.c10:focus,
+.c10:hover {
+  background-color: hsl(0,0%,45%);
+}
+
+.c10:active {
+  color: hsl(0,0%,90%);
+}
+
+.c10:focus,
+.c10:hover {
+  background-color: hsl(200,100%,30%);
+}
+
+.c10:active {
+  color: hsl(200,100%,60%);
+}
+
 @media all and (max-width:) {
   .c3 {
     grid-template-columns: 1fr;
@@ -235,5 +271,11 @@ exports[`Manage feeds should match snapshot 1`] = `
       </div>
     </li>
   </ul>
+  <button
+    class="c10"
+    type="button"
+  >
+    Add new feed
+  </button>
 </main>
 `;

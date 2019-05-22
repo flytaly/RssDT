@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useApolloClient } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import FeedItems from './feed-items';
-import LoginPage from '../../pages/login';
 
 const feedFragment = gql`
     fragment feed on UserFeed {

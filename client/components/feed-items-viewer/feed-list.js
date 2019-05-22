@@ -6,6 +6,9 @@ import { withRouter } from 'next/router';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import { MY_FEEDS_QUERY } from '../../queries';
+import plusIcon from '../../static/plus.svg';
+import { NoStylesButton } from '../styled/buttons';
+import { useDispatch, types } from '../state';
 
 const StyledFeedList = styled.ul`
     display: flex;
@@ -13,17 +16,17 @@ const StyledFeedList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
-    li {
-        padding: 2px 1rem 2px 1.5rem;
-        overflow-x: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-    li:hover {
+`;
+
+const StyledLi = styled.li`
+    padding: 2px 1rem 2px 1.5rem;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &:hover {
         background-color: ${props => props.theme.feedListHoverBgColor};
     }
-
-    li.active:not(:hover) {
+    &.active:not(:hover) {
         background-color: ${props => props.theme.feedListActiveBgColor};
     }
     a {
@@ -31,9 +34,27 @@ const StyledFeedList = styled.ul`
         text-decoration: none;
     }
 `;
+const AddFeedButton = styled.li`
+    align-self: center;
+    margin-top: 1rem;
+    :hover {
+        background-color: none;
+    }
+`;
+
+export const Img = styled.img`
+    height: 1.3rem;
+`;
+
+export const Button = styled(NoStylesButton)`
+    margin: 0 0.5rem 0 0;
+    font-size: 1.3rem;
+    color: ${props => props.theme.feedListFontColor};
+`;
 
 function FeedList({ linkClickHandler, router }) {
     const { id: activeId } = router.query;
+    const dispatch = useDispatch();
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
     const feeds = get(data, 'myFeeds', []);
     if (loading) return <div>Loading...</div>;
@@ -44,14 +65,19 @@ function FeedList({ linkClickHandler, router }) {
             {feeds.map((feedInfo) => {
                 const { id, feed: { title, url } } = feedInfo;
                 return (
-                    <li key={id} className={activeId === id ? 'active' : null}>
+                    <StyledLi key={id} className={activeId === id ? 'active' : null}>
                         <Link href={`/feeds/view?id=${id}`}>
                             <a href={`/feeds/view?id=${id}`} onClick={linkClickHandler}>
                                 {title || url}
                             </a>
                         </Link>
-                    </li>);
+                    </StyledLi>);
             })}
+            <AddFeedButton>
+                <Button onClick={() => { dispatch({ type: types.toggleNewFeedModal }); }}>
+                    <Img src={plusIcon} alt="Add new feed" title="Add new feed" />
+                </Button>
+            </AddFeedButton>
         </StyledFeedList>
     );
 }

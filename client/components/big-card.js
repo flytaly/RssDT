@@ -1,6 +1,8 @@
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import BigCardHeader from './big-card-header';
+import AddFeedModal from './add-feed-modal';
 
 const StyledBigCard = styled.div`
     display: flex;
@@ -19,6 +21,7 @@ const BigCard = ({ page, children }) => (
     <StyledBigCard id="bigCard">
         <BigCardHeader page={page} />
         {children}
+        <AddFeedModal />
     </StyledBigCard>
 );
 

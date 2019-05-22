@@ -89,6 +89,18 @@ export const GreenButtonLink = styled(Button).attrs({ as: 'a' })`
     }
 `;
 
+export const BlueButton = styled(Button).attrs({ type: 'button' })`
+    background-color: hsl(200, 100%, 40%);
+    :focus,
+    :hover{
+        background-color: hsl(200, 100%, 30%);
+    }
+    :active{
+        color: hsl(200, 100%, 60%);
+    }
+`;
+
+
 export const CancelButton = styled(Button)`
 
 `;
