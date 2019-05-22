@@ -3,6 +3,7 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import Meta from './meta';
 import theme from './themes/default';
+import { StateProvider } from './state';
 
 const StyledPage = styled.div`
   color: black;
@@ -28,11 +29,13 @@ const GlobalStyle = createGlobalStyle`
 
 const Page = ({ children }) => (
     <ThemeProvider theme={theme}>
-        <StyledPage>
-            <GlobalStyle />
-            <Meta />
-            {children}
-        </StyledPage>
+        <StateProvider>
+            <StyledPage>
+                <GlobalStyle />
+                <Meta />
+                {children}
+            </StyledPage>
+        </StateProvider>
     </ThemeProvider>
 );
 
