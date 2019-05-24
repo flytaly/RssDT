@@ -18,11 +18,15 @@ const ADD_FEED_MUTATION = gql`
     $email: String!
     $url: String!
     $period: DigestSchedule
+    $locale: String
+    $timeZone: String
   ) {
     addFeed(
         email: $email
         feedUrl: $url
         feedSchedule: $period
+        locale: $locale
+        timeZone: $timeZone
     ) {
         message
     }
@@ -57,10 +61,17 @@ const AddFeedForm = ({ setMessages, user }) => {
         <Formik
             initialValues={{ email: user.email, url: 'http://', period: periods.DAILY }}
             validationSchema={AddFeedSchema}
-            onSubmit={async (variables, { setSubmitting, resetForm }) => {
-                const { email, url, period } = variables;
+            onSubmit={async (formVariables, { setSubmitting, resetForm }) => {
+                const { email, url, period } = formVariables;
                 try {
-                    const { data } = await addFeed({ variables: { email, url, period } });
+                    const variables = { email, url, period };
+
+                    if (Intl && Intl.DateTimeFormat) {
+                        const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
+                        variables.timeZone = timeZone;
+                        variables.locale = locale;
+                    }
+                    const { data } = await addFeed({ variables });
                     setMessages({ success: data.addFeed.message });
                     resetForm();
                 } catch (error) {

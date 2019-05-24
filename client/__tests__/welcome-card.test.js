@@ -13,6 +13,8 @@ const values = {
     url: 'http://test.com/feed',
     email: 'email@email.com',
     period: periods.DAILY,
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    locale: Intl.DateTimeFormat().resolvedOptions().locale,
 };
 const successMsg = 'success';
 const mocks = [{
