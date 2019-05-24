@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const nanoid = require('nanoid');
 const normalizeUrl = require('normalize-url');
 const { getFeedStream, checkFeedInfo } = require('../../feed-parser');
@@ -7,7 +8,8 @@ const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
 
 async function addFeed(parent, args, ctx) {
     let feedMeta = {};
-    const { feedSchedule: schedule } = args;
+    const { feedSchedule: schedule, locale, timeZone } = args;
+
     const email = args.email.trim().toLowerCase();
     let url;
     try {
@@ -18,6 +20,9 @@ async function addFeed(parent, args, ctx) {
     }
     if (!email) { // TODO: add additional validations
         throw new Error('Not valid argument: email');
+    }
+    if (timeZone && !moment.tz.zone(timeZone)) {
+        return new Error('Not valid argument: timeZone');
     }
 
     // check if url is a valid feed before adding it to db
@@ -78,9 +83,13 @@ async function addFeed(parent, args, ctx) {
                 email,
                 permissions: { set: ['USER'] },
                 feeds: createNewUserFeed,
+                ...(locale ? { locale } : {}),
+                ...(timeZone ? { timeZone } : {}),
             },
             update: {
                 feeds: upsertUserFeed,
+                ...(locale ? { locale } : {}),
+                ...(timeZone ? { timeZone } : {}),
             },
         });
     } catch (e) {

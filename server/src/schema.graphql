@@ -10,6 +10,8 @@ type User {
     email: String!
     feeds: [UserFeed!]!
     permissions: [Permission!]!
+    locale: String
+    timeZone: String
     createdAt: DateTime!
 }
 
@@ -50,7 +52,7 @@ type Mutation {
     Add feed to user with given email.
     If user doesn't exist the mutation will create a new user.
     """
-    addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule): Message!
+    addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule, locale: String, timeZone: String): Message!
     confirmSubscription(token: String!): Message!
     deleteMyFeed(id: ID!): UserFeed! @isAuthenticated
     requestPasswordChange(email: String!): Message!

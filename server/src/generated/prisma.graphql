@@ -1,3347 +1,2267 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Fri Apr 26 2019 22:34:13 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri May 24 2019 18:18:16 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
-    count: Int!
+  count: Int!
 }
 
 type AggregateFeedItem {
-    count: Int!
+  count: Int!
 }
 
 type AggregateItemEnclosure {
-    count: Int!
+  count: Int!
 }
 
 type AggregateUser {
-    count: Int!
+  count: Int!
 }
 
 type AggregateUserFeed {
-    count: Int!
+  count: Int!
 }
 
 type BatchPayload {
-    """
-    The number of nodes that have been affected by the Batch operation.
-    """
-    count: Long!
+  """The number of nodes that have been affected by the Batch operation."""
+  count: Long!
 }
 
 scalar DateTime
 
 enum DigestSchedule {
-    REALTIME
-    EVERYHOUR
-    EVERY2HOURS
-    EVERY3HOURS
-    EVERY6HOURS
-    EVERY12HOURS
-    DAILY
+  REALTIME
+  EVERYHOUR
+  EVERY2HOURS
+  EVERY3HOURS
+  EVERY6HOURS
+  EVERY12HOURS
+  DAILY
 }
 
 type Feed implements Node {
-    id: ID!
-    url: String!
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    userFeeds(
-        where: UserFeedWhereInput
-        orderBy: UserFeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [UserFeed!]
-    items(
-        where: FeedItemWhereInput
-        orderBy: FeedItemOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [FeedItem!]
-    lastSuccessful: DateTime
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  url: String!
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
+  items(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FeedItem!]
+  lastSuccessful: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type FeedConnection {
-    """
-    Information to aid in pagination.
-    """
-    pageInfo: PageInfo!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-    """
-    A list of edges.
-    """
-    edges: [FeedEdge]!
-    aggregate: AggregateFeed!
+  """A list of edges."""
+  edges: [FeedEdge]!
+  aggregate: AggregateFeed!
 }
 
 input FeedCreateInput {
-    id: ID
-    url: String!
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    userFeeds: UserFeedCreateManyWithoutFeedInput
-    items: FeedItemCreateManyWithoutFeedInput
+  id: ID
+  url: String!
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  userFeeds: UserFeedCreateManyWithoutFeedInput
+  items: FeedItemCreateManyWithoutFeedInput
 }
 
 input FeedCreateOneWithoutItemsInput {
-    create: FeedCreateWithoutItemsInput
-    connect: FeedWhereUniqueInput
+  create: FeedCreateWithoutItemsInput
+  connect: FeedWhereUniqueInput
 }
 
 input FeedCreateOneWithoutUserFeedsInput {
-    create: FeedCreateWithoutUserFeedsInput
-    connect: FeedWhereUniqueInput
+  create: FeedCreateWithoutUserFeedsInput
+  connect: FeedWhereUniqueInput
 }
 
 input FeedCreateWithoutItemsInput {
-    id: ID
-    url: String!
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    userFeeds: UserFeedCreateManyWithoutFeedInput
+  id: ID
+  url: String!
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  userFeeds: UserFeedCreateManyWithoutFeedInput
 }
 
 input FeedCreateWithoutUserFeedsInput {
-    id: ID
-    url: String!
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    items: FeedItemCreateManyWithoutFeedInput
+  id: ID
+  url: String!
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  items: FeedItemCreateManyWithoutFeedInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type FeedEdge {
-    """
-    The item at the end of the edge.
-    """
-    node: Feed!
+  """The item at the end of the edge."""
+  node: Feed!
 
-    """
-    A cursor for use in pagination.
-    """
-    cursor: String!
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 type FeedItem implements Node {
-    id: ID!
-    feed: Feed
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String!
-    imageUrl: String
-    enclosures(
-        where: ItemEnclosureWhereInput
-        orderBy: ItemEnclosureOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [ItemEnclosure!]
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  feed: Feed
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  enclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type FeedItemConnection {
-    """
-    Information to aid in pagination.
-    """
-    pageInfo: PageInfo!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-    """
-    A list of edges.
-    """
-    edges: [FeedItemEdge]!
-    aggregate: AggregateFeedItem!
+  """A list of edges."""
+  edges: [FeedItemEdge]!
+  aggregate: AggregateFeedItem!
 }
 
 input FeedItemCreateInput {
-    id: ID
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String!
-    imageUrl: String
-    feed: FeedCreateOneWithoutItemsInput
-    enclosures: ItemEnclosureCreateManyWithoutItemInput
+  id: ID
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  feed: FeedCreateOneWithoutItemsInput
+  enclosures: ItemEnclosureCreateManyWithoutItemInput
 }
 
 input FeedItemCreateManyWithoutFeedInput {
-    create: [FeedItemCreateWithoutFeedInput!]
-    connect: [FeedItemWhereUniqueInput!]
+  create: [FeedItemCreateWithoutFeedInput!]
+  connect: [FeedItemWhereUniqueInput!]
 }
 
 input FeedItemCreateOneWithoutEnclosuresInput {
-    create: FeedItemCreateWithoutEnclosuresInput
-    connect: FeedItemWhereUniqueInput
+  create: FeedItemCreateWithoutEnclosuresInput
+  connect: FeedItemWhereUniqueInput
 }
 
 input FeedItemCreateWithoutEnclosuresInput {
-    id: ID
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String!
-    imageUrl: String
-    feed: FeedCreateOneWithoutItemsInput
+  id: ID
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  feed: FeedCreateOneWithoutItemsInput
 }
 
 input FeedItemCreateWithoutFeedInput {
-    id: ID
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String!
-    imageUrl: String
-    enclosures: ItemEnclosureCreateManyWithoutItemInput
+  id: ID
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  enclosures: ItemEnclosureCreateManyWithoutItemInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type FeedItemEdge {
-    """
-    The item at the end of the edge.
-    """
-    node: FeedItem!
+  """The item at the end of the edge."""
+  node: FeedItem!
 
-    """
-    A cursor for use in pagination.
-    """
-    cursor: String!
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 enum FeedItemOrderByInput {
-    id_ASC
-    id_DESC
-    title_ASC
-    title_DESC
-    description_ASC
-    description_DESC
-    summary_ASC
-    summary_DESC
-    pubDate_ASC
-    pubDate_DESC
-    link_ASC
-    link_DESC
-    guid_ASC
-    guid_DESC
-    imageUrl_ASC
-    imageUrl_DESC
-    createdAt_ASC
-    createdAt_DESC
-    updatedAt_ASC
-    updatedAt_DESC
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  summary_ASC
+  summary_DESC
+  pubDate_ASC
+  pubDate_DESC
+  link_ASC
+  link_DESC
+  guid_ASC
+  guid_DESC
+  imageUrl_ASC
+  imageUrl_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type FeedItemPreviousValues {
-    id: ID!
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String!
-    imageUrl: String
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String!
+  imageUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input FeedItemScalarWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [FeedItemScalarWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [FeedItemScalarWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [FeedItemScalarWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    title: String
-
-    """
-    All values that are not equal to given value.
-    """
-    title_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    title_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    title_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    title_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    title_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    title_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    title_gte: String
-
-    """
-    All values containing the given string.
-    """
-    title_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    title_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    title_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    title_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    title_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    title_not_ends_with: String
-    description: String
-
-    """
-    All values that are not equal to given value.
-    """
-    description_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    description_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    description_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    description_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    description_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    description_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    description_gte: String
-
-    """
-    All values containing the given string.
-    """
-    description_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    description_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    description_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    description_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    description_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    description_not_ends_with: String
-    summary: String
-
-    """
-    All values that are not equal to given value.
-    """
-    summary_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    summary_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    summary_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    summary_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    summary_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    summary_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    summary_gte: String
-
-    """
-    All values containing the given string.
-    """
-    summary_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    summary_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    summary_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    summary_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    summary_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    summary_not_ends_with: String
-    pubDate: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    pubDate_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    pubDate_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    pubDate_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    pubDate_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    pubDate_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    pubDate_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    pubDate_gte: DateTime
-    link: String
-
-    """
-    All values that are not equal to given value.
-    """
-    link_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    link_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    link_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    link_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    link_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    link_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    link_gte: String
-
-    """
-    All values containing the given string.
-    """
-    link_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    link_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    link_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    link_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    link_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    link_not_ends_with: String
-    guid: String
-
-    """
-    All values that are not equal to given value.
-    """
-    guid_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    guid_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    guid_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    guid_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    guid_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    guid_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    guid_gte: String
-
-    """
-    All values containing the given string.
-    """
-    guid_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    guid_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    guid_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    guid_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    guid_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    guid_not_ends_with: String
-    imageUrl: String
-
-    """
-    All values that are not equal to given value.
-    """
-    imageUrl_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    imageUrl_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    imageUrl_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    imageUrl_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    imageUrl_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    imageUrl_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    imageUrl_gte: String
-
-    """
-    All values containing the given string.
-    """
-    imageUrl_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    imageUrl_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    imageUrl_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    imageUrl_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    imageUrl_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    imageUrl_not_ends_with: String
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
+  """Logical AND on all given filters."""
+  AND: [FeedItemScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FeedItemScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedItemScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  summary: String
+
+  """All values that are not equal to given value."""
+  summary_not: String
+
+  """All values that are contained in given list."""
+  summary_in: [String!]
+
+  """All values that are not contained in given list."""
+  summary_not_in: [String!]
+
+  """All values less than the given value."""
+  summary_lt: String
+
+  """All values less than or equal the given value."""
+  summary_lte: String
+
+  """All values greater than the given value."""
+  summary_gt: String
+
+  """All values greater than or equal the given value."""
+  summary_gte: String
+
+  """All values containing the given string."""
+  summary_contains: String
+
+  """All values not containing the given string."""
+  summary_not_contains: String
+
+  """All values starting with the given string."""
+  summary_starts_with: String
+
+  """All values not starting with the given string."""
+  summary_not_starts_with: String
+
+  """All values ending with the given string."""
+  summary_ends_with: String
+
+  """All values not ending with the given string."""
+  summary_not_ends_with: String
+  pubDate: DateTime
+
+  """All values that are not equal to given value."""
+  pubDate_not: DateTime
+
+  """All values that are contained in given list."""
+  pubDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  pubDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  pubDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  pubDate_lte: DateTime
+
+  """All values greater than the given value."""
+  pubDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  pubDate_gte: DateTime
+  link: String
+
+  """All values that are not equal to given value."""
+  link_not: String
+
+  """All values that are contained in given list."""
+  link_in: [String!]
+
+  """All values that are not contained in given list."""
+  link_not_in: [String!]
+
+  """All values less than the given value."""
+  link_lt: String
+
+  """All values less than or equal the given value."""
+  link_lte: String
+
+  """All values greater than the given value."""
+  link_gt: String
+
+  """All values greater than or equal the given value."""
+  link_gte: String
+
+  """All values containing the given string."""
+  link_contains: String
+
+  """All values not containing the given string."""
+  link_not_contains: String
+
+  """All values starting with the given string."""
+  link_starts_with: String
+
+  """All values not starting with the given string."""
+  link_not_starts_with: String
+
+  """All values ending with the given string."""
+  link_ends_with: String
+
+  """All values not ending with the given string."""
+  link_not_ends_with: String
+  guid: String
+
+  """All values that are not equal to given value."""
+  guid_not: String
+
+  """All values that are contained in given list."""
+  guid_in: [String!]
+
+  """All values that are not contained in given list."""
+  guid_not_in: [String!]
+
+  """All values less than the given value."""
+  guid_lt: String
+
+  """All values less than or equal the given value."""
+  guid_lte: String
+
+  """All values greater than the given value."""
+  guid_gt: String
+
+  """All values greater than or equal the given value."""
+  guid_gte: String
+
+  """All values containing the given string."""
+  guid_contains: String
+
+  """All values not containing the given string."""
+  guid_not_contains: String
+
+  """All values starting with the given string."""
+  guid_starts_with: String
+
+  """All values not starting with the given string."""
+  guid_not_starts_with: String
+
+  """All values ending with the given string."""
+  guid_ends_with: String
+
+  """All values not ending with the given string."""
+  guid_not_ends_with: String
+  imageUrl: String
+
+  """All values that are not equal to given value."""
+  imageUrl_not: String
+
+  """All values that are contained in given list."""
+  imageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imageUrl_lte: String
+
+  """All values greater than the given value."""
+  imageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imageUrl_gte: String
+
+  """All values containing the given string."""
+  imageUrl_contains: String
+
+  """All values not containing the given string."""
+  imageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imageUrl_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type FeedItemSubscriptionPayload {
-    mutation: MutationType!
-    node: FeedItem
-    updatedFields: [String!]
-    previousValues: FeedItemPreviousValues
+  mutation: MutationType!
+  node: FeedItem
+  updatedFields: [String!]
+  previousValues: FeedItemPreviousValues
 }
 
 input FeedItemSubscriptionWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [FeedItemSubscriptionWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [FeedItemSubscriptionWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [FeedItemSubscriptionWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [FeedItemSubscriptionWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [FeedItemSubscriptionWhereInput!]
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedItemSubscriptionWhereInput!]
 
-    """
-    The subscription event gets dispatched when it's listed in mutation_in
-    """
-    mutation_in: [MutationType!]
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
 
-    """
-    The subscription event gets only dispatched when one of the updated fields names is included in this list
-    """
-    updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
 
-    """
-    The subscription event gets only dispatched when all of the field names included in this list have been updated
-    """
-    updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
 
-    """
-    The subscription event gets only dispatched when some of the field names included in this list have been updated
-    """
-    updatedFields_contains_some: [String!]
-    node: FeedItemWhereInput
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FeedItemWhereInput
 }
 
 input FeedItemUpdateInput {
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String
-    imageUrl: String
-    feed: FeedUpdateOneWithoutItemsInput
-    enclosures: ItemEnclosureUpdateManyWithoutItemInput
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  feed: FeedUpdateOneWithoutItemsInput
+  enclosures: ItemEnclosureUpdateManyWithoutItemInput
 }
 
 input FeedItemUpdateManyDataInput {
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String
-    imageUrl: String
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
 }
 
 input FeedItemUpdateManyMutationInput {
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String
-    imageUrl: String
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
 }
 
 input FeedItemUpdateManyWithoutFeedInput {
-    create: [FeedItemCreateWithoutFeedInput!]
-    connect: [FeedItemWhereUniqueInput!]
-    set: [FeedItemWhereUniqueInput!]
-    disconnect: [FeedItemWhereUniqueInput!]
-    delete: [FeedItemWhereUniqueInput!]
-    update: [FeedItemUpdateWithWhereUniqueWithoutFeedInput!]
-    updateMany: [FeedItemUpdateManyWithWhereNestedInput!]
-    deleteMany: [FeedItemScalarWhereInput!]
-    upsert: [FeedItemUpsertWithWhereUniqueWithoutFeedInput!]
+  create: [FeedItemCreateWithoutFeedInput!]
+  connect: [FeedItemWhereUniqueInput!]
+  set: [FeedItemWhereUniqueInput!]
+  disconnect: [FeedItemWhereUniqueInput!]
+  delete: [FeedItemWhereUniqueInput!]
+  update: [FeedItemUpdateWithWhereUniqueWithoutFeedInput!]
+  updateMany: [FeedItemUpdateManyWithWhereNestedInput!]
+  deleteMany: [FeedItemScalarWhereInput!]
+  upsert: [FeedItemUpsertWithWhereUniqueWithoutFeedInput!]
 }
 
 input FeedItemUpdateManyWithWhereNestedInput {
-    where: FeedItemScalarWhereInput!
-    data: FeedItemUpdateManyDataInput!
+  where: FeedItemScalarWhereInput!
+  data: FeedItemUpdateManyDataInput!
 }
 
 input FeedItemUpdateOneRequiredWithoutEnclosuresInput {
-    create: FeedItemCreateWithoutEnclosuresInput
-    connect: FeedItemWhereUniqueInput
-    update: FeedItemUpdateWithoutEnclosuresDataInput
-    upsert: FeedItemUpsertWithoutEnclosuresInput
+  create: FeedItemCreateWithoutEnclosuresInput
+  connect: FeedItemWhereUniqueInput
+  update: FeedItemUpdateWithoutEnclosuresDataInput
+  upsert: FeedItemUpsertWithoutEnclosuresInput
 }
 
 input FeedItemUpdateWithoutEnclosuresDataInput {
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String
-    imageUrl: String
-    feed: FeedUpdateOneWithoutItemsInput
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  feed: FeedUpdateOneWithoutItemsInput
 }
 
 input FeedItemUpdateWithoutFeedDataInput {
-    title: String
-    description: String
-    summary: String
-    pubDate: DateTime
-    link: String
-    guid: String
-    imageUrl: String
-    enclosures: ItemEnclosureUpdateManyWithoutItemInput
+  title: String
+  description: String
+  summary: String
+  pubDate: DateTime
+  link: String
+  guid: String
+  imageUrl: String
+  enclosures: ItemEnclosureUpdateManyWithoutItemInput
 }
 
 input FeedItemUpdateWithWhereUniqueWithoutFeedInput {
-    where: FeedItemWhereUniqueInput!
-    data: FeedItemUpdateWithoutFeedDataInput!
+  where: FeedItemWhereUniqueInput!
+  data: FeedItemUpdateWithoutFeedDataInput!
 }
 
 input FeedItemUpsertWithoutEnclosuresInput {
-    update: FeedItemUpdateWithoutEnclosuresDataInput!
-    create: FeedItemCreateWithoutEnclosuresInput!
+  update: FeedItemUpdateWithoutEnclosuresDataInput!
+  create: FeedItemCreateWithoutEnclosuresInput!
 }
 
 input FeedItemUpsertWithWhereUniqueWithoutFeedInput {
-    where: FeedItemWhereUniqueInput!
-    update: FeedItemUpdateWithoutFeedDataInput!
-    create: FeedItemCreateWithoutFeedInput!
+  where: FeedItemWhereUniqueInput!
+  update: FeedItemUpdateWithoutFeedDataInput!
+  create: FeedItemCreateWithoutFeedInput!
 }
 
 input FeedItemWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [FeedItemWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [FeedItemWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [FeedItemWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    title: String
-
-    """
-    All values that are not equal to given value.
-    """
-    title_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    title_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    title_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    title_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    title_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    title_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    title_gte: String
-
-    """
-    All values containing the given string.
-    """
-    title_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    title_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    title_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    title_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    title_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    title_not_ends_with: String
-    description: String
-
-    """
-    All values that are not equal to given value.
-    """
-    description_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    description_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    description_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    description_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    description_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    description_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    description_gte: String
-
-    """
-    All values containing the given string.
-    """
-    description_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    description_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    description_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    description_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    description_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    description_not_ends_with: String
-    summary: String
-
-    """
-    All values that are not equal to given value.
-    """
-    summary_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    summary_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    summary_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    summary_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    summary_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    summary_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    summary_gte: String
-
-    """
-    All values containing the given string.
-    """
-    summary_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    summary_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    summary_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    summary_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    summary_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    summary_not_ends_with: String
-    pubDate: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    pubDate_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    pubDate_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    pubDate_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    pubDate_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    pubDate_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    pubDate_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    pubDate_gte: DateTime
-    link: String
-
-    """
-    All values that are not equal to given value.
-    """
-    link_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    link_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    link_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    link_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    link_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    link_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    link_gte: String
-
-    """
-    All values containing the given string.
-    """
-    link_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    link_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    link_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    link_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    link_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    link_not_ends_with: String
-    guid: String
-
-    """
-    All values that are not equal to given value.
-    """
-    guid_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    guid_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    guid_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    guid_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    guid_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    guid_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    guid_gte: String
-
-    """
-    All values containing the given string.
-    """
-    guid_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    guid_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    guid_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    guid_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    guid_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    guid_not_ends_with: String
-    imageUrl: String
-
-    """
-    All values that are not equal to given value.
-    """
-    imageUrl_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    imageUrl_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    imageUrl_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    imageUrl_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    imageUrl_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    imageUrl_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    imageUrl_gte: String
-
-    """
-    All values containing the given string.
-    """
-    imageUrl_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    imageUrl_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    imageUrl_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    imageUrl_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    imageUrl_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    imageUrl_not_ends_with: String
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
-    feed: FeedWhereInput
-    enclosures_every: ItemEnclosureWhereInput
-    enclosures_some: ItemEnclosureWhereInput
-    enclosures_none: ItemEnclosureWhereInput
+  """Logical AND on all given filters."""
+  AND: [FeedItemWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FeedItemWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedItemWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  summary: String
+
+  """All values that are not equal to given value."""
+  summary_not: String
+
+  """All values that are contained in given list."""
+  summary_in: [String!]
+
+  """All values that are not contained in given list."""
+  summary_not_in: [String!]
+
+  """All values less than the given value."""
+  summary_lt: String
+
+  """All values less than or equal the given value."""
+  summary_lte: String
+
+  """All values greater than the given value."""
+  summary_gt: String
+
+  """All values greater than or equal the given value."""
+  summary_gte: String
+
+  """All values containing the given string."""
+  summary_contains: String
+
+  """All values not containing the given string."""
+  summary_not_contains: String
+
+  """All values starting with the given string."""
+  summary_starts_with: String
+
+  """All values not starting with the given string."""
+  summary_not_starts_with: String
+
+  """All values ending with the given string."""
+  summary_ends_with: String
+
+  """All values not ending with the given string."""
+  summary_not_ends_with: String
+  pubDate: DateTime
+
+  """All values that are not equal to given value."""
+  pubDate_not: DateTime
+
+  """All values that are contained in given list."""
+  pubDate_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  pubDate_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  pubDate_lt: DateTime
+
+  """All values less than or equal the given value."""
+  pubDate_lte: DateTime
+
+  """All values greater than the given value."""
+  pubDate_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  pubDate_gte: DateTime
+  link: String
+
+  """All values that are not equal to given value."""
+  link_not: String
+
+  """All values that are contained in given list."""
+  link_in: [String!]
+
+  """All values that are not contained in given list."""
+  link_not_in: [String!]
+
+  """All values less than the given value."""
+  link_lt: String
+
+  """All values less than or equal the given value."""
+  link_lte: String
+
+  """All values greater than the given value."""
+  link_gt: String
+
+  """All values greater than or equal the given value."""
+  link_gte: String
+
+  """All values containing the given string."""
+  link_contains: String
+
+  """All values not containing the given string."""
+  link_not_contains: String
+
+  """All values starting with the given string."""
+  link_starts_with: String
+
+  """All values not starting with the given string."""
+  link_not_starts_with: String
+
+  """All values ending with the given string."""
+  link_ends_with: String
+
+  """All values not ending with the given string."""
+  link_not_ends_with: String
+  guid: String
+
+  """All values that are not equal to given value."""
+  guid_not: String
+
+  """All values that are contained in given list."""
+  guid_in: [String!]
+
+  """All values that are not contained in given list."""
+  guid_not_in: [String!]
+
+  """All values less than the given value."""
+  guid_lt: String
+
+  """All values less than or equal the given value."""
+  guid_lte: String
+
+  """All values greater than the given value."""
+  guid_gt: String
+
+  """All values greater than or equal the given value."""
+  guid_gte: String
+
+  """All values containing the given string."""
+  guid_contains: String
+
+  """All values not containing the given string."""
+  guid_not_contains: String
+
+  """All values starting with the given string."""
+  guid_starts_with: String
+
+  """All values not starting with the given string."""
+  guid_not_starts_with: String
+
+  """All values ending with the given string."""
+  guid_ends_with: String
+
+  """All values not ending with the given string."""
+  guid_not_ends_with: String
+  imageUrl: String
+
+  """All values that are not equal to given value."""
+  imageUrl_not: String
+
+  """All values that are contained in given list."""
+  imageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imageUrl_lte: String
+
+  """All values greater than the given value."""
+  imageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imageUrl_gte: String
+
+  """All values containing the given string."""
+  imageUrl_contains: String
+
+  """All values not containing the given string."""
+  imageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imageUrl_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  feed: FeedWhereInput
+  enclosures_every: ItemEnclosureWhereInput
+  enclosures_some: ItemEnclosureWhereInput
+  enclosures_none: ItemEnclosureWhereInput
 }
 
 input FeedItemWhereUniqueInput {
-    id: ID
+  id: ID
 }
 
 enum FeedOrderByInput {
-    id_ASC
-    id_DESC
-    url_ASC
-    url_DESC
-    link_ASC
-    link_DESC
-    title_ASC
-    title_DESC
-    description_ASC
-    description_DESC
-    activated_ASC
-    activated_DESC
-    language_ASC
-    language_DESC
-    imageUrl_ASC
-    imageUrl_DESC
-    imageTitle_ASC
-    imageTitle_DESC
-    lastSuccessful_ASC
-    lastSuccessful_DESC
-    createdAt_ASC
-    createdAt_DESC
-    updatedAt_ASC
-    updatedAt_DESC
+  id_ASC
+  id_DESC
+  url_ASC
+  url_DESC
+  link_ASC
+  link_DESC
+  title_ASC
+  title_DESC
+  description_ASC
+  description_DESC
+  activated_ASC
+  activated_DESC
+  language_ASC
+  language_DESC
+  imageUrl_ASC
+  imageUrl_DESC
+  imageTitle_ASC
+  imageTitle_DESC
+  lastSuccessful_ASC
+  lastSuccessful_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type FeedPreviousValues {
-    id: ID!
-    url: String!
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  url: String!
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type FeedSubscriptionPayload {
-    mutation: MutationType!
-    node: Feed
-    updatedFields: [String!]
-    previousValues: FeedPreviousValues
+  mutation: MutationType!
+  node: Feed
+  updatedFields: [String!]
+  previousValues: FeedPreviousValues
 }
 
 input FeedSubscriptionWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [FeedSubscriptionWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [FeedSubscriptionWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [FeedSubscriptionWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [FeedSubscriptionWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [FeedSubscriptionWhereInput!]
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedSubscriptionWhereInput!]
 
-    """
-    The subscription event gets dispatched when it's listed in mutation_in
-    """
-    mutation_in: [MutationType!]
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
 
-    """
-    The subscription event gets only dispatched when one of the updated fields names is included in this list
-    """
-    updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
 
-    """
-    The subscription event gets only dispatched when all of the field names included in this list have been updated
-    """
-    updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
 
-    """
-    The subscription event gets only dispatched when some of the field names included in this list have been updated
-    """
-    updatedFields_contains_some: [String!]
-    node: FeedWhereInput
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: FeedWhereInput
 }
 
 input FeedUpdateInput {
-    url: String
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    userFeeds: UserFeedUpdateManyWithoutFeedInput
-    items: FeedItemUpdateManyWithoutFeedInput
+  url: String
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  userFeeds: UserFeedUpdateManyWithoutFeedInput
+  items: FeedItemUpdateManyWithoutFeedInput
 }
 
 input FeedUpdateManyMutationInput {
-    url: String
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
+  url: String
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
 }
 
 input FeedUpdateOneRequiredWithoutUserFeedsInput {
-    create: FeedCreateWithoutUserFeedsInput
-    connect: FeedWhereUniqueInput
-    update: FeedUpdateWithoutUserFeedsDataInput
-    upsert: FeedUpsertWithoutUserFeedsInput
+  create: FeedCreateWithoutUserFeedsInput
+  connect: FeedWhereUniqueInput
+  update: FeedUpdateWithoutUserFeedsDataInput
+  upsert: FeedUpsertWithoutUserFeedsInput
 }
 
 input FeedUpdateOneWithoutItemsInput {
-    create: FeedCreateWithoutItemsInput
-    connect: FeedWhereUniqueInput
-    disconnect: Boolean
-    delete: Boolean
-    update: FeedUpdateWithoutItemsDataInput
-    upsert: FeedUpsertWithoutItemsInput
+  create: FeedCreateWithoutItemsInput
+  connect: FeedWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: FeedUpdateWithoutItemsDataInput
+  upsert: FeedUpsertWithoutItemsInput
 }
 
 input FeedUpdateWithoutItemsDataInput {
-    url: String
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    userFeeds: UserFeedUpdateManyWithoutFeedInput
+  url: String
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  userFeeds: UserFeedUpdateManyWithoutFeedInput
 }
 
 input FeedUpdateWithoutUserFeedsDataInput {
-    url: String
-    link: String
-    title: String
-    description: String
-    activated: Boolean
-    language: String
-    imageUrl: String
-    imageTitle: String
-    lastSuccessful: DateTime
-    items: FeedItemUpdateManyWithoutFeedInput
+  url: String
+  link: String
+  title: String
+  description: String
+  activated: Boolean
+  language: String
+  imageUrl: String
+  imageTitle: String
+  lastSuccessful: DateTime
+  items: FeedItemUpdateManyWithoutFeedInput
 }
 
 input FeedUpsertWithoutItemsInput {
-    update: FeedUpdateWithoutItemsDataInput!
-    create: FeedCreateWithoutItemsInput!
+  update: FeedUpdateWithoutItemsDataInput!
+  create: FeedCreateWithoutItemsInput!
 }
 
 input FeedUpsertWithoutUserFeedsInput {
-    update: FeedUpdateWithoutUserFeedsDataInput!
-    create: FeedCreateWithoutUserFeedsInput!
+  update: FeedUpdateWithoutUserFeedsDataInput!
+  create: FeedCreateWithoutUserFeedsInput!
 }
 
 input FeedWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [FeedWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [FeedWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [FeedWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    url: String
-
-    """
-    All values that are not equal to given value.
-    """
-    url_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    url_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    url_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    url_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    url_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    url_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    url_gte: String
-
-    """
-    All values containing the given string.
-    """
-    url_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    url_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    url_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    url_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    url_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    url_not_ends_with: String
-    link: String
-
-    """
-    All values that are not equal to given value.
-    """
-    link_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    link_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    link_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    link_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    link_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    link_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    link_gte: String
-
-    """
-    All values containing the given string.
-    """
-    link_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    link_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    link_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    link_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    link_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    link_not_ends_with: String
-    title: String
-
-    """
-    All values that are not equal to given value.
-    """
-    title_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    title_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    title_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    title_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    title_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    title_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    title_gte: String
-
-    """
-    All values containing the given string.
-    """
-    title_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    title_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    title_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    title_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    title_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    title_not_ends_with: String
-    description: String
-
-    """
-    All values that are not equal to given value.
-    """
-    description_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    description_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    description_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    description_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    description_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    description_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    description_gte: String
-
-    """
-    All values containing the given string.
-    """
-    description_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    description_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    description_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    description_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    description_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    description_not_ends_with: String
-    activated: Boolean
-
-    """
-    All values that are not equal to given value.
-    """
-    activated_not: Boolean
-    language: String
-
-    """
-    All values that are not equal to given value.
-    """
-    language_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    language_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    language_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    language_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    language_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    language_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    language_gte: String
-
-    """
-    All values containing the given string.
-    """
-    language_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    language_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    language_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    language_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    language_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    language_not_ends_with: String
-    imageUrl: String
-
-    """
-    All values that are not equal to given value.
-    """
-    imageUrl_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    imageUrl_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    imageUrl_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    imageUrl_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    imageUrl_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    imageUrl_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    imageUrl_gte: String
-
-    """
-    All values containing the given string.
-    """
-    imageUrl_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    imageUrl_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    imageUrl_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    imageUrl_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    imageUrl_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    imageUrl_not_ends_with: String
-    imageTitle: String
-
-    """
-    All values that are not equal to given value.
-    """
-    imageTitle_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    imageTitle_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    imageTitle_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    imageTitle_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    imageTitle_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    imageTitle_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    imageTitle_gte: String
-
-    """
-    All values containing the given string.
-    """
-    imageTitle_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    imageTitle_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    imageTitle_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    imageTitle_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    imageTitle_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    imageTitle_not_ends_with: String
-    lastSuccessful: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    lastSuccessful_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    lastSuccessful_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    lastSuccessful_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    lastSuccessful_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    lastSuccessful_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    lastSuccessful_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    lastSuccessful_gte: DateTime
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
-    userFeeds_every: UserFeedWhereInput
-    userFeeds_some: UserFeedWhereInput
-    userFeeds_none: UserFeedWhereInput
-    items_every: FeedItemWhereInput
-    items_some: FeedItemWhereInput
-    items_none: FeedItemWhereInput
+  """Logical AND on all given filters."""
+  AND: [FeedWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [FeedWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [FeedWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  link: String
+
+  """All values that are not equal to given value."""
+  link_not: String
+
+  """All values that are contained in given list."""
+  link_in: [String!]
+
+  """All values that are not contained in given list."""
+  link_not_in: [String!]
+
+  """All values less than the given value."""
+  link_lt: String
+
+  """All values less than or equal the given value."""
+  link_lte: String
+
+  """All values greater than the given value."""
+  link_gt: String
+
+  """All values greater than or equal the given value."""
+  link_gte: String
+
+  """All values containing the given string."""
+  link_contains: String
+
+  """All values not containing the given string."""
+  link_not_contains: String
+
+  """All values starting with the given string."""
+  link_starts_with: String
+
+  """All values not starting with the given string."""
+  link_not_starts_with: String
+
+  """All values ending with the given string."""
+  link_ends_with: String
+
+  """All values not ending with the given string."""
+  link_not_ends_with: String
+  title: String
+
+  """All values that are not equal to given value."""
+  title_not: String
+
+  """All values that are contained in given list."""
+  title_in: [String!]
+
+  """All values that are not contained in given list."""
+  title_not_in: [String!]
+
+  """All values less than the given value."""
+  title_lt: String
+
+  """All values less than or equal the given value."""
+  title_lte: String
+
+  """All values greater than the given value."""
+  title_gt: String
+
+  """All values greater than or equal the given value."""
+  title_gte: String
+
+  """All values containing the given string."""
+  title_contains: String
+
+  """All values not containing the given string."""
+  title_not_contains: String
+
+  """All values starting with the given string."""
+  title_starts_with: String
+
+  """All values not starting with the given string."""
+  title_not_starts_with: String
+
+  """All values ending with the given string."""
+  title_ends_with: String
+
+  """All values not ending with the given string."""
+  title_not_ends_with: String
+  description: String
+
+  """All values that are not equal to given value."""
+  description_not: String
+
+  """All values that are contained in given list."""
+  description_in: [String!]
+
+  """All values that are not contained in given list."""
+  description_not_in: [String!]
+
+  """All values less than the given value."""
+  description_lt: String
+
+  """All values less than or equal the given value."""
+  description_lte: String
+
+  """All values greater than the given value."""
+  description_gt: String
+
+  """All values greater than or equal the given value."""
+  description_gte: String
+
+  """All values containing the given string."""
+  description_contains: String
+
+  """All values not containing the given string."""
+  description_not_contains: String
+
+  """All values starting with the given string."""
+  description_starts_with: String
+
+  """All values not starting with the given string."""
+  description_not_starts_with: String
+
+  """All values ending with the given string."""
+  description_ends_with: String
+
+  """All values not ending with the given string."""
+  description_not_ends_with: String
+  activated: Boolean
+
+  """All values that are not equal to given value."""
+  activated_not: Boolean
+  language: String
+
+  """All values that are not equal to given value."""
+  language_not: String
+
+  """All values that are contained in given list."""
+  language_in: [String!]
+
+  """All values that are not contained in given list."""
+  language_not_in: [String!]
+
+  """All values less than the given value."""
+  language_lt: String
+
+  """All values less than or equal the given value."""
+  language_lte: String
+
+  """All values greater than the given value."""
+  language_gt: String
+
+  """All values greater than or equal the given value."""
+  language_gte: String
+
+  """All values containing the given string."""
+  language_contains: String
+
+  """All values not containing the given string."""
+  language_not_contains: String
+
+  """All values starting with the given string."""
+  language_starts_with: String
+
+  """All values not starting with the given string."""
+  language_not_starts_with: String
+
+  """All values ending with the given string."""
+  language_ends_with: String
+
+  """All values not ending with the given string."""
+  language_not_ends_with: String
+  imageUrl: String
+
+  """All values that are not equal to given value."""
+  imageUrl_not: String
+
+  """All values that are contained in given list."""
+  imageUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  imageUrl_lt: String
+
+  """All values less than or equal the given value."""
+  imageUrl_lte: String
+
+  """All values greater than the given value."""
+  imageUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  imageUrl_gte: String
+
+  """All values containing the given string."""
+  imageUrl_contains: String
+
+  """All values not containing the given string."""
+  imageUrl_not_contains: String
+
+  """All values starting with the given string."""
+  imageUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  imageUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  imageUrl_not_ends_with: String
+  imageTitle: String
+
+  """All values that are not equal to given value."""
+  imageTitle_not: String
+
+  """All values that are contained in given list."""
+  imageTitle_in: [String!]
+
+  """All values that are not contained in given list."""
+  imageTitle_not_in: [String!]
+
+  """All values less than the given value."""
+  imageTitle_lt: String
+
+  """All values less than or equal the given value."""
+  imageTitle_lte: String
+
+  """All values greater than the given value."""
+  imageTitle_gt: String
+
+  """All values greater than or equal the given value."""
+  imageTitle_gte: String
+
+  """All values containing the given string."""
+  imageTitle_contains: String
+
+  """All values not containing the given string."""
+  imageTitle_not_contains: String
+
+  """All values starting with the given string."""
+  imageTitle_starts_with: String
+
+  """All values not starting with the given string."""
+  imageTitle_not_starts_with: String
+
+  """All values ending with the given string."""
+  imageTitle_ends_with: String
+
+  """All values not ending with the given string."""
+  imageTitle_not_ends_with: String
+  lastSuccessful: DateTime
+
+  """All values that are not equal to given value."""
+  lastSuccessful_not: DateTime
+
+  """All values that are contained in given list."""
+  lastSuccessful_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  lastSuccessful_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  lastSuccessful_lt: DateTime
+
+  """All values less than or equal the given value."""
+  lastSuccessful_lte: DateTime
+
+  """All values greater than the given value."""
+  lastSuccessful_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  lastSuccessful_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  userFeeds_every: UserFeedWhereInput
+  userFeeds_some: UserFeedWhereInput
+  userFeeds_none: UserFeedWhereInput
+  items_every: FeedItemWhereInput
+  items_some: FeedItemWhereInput
+  items_none: FeedItemWhereInput
 }
 
 input FeedWhereUniqueInput {
-    id: ID
-    url: String
+  id: ID
+  url: String
 }
 
 type ItemEnclosure implements Node {
-    id: ID!
-    url: String!
-    type: String
-    length: String
-    item: FeedItem!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  url: String!
+  type: String
+  length: String
+  item: FeedItem!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type ItemEnclosureConnection {
-    """
-    Information to aid in pagination.
-    """
-    pageInfo: PageInfo!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-    """
-    A list of edges.
-    """
-    edges: [ItemEnclosureEdge]!
-    aggregate: AggregateItemEnclosure!
+  """A list of edges."""
+  edges: [ItemEnclosureEdge]!
+  aggregate: AggregateItemEnclosure!
 }
 
 input ItemEnclosureCreateInput {
-    id: ID
-    url: String!
-    type: String
-    length: String
-    item: FeedItemCreateOneWithoutEnclosuresInput!
+  id: ID
+  url: String!
+  type: String
+  length: String
+  item: FeedItemCreateOneWithoutEnclosuresInput!
 }
 
 input ItemEnclosureCreateManyWithoutItemInput {
-    create: [ItemEnclosureCreateWithoutItemInput!]
-    connect: [ItemEnclosureWhereUniqueInput!]
+  create: [ItemEnclosureCreateWithoutItemInput!]
+  connect: [ItemEnclosureWhereUniqueInput!]
 }
 
 input ItemEnclosureCreateWithoutItemInput {
-    id: ID
-    url: String!
-    type: String
-    length: String
+  id: ID
+  url: String!
+  type: String
+  length: String
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type ItemEnclosureEdge {
-    """
-    The item at the end of the edge.
-    """
-    node: ItemEnclosure!
+  """The item at the end of the edge."""
+  node: ItemEnclosure!
 
-    """
-    A cursor for use in pagination.
-    """
-    cursor: String!
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 enum ItemEnclosureOrderByInput {
-    id_ASC
-    id_DESC
-    url_ASC
-    url_DESC
-    type_ASC
-    type_DESC
-    length_ASC
-    length_DESC
-    createdAt_ASC
-    createdAt_DESC
-    updatedAt_ASC
-    updatedAt_DESC
+  id_ASC
+  id_DESC
+  url_ASC
+  url_DESC
+  type_ASC
+  type_DESC
+  length_ASC
+  length_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type ItemEnclosurePreviousValues {
-    id: ID!
-    url: String!
-    type: String
-    length: String
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  url: String!
+  type: String
+  length: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 input ItemEnclosureScalarWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [ItemEnclosureScalarWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [ItemEnclosureScalarWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [ItemEnclosureScalarWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    url: String
-
-    """
-    All values that are not equal to given value.
-    """
-    url_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    url_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    url_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    url_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    url_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    url_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    url_gte: String
-
-    """
-    All values containing the given string.
-    """
-    url_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    url_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    url_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    url_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    url_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    url_not_ends_with: String
-    type: String
-
-    """
-    All values that are not equal to given value.
-    """
-    type_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    type_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    type_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    type_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    type_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    type_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    type_gte: String
-
-    """
-    All values containing the given string.
-    """
-    type_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    type_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    type_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    type_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    type_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    type_not_ends_with: String
-    length: String
-
-    """
-    All values that are not equal to given value.
-    """
-    length_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    length_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    length_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    length_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    length_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    length_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    length_gte: String
-
-    """
-    All values containing the given string.
-    """
-    length_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    length_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    length_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    length_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    length_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    length_not_ends_with: String
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
+  """Logical AND on all given filters."""
+  AND: [ItemEnclosureScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ItemEnclosureScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ItemEnclosureScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  length: String
+
+  """All values that are not equal to given value."""
+  length_not: String
+
+  """All values that are contained in given list."""
+  length_in: [String!]
+
+  """All values that are not contained in given list."""
+  length_not_in: [String!]
+
+  """All values less than the given value."""
+  length_lt: String
+
+  """All values less than or equal the given value."""
+  length_lte: String
+
+  """All values greater than the given value."""
+  length_gt: String
+
+  """All values greater than or equal the given value."""
+  length_gte: String
+
+  """All values containing the given string."""
+  length_contains: String
+
+  """All values not containing the given string."""
+  length_not_contains: String
+
+  """All values starting with the given string."""
+  length_starts_with: String
+
+  """All values not starting with the given string."""
+  length_not_starts_with: String
+
+  """All values ending with the given string."""
+  length_ends_with: String
+
+  """All values not ending with the given string."""
+  length_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type ItemEnclosureSubscriptionPayload {
-    mutation: MutationType!
-    node: ItemEnclosure
-    updatedFields: [String!]
-    previousValues: ItemEnclosurePreviousValues
+  mutation: MutationType!
+  node: ItemEnclosure
+  updatedFields: [String!]
+  previousValues: ItemEnclosurePreviousValues
 }
 
 input ItemEnclosureSubscriptionWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [ItemEnclosureSubscriptionWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [ItemEnclosureSubscriptionWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [ItemEnclosureSubscriptionWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [ItemEnclosureSubscriptionWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [ItemEnclosureSubscriptionWhereInput!]
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ItemEnclosureSubscriptionWhereInput!]
 
-    """
-    The subscription event gets dispatched when it's listed in mutation_in
-    """
-    mutation_in: [MutationType!]
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
 
-    """
-    The subscription event gets only dispatched when one of the updated fields names is included in this list
-    """
-    updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
 
-    """
-    The subscription event gets only dispatched when all of the field names included in this list have been updated
-    """
-    updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
 
-    """
-    The subscription event gets only dispatched when some of the field names included in this list have been updated
-    """
-    updatedFields_contains_some: [String!]
-    node: ItemEnclosureWhereInput
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: ItemEnclosureWhereInput
 }
 
 input ItemEnclosureUpdateInput {
-    url: String
-    type: String
-    length: String
-    item: FeedItemUpdateOneRequiredWithoutEnclosuresInput
+  url: String
+  type: String
+  length: String
+  item: FeedItemUpdateOneRequiredWithoutEnclosuresInput
 }
 
 input ItemEnclosureUpdateManyDataInput {
-    url: String
-    type: String
-    length: String
+  url: String
+  type: String
+  length: String
 }
 
 input ItemEnclosureUpdateManyMutationInput {
-    url: String
-    type: String
-    length: String
+  url: String
+  type: String
+  length: String
 }
 
 input ItemEnclosureUpdateManyWithoutItemInput {
-    create: [ItemEnclosureCreateWithoutItemInput!]
-    connect: [ItemEnclosureWhereUniqueInput!]
-    set: [ItemEnclosureWhereUniqueInput!]
-    disconnect: [ItemEnclosureWhereUniqueInput!]
-    delete: [ItemEnclosureWhereUniqueInput!]
-    update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
-    updateMany: [ItemEnclosureUpdateManyWithWhereNestedInput!]
-    deleteMany: [ItemEnclosureScalarWhereInput!]
-    upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
+  create: [ItemEnclosureCreateWithoutItemInput!]
+  connect: [ItemEnclosureWhereUniqueInput!]
+  set: [ItemEnclosureWhereUniqueInput!]
+  disconnect: [ItemEnclosureWhereUniqueInput!]
+  delete: [ItemEnclosureWhereUniqueInput!]
+  update: [ItemEnclosureUpdateWithWhereUniqueWithoutItemInput!]
+  updateMany: [ItemEnclosureUpdateManyWithWhereNestedInput!]
+  deleteMany: [ItemEnclosureScalarWhereInput!]
+  upsert: [ItemEnclosureUpsertWithWhereUniqueWithoutItemInput!]
 }
 
 input ItemEnclosureUpdateManyWithWhereNestedInput {
-    where: ItemEnclosureScalarWhereInput!
-    data: ItemEnclosureUpdateManyDataInput!
+  where: ItemEnclosureScalarWhereInput!
+  data: ItemEnclosureUpdateManyDataInput!
 }
 
 input ItemEnclosureUpdateWithoutItemDataInput {
-    url: String
-    type: String
-    length: String
+  url: String
+  type: String
+  length: String
 }
 
 input ItemEnclosureUpdateWithWhereUniqueWithoutItemInput {
-    where: ItemEnclosureWhereUniqueInput!
-    data: ItemEnclosureUpdateWithoutItemDataInput!
+  where: ItemEnclosureWhereUniqueInput!
+  data: ItemEnclosureUpdateWithoutItemDataInput!
 }
 
 input ItemEnclosureUpsertWithWhereUniqueWithoutItemInput {
-    where: ItemEnclosureWhereUniqueInput!
-    update: ItemEnclosureUpdateWithoutItemDataInput!
-    create: ItemEnclosureCreateWithoutItemInput!
+  where: ItemEnclosureWhereUniqueInput!
+  update: ItemEnclosureUpdateWithoutItemDataInput!
+  create: ItemEnclosureCreateWithoutItemInput!
 }
 
 input ItemEnclosureWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [ItemEnclosureWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [ItemEnclosureWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [ItemEnclosureWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    url: String
-
-    """
-    All values that are not equal to given value.
-    """
-    url_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    url_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    url_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    url_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    url_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    url_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    url_gte: String
-
-    """
-    All values containing the given string.
-    """
-    url_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    url_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    url_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    url_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    url_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    url_not_ends_with: String
-    type: String
-
-    """
-    All values that are not equal to given value.
-    """
-    type_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    type_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    type_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    type_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    type_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    type_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    type_gte: String
-
-    """
-    All values containing the given string.
-    """
-    type_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    type_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    type_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    type_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    type_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    type_not_ends_with: String
-    length: String
-
-    """
-    All values that are not equal to given value.
-    """
-    length_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    length_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    length_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    length_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    length_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    length_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    length_gte: String
-
-    """
-    All values containing the given string.
-    """
-    length_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    length_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    length_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    length_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    length_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    length_not_ends_with: String
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
-    item: FeedItemWhereInput
+  """Logical AND on all given filters."""
+  AND: [ItemEnclosureWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ItemEnclosureWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ItemEnclosureWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  type: String
+
+  """All values that are not equal to given value."""
+  type_not: String
+
+  """All values that are contained in given list."""
+  type_in: [String!]
+
+  """All values that are not contained in given list."""
+  type_not_in: [String!]
+
+  """All values less than the given value."""
+  type_lt: String
+
+  """All values less than or equal the given value."""
+  type_lte: String
+
+  """All values greater than the given value."""
+  type_gt: String
+
+  """All values greater than or equal the given value."""
+  type_gte: String
+
+  """All values containing the given string."""
+  type_contains: String
+
+  """All values not containing the given string."""
+  type_not_contains: String
+
+  """All values starting with the given string."""
+  type_starts_with: String
+
+  """All values not starting with the given string."""
+  type_not_starts_with: String
+
+  """All values ending with the given string."""
+  type_ends_with: String
+
+  """All values not ending with the given string."""
+  type_not_ends_with: String
+  length: String
+
+  """All values that are not equal to given value."""
+  length_not: String
+
+  """All values that are contained in given list."""
+  length_in: [String!]
+
+  """All values that are not contained in given list."""
+  length_not_in: [String!]
+
+  """All values less than the given value."""
+  length_lt: String
+
+  """All values less than or equal the given value."""
+  length_lte: String
+
+  """All values greater than the given value."""
+  length_gt: String
+
+  """All values greater than or equal the given value."""
+  length_gte: String
+
+  """All values containing the given string."""
+  length_contains: String
+
+  """All values not containing the given string."""
+  length_not_contains: String
+
+  """All values starting with the given string."""
+  length_starts_with: String
+
+  """All values not starting with the given string."""
+  length_not_starts_with: String
+
+  """All values ending with the given string."""
+  length_ends_with: String
+
+  """All values not ending with the given string."""
+  length_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  item: FeedItemWhereInput
 }
 
 input ItemEnclosureWhereUniqueInput {
-    id: ID
+  id: ID
 }
 
 """
@@ -3351,1690 +2271,1234 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-    createUser(data: UserCreateInput!): User!
-    createUserFeed(data: UserFeedCreateInput!): UserFeed!
-    createFeed(data: FeedCreateInput!): Feed!
-    createItemEnclosure(data: ItemEnclosureCreateInput!): ItemEnclosure!
-    createFeedItem(data: FeedItemCreateInput!): FeedItem!
-    updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-    updateUserFeed(data: UserFeedUpdateInput!, where: UserFeedWhereUniqueInput!): UserFeed
-    updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
-    updateItemEnclosure(data: ItemEnclosureUpdateInput!, where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-    updateFeedItem(data: FeedItemUpdateInput!, where: FeedItemWhereUniqueInput!): FeedItem
-    deleteUser(where: UserWhereUniqueInput!): User
-    deleteUserFeed(where: UserFeedWhereUniqueInput!): UserFeed
-    deleteFeed(where: FeedWhereUniqueInput!): Feed
-    deleteItemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-    deleteFeedItem(where: FeedItemWhereUniqueInput!): FeedItem
-    upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-    upsertUserFeed(
-        where: UserFeedWhereUniqueInput!
-        create: UserFeedCreateInput!
-        update: UserFeedUpdateInput!
-    ): UserFeed!
-    upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
-    upsertItemEnclosure(
-        where: ItemEnclosureWhereUniqueInput!
-        create: ItemEnclosureCreateInput!
-        update: ItemEnclosureUpdateInput!
-    ): ItemEnclosure!
-    upsertFeedItem(
-        where: FeedItemWhereUniqueInput!
-        create: FeedItemCreateInput!
-        update: FeedItemUpdateInput!
-    ): FeedItem!
-    updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-    updateManyUserFeeds(data: UserFeedUpdateManyMutationInput!, where: UserFeedWhereInput): BatchPayload!
-    updateManyFeeds(data: FeedUpdateManyMutationInput!, where: FeedWhereInput): BatchPayload!
-    updateManyItemEnclosures(data: ItemEnclosureUpdateManyMutationInput!, where: ItemEnclosureWhereInput): BatchPayload!
-    updateManyFeedItems(data: FeedItemUpdateManyMutationInput!, where: FeedItemWhereInput): BatchPayload!
-    deleteManyUsers(where: UserWhereInput): BatchPayload!
-    deleteManyUserFeeds(where: UserFeedWhereInput): BatchPayload!
-    deleteManyFeeds(where: FeedWhereInput): BatchPayload!
-    deleteManyItemEnclosures(where: ItemEnclosureWhereInput): BatchPayload!
-    deleteManyFeedItems(where: FeedItemWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  createUserFeed(data: UserFeedCreateInput!): UserFeed!
+  createFeed(data: FeedCreateInput!): Feed!
+  createItemEnclosure(data: ItemEnclosureCreateInput!): ItemEnclosure!
+  createFeedItem(data: FeedItemCreateInput!): FeedItem!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateUserFeed(data: UserFeedUpdateInput!, where: UserFeedWhereUniqueInput!): UserFeed
+  updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
+  updateItemEnclosure(data: ItemEnclosureUpdateInput!, where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  updateFeedItem(data: FeedItemUpdateInput!, where: FeedItemWhereUniqueInput!): FeedItem
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteUserFeed(where: UserFeedWhereUniqueInput!): UserFeed
+  deleteFeed(where: FeedWhereUniqueInput!): Feed
+  deleteItemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  deleteFeedItem(where: FeedItemWhereUniqueInput!): FeedItem
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertUserFeed(where: UserFeedWhereUniqueInput!, create: UserFeedCreateInput!, update: UserFeedUpdateInput!): UserFeed!
+  upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
+  upsertItemEnclosure(where: ItemEnclosureWhereUniqueInput!, create: ItemEnclosureCreateInput!, update: ItemEnclosureUpdateInput!): ItemEnclosure!
+  upsertFeedItem(where: FeedItemWhereUniqueInput!, create: FeedItemCreateInput!, update: FeedItemUpdateInput!): FeedItem!
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyUserFeeds(data: UserFeedUpdateManyMutationInput!, where: UserFeedWhereInput): BatchPayload!
+  updateManyFeeds(data: FeedUpdateManyMutationInput!, where: FeedWhereInput): BatchPayload!
+  updateManyItemEnclosures(data: ItemEnclosureUpdateManyMutationInput!, where: ItemEnclosureWhereInput): BatchPayload!
+  updateManyFeedItems(data: FeedItemUpdateManyMutationInput!, where: FeedItemWhereInput): BatchPayload!
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyUserFeeds(where: UserFeedWhereInput): BatchPayload!
+  deleteManyFeeds(where: FeedWhereInput): BatchPayload!
+  deleteManyItemEnclosures(where: ItemEnclosureWhereInput): BatchPayload!
+  deleteManyFeedItems(where: FeedItemWhereInput): BatchPayload!
 }
 
 enum MutationType {
-    CREATED
-    UPDATED
-    DELETED
+  CREATED
+  UPDATED
+  DELETED
 }
 
-"""
-An object with an ID
-"""
+"""An object with an ID"""
 interface Node {
-    """
-    The id of the object.
-    """
-    id: ID!
+  """The id of the object."""
+  id: ID!
 }
 
-"""
-Information about pagination in a connection.
-"""
+"""Information about pagination in a connection."""
 type PageInfo {
-    """
-    When paginating forwards, are there more items?
-    """
-    hasNextPage: Boolean!
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
 
-    """
-    When paginating backwards, are there more items?
-    """
-    hasPreviousPage: Boolean!
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
 
-    """
-    When paginating backwards, the cursor to continue.
-    """
-    startCursor: String
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
 
-    """
-    When paginating forwards, the cursor to continue.
-    """
-    endCursor: String
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
 }
 
 enum Permission {
-    ADMIN
-    USER
+  ADMIN
+  USER
 }
 
 type Query {
-    users(
-        where: UserWhereInput
-        orderBy: UserOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [User]!
-    userFeeds(
-        where: UserFeedWhereInput
-        orderBy: UserFeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [UserFeed]!
-    feeds(
-        where: FeedWhereInput
-        orderBy: FeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [Feed]!
-    itemEnclosures(
-        where: ItemEnclosureWhereInput
-        orderBy: ItemEnclosureOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [ItemEnclosure]!
-    feedItems(
-        where: FeedItemWhereInput
-        orderBy: FeedItemOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [FeedItem]!
-    user(where: UserWhereUniqueInput!): User
-    userFeed(where: UserFeedWhereUniqueInput!): UserFeed
-    feed(where: FeedWhereUniqueInput!): Feed
-    itemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
-    feedItem(where: FeedItemWhereUniqueInput!): FeedItem
-    usersConnection(
-        where: UserWhereInput
-        orderBy: UserOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): UserConnection!
-    userFeedsConnection(
-        where: UserFeedWhereInput
-        orderBy: UserFeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): UserFeedConnection!
-    feedsConnection(
-        where: FeedWhereInput
-        orderBy: FeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): FeedConnection!
-    itemEnclosuresConnection(
-        where: ItemEnclosureWhereInput
-        orderBy: ItemEnclosureOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): ItemEnclosureConnection!
-    feedItemsConnection(
-        where: FeedItemWhereInput
-        orderBy: FeedItemOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): FeedItemConnection!
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  userFeeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed]!
+  feeds(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feed]!
+  itemEnclosures(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ItemEnclosure]!
+  feedItems(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [FeedItem]!
+  user(where: UserWhereUniqueInput!): User
+  userFeed(where: UserFeedWhereUniqueInput!): UserFeed
+  feed(where: FeedWhereUniqueInput!): Feed
+  itemEnclosure(where: ItemEnclosureWhereUniqueInput!): ItemEnclosure
+  feedItem(where: FeedItemWhereUniqueInput!): FeedItem
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  userFeedsConnection(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserFeedConnection!
+  feedsConnection(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedConnection!
+  itemEnclosuresConnection(where: ItemEnclosureWhereInput, orderBy: ItemEnclosureOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemEnclosureConnection!
+  feedItemsConnection(where: FeedItemWhereInput, orderBy: FeedItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedItemConnection!
 
-    """
-    Fetches an object given its ID
-    """
-    node(
-        """
-        The ID of an object
-        """
-        id: ID!
-    ): Node
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
 }
 
 type Subscription {
-    user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-    userFeed(where: UserFeedSubscriptionWhereInput): UserFeedSubscriptionPayload
-    feed(where: FeedSubscriptionWhereInput): FeedSubscriptionPayload
-    itemEnclosure(where: ItemEnclosureSubscriptionWhereInput): ItemEnclosureSubscriptionPayload
-    feedItem(where: FeedItemSubscriptionWhereInput): FeedItemSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  userFeed(where: UserFeedSubscriptionWhereInput): UserFeedSubscriptionPayload
+  feed(where: FeedSubscriptionWhereInput): FeedSubscriptionPayload
+  itemEnclosure(where: ItemEnclosureSubscriptionWhereInput): ItemEnclosureSubscriptionPayload
+  feedItem(where: FeedItemSubscriptionWhereInput): FeedItemSubscriptionPayload
 }
 
 type User implements Node {
-    id: ID!
-    email: String!
-    feeds(
-        where: UserFeedWhereInput
-        orderBy: UserFeedOrderByInput
-        skip: Int
-        after: String
-        before: String
-        first: Int
-        last: Int
-    ): [UserFeed!]
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: [Permission!]!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  email: String!
+  feeds(where: UserFeedWhereInput, orderBy: UserFeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [UserFeed!]
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  permissions: [Permission!]!
+  locale: String
+  timeZone: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type UserConnection {
-    """
-    Information to aid in pagination.
-    """
-    pageInfo: PageInfo!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-    """
-    A list of edges.
-    """
-    edges: [UserEdge]!
-    aggregate: AggregateUser!
+  """A list of edges."""
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
 }
 
 input UserCreateInput {
-    id: ID
-    email: String!
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: UserCreatepermissionsInput
-    feeds: UserFeedCreateManyWithoutUserInput
+  id: ID
+  email: String!
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  locale: String
+  timeZone: String
+  permissions: UserCreatepermissionsInput
+  feeds: UserFeedCreateManyWithoutUserInput
 }
 
 input UserCreateOneWithoutFeedsInput {
-    create: UserCreateWithoutFeedsInput
-    connect: UserWhereUniqueInput
+  create: UserCreateWithoutFeedsInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreatepermissionsInput {
-    set: [Permission!]
+  set: [Permission!]
 }
 
 input UserCreateWithoutFeedsInput {
-    id: ID
-    email: String!
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: UserCreatepermissionsInput
+  id: ID
+  email: String!
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  locale: String
+  timeZone: String
+  permissions: UserCreatepermissionsInput
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type UserEdge {
-    """
-    The item at the end of the edge.
-    """
-    node: User!
+  """The item at the end of the edge."""
+  node: User!
 
-    """
-    A cursor for use in pagination.
-    """
-    cursor: String!
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 type UserFeed implements Node {
-    id: ID!
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    feed: Feed!
-    createdAt: DateTime!
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    user: User!
-    updatedAt: DateTime!
+  id: ID!
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  feed: Feed!
+  createdAt: DateTime!
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  user: User!
+  updatedAt: DateTime!
 }
 
-"""
-A connection to a list of items.
-"""
+"""A connection to a list of items."""
 type UserFeedConnection {
-    """
-    Information to aid in pagination.
-    """
-    pageInfo: PageInfo!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
 
-    """
-    A list of edges.
-    """
-    edges: [UserFeedEdge]!
-    aggregate: AggregateUserFeed!
+  """A list of edges."""
+  edges: [UserFeedEdge]!
+  aggregate: AggregateUserFeed!
 }
 
 input UserFeedCreateInput {
-    id: ID
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    feed: FeedCreateOneWithoutUserFeedsInput!
-    user: UserCreateOneWithoutFeedsInput!
+  id: ID
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  feed: FeedCreateOneWithoutUserFeedsInput!
+  user: UserCreateOneWithoutFeedsInput!
 }
 
 input UserFeedCreateManyWithoutFeedInput {
-    create: [UserFeedCreateWithoutFeedInput!]
-    connect: [UserFeedWhereUniqueInput!]
+  create: [UserFeedCreateWithoutFeedInput!]
+  connect: [UserFeedWhereUniqueInput!]
 }
 
 input UserFeedCreateManyWithoutUserInput {
-    create: [UserFeedCreateWithoutUserInput!]
-    connect: [UserFeedWhereUniqueInput!]
+  create: [UserFeedCreateWithoutUserInput!]
+  connect: [UserFeedWhereUniqueInput!]
 }
 
 input UserFeedCreateWithoutFeedInput {
-    id: ID
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    user: UserCreateOneWithoutFeedsInput!
+  id: ID
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  user: UserCreateOneWithoutFeedsInput!
 }
 
 input UserFeedCreateWithoutUserInput {
-    id: ID
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    feed: FeedCreateOneWithoutUserFeedsInput!
+  id: ID
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  feed: FeedCreateOneWithoutUserFeedsInput!
 }
 
-"""
-An edge in a connection.
-"""
+"""An edge in a connection."""
 type UserFeedEdge {
-    """
-    The item at the end of the edge.
-    """
-    node: UserFeed!
+  """The item at the end of the edge."""
+  node: UserFeed!
 
-    """
-    A cursor for use in pagination.
-    """
-    cursor: String!
+  """A cursor for use in pagination."""
+  cursor: String!
 }
 
 enum UserFeedOrderByInput {
-    id_ASC
-    id_DESC
-    activated_ASC
-    activated_DESC
-    activationToken_ASC
-    activationToken_DESC
-    activationTokenExpiry_ASC
-    activationTokenExpiry_DESC
-    createdAt_ASC
-    createdAt_DESC
-    lastUpdate_ASC
-    lastUpdate_DESC
-    schedule_ASC
-    schedule_DESC
-    updatedAt_ASC
-    updatedAt_DESC
+  id_ASC
+  id_DESC
+  activated_ASC
+  activated_DESC
+  activationToken_ASC
+  activationToken_DESC
+  activationTokenExpiry_ASC
+  activationTokenExpiry_DESC
+  createdAt_ASC
+  createdAt_DESC
+  lastUpdate_ASC
+  lastUpdate_DESC
+  schedule_ASC
+  schedule_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type UserFeedPreviousValues {
-    id: ID!
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    createdAt: DateTime!
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    updatedAt: DateTime!
+  id: ID!
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  createdAt: DateTime!
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  updatedAt: DateTime!
 }
 
 input UserFeedScalarWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [UserFeedScalarWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [UserFeedScalarWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [UserFeedScalarWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [UserFeedScalarWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [UserFeedScalarWhereInput!]
-    id: ID
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserFeedScalarWhereInput!]
+  id: ID
 
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
+  """All values that are not equal to given value."""
+  id_not: ID
 
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
+  """All values that are contained in given list."""
+  id_in: [ID!]
 
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
 
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
+  """All values less than the given value."""
+  id_lt: ID
 
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
+  """All values less than or equal the given value."""
+  id_lte: ID
 
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
+  """All values greater than the given value."""
+  id_gt: ID
 
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
+  """All values greater than or equal the given value."""
+  id_gte: ID
 
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
+  """All values containing the given string."""
+  id_contains: ID
 
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
+  """All values not containing the given string."""
+  id_not_contains: ID
 
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
+  """All values starting with the given string."""
+  id_starts_with: ID
 
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
 
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
+  """All values ending with the given string."""
+  id_ends_with: ID
 
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    activated: Boolean
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  activated: Boolean
 
-    """
-    All values that are not equal to given value.
-    """
-    activated_not: Boolean
-    activationToken: String
+  """All values that are not equal to given value."""
+  activated_not: Boolean
+  activationToken: String
 
-    """
-    All values that are not equal to given value.
-    """
-    activationToken_not: String
+  """All values that are not equal to given value."""
+  activationToken_not: String
 
-    """
-    All values that are contained in given list.
-    """
-    activationToken_in: [String!]
+  """All values that are contained in given list."""
+  activationToken_in: [String!]
 
-    """
-    All values that are not contained in given list.
-    """
-    activationToken_not_in: [String!]
+  """All values that are not contained in given list."""
+  activationToken_not_in: [String!]
 
-    """
-    All values less than the given value.
-    """
-    activationToken_lt: String
+  """All values less than the given value."""
+  activationToken_lt: String
 
-    """
-    All values less than or equal the given value.
-    """
-    activationToken_lte: String
+  """All values less than or equal the given value."""
+  activationToken_lte: String
 
-    """
-    All values greater than the given value.
-    """
-    activationToken_gt: String
+  """All values greater than the given value."""
+  activationToken_gt: String
 
-    """
-    All values greater than or equal the given value.
-    """
-    activationToken_gte: String
+  """All values greater than or equal the given value."""
+  activationToken_gte: String
 
-    """
-    All values containing the given string.
-    """
-    activationToken_contains: String
+  """All values containing the given string."""
+  activationToken_contains: String
 
-    """
-    All values not containing the given string.
-    """
-    activationToken_not_contains: String
+  """All values not containing the given string."""
+  activationToken_not_contains: String
 
-    """
-    All values starting with the given string.
-    """
-    activationToken_starts_with: String
+  """All values starting with the given string."""
+  activationToken_starts_with: String
 
-    """
-    All values not starting with the given string.
-    """
-    activationToken_not_starts_with: String
+  """All values not starting with the given string."""
+  activationToken_not_starts_with: String
 
-    """
-    All values ending with the given string.
-    """
-    activationToken_ends_with: String
+  """All values ending with the given string."""
+  activationToken_ends_with: String
 
-    """
-    All values not ending with the given string.
-    """
-    activationToken_not_ends_with: String
-    activationTokenExpiry: DateTime
+  """All values not ending with the given string."""
+  activationToken_not_ends_with: String
+  activationTokenExpiry: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    activationTokenExpiry_not: DateTime
+  """All values that are not equal to given value."""
+  activationTokenExpiry_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    activationTokenExpiry_in: [DateTime!]
+  """All values that are contained in given list."""
+  activationTokenExpiry_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    activationTokenExpiry_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  activationTokenExpiry_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    activationTokenExpiry_lt: DateTime
+  """All values less than the given value."""
+  activationTokenExpiry_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    activationTokenExpiry_lte: DateTime
+  """All values less than or equal the given value."""
+  activationTokenExpiry_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    activationTokenExpiry_gt: DateTime
+  """All values greater than the given value."""
+  activationTokenExpiry_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    activationTokenExpiry_gte: DateTime
-    createdAt: DateTime
+  """All values greater than or equal the given value."""
+  activationTokenExpiry_gte: DateTime
+  createdAt: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
+  """All values less than the given value."""
+  createdAt_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    lastUpdate: DateTime
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  lastUpdate: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    lastUpdate_not: DateTime
+  """All values that are not equal to given value."""
+  lastUpdate_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    lastUpdate_in: [DateTime!]
+  """All values that are contained in given list."""
+  lastUpdate_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    lastUpdate_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  lastUpdate_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    lastUpdate_lt: DateTime
+  """All values less than the given value."""
+  lastUpdate_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    lastUpdate_lte: DateTime
+  """All values less than or equal the given value."""
+  lastUpdate_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    lastUpdate_gt: DateTime
+  """All values greater than the given value."""
+  lastUpdate_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    lastUpdate_gte: DateTime
-    schedule: DigestSchedule
+  """All values greater than or equal the given value."""
+  lastUpdate_gte: DateTime
+  schedule: DigestSchedule
 
-    """
-    All values that are not equal to given value.
-    """
-    schedule_not: DigestSchedule
+  """All values that are not equal to given value."""
+  schedule_not: DigestSchedule
 
-    """
-    All values that are contained in given list.
-    """
-    schedule_in: [DigestSchedule!]
+  """All values that are contained in given list."""
+  schedule_in: [DigestSchedule!]
 
-    """
-    All values that are not contained in given list.
-    """
-    schedule_not_in: [DigestSchedule!]
-    updatedAt: DateTime
+  """All values that are not contained in given list."""
+  schedule_not_in: [DigestSchedule!]
+  updatedAt: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
 }
 
 type UserFeedSubscriptionPayload {
-    mutation: MutationType!
-    node: UserFeed
-    updatedFields: [String!]
-    previousValues: UserFeedPreviousValues
+  mutation: MutationType!
+  node: UserFeed
+  updatedFields: [String!]
+  previousValues: UserFeedPreviousValues
 }
 
 input UserFeedSubscriptionWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [UserFeedSubscriptionWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [UserFeedSubscriptionWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [UserFeedSubscriptionWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [UserFeedSubscriptionWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [UserFeedSubscriptionWhereInput!]
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserFeedSubscriptionWhereInput!]
 
-    """
-    The subscription event gets dispatched when it's listed in mutation_in
-    """
-    mutation_in: [MutationType!]
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
 
-    """
-    The subscription event gets only dispatched when one of the updated fields names is included in this list
-    """
-    updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
 
-    """
-    The subscription event gets only dispatched when all of the field names included in this list have been updated
-    """
-    updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
 
-    """
-    The subscription event gets only dispatched when some of the field names included in this list have been updated
-    """
-    updatedFields_contains_some: [String!]
-    node: UserFeedWhereInput
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserFeedWhereInput
 }
 
 input UserFeedUpdateInput {
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    feed: FeedUpdateOneRequiredWithoutUserFeedsInput
-    user: UserUpdateOneRequiredWithoutFeedsInput
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  feed: FeedUpdateOneRequiredWithoutUserFeedsInput
+  user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
 input UserFeedUpdateManyDataInput {
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
 }
 
 input UserFeedUpdateManyMutationInput {
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
-    create: [UserFeedCreateWithoutFeedInput!]
-    connect: [UserFeedWhereUniqueInput!]
-    set: [UserFeedWhereUniqueInput!]
-    disconnect: [UserFeedWhereUniqueInput!]
-    delete: [UserFeedWhereUniqueInput!]
-    update: [UserFeedUpdateWithWhereUniqueWithoutFeedInput!]
-    updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
-    deleteMany: [UserFeedScalarWhereInput!]
-    upsert: [UserFeedUpsertWithWhereUniqueWithoutFeedInput!]
+  create: [UserFeedCreateWithoutFeedInput!]
+  connect: [UserFeedWhereUniqueInput!]
+  set: [UserFeedWhereUniqueInput!]
+  disconnect: [UserFeedWhereUniqueInput!]
+  delete: [UserFeedWhereUniqueInput!]
+  update: [UserFeedUpdateWithWhereUniqueWithoutFeedInput!]
+  updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserFeedScalarWhereInput!]
+  upsert: [UserFeedUpsertWithWhereUniqueWithoutFeedInput!]
 }
 
 input UserFeedUpdateManyWithoutUserInput {
-    create: [UserFeedCreateWithoutUserInput!]
-    connect: [UserFeedWhereUniqueInput!]
-    set: [UserFeedWhereUniqueInput!]
-    disconnect: [UserFeedWhereUniqueInput!]
-    delete: [UserFeedWhereUniqueInput!]
-    update: [UserFeedUpdateWithWhereUniqueWithoutUserInput!]
-    updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
-    deleteMany: [UserFeedScalarWhereInput!]
-    upsert: [UserFeedUpsertWithWhereUniqueWithoutUserInput!]
+  create: [UserFeedCreateWithoutUserInput!]
+  connect: [UserFeedWhereUniqueInput!]
+  set: [UserFeedWhereUniqueInput!]
+  disconnect: [UserFeedWhereUniqueInput!]
+  delete: [UserFeedWhereUniqueInput!]
+  update: [UserFeedUpdateWithWhereUniqueWithoutUserInput!]
+  updateMany: [UserFeedUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserFeedScalarWhereInput!]
+  upsert: [UserFeedUpsertWithWhereUniqueWithoutUserInput!]
 }
 
 input UserFeedUpdateManyWithWhereNestedInput {
-    where: UserFeedScalarWhereInput!
-    data: UserFeedUpdateManyDataInput!
+  where: UserFeedScalarWhereInput!
+  data: UserFeedUpdateManyDataInput!
 }
 
 input UserFeedUpdateWithoutFeedDataInput {
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    user: UserUpdateOneRequiredWithoutFeedsInput
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
 input UserFeedUpdateWithoutUserDataInput {
-    activated: Boolean
-    activationToken: String
-    activationTokenExpiry: DateTime
-    lastUpdate: DateTime
-    schedule: DigestSchedule
-    feed: FeedUpdateOneRequiredWithoutUserFeedsInput
+  activated: Boolean
+  activationToken: String
+  activationTokenExpiry: DateTime
+  lastUpdate: DateTime
+  schedule: DigestSchedule
+  feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
 
 input UserFeedUpdateWithWhereUniqueWithoutFeedInput {
-    where: UserFeedWhereUniqueInput!
-    data: UserFeedUpdateWithoutFeedDataInput!
+  where: UserFeedWhereUniqueInput!
+  data: UserFeedUpdateWithoutFeedDataInput!
 }
 
 input UserFeedUpdateWithWhereUniqueWithoutUserInput {
-    where: UserFeedWhereUniqueInput!
-    data: UserFeedUpdateWithoutUserDataInput!
+  where: UserFeedWhereUniqueInput!
+  data: UserFeedUpdateWithoutUserDataInput!
 }
 
 input UserFeedUpsertWithWhereUniqueWithoutFeedInput {
-    where: UserFeedWhereUniqueInput!
-    update: UserFeedUpdateWithoutFeedDataInput!
-    create: UserFeedCreateWithoutFeedInput!
+  where: UserFeedWhereUniqueInput!
+  update: UserFeedUpdateWithoutFeedDataInput!
+  create: UserFeedCreateWithoutFeedInput!
 }
 
 input UserFeedUpsertWithWhereUniqueWithoutUserInput {
-    where: UserFeedWhereUniqueInput!
-    update: UserFeedUpdateWithoutUserDataInput!
-    create: UserFeedCreateWithoutUserInput!
+  where: UserFeedWhereUniqueInput!
+  update: UserFeedUpdateWithoutUserDataInput!
+  create: UserFeedCreateWithoutUserInput!
 }
 
 input UserFeedWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [UserFeedWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [UserFeedWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [UserFeedWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [UserFeedWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [UserFeedWhereInput!]
-    id: ID
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserFeedWhereInput!]
+  id: ID
 
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
+  """All values that are not equal to given value."""
+  id_not: ID
 
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
+  """All values that are contained in given list."""
+  id_in: [ID!]
 
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
 
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
+  """All values less than the given value."""
+  id_lt: ID
 
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
+  """All values less than or equal the given value."""
+  id_lte: ID
 
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
+  """All values greater than the given value."""
+  id_gt: ID
 
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
+  """All values greater than or equal the given value."""
+  id_gte: ID
 
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
+  """All values containing the given string."""
+  id_contains: ID
 
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
+  """All values not containing the given string."""
+  id_not_contains: ID
 
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
+  """All values starting with the given string."""
+  id_starts_with: ID
 
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
 
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
+  """All values ending with the given string."""
+  id_ends_with: ID
 
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    activated: Boolean
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  activated: Boolean
 
-    """
-    All values that are not equal to given value.
-    """
-    activated_not: Boolean
-    activationToken: String
+  """All values that are not equal to given value."""
+  activated_not: Boolean
+  activationToken: String
 
-    """
-    All values that are not equal to given value.
-    """
-    activationToken_not: String
+  """All values that are not equal to given value."""
+  activationToken_not: String
 
-    """
-    All values that are contained in given list.
-    """
-    activationToken_in: [String!]
+  """All values that are contained in given list."""
+  activationToken_in: [String!]
 
-    """
-    All values that are not contained in given list.
-    """
-    activationToken_not_in: [String!]
+  """All values that are not contained in given list."""
+  activationToken_not_in: [String!]
 
-    """
-    All values less than the given value.
-    """
-    activationToken_lt: String
+  """All values less than the given value."""
+  activationToken_lt: String
 
-    """
-    All values less than or equal the given value.
-    """
-    activationToken_lte: String
+  """All values less than or equal the given value."""
+  activationToken_lte: String
 
-    """
-    All values greater than the given value.
-    """
-    activationToken_gt: String
+  """All values greater than the given value."""
+  activationToken_gt: String
 
-    """
-    All values greater than or equal the given value.
-    """
-    activationToken_gte: String
+  """All values greater than or equal the given value."""
+  activationToken_gte: String
 
-    """
-    All values containing the given string.
-    """
-    activationToken_contains: String
+  """All values containing the given string."""
+  activationToken_contains: String
 
-    """
-    All values not containing the given string.
-    """
-    activationToken_not_contains: String
+  """All values not containing the given string."""
+  activationToken_not_contains: String
 
-    """
-    All values starting with the given string.
-    """
-    activationToken_starts_with: String
+  """All values starting with the given string."""
+  activationToken_starts_with: String
 
-    """
-    All values not starting with the given string.
-    """
-    activationToken_not_starts_with: String
+  """All values not starting with the given string."""
+  activationToken_not_starts_with: String
 
-    """
-    All values ending with the given string.
-    """
-    activationToken_ends_with: String
+  """All values ending with the given string."""
+  activationToken_ends_with: String
 
-    """
-    All values not ending with the given string.
-    """
-    activationToken_not_ends_with: String
-    activationTokenExpiry: DateTime
+  """All values not ending with the given string."""
+  activationToken_not_ends_with: String
+  activationTokenExpiry: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    activationTokenExpiry_not: DateTime
+  """All values that are not equal to given value."""
+  activationTokenExpiry_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    activationTokenExpiry_in: [DateTime!]
+  """All values that are contained in given list."""
+  activationTokenExpiry_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    activationTokenExpiry_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  activationTokenExpiry_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    activationTokenExpiry_lt: DateTime
+  """All values less than the given value."""
+  activationTokenExpiry_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    activationTokenExpiry_lte: DateTime
+  """All values less than or equal the given value."""
+  activationTokenExpiry_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    activationTokenExpiry_gt: DateTime
+  """All values greater than the given value."""
+  activationTokenExpiry_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    activationTokenExpiry_gte: DateTime
-    createdAt: DateTime
+  """All values greater than or equal the given value."""
+  activationTokenExpiry_gte: DateTime
+  createdAt: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
+  """All values less than the given value."""
+  createdAt_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    lastUpdate: DateTime
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  lastUpdate: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    lastUpdate_not: DateTime
+  """All values that are not equal to given value."""
+  lastUpdate_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    lastUpdate_in: [DateTime!]
+  """All values that are contained in given list."""
+  lastUpdate_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    lastUpdate_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  lastUpdate_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    lastUpdate_lt: DateTime
+  """All values less than the given value."""
+  lastUpdate_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    lastUpdate_lte: DateTime
+  """All values less than or equal the given value."""
+  lastUpdate_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    lastUpdate_gt: DateTime
+  """All values greater than the given value."""
+  lastUpdate_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    lastUpdate_gte: DateTime
-    schedule: DigestSchedule
+  """All values greater than or equal the given value."""
+  lastUpdate_gte: DateTime
+  schedule: DigestSchedule
 
-    """
-    All values that are not equal to given value.
-    """
-    schedule_not: DigestSchedule
+  """All values that are not equal to given value."""
+  schedule_not: DigestSchedule
 
-    """
-    All values that are contained in given list.
-    """
-    schedule_in: [DigestSchedule!]
+  """All values that are contained in given list."""
+  schedule_in: [DigestSchedule!]
 
-    """
-    All values that are not contained in given list.
-    """
-    schedule_not_in: [DigestSchedule!]
-    updatedAt: DateTime
+  """All values that are not contained in given list."""
+  schedule_not_in: [DigestSchedule!]
+  updatedAt: DateTime
 
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
 
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
 
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
 
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
 
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
 
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
 
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
-    feed: FeedWhereInput
-    user: UserWhereInput
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  feed: FeedWhereInput
+  user: UserWhereInput
 }
 
 input UserFeedWhereUniqueInput {
-    id: ID
+  id: ID
 }
 
 enum UserOrderByInput {
-    id_ASC
-    id_DESC
-    email_ASC
-    email_DESC
-    password_ASC
-    password_DESC
-    setPasswordToken_ASC
-    setPasswordToken_DESC
-    setPasswordTokenExpiry_ASC
-    setPasswordTokenExpiry_DESC
-    createdAt_ASC
-    createdAt_DESC
-    updatedAt_ASC
-    updatedAt_DESC
+  id_ASC
+  id_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  setPasswordToken_ASC
+  setPasswordToken_DESC
+  setPasswordTokenExpiry_ASC
+  setPasswordTokenExpiry_DESC
+  locale_ASC
+  locale_DESC
+  timeZone_ASC
+  timeZone_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
 }
 
 type UserPreviousValues {
-    id: ID!
-    email: String!
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: [Permission!]!
-    createdAt: DateTime!
-    updatedAt: DateTime!
+  id: ID!
+  email: String!
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  permissions: [Permission!]!
+  locale: String
+  timeZone: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type UserSubscriptionPayload {
-    mutation: MutationType!
-    node: User
-    updatedFields: [String!]
-    previousValues: UserPreviousValues
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
 }
 
 input UserSubscriptionWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [UserSubscriptionWhereInput!]
+  """Logical AND on all given filters."""
+  AND: [UserSubscriptionWhereInput!]
 
-    """
-    Logical OR on all given filters.
-    """
-    OR: [UserSubscriptionWhereInput!]
+  """Logical OR on all given filters."""
+  OR: [UserSubscriptionWhereInput!]
 
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [UserSubscriptionWhereInput!]
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserSubscriptionWhereInput!]
 
-    """
-    The subscription event gets dispatched when it's listed in mutation_in
-    """
-    mutation_in: [MutationType!]
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
 
-    """
-    The subscription event gets only dispatched when one of the updated fields names is included in this list
-    """
-    updatedFields_contains: String
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
 
-    """
-    The subscription event gets only dispatched when all of the field names included in this list have been updated
-    """
-    updatedFields_contains_every: [String!]
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
 
-    """
-    The subscription event gets only dispatched when some of the field names included in this list have been updated
-    """
-    updatedFields_contains_some: [String!]
-    node: UserWhereInput
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
 }
 
 input UserUpdateInput {
-    email: String
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: UserUpdatepermissionsInput
-    feeds: UserFeedUpdateManyWithoutUserInput
+  email: String
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  locale: String
+  timeZone: String
+  permissions: UserUpdatepermissionsInput
+  feeds: UserFeedUpdateManyWithoutUserInput
 }
 
 input UserUpdateManyMutationInput {
-    email: String
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: UserUpdatepermissionsInput
+  email: String
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  locale: String
+  timeZone: String
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpdateOneRequiredWithoutFeedsInput {
-    create: UserCreateWithoutFeedsInput
-    connect: UserWhereUniqueInput
-    update: UserUpdateWithoutFeedsDataInput
-    upsert: UserUpsertWithoutFeedsInput
+  create: UserCreateWithoutFeedsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutFeedsDataInput
+  upsert: UserUpsertWithoutFeedsInput
 }
 
 input UserUpdatepermissionsInput {
-    set: [Permission!]
+  set: [Permission!]
 }
 
 input UserUpdateWithoutFeedsDataInput {
-    email: String
-    password: String
-    setPasswordToken: String
-    setPasswordTokenExpiry: DateTime
-    permissions: UserUpdatepermissionsInput
+  email: String
+  password: String
+  setPasswordToken: String
+  setPasswordTokenExpiry: DateTime
+  locale: String
+  timeZone: String
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpsertWithoutFeedsInput {
-    update: UserUpdateWithoutFeedsDataInput!
-    create: UserCreateWithoutFeedsInput!
+  update: UserUpdateWithoutFeedsDataInput!
+  create: UserCreateWithoutFeedsInput!
 }
 
 input UserWhereInput {
-    """
-    Logical AND on all given filters.
-    """
-    AND: [UserWhereInput!]
-
-    """
-    Logical OR on all given filters.
-    """
-    OR: [UserWhereInput!]
-
-    """
-    Logical NOT on all given filters combined by AND.
-    """
-    NOT: [UserWhereInput!]
-    id: ID
-
-    """
-    All values that are not equal to given value.
-    """
-    id_not: ID
-
-    """
-    All values that are contained in given list.
-    """
-    id_in: [ID!]
-
-    """
-    All values that are not contained in given list.
-    """
-    id_not_in: [ID!]
-
-    """
-    All values less than the given value.
-    """
-    id_lt: ID
-
-    """
-    All values less than or equal the given value.
-    """
-    id_lte: ID
-
-    """
-    All values greater than the given value.
-    """
-    id_gt: ID
-
-    """
-    All values greater than or equal the given value.
-    """
-    id_gte: ID
-
-    """
-    All values containing the given string.
-    """
-    id_contains: ID
-
-    """
-    All values not containing the given string.
-    """
-    id_not_contains: ID
-
-    """
-    All values starting with the given string.
-    """
-    id_starts_with: ID
-
-    """
-    All values not starting with the given string.
-    """
-    id_not_starts_with: ID
-
-    """
-    All values ending with the given string.
-    """
-    id_ends_with: ID
-
-    """
-    All values not ending with the given string.
-    """
-    id_not_ends_with: ID
-    email: String
-
-    """
-    All values that are not equal to given value.
-    """
-    email_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    email_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    email_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    email_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    email_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    email_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    email_gte: String
-
-    """
-    All values containing the given string.
-    """
-    email_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    email_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    email_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    email_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    email_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    email_not_ends_with: String
-    password: String
-
-    """
-    All values that are not equal to given value.
-    """
-    password_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    password_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    password_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    password_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    password_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    password_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    password_gte: String
-
-    """
-    All values containing the given string.
-    """
-    password_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    password_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    password_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    password_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    password_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    password_not_ends_with: String
-    setPasswordToken: String
-
-    """
-    All values that are not equal to given value.
-    """
-    setPasswordToken_not: String
-
-    """
-    All values that are contained in given list.
-    """
-    setPasswordToken_in: [String!]
-
-    """
-    All values that are not contained in given list.
-    """
-    setPasswordToken_not_in: [String!]
-
-    """
-    All values less than the given value.
-    """
-    setPasswordToken_lt: String
-
-    """
-    All values less than or equal the given value.
-    """
-    setPasswordToken_lte: String
-
-    """
-    All values greater than the given value.
-    """
-    setPasswordToken_gt: String
-
-    """
-    All values greater than or equal the given value.
-    """
-    setPasswordToken_gte: String
-
-    """
-    All values containing the given string.
-    """
-    setPasswordToken_contains: String
-
-    """
-    All values not containing the given string.
-    """
-    setPasswordToken_not_contains: String
-
-    """
-    All values starting with the given string.
-    """
-    setPasswordToken_starts_with: String
-
-    """
-    All values not starting with the given string.
-    """
-    setPasswordToken_not_starts_with: String
-
-    """
-    All values ending with the given string.
-    """
-    setPasswordToken_ends_with: String
-
-    """
-    All values not ending with the given string.
-    """
-    setPasswordToken_not_ends_with: String
-    setPasswordTokenExpiry: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    setPasswordTokenExpiry_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    setPasswordTokenExpiry_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    setPasswordTokenExpiry_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    setPasswordTokenExpiry_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    setPasswordTokenExpiry_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    setPasswordTokenExpiry_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    setPasswordTokenExpiry_gte: DateTime
-    createdAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    createdAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    createdAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    createdAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    createdAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    createdAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    createdAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    createdAt_gte: DateTime
-    updatedAt: DateTime
-
-    """
-    All values that are not equal to given value.
-    """
-    updatedAt_not: DateTime
-
-    """
-    All values that are contained in given list.
-    """
-    updatedAt_in: [DateTime!]
-
-    """
-    All values that are not contained in given list.
-    """
-    updatedAt_not_in: [DateTime!]
-
-    """
-    All values less than the given value.
-    """
-    updatedAt_lt: DateTime
-
-    """
-    All values less than or equal the given value.
-    """
-    updatedAt_lte: DateTime
-
-    """
-    All values greater than the given value.
-    """
-    updatedAt_gt: DateTime
-
-    """
-    All values greater than or equal the given value.
-    """
-    updatedAt_gte: DateTime
-    feeds_every: UserFeedWhereInput
-    feeds_some: UserFeedWhereInput
-    feeds_none: UserFeedWhereInput
+  """Logical AND on all given filters."""
+  AND: [UserWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  setPasswordToken: String
+
+  """All values that are not equal to given value."""
+  setPasswordToken_not: String
+
+  """All values that are contained in given list."""
+  setPasswordToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  setPasswordToken_not_in: [String!]
+
+  """All values less than the given value."""
+  setPasswordToken_lt: String
+
+  """All values less than or equal the given value."""
+  setPasswordToken_lte: String
+
+  """All values greater than the given value."""
+  setPasswordToken_gt: String
+
+  """All values greater than or equal the given value."""
+  setPasswordToken_gte: String
+
+  """All values containing the given string."""
+  setPasswordToken_contains: String
+
+  """All values not containing the given string."""
+  setPasswordToken_not_contains: String
+
+  """All values starting with the given string."""
+  setPasswordToken_starts_with: String
+
+  """All values not starting with the given string."""
+  setPasswordToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  setPasswordToken_ends_with: String
+
+  """All values not ending with the given string."""
+  setPasswordToken_not_ends_with: String
+  setPasswordTokenExpiry: DateTime
+
+  """All values that are not equal to given value."""
+  setPasswordTokenExpiry_not: DateTime
+
+  """All values that are contained in given list."""
+  setPasswordTokenExpiry_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  setPasswordTokenExpiry_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  setPasswordTokenExpiry_lt: DateTime
+
+  """All values less than or equal the given value."""
+  setPasswordTokenExpiry_lte: DateTime
+
+  """All values greater than the given value."""
+  setPasswordTokenExpiry_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  setPasswordTokenExpiry_gte: DateTime
+  locale: String
+
+  """All values that are not equal to given value."""
+  locale_not: String
+
+  """All values that are contained in given list."""
+  locale_in: [String!]
+
+  """All values that are not contained in given list."""
+  locale_not_in: [String!]
+
+  """All values less than the given value."""
+  locale_lt: String
+
+  """All values less than or equal the given value."""
+  locale_lte: String
+
+  """All values greater than the given value."""
+  locale_gt: String
+
+  """All values greater than or equal the given value."""
+  locale_gte: String
+
+  """All values containing the given string."""
+  locale_contains: String
+
+  """All values not containing the given string."""
+  locale_not_contains: String
+
+  """All values starting with the given string."""
+  locale_starts_with: String
+
+  """All values not starting with the given string."""
+  locale_not_starts_with: String
+
+  """All values ending with the given string."""
+  locale_ends_with: String
+
+  """All values not ending with the given string."""
+  locale_not_ends_with: String
+  timeZone: String
+
+  """All values that are not equal to given value."""
+  timeZone_not: String
+
+  """All values that are contained in given list."""
+  timeZone_in: [String!]
+
+  """All values that are not contained in given list."""
+  timeZone_not_in: [String!]
+
+  """All values less than the given value."""
+  timeZone_lt: String
+
+  """All values less than or equal the given value."""
+  timeZone_lte: String
+
+  """All values greater than the given value."""
+  timeZone_gt: String
+
+  """All values greater than or equal the given value."""
+  timeZone_gte: String
+
+  """All values containing the given string."""
+  timeZone_contains: String
+
+  """All values not containing the given string."""
+  timeZone_not_contains: String
+
+  """All values starting with the given string."""
+  timeZone_starts_with: String
+
+  """All values not starting with the given string."""
+  timeZone_not_starts_with: String
+
+  """All values ending with the given string."""
+  timeZone_ends_with: String
+
+  """All values not ending with the given string."""
+  timeZone_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  feeds_every: UserFeedWhereInput
+  feeds_some: UserFeedWhereInput
+  feeds_none: UserFeedWhereInput
 }
 
 input UserWhereUniqueInput {
-    id: ID
-    email: String
-    setPasswordToken: String
+  id: ID
+  email: String
+  setPasswordToken: String
 }

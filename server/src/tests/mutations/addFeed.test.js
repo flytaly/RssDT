@@ -13,6 +13,8 @@ const mocks = {
         email: `${moduleName}TestUser@test.com`,
         feedUrl: `http://${moduleName}testfeed.com`,
         feedSchedule: 'EVERY2HOURS',
+        timeZone: 'Europe/Paris',
+        locale: 'en-US',
     },
     addNewFeed: {
         email: `${moduleName}TestUser@test.com`,
@@ -74,12 +76,14 @@ describe('addFeed mutation', () => {
             query: gq.ADD_FEED_MUTATION,
             variables: { email, feedUrl, feedSchedule },
         }));
-        const user = await db.query.user({ where: { email } }, '{ email permissions feeds { schedule activated activationToken feed { url } }  }');
+        const user = await db.query.user({ where: { email } }, '{ email locale timeZone permissions feeds { schedule activated activationToken feed { url } }  }');
         expect(errors).toBeUndefined();
         expect(message).toEqual(`Activation link has been sent to ${email.toLowerCase()}`);
         expect(user).toMatchObject({
             email: mocks.addFeed.email.toLowerCase(),
             permissions: ['USER'],
+            locale: 'en-GB',
+            timeZone: 'GMT',
             feeds: [{
                 schedule: mocks.addFeed.feedSchedule,
                 activated: false,
@@ -148,5 +152,28 @@ describe('addFeed mutation', () => {
         }));
 
         expect(errors[0].message).toEqual('Not a feed');
+    });
+});
+
+describe('d', () => {
+    beforeEach(clearDB);
+    test('should save locale and timeZone', async () => {
+        const { email, feedUrl, feedSchedule, locale, timeZone } = mocks.addFeed;
+        await makePromise(execute(link, {
+            query: gq.ADD_FEED_MUTATION,
+            variables: { email, feedUrl, feedSchedule, locale, timeZone },
+        }));
+        const user = await db.query.user({ where: { email } }, '{ locale timeZone }');
+        expect(user.timeZone).toBe(timeZone);
+        expect(user.locale).toBe(locale);
+    });
+
+    test('should not save incorrect timezone', async () => {
+        const { email, feedUrl, feedSchedule } = mocks.addFeed;
+        const { errors } = await makePromise(execute(link, {
+            query: gq.ADD_FEED_MUTATION,
+            variables: { email, feedUrl, feedSchedule, timeZone: 'wrongTimeZone' },
+        }));
+        expect(errors[0]).toHaveProperty('message', 'Not valid argument: timeZone');
     });
 });

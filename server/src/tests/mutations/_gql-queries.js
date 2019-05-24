@@ -4,11 +4,15 @@ const ADD_FEED_MUTATION = gql`mutation (
     $email: String!
     $feedUrl: String!,
     $feedSchedule: DigestSchedule,
+    $locale: String,
+    $timeZone: String,
     ) {
     addFeed(
         email: $email
         feedUrl: $feedUrl
         feedSchedule: $feedSchedule
+        locale: $locale
+        timeZone: $timeZone
     ) {
       message
     }

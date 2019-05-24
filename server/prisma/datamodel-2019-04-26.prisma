@@ -21,6 +21,8 @@ type User {
     setPasswordToken: String @unique
     setPasswordTokenExpiry: DateTime
     permissions: [Permission] @scalarList(strategy: RELATION)
+    locale: String @default(value: "en-GB")
+    timeZone: String @default(value: "GMT")
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
 }
