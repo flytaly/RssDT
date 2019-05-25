@@ -28,6 +28,11 @@ input MyFeedUpdateInput {
     schedule: DigestSchedule
 }
 
+input MyInfoUpdateInput {
+    locale: String
+    timeZone: String
+}
+
 type Feed {
     id: ID!
     url: String!
@@ -60,6 +65,7 @@ type Mutation {
     signIn(email: String!, password: String!): Message!
     signOut: Message!
     updateMyFeed(data: MyFeedUpdateInput!, id: ID!): UserFeed! @isAuthenticated
+    updateMyInfo(data: MyInfoUpdateInput): User @isAuthenticated
 }
 
 type Query {

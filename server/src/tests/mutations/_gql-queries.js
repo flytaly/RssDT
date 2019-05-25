@@ -81,6 +81,18 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
   }
 }`;
 
+const UPDATE_MY_INFO_MUTATION = gql`mutation (
+    $data: MyInfoUpdateInput!
+  ){
+    updateMyInfo (
+      data: $data
+    ) {
+      locale
+      timeZone
+    }
+}`;
+
+
 const DELETE_MY_FEED_MUTATION = gql`mutation (
     $id: ID!
 ){
@@ -100,4 +112,5 @@ module.exports = {
     SIGNIN_MUTATION,
     SIGNOUT_MUTATION,
     UPDATE_MY_FEED_MUTATION,
+    UPDATE_MY_INFO_MUTATION,
 };
