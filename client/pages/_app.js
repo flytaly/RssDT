@@ -5,6 +5,7 @@ import App, { Container } from 'next/app';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import Page from '../components/page';
 import withApolloHooks from '../lib/with-apollo-hooks';
+import { StateProvider } from '../components/state';
 
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -22,9 +23,11 @@ class MyApp extends App {
         return (
             <Container>
                 <ApolloHooksProvider client={apolloClient}>
-                    <Page>
-                        <Component {...pageProps} />
-                    </Page>
+                    <StateProvider>
+                        <Page>
+                            <Component {...pageProps} />
+                        </Page>
+                    </StateProvider>
                 </ApolloHooksProvider>
             </Container>
         );
