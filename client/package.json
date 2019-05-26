@@ -4,18 +4,21 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "next -p 8082",
+        "dev": "NODE_ICU_DATA=node_modules/full-icu nodemon server.js",
         "build": "next build",
-        "start": "NODE_ENV=production next start",
-        "test": "NODE_ENV=test jest --coverage",
-        "test:watch": "NODE_ENV=test jest --watch"
+        "start": "NODE_ICU_DATA=node_modules/full-icu NODE_ENV=production next start",
+        "test": "NODE_ICU_DATA=node_modules/full-icu NODE_ENV=test jest --coverage",
+        "test:watch": "NODE_ICU_DATA=node_modules/full-icu NODE_ENV=test jest --watch"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "accepts": "^1.3.7",
         "apollo-boost": "^0.3.1",
         "babel-plugin-file-loader": "^1.1.1",
+        "express": "^4.17.0",
         "formik": "^1.5.4",
+        "full-icu": "^1.3.0",
         "graphql": "^14.3.0",
         "graphql-tag": "^2.10.1",
         "isomorphic-unfetch": "^3.0.0",
