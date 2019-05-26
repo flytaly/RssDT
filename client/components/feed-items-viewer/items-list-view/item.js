@@ -77,18 +77,18 @@ const getImageFromEnclosures = (enclosures = []) => {
 };
 
 
-const FeedItemsListElement = ({ item }) => {
+const FeedItemsListElement = ({ item, locale, timeZone }) => {
     const { link, title, pubDate, description } = item;
     const imageUrl = item.imageUrl || getImageFromEnclosures(item.enclosures || []);
     const enclosures = addTitlesToEnclosures(item.enclosures || []);
     const date = new Date(pubDate);
-
+    const dateArgs = (locale && timeZone) ? [locale, { timeZone }] : [];
     return (
         <ListElement>
             <ElementTitle>
                 <div>
                     <h3><a href={link} rel="noopener noreferrer" target="_blank">{title}</a></h3>
-                    <Time>{date.toLocaleString()}</Time>
+                    <Time>{date.toLocaleString(...dateArgs)}</Time>
                 </div>
                 {imageUrl && (
                     <a href={link} rel="noopener noreferrer" target="_blank">
@@ -115,6 +115,12 @@ const FeedItemsListElement = ({ item }) => {
 
 FeedItemsListElement.propTypes = {
     item: PropTypes.shape({}).isRequired,
+    locale: PropTypes.string,
+    timeZone: PropTypes.string,
+};
+FeedItemsListElement.defaultProps = {
+    locale: '',
+    timeZone: '',
 };
 
 export default FeedItemsListElement;

@@ -5,6 +5,8 @@ const ME_QUERY = gql`
         me {
             id
             email
+            timeZone
+            locale
         }
     }
 `;

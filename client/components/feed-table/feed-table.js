@@ -10,24 +10,45 @@ import trashIcon from '../../static/trash.svg';
 import editIcon from '../../static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
 import { periodNames } from '../../types/digest-periods';
-import { MY_FEEDS_QUERY } from '../../queries';
+import { MY_FEEDS_QUERY, ME_QUERY } from '../../queries';
 
 const DELETE_FEED_MUTATION = gql`mutation ($id: ID!){
   deleteMyFeed ( id: $id ) { id }
 }`;
 
+const formatDates = ({ createdAt, lastUpdate }, { timeZone, locale }) => {
+    const createdAtDate = new Date(createdAt);
+    const lastUpdateDate = new Date(lastUpdate);
+    let localCreatedAt;
+    let localLastUpdate;
+    // On NextJS server use information from GraphQL to create Date strings with user timezone and locale
+    if (!process.browser || !timeZone || !locale) {
+        try {
+            localCreatedAt = createdAtDate.toLocaleDateString(locale, { timeZone });
+            localLastUpdate = lastUpdateDate.toLocaleString(locale, { timeZone });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    if (!localCreatedAt) localCreatedAt = createdAtDate.toLocaleDateString();
+    if (!localLastUpdate) localLastUpdate = lastUpdateDate.toLocaleString();
 
-const renderRow = (feedInfo, { setConfirmDelete, setEditFeed }) => {
+    return { localCreatedAt, localLastUpdate };
+};
+
+// eslint-disable-next-line react/prop-types
+const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
     const title = feedInfo.feed.title || feedInfo.feed.link || feedInfo.feed.url;
+    const { localCreatedAt, localLastUpdate } = formatDates(feedInfo, meInfo);
     return (
         <Tr key={feedInfo.id}>
             <Td data-name="FEED">
                 <Link href={`/feeds/view?id=${feedInfo.id}`}><a href={`/feeds/view?id=${feedInfo.id}`} title="View items">{title}</a></Link>
             </Td>
             <Td minWidth="8rem" data-name="ADDED">
-                {new Date(feedInfo.createdAt).toLocaleDateString()}
+                {localCreatedAt}
             </Td>
-            <Td data-name="LAST DIGEST DATE">{new Date(feedInfo.lastUpdate).toLocaleString()}</Td>
+            <Td data-name="LAST DIGEST DATE">{localLastUpdate}</Td>
             <Td data-name="DIGEST SCHEDULE">{`${periodNames[feedInfo.schedule] || feedInfo.schedule} digest` }</Td>
             <Td minWidth="8rem" data-name="ACTIONS">
                 <div>
@@ -73,6 +94,7 @@ const updateAfterDeletion = (dataProxy, mutationResult) => {
 };
 
 const ResponsiveTable = () => {
+    const { data: meData } = useQuery(ME_QUERY);
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
     const deleteFeedMutation = useMutation(DELETE_FEED_MUTATION, { update: updateAfterDeletion });
     const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, title: null, id: null });
@@ -83,6 +105,7 @@ const ResponsiveTable = () => {
     }, []); // DOM doesn't exist on server so run setAppElement inside useEffect
 
     const feeds = get(data, 'myFeeds', []);
+    const me = get(meData, 'me', {});
     if (error && error.message !== 'GraphQL error: Authentication is required') {
         console.error(error);
     }
@@ -97,7 +120,7 @@ const ResponsiveTable = () => {
                     <Th>DIGEST SCHEDULE</Th>
                     <Th minWidth="8rem">ACTIONS</Th>
                 </Tr>
-                {loading ? 'loading...' : feeds.map(feedInfo => renderRow(feedInfo, { setConfirmDelete, setEditFeed }))}
+                {loading ? 'loading...' : feeds.map(feedInfo => renderRow({ feedInfo, meInfo: me, setConfirmDelete, setEditFeed }))}
             </Table>
             <ReactModal
                 isOpen={confirmDelete.isOpen}

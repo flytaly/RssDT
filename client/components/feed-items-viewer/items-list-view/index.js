@@ -25,7 +25,7 @@ const SpinnerContainer = styled.div`
     margin: 0 auto;
 `;
 
-function ItemsListView({ items, fetchMore, loading, canFetchMore }) {
+function ItemsListView({ items, fetchMore, loading, canFetchMore, me }) {
     const loadMoreRef = useRef(null);
     const lastId = items.length ? items[items.length - 1].id : null;
 
@@ -50,7 +50,7 @@ function ItemsListView({ items, fetchMore, loading, canFetchMore }) {
     return (
         <StyledItemContainer>
             <StyledItemList>
-                {items.map(item => <FeedItem item={item} key={item.id} />)}
+                {items.map(item => <FeedItem item={item} key={item.id} timeZone={me.timeZone} locale={me.locale} />)}
             </StyledItemList>
             <div ref={loadMoreRef}>
                 {
@@ -68,12 +68,14 @@ ItemsListView.propTypes = {
     fetchMore: PropTypes.func,
     loading: PropTypes.bool,
     canFetchMore: PropTypes.bool,
+    me: PropTypes.shape({ locale: PropTypes.string, timeZone: PropTypes.string }),
 };
 ItemsListView.defaultProps = {
     items: [],
     fetchMore: () => {},
     loading: false,
     canFetchMore: false,
+    me: {},
 };
 
 export default ItemsListView;

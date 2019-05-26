@@ -7,7 +7,7 @@ import { SIGN_IN_MUTATION } from '../components/login/login-form';
 import RequestPasswordForm, { REQUEST_PASSWORD_CHANGE } from '../components/login/request-password-form';
 import SetPasswordForm, { SET_PASSWORD_MUTATION } from '../components/login/set-password-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
-import { ME_QUERY_MOCK } from '../test-utils/qgl-mocks';
+import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
 
 expect.extend(toHaveNoViolations);
 
@@ -20,6 +20,7 @@ const mocks = [{
     result: { data: { requestPasswordChange: { message: 'OK' } } },
 },
 ME_QUERY_MOCK,
+UPDATE_MY_INFO_MOCK,
 ];
 
 describe('Log In form', () => {

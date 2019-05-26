@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { useQuery } from 'react-apollo-hooks';
 import get from 'lodash.get';
-import { MY_FEED_ITEMS_QUERY, FEED_ITEMS_CONNECTION } from '../../queries';
+import { MY_FEED_ITEMS_QUERY, FEED_ITEMS_CONNECTION, ME_QUERY } from '../../queries';
 import ItemsListView from './items-list-view';
 
 const useQueryWithPagination = ({ feedId, first = 20, orderBy = 'pubDate_DESC' }) => {
@@ -56,6 +56,7 @@ function FeedItems({ feedId }) {
         data: { items, canFetchMore }, error, loading, fetchMore,
     } = useQueryWithPagination({ feedId, first: itemsPerFetch });
     const [state, dispatch] = useReducer(reducer, { prevAfter: null });
+    const { data: meData } = useQuery(ME_QUERY);
 
     // ? For some reasons (maybe because I combine 2 useQuery?) useCallback doesn't
     // ? always work here so I use useReducer to prevent fetching the same results.
@@ -78,6 +79,7 @@ function FeedItems({ feedId }) {
             fetchMore={memoizedFetchMore}
             canFetchMore={canFetchMore}
             loading={loading}
+            me={meData ? meData.me : null}
         />
     );
 }

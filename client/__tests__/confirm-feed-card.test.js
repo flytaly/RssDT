@@ -2,7 +2,7 @@ import 'jest-dom/extend-expect';
 import { render, wait } from 'react-testing-library';
 import ConfirmFeed, { CONFIRM_SUBSCRIPTION_MUTATION } from '../components/confirm-feed-card';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
-import { ME_QUERY_MOCK } from '../test-utils/qgl-mocks';
+import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
 
 const successMessage = 'Feed "feed_name" was activated';
 const errorMessage = 'Wrong or expired token';
@@ -20,6 +20,7 @@ const mocks = [{
     error: new Error(errorMessage),
 },
 ME_QUERY_MOCK,
+UPDATE_MY_INFO_MOCK,
 ];
 
 describe('Confirm a feed subscription', () => {

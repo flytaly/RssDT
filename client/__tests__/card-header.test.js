@@ -4,18 +4,15 @@ import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import CardHeader from '../components/card-header';
 import ME_QUERY from '../queries/me-query';
 import withAuth from '../components/decorators/withAuth';
+import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
 
 describe('Navigation menu', () => {
     afterEach(cleanup);
     const HeaderWithAuth = withAuth(false)(CardHeader);
 
     test('should have "Log out" link if user is logged in', async () => {
-        const mocks = [{
-            request: { query: ME_QUERY },
-            result: { data: { me: { email: 'email@test.com', id: 'id' } } },
-        }];
         const { queryByText } = render(
-            <ApolloMockedProvider mocks={mocks}>
+            <ApolloMockedProvider mocks={[ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK]}>
                 <HeaderWithAuth />
             </ApolloMockedProvider>,
         );
@@ -32,7 +29,9 @@ describe('Navigation menu', () => {
             request: { query: ME_QUERY },
             result: { data: {} },
             error: new Error(),
-        }];
+        },
+        UPDATE_MY_INFO_MOCK,
+        ];
         const { queryByText } = render(
             <ApolloMockedProvider mocks={mocks}>
                 <HeaderWithAuth />
