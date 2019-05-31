@@ -8,13 +8,17 @@ const createAuthMiddleware = require('../../middlewares/jwtAuth');
 jest.mock('../../mail-sender/dispatcher.js');
 
 const deleteData = async (prisma, { email, url = '' }) => {
-    const userExists = await prisma.exists.User({ email });
-    const feedExists = await prisma.exists.Feed({ url });
-    if (userExists) {
-        await prisma.mutation.deleteUser({ where: { email } });
+    if (email) {
+        const userExists = await prisma.exists.User({ email });
+        if (userExists) {
+            await prisma.mutation.deleteUser({ where: { email } });
+        }
     }
-    if (feedExists) {
-        await prisma.mutation.deleteFeed({ where: { url } });
+    if (url) {
+        const feedExists = await prisma.exists.Feed({ url });
+        if (feedExists) {
+            await prisma.mutation.deleteFeed({ where: { url } });
+        }
     }
 };
 

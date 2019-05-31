@@ -1,0 +1,10 @@
+const periods = {
+    EVERYHOUR: 'EVERYHOUR',
+    EVERY2HOURS: 'EVERY2HOURS',
+    EVERY3HOURS: 'EVERY3HOURS',
+    EVERY6HOURS: 'EVERY6HOURS',
+    EVERY12HOURS: 'EVERY12HOURS',
+    DAILY: 'DAILY',
+};
+
+module.exports = periods;
