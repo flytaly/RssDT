@@ -22,10 +22,12 @@ const periods = {
     EVERY12HOURS: 12,
     DAILY: 24,
 };
+const dailyDigestHour = 18;
 
 module.exports = {
     limitEmailsNumber,
     maxItemsPerMail,
     periodsByDuration,
     periods,
+    dailyDigestHour,
 };

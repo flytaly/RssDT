@@ -1,5 +1,6 @@
 const moment = require('moment-timezone');
-
+const { periods, dailyDigestHour } = require('./config');
+const periodNames = require('../periods');
 /**
  * Check if current userFeed is ready to receive digest.
  * This function uses time relative to user's time zone.
@@ -16,9 +17,27 @@ const moment = require('moment-timezone');
  */
 const isFeedReady = (userFeed) => {
     const { lastUpdate, schedule, user } = userFeed;
-    // TODO: Implement the algorithm described above
+    if (!lastUpdate) return true;
+    const timeZone = user.timeZone || 'GMT';
+    const lastEmailTime = moment(lastUpdate).tz(timeZone);
+    const now = moment().tz(timeZone);
+    const hour = now.hour();
+    const prevSuitableHour = hour - (hour % periods[schedule]);
 
-    return true;
+    const prevSuitableTime = now.clone().tz(timeZone)
+        .set({ hour: prevSuitableHour, minute: 0, second: 0, millisecond: 0 });
+    if (schedule === periodNames.DAILY) {
+        prevSuitableTime.hour(dailyDigestHour);
+        if (!prevSuitableTime.isSameOrBefore(now)) {
+            prevSuitableTime.subtract(1, 'days');
+        }
+    }
+
+    if (lastEmailTime.isBefore(prevSuitableTime)) {
+        return true;
+    }
+
+    return false;
 };
 
 module.exports = { isFeedReady };
