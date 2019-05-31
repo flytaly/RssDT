@@ -19,7 +19,7 @@ async function getActiveUserFeeds(feedUrl) {
             },
             activated: true,
         },
-    }, '{ id lastUpdate schedule user { email } }');
+    }, '{ id lastUpdate schedule user { email timeZone } }');
 }
 
 async function getFeedInfo(url) {
