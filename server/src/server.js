@@ -20,8 +20,8 @@ class AuthDirective extends SchemaDirectiveVisitor {
         field.resolve = async function (...args) {
             const { request } = args[2];
             const { user } = request;
-            if (!user) { throw new AuthenticationError('Authentication is required'); }
-            if (!user.permissions.includes(permission)) { throw new ForbiddenError('Access Denied'); }
+            if (!user) { return new AuthenticationError('Authentication is required'); }
+            if (!user.permissions.includes(permission)) { return new ForbiddenError('Access Denied'); }
             const result = await resolve.apply(this, args);
             return result;
         };

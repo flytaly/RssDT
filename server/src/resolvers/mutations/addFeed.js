@@ -19,7 +19,7 @@ async function addFeed(parent, args, ctx) {
         return new Error('Not valid argument: feedUrl');
     }
     if (!email) { // TODO: add additional validations
-        throw new Error('Not valid argument: email');
+        return new Error('Not valid argument: email');
     }
     if (timeZone && !moment.tz.zone(timeZone)) {
         return new Error('Not valid argument: timeZone');
@@ -37,7 +37,7 @@ async function addFeed(parent, args, ctx) {
         } catch (e) {
             if (e.message === 'Not a feed') throw e;
             logger.error(e);
-            throw new Error('Couldn\'t get access to feed');
+            return new Error('Couldn\'t get access to feed');
         }
     }
 
@@ -46,7 +46,7 @@ async function addFeed(parent, args, ctx) {
         create: { url, ...filterMeta(feedMeta) },
         update: {},
     });
-    if (!feed) throw new Error(`Couldn't save feed ${url}`);
+    if (!feed) return new Error(`Couldn't save feed ${url}`);
 
     const userFeeds = await ctx.db.query.userFeeds({ where: {
         user: { email },
@@ -95,7 +95,7 @@ async function addFeed(parent, args, ctx) {
     } catch (e) {
         logger.error(e);
     }
-    if (!user) throw new Error(`Couldn't save feed to user ${email}`);
+    if (!user) return new Error(`Couldn't save feed to user ${email}`);
 
     const title = feedMeta.title ? feedMeta.title : url;
     await sendConfirmSubscription(email, activationToken, title);

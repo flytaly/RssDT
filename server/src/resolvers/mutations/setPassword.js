@@ -11,7 +11,7 @@ async function setPassword(parent, args, ctx) {
         setPasswordToken: token,
         setPasswordTokenExpiry_gte: new Date(),
     })) {
-        throw new Error('The token is invalid or expired');
+        return new Error('The token is invalid or expired');
     }
 
     const password = await bcrypt.hash(plainPassword, saltRounds);

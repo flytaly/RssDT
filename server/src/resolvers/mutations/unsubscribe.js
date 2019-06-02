@@ -5,7 +5,7 @@ async function unsubscribe(parent, args, ctx) {
         unsubscribeToken: token,
         unsubscribeTokenExpiry_gte: new Date(),
     })) {
-        throw new Error('The token is invalid or expired');
+        return new Error('The token is invalid or expired');
     }
 
     const userFeed = await ctx.db.mutation.deleteUserFeed({

@@ -11,7 +11,7 @@ async function confirmSubscription(parent, args, ctx) {
         },
     }, '{ id feed { url title } }');
 
-    if (!userFeeds || !userFeeds.length) throw new Error('Wrong or expired token');
+    if (!userFeeds || !userFeeds.length) return new Error('Wrong or expired token');
 
     const userFeed = userFeeds[0];
 
