@@ -1,5 +1,6 @@
 const mjml2html = require('mjml');
 const url = require('url');
+const moment = require('moment-timezone');
 const themes = require('./themes');
 
 /**
@@ -45,14 +46,19 @@ const getImageFromEnclosures = (enclosures) => {
  * @param {String} userFeedId - id of user's feed for unsubscribing
  * @return {{html: String, errors: Array}}
  */
-const composeHTML = (info, feedItems, userFeedId = '') => {
+const composeHTML = (info, feedItems, userFeed = {}) => {
     /* eslint-disable no-param-reassign */
+    const {
+        id: userFeedId = '', user: { timeZone = 'GMT', locale = 'en' } = {},
+    } = userFeed;
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
     const items = feedItems.reduce((acc, item) => {
         // if there is no image try to find it in enclosures. Many feeds save images in enclosures.
         if (!item.imageUrl) { item.imageUrl = getImageFromEnclosures(item.enclosures); }
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
+        item.pubDate = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
+
         return acc + theme.item(item);
     }, '');
     const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;

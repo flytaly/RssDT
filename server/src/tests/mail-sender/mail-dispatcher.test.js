@@ -34,11 +34,11 @@ describe('Build digest', () => {
             { schedule: periods.EVERY3HOURS, activated: true, feed: { create: feed } }];
         data.urls = [feed.url];
         data.feedItems = feedItems;
-        data.user = {
+        const user = {
             email: faker.internet.email(),
             feeds: { create: userFeeds },
         };
-        await db.mutation.createUser({ data: data.user });
+        data.user = await db.mutation.createUser({ data: user });
     });
 
     afterEach(jest.clearAllMocks);
@@ -53,9 +53,14 @@ describe('Build digest', () => {
         const url = data.urls[0];
         const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id activated schedule } }');
         const userFeed = feed.userFeeds[0];
-        await setUserFeedLastUpdate(userFeed.id, new Date(Date.now() - 3600000 * 24));
+        const lastUpdate = new Date(Date.now() - 3600000 * 24);
+        await setUserFeedLastUpdate(userFeed.id, lastUpdate);
 
         await buildAndSendDigests(url);
+        const userFeedAfter = await db.query.userFeed(
+            { where: { id: userFeed.id } },
+            '{ id lastUpdate schedule user { email locale timeZone } }',
+        );
         expect(isFeedReady).toHaveBeenCalled();
         expect(isFeedReady.mock.calls[0][0]).toMatchObject({ id: userFeed.id });
 
@@ -63,7 +68,7 @@ describe('Build digest', () => {
         expect(composeHTML).toHaveBeenCalledWith(
             expect.objectContaining({ title: feed.title }),
             expect.arrayContaining(data.feedItems.map(({ title }) => expect.objectContaining({ title }))),
-            userFeed.id,
+            expect.objectContaining({ ...userFeedAfter, lastUpdate: lastUpdate.toISOString() }),
         );
         expect(transport.sendMail).toHaveBeenCalledWith(expect.objectContaining({
             from: process.env.MAIL_FROM,
@@ -89,17 +94,22 @@ describe('Build digest', () => {
         const url = data.urls[0];
         const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id activated schedule } }');
         const userFeed = feed.userFeeds[0];
-        await setUserFeedLastUpdate(userFeed.id, new Date(Date.now()));
+        const lastUpdate = new Date(Date.now());
+        await setUserFeedLastUpdate(userFeed.id, lastUpdate);
         await db.mutation.updateFeed({
             where: { url },
             data: { items: { create: newItems } },
         });
         await buildAndSendDigests(url);
+        const userFeedAfter = await db.query.userFeed(
+            { where: { id: userFeed.id } },
+            '{ id lastUpdate schedule user { email locale timeZone } }',
+        );
         expect(composeHTML.mock.calls[0][1]).toHaveLength(newItems.length);
         expect(composeHTML).toHaveBeenCalledWith(
             expect.objectContaining({ title: feed.title }),
             expect.arrayContaining(newItems.map(({ title }) => expect.objectContaining({ title }))),
-            userFeed.id,
+            expect.objectContaining({ ...userFeedAfter, lastUpdate: lastUpdate.toISOString() }),
         );
         expect(transport.sendMail).toHaveBeenCalled();
     });

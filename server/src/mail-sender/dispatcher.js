@@ -31,7 +31,7 @@ async function buildAndSendDigests(url) {
             const items = await getItemsNewerThan(url, userFeed.lastUpdate, maxItemsPerMail);
             if (!items.length) return;
             const timestamp = new Date();
-            const { html, errors } = composeHTML(feed, items, userFeed.id);
+            const { html, errors } = composeHTML(feed, items, userFeed);
             if (!errors.length) {
                 const result = await transport.sendMail({
                     from: process.env.MAIL_FROM,
