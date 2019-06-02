@@ -63,6 +63,7 @@ describe('Build digest', () => {
         expect(composeHTML).toHaveBeenCalledWith(
             expect.objectContaining({ title: feed.title }),
             expect.arrayContaining(data.feedItems.map(({ title }) => expect.objectContaining({ title }))),
+            userFeed.id,
         );
         expect(transport.sendMail).toHaveBeenCalledWith(expect.objectContaining({
             from: process.env.MAIL_FROM,
@@ -98,6 +99,7 @@ describe('Build digest', () => {
         expect(composeHTML).toHaveBeenCalledWith(
             expect.objectContaining({ title: feed.title }),
             expect.arrayContaining(newItems.map(({ title }) => expect.objectContaining({ title }))),
+            userFeed.id,
         );
         expect(transport.sendMail).toHaveBeenCalled();
     });

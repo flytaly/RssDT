@@ -42,9 +42,10 @@ const getImageFromEnclosures = (enclosures) => {
  * @param {String} feedInfo.title - feed title
  * @param {String} [feedInfo.theme='default'] - email's theme
  * @param {Array.<feedItem>} feedItems
+ * @param {String} userFeedId - id of user's feed for unsubscribing
  * @return {{html: String, errors: Array}}
  */
-const composeHTML = (info, feedItems) => {
+const composeHTML = (info, feedItems, userFeedId = '') => {
     /* eslint-disable no-param-reassign */
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
@@ -54,7 +55,8 @@ const composeHTML = (info, feedItems) => {
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
         return acc + theme.item(item);
     }, '');
-    const footer = theme.footer(info);
+    const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;
+    const footer = theme.footer({ unsubscribeUrl });
     return mjml2html(header + items + footer, { minify: true });
 };
 
