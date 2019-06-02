@@ -9,7 +9,7 @@ async function setPassword(parent, args, ctx) {
     } */
     if (!await ctx.db.exists.User({
         setPasswordToken: token,
-        setPasswordTokenExpiry_gte: new Date(Date.now() - 3600000 * 12),
+        setPasswordTokenExpiry_gte: new Date(),
     })) {
         throw new Error('The token is invalid or expired');
     }
