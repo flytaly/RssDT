@@ -75,6 +75,10 @@ export const DeleteButton = styled(Button).attrs({ type: 'button' })`
     :active{
         color: hsl(10, 67%, 90%);
     }
+    :disabled {
+        color: black;
+        background-color: hsl(10, 67%, 90%);
+    }
 `;
 
 export const GreenButtonLink = styled(Button).attrs({ as: 'a' })`

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import StyledCard from './styled/card';
 import CardHeader from './card-header';
 import GraphQLError from './graphql-error';
+import Container from './styled/card-inner-container';
 
 const CONFIRM_SUBSCRIPTION_MUTATION = gql`
   mutation CONFIRM_SUBSCRIPTION_MUTATION(
@@ -17,14 +18,6 @@ const CONFIRM_SUBSCRIPTION_MUTATION = gql`
         message
     }
   }
-`;
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items:center;
-    width:100%;
-    padding: 1rem 3rem;
 `;
 
 const Message = styled.div`

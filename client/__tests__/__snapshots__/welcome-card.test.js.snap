@@ -13,8 +13,8 @@ exports[`Snapshot should match snapshot 1`] = `
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
-  background: white;
-  color: black;
+  background: #FFFFFF;
+  color: #000000;
   width: 72rem;
   min-width: 36rem;
   max-width: calc(100vw - 2rem);

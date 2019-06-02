@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "NODE_ICU_DATA=node_modules/full-icu nodemon server.js",
+        "dev": "NODE_ICU_DATA=node_modules/full-icu nodemon -w server.js server.js",
         "build": "next build",
         "start": "NODE_ICU_DATA=node_modules/full-icu NODE_ENV=production next start",
         "test": "NODE_ICU_DATA=node_modules/full-icu NODE_ENV=test jest --coverage",
