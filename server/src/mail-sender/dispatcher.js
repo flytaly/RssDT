@@ -98,7 +98,7 @@ async function sendUnsubscribe(email, token, title) {
 If it was you, and you want to unsubscribe visit this link: ${url}
 
 Otherwise, ignore this message.`,
-        html: `Somebody (hopefully you) requested to unsubscribe from the feed: ${title}.<br>
+        html: `Somebody (hopefully you) requested to unsubscribe from the feed: <b>${title}</b>.<br><br>
         If it was you, and you want to unsubscribe visit this link : <a href="${url}">${url}</a><br><br>
         Otherwise, ignore this message.`,
     });
