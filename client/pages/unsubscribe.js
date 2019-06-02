@@ -5,7 +5,7 @@ import redirect from '../lib/redirect';
 const UnsubscribePage = ({ query }) => <RequestUnsubscribe id={query.id} />;
 
 UnsubscribePage.propTypes = {
-    query: PropTypes.shape({ token: PropTypes.string }).isRequired,
+    query: PropTypes.shape({ id: PropTypes.string }).isRequired,
 };
 
 UnsubscribePage.getInitialProps = (context) => {

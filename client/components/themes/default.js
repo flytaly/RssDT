@@ -21,7 +21,7 @@ const theme = {
     feedViewFontColor: '#000000',
     feedViewBgColor: '#E9E9E9',
     feedViewLinkColor: '#3498db',
-    successMsgColor: '#00CC00',
+    successMsgColor: '#00AA00',
     errorMsgColor: '#CC0000',
 };
 
