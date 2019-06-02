@@ -141,4 +141,44 @@ describe('Test GraphQL queries:', () => {
             expect(errors[0].message).toEqual('Authentication is required');
         });
     });
+
+    describe('feedTitle', () => {
+        const USER_FEED_TITLE_QUERY = gql`query (
+            $id: ID!
+          ) {
+            userFeedTitle(
+              id: $id
+            ) {
+              title
+            }
+        }`;
+        test('should return title', async () => {
+            const { url } = mocks.feed;
+            const title = 'Some Test Title';
+            const userFeeds = await db.query.userFeeds({ where: { feed: { url } } }, '{ id feed { title url link } }');
+            const { id } = userFeeds[0];
+
+            const makeQuery = () => makePromise(execute(link, {
+                query: USER_FEED_TITLE_QUERY,
+                variables: { id },
+            }));
+
+            const { data: noTitle } = await makeQuery();
+            expect(noTitle).toMatchObject({ userFeedTitle: { title: url } });
+
+            await db.mutation.updateFeed({ where: { url }, data: { title } });
+            const { data: withTitle } = await makeQuery();
+            expect(withTitle).toMatchObject({ userFeedTitle: { title } });
+        });
+
+        test('should return error', async () => {
+            const { errors } = await makePromise(execute(link, {
+                query: USER_FEED_TITLE_QUERY,
+                variables: { id: 'fakeID' },
+            }));
+
+            expect(errors).toHaveLength(1);
+            expect(errors[0]).toMatchObject({ message: 'The feed doesn\'t exist' });
+        });
+    });
 });

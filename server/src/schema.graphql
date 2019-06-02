@@ -52,6 +52,10 @@ type Feed {
     ): [FeedItem!]
 }
 
+type UserFeedTitle {
+    title: String
+}
+
 type Mutation {
     """
     Add feed to user with given email.
@@ -98,4 +102,5 @@ type Query {
         first: Int
         last: Int
     ): FeedItemConnection! @isAuthenticated
+    userFeedTitle(id: ID!): UserFeedTitle
 }

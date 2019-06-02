@@ -25,6 +25,16 @@ const Queries = {
         return ctx.db.query.feedItems({ where: { feed: { id } } }, info);
     },
 
+    async userFeedTitle(parent, args, ctx) {
+        const { id } = args;
+        const userFeed = await ctx.db.query.userFeed({ where: { id } }, '{ feed { title url link }  }');
+        if (!userFeed || !userFeed.feed) {
+            return new Error('The feed doesn\'t exist');
+        }
+        const { title, link, url } = userFeed.feed;
+
+        return { title: title || link || url };
+    },
 };
 
 module.exports = Queries;
