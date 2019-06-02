@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Fri May 24 2019 18:18:16 GMT+0300 (Moscow Standard Time)
+# timestamp: Sun Jun 02 2019 02:26:55 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2437,12 +2437,14 @@ type UserFeed implements Node {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  feed: Feed!
   createdAt: DateTime!
+  feed: Feed!
   lastUpdate: DateTime
   schedule: DigestSchedule
-  user: User!
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   updatedAt: DateTime!
+  user: User!
 }
 
 """A connection to a list of items."""
@@ -2462,6 +2464,8 @@ input UserFeedCreateInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
 }
@@ -2483,6 +2487,8 @@ input UserFeedCreateWithoutFeedInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   user: UserCreateOneWithoutFeedsInput!
 }
 
@@ -2493,6 +2499,8 @@ input UserFeedCreateWithoutUserInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
 
@@ -2520,6 +2528,10 @@ enum UserFeedOrderByInput {
   lastUpdate_DESC
   schedule_ASC
   schedule_DESC
+  unsubscribeToken_ASC
+  unsubscribeToken_DESC
+  unsubscribeTokenExpiry_ASC
+  unsubscribeTokenExpiry_DESC
   updatedAt_ASC
   updatedAt_DESC
 }
@@ -2532,6 +2544,8 @@ type UserFeedPreviousValues {
   createdAt: DateTime!
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   updatedAt: DateTime!
 }
 
@@ -2704,6 +2718,68 @@ input UserFeedScalarWhereInput {
 
   """All values that are not contained in given list."""
   schedule_not_in: [DigestSchedule!]
+  unsubscribeToken: String
+
+  """All values that are not equal to given value."""
+  unsubscribeToken_not: String
+
+  """All values that are contained in given list."""
+  unsubscribeToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  unsubscribeToken_not_in: [String!]
+
+  """All values less than the given value."""
+  unsubscribeToken_lt: String
+
+  """All values less than or equal the given value."""
+  unsubscribeToken_lte: String
+
+  """All values greater than the given value."""
+  unsubscribeToken_gt: String
+
+  """All values greater than or equal the given value."""
+  unsubscribeToken_gte: String
+
+  """All values containing the given string."""
+  unsubscribeToken_contains: String
+
+  """All values not containing the given string."""
+  unsubscribeToken_not_contains: String
+
+  """All values starting with the given string."""
+  unsubscribeToken_starts_with: String
+
+  """All values not starting with the given string."""
+  unsubscribeToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  unsubscribeToken_ends_with: String
+
+  """All values not ending with the given string."""
+  unsubscribeToken_not_ends_with: String
+  unsubscribeTokenExpiry: DateTime
+
+  """All values that are not equal to given value."""
+  unsubscribeTokenExpiry_not: DateTime
+
+  """All values that are contained in given list."""
+  unsubscribeTokenExpiry_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  unsubscribeTokenExpiry_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  unsubscribeTokenExpiry_lt: DateTime
+
+  """All values less than or equal the given value."""
+  unsubscribeTokenExpiry_lte: DateTime
+
+  """All values greater than the given value."""
+  unsubscribeTokenExpiry_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  unsubscribeTokenExpiry_gte: DateTime
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -2771,6 +2847,8 @@ input UserFeedUpdateInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
@@ -2781,6 +2859,8 @@ input UserFeedUpdateManyDataInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
 }
 
 input UserFeedUpdateManyMutationInput {
@@ -2789,6 +2869,8 @@ input UserFeedUpdateManyMutationInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
@@ -2826,6 +2908,8 @@ input UserFeedUpdateWithoutFeedDataInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
@@ -2835,6 +2919,8 @@ input UserFeedUpdateWithoutUserDataInput {
   activationTokenExpiry: DateTime
   lastUpdate: DateTime
   schedule: DigestSchedule
+  unsubscribeToken: String
+  unsubscribeTokenExpiry: DateTime
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
 
@@ -3029,6 +3115,68 @@ input UserFeedWhereInput {
 
   """All values that are not contained in given list."""
   schedule_not_in: [DigestSchedule!]
+  unsubscribeToken: String
+
+  """All values that are not equal to given value."""
+  unsubscribeToken_not: String
+
+  """All values that are contained in given list."""
+  unsubscribeToken_in: [String!]
+
+  """All values that are not contained in given list."""
+  unsubscribeToken_not_in: [String!]
+
+  """All values less than the given value."""
+  unsubscribeToken_lt: String
+
+  """All values less than or equal the given value."""
+  unsubscribeToken_lte: String
+
+  """All values greater than the given value."""
+  unsubscribeToken_gt: String
+
+  """All values greater than or equal the given value."""
+  unsubscribeToken_gte: String
+
+  """All values containing the given string."""
+  unsubscribeToken_contains: String
+
+  """All values not containing the given string."""
+  unsubscribeToken_not_contains: String
+
+  """All values starting with the given string."""
+  unsubscribeToken_starts_with: String
+
+  """All values not starting with the given string."""
+  unsubscribeToken_not_starts_with: String
+
+  """All values ending with the given string."""
+  unsubscribeToken_ends_with: String
+
+  """All values not ending with the given string."""
+  unsubscribeToken_not_ends_with: String
+  unsubscribeTokenExpiry: DateTime
+
+  """All values that are not equal to given value."""
+  unsubscribeTokenExpiry_not: DateTime
+
+  """All values that are contained in given list."""
+  unsubscribeTokenExpiry_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  unsubscribeTokenExpiry_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  unsubscribeTokenExpiry_lt: DateTime
+
+  """All values less than or equal the given value."""
+  unsubscribeTokenExpiry_lte: DateTime
+
+  """All values greater than the given value."""
+  unsubscribeTokenExpiry_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  unsubscribeTokenExpiry_gte: DateTime
   updatedAt: DateTime
 
   """All values that are not equal to given value."""
@@ -3057,6 +3205,7 @@ input UserFeedWhereInput {
 
 input UserFeedWhereUniqueInput {
   id: ID
+  unsubscribeToken: String
 }
 
 enum UserOrderByInput {

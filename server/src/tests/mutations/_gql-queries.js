@@ -38,6 +38,16 @@ const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
     }
   }`;
 
+const REQUEST_UNSUBSCRIBE_MUTATION = gql`mutation (
+    $id: ID!
+  ) {
+    requestUnsubscribe(
+      id: $id
+    ) {
+      message
+    }
+}`;
+
 const SET_PASSWORD_MUTATION = gql`mutation (
     $password: String!
     $token: String!
@@ -81,6 +91,16 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
   }
 }`;
 
+const UNSUBSCRIBE_MUTATION = gql`mutation (
+    $token: String!
+  ){
+    unsubscribe (
+      token: $token
+    ) {
+      id
+    }
+}`;
+
 const UPDATE_MY_INFO_MUTATION = gql`mutation (
     $data: MyInfoUpdateInput!
   ){
@@ -108,9 +128,11 @@ module.exports = {
     CONFIRM_SUBSCRIPTION_MUTATION,
     DELETE_MY_FEED_MUTATION,
     REQUEST_PASSWORD_CHANGE_MUTATION,
+    REQUEST_UNSUBSCRIBE_MUTATION,
     SET_PASSWORD_MUTATION,
     SIGNIN_MUTATION,
     SIGNOUT_MUTATION,
+    UNSUBSCRIBE_MUTATION,
     UPDATE_MY_FEED_MUTATION,
     UPDATE_MY_INFO_MUTATION,
 };

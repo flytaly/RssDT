@@ -36,8 +36,29 @@ const getApolloLink = port => new HttpLink({
     credentials: 'same-origin',
 });
 
+
+const createMockDate = () => {
+    const RealDate = Date;
+    const mockDate = (mockDateNow) => {
+        global.Date = class extends RealDate {
+            constructor(...args) {
+                if (!args.length) {
+                    return new RealDate(mockDateNow);
+                }
+                return new RealDate(...args);
+            }
+
+            static now() {
+                return (new RealDate(mockDateNow)).getTime();
+            }
+        };
+    };
+    return mockDate;
+};
+
 module.exports = {
     runServer,
     getApolloLink,
     deleteData,
+    createMockDate,
 };

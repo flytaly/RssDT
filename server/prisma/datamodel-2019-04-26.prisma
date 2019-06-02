@@ -32,12 +32,14 @@ type UserFeed {
     activated: Boolean @default(value: false)
     activationToken: String
     activationTokenExpiry: DateTime
-    feed: Feed! @relation(link: TABLE)
     createdAt: DateTime! @createdAt
+    feed: Feed! @relation(link: TABLE)
     lastUpdate: DateTime
     schedule: DigestSchedule @default(value: DAILY)
-    user: User! @relation(link: TABLE, name: "UserFeeds")
+    unsubscribeToken: String @unique
+    unsubscribeTokenExpiry: DateTime
     updatedAt: DateTime! @updatedAt
+    user: User! @relation(link: TABLE, name: "UserFeeds")
 }
 
 type Feed {

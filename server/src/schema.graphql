@@ -60,10 +60,12 @@ type Mutation {
     addFeed(email: String!, feedUrl: String, feedSchedule: DigestSchedule, locale: String, timeZone: String): Message!
     confirmSubscription(token: String!): Message!
     deleteMyFeed(id: ID!): UserFeed! @isAuthenticated
+    requestUnsubscribe(id: ID!): Message!
     requestPasswordChange(email: String!): Message!
     setPassword(token: String!, password: String!): User!
     signIn(email: String!, password: String!): Message!
     signOut: Message!
+    unsubscribe(token: String!): UserFeed!
     updateMyFeed(data: MyFeedUpdateInput!, id: ID!): UserFeed! @isAuthenticated
     updateMyInfo(data: MyInfoUpdateInput): User @isAuthenticated
 }

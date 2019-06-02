@@ -87,8 +87,27 @@ Otherwise, ignore this message.`,
     logger.info(result, 'setting password email has been sent');
 }
 
+async function sendUnsubscribe(email, token, title) {
+    const url = `${process.env.FRONTEND_URL}/confirmunsubscribe?token=${token}`;
+    const result = await transport.sendMail({
+        from: process.env.MAIL_FROM,
+        to: email,
+        subject: 'Confirm that you want to unsubscribe from the feed',
+        text: `Somebody (hopefully you) requested to unsubscribe from the feed: ${title}.
+
+If it was you, and you want to unsubscribe visit this link: ${url}
+
+Otherwise, ignore this message.`,
+        html: `Somebody (hopefully you) requested to unsubscribe from the feed: ${title}.<br>
+        If it was you, and you want to unsubscribe visit this link : <a href="${url}">${url}</a><br><br>
+        Otherwise, ignore this message.`,
+    });
+    logger.info(result, 'unsubscribe confirmation email has been sent');
+}
+
 module.exports = {
     buildAndSendDigests,
     sendConfirmSubscription,
     sendSetPasswordLink,
+    sendUnsubscribe,
 };
