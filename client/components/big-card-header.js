@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
-import '@reach/menu-button/styles.css';
 import { withRouter } from 'next/router';
 import { removeButtonStylesMixin } from './styled/buttons';
 import UserCircleIcon from '../static/user-circle-solid.svg';

@@ -3,6 +3,7 @@ import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 import Meta from './meta';
 import theme from './themes/default';
+import '@reach/menu-button/styles.css';
 
 const StyledPage = styled.div`
   color: black;
