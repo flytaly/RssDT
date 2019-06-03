@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const SubmitButton = styled.button`
     width: 100%;
@@ -26,7 +26,7 @@ export const SubmitButton = styled.button`
     }
 `;
 
-export const NoStylesButton = styled.button.attrs({ type: 'button' })`
+export const removeButtonStylesMixin = css`
     border: none;
     padding: 0;
     background: none;
@@ -44,6 +44,11 @@ export const NoStylesButton = styled.button.attrs({ type: 'button' })`
     :active{
         transform: scale(0.95);
     }
+`;
+
+export const NoStylesButton = styled.button.attrs({ type: 'button' })`
+    ${removeButtonStylesMixin}
+
 `;
 
 export const Button = styled.button.attrs({ type: 'button' })`

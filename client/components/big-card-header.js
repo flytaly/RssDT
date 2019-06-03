@@ -2,6 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import '@reach/menu-button/styles.css';
+import { withRouter } from 'next/router';
+import { removeButtonStylesMixin } from './styled/buttons';
+import UserCircleIcon from '../static/user-circle-solid.svg';
 
 const Header = styled.header`
   display: flex;
@@ -22,7 +27,7 @@ const HeaderRow = styled.div`
   > *:not(:first-child) {
     margin-left: 1rem;
   }
-  a {
+  & a {
     position: relative;
     color: ${props => props.theme.fontColor};
     text-decoration: none;
@@ -60,6 +65,28 @@ const Title = styled.h2`
   margin: 0;
 `;
 
+const MenuButtonModified = styled(MenuButton)`
+   ${removeButtonStylesMixin}
+   &[aria-expanded=true] {
+    transform: scale(1.10);
+   }
+`;
+
+const MenuListModified = styled(MenuList)`
+  background: ${props => props.theme.dropDownBgColor};
+  color: ${props => props.theme.dropDownFontColor};
+  font-size: 1.3rem;
+  > [data-reach-menu-item][data-selected] {
+    background: ${props => props.theme.dropDownHoverBgColor};
+    color: ${props => props.theme.dropDownHoverFontColor};
+
+  }
+`;
+
+const Icon = styled.img`
+  height: 2rem;
+`;
+
 const getSubRow = (page) => {
     if (page === 'manage' || page === 'view') {
         return (
@@ -76,7 +103,7 @@ const getSubRow = (page) => {
     return <HeaderRow />;
 };
 
-const BigCardHeader = ({ page }) => {
+const BigCardHeader = ({ page, router }) => {
     const getTitle = () => {
         if (page === 'settings') return 'Settings';
         return 'Subscriptions';
@@ -87,8 +114,13 @@ const BigCardHeader = ({ page }) => {
             <HeaderRow>
                 <Title>{getTitle()}</Title>
                 {page !== 'manage' && page !== 'view' && <Link href="/feeds"><a href="/feeds">Feeds</a></Link>}
-                {page !== 'settings' && <Link href="/settings"><a href="/settings">Settings</a></Link>}
-                {<Link href="/logout"><a href="/logout">Log out</a></Link>}
+                <Menu>
+                    <MenuButtonModified><Icon src={UserCircleIcon} alt="Profile" /></MenuButtonModified>
+                    <MenuListModified>
+                        <MenuItem onSelect={() => { router.push('/settings'); }}>Settings</MenuItem>
+                        <MenuItem onSelect={() => { router.push('/logout'); }}>Log out</MenuItem>
+                    </MenuListModified>
+                </Menu>
             </HeaderRow>
             {getSubRow(page)}
         </Header>);
@@ -96,6 +128,11 @@ const BigCardHeader = ({ page }) => {
 
 BigCardHeader.propTypes = {
     page: PropTypes.string.isRequired,
+    router: PropTypes.shape({ push: PropTypes.func }),
 };
 
-export default BigCardHeader;
+BigCardHeader.defaultProps = {
+    router: () => {},
+};
+
+export default withRouter(BigCardHeader);

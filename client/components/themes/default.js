@@ -11,16 +11,25 @@ const theme = {
     btnColor1: '#ac247d',
     btnColor1Disable: '#ae7f9e',
     accentColor1: '#73286D',
+
     tableHoverColor: 'rgba(115, 40, 109,0.1)',
     tableAltRowColor: 'rgba(115, 40, 109,0.03)',
     tableMinWidth: '37em',
+
+    dropDownBgColor: '#FFFFFF',
+    dropDownFontColor: '#000000',
+    dropDownHoverBgColor: 'hsl(238, 24%, 40%)',
+    dropDownHoverFontColor: '#FFFFFF',
+
     feedListFontColor: '#FFFFFF',
     feedListBgColor: '#37386E',
     feedListHoverBgColor: 'hsl(238, 24%, 40%)',
     feedListActiveBgColor: 'hsl(238, 24%, 20%)',
+
     feedViewFontColor: '#000000',
     feedViewBgColor: '#E9E9E9',
     feedViewLinkColor: '#3498db',
+
     successMsgColor: '#00AA00',
     errorMsgColor: '#CC0000',
 };
