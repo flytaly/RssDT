@@ -1,5 +1,5 @@
 import 'jest-dom/extend-expect';
-import { render, wait, cleanup } from 'react-testing-library';
+import { render, wait, cleanup } from '@testing-library/react';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import CardHeader from '../components/card-header';
 import ME_QUERY from '../queries/me-query';

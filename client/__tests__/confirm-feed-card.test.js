@@ -1,5 +1,5 @@
 import 'jest-dom/extend-expect';
-import { render, wait } from 'react-testing-library';
+import { render, wait } from '@testing-library/react';
 import ConfirmFeed, { CONFIRM_SUBSCRIPTION_MUTATION } from '../components/confirm-feed-card';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';

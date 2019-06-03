@@ -1,5 +1,5 @@
 import 'jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait, waitForElement, getByText } from 'react-testing-library';
+import { render, cleanup, fireEvent, wait, waitForElement, getByText } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import router from 'next/router';
 import LoginCard from '../components/login/login-card';

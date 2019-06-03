@@ -1,4 +1,4 @@
-import { render, wait } from 'react-testing-library';
+import { render, wait } from '@testing-library/react';
 import ManageFeeds from '../components/manage-feeds';
 import { MY_FEEDS_QUERY } from '../queries';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';

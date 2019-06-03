@@ -1,4 +1,4 @@
-import { render, wait } from 'react-testing-library';
+import { render, wait } from '@testing-library/react';
 import Router from 'next/router';
 import Logout, { LOGOUT_MUTATION, LOGOUT_CLIENT_MUTATION } from '../pages/logout';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
