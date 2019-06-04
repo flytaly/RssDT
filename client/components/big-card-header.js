@@ -6,6 +6,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { withRouter } from 'next/router';
 import { removeButtonStylesMixin } from './styled/buttons';
 import UserCircleIcon from '../static/user-circle-solid.svg';
+import { SettingTitles } from './settings';
 
 const Header = styled.header`
   display: flex;
@@ -24,7 +25,7 @@ const HeaderRow = styled.div`
   align-items: center;
   margin-bottom: 4px;
   > *:not(:first-child) {
-    margin-left: 1rem;
+    margin-left: 1.3rem;
   }
   & a {
     position: relative;
@@ -97,6 +98,13 @@ const getSubRow = (page) => {
                     <a href="/feeds/manage" className={page === 'manage' ? 'active' : null}>Manage</a>
                 </Link>
             </HeaderRow>);
+    }
+    if (page === 'settings') {
+        return (
+            <HeaderRow>
+                {SettingTitles.map(({ id, name }) => <a key={id} href={`/settings#${id}`}>{name}</a>) }
+            </HeaderRow>
+        );
     }
 
     return <HeaderRow />;

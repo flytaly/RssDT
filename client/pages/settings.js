@@ -1,6 +1,7 @@
 import BigCard from '../components/big-card';
 import withAuth from '../components/decorators/withAuth';
+import Settings from '../components/settings';
 
-const ManageFeeds = () => <BigCard page="settings"><div>Settings</div></BigCard>;
+const SettingsPage = () => <BigCard page="settings"><Settings /></BigCard>;
 
-export default withAuth(true)(ManageFeeds);
+export default withAuth(true)(SettingsPage);

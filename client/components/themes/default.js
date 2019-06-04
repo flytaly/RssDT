@@ -8,6 +8,7 @@ const theme = {
     greyMedium: '#e6e6e6',
     greyLight: '#f5f5f5',
     borderColor: '#B3B3B3',
+    borderColorLight: '#e6e6e6',
     btnColor1: '#ac247d',
     btnColor1Disable: '#ae7f9e',
     accentColor1: '#73286D',
