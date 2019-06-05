@@ -2,7 +2,7 @@ const mjml2html = require('mjml');
 const url = require('url');
 const moment = require('moment-timezone');
 const themes = require('./themes');
-
+const share = require('./share');
 /**
  * @typedef {Object} enclosure
  * @property {String} type
@@ -51,6 +51,7 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
     const {
         id: userFeedId = '', user: { timeZone = 'GMT', locale = 'en' } = {},
     } = userFeed;
+
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
     const items = feedItems.reduce((acc, item) => {
@@ -58,6 +59,7 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
         if (!item.imageUrl) { item.imageUrl = getImageFromEnclosures(item.enclosures); }
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
         item.pubDate = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
+        item.share = share.map(s => ({ ...s, url: s.getUrl(item.link, item.title) }));
 
         return acc + theme.item(item);
     }, '');

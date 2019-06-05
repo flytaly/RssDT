@@ -4,9 +4,13 @@
       <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
     </mj-text>
     <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
-    <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" line-height="20px" color="#505050"><a href="#" style="text-decoration: none; ">share block</a></mj-text>
+    <mj-text>
+      {{#each share}}
+        <a style="margin-right: 4px;" href="{{url}}"><img style="width: 16px;" src="{{iconUrl}}" title="{{title}}" /></a>
+      {{/each}}
+    </mj-text>
   </mj-column>
-  <mj-column width="25%" vertical-align="middle">
+  <mj-column width=" 25%" vertical-align="middle">
     {{#if imageUrl}}
       <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
     {{/if}}
