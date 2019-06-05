@@ -2,7 +2,7 @@
 import ME_QUERY from '../queries/me-query';
 import UPDATE_MY_INFO_MUTATION from '../queries/update-my-info-mutation';
 
-const user = { id: 'id', email: 'email@test.com', timeZone: 'GMT', locale: 'en-GB' };
+const user = { id: 'id', email: 'email@test.com', timeZone: 'GMT', locale: 'en-GB', dailyDigestHour: 18 };
 const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
 
 export const ME_QUERY_MOCK = {

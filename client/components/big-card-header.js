@@ -6,7 +6,7 @@ import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { withRouter } from 'next/router';
 import { removeButtonStylesMixin } from './styled/buttons';
 import UserCircleIcon from '../static/user-circle-solid.svg';
-import { SettingTitles } from './settings';
+import { SettingsTitles } from './settings';
 
 const Header = styled.header`
   display: flex;
@@ -102,7 +102,7 @@ const getSubRow = (page) => {
     if (page === 'settings') {
         return (
             <HeaderRow>
-                {SettingTitles.map(({ id, name }) => <a key={id} href={`/settings#${id}`}>{name}</a>) }
+                {SettingsTitles.map(({ id, name }) => <a key={id} href={`/settings#${id}`}>{name}</a>) }
             </HeaderRow>
         );
     }

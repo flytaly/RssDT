@@ -7,6 +7,7 @@ const ME_QUERY = gql`
             email
             timeZone
             locale
+            dailyDigestHour
         }
     }
 `;

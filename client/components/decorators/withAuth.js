@@ -31,7 +31,7 @@ const withAuth = (redirectOnFail = false) => (Component) => {
         const updateMutation = useCallback(({ timeZone, locale }) => {
             updateMyInfo({
                 variables: { data: { timeZone, locale } },
-                optimisticResponse: { __typename: 'Mutation', updateMyInfo: { __typename: 'User', timeZone, locale } },
+                optimisticResponse: { __typename: 'Mutation', updateMyInfo: { __typename: 'User', ...me, timeZone, locale } },
             }).catch(e => console.error(e));
         // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [me.locale, me.timeZone]);
