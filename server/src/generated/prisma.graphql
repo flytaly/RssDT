@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Sun Jun 02 2019 02:26:55 GMT+0300 (Moscow Standard Time)
+# timestamp: Wed Jun 05 2019 16:05:22 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2379,6 +2379,7 @@ type User implements Node {
   timeZone: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  dailyDigestHour: Int
 }
 
 """A connection to a list of items."""
@@ -2399,6 +2400,7 @@ input UserCreateInput {
   setPasswordTokenExpiry: DateTime
   locale: String
   timeZone: String
+  dailyDigestHour: Int
   permissions: UserCreatepermissionsInput
   feeds: UserFeedCreateManyWithoutUserInput
 }
@@ -2420,6 +2422,7 @@ input UserCreateWithoutFeedsInput {
   setPasswordTokenExpiry: DateTime
   locale: String
   timeZone: String
+  dailyDigestHour: Int
   permissions: UserCreatepermissionsInput
 }
 
@@ -3227,6 +3230,8 @@ enum UserOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  dailyDigestHour_ASC
+  dailyDigestHour_DESC
 }
 
 type UserPreviousValues {
@@ -3240,6 +3245,7 @@ type UserPreviousValues {
   timeZone: String
   createdAt: DateTime!
   updatedAt: DateTime!
+  dailyDigestHour: Int
 }
 
 type UserSubscriptionPayload {
@@ -3286,6 +3292,7 @@ input UserUpdateInput {
   setPasswordTokenExpiry: DateTime
   locale: String
   timeZone: String
+  dailyDigestHour: Int
   permissions: UserUpdatepermissionsInput
   feeds: UserFeedUpdateManyWithoutUserInput
 }
@@ -3297,6 +3304,7 @@ input UserUpdateManyMutationInput {
   setPasswordTokenExpiry: DateTime
   locale: String
   timeZone: String
+  dailyDigestHour: Int
   permissions: UserUpdatepermissionsInput
 }
 
@@ -3318,6 +3326,7 @@ input UserUpdateWithoutFeedsDataInput {
   setPasswordTokenExpiry: DateTime
   locale: String
   timeZone: String
+  dailyDigestHour: Int
   permissions: UserUpdatepermissionsInput
 }
 
@@ -3641,6 +3650,28 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  dailyDigestHour: Int
+
+  """All values that are not equal to given value."""
+  dailyDigestHour_not: Int
+
+  """All values that are contained in given list."""
+  dailyDigestHour_in: [Int!]
+
+  """All values that are not contained in given list."""
+  dailyDigestHour_not_in: [Int!]
+
+  """All values less than the given value."""
+  dailyDigestHour_lt: Int
+
+  """All values less than or equal the given value."""
+  dailyDigestHour_lte: Int
+
+  """All values greater than the given value."""
+  dailyDigestHour_gt: Int
+
+  """All values greater than or equal the given value."""
+  dailyDigestHour_gte: Int
   feeds_every: UserFeedWhereInput
   feeds_some: UserFeedWhereInput
   feeds_none: UserFeedWhereInput

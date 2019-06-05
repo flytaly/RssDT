@@ -109,6 +109,7 @@ const UPDATE_MY_INFO_MUTATION = gql`mutation (
     ) {
       locale
       timeZone
+      dailyDigestHour
     }
 }`;
 

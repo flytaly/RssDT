@@ -25,6 +25,7 @@ type User {
     timeZone: String @default(value: "GMT")
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
+    dailyDigestHour: Int @default(value: 18)
 }
 
 type UserFeed {

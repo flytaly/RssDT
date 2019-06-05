@@ -59,7 +59,7 @@ afterAll(async () => {
     await clearDB();
 });
 
-describe('', () => {
+describe('updateMyInfo mutation', () => {
     test('should return error if user isn\'t authenticated', async () => {
         const { errors } = await makePromise(execute(globalData.link, {
             query: UPDATE_MY_INFO_MUTATION,
@@ -70,9 +70,13 @@ describe('', () => {
 
     test('should update user\'s info', async () => {
         const { linkWithAuthCookies, userId: id } = globalData;
-        const data = { timeZone: 'Europe/Moscow', locale: 'ru' };
+        const data = {
+            timeZone: 'Europe/Moscow',
+            locale: 'ru',
+            dailyDigestHour: 20,
+        };
         const before = await db.query.user({ where: { id } });
-        const { data: { updateMyInfo }, errors } = await makePromise(execute(linkWithAuthCookies, {
+        const { data: { updateMyInfo } } = await makePromise(execute(linkWithAuthCookies, {
             query: UPDATE_MY_INFO_MUTATION,
             variables: { data },
         }));

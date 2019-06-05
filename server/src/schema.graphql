@@ -13,6 +13,7 @@ type User {
     locale: String
     timeZone: String
     createdAt: DateTime!
+    dailyDigestHour: Int
 }
 
 type UserFeed {
@@ -31,6 +32,7 @@ input MyFeedUpdateInput {
 input MyInfoUpdateInput {
     locale: String
     timeZone: String
+    dailyDigestHour: Int
 }
 
 type Feed {
