@@ -10,7 +10,7 @@
       {{/each}}
     </mj-text>
   </mj-column>
-  <mj-column width=" 25%" vertical-align="middle">
+  <mj-column width="25%" vertical-align="middle">
     {{#if imageUrl}}
       <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
     {{/if}}

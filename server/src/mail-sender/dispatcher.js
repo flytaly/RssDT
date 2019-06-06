@@ -42,6 +42,8 @@ async function buildAndSendDigests(url) {
                 });
                 logger.info(result, 'digest email has been sent');
                 await setUserFeedLastUpdate(userFeed.id, timestamp);
+            } else {
+                logger.error(errors);
             }
         } catch (e) {
             logger.error(e.message);
