@@ -59,7 +59,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule user { email locale timeZone } }',
+            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare } }',
         );
         expect(isFeedReady).toHaveBeenCalled();
         expect(isFeedReady.mock.calls[0][0]).toMatchObject({ id: userFeed.id });
@@ -80,7 +80,8 @@ describe('Build digest', () => {
 
     test('should not build digest if there are NO NEW ITEMS', async () => {
         const url = data.urls[0];
-        const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id activated schedule } }');
+        const feed = await db.query.feed({ where: { url } },
+            '{ userFeeds { id } }');
         const userFeed = feed.userFeeds[0];
         await setUserFeedLastUpdate(userFeed.id, new Date(Date.now()));
         await buildAndSendDigests(url);
@@ -92,7 +93,7 @@ describe('Build digest', () => {
     test('should build digest with ONLY NEW ITEMS', async () => {
         const newItems = generateFeedItems({ count: 4 });
         const url = data.urls[0];
-        const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id activated schedule } }');
+        const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id } }');
         const userFeed = feed.userFeeds[0];
         const lastUpdate = new Date(Date.now());
         await setUserFeedLastUpdate(userFeed.id, lastUpdate);
@@ -103,7 +104,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule user { email locale timeZone } }',
+            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare } }',
         );
         expect(composeHTML.mock.calls[0][1]).toHaveLength(newItems.length);
         expect(composeHTML).toHaveBeenCalledWith(

@@ -49,7 +49,13 @@ const getImageFromEnclosures = (enclosures) => {
 const composeHTML = (info, feedItems, userFeed = {}) => {
     /* eslint-disable no-param-reassign */
     const {
-        id: userFeedId = '', user: { timeZone = 'GMT', locale = 'en' } = {},
+        id: userFeedId = '',
+        user: {
+            timeZone = 'GMT',
+            locale = 'en',
+            shareEnable = true,
+            filterShare = [],
+        } = {},
     } = userFeed;
 
     const theme = themes[info.theme ? info.theme : 'default'];
@@ -59,7 +65,12 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
         if (!item.imageUrl) { item.imageUrl = getImageFromEnclosures(item.enclosures); }
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
         item.pubDate = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
-        item.share = share.map(s => ({ ...s, url: s.getUrl(item.link, item.title) }));
+        item.share = shareEnable
+            ? share
+                //  Empty filterShare array means nothing should be filtered!
+                .filter(s => !filterShare.length || filterShare.includes(s.id))
+                .map(s => ({ ...s, url: s.getUrl(item.link, item.title) }))
+            : [];
 
         return acc + theme.item(item);
     }, '');
