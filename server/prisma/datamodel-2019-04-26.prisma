@@ -26,6 +26,8 @@ type User {
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
     dailyDigestHour: Int @default(value: 18)
+    shareEnable: Boolean @default(value: true)
+    filterShare: [String!]! @scalarList(strategy: RELATION)
 }
 
 type UserFeed {

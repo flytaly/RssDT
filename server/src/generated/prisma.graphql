@@ -1,5 +1,5 @@
 # source: http://localhost:4466/digester/dev
-# timestamp: Wed Jun 05 2019 16:05:22 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Jun 07 2019 01:31:29 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2380,6 +2380,8 @@ type User implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   dailyDigestHour: Int
+  shareEnable: Boolean
+  filterShare: [String!]!
 }
 
 """A connection to a list of items."""
@@ -2392,6 +2394,10 @@ type UserConnection {
   aggregate: AggregateUser!
 }
 
+input UserCreatefilterShareInput {
+  set: [String!]
+}
+
 input UserCreateInput {
   id: ID
   email: String!
@@ -2401,7 +2407,9 @@ input UserCreateInput {
   locale: String
   timeZone: String
   dailyDigestHour: Int
+  shareEnable: Boolean
   permissions: UserCreatepermissionsInput
+  filterShare: UserCreatefilterShareInput
   feeds: UserFeedCreateManyWithoutUserInput
 }
 
@@ -2423,7 +2431,9 @@ input UserCreateWithoutFeedsInput {
   locale: String
   timeZone: String
   dailyDigestHour: Int
+  shareEnable: Boolean
   permissions: UserCreatepermissionsInput
+  filterShare: UserCreatefilterShareInput
 }
 
 """An edge in a connection."""
@@ -3232,6 +3242,8 @@ enum UserOrderByInput {
   updatedAt_DESC
   dailyDigestHour_ASC
   dailyDigestHour_DESC
+  shareEnable_ASC
+  shareEnable_DESC
 }
 
 type UserPreviousValues {
@@ -3246,6 +3258,8 @@ type UserPreviousValues {
   createdAt: DateTime!
   updatedAt: DateTime!
   dailyDigestHour: Int
+  shareEnable: Boolean
+  filterShare: [String!]!
 }
 
 type UserSubscriptionPayload {
@@ -3285,6 +3299,10 @@ input UserSubscriptionWhereInput {
   node: UserWhereInput
 }
 
+input UserUpdatefilterShareInput {
+  set: [String!]
+}
+
 input UserUpdateInput {
   email: String
   password: String
@@ -3293,7 +3311,9 @@ input UserUpdateInput {
   locale: String
   timeZone: String
   dailyDigestHour: Int
+  shareEnable: Boolean
   permissions: UserUpdatepermissionsInput
+  filterShare: UserUpdatefilterShareInput
   feeds: UserFeedUpdateManyWithoutUserInput
 }
 
@@ -3305,7 +3325,9 @@ input UserUpdateManyMutationInput {
   locale: String
   timeZone: String
   dailyDigestHour: Int
+  shareEnable: Boolean
   permissions: UserUpdatepermissionsInput
+  filterShare: UserUpdatefilterShareInput
 }
 
 input UserUpdateOneRequiredWithoutFeedsInput {
@@ -3327,7 +3349,9 @@ input UserUpdateWithoutFeedsDataInput {
   locale: String
   timeZone: String
   dailyDigestHour: Int
+  shareEnable: Boolean
   permissions: UserUpdatepermissionsInput
+  filterShare: UserUpdatefilterShareInput
 }
 
 input UserUpsertWithoutFeedsInput {
@@ -3672,6 +3696,10 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   dailyDigestHour_gte: Int
+  shareEnable: Boolean
+
+  """All values that are not equal to given value."""
+  shareEnable_not: Boolean
   feeds_every: UserFeedWhereInput
   feeds_some: UserFeedWhereInput
   feeds_none: UserFeedWhereInput

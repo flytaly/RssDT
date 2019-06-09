@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { deleteData, runServer } = require('./_common');
 const db = require('../../bind-prisma');
 const { UPDATE_MY_INFO_MUTATION } = require('./_gql-queries');
+const share = require('../../mail-sender/share');
 
 const globalData = {
     yogaApp: null,
@@ -27,6 +28,7 @@ const addTestData = async () => {
         email,
         password: await bcrypt.hash(mocks.user.password, 10),
         permissions: { set: ['USER'] },
+        shareEnable: false,
     };
     const { id } = await db.mutation.createUser({ data: newUser }, '{ id }');
     globalData.userId = id;
@@ -96,5 +98,34 @@ describe('updateMyInfo mutation', () => {
             query: UPDATE_MY_INFO_MUTATION, variables: { data },
         }));
         expect(errors[0].message).toEqual('Not valid argument: timeZone');
+    });
+    test('should update user\'s settings', async () => {
+        const { linkWithAuthCookies, userId: id } = globalData;
+        const data = {
+            shareEnable: true,
+            filterShare: [share[0].id, share[1].id],
+        };
+        const before = await db.query.user({ where: { id } }, '{ shareEnable filterShare }');
+        const { data: { updateMyInfo } } = await makePromise(execute(linkWithAuthCookies, {
+            query: UPDATE_MY_INFO_MUTATION,
+            variables: { data },
+        }));
+
+        const after = await db.query.user({ where: { id } }, '{ shareEnable filterShare }');
+
+        expect(before.shareEnable).toBeFalsy();
+        expect(before.filterShare).toHaveLength(0);
+        expect(updateMyInfo).toMatchObject(data);
+        expect(after).toMatchObject(data);
+    });
+
+    test('should return error if share service doesn\'t exist', async () => {
+        const { linkWithAuthCookies } = globalData;
+        const data = { filterShare: [share[0].id, 'some fake string'] };
+        const { errors } = await makePromise(execute(linkWithAuthCookies, {
+            query: UPDATE_MY_INFO_MUTATION,
+            variables: { data },
+        }));
+        expect(errors[0].message).toBe('Not valid argument: filterShare');
     });
 });
