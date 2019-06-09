@@ -8,6 +8,8 @@ const ME_QUERY = gql`
             timeZone
             locale
             dailyDigestHour
+            shareEnable
+            filterShare
         }
     }
 `;
