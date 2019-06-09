@@ -50,7 +50,14 @@ function ItemsListView({ items, fetchMore, loading, canFetchMore, me }) {
     return (
         <StyledItemContainer>
             <StyledItemList>
-                {items.map(item => <FeedItem item={item} key={item.id} timeZone={me.timeZone} locale={me.locale} />)}
+                {items.map(item => <FeedItem
+                    item={item}
+                    key={item.id}
+                    timeZone={me.timeZone}
+                    locale={me.locale}
+                    shareEnable={me.shareEnable}
+                    filterShare={me.filterShare}
+                />)}
             </StyledItemList>
             <div ref={loadMoreRef}>
                 {

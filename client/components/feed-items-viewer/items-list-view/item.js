@@ -2,6 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import ShareBlock from './shareBlock';
+import shareServices from '../../../types/share-services';
 
 const ListElement = styled.article`
     display: flex;
@@ -77,18 +79,20 @@ const getImageFromEnclosures = (enclosures = []) => {
 };
 
 
-const FeedItemsListElement = ({ item, locale, timeZone }) => {
+const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable }) => {
     const { link, title, pubDate, description } = item;
     const imageUrl = item.imageUrl || getImageFromEnclosures(item.enclosures || []);
     const enclosures = addTitlesToEnclosures(item.enclosures || []);
     const date = new Date(pubDate);
     const dateArgs = (locale && timeZone) ? [locale, { timeZone }] : [];
+    const filtered = shareServices.filter(s => !filterShare.length || filterShare.includes(s.id));
     return (
         <ListElement>
             <ElementTitle>
                 <div>
                     <h3><a href={link} rel="noopener noreferrer" target="_blank">{title}</a></h3>
                     <Time>{date.toLocaleString(...dateArgs)}</Time>
+                    {shareEnable ? <ShareBlock shares={filtered} itemTitle={title} itemLink={link} /> : null}
                 </div>
                 {imageUrl && (
                     <a href={link} rel="noopener noreferrer" target="_blank">
@@ -117,10 +121,14 @@ FeedItemsListElement.propTypes = {
     item: PropTypes.shape({}).isRequired,
     locale: PropTypes.string,
     timeZone: PropTypes.string,
+    shareEnable: PropTypes.bool,
+    filterShare: PropTypes.arrayOf(PropTypes.string),
 };
 FeedItemsListElement.defaultProps = {
     locale: '',
     timeZone: '',
+    shareEnable: true,
+    filterShare: [],
 };
 
 export default FeedItemsListElement;

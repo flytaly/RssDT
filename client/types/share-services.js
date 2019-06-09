@@ -1,18 +1,18 @@
-const shareServices = [{
+const share = [{
     id: 'pocket',
-    url: 'https://getpocket.com',
+    getUrl: url => `https://getpocket.com/edit?url=${encodeURIComponent(url)}`,
     iconUrl: '/static/share/pocket_32.png',
     title: 'Pocket',
 }, {
     id: 'evernote',
-    url: 'https://evernote.com',
+    getUrl: (url, title) => `http://www.evernote.com/clip.action?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
     iconUrl: '/static/share/evernote_32.png',
     title: 'Evernote',
 }, {
     id: 'trello',
-    url: 'https://trello.com',
+    getUrl: (url, title) => `https://trello.com/en/add-card?url=${encodeURIComponent(url)}&name=${encodeURIComponent(title)}`,
     iconUrl: '/static/share/trello_32.png',
     title: 'Trello',
 }];
 
-module.exports = shareServices;
+module.exports = share;
