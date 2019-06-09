@@ -3,7 +3,6 @@ import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import get from 'lodash.get';
 import StyledCard from './styled/card';
 import CardHeader from './card-header';
 import GraphQLError from './graphql-error';

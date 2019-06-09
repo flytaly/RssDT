@@ -43,9 +43,6 @@ const LoaderContainer = styled.div`
     top: 10px;
 `;
 
-const SavingMsg = styled.div`
-    color: ${props => props.theme.accentColor1};
-`;
 const ErrorMsg = styled.div`
     color: ${props => props.theme.errorMsgColor};
 `;
