@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import { useApolloClient } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import FeedItems from './feed-items';
+import NotActivatedWarning from './not-activated-warning';
 
 const feedFragment = gql`
     fragment feed on UserFeed {
+        activated
         feed {
             id
             title
@@ -38,18 +40,21 @@ const FeedTitle = styled.h2`
 function FeedContent({ id }) {
     const client = useApolloClient();
     let feedInfo = {};
+    let isActivated = true;
     try {
         const result = client.readFragment({
             id: `UserFeed:${id}`,
             fragment: feedFragment,
         });
         feedInfo = result && result.feed ? result.feed : {};
+        isActivated = result && result.activated;
     } catch (e) { console.error('Error during readFragment:', e); }
 
     if (!id || !feedInfo.id) return (<Container>Choose a feed to display its items</Container>);
     const link = feedInfo.link || feedInfo.url;
     return (
         <Container>
+            {!isActivated ? <NotActivatedWarning id={id} /> : null }
             <FeedTitle><a href={link}>{feedInfo.title || link}</a></FeedTitle>
             <FeedItems feedId={feedInfo.id} />
         </Container>

@@ -13,6 +13,7 @@ const mocks = [{
                 createdAt: new Date('2019-04-19T00:11:00.000Z'),
                 lastUpdate: new Date('2019-04-19T00:12:00.000Z'),
                 schedule: types.DAILY,
+                activated: true,
                 feed: {
                     id: 'testFeedId',
                     title: 'Test Feed Title',

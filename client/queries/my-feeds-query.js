@@ -15,6 +15,7 @@ const MY_FEEDS_QUERY = gql`
             schedule
             lastUpdate
             createdAt
+            activated
         }
     }
 `;
