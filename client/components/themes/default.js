@@ -30,6 +30,7 @@ const theme = {
     feedViewFontColor: '#000000',
     feedViewBgColor: '#E9E9E9',
     feedViewLinkColor: '#3498db',
+    feedViewItemBg: '#FFFFFF',
 
     successMsgColor: '#00AA00',
     errorMsgColor: '#CC0000',

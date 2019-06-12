@@ -34,6 +34,9 @@ export const removeButtonStylesMixin = css`
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+`;
+
+export const scaleOnHoverActiveMixin = css`
     :focus,
     :hover{
         transform: scale(1.10);
@@ -48,7 +51,23 @@ export const removeButtonStylesMixin = css`
 
 export const NoStylesButton = styled.button.attrs({ type: 'button' })`
     ${removeButtonStylesMixin}
+    ${scaleOnHoverActiveMixin}
+`;
 
+export const InlineTextButton = styled.button`
+    ${removeButtonStylesMixin}
+    font-size: inherit;
+    color: ${props => props.theme.greyDark};
+    text-decoration: underline dotted;
+    :hover {
+        text-decoration: underline;
+    }
+    :active:not(:disabled){
+        color: inherit;
+    }
+    :disabled {
+        text-decoration: none;
+    }
 `;
 
 export const Button = styled.button.attrs({ type: 'button' })`

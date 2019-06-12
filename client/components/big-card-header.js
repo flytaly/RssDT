@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { withRouter } from 'next/router';
-import { removeButtonStylesMixin } from './styled/buttons';
+import { removeButtonStylesMixin, scaleOnHoverActiveMixin } from './styled/buttons';
 import UserCircleIcon from '../static/user-circle-solid.svg';
 import { SettingsTitles } from './settings';
 
@@ -67,6 +67,7 @@ const Title = styled.h2`
 
 const MenuButtonModified = styled(MenuButton)`
    ${removeButtonStylesMixin}
+   ${scaleOnHoverActiveMixin}
    &[aria-expanded=true] {
     transform: scale(1.10);
    }

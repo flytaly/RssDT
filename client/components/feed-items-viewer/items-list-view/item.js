@@ -8,7 +8,7 @@ import shareServices from '../../../types/share-services';
 const ListElement = styled.article`
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: ${props => props.theme.feedViewItemBg};
     margin: 1rem 0;
     padding: 1rem;
     border-radius: 7px;
