@@ -28,6 +28,16 @@ const CONFIRM_SUBSCRIPTION_MUTATION = gql`mutation(
     }
   }`;
 
+const RESEND_ACTIVATION_LINK = gql`mutation (
+  $id: ID!,
+) {
+  resendActivationLink(
+    id: $id
+  ) {
+    message
+  }
+}`;
+
 const REQUEST_PASSWORD_CHANGE_MUTATION = gql`mutation (
     $email: String!
     ) {
@@ -130,6 +140,7 @@ module.exports = {
     ADD_FEED_MUTATION,
     CONFIRM_SUBSCRIPTION_MUTATION,
     DELETE_MY_FEED_MUTATION,
+    RESEND_ACTIVATION_LINK,
     REQUEST_PASSWORD_CHANGE_MUTATION,
     REQUEST_UNSUBSCRIBE_MUTATION,
     SET_PASSWORD_MUTATION,

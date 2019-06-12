@@ -1,8 +1,9 @@
 const addFeed = require('./mutations/addFeed');
 const confirmSubscription = require('./mutations/confirmSubscription');
 const deleteMyFeed = require('./mutations/deleteMyFeed');
-const requestUnsubscribe = require('./mutations/requestUnsubscribe');
 const requestPasswordChange = require('./mutations/requestPasswordChange');
+const requestUnsubscribe = require('./mutations/requestUnsubscribe');
+const resendActivationLink = require('./mutations/resendActivationLink');
 const setPassword = require('./mutations/setPassword');
 const signIn = require('./mutations/signIn');
 const signOut = require('./mutations/signOut');
@@ -14,8 +15,9 @@ const Mutations = {
     addFeed,
     confirmSubscription,
     deleteMyFeed,
-    requestUnsubscribe,
     requestPasswordChange,
+    requestUnsubscribe,
+    resendActivationLink,
     setPassword,
     signIn,
     signOut,
