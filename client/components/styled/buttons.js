@@ -7,6 +7,7 @@ export const SubmitButton = styled.button`
     background-color: ${props => props.theme.btnColor1};
     color: #FFFFFF;
     border-radius: 20px;
+    border: 1px solid ${props => props.theme.btnColor1};
     font-size: 2rem;
     cursor: pointer;
     :disabled,
@@ -18,7 +19,6 @@ export const SubmitButton = styled.button`
     :focus,
     :hover:not(:disabled) {
         outline: none;
-        border: 1px solid ${props => props.theme.btnColor1};
         box-shadow: 0 0 1.5rem ${props => props.theme.btnColor1};
     }
     :active:not(:disabled){

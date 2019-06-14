@@ -67,6 +67,7 @@ exports[`Snapshot should match snapshot 1`] = `
   background-color: #ac247d;
   color: #FFFFFF;
   border-radius: 20px;
+  border: 1px solid #ac247d;
   font-size: 2rem;
   cursor: pointer;
 }
@@ -80,7 +81,6 @@ exports[`Snapshot should match snapshot 1`] = `
 .c10:focus,
 .c10:hover:not(:disabled) {
   outline: none;
-  border: 1px solid #ac247d;
   box-shadow: 0 0 1.5rem #ac247d;
 }
 
