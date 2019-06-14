@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ShareBlock from './shareBlock';
 import shareServices from '../../../types/share-services';
+import RenderInBrowser from '../../render-in-browser';
 
 const ListElement = styled.article`
     display: flex;
@@ -63,9 +64,7 @@ const Enclosures = styled.ul`
  * This function reduces them to filename and saves them as 'title' property.
 */
 const addTitlesToEnclosures = enclosures => enclosures.reduce((acc, enc) => {
-    if (!URL) return enc;
-    const parsedUrl = new URL(enc.url).pathname;
-    const filename = parsedUrl.split('/').pop();
+    const filename = enc.url.split('/').pop();
     acc.push({ ...enc, title: filename || enc.url });
     return acc;
 }, []);
@@ -91,7 +90,7 @@ const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable
             <ElementTitle>
                 <div>
                     <h3><a href={link} rel="noopener noreferrer" target="_blank">{title}</a></h3>
-                    <Time>{date.toLocaleString(...dateArgs)}</Time>
+                    <Time><RenderInBrowser>{date.toLocaleString(...dateArgs)}</RenderInBrowser></Time>
                     {shareEnable ? <ShareBlock shares={filtered} itemTitle={title} itemLink={link} /> : null}
                 </div>
                 {imageUrl && (

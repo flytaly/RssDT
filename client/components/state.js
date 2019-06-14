@@ -7,9 +7,11 @@ import PropTypes from 'prop-types';
 
 export const initialState = {
     newFeedModal: { isOpen: false },
+    isBrowser: false,
 };
 export const types = {
     toggleNewFeedModal: 'toggleNewFeedModal',
+    setIsBrowser: 'setIsBrowser',
 };
 
 export const reducer = (state, action) => {
@@ -18,11 +20,15 @@ export const reducer = (state, action) => {
             ...state,
             newFeedModal: { isOpen: !state.newFeedModal.isOpen },
         };
+        case types.setIsBrowser: return {
+            ...state,
+            isBrowser: true,
+        };
         default: return state;
     }
 };
 
-const stateCtx = createContext(initialState);
+export const stateCtx = createContext(initialState);
 const dispatchCtx = createContext(() => null);
 
 export const useDispatch = () => useContext(dispatchCtx);

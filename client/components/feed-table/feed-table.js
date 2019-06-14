@@ -11,6 +11,7 @@ import editIcon from '../../static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
 import { periodNames } from '../../types/digest-periods';
 import { MY_FEEDS_QUERY, ME_QUERY } from '../../queries';
+import RenderInBrowser from '../render-in-browser';
 
 const DELETE_FEED_MUTATION = gql`mutation ($id: ID!){
   deleteMyFeed ( id: $id ) { id }
@@ -46,9 +47,11 @@ const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
                 <Link href={`/feeds/view?id=${feedInfo.id}`}><a href={`/feeds/view?id=${feedInfo.id}`} title="View items">{title}</a></Link>
             </Td>
             <Td minWidth="8rem" data-name="ADDED">
-                {localCreatedAt}
+                <RenderInBrowser>
+                    {localCreatedAt}
+                </RenderInBrowser>
             </Td>
-            <Td data-name="LAST DIGEST DATE">{localLastUpdate}</Td>
+            <Td data-name="LAST DIGEST DATE"><RenderInBrowser>{localLastUpdate}</RenderInBrowser></Td>
             <Td data-name="DIGEST SCHEDULE">{`${periodNames[feedInfo.schedule] || feedInfo.schedule} digest` }</Td>
             <Td minWidth="8rem" data-name="ACTIONS">
                 <div>

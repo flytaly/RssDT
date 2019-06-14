@@ -228,13 +228,13 @@ exports[`Manage feeds should match snapshot 1`] = `
         class="c7"
         data-name="ADDED"
       >
-        4/19/2019
+        <span />
       </div>
       <div
         class="c6"
         data-name="LAST DIGEST DATE"
       >
-        4/19/2019, 3:12:00 AM
+        <span />
       </div>
       <div
         class="c6"
