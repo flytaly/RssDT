@@ -6,7 +6,7 @@ import { withRouter } from 'next/router';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import { MY_FEEDS_QUERY } from '../../queries';
-import plusIcon from '../../static/plus.svg';
+import PlusIcon from '../../static/plus.svg';
 import { NoStylesButton } from '../styled/buttons';
 import { useDispatch, types } from '../state';
 
@@ -34,7 +34,7 @@ const StyledLi = styled.li`
         text-decoration: none;
     }
 `;
-const AddFeedButton = styled.li`
+const AddFeedRow = styled.li`
     align-self: center;
     margin-top: 1rem;
     :hover {
@@ -42,14 +42,13 @@ const AddFeedButton = styled.li`
     }
 `;
 
-export const Img = styled.img`
-    height: 1.3rem;
-`;
-
-export const Button = styled(NoStylesButton)`
+export const AddFeedButton = styled(NoStylesButton)`
     margin: 0 0.5rem 0 0;
     font-size: 1.3rem;
     color: ${props => props.theme.feedListFontColor};
+    svg {
+        height: 1.3rem;
+    }
 `;
 
 function FeedList({ linkClickHandler, router }) {
@@ -73,11 +72,11 @@ function FeedList({ linkClickHandler, router }) {
                         </Link>
                     </StyledLi>);
             })}
-            <AddFeedButton>
-                <Button onClick={() => { dispatch({ type: types.toggleNewFeedModal }); }}>
-                    <Img src={plusIcon} alt="Add new feed" title="Add new feed" />
-                </Button>
-            </AddFeedButton>
+            <AddFeedRow>
+                <AddFeedButton onClick={() => { dispatch({ type: types.toggleNewFeedModal }); }} title="Add new feed">
+                    <PlusIcon />
+                </AddFeedButton>
+            </AddFeedRow>
         </StyledFeedList>
     );
 }

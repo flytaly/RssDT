@@ -71,6 +71,9 @@ const MenuButtonModified = styled(MenuButton)`
    &[aria-expanded=true] {
     transform: scale(1.10);
    }
+   svg {
+      height: 2rem;
+   }
 `;
 
 const MenuListModified = styled(MenuList)`
@@ -82,10 +85,6 @@ const MenuListModified = styled(MenuList)`
     color: ${props => props.theme.dropDownHoverFontColor};
 
   }
-`;
-
-const Icon = styled.img`
-  height: 2rem;
 `;
 
 const getSubRow = (page) => {
@@ -123,7 +122,7 @@ const BigCardHeader = ({ page, router }) => {
                 <Title>{getTitle()}</Title>
                 {page !== 'manage' && page !== 'view' && <Link href="/feeds"><a href="/feeds">Feeds</a></Link>}
                 <Menu>
-                    <MenuButtonModified><Icon src={UserCircleIcon} alt="Profile" /></MenuButtonModified>
+                    <MenuButtonModified><UserCircleIcon title="Profile" /></MenuButtonModified>
                     <MenuListModified>
                         <MenuItem onSelect={() => { router.push('/settings'); }}>Settings</MenuItem>
                         <MenuItem onSelect={() => { router.push('/logout'); }}>Log out</MenuItem>

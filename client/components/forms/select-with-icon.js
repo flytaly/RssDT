@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Field, Image } from '../styled/form-field';
+import { Container, Field, IconContainer } from '../styled/form-field';
 
 function Select(props) {
     const [focus, setFocus] = useState(false);
-    const { onFocus, onBlur, name, title, icon } = props;
-
+    const { onFocus, onBlur, title, IconSVG } = props;
     return (
         <Container focus={focus} title={title}>
-            <Image src={icon} alt={name} />
+            <IconContainer>
+                { IconSVG ? <IconSVG style={{ width: '100%', height: '100%' }} /> : null}
+            </IconContainer>
             <Field
                 as="select"
                 {...props}
@@ -26,10 +27,9 @@ function Select(props) {
 }
 
 Select.propTypes = {
-    icon: PropTypes.string.isRequired,
+    IconSVG: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
-    name: PropTypes.string.isRequired,
     title: PropTypes.string,
 };
 
@@ -37,6 +37,7 @@ Select.defaultProps = {
     onFocus: null,
     onBlur: null,
     title: '',
+    IconSVG: null,
 };
 
 export default Select;

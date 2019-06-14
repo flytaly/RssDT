@@ -27,6 +27,8 @@
         "lodash.get": "^4.4.2",
         "lodash.throttle": "^4.1.1",
         "next": "^8.1.0",
+        "next-compose-plugins": "^2.2.0",
+        "next-react-svg": "^1.1.0",
         "next-with-apollo": "^3.4.0",
         "nprogress": "^0.2.0",
         "prop-types": "^15.7.2",
@@ -40,7 +42,7 @@
     },
     "devDependencies": {
         "@testing-library/react": "^8.0.1",
-        "@types/jest": "^24.0.13",
+        "@types/jest": "^24.0.14",
         "babel-core": "^6.26.3",
         "babel-jest": "^24.8.0",
         "babel-plugin-styled-components": "^1.10.0",
@@ -48,8 +50,9 @@
         "jest": "^24.8.0",
         "jest-axe": "^3.1.1",
         "jest-cli": "^24.8.0",
-        "jest-dom": "^3.4.0",
+        "jest-dom": "^3.5.0",
         "jest-styled-components": "^6.3.1",
+        "jest-svg-transformer": "^1.0.0",
         "react-test-renderer": "^16.8.6"
     },
     "jest": {
@@ -57,7 +60,8 @@
             "js"
         ],
         "transform": {
-            "^.+\\.js$": "babel-jest"
+            "^.+\\.js$": "babel-jest",
+            "^.+\\.svg$": "jest-svg-transformer"
         },
         "setupFilesAfterEnv": [
             "./setupTest.js"

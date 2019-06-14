@@ -14,11 +14,18 @@ const Container = styled.label`
         ? `2px solid ${props.theme.btnColor1}`
         : `1px solid ${props.theme.greyDark}`)};
     border-radius: 30px;
-    :hover {
+    :hover{
         border-width: 2px;
+    }
+    svg {
+        fill: ${props => (props.focus ? props.theme.btnColor1 : props.theme.svgIconGrey)};
     }
 `;
 const Image = styled.img`
+    width: 2rem;
+    height: 2rem;
+`;
+const IconContainer = styled.div`
     width: 2rem;
     height: 2rem;
 `;
@@ -52,5 +59,5 @@ const ErrorMessage = styled.div`
 `;
 
 export {
-    Container, Field, Image, ErrorMessage,
+    Container, Field, Image, ErrorMessage, IconContainer,
 };

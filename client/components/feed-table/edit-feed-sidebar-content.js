@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import { GreenButtonLink, NoStylesButton, SubmitButton } from '../styled/buttons';
-import arrowLeftImg from '../../static/arrow-left.svg';
+import ArrowLeft from '../../static/arrow-left.svg';
 import periods, { periodNames } from '../../types/digest-periods';
 
 const UPDATE_MY_FEED_MUTATION = gql`mutation (
@@ -112,7 +112,7 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                 <ContainerForm onSubmit={handleSubmit}>
                     <SpaceBetweenRow>
                         <ImgContainerButton onClick={() => closeSidebar()}>
-                            <img src={arrowLeftImg} alt="Go back" />
+                            <ArrowLeft style={{ width: '100%', height: '100%' }} title="Go back" />
                         </ImgContainerButton>
                         {imageUrl && <FeedLogoImg src={imageUrl} title={imageTitle} />}
                     </SpaceBetweenRow>

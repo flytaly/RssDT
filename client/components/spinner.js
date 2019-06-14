@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import spinnerIcon from '../static/spinner.svg';
+import SpinnerIcon from '../static/spinner.svg';
 
-const StyledSpinner = styled.img`
+const StyledSpinner = styled.div`
     width: 2rem;
     animation: spin 1s ease infinite;
     @keyframes spin {
@@ -10,14 +10,18 @@ const StyledSpinner = styled.img`
             transform:rotate(360deg);
         }
     }
+    svg {
+        width: 100%;
+    }
 `;
 
 function Spinner() {
     return (
         <StyledSpinner
-            src={spinnerIcon}
-            alt="loading"
-        />
+            title="loading"
+        >
+            <SpinnerIcon />
+        </StyledSpinner>
     );
 }
 

@@ -114,6 +114,10 @@ exports[`Snapshot should match snapshot 1`] = `
   border-width: 2px;
 }
 
+.c6 svg {
+  fill: #455765;
+}
+
 .c7 {
   width: 2rem;
   height: 2rem;
@@ -240,16 +244,18 @@ exports[`Snapshot should match snapshot 1`] = `
         class="c6"
         title="The RSS or Atom feed url"
       >
-        <img
-          alt="url"
+        <div
           class="c7"
-          src="/static/rss-square.svg"
-        />
+        >
+          <svg
+            data-file-name="SvgRssSquare"
+            style="width: 100%; height: 100%;"
+          />
+        </div>
         <input
           aria-label="The RSS or Atom feed url"
           class="c8"
           id="url"
-          name="url"
           placeholder="http://..."
           required=""
           title="The RSS or Atom feed url"
@@ -261,16 +267,18 @@ exports[`Snapshot should match snapshot 1`] = `
         class="c6"
         title="Email address"
       >
-        <img
-          alt="email"
+        <div
           class="c7"
-          src="/static/envelope.svg"
-        />
+        >
+          <svg
+            data-file-name="SvgEnvelope"
+            style="width: 100%; height: 100%;"
+          />
+        </div>
         <input
           aria-label="Email address"
           class="c8"
           id="email"
-          name="email"
           placeholder="Email"
           required=""
           title="Email address"
@@ -282,16 +290,18 @@ exports[`Snapshot should match snapshot 1`] = `
         class="c6"
         title="Select a digest period"
       >
-        <img
-          alt="period"
+        <div
           class="c7"
-          src="/static/clock.svg"
-        />
+        >
+          <svg
+            data-file-name="SvgClock"
+            style="width: 100%; height: 100%;"
+          />
+        </div>
         <select
           aria-label="Select a digest period"
           class="c9"
           id="period"
-          name="period"
           title="Select a digest period"
         >
           <option

@@ -1,19 +1,21 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Field, Image, ErrorMessage } from '../styled/form-field';
+import { Container, Field, ErrorMessage, IconContainer } from '../styled/form-field';
 
 function Input(props) {
     const [focus, setFocus] = useState(false);
     const inputEl = useRef(null);
     const {
-        icon, onFocus, onBlur, error, name, title, touched,
+        IconSVG, onFocus, onBlur, error, title, touched,
     } = props;
 
     const onClick = () => inputEl.current.focus();
 
     return (
         <Container focus={focus} onClick={onClick} title={title}>
-            <Image src={icon} alt={name} />
+            <IconContainer>
+                { IconSVG ? <IconSVG style={{ width: '100%', height: '100%' }} /> : null}
+            </IconContainer>
             <Field
                 as="input"
                 {...props}
@@ -33,11 +35,10 @@ function Input(props) {
 }
 
 Input.propTypes = {
-    icon: PropTypes.string.isRequired,
+    IconSVG: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
     error: PropTypes.string,
-    name: PropTypes.string.isRequired,
     title: PropTypes.string,
     touched: PropTypes.bool,
 };
@@ -48,6 +49,7 @@ Input.defaultProps = {
     error: '',
     title: '',
     touched: false,
+    IconSVG: null,
 };
 
 export default Input;

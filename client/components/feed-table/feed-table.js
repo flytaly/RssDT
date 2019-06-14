@@ -4,10 +4,10 @@ import { useQuery, useMutation } from 'react-apollo-hooks';
 import Link from 'next/link';
 import get from 'lodash.get';
 import ReactModal from 'react-modal';
-import { Table, Th, Tr, Td, ButtonWithImg } from './styled-table-parts';
+import { Table, Th, Tr, Td, ButtonWithIcon } from './styled-table-parts';
 import { DeleteButton, CancelButton } from '../styled/buttons';
-import trashIcon from '../../static/trash.svg';
-import editIcon from '../../static/edit.svg';
+import TrashIcon from '../../static/trash.svg';
+import EditIcon from '../../static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
 import { periodNames } from '../../types/digest-periods';
 import { MY_FEEDS_QUERY, ME_QUERY } from '../../queries';
@@ -55,7 +55,7 @@ const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
             <Td data-name="DIGEST SCHEDULE">{`${periodNames[feedInfo.schedule] || feedInfo.schedule} digest` }</Td>
             <Td minWidth="8rem" data-name="ACTIONS">
                 <div>
-                    <ButtonWithImg
+                    <ButtonWithIcon
                         clickHandler={({ currentTarget }) => {
                             /* Firefox loses focus after clicking on button
                              hence ReactModal's 'shouldReturnFocusAfterClose' option doesn't work */
@@ -66,10 +66,10 @@ const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
                                 feedInfo,
                             });
                         }}
-                        src={editIcon}
-                        alt="Edit the feed"
+                        Icon={EditIcon}
+                        title="Edit the feed"
                     />
-                    <ButtonWithImg
+                    <ButtonWithIcon
                         clickHandler={() => {
                             setConfirmDelete({
                                 isOpen: true,
@@ -77,8 +77,8 @@ const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
                                 id: feedInfo.id,
                             });
                         }}
-                        src={trashIcon}
-                        alt="Delete the feed"
+                        Icon={TrashIcon}
+                        title="Delete the feed"
                     />
                 </div>
             </Td>

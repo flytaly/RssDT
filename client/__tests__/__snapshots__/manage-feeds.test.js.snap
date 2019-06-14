@@ -45,10 +45,6 @@ exports[`Manage feeds should match snapshot 1`] = `
   min-width: 8rem;
 }
 
-.c9 {
-  height: 1.5rem;
-}
-
 .c8 {
   border: none;
   padding: 0;
@@ -79,6 +75,11 @@ exports[`Manage feeds should match snapshot 1`] = `
   transform: scale(0.95);
 }
 
+.c8 svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .c0 {
   padding: 0 2rem 1rem;
 }
@@ -87,7 +88,7 @@ exports[`Manage feeds should match snapshot 1`] = `
   font-size: 1.8rem;
 }
 
-.c10 {
+.c9 {
   background-color: hsl(0,0%,60%);
   color: white;
   padding: 0.6rem 1rem;
@@ -105,21 +106,21 @@ exports[`Manage feeds should match snapshot 1`] = `
   margin-top: 1rem;
 }
 
-.c10:focus,
-.c10:hover {
+.c9:focus,
+.c9:hover {
   background-color: hsl(0,0%,45%);
 }
 
-.c10:active {
+.c9:active {
   color: hsl(0,0%,90%);
 }
 
-.c10:focus,
-.c10:hover {
+.c9:focus,
+.c9:hover {
   background-color: hsl(200,100%,30%);
 }
 
-.c10:active {
+.c9:active {
   color: hsl(200,100%,60%);
 }
 
@@ -249,22 +250,20 @@ exports[`Manage feeds should match snapshot 1`] = `
         <div>
           <button
             class="c8"
+            title="Edit the feed"
             type="button"
           >
-            <img
-              alt="Edit the feed"
-              class="c9"
-              src="/static/edit.svg"
+            <svg
+              data-file-name="SvgEdit"
             />
           </button>
           <button
             class="c8"
+            title="Delete the feed"
             type="button"
           >
-            <img
-              alt="Delete the feed"
-              class="c9"
-              src="/static/trash.svg"
+            <svg
+              data-file-name="SvgTrash"
             />
           </button>
         </div>
@@ -272,7 +271,7 @@ exports[`Manage feeds should match snapshot 1`] = `
     </li>
   </ul>
   <button
-    class="c10"
+    class="c9"
     type="button"
   >
     Add new feed

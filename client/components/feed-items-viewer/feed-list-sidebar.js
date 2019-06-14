@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import FeedList from './feed-list';
 import { NoStylesButton } from '../styled/buttons';
-import barsIcon from '../../static/bars.svg';
+import BarsIcon from '../../static/bars.svg';
 import FeedListModalSidebar from './feed-list-modal';
 
 const SmallScreen = styled.div`
@@ -31,10 +31,11 @@ const BigScreen = styled.div`
     }
 `;
 
-const Img = styled.img`
-    height: 1.5rem;
+const BarsButton = styled(NoStylesButton)`
+    svg {
+        height: 1.5rem;
+    }
 `;
-
 
 function FeedListSidebar() {
     const [modalInfo, setModalInfo] = useState({ isOpen: false });
@@ -42,15 +43,12 @@ function FeedListSidebar() {
     return (
         <React.Fragment>
             <SmallScreen>
-                <NoStylesButton
+                <BarsButton
                     onClick={() => { setModalInfo({ isOpen: true }); }}
+                    title="Open list of your feeds"
                 >
-                    <Img
-                        src={barsIcon}
-                        alt="Feeds"
-                        title="Open list of your feeds"
-                    />
-                </NoStylesButton>
+                    <BarsIcon />
+                </BarsButton>
                 <FeedListModalSidebar
                     modalInfo={modalInfo}
                     setModalInfo={setModalInfo}

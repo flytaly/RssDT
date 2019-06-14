@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
-import emailIcon from '../../static/envelope.svg';
-import passwordIcon from '../../static/key.svg';
+import EmailIcon from '../../static/envelope.svg';
+import PasswordIcon from '../../static/key.svg';
 
 const SIGN_IN_MUTATION = gql`
   mutation SIGN_IN_MUTATION(
@@ -45,7 +45,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
         <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={LogInSchema}
-            onSubmit={async (variables, { setSubmitting }) => {
+            onSubmit={async (variables, { setSubmitting, resetForm }) => {
                 const { email, password } = variables;
 
                 try {
@@ -73,8 +73,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                     <Input
                         id="email"
                         type="email"
-                        name="email"
-                        icon={emailIcon}
+                        IconSVG={EmailIcon}
                         touched={touched.email}
                         placeholder="Email"
                         onChange={handleChange}
@@ -88,8 +87,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                     <Input
                         id="password"
                         type="password"
-                        name="password"
-                        icon={passwordIcon}
+                        IconSVG={PasswordIcon}
                         touched={touched.password}
                         placeholder="Password"
                         onChange={handleChange}

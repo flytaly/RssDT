@@ -21,7 +21,7 @@ module.exports = (api) => {
         'file-loader',
         {
             name: '[name].[ext]',
-            extensions: ['png', 'jpg', 'jpeg', 'gif', 'svg'],
+            extensions: ['png', 'jpg', 'jpeg', 'gif'],
             publicPath: '/static',
             outputPath: null,
             context: '',

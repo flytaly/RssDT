@@ -51,16 +51,21 @@ export const Th = styled.div`
     }
 `;
 
-export const Img = styled.img`
-    height: 1.5rem;
-`;
-
-export const Button = styled(NoStylesButton)`
+export const SvgButton = styled(NoStylesButton)`
     margin: 0 0.5rem 0 0;
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
 `;
 
-export const ButtonWithImg = ({ clickHandler, ...rest }) => <Button onClick={clickHandler}><Img {...rest} /></Button>;
+export const ButtonWithIcon = ({ clickHandler, Icon, title }) => (
+    <SvgButton onClick={clickHandler} title={title}>
+        <Icon />
+    </SvgButton>);
 
-ButtonWithImg.propTypes = {
+ButtonWithIcon.propTypes = {
     clickHandler: PropTypes.func.isRequired,
+    Icon: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
 };

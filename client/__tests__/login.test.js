@@ -85,7 +85,8 @@ describe('Log In form', () => {
         await wait(() => {
             expect(getByTestId('login-message')).toHaveTextContent(errorMsg);
             // form values should not be cleared
-            expect(getByTestId('login')).toHaveFormValues({ email, password });
+            expect(inputs.email).toHaveValue(email);
+            expect(inputs.password).toHaveValue(password);
         });
     });
 });
