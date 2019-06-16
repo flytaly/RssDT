@@ -1,3 +1,9 @@
-# Feed Digester frontend
+# Feedmailu frontend
 
-- NEXT.js
+## app
+
+public NEXT.js serverless app
+
+## admin
+
+admin application
