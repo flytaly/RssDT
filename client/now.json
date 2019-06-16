@@ -13,14 +13,15 @@
         }
     ],
     "routes": [
+        { "src": "/favicon.ico", "dest": "/app/static/_meta/favicon.ico" },
+        { "src": "/manifest.json", "dest": "/app/static/_meta/manifest.json" },
+        { "src": "/browserconfig.xml", "dest": "/app/static/_meta/browserconfig.xml" },
         {
             "src": "/static/(?<folder>css|media|js)/(?<file>.*)",
             "headers": { "cache-control": "s-maxage=31536000,immutable" },
             "dest": "/admin/static/$folder/$file"
         },
-        { "src": "/favicon.ico", "dest": "/static/favicon.ico" },
         { "src": "/asset-manifest.json", "dest": "/admin/asset-manifest.json" },
-        { "src": "/manifest.json", "dest": "/admin/manifest.json" },
         { "src": "/precache-manifest.(.*)", "dest": "/admin/precache-manifest.$1" },
         {
             "src": "/service-worker.js",
