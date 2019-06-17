@@ -111,4 +111,15 @@ type Query {
         last: Int
     ): FeedItemConnection! @isAuthenticated
     userFeedTitle(id: ID!): UserFeedTitle
+
+    #  ADMIN QUERIES
+    users(
+        where: UserWhereInput
+        orderBy: UserOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [User]! @isAuthenticated(permission: ADMIN)
 }
