@@ -23,6 +23,8 @@
         },
         { "src": "/asset-manifest.json", "dest": "/admin/asset-manifest.json" },
         { "src": "/precache-manifest.(.*)", "dest": "/admin/precache-manifest.$1" },
+        { "src": "/main.(.*).hot-update.js", "dest": "/admin/main.$1.hot-update.js" },
+        { "src": "/sockjs-node/(.*)", "dest": "/admin/sockjs-node/$1" },
         {
             "src": "/service-worker.js",
             "headers": { "cache-control": "s-maxage=0" },
