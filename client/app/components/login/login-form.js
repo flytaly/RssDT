@@ -45,7 +45,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
         <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={LogInSchema}
-            onSubmit={async (variables, { setSubmitting, resetForm }) => {
+            onSubmit={async (variables, { setSubmitting/* , resetForm */ }) => {
                 const { email, password } = variables;
 
                 try {

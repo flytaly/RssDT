@@ -4,7 +4,7 @@ import ManageFeeds from '../components/manage-feeds';
 import { MY_FEEDS_QUERY } from '../queries';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import types from '../types/digest-periods';
-import { StateProvider, stateCtx } from '../components/state';
+import { StateProvider } from '../components/state';
 
 const getByNameAttribute = queryHelpers.queryByAttribute.bind(
     null,
