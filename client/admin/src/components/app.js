@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApolloProvider } from 'react-apollo-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { Icon, Layout } from 'antd';
 import AppLayout from './app-layout';
 import apolloClient from '../lib/apollo-client';
@@ -14,9 +14,10 @@ const Loading = () => (
 const App = () => (
     <ApolloProvider client={apolloClient}>
         <Authorize>
-            {({ loading, needLogin }) => {
+            {({ loading, needLogin, needPermissions }) => {
                 if (loading) return <Loading />;
                 if (needLogin) return <Login />;
+                if (needPermissions) return <Login needPermissions={needPermissions} />;
                 return <AppLayout />;
             }}
         </Authorize>
