@@ -7,16 +7,16 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "test": "NODE_ICU_DATA=node_modules/full-icu  NODE_ENV=test jest --coverage",
-        "test:watch": "NODE_ICU_DATA=node_modules/full-icu  NODE_ENV=test jest --watch"
+        "test": "NODE_ENV=test jest --coverage",
+        "test:watch": "NODE_ENV=test jest --watch"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@reach/menu-button": "^0.1.17",
+        "@reach/menu-button": "^0.1.18",
         "@zeit/next-css": "^1.0.1",
         "accepts": "^1.3.7",
-        "apollo-boost": "^0.3.1",
+        "apollo-boost": "^0.4.3",
         "babel-plugin-file-loader": "^1.1.1",
         "express": "^4.17.1",
         "formik": "^1.5.7",
@@ -33,11 +33,11 @@
         "nprogress": "^0.2.0",
         "prop-types": "^15.7.2",
         "react": "^16.9.0-alpha.0",
-        "react-apollo": "^2.5.6",
+        "react-apollo": "^2.5.7",
         "react-apollo-hooks": "^0.4.5",
         "react-dom": "^16.9.0-alpha.0",
         "react-modal": "^3.8.1",
-        "styled-components": "^4.2.1",
+        "styled-components": "^4.3.2",
         "yup": "^0.27.0"
     },
     "devDependencies": {
