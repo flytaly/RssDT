@@ -19,7 +19,7 @@ const getRelativePath = (pathname) => {
     return match.groups.path;
 };
 
-const App = () => (
+const AppLayout = ({ needAuth, isLoading }) => (
     <Layout style={{ minHeight: '100vh' }}>
         <Sider
             breakpoint="lg"
@@ -55,4 +55,4 @@ const App = () => (
         </Layout>
     </Layout>);
 
-export default App;
+export default AppLayout;
