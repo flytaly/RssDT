@@ -16,6 +16,8 @@
         "react-apollo": "^2.5.7",
         "react-apollo-hooks": "^0.4.5",
         "react-dom": "^16.8.6",
+        "react-json-view": "^1.19.1",
+        "react-modal": "^3.8.1",
         "react-scripts": "3.0.1",
         "styled-components": "^4.3.2"
     },
