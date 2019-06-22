@@ -36,6 +36,7 @@ const Queries = {
         return { title: title || link || url };
     },
     users: forwardTo('db'),
+    usersConnection: forwardTo('db'),
 };
 
 module.exports = Queries;

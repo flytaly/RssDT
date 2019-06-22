@@ -122,4 +122,13 @@ type Query {
         first: Int
         last: Int
     ): [User]! @isAuthenticated(permission: ADMIN)
+    usersConnection(
+        where: UserWhereInput
+        orderBy: UserOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): UserConnection! @isAuthenticated(permission: ADMIN)
 }
