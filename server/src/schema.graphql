@@ -131,4 +131,22 @@ type Query {
         first: Int
         last: Int
     ): UserConnection! @isAuthenticated(permission: ADMIN)
+    feeds(
+        where: FeedWhereInput
+        orderBy: FeedOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): [Feed]! @isAuthenticated(permission: ADMIN)
+    feedsConnection(
+        where: FeedWhereInput
+        orderBy: FeedOrderByInput
+        skip: Int
+        after: String
+        before: String
+        first: Int
+        last: Int
+    ): FeedConnection! @isAuthenticated(permission: ADMIN)
 }
