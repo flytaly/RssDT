@@ -37,20 +37,34 @@ const Users = () => {
                     size="middle"
                     onRow={record => ({ onClick: () => setViewRowData({ isOpen: true, record }) })}
                 >
-                    <Column title="Email" dataIndex="email" key="email" />
+                    <Column
+                        title="Email"
+                        dataIndex="email"
+                        key="email"
+
+                    />
                     <Column
                         title="Permissions"
                         dataIndex="permissions"
                         key="permissions"
+                        filters={[{ text: 'ADMIN', value: 'ADMIN' }, { text: 'USER', value: 'USER' }]}
+                        onFilter={(value, record) => record.permissions.includes(value)}
                         render={p => <span>{p.map(tag => <Tag key={tag}>{tag}</Tag>)}</span>}
                     />
                     <Column title="Digest Hour" dataIndex="dailyDigestHour" key="dailyDigestHour" />
-                    <Column title="Feeds" dataIndex="feedsNumber" key="feedsNumber" />
+                    <Column
+                        title="Feeds"
+                        dataIndex="feedsNumber"
+                        key="feedsNumber"
+                        sorter={({ feedsNumber: a }, { feedsNumber: b }) => a - b}
+                    />
                     <Column title="TimeZone" dataIndex="timeZone" key="timeZone" />
                     <Column
                         title="CreatedAt"
                         dataIndex="createdAt"
                         key="createdAt"
+                        sorter={({ createdAt: a }, { createdAt: b }) => Date.parse(a) - Date.parse(b)}
+                        defaultSortOrder="descend"
                         render={d => <span>{new Date(d).toLocaleString()}</span>}
                     />
                     <Column
