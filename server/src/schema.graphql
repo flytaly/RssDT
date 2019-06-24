@@ -101,8 +101,8 @@ type Query {
         first: Int
         last: Int
     ): [FeedItem]! @isAuthenticated
-    feedItemsConnection(
-        where: FeedItemWhereInput
+    myFeedItemsConnection(
+        feedId: ID!
         orderBy: FeedItemOrderByInput
         skip: Int
         after: String

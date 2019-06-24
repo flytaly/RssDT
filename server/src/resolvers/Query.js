@@ -1,7 +1,8 @@
 const { forwardTo } = require('prisma-binding');
 
+const noSuchFeedMsg = 'The feed doesn\'t exist or you are not subscribed to it';
+
 const Queries = {
-    feedItemsConnection: forwardTo('db'),
     async me(parent, args, ctx, info) {
         const { user } = ctx.request;
 
@@ -20,9 +21,23 @@ const Queries = {
             feed: { id },
         });
 
-        if (!userFeedExists) return new Error('The feed doesn\'t exist or you are not subscribed to it');
+        if (!userFeedExists) return new Error(noSuchFeedMsg);
 
         return ctx.db.query.feedItems({ where: { feed: { id } } }, info);
+    },
+
+    async myFeedItemsConnection(parent, args, ctx, info) {
+        const { user } = ctx.request;
+        const { feedId: id } = args;
+        const userFeedExists = await ctx.db.exists.UserFeed({
+            user: { id: user.id },
+            feed: { id },
+        });
+        if (!userFeedExists) return new Error(noSuchFeedMsg);
+
+        return ctx.db.query.feedItemsConnection({ where: {
+            feed: { id },
+        } }, info);
     },
 
     async userFeedTitle(parent, args, ctx) {
@@ -35,6 +50,7 @@ const Queries = {
 
         return { title: title || link || url };
     },
+
     users: forwardTo('db'),
     usersConnection: forwardTo('db'),
     feeds: forwardTo('db'),
