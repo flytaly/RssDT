@@ -37,6 +37,8 @@ const Queries = {
     },
     users: forwardTo('db'),
     usersConnection: forwardTo('db'),
+    feeds: forwardTo('db'),
+    feedsConnection: forwardTo('db'),
 };
 
 module.exports = Queries;
