@@ -1,5 +1,22 @@
 import gql from 'graphql-tag';
 
+const feedItemFields = gql`
+    fragment feedItemFields on FeedItem {
+        id
+            title
+            description
+            summary
+            pubDate
+            link
+            guid
+            imageUrl
+            enclosures {
+                url
+                type
+                length
+            }
+}`;
+
 const MY_FEED_ITEMS_QUERY = gql`query MY_FEEDS_QUERY (
         $feedId: ID!
         $orderBy: FeedItemOrderByInput
@@ -18,21 +35,11 @@ const MY_FEED_ITEMS_QUERY = gql`query MY_FEEDS_QUERY (
             first: $first
             last: $last
         ) {
-            id
-            title
-            description
-            summary
-            pubDate
-            link
-            guid
-            imageUrl
-            enclosures {
-                url
-                type
-                length
-            }
+            ...feedItemFields
         }
     }
+    ${feedItemFields}
 `;
 
+export { feedItemFields };
 export default MY_FEED_ITEMS_QUERY;

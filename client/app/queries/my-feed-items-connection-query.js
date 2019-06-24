@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
+import { feedItemFields } from './my-feed-items-query';
 
-const FEED_ITEMS_CONNECTION = gql`query FEED_ITEM_CONNECTION(
+const MY_FEED_ITEMS_CONNECTION = gql`query FEED_ITEM_CONNECTION(
         $feedId: ID!
         $orderBy: FeedItemOrderByInput
         $skip: Int
@@ -9,8 +10,8 @@ const FEED_ITEMS_CONNECTION = gql`query FEED_ITEM_CONNECTION(
         $first: Int
         $last: Int
     ){
-        feedItemsConnection(
-            where: { feed: { id: $feedId } }
+        myFeedItemsConnection(
+            feedId: $feedId
             orderBy: $orderBy
             skip: $skip
             after: $after
@@ -21,10 +22,17 @@ const FEED_ITEMS_CONNECTION = gql`query FEED_ITEM_CONNECTION(
             aggregate {
                 count
             }
+            edges {
+                node {
+                    ...feedItemFields
+                }
+            }
             pageInfo {
                 hasNextPage
             }
         }
-}`;
+}
+    ${feedItemFields}
+`;
 
-export default FEED_ITEMS_CONNECTION;
+export default MY_FEED_ITEMS_CONNECTION;
