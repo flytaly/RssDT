@@ -1,12 +1,16 @@
 const cookieParser = require('cookie-parser');
+const { Prisma } = require('prisma-binding');
 const createServer = require('./server');
-const db = require('./bind-prisma');
 const Watcher = require('./feed-watcher');
 const logger = require('./logger');
 const authMiddleware = require('./middlewares/jwtAuth.js');
+const prismaOptions = require('./prisma-options');
+const { fragmentReplacements } = require('./resolvers');
 
-require('./mail-sender/themes');
-// load email themes from filesystem
+require('./mail-sender/themes'); // load email themes from filesystem
+
+const db = new Prisma({ ...prismaOptions, fragmentReplacements });
+
 const feedWatcher = new Watcher(db);
 feedWatcher.start();
 

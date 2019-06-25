@@ -57,6 +57,12 @@ type Feed {
         first: Int
         last: Int
     ): [FeedItem!]
+    itemsCount: Int
+    ############################################################
+    userFeeds: [UserFeed!] @isAuthenticated(permission: ADMIN)
+    lastSuccessful: DateTime @isAuthenticated(permission: ADMIN)
+    createdAt: DateTime! @isAuthenticated(permission: ADMIN)
+    updatedAt: DateTime! @isAuthenticated(permission: ADMIN)
 }
 
 type UserFeedTitle {

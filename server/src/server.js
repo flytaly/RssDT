@@ -3,8 +3,7 @@ const { SchemaDirectiveVisitor } = require('graphql-tools');
 const { defaultFieldResolver } = require('graphql');
 const { GraphQLServer } = require('graphql-yoga');
 const { AuthenticationError, ForbiddenError } = require('apollo-server');
-const Mutation = require('./resolvers/Mutation');
-const Query = require('./resolvers/Query');
+const { resolvers } = require('./resolvers');
 
 // https://www.apollographql.com/docs/graphql-tools/schema-directives
 class AuthDirective extends SchemaDirectiveVisitor {
@@ -34,14 +33,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
  */
 const createServer = (db, watcher) => new GraphQLServer({
     typeDefs: 'src/schema.graphql',
-    resolvers: {
-        Mutation,
-        Query,
-    },
-    // to hide warning in tests https://github.com/prisma/prisma/issues/2225
-    resolverValidationOptions: {
-        requireResolversForResolveType: false,
-    },
+    resolvers,
     schemaDirectives: {
         isAuthenticated: AuthDirective,
     },
