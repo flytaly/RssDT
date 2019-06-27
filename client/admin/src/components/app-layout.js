@@ -4,6 +4,7 @@ import { Layout, Menu, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import Dashboard from './dashboard';
 import Users from './users';
+import Feeds from './feeds';
 
 const { Footer, Sider } = Layout;
 
@@ -11,6 +12,7 @@ const basepath = 'admin';
 const paths = {
     dashboard: `/${basepath}/`,
     users: `/${basepath}/users`,
+    feeds: `/${basepath}/feeds`,
 };
 
 const getRelativePath = (pathname) => {
@@ -41,6 +43,11 @@ const AppLayout = ({ needAuth, isLoading }) => (
                                 <span className="nav-text">Users</span>
                             </Link>
                         </Menu.Item>
+                        <Menu.Item key="feeds">
+                            <Link to={paths.feeds}>
+                                <span className="nav-text">Feeds</span>
+                            </Link>
+                        </Menu.Item>
                     </Menu>
                 )}
             </Match>
@@ -50,6 +57,7 @@ const AppLayout = ({ needAuth, isLoading }) => (
             <Router basepath={basepath}>
                 <Dashboard path="/" />
                 <Users path="/users" />
+                <Feeds path="/feeds" />
             </Router>
             <Footer style={{ textAlign: 'center' }}>2019</Footer>
         </Layout>

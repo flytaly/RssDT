@@ -24,7 +24,7 @@ const { Column } = Table;
 const Users = () => {
     const { data, loading, error } = useQuery(USERS_QUERY);
     const [viewRowData, setViewRowData] = useState({ isOpen: false, record: {} });
-    if (error) console.log(error);
+    if (error) console.error(error);
     const users = (get(data, 'users', [])).map(user => ({ ...user, key: user.id, feedsNumber: user.feeds.length }));
     return (
         <>
@@ -41,7 +41,6 @@ const Users = () => {
                         title="Email"
                         dataIndex="email"
                         key="email"
-
                     />
                     <Column
                         title="Permissions"
