@@ -48,6 +48,7 @@ type Feed {
     description: String
     imageUrl: String
     imageTitle: String
+    language: String
     items(
         where: FeedItemWhereInput
         orderBy: FeedItemOrderByInput
@@ -59,6 +60,7 @@ type Feed {
     ): [FeedItem!]
     itemsCount: Int
     ############################################################
+    activated: Boolean @isAuthenticated(permission: ADMIN)
     userFeeds: [UserFeed!] @isAuthenticated(permission: ADMIN)
     lastSuccessful: DateTime @isAuthenticated(permission: ADMIN)
     createdAt: DateTime! @isAuthenticated(permission: ADMIN)
