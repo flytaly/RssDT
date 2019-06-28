@@ -89,7 +89,7 @@ describe('signIn', () => {
     });
     test('should return error if email is invalid', async () => {
         const { password } = mocks.user;
-        const email = 'wrongEmail';
+        const email = 'wrongemail';
         const operation = {
             query: gq.SIGNIN_MUTATION,
             variables: { email, password },

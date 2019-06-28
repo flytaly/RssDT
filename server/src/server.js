@@ -4,6 +4,8 @@ const { defaultFieldResolver } = require('graphql');
 const { GraphQLServer } = require('graphql-yoga');
 const { AuthenticationError, ForbiddenError } = require('apollo-server');
 const { resolvers } = require('./resolvers');
+const shieldMiddleware = require('./middlewares/shield');
+const normalizeInput = require('./middlewares/normalize-inputs');
 
 // https://www.apollographql.com/docs/graphql-tools/schema-directives
 class AuthDirective extends SchemaDirectiveVisitor {
@@ -34,6 +36,7 @@ class AuthDirective extends SchemaDirectiveVisitor {
 const createServer = (db, watcher) => new GraphQLServer({
     typeDefs: 'src/schema.graphql',
     resolvers,
+    middlewares: [normalizeInput, shieldMiddleware],
     schemaDirectives: {
         isAuthenticated: AuthDirective,
     },

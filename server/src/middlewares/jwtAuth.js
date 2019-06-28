@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../logger');
 
+/*  EXPRESS middleware */
 module.exports = db => async (req, res, next) => {
     try {
         const { token } = req.cookies;

@@ -10,14 +10,14 @@ let yogaApp;
 let link;
 const watcher = {};
 
-const moduleName = 'requestPasswordChange';
+const moduleName = 'requestpasswordchange';
 const mocks = {
     user: {
-        email: `${moduleName}TestUser@test.com`,
+        email: `${moduleName}testuser@test.com`,
         password: `${moduleName}_password`,
     },
     feed: {
-        email: `${moduleName}TestUser@test.com`,
+        email: `${moduleName}testuser@test.com`,
         feedUrl: `http://${moduleName}testfeed.com`,
         feedSchedule: 'EVERY2HOURS',
     },

@@ -153,9 +153,23 @@ describe('addFeed mutation', () => {
 
         expect(errors[0].message).toEqual('Not a feed');
     });
+
+    test('should return error if email is not an email', async () => {
+        const { errors: e1 } = await makePromise(execute(link, {
+            query: gq.ADD_FEED_MUTATION,
+            variables: { email: 'notAnEmail', feedUrl: mocks.addFeed.feedUrl },
+        }));
+        expect(e1[0].message).toEqual('Not valid argument: email');
+
+        const { errors: e2 } = await makePromise(execute(link, {
+            query: gq.ADD_FEED_MUTATION,
+            variables: { email: '', feedUrl: mocks.addFeed.feedUrl },
+        }));
+        expect(e2[0].message).toEqual('Not valid argument: email');
+    });
 });
 
-describe('d', () => {
+describe('user info', () => {
     beforeEach(clearDB);
     test('should save locale and timeZone', async () => {
         const { email, feedUrl, feedSchedule, locale, timeZone } = mocks.addFeed;
