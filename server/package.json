@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "dotenv node src/index.js",
-    "dev": "NODE_ENV=development dotenv -e .env.dev -- nodemon -e js,graphql -x node src/index.js -i src/tests  | pino-pretty -c -t",
+    "start": "node src/index.js",
+    "dev": "NODE_ENV=development nodemon -e js,graphql -x node src/index.js -i src/tests  | pino-pretty -c -t",
     "delete:dev": "prisma delete --env-file .env.dev --force",
     "deploy:prod": "prisma deploy",
     "deploy:dev": "prisma deploy --env-file .env.dev",
@@ -34,6 +34,7 @@
     "bcrypt": "^3.0.6",
     "cookie-parser": "^1.4.4",
     "cron": "^1.7.1",
+    "dotenv": "^8.0.0",
     "dotenv-cli": "^2.0.0",
     "feedparser": "^2.2.9",
     "graphql": "^14.4.0",

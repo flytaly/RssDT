@@ -1,5 +1,12 @@
 const cookieParser = require('cookie-parser');
 const { Prisma } = require('prisma-binding');
+const path = require('path');
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+const envFile = isDevelopment ? '.env.dev' : '.env';
+require('dotenv').config({ path: path.join(__dirname, '..', envFile) });
+
 const createServer = require('./server');
 const Watcher = require('./feed-watcher');
 const logger = require('./logger');
@@ -13,8 +20,6 @@ const db = new Prisma({ ...prismaOptions, fragmentReplacements });
 
 const feedWatcher = new Watcher(db);
 feedWatcher.start();
-
-const isDevelopment = process.env.NODE_ENV === 'development';
 
 if (isDevelopment) {
     (async () => {
