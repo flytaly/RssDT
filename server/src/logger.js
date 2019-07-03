@@ -1,8 +1,10 @@
 const pino = require('pino');
 const childProcess = require('child_process');
 const stream = require('stream');
+const path = require('path');
 
-const cwd = process.cwd();
+// const cwd = process.cwd();
+const cwd = path.join(__dirname, '..');
 const { env } = process;
 const logPath = `${cwd}/log`;
 
