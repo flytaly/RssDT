@@ -26,4 +26,5 @@ module.exports = withCSS(withReactSvg({
         HackRemoveMinimizeOptionFromCssLoaders(config);
         return config;
     },
+    env: { API_URL: process.env.API_URL },
 }));

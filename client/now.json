@@ -1,6 +1,13 @@
 {
     "version": 2,
     "name": "feedmailu",
+    "regions": ["lhr1", "dub1"],
+    "build": {
+        "env": {
+            "API_URL": "@api_url",
+            "REACT_APP_API_URL": "@api_url"
+        }
+    },
     "builds": [
         {
             "src": "/app/package.json",
