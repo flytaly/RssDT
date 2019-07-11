@@ -29,7 +29,7 @@ export default function initApollo(initialState, headers) {
     // Make sure to create a new client for every server-side request so that data
     // isn't shared between connections (which would be bad)
     if (!process.browser) {
-        return create(initialState, headers); // explicitly pass headers in SSR mode so server has access to cookies
+        return create(initialState, headers); // pass headers with cookie in SSR mode for authorization
     }
 
     // Reuse client on the client-side

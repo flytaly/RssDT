@@ -18,8 +18,8 @@ export default App => class Apollo extends React.Component {
 
         // Run all GraphQL queries in the component tree
         // and extract the resulting data
-
-        const apollo = initApollo(null, req ? req.headers : {});
+        const cookie = req && req.headers.cookie;
+        const apollo = initApollo(null, { cookie });
         if (!process.browser) {
             try {
                 // Run all GraphQL queries
