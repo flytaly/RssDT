@@ -1,5 +1,10 @@
 async function signOut(parent, args, ctx) {
-    ctx.response.clearCookie('token', { httpOnly: true });
+    const domain = process.env.COOKIE_DOMAIN;
+    ctx.response.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        ...(domain ? { domain } : {}),
+    });
     return { message: 'OK' };
 }
 

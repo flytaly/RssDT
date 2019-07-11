@@ -12,9 +12,13 @@ async function signIn(parent, args, ctx) {
         return new Error('Invalid Password!');
     }
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    const domain = process.env.COOKIE_DOMAIN;
+    // http://expressjs.com/en/api.html#res.cookie
     ctx.response.cookie('token', token, {
         maxAge: 1000 * 60 * 60 * 24 * 180,
         httpOnly: true,
+        secure: true,
+        ...(domain ? { domain } : {}),
     });
 
     return { message: 'OK' };
