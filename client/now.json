@@ -1,6 +1,7 @@
 {
     "version": 2,
     "name": "feedmailu",
+    "alias": "feedmailu.com",
     "regions": ["lhr1", "dub1"],
     "build": {
         "env": {
