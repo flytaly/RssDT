@@ -4,7 +4,7 @@ const periods = require('../../periods');
 const mockUserFeed = {
     lastUpdate: new Date(),
     schedule: periods.EVERY3HOURS,
-    user: { timeZone: 'GMT' },
+    user: { timeZone: 'GMT', dailyDigestHour: 18 },
 };
 
 // Mock Date

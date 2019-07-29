@@ -59,7 +59,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare } }',
+            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare dailyDigestHour } }',
         );
         expect(isFeedReady).toHaveBeenCalled();
         expect(isFeedReady.mock.calls[0][0]).toMatchObject({ id: userFeed.id });
@@ -104,7 +104,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare } }',
+            '{ id lastUpdate schedule user { email locale timeZone shareEnable filterShare dailyDigestHour } }',
         );
         expect(composeHTML.mock.calls[0][1]).toHaveLength(newItems.length);
         expect(composeHTML).toHaveBeenCalledWith(

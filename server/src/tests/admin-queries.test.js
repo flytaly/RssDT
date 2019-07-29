@@ -1,10 +1,10 @@
 const { execute, makePromise } = require('apollo-link');
 const { HttpLink } = require('apollo-link-http');
 const jwt = require('jsonwebtoken');
+const gql = require('graphql-tag');
 const db = require('../bind-prisma');
 const { deleteData, runServer } = require('./mutations/_common');
 const mocks = require('./mocks/admin-queries.mocks');
-const gql = require('graphql-tag');
 
 const globalData = {
     yogaApp: null,
