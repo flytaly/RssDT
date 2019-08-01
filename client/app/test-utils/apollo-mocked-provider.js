@@ -6,7 +6,7 @@ import resolvers from '../lib/resolvers';
 
 function createClient(mocks) {
     return new ApolloClient({
-        cache: new InMemoryCache({ addTypename: false }),
+        cache: new InMemoryCache({ addTypename: true }),
         link: new MockLink(mocks),
         resolvers,
     });

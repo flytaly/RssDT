@@ -2,7 +2,8 @@
 import ME_QUERY from '../queries/me-query';
 import UPDATE_MY_INFO_MUTATION from '../queries/update-my-info-mutation';
 
-const user = {
+export const user = {
+    __typename: 'User',
     id: 'id',
     email: 'email@test.com',
     timeZone: 'GMT',

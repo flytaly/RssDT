@@ -5,7 +5,7 @@ import get from 'lodash.get';
 import { ME_QUERY, UPDATE_MY_INFO_MUTATION } from '../../queries';
 import StyledCard from '../styled/card';
 
-const updateMe = (dataProxy, mutationResult) => {
+export const updateMe = (dataProxy, mutationResult) => {
     try {
         const { locale, timeZone } = mutationResult.data.updateMyInfo;
         const data = dataProxy.readQuery({ query: ME_QUERY });
@@ -24,7 +24,7 @@ const updateMe = (dataProxy, mutationResult) => {
  */
 const withAuth = (redirectOnFail = false) => (Component) => {
     const WrappingComponent = (props) => {
-        const { data, error } = useQuery(ME_QUERY);
+        const { data, error, loading } = useQuery(ME_QUERY);
         const me = get(data, 'me', {});
 
         const updateMyInfo = useMutation(UPDATE_MY_INFO_MUTATION, { update: updateMe });
@@ -58,7 +58,7 @@ const withAuth = (redirectOnFail = false) => (Component) => {
         }
 
         if (redirectOnFail && !data.me) {
-            return <StyledCard><h1>You are not logged in. Redirect...</h1></StyledCard>;
+            return <StyledCard><h1>{loading ? 'Loading' : 'You are not logged in. Redirect...'}</h1></StyledCard>;
         }
 
         return <Component {...props} me={data.me} />;

@@ -1,8 +1,7 @@
 import gql from 'graphql-tag';
 
-const ME_QUERY = gql`
-    query ME_QUERY {
-        me {
+export const meFields = gql`
+    fragment meFields on User {
             id
             email
             timeZone
@@ -10,8 +9,15 @@ const ME_QUERY = gql`
             dailyDigestHour
             shareEnable
             filterShare
+}`;
+
+const ME_QUERY = gql`
+    query ME_QUERY {
+        me {
+            ...meFields
         }
     }
+    ${meFields}
 `;
 
 export default ME_QUERY;

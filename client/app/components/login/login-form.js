@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik } from 'formik';
 import { withRouter } from 'next/router';
 import * as Yup from 'yup';
-import { useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
 import { SubmitButton } from '../styled/buttons';
@@ -10,6 +10,16 @@ import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
 import EmailIcon from '../../static/envelope.svg';
 import PasswordIcon from '../../static/key.svg';
+import ME_QUERY, { meFields } from '../../queries/me-query';
+
+export const updateMeAfterSignIn = (dataProxy, mutationResult) => {
+    try {
+        const me = mutationResult.data.signIn;
+        dataProxy.writeQuery({ query: ME_QUERY, data: { me } });
+    } catch (e) {
+        console.error(e);
+    }
+};
 
 const SIGN_IN_MUTATION = gql`
   mutation SIGN_IN_MUTATION(
@@ -20,9 +30,10 @@ const SIGN_IN_MUTATION = gql`
         email: $email
         password: $password
     ) {
-        message
+        ...meFields
     }
   }
+  ${meFields}
 `;
 
 // VALIDATION
@@ -36,7 +47,8 @@ const LogInSchema = Yup.object().shape({
 });
 
 const LogInForm = ({ setMessages, router, changeForm }) => {
-    const signIn = useMutation(SIGN_IN_MUTATION);
+    const signIn = useMutation(SIGN_IN_MUTATION, { update: updateMeAfterSignIn });
+
     const handleClick = (e) => {
         e.preventDefault();
         changeForm();
@@ -50,7 +62,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
 
                 try {
                     const { data } = await signIn({ variables: { email, password } });
-                    if (data && data.signIn && data.signIn.message) {
+                    if (data && data.signIn) {
                         router.replace('/feeds');
                     }
                 } catch (error) {
