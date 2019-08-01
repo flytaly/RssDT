@@ -182,9 +182,6 @@ const SettingsComponent = () => {
                         {state.share.error ? <ErrorMsg>{state.share.error}</ErrorMsg> : null}
                         <LoaderContainer>{state.share.isSaving ? <Spinner /> : null}</LoaderContainer>
                     </article>
-                    <article>
-                        <h3>Links to online services</h3>
-                    </article>
                 </Section>
             </InnerContainer>
         </OuterContainer>);
