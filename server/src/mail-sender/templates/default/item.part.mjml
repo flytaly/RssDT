@@ -18,7 +18,7 @@
 </mj-section>
 <mj-section>
   <mj-column width="100%">
-    <mj-text>{{{summary}}} {{#if enclosures.length}}
+    <mj-text>{{{content}}} {{#if enclosures.length}}
         <br /><b>Files:</b><br /> {{/if}}
       {{#each enclosures}}
         <a href="{{url}}">{{title}}</a> [{{type}}]<br />

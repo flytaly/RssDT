@@ -34,6 +34,7 @@ const getImageFromEnclosures = (enclosures) => {
  * @property {String} link
  * @property {String} [imageUrl]
  * @property {String} summary
+ * @property {String} description
  * @property {String} pubDate
  * @property {enclosures} enclosures
  */
@@ -71,7 +72,7 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
                 .filter(s => !filterShare.length || filterShare.includes(s.id))
                 .map(s => ({ ...s, url: s.getUrl(item.link, item.title) }))
             : [];
-
+        item.content = item.summary || item.description;
         return acc + theme.item(item);
     }, '');
     const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;
