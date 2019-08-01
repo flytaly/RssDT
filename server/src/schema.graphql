@@ -83,7 +83,7 @@ type Mutation {
     requestUnsubscribe(id: ID!): Message!
     requestPasswordChange(email: String!): Message!
     setPassword(token: String!, password: String!): User!
-    signIn(email: String!, password: String!): Message!
+    signIn(email: String!, password: String!): User!
     signOut: Message!
     unsubscribe(token: String!): UserFeed!
     updateMyFeed(data: MyFeedUpdateInput!, id: ID!): UserFeed! @isAuthenticated

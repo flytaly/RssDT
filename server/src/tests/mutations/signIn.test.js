@@ -58,14 +58,14 @@ describe('signIn', () => {
         acc[key] = value;
         return acc;
     }, {});
-    test('should return token in cookies', async () => {
+    test('should return token in cookies and user in query response', async () => {
         const { email, password } = mocks.user;
         const operation = {
             query: gq.SIGNIN_MUTATION,
             variables: { email, password },
         };
         const { data, errors } = await makePromise(execute(linkCustomFetch, operation));
-        expect(data.signIn).toMatchObject({ message: 'OK' });
+        expect(data.signIn).toMatchObject({ email });
         expect(errors).toBeUndefined();
         const userFromDB = await db.query.user({ where: { email } }, '{ id }');
         const parsed = parseCookies(cookies);

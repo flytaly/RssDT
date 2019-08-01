@@ -78,7 +78,8 @@ const SIGNIN_MUTATION = gql`mutation (
         email: $email
         password: $password
     ) {
-      message
+          id
+          email
     }
   }`;
 

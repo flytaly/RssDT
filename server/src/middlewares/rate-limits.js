@@ -1,6 +1,8 @@
 const { rule } = require('graphql-shield');
 const { getAsync, redisClient } = require('../redis');
 
+const isTest = process.env.NODE_ENV === 'test';
+
 /**
  * @param {string} identityArgName - name of argument that will be used as identity of current GraphQL query
  * @param {string} ruleName - an additional string to distinguish different rule with the same identity
@@ -8,6 +10,9 @@ const { getAsync, redisClient } = require('../redis');
 const createRateLimitRuleFromArgument = (identityArgName, ruleName) => rule(
     ruleName,
 )(async (parent, args/* , ctx, info */) => {
+    // TODO: add tests
+    if (isTest) return true; // workaround to not call redis in tests
+
     const initialCooldown = 60 * 1000; // MS
     const EXPIRY = 60 * 60 * 12; // SEC
     const identity = args[identityArgName];

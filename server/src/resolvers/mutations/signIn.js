@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const isDev = process.env.NODE_ENV === 'development';
 
-async function signIn(parent, args, ctx) {
+async function signIn(parent, args, ctx, info) {
     const { email, password } = args;
     const user = await ctx.db.query.user({ where: { email } });
     if (!user) {
@@ -22,8 +22,7 @@ async function signIn(parent, args, ctx) {
         secure: !isDev,
         ...(domain ? { domain } : {}),
     });
-
-    return { message: 'OK' };
+    return ctx.db.query.user({ where: { email } }, info);
 }
 
 module.exports = signIn;
