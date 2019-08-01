@@ -1,8 +1,9 @@
 /* eslint-disable no-shadow */
 const moment = require('moment-timezone');
-const { shield, inputRule } = require('graphql-shield');
+const { shield, inputRule, chain } = require('graphql-shield');
 const yup = require('yup');
 const share = require('../mail-sender/share');
+const { createRateLimitRuleFromArgument } = require('./rate-limits');
 
 const shareNames = new Set(share.map(({ id }) => id));
 
@@ -14,13 +15,14 @@ const valids = {
         }),
     dailyDigestHour: yup.number().integer().max(23).min(0),
     locale: yup.string().max(50),
-};
-
-const addFeedValidation = inputRule(yup => yup.object({
     email: yup
         .string()
         .email('Not valid argument: email')
         .required('Not valid argument: email'),
+};
+
+const addFeedValidation = inputRule(yup => yup.object({
+    email: valids.email,
     feedUrl: yup
         .string()
         .url('Not valid argument: feedUrl')
@@ -50,9 +52,14 @@ const setPasswordValidation = inputRule(yup => yup.object({
     password: yup.string().min(8).required(),
 }));
 
+const emailValidation = inputRule(yup => yup.object({ email: valids.email }));
+
 module.exports = shield({
     Mutation: {
         addFeed: addFeedValidation,
+        requestPasswordChange: chain(emailValidation, createRateLimitRuleFromArgument('email', 'passwordChange')),
+        requestUnsubscribe: createRateLimitRuleFromArgument('id', 'requestUnsubscribe'),
+        resendActivationLink: createRateLimitRuleFromArgument('id', 'sendActivation'),
         setPassword: setPasswordValidation,
         updateMyInfo: updateMyInfoValidation,
     },

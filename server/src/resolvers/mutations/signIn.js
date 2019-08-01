@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const isDev = process.env.NODE_ENV === 'development';
+
 async function signIn(parent, args, ctx) {
     const { email, password } = args;
     const user = await ctx.db.query.user({ where: { email } });
@@ -17,7 +19,7 @@ async function signIn(parent, args, ctx) {
     ctx.response.cookie('token', token, {
         maxAge: 1000 * 60 * 60 * 24 * 180,
         httpOnly: true,
-        secure: true,
+        secure: !isDev,
         ...(domain ? { domain } : {}),
     });
 
