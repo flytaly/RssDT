@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import Router from 'next/router';
+// import Router from 'next/router';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo-hooks';
 import StyledCard from '../components/styled/card';
@@ -21,7 +21,12 @@ const Logout = () => {
 
     useEffect(() => {
         Promise.all([logoutLocal(), logout()])
-            .then(() => Router.replace('/'))
+            .then(() => {
+                // It's hard to invalidate queries in apollo store cache
+                //  so it's easier to just reload page after signing out
+                window.location.href = '/';
+                // Router.replace('/');
+            })
             .catch(e => console.error(e));
     });
 
