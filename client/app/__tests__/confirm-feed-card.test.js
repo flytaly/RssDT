@@ -11,7 +11,10 @@ const mocks = [{
         query: CONFIRM_SUBSCRIPTION_MUTATION,
         variables: { token: 'token' },
     },
-    result: { data: { confirmSubscription: { message: successMessage } } },
+    result: { data: { confirmSubscription: {
+        __typename: 'Message',
+        message: successMessage,
+    } } },
 }, {
     request: {
         query: CONFIRM_SUBSCRIPTION_MUTATION,

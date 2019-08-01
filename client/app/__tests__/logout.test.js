@@ -5,10 +5,16 @@ import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 
 const mocks = [{
     request: { query: LOGOUT_MUTATION },
-    result: { data: { logOut: { message: 'OK' } } },
+    result: { data: { logOut: {
+        message: 'OK',
+        __typename: 'Message',
+    } } },
 }, {
     request: { query: LOGOUT_CLIENT_MUTATION },
-    result: { data: { logOut: { message: 'OK' } } },
+    result: { data: { logOut: {
+        __typename: 'Message',
+        message: 'OK',
+    } } },
 }];
 
 describe('Log out', () => {

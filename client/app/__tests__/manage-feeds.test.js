@@ -18,6 +18,7 @@ const mocks = [{
     result: {
         data: {
             myFeeds: [{
+                __typename: 'UserFeed',
                 id: 'id1',
                 createdAt,
                 lastUpdate,
@@ -30,6 +31,7 @@ const mocks = [{
                     url: 'http://testfeed.com/feed',
                     imageTitle: 'Image Title',
                     imageUrl: 'http://testfeed.com/logo.png',
+                    __typename: 'Feed',
                 },
             }],
         },

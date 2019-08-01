@@ -7,17 +7,23 @@ import { SIGN_IN_MUTATION } from '../components/login/login-form';
 import RequestPasswordForm, { REQUEST_PASSWORD_CHANGE } from '../components/login/request-password-form';
 import SetPasswordForm, { SET_PASSWORD_MUTATION } from '../components/login/set-password-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
-import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
+import { user, ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
 
 expect.extend(toHaveNoViolations);
 
 const values = { email: 'email@tst.com', password: 'password' };
 const mocks = [{
     request: { query: SIGN_IN_MUTATION, variables: { ...values } },
-    result: { data: { signIn: { message: 'OK' } } },
+    result: { data: {
+        __typename: 'User',
+        signIn: user,
+    } },
 }, {
     request: { query: REQUEST_PASSWORD_CHANGE, variables: { email: values.email } },
-    result: { data: { requestPasswordChange: { message: 'OK' } } },
+    result: { data: { requestPasswordChange: {
+        __typename: 'Message',
+        message: 'OK',
+    } } },
 },
 ME_QUERY_MOCK,
 UPDATE_MY_INFO_MOCK,
@@ -142,7 +148,7 @@ describe('Set password form', () => {
     const password = 'testPassword';
     const setPasswordMocks = [...mocks, {
         request: { query: SET_PASSWORD_MUTATION, variables: { token, password } },
-        result: { data: { setPassword: { email: values.email } } },
+        result: { data: { setPassword: { __typename: 'User', email: values.email } } },
     },
     ];
 

@@ -24,7 +24,10 @@ const mocks = [{
             ...values,
         },
     },
-    result: { data: { addFeed: { message: successMsg } } },
+    result: { data: { addFeed: {
+        __typename: 'Message',
+        message: successMsg,
+    } } },
 },
 ME_QUERY_MOCK,
 UPDATE_MY_INFO_MOCK,
