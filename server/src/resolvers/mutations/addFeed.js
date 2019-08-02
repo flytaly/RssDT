@@ -38,7 +38,7 @@ async function addFeed(parent, args, ctx) {
     } }, '{ id activated }');
     const userFeed = userFeeds && userFeeds.length && userFeeds[0];
 
-    if (userFeed /* && userFeed.activated */) throw new Error('The feed was already added');
+    if (userFeed && userFeed.activated) throw new Error('The feed was already added');
 
     const activationToken = await nanoid(20);
     const activationTokenExpiry = new Date(Date.now() + 1000 * 3600 * 24); // 24 hours
