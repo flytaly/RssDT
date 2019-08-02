@@ -3,7 +3,7 @@ const moment = require('moment-timezone');
 const { shield, inputRule, chain } = require('graphql-shield');
 const yup = require('yup');
 const share = require('../mail-sender/share');
-const { createRateLimitRuleFromArgument } = require('./rate-limits');
+const { createRateLimitRuleFromArguments } = require('./rate-limits');
 
 const shareNames = new Set(share.map(({ id }) => id));
 
@@ -56,10 +56,16 @@ const emailValidation = inputRule(yup => yup.object({ email: valids.email }));
 
 module.exports = shield({
     Mutation: {
-        addFeed: addFeedValidation,
-        requestPasswordChange: chain(emailValidation, createRateLimitRuleFromArgument('email', 'passwordChange')),
-        requestUnsubscribe: createRateLimitRuleFromArgument('id', 'requestUnsubscribe'),
-        resendActivationLink: createRateLimitRuleFromArgument('id', 'sendActivation'),
+        addFeed: chain(addFeedValidation, createRateLimitRuleFromArguments(
+            ({ email, feedUrl }) => `${email}:${feedUrl}`,
+            'addFeed',
+        )),
+        requestPasswordChange: chain(emailValidation, createRateLimitRuleFromArguments(
+            ({ email }) => email,
+            'passwordChange',
+        )),
+        requestUnsubscribe: createRateLimitRuleFromArguments(({ id }) => id, 'requestUnsubscribe'),
+        resendActivationLink: createRateLimitRuleFromArguments(({ id }) => id, 'sendActivation'),
         setPassword: setPasswordValidation,
         updateMyInfo: updateMyInfoValidation,
     },

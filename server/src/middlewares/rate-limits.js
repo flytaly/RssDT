@@ -4,10 +4,11 @@ const { getAsync, redisClient } = require('../redis');
 const isTest = process.env.NODE_ENV === 'test';
 
 /**
- * @param {string} identityArgName - name of argument that will be used as identity of current GraphQL query
  * @param {string} ruleName - an additional string to distinguish different rule with the same identity
+ * @param {function} getIdentityFromArgs - cb that receives argument and returns string which
+ * will be used as identity of current GraphQL query
  */
-const createRateLimitRuleFromArgument = (identityArgName, ruleName) => rule(
+const createRateLimitRuleFromArguments = (getIdentity, ruleName) => rule(
     ruleName,
 )(async (parent, args/* , ctx, info */) => {
     // TODO: add tests
@@ -15,7 +16,7 @@ const createRateLimitRuleFromArgument = (identityArgName, ruleName) => rule(
 
     const initialCooldown = 60 * 1000; // MS
     const EXPIRY = 60 * 60 * 12; // SEC
-    const identity = args[identityArgName];
+    const identity = getIdentity(args);
     const fieldNames = { attempt: `${identity}:${ruleName}:attempt`, ts: `${identity}:${ruleName}:ts` };
     const attempt = Number(await getAsync(fieldNames.attempt) || 0);
     const tsPrev = await getAsync(fieldNames.ts);
@@ -37,5 +38,5 @@ const createRateLimitRuleFromArgument = (identityArgName, ruleName) => rule(
 });
 
 module.exports = {
-    createRateLimitRuleFromArgument,
+    createRateLimitRuleFromArguments,
 };
