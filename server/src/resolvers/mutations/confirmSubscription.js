@@ -9,7 +9,7 @@ async function confirmSubscription(parent, args, ctx) {
             activationToken: token,
             activationTokenExpiry_gte: new Date(),
         },
-    }, '{ id feed { url title } }');
+    }, '{ id feed { url title lastSuccessful } }');
 
     if (!userFeeds || !userFeeds.length) return new Error('Wrong or expired token');
 
@@ -36,11 +36,13 @@ async function confirmSubscription(parent, args, ctx) {
 
     // concurrent task that updates feed and then sets last update time to userFeed
     (async () => {
-        try {
-            await ctx.watcher.updateFeed(userFeed.feed.url);
-            await ctx.watcher.setFeedUpdateTime(userFeed.feed.url);
-        } catch (error) {
-            logger.error({ url: userFeed.url, message: error.message }, 'Couldn\'t update a feed');
+        if (!userFeed.feed.lastSuccessful) {
+            try {
+                await ctx.watcher.updateFeed(userFeed.feed.url);
+                await ctx.watcher.setFeedUpdateTime(userFeed.feed.url);
+            } catch (error) {
+                logger.error({ url: userFeed.url, message: error.message }, 'Couldn\'t update a feed');
+            }
         }
         // set even if feed wasn't actually updated to have initial time
         await setUserFeedLastUpdate(userFeed.id);
