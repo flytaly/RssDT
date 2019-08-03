@@ -1,5 +1,6 @@
 const logger = require('../../logger');
 const { setUserFeedLastUpdate } = require('../../db-queries');
+const cache = require('../../cache');
 
 async function confirmSubscription(parent, args, ctx) {
     const { token } = args;
@@ -36,13 +37,24 @@ async function confirmSubscription(parent, args, ctx) {
 
     // concurrent task that updates feed and then sets last update time to userFeed
     (async () => {
-        if (!userFeed.feed.lastSuccessful) {
-            try {
-                await ctx.watcher.updateFeed(userFeed.feed.url);
-                await ctx.watcher.setFeedUpdateTime(userFeed.feed.url);
-            } catch (error) {
-                logger.error({ url: userFeed.url, message: error.message }, 'Couldn\'t update a feed');
+        try {
+            if (!userFeed.feed.lastSuccessful) {
+                const { url } = userFeed.feed;
+
+                const isLocked = await cache.isLocked(url);
+                if (!isLocked) {
+                    try {
+                        await cache.lock(url);
+                        await ctx.watcher.updateFeed(url);
+                        await ctx.watcher.setFeedUpdateTime(url);
+                    } catch (error) {
+                        logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
+                    }
+                    await cache.unlock(url);
+                }
             }
+        } catch (e) {
+            logger.error(e);
         }
         // set even if feed wasn't actually updated to have initial time
         await setUserFeedLastUpdate(userFeed.id);

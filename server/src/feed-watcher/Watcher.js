@@ -4,6 +4,7 @@ const logger = require('../logger');
 const { getNewItems } = require('../feed-parser');
 const { filterAndClearHtml, filterMeta } = require('./utils');
 const { buildAndSendDigests } = require('../mail-sender/dispatcher');
+const redisCache = require('../cache');
 
 class Watcher {
     /**
@@ -14,6 +15,7 @@ class Watcher {
      * @param {number} options.maxNewItems=150 - maximum number of new items saving per feed
      * @param {number} options.itemMaxTime - maximum time of storing items
      * @param {number} options.storeNumberOfItems - number of items to store after itemMaxTime
+     * @param {object} options.cache - cache for locking current loading url
      */
     constructor(db, {
         cron = '*/5 * * * *',
@@ -21,6 +23,7 @@ class Watcher {
         maxNewItems = 150,
         itemMaxTime = (1000 * 60 * 60 * 24) * 2, // 2 days
         storeNumberOfItems = 30,
+        cache = redisCache,
     } = {}) {
         this.db = db;
         this.cron = cron;
@@ -30,6 +33,7 @@ class Watcher {
         this.storeNumberOfItems = storeNumberOfItems;
         this.isUpdating = false;
         this.initJob();
+        this.cache = cache;
     }
 
     async getFeedsInfo() {
@@ -110,9 +114,14 @@ class Watcher {
         const feeds = await this.getFeedsInfo();
         const limit = pLimit(this.maxConnections);
         let [totalFeeds, totalNewItems] = [0, 0];
-        await Promise.all(
-            feeds.map(({ url }) => limit(async () => {
+        await Promise.all(feeds.map(({ url }) => limit(async () => this.cache.isLocked(url)
+            .then(async (isLocked) => {
                 try {
+                    if (isLocked) {
+                        logger.error({ url }, 'The feed is locked, skip updating');
+                        return;
+                    }
+                    await this.cache.lock(url);
                     /* accumulator += await... -- doesn't work in map because before promise resolves,
                     accumulation value in every function stays 0 */
                     totalNewItems = await this.updateFeed(url) + totalNewItems;
@@ -121,9 +130,12 @@ class Watcher {
                 } catch (error) {
                     logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
                 }
+                await this.cache.unlock(url);
+            })
+            .catch(e => logger.error(e)) // Catch cache errors
+            .then(() => {
                 buildAndSendDigests(url);
-            })),
-        );
+            }))));
         logger.info({ totalFeeds, totalNewItems }, 'Feeds were updated');
     }
 

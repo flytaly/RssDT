@@ -5,6 +5,7 @@ const { getNewItems } = require('../feed-parser/parse-utils');
 const Watcher = require('../feed-watcher');
 const { filterAndClearHtml } = require('../feed-watcher/utils');
 const mocks = require('./mocks/feed-watcher.mocks');
+const cache = require('../cache');
 
 jest.mock('../feed-parser/parse-utils', () => ({
     getNewItems: jest.fn(() => ({ feedItems: mocks.newFeedItems, feedMeta: null })),
@@ -13,6 +14,8 @@ jest.mock('../feed-parser/parse-utils', () => ({
 jest.mock('../mail-sender/dispatcher.js', () => ({
     buildAndSendDigests: jest.fn(),
 }));
+
+jest.mock('../cache');
 
 const db = {
     query: {
@@ -102,5 +105,33 @@ describe('Feed watcher: filterFields method', () => {
             },
         };
         expect(filterAndClearHtml(item)).toEqual(resultItem);
+    });
+});
+
+describe('Url locker', () => {
+    let feedWatcher = {};
+    const { url } = mocks.feed;
+    beforeAll(() => {
+        feedWatcher = new Watcher(db);
+        feedWatcher.updateFeed = jest.fn(async () => 1);
+        feedWatcher.setFeedUpdateTime = jest.fn(async () => {});
+    });
+    beforeEach(jest.clearAllMocks);
+    test('should lock and then unlock url', async () => {
+        await feedWatcher.update();
+        expect(cache.isLocked).toHaveBeenCalledWith(url);
+        expect(cache.lock).toHaveBeenCalledWith(url);
+        expect(cache.unlock).toHaveBeenCalledWith(url);
+        expect(feedWatcher.updateFeed).toHaveBeenCalled();
+        expect(feedWatcher.setFeedUpdateTime).toHaveBeenCalled();
+    });
+    test('shouldn\'t update if url is locked', async () => {
+        cache.isLocked.mockImplementationOnce(async () => true);
+        await feedWatcher.update();
+        expect(cache.isLocked).toHaveBeenCalledWith(url);
+        expect(cache.lock).not.toHaveBeenCalledWith(url);
+        expect(cache.unlock).not.toHaveBeenCalledWith(url);
+        expect(feedWatcher.updateFeed).not.toHaveBeenCalled();
+        expect(feedWatcher.setFeedUpdateTime).not.toHaveBeenCalled();
     });
 });

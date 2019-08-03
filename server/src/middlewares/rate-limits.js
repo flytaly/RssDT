@@ -1,5 +1,5 @@
 const { rule } = require('graphql-shield');
-const { getAsync, redisClient } = require('../redis');
+const { getAsync, redisClient } = require('../cache');
 
 const isTest = process.env.NODE_ENV === 'test';
 
