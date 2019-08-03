@@ -47,6 +47,7 @@ function getFeedStream(url, options = {}) {
     const axiosOptions = {
         method: 'get',
         responseType: 'arraybuffer',
+        maxContentLength: 10000000,
         headers: {
             Accept: '*/*',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
