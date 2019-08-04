@@ -34,7 +34,7 @@ async function getItemsNewerThan(url, time, first) {
         },
         ...(first && { first }),
         orderBy: 'pubDate_DESC',
-    }, '{ title summary link pubDate imageUrl enclosures { url type length } }');
+    }, '{ title summary description link pubDate imageUrl enclosures { url type length } }');
 }
 
 module.exports = {

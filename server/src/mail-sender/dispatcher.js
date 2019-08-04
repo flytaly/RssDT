@@ -46,7 +46,7 @@ async function buildAndSendDigests(url) {
                 logger.error(errors);
             }
         } catch (e) {
-            logger.error(e.message);
+            logger.error(e);
         }
     })));
 }
