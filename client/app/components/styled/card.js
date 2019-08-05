@@ -11,7 +11,7 @@ const StyledCard = styled.div`
     min-width: ${props => props.theme.cardWidth / 2}rem;
     max-width: calc(100vw - 2rem);
     min-height: 40rem;
-    margin: 2rem auto;
+    margin: 1rem auto;
     border-radius: 10px;
 `;
 

@@ -13,7 +13,7 @@ const StyledBigCard = styled.div`
     width: ${props => props.theme.bigCardWidth}rem;
     max-width: calc(100vw - 2rem);
     min-height: 50rem;
-    margin: 2rem auto;
+    margin: 1rem auto;
     border-radius: 10px;
 `;
 

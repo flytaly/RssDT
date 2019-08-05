@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Meta from './meta';
 import theme from './themes/default';
 import '@reach/menu-button/styles.css';
+import Logo from './logo';
 
 const StyledPage = styled.div`
   color: black;
@@ -27,12 +28,27 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem;
+`;
+const Center = styled.div`
+  align-self: center;
+`;
+
 const Page = ({ children }) => (
     <ThemeProvider theme={theme}>
         <StyledPage>
             <GlobalStyle />
             <Meta />
-            {children}
+            <Container>
+                <Center>
+                    <Logo />
+                    {children}
+                </Center>
+            </Container>
         </StyledPage>
     </ThemeProvider>
 );
