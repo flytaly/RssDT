@@ -37,7 +37,9 @@ const ADD_FEED_MUTATION = gql`
 const StyledForm = styled.form`
     align-self: center;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    justify-content: center;
     width: ${props => props.theme.cardWidth / 2 - 6}rem;
 `;
 

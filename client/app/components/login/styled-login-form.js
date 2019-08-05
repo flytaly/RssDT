@@ -5,6 +5,8 @@ const StyledForm = styled.form.attrs({
 })`
     align-self: center;
     display: flex;
+    flex: 1;
+    justify-content: center;
     flex-direction: column;
     width: ${props => props.theme.cardWidth / 2 - 6}rem;
     h2 {

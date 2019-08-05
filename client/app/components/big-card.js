@@ -12,7 +12,7 @@ const StyledBigCard = styled.div`
     color: ${props => props.theme.fontColor};
     width: ${props => props.theme.bigCardWidth}rem;
     max-width: calc(100vw - 2rem);
-    min-height: 40rem;
+    min-height: 50rem;
     margin: 2rem auto;
     border-radius: 10px;
 `;

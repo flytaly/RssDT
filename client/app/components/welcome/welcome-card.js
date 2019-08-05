@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import StyledCard from '../styled/card';
+import { WelcomeStyledCard } from '../styled/card';
 import CardLeft from './card-left';
 import CardRight from './card-right';
-
 
 const WelcomeCard = () => {
     const [messages, setMessages] = useState({ error: '', success: '' });
     return (
-        <StyledCard>
+        <WelcomeStyledCard>
             <CardLeft messages={messages} />
             <CardRight setMessages={setMessages} />
-        </StyledCard>);
+        </WelcomeStyledCard>);
 };
 
 export default WelcomeCard;

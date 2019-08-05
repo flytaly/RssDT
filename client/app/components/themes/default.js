@@ -1,8 +1,10 @@
 const theme = {
-    pageBackground: 'linear-gradient(black, #D049C5) fixed',
+    // pageBackground: 'linear-gradient(#D049C5, black) fixed',
+    pageBackground: 'linear-gradient(#D049C5 0%, hsl(238, 24%, 20%) 100%) fixed',
     cardWidth: 72, // rem
     bigCardWidth: 100, // rem
     cardBackground: '#FFFFFF',
+    welcomeCardBackground: 'url(/static/background_01.jpg) #FFFFFF',
     fontColor: '#000000',
     greyDark: '#707070',
     greyMedium: '#e6e6e6',
