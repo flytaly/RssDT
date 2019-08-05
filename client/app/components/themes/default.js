@@ -8,7 +8,7 @@ const theme = {
     fontColor: '#000000',
     greyDark: '#707070',
     greyMedium: '#e6e6e6',
-    greyLight: '#f5f5f5',
+    greyLight: 'rgba(90%, 90%, 90%, 60%)',
     svgIconGrey: '#455765',
     borderColor: '#B3B3B3',
     borderColorLight: '#e6e6e6',
