@@ -93,7 +93,7 @@ const SettingsComponent = () => {
     const [state, dispatch] = useReducer(settingsStateReducer, initialState);
 
     const shareFormRef = useRef(null);
-    const updateMyInfo = useMutation(UPDATE_MY_INFO_MUTATION, { update: updateMeQuery });
+    const [updateMyInfo] = useMutation(UPDATE_MY_INFO_MUTATION, { update: updateMeQuery });
     const updateDigestHour = useCallback(async ({ target }) => {
         const dailyDigestHour = parseInt(target.value, 10);
         dispatch({ type: 'digestHour', payload: { isSaving: true } });

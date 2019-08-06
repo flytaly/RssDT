@@ -37,7 +37,7 @@ const SetPasswordSchema = Yup.object().shape({
 
 const SetPasswordForm = ({ setMessages, token }) => {
     const [passwordSaved, setPasswordSaved] = useState(false);
-    const setPassword = useMutation(SET_PASSWORD_MUTATION);
+    const [setPassword] = useMutation(SET_PASSWORD_MUTATION);
     return (
         <Formik
             initialValues={{ password: '', confirm: '' }}

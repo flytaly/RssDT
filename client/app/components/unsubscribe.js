@@ -35,7 +35,7 @@ const Unsubscribe = ({ token }) => {
     const [onSuccessMsg, setOnSuccessMsg] = useState('');
     const [onErrorMsg, setOnErrorMsg] = useState('');
     const [loading, setLoading] = useState(true);
-    const unsubscribeMutation = useMutation(UNSUBSCRIBE_MUTATION);
+    const [unsubscribeMutation] = useMutation(UNSUBSCRIBE_MUTATION);
 
     const unsubscribeEffect = useCallback(async () => {
         try {

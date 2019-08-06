@@ -28,7 +28,7 @@ const Message = styled.div`
 const ConfirmFeed = ({ token }) => {
     const [message, setMessage] = useState('Confirming subscription...');
     const [errorMsg, setErrorMsg] = useState('');
-    const confirmSubscription = useMutation(CONFIRM_SUBSCRIPTION_MUTATION);
+    const [confirmSubscription] = useMutation(CONFIRM_SUBSCRIPTION_MUTATION);
 
     useEffect(() => {
         async function confirm() {

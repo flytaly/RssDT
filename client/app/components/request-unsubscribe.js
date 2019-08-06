@@ -48,7 +48,7 @@ const RequestUnsubscribe = ({ id }) => {
     const [onErrorMsg, setOnErrorMsg] = useState('');
     const [loadingRequest, setLoadingRequest] = useState(false);
     const { data: titleData, error } = useQuery(USER_FEED_TITLE_QUERY, { variables: { id } });
-    const requestUnsubscribe = useMutation(REQUEST_UNSUBSCRIBE_MUTATION);
+    const [requestUnsubscribe] = useMutation(REQUEST_UNSUBSCRIBE_MUTATION);
 
     const clickHandler = useCallback(async () => {
         setLoadingRequest(true);

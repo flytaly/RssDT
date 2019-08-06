@@ -82,7 +82,7 @@ const SubmitSideBarButton = styled(SubmitButton)`
 const EditFeed = ({ feedInfo, closeSidebar }) => {
     const { id, createdAt, lastUpdate, schedule } = feedInfo;
     const { title, link, url, imageTitle = '', imageUrl } = feedInfo.feed || {};
-    const updateFeedMutation = useMutation(UPDATE_MY_FEED_MUTATION);
+    const [updateFeedMutation] = useMutation(UPDATE_MY_FEED_MUTATION);
 
     return (
         <Formik

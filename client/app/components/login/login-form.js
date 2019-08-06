@@ -47,7 +47,7 @@ const LogInSchema = Yup.object().shape({
 });
 
 const LogInForm = ({ setMessages, router, changeForm }) => {
-    const signIn = useMutation(SIGN_IN_MUTATION, { update: updateMeAfterSignIn });
+    const [signIn] = useMutation(SIGN_IN_MUTATION, { update: updateMeAfterSignIn });
 
     const handleClick = (e) => {
         e.preventDefault();

@@ -28,10 +28,8 @@ const StyledMessage = styled.div`
 
 const NotActivatedWarning = ({ id }) => {
     const [isSent, setIsSent] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const sendLinkMutation = useMutation(RESEND_ACTIVATION_LINK_MUTATION, { variables: { id } });
+    const [sendLinkMutation, { loading }] = useMutation(RESEND_ACTIVATION_LINK_MUTATION, { variables: { id } });
     const clickHandler = async () => {
-        setLoading(true);
         try {
             const { data } = await sendLinkMutation();
             if (data && data.resendActivationLink && data.resendActivationLink.message) {
@@ -40,7 +38,6 @@ const NotActivatedWarning = ({ id }) => {
         } catch (e) {
             console.error(e);
         }
-        setLoading(false);
     };
 
     const getButtonText = () => {

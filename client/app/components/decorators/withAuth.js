@@ -24,10 +24,9 @@ export const updateMe = (dataProxy, mutationResult) => {
  */
 const withAuth = (redirectOnFail = false) => (Component) => {
     const WrappingComponent = (props) => {
-        const { data, error, loading } = useQuery(ME_QUERY);
+        const { data = {}, error, loading } = useQuery(ME_QUERY);
         const me = get(data, 'me', {});
-
-        const updateMyInfo = useMutation(UPDATE_MY_INFO_MUTATION, { update: updateMe });
+        const [updateMyInfo] = useMutation(UPDATE_MY_INFO_MUTATION, { update: updateMe });
         const updateMutation = useCallback(({ timeZone, locale }) => {
             updateMyInfo({
                 variables: { data: { timeZone, locale } },

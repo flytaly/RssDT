@@ -37,7 +37,7 @@ const getButtonText = (emailSent, isSubmitting) => {
 
 const RequestPasswordForm = ({ setMessages, changeForm }) => {
     const [emailSent, setEmailSent] = useState(false);
-    const requestPassword = useMutation(REQUEST_PASSWORD_CHANGE);
+    const [requestPassword] = useMutation(REQUEST_PASSWORD_CHANGE);
     const handleClick = (e) => {
         e.preventDefault();
         changeForm();

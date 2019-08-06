@@ -58,7 +58,7 @@ const AddFeedSchema = Yup.object().shape({
 });
 
 const AddFeedForm = ({ setMessages, user }) => {
-    const addFeed = useMutation(ADD_FEED_MUTATION);
+    const [addFeed] = useMutation(ADD_FEED_MUTATION);
     return (
         <Formik
             initialValues={{ email: user.email, url: 'http://', period: periods.DAILY }}

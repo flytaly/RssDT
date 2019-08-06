@@ -16,11 +16,11 @@ const LOGOUT_CLIENT_MUTATION = gql`
 `;
 
 const Logout = () => {
-    const logout = useMutation(LOGOUT_MUTATION);
-    const logoutLocal = useMutation(LOGOUT_CLIENT_MUTATION);
+    const [logout] = useMutation(LOGOUT_MUTATION);
+    // const [logoutLocal] = useMutation(LOGOUT_CLIENT_MUTATION);
 
     useEffect(() => {
-        Promise.all([logoutLocal(), logout()])
+        logout()
             .then(() => {
                 // It's hard to invalidate queries in apollo store cache
                 //  so it's easier to just reload page after signing out
@@ -28,7 +28,7 @@ const Logout = () => {
                 // Router.replace('/');
             })
             .catch(e => console.error(e));
-    });
+    }, [logout]);
 
     return <StyledCard>Logging out...</StyledCard>;
 };

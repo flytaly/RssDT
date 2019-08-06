@@ -99,7 +99,7 @@ const updateAfterDeletion = (dataProxy, mutationResult) => {
 const ResponsiveTable = () => {
     const { data: meData } = useQuery(ME_QUERY);
     const { data, loading, error } = useQuery(MY_FEEDS_QUERY);
-    const deleteFeedMutation = useMutation(DELETE_FEED_MUTATION, { update: updateAfterDeletion });
+    const [deleteFeedMutation] = useMutation(DELETE_FEED_MUTATION, { update: updateAfterDeletion });
     const [confirmDelete, setConfirmDelete] = useState({ isOpen: false, title: null, id: null });
     const [editFeed, setEditFeed] = useState({ isOpen: false, feedInfo: {} });
     const cancelBtnRef = useRef(null);
