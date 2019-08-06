@@ -1,5 +1,6 @@
-import 'jest-dom/extend-expect';
-import { render, wait, queryHelpers } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import { render, wait, queryHelpers, act } from '@testing-library/react';
+// import { act } from 'react-dom/test-utils';
 import ManageFeeds from '../components/manage-feeds';
 import { MY_FEEDS_QUERY } from '../queries';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
@@ -39,13 +40,19 @@ const mocks = [{
 }];
 
 describe('Manage feeds', () => {
-    const { container } = render(
-        <ApolloMockedProvider mocks={mocks}>
-            <StateProvider>
-                <ManageFeeds />
-            </StateProvider>
-        </ApolloMockedProvider>,
-    );
+    let container;
+
+    beforeAll(async () => {
+        await act(async () => {
+            ({ container } = render(
+                <ApolloMockedProvider mocks={mocks}>
+                    <StateProvider>
+                        <ManageFeeds />
+                    </StateProvider>
+                </ApolloMockedProvider>,
+            ));
+        });
+    });
 
 
     test('should match snapshot', async () => {

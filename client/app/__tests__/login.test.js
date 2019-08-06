@@ -1,5 +1,5 @@
-import 'jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait, waitForElement, getByText } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import { render, cleanup, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import router from 'next/router';
 import LoginCard from '../components/login/login-card';
@@ -40,7 +40,8 @@ describe('Log In form', () => {
             </ApolloMockedProvider>,
             { container },
         );
-        const result = await axe(container.innerHTML);
+        let result;
+        await act(async () => { result = await axe(container.innerHTML); });
 
         expect(result).toHaveNoViolations();
     });

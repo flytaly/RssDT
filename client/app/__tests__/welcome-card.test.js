@@ -1,5 +1,5 @@
-import 'jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait, waitForElement, getByText } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+import { render, cleanup, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
@@ -48,7 +48,10 @@ describe('Add feed form', () => {
             { container },
         );
 
-        const result = await axe(container.innerHTML);
+        let result;
+        await act(async () => {
+            result = await axe(container.innerHTML);
+        });
 
         expect(result).toHaveNoViolations();
     });
@@ -109,7 +112,7 @@ describe('Submitting data', () => {
             expect(submitBtn).toBeEnabled();
             expect(submitBtn).toHaveTextContent(/subscribe/i);
 
-            expect(getByTestId('add-feed-message')).toHaveTextContent(`${successMsg}`);
+            expect(getByTestId('add-feed-ok-msg')).toHaveTextContent(`${successMsg}`);
         });
     });
 
@@ -143,7 +146,7 @@ describe('Submitting data', () => {
         fireEvent.click(submitBtn);
 
         await wait(() => {
-            expect(getByTestId('add-feed-message')).toHaveTextContent(errorMsg);
+            expect(getByTestId('add-feed-err-msg')).toHaveTextContent(errorMsg);
         });
     });
 });
