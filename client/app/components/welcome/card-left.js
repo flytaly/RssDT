@@ -1,28 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { useTransition } from 'react-spring';
 import { StyledLightHalf as CardHalf } from '../styled/card-half';
 import GraphQLError from '../graphql-error';
+import AlertCircleIcon from '../../static/alert-circle.svg';
+import CheckCircleIcon from '../../static/check-circle.svg';
+import { Message, MessageLine, SuccessMessage, ErrorMessage } from '../styled/animated-messages';
 
-const Message = styled.div`
-    border: 1px solid ${props => props.color};
-    color: ${props => props.color};
-    padding: 1rem;
-    word-break: break-word;
-    border-radius: 3px;
-`;
+const CardLeft = ({ messages: { error, success } }) => {
+    const items = [{
+        text: 'FeedMailu aggregates RSS or Atom feeds into digests and send them to you via email',
+        key: 'msg1',
+    }, {
+        text: 'To start receiving digests just enter an address of desired feed, email and digest period',
+        key: 'msg2',
+    }];
+    if (error) items.push({ text: error, key: error, type: 'error' });
+    if (success) items.push({ text: success, key: success, type: 'success' });
 
-const CardLeft = ({ messages: { error, success } }) => (
-    <CardHalf>
-        <p>Enter address of a feed (rss, atom) and your email to receive updates every chosen period.</p>
-        {(error || success) && (
-            <Message color={error ? 'red' : 'green'} data-testid="add-feed-message">
-                {error && <GraphQLError error={error} />}
-                {success && success}
-            </Message>)
-        }
-    </CardHalf>
-);
+    const transitions = useTransition(items, item => item.key, {
+        from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
+        enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
+        leave: { position: 'absolute' },
+    });
+
+    return (
+        <CardHalf>
+            {transitions.map(({ item, props, key }) => {
+                if (item.type === 'error') {
+                    return (
+                        <ErrorMessage key={key} style={props} data-testid="add-feed-err-msg">
+                            <AlertCircleIcon />
+                            <GraphQLError error={item.text} />
+                        </ErrorMessage>
+                    );
+                }
+                if (item.type === 'success') {
+                    return (
+                        <SuccessMessage key={key} style={props} data-testid="add-feed-ok-msg">
+                            <CheckCircleIcon />
+                            <GraphQLError error={item.text} />
+                        </SuccessMessage>
+                    );
+                }
+
+                return (
+                    <Message key={key} style={props}>
+                        <MessageLine />
+                        {item.text}
+                    </Message>);
+            })}
+        </CardHalf>);
+};
+
 CardLeft.propTypes = {
     messages: PropTypes.shape({
         error: PropTypes.string,
