@@ -68,6 +68,9 @@
   "jest": {
     "moduleFileExtensions": [
       "js"
+    ],
+    "setupFilesAfterEnv": [
+      "./setupTest.js"
     ]
   }
 }
