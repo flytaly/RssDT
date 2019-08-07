@@ -1,4 +1,4 @@
-const { isFeedReady } = require('../../mail-sender/utils');
+const { isFeedReady } = require('../../mail-sender/is-feed-ready');
 const periods = require('../../periods');
 
 const mockUserFeed = {
@@ -114,14 +114,24 @@ describe('Check 12 hourly digest feed', () => {
 describe('Check daily digest feed', () => {
     beforeAll(() => { mockUserFeed.schedule = periods.DAILY; });
     test('should return true', () => {
-        mockDate('2019-05-30T23:30:00.00Z');
+        mockDate('2019-05-30T19:30:00.00Z');
         mockUserFeed.lastUpdate = '2019-05-29T04:04:00.00Z';
         expect(isFeedReady(mockUserFeed)).toBeTruthy();
 
-        mockDate('2019-05-31T16:00:00.00Z');
-        mockUserFeed.lastUpdate = '2019-05-30T15:04:00.00Z';
+        mockDate('2019-05-31T18:00:00.00Z');
+        mockUserFeed.lastUpdate = '2019-05-30T18:04:00.00Z';
         expect(isFeedReady(mockUserFeed)).toBeTruthy();
     });
+    test('should return false if it\'s too late', () => {
+        mockDate('2019-05-30T22:30:00.00Z');
+        mockUserFeed.lastUpdate = '2019-05-29T04:04:00.00Z';
+        expect(isFeedReady(mockUserFeed)).toBeFalsy();
+
+        mockDate('2019-05-31T14:00:00.00Z');
+        mockUserFeed.lastUpdate = '2019-05-30T18:04:00.00Z';
+        expect(isFeedReady(mockUserFeed)).toBeFalsy();
+    });
+
     test('should return false', () => {
         mockDate('2019-05-30T23:30:00.00Z');
         mockUserFeed.lastUpdate = '2019-05-30T18:04:00.00Z';

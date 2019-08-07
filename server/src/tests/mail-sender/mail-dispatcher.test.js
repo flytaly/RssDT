@@ -4,7 +4,7 @@ const transport = require('../../mail-sender/transport');
 const { generateFeed, generateFeedItems } = require('../mocks/feed-generator');
 const periods = require('../../periods');
 const { buildAndSendDigests } = require('../../mail-sender/dispatcher');
-const { isFeedReady } = require('../../mail-sender/utils');
+const { isFeedReady } = require('../../mail-sender/is-feed-ready');
 const { setUserFeedLastUpdate } = require('../../db-queries');
 const { composeHTML } = require('../../mail-sender/composeMail');
 const periodsNames = require('../../periods-names');
@@ -13,7 +13,7 @@ jest.mock('../../mail-sender/transport.js', () => ({
     sendMail: jest.fn(async () => ({})),
 }));
 
-jest.mock('../../mail-sender/utils.js', () => ({
+jest.mock('../../mail-sender/is-feed-ready.js', () => ({
     isFeedReady: jest.fn(() => true),
 }));
 

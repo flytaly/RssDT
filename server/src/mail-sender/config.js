@@ -23,6 +23,7 @@ const periods = {
     DAILY: 24,
 };
 const defaultDailyDigestHour = 18;
+const windowDuration = 3; // hours - duration of the window in which Daily digest could be sent
 
 module.exports = {
     limitEmailsNumber,
@@ -30,4 +31,5 @@ module.exports = {
     periodsByDuration,
     periods,
     defaultDailyDigestHour,
+    windowDuration,
 };

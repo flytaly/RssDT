@@ -1,5 +1,5 @@
 const moment = require('moment-timezone');
-const { periods } = require('./config');
+const { periods, windowDuration } = require('./config');
 const periodTypes = require('../periods');
 /**
  * Check if current userFeed is ready to receive digest.
@@ -26,10 +26,15 @@ const isFeedReady = (userFeed) => {
 
     const prevSuitableTime = now.clone().tz(timeZone)
         .set({ hour: prevSuitableHour, minute: 0, second: 0, millisecond: 0 });
+
     if (schedule === periodTypes.DAILY) {
         prevSuitableTime.hour(user.dailyDigestHour);
+        const windowTime = prevSuitableTime.clone().add(windowDuration, 'hours');
         if (!prevSuitableTime.isSameOrBefore(now)) {
             prevSuitableTime.subtract(1, 'days');
+        }
+        if (now.isAfter(windowTime)) {
+            return false;
         }
     }
 

@@ -5,7 +5,7 @@ const { composeHTML } = require('./composeMail');
 const {
     getActiveUserFeeds, getFeedInfo, getItemsNewerThan, setUserFeedLastUpdate,
 } = require('../db-queries');
-const { isFeedReady } = require('./utils');
+const { isFeedReady } = require('./is-feed-ready');
 const { limitEmailsNumber, maxItemsPerMail } = require('./config');
 const periodsNames = require('../periods-names');
 
