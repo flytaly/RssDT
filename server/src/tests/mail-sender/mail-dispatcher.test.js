@@ -7,6 +7,7 @@ const { buildAndSendDigests } = require('../../mail-sender/dispatcher');
 const { isFeedReady } = require('../../mail-sender/utils');
 const { setUserFeedLastUpdate } = require('../../db-queries');
 const { composeHTML } = require('../../mail-sender/composeMail');
+const periodsNames = require('../../periods-names');
 
 jest.mock('../../mail-sender/transport.js', () => ({
     sendMail: jest.fn(async () => ({})),
@@ -73,7 +74,7 @@ describe('Build digest', () => {
         expect(transport.sendMail).toHaveBeenCalledWith(expect.objectContaining({
             from: process.env.MAIL_FROM,
             to: data.user.email,
-            subject: `${feed.title}: ${userFeed.schedule} digest`,
+            subject: `${feed.title}: ${periodsNames[userFeed.schedule]} digest`,
             html: 'OK',
         }));
     });

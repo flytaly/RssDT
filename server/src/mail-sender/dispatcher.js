@@ -7,6 +7,7 @@ const {
 } = require('../db-queries');
 const { isFeedReady } = require('./utils');
 const { limitEmailsNumber, maxItemsPerMail } = require('./config');
+const periodsNames = require('../periods-names');
 
 const limitEmails = pLimit(limitEmailsNumber);
 
@@ -33,10 +34,11 @@ async function buildAndSendDigests(url) {
             const timestamp = new Date();
             const { html, errors } = composeHTML(feed, items, userFeed);
             if (!errors.length) {
+                const digestTime = `${periodsNames[userFeed.schedule]} digest`;
                 const result = await transport.sendMail({
                     from: process.env.MAIL_FROM,
                     to: userFeed.user.email,
-                    subject: `${feed.title}: ${userFeed.schedule} digest`,
+                    subject: `${feed.title}: ${digestTime}`,
                     // text:,
                     html,
                 });

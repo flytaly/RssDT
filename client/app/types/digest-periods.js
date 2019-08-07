@@ -1,9 +1,9 @@
 export const periodNames = {
-    EVERYHOUR: '1 hour',
-    EVERY2HOURS: '2 hours',
-    EVERY3HOURS: '3 hours',
-    EVERY6HOURS: '6 hours',
-    EVERY12HOURS: '12 hours',
+    EVERYHOUR: '1-hourly',
+    EVERY2HOURS: '2-hourly',
+    EVERY3HOURS: '3-hourly',
+    EVERY6HOURS: '6-hourly',
+    EVERY12HOURS: '12-hourly',
     DAILY: 'Daily',
 };
 
