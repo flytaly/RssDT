@@ -112,7 +112,7 @@ describe('Submitting data', () => {
             expect(submitBtn).toBeEnabled();
             expect(submitBtn).toHaveTextContent(/subscribe/i);
 
-            expect(getByTestId('add-feed-ok-msg')).toHaveTextContent(`${successMsg}`);
+            expect(getByTestId('ok-msg')).toHaveTextContent(`${successMsg}`);
         });
     });
 
@@ -146,7 +146,7 @@ describe('Submitting data', () => {
         fireEvent.click(submitBtn);
 
         await wait(() => {
-            expect(getByTestId('add-feed-err-msg')).toHaveTextContent(errorMsg);
+            expect(getByTestId('err-msg')).toHaveTextContent(errorMsg);
         });
     });
 });

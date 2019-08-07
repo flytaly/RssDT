@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useTransition } from 'react-spring';
 import { StyledLightHalf as CardHalf } from '../styled/card-half';
 import GraphQLError from '../graphql-error';
 import AlertCircleIcon from '../../static/alert-circle.svg';
 import CheckCircleIcon from '../../static/check-circle.svg';
-import { Message, MessageLine, SuccessMessage, ErrorMessage } from '../styled/animated-messages';
+import { Message, MessageLine, SuccessMessage, ErrorMessage, useEmergeTransition } from '../styled/animated-messages';
 
 const CardLeft = ({ messages: { error, success } }) => {
     const items = [{
@@ -18,18 +17,14 @@ const CardLeft = ({ messages: { error, success } }) => {
     if (error) items.push({ text: error, key: error, type: 'error' });
     if (success) items.push({ text: success, key: success, type: 'success' });
 
-    const transitions = useTransition(items, item => item.key, {
-        from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
-        enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
-        leave: { position: 'absolute' },
-    });
+    const transitions = useEmergeTransition(items);
 
     return (
         <CardHalf>
             {transitions.map(({ item, props, key }) => {
                 if (item.type === 'error') {
                     return (
-                        <ErrorMessage key={key} style={props} data-testid="add-feed-err-msg">
+                        <ErrorMessage key={key} style={props} data-testid="err-msg">
                             <AlertCircleIcon />
                             <GraphQLError error={item.text} />
                         </ErrorMessage>
@@ -37,7 +32,7 @@ const CardLeft = ({ messages: { error, success } }) => {
                 }
                 if (item.type === 'success') {
                     return (
-                        <SuccessMessage key={key} style={props} data-testid="add-feed-ok-msg">
+                        <SuccessMessage key={key} style={props} data-testid="ok-msg">
                             <CheckCircleIcon />
                             <GraphQLError error={item.text} />
                         </SuccessMessage>

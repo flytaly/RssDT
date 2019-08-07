@@ -1,4 +1,4 @@
-import { animated } from 'react-spring';
+import { useTransition, animated } from 'react-spring';
 import styled from 'styled-components';
 
 export const Message = styled(animated.div)`
@@ -24,7 +24,7 @@ export const Message = styled(animated.div)`
 export const MessageLine = styled.div`
     background-color: ${props => props.theme.greyDark};
     height: 100%;
-    width: 1rem;
+    min-width: 3px;
     margin-right: 1rem;
     border-radius: 10px;
 `;
@@ -38,6 +38,7 @@ export const ErrorMessage = styled(Message)`
         box-shadow: 0rem 5px 5px 0px rgba(200,0,0,0.35);
     }
 `;
+
 export const SuccessMessage = styled(Message)`
     word-break: break-word;
     border: 1px solid rgb(0, 128, 0);
@@ -47,3 +48,9 @@ export const SuccessMessage = styled(Message)`
         box-shadow: 0rem 5px 5px 0px rgba(0,128,0,0.35)
     }
 `;
+
+export const useEmergeTransition = items => useTransition(items, item => item.key, {
+    from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
+    enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
+    leave: { position: 'absolute' },
+});

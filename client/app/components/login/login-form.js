@@ -1,10 +1,11 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import * as Yup from 'yup';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
@@ -46,13 +47,10 @@ const LogInSchema = Yup.object().shape({
         .required('The field is required'),
 });
 
-const LogInForm = ({ setMessages, router, changeForm }) => {
+const LogInForm = ({ setMessages }) => {
     const [signIn] = useMutation(SIGN_IN_MUTATION, { update: updateMeAfterSignIn });
+    const router = useRouter();
 
-    const handleClick = (e) => {
-        e.preventDefault();
-        changeForm();
-    };
     return (
         <Formik
             initialValues={{ email: '', password: '' }}
@@ -110,7 +108,7 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
                         title="Password"
                         required
                     />
-                    <a onClick={handleClick} href="/login">I forgot or don&apos;t have password</a>
+                    <Link href="/request-reset"><a>I forgot or don&apos;t have password</a></Link>
                     <SubmitButton type="submit" disabled={isSubmitting}>
                         {isSubmitting ? 'Logging in...' : 'Log in'}
                     </SubmitButton>
@@ -120,10 +118,8 @@ const LogInForm = ({ setMessages, router, changeForm }) => {
 
 LogInForm.propTypes = {
     setMessages: PropTypes.func.isRequired,
-    router: PropTypes.shape({ replace: PropTypes.func.isRequired }).isRequired,
-    changeForm: PropTypes.func.isRequired,
 };
 
-export default withRouter(LogInForm);
+export default LogInForm;
 
 export { SIGN_IN_MUTATION };

@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
@@ -35,13 +36,9 @@ const getButtonText = (emailSent, isSubmitting) => {
     return 'Email me';
 };
 
-const RequestPasswordForm = ({ setMessages, changeForm }) => {
+const RequestPasswordForm = ({ setMessages }) => {
     const [emailSent, setEmailSent] = useState(false);
     const [requestPassword] = useMutation(REQUEST_PASSWORD_CHANGE);
-    const handleClick = (e) => {
-        e.preventDefault();
-        changeForm();
-    };
     return (
         <Formik
             initialValues={{ email: '' }}
@@ -86,7 +83,7 @@ const RequestPasswordForm = ({ setMessages, changeForm }) => {
                         title="Email address"
                         required
                     />
-                    <a onClick={handleClick} href="/login">← back to log in form</a>
+                    <Link href="/login"><a>← back to log in form</a></Link>
                     <SubmitButton type="submit" disabled={isSubmitting || emailSent}>
                         {getButtonText(emailSent, isSubmitting)}
                     </SubmitButton>
@@ -96,7 +93,6 @@ const RequestPasswordForm = ({ setMessages, changeForm }) => {
 
 RequestPasswordForm.propTypes = {
     setMessages: PropTypes.func.isRequired,
-    changeForm: PropTypes.func.isRequired,
 };
 
 export default RequestPasswordForm;

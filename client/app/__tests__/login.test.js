@@ -3,6 +3,7 @@ import { render, cleanup, fireEvent, wait, waitForElement, getByText, act } from
 import { axe, toHaveNoViolations } from 'jest-axe';
 import router from 'next/router';
 import LoginCard from '../components/login/login-card';
+import formTypes from '../components/login/form-types';
 import { SIGN_IN_MUTATION } from '../components/login/login-form';
 import RequestPasswordForm, { REQUEST_PASSWORD_CHANGE } from '../components/login/request-password-form';
 import SetPasswordForm, { SET_PASSWORD_MUTATION } from '../components/login/set-password-form';
@@ -90,17 +91,41 @@ describe('Log In form', () => {
         fireEvent.change(inputs.password, { target: { value: password } });
         fireEvent.click(submitBtn);
         await wait(() => {
-            expect(getByTestId('login-message')).toHaveTextContent(errorMsg);
+            expect(getByTestId('err-msg')).toHaveTextContent(errorMsg);
             // form values should not be cleared
             expect(inputs.email).toHaveValue(email);
             expect(inputs.password).toHaveValue(password);
         });
+    });
+
+    test('should have link to request password form', () => {
+        const { container } = render(
+            <ApolloMockedProvider mocks={mocks}>
+                <LoginCard />
+            </ApolloMockedProvider>,
+        );
+        const link = getByText(container, /I forgot or don't have password/i);
+        expect(link).toHaveAttribute('href', '/request-reset');
+        // fireEvent.click(getByText(container, /I forgot or don't have password/i));
     });
 });
 
 
 describe('Request password change form', () => {
     afterEach(() => { cleanup(); jest.clearAllMocks(); });
+
+
+    test('should render request password form with link to login form', () => {
+        const { getByTestId, container } = render(
+            <ApolloMockedProvider mocks={mocks}>
+                <LoginCard form={formTypes.request_password} />
+            </ApolloMockedProvider>,
+        );
+        expect(getByTestId('request_password')).toBeInTheDocument();
+        const link = getByText(container, /back to log in form/i);
+        expect(link).toHaveAttribute('href', '/login');
+    });
+
 
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
@@ -116,22 +141,10 @@ describe('Request password change form', () => {
         expect(result).toHaveNoViolations();
     });
 
-    test('should replace login form to request password form', () => {
-        const { getByTestId, container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard />
-            </ApolloMockedProvider>,
-        );
-        fireEvent.click(getByText(container, /I forgot or don't have password/i));
-        expect(getByTestId('request_password')).toBeInTheDocument();
-        fireEvent.click(getByText(container, /back to log in form/i));
-        expect(getByTestId('login')).toBeInTheDocument();
-    });
-
     test('should send graphql query on submit', async () => {
         const { getByTestId, getByLabelText, container } = render(
             <ApolloMockedProvider mocks={mocks}>
-                <LoginCard form="request_password" />
+                <LoginCard form={formTypes.request_password} />
             </ApolloMockedProvider>,
         );
         expect(getByTestId('request_password')).toBeInTheDocument();
@@ -139,7 +152,7 @@ describe('Request password change form', () => {
         fireEvent.click(getByText(container, /email me/i));
 
         await wait(async () => {
-            expect(getByTestId('login-message')).toHaveTextContent('If provided email is correct reset link has been sent');
+            expect(getByTestId('ok-msg')).toHaveTextContent('If provided email is correct reset link has been sent');
         });
     });
 });
@@ -172,7 +185,7 @@ describe('Set password form', () => {
     test('should render set password form', () => {
         const { getByTestId } = render(
             <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form="set_password" />
+                <LoginCard token={token} form={formTypes.set_password} />
             </ApolloMockedProvider>,
         );
         expect(getByTestId('set_password')).toBeInTheDocument();
@@ -181,7 +194,7 @@ describe('Set password form', () => {
     test('should show errors if password is invalid', async () => {
         const { getByLabelText, container } = render(
             <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form="set_password" />
+                <LoginCard token={token} form={formTypes.set_password} />
             </ApolloMockedProvider>,
         );
         const inputs = {
@@ -201,7 +214,7 @@ describe('Set password form', () => {
     test('should send graphql query on submit', async () => {
         const { getByTestId, getByLabelText, container } = render(
             <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form="set_password" />
+                <LoginCard token={token} form={formTypes.set_password} />
             </ApolloMockedProvider>,
         );
         const inputs = {
@@ -213,7 +226,7 @@ describe('Set password form', () => {
         fireEvent.click(getByText(container, /set password/i));
 
         await wait(async () => {
-            expect(getByTestId('login-message')).toHaveTextContent('New password was saved');
+            expect(getByTestId('ok-msg')).toHaveTextContent('New password was saved');
         });
 
         await wait(() => {

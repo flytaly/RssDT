@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import LoginCard from '../components/login/login-card';
 import redirect from '../lib/redirect';
+import formTypes from '../components/login/form-types';
 
-const ResetPasswordPage = ({ query }) => <LoginCard token={query.token} form="set_password" />;
+const ResetPasswordPage = ({ query }) => <LoginCard token={query.token} form={formTypes.set_password} />;
 
 ResetPasswordPage.propTypes = {
     query: PropTypes.shape({ token: PropTypes.string }).isRequired,
