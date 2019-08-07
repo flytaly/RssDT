@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
 import gql from 'graphql-tag';
 import { useQuery, useMutation } from 'react-apollo-hooks';
@@ -37,7 +38,6 @@ const formatDates = ({ createdAt, lastUpdate }, { timeZone, locale }) => {
     return { localCreatedAt, localLastUpdate };
 };
 
-// eslint-disable-next-line react/prop-types
 const renderRow = ({ feedInfo, meInfo, setConfirmDelete, setEditFeed }) => {
     const title = feedInfo.feed.title || feedInfo.feed.link || feedInfo.feed.url;
     const { localCreatedAt, localLastUpdate } = formatDates(feedInfo, meInfo);

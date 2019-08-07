@@ -1,4 +1,5 @@
-import { MockLink } from 'react-apollo/test-links';
+/* eslint-disable import/no-extraneous-dependencies */
+import { MockLink } from '@apollo/react-testing';
 import { ApolloClient, InMemoryCache } from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';

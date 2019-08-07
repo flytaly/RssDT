@@ -71,11 +71,18 @@ function ItemsListView({ items, fetchMore, loading, canFetchMore, me }) {
 }
 
 ItemsListView.propTypes = {
-    items: PropTypes.arrayOf(PropTypes.shape({})),
+    items: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string,
+    })),
     fetchMore: PropTypes.func,
     loading: PropTypes.bool,
     canFetchMore: PropTypes.bool,
-    me: PropTypes.shape({ locale: PropTypes.string, timeZone: PropTypes.string }),
+    me: PropTypes.shape({
+        locale: PropTypes.string,
+        timeZone: PropTypes.string,
+        shareEnable: PropTypes.bool,
+        filterShare: PropTypes.arrayOf(PropTypes.string),
+    }),
 };
 ItemsListView.defaultProps = {
     items: [],

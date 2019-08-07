@@ -18,7 +18,7 @@
         "accepts": "^1.3.7",
         "apollo-boost": "^0.4.3",
         "babel-plugin-file-loader": "^1.1.1",
-        "css-loader": "^3.1.0",
+        "css-loader": "^3.2.0",
         "express": "^4.17.1",
         "formik": "^1.5.8",
         "full-icu": "^1.3.0",
@@ -34,7 +34,7 @@
         "nprogress": "^0.2.0",
         "prop-types": "^15.7.2",
         "react": "0.0.0-db3ae32b8",
-        "react-apollo": "^2.5.8",
+        "react-apollo": "^3.0.0",
         "react-apollo-hooks": "^0.5.0",
         "react-dom": "0.0.0-db3ae32b8",
         "react-modal": "^3.9.1",
@@ -43,8 +43,9 @@
         "yup": "^0.27.0"
     },
     "devDependencies": {
+        "@apollo/react-testing": "^3.0.0",
         "@testing-library/jest-dom": "^4.0.0",
-        "@testing-library/react": "^8.0.7",
+        "@testing-library/react": "^8.0.8",
         "@types/jest": "^24.0.17",
         "babel-core": "^6.26.3",
         "babel-jest": "^24.8.0",

@@ -82,7 +82,7 @@ function FeedList({ linkClickHandler, router }) {
 }
 
 FeedList.propTypes = {
-    router: PropTypes.shape({ query: PropTypes.shape({}) }),
+    router: PropTypes.shape({ query: PropTypes.shape({ id: PropTypes.string }) }),
     linkClickHandler: PropTypes.func,
 };
 FeedList.defaultProps = {

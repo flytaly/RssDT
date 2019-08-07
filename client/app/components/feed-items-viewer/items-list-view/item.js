@@ -80,6 +80,7 @@ const getImageFromEnclosures = (enclosures = []) => {
 
 const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable }) => {
     const { link, title, pubDate, description } = item;
+
     const imageUrl = item.imageUrl || getImageFromEnclosures(item.enclosures || []);
     const enclosures = addTitlesToEnclosures(item.enclosures || []);
     const date = new Date(pubDate);
@@ -117,7 +118,18 @@ const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable
 };
 
 FeedItemsListElement.propTypes = {
-    item: PropTypes.shape({}).isRequired,
+    item: PropTypes.shape({
+        link: PropTypes.string,
+        title: PropTypes.string,
+        pubDate: PropTypes.string,
+        description: PropTypes.string,
+        imageUrl: PropTypes.string,
+        enclosures: PropTypes.arrayOf(PropTypes.shape({
+            length: PropTypes.string,
+            type: PropTypes.string,
+            url: PropTypes.string,
+        })),
+    }).isRequired,
     locale: PropTypes.string,
     timeZone: PropTypes.string,
     shareEnable: PropTypes.bool,
