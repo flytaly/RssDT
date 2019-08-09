@@ -9,6 +9,7 @@ export const meFields = gql`
             dailyDigestHour
             shareEnable
             filterShare
+            withContentTableDefault
 }`;
 
 const ME_QUERY = gql`

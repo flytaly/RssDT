@@ -1,5 +1,5 @@
 export const periodNames = {
-    EVERYHOUR: '1-hourly',
+    EVERYHOUR: 'Hourly',
     EVERY2HOURS: '2-hourly',
     EVERY3HOURS: '3-hourly',
     EVERY6HOURS: '6-hourly',

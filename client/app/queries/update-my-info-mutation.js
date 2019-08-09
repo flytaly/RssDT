@@ -11,6 +11,7 @@ const UPDATE_MY_INFO_MUTATION = gql`mutation (
         dailyDigestHour
         shareEnable
         filterShare
+        withContentTableDefault
     }
   }
 `;

@@ -16,6 +16,7 @@ const MY_FEEDS_QUERY = gql`
             lastUpdate
             createdAt
             activated
+            withContentTable
         }
     }
 `;

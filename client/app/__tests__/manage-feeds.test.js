@@ -25,6 +25,7 @@ const mocks = [{
                 lastUpdate,
                 schedule: types.DAILY,
                 activated: true,
+                withContentTable: 'DEFAULT',
                 feed: {
                     id: 'testFeedId',
                     title: 'Test Feed Title',

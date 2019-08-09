@@ -11,6 +11,7 @@ export const user = {
     dailyDigestHour: 18,
     shareEnable: true,
     filterShare: [],
+    withContentTableDefault: false,
 };
 const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
 

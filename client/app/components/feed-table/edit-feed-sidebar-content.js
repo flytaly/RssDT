@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import Link from 'next/link';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
+import get from 'lodash.get';
 import { GreenButtonLink, NoStylesButton, SubmitButton } from '../styled/buttons';
 import ArrowLeft from '../../static/arrow-left.svg';
 import periods, { periodNames } from '../../types/digest-periods';
+import { ME_QUERY } from '../../queries';
 
 const UPDATE_MY_FEED_MUTATION = gql`mutation (
     $data: MyFeedUpdateInput!
@@ -19,6 +21,7 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
   ) {
     id
     schedule
+    withContentTable
   }
 }`;
 
@@ -81,17 +84,23 @@ const SubmitSideBarButton = styled(SubmitButton)`
 
 const EditFeed = ({ feedInfo, closeSidebar }) => {
     const { id, createdAt, lastUpdate, schedule } = feedInfo;
+    const withContentTable = feedInfo.withContentTable || 'DEFAULT';
     const { title, link, url, imageTitle = '', imageUrl } = feedInfo.feed || {};
     const [updateFeedMutation] = useMutation(UPDATE_MY_FEED_MUTATION);
+    const { data } = useQuery(ME_QUERY);
+    const withContentTableDefault = get(data, 'me.withContentTableDefault', false) ? 'ENABLE' : 'DISABLE';
 
     return (
         <Formik
-            initialValues={{ period: schedule }}
+            initialValues={{ period: schedule, contentTable: withContentTable }}
             onSubmit={async (variables, { setSubmitting, resetForm }) => {
-                const { period } = variables;
-                if (period !== schedule) {
+                const { period, contentTable } = variables;
+                if (period !== schedule || contentTable !== withContentTable) {
                     try {
-                        await updateFeedMutation({ variables: { data: { schedule: period }, id } });
+                        await updateFeedMutation({ variables: {
+                            data: { schedule: period, withContentTable: contentTable },
+                            id,
+                        } });
                         resetForm();
                     } catch (e) {
                         console.error(e);
@@ -143,6 +152,22 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                         </Select>
                     </Row>
                     <Row>
+                        <FieldTitle>Table of Content</FieldTitle>
+                        <Select
+                            id="contentTable"
+                            name="contentTable"
+                            disabled={isSubmitting}
+                            defaultValue={withContentTable}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            title="Include table of content in the digests?"
+                        >
+                            <option value="DEFAULT">{`DEFAULT (${withContentTableDefault})`}</option>
+                            <option value="ENABLE">ENABLE</option>
+                            <option value="DISABLE">DISABLE</option>
+                        </Select>
+                    </Row>
+                    <Row>
                         <FieldTitle>Site Link:</FieldTitle>
                         <FieldData>
                             <FeedLink href={link} target="_blank">
@@ -184,6 +209,7 @@ EditFeed.propTypes = {
         lastUpdate: PropTypes.string,
         createdAt: PropTypes.string,
         schedule: PropTypes.string,
+        withContentTable: PropTypes.oneOf(['DISABLE', 'ENABLE', 'DEFAULT']),
     }).isRequired,
     closeSidebar: PropTypes.func.isRequired,
 };

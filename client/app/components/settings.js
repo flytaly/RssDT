@@ -72,12 +72,15 @@ export const SettingsTitles = [
 
 const initialState = {
     digestHour: { isSaving: false, error: null },
+    withContentTableDefault: { isSaving: false, error: null },
     share: { isSaving: 0, error: null },
 };
 function settingsStateReducer(state, action) {
     switch (action.type) {
         case 'digestHour':
             return { ...state, digestHour: action.payload };
+        case 'withContentTableDefault':
+            return { ...state, withContentTableDefault: action.payload };
         case 'share': {
             const { isSaving } = state.share;
             const inc = action.payload.isSaving;
@@ -111,6 +114,26 @@ const SettingsComponent = () => {
             dispatch({ type: 'digestHour', payload: { isSaving: false, error: 'Error occurred during saving' } });
         }
     }, [me, updateMyInfo]);
+
+    const updateWithContentTable = useCallback(async ({ target }) => {
+        dispatch({ type: 'withContentTableDefault', payload: { isSaving: true } });
+        const withContentTableDefault = target.checked;
+
+        try {
+            await updateMyInfo({
+                variables: { data: { withContentTableDefault } },
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateMyInfo: { __typename: 'User', ...me, withContentTableDefault },
+                },
+            });
+            dispatch({ type: 'withContentTableDefault', payload: { isSaving: false } });
+        } catch (e) {
+            console.error(e);
+            dispatch({ type: 'withContentTableDefault', payload: { isSaving: false, error: 'Error occurred during saving' } });
+        }
+    }, [me, updateMyInfo]);
+
     const updateShareLinks = useCallback(async (formRef) => {
         if (!formRef.current) return;
         dispatch({ type: 'share', payload: { isSaving: true } });
@@ -131,7 +154,7 @@ const SettingsComponent = () => {
             dispatch({ type: 'share', payload: { isSaving: false, error: 'Error occurred during saving' } });
         }
     }, [me, updateMyInfo]);
-    const { timeZone, locale, email, dailyDigestHour = 18 } = me;
+    const { timeZone, locale, email, dailyDigestHour = 18, withContentTableDefault } = me;
 
     return (
         <OuterContainer>
@@ -166,6 +189,18 @@ const SettingsComponent = () => {
                         </select>
                         <LoaderContainer>{state.digestHour.isSaving ? <Spinner /> : null}</LoaderContainer>
                         {state.digestHour.error ? <ErrorMsg>{state.digestHour.error}</ErrorMsg> : null}
+                    </article>
+                    <article>
+                        <label htmlFor="digest-hour-select"><h3>Table of Content</h3></label>
+                        <CheckBox
+                            id="withContentTableDefault"
+                            title="Include table of content"
+                            checked={withContentTableDefault}
+                            onChangeHandler={updateWithContentTable}
+                            disabled={state.withContentTableDefault.isSaving}
+                        />
+                        <LoaderContainer>{state.withContentTableDefault.isSaving ? <Spinner /> : null}</LoaderContainer>
+                        {state.withContentTableDefault.error ? <ErrorMsg>{state.withContentTableDefault.error}</ErrorMsg> : null}
                     </article>
                     <article>
                         <h3>

@@ -378,7 +378,7 @@ exports[`Snapshot should match snapshot 1`] = `
           <option
             value="EVERYHOUR"
           >
-            1-hourly digest
+            Hourly digest
           </option>
           <option
             value="EVERY2HOURS"
