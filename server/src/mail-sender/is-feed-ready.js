@@ -29,12 +29,14 @@ const isFeedReady = (userFeed) => {
 
     if (schedule === periodTypes.DAILY) {
         prevSuitableTime.hour(user.dailyDigestHour);
-        const windowTime = prevSuitableTime.clone().add(windowDuration, 'hours');
+        const windowStart = prevSuitableTime.clone();
+        const windowEnd = windowStart.clone().add(windowDuration, 'hours');
+        if (now.isBefore(windowStart) || now.isAfter(windowEnd)) {
+            return false;
+        }
+
         if (!prevSuitableTime.isSameOrBefore(now)) {
             prevSuitableTime.subtract(1, 'days');
-        }
-        if (now.isAfter(windowTime)) {
-            return false;
         }
     }
 

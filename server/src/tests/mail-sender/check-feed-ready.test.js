@@ -124,10 +124,16 @@ describe('Check daily digest feed', () => {
     });
     test('should return false if it\'s too late', () => {
         mockDate('2019-05-30T22:30:00.00Z');
-        mockUserFeed.lastUpdate = '2019-05-29T04:04:00.00Z';
+        mockUserFeed.lastUpdate = '2019-05-28T19:04:00.00Z';
         expect(isFeedReady(mockUserFeed)).toBeFalsy();
 
-        mockDate('2019-05-31T14:00:00.00Z');
+        mockDate('2019-05-31T05:00:00.00Z');
+        mockUserFeed.lastUpdate = '2019-05-30T21:04:00.00Z';
+        expect(isFeedReady(mockUserFeed)).toBeFalsy();
+    });
+
+    test('should return false if it\'s too early', () => {
+        mockDate('2019-06-02T14:00:00.00Z');
         mockUserFeed.lastUpdate = '2019-05-30T18:04:00.00Z';
         expect(isFeedReady(mockUserFeed)).toBeFalsy();
     });
