@@ -16,6 +16,7 @@ type User {
     dailyDigestHour: Int
     shareEnable: Boolean
     filterShare: [String!]!
+    withContentTableDefault: Boolean
 }
 
 type UserFeed {
@@ -26,12 +27,12 @@ type UserFeed {
     lastUpdate: DateTime
     createdAt: DateTime
     activated: Boolean
-    withContentTable: Boolean
+    withContentTable: SettingState
 }
 
 input MyFeedUpdateInput {
     schedule: DigestSchedule
-    withContentTable: Boolean
+    withContentTable: SettingState
 }
 
 input MyInfoUpdateInput {
@@ -40,6 +41,7 @@ input MyInfoUpdateInput {
     dailyDigestHour: Int
     shareEnable: Boolean
     filterShare: [String]
+    withContentTableDefault: Boolean
 }
 
 type Feed {

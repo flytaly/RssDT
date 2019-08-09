@@ -13,6 +13,12 @@ enum Permission {
     USER
 }
 
+enum SettingState {
+    ENABLE
+    DISABLE
+    DEFAULT
+}
+
 type User {
     id: ID! @id
     email: String! @unique
@@ -28,6 +34,7 @@ type User {
     dailyDigestHour: Int @default(value: 18)
     shareEnable: Boolean @default(value: true)
     filterShare: [String!]! @scalarList(strategy: RELATION)
+    withContentTableDefault: Boolean @default(value: false)
 }
 
 type UserFeed {
@@ -36,7 +43,6 @@ type UserFeed {
     activationToken: String
     activationTokenExpiry: DateTime
     createdAt: DateTime! @createdAt
-    withContentTable: Boolean @default(value: false)
     feed: Feed! @relation(link: TABLE)
     lastUpdate: DateTime
     schedule: DigestSchedule @default(value: DAILY)
@@ -44,6 +50,7 @@ type UserFeed {
     unsubscribeTokenExpiry: DateTime
     updatedAt: DateTime! @updatedAt
     user: User! @relation(link: TABLE, name: "UserFeeds")
+    withContentTable: SettingState @default(value: DEFAULT)
 }
 
 type Feed {

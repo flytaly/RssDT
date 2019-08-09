@@ -12,7 +12,7 @@ async function setUserFeedLastUpdate(userFeedId, timestamp) {
 }
 
 async function getActiveUserFeeds(feedUrl) {
-    const userFields = 'user { email timeZone locale shareEnable filterShare dailyDigestHour }';
+    const userFields = 'user { email timeZone locale shareEnable filterShare dailyDigestHour withContentTableDefault }';
     return db.query.userFeeds({
         where: {
             feed: {

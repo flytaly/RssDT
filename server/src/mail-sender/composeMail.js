@@ -51,14 +51,16 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
     /* eslint-disable no-param-reassign */
     const {
         id: userFeedId = '',
-        withContentTable = false,
         user: {
             timeZone = 'GMT',
             locale = 'en',
             shareEnable = true,
             filterShare = [],
+            withContentTableDefault = false,
         } = {},
     } = userFeed;
+
+    const withContentTable = userFeed.withContentTable || 'DEFAULT';
 
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
@@ -77,7 +79,10 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
         return acc + theme.item(item);
     }, '');
 
-    const tableOfContent = withContentTable ? theme.contentTable({ items: feedItems }) : '';
+    let tableOfContent = '';
+    if ((withContentTable === 'DEFAULT' && withContentTableDefault) || (withContentTable === 'ENABLE')) {
+        tableOfContent = theme.contentTable({ items: feedItems });
+    }
 
     const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;
     const footer = theme.footer({ unsubscribeUrl });

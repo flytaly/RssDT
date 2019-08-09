@@ -29,6 +29,7 @@ const addTestData = async () => {
         password: await bcrypt.hash(mocks.user.password, 10),
         permissions: { set: ['USER'] },
         shareEnable: false,
+        withContentTableDefault: false,
     };
     const { id } = await db.mutation.createUser({ data: newUser }, '{ id }');
     globalData.userId = id;
@@ -76,6 +77,7 @@ describe('updateMyInfo mutation', () => {
             timeZone: 'Europe/Moscow',
             locale: 'ru',
             dailyDigestHour: 20,
+            withContentTableDefault: true,
         };
         const before = await db.query.user({ where: { id } });
         const { data: { updateMyInfo } } = await makePromise(execute(linkWithAuthCookies, {
@@ -87,6 +89,7 @@ describe('updateMyInfo mutation', () => {
 
         expect(before.timeZone).toEqual('GMT');
         expect(before.locale).toEqual('en-GB');
+        expect(before.withContentTableDefault).toEqual(false);
         expect(updateMyInfo).toMatchObject(data);
         expect(after).toMatchObject(data);
     });

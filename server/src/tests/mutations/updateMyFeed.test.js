@@ -74,11 +74,11 @@ describe('', () => {
         const { userFeedId: id } = globalData;
         const oldData = {
             schedule: mocks.feed.schedule,
-            withContentTable: false,
+            withContentTable: 'DEFAULT',
         };
         const newData = {
             schedule: 'EVERY2HOURS',
-            withContentTable: true,
+            withContentTable: 'ENABLE',
         };
         const before = await db.query.userFeed({ where: { id } });
 
@@ -86,10 +86,7 @@ describe('', () => {
             query: UPDATE_MY_FEED_MUTATION,
             variables: {
                 id,
-                data: {
-                    schedule: 'EVERY2HOURS',
-                    withContentTable: true,
-                },
+                data: newData,
             },
         }));
         const after = await db.query.userFeed({ where: { id } });

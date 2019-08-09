@@ -1,5 +1,5 @@
 # source: http://localhost:4466/feedmailu/dev
-# timestamp: Fri Aug 09 2019 20:36:08 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Aug 09 2019 21:22:03 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2359,6 +2359,12 @@ type Query {
   ): Node
 }
 
+enum SettingState {
+  ENABLE
+  DISABLE
+  DEFAULT
+}
+
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   userFeed(where: UserFeedSubscriptionWhereInput): UserFeedSubscriptionPayload
@@ -2382,6 +2388,7 @@ type User implements Node {
   dailyDigestHour: Int
   shareEnable: Boolean
   filterShare: [String!]!
+  withContentTableDefault: Boolean
 }
 
 """A connection to a list of items."""
@@ -2408,6 +2415,7 @@ input UserCreateInput {
   timeZone: String
   dailyDigestHour: Int
   shareEnable: Boolean
+  withContentTableDefault: Boolean
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
   feeds: UserFeedCreateManyWithoutUserInput
@@ -2432,6 +2440,7 @@ input UserCreateWithoutFeedsInput {
   timeZone: String
   dailyDigestHour: Int
   shareEnable: Boolean
+  withContentTableDefault: Boolean
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
 }
@@ -2451,7 +2460,6 @@ type UserFeed implements Node {
   activationToken: String
   activationTokenExpiry: DateTime
   createdAt: DateTime!
-  withContentTable: Boolean
   feed: Feed!
   lastUpdate: DateTime
   schedule: DigestSchedule
@@ -2459,6 +2467,7 @@ type UserFeed implements Node {
   unsubscribeTokenExpiry: DateTime
   updatedAt: DateTime!
   user: User!
+  withContentTable: SettingState
 }
 
 """A connection to a list of items."""
@@ -2476,11 +2485,11 @@ input UserFeedCreateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
 }
@@ -2500,11 +2509,11 @@ input UserFeedCreateWithoutFeedInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   user: UserCreateOneWithoutFeedsInput!
 }
 
@@ -2513,11 +2522,11 @@ input UserFeedCreateWithoutUserInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
 
@@ -2541,8 +2550,6 @@ enum UserFeedOrderByInput {
   activationTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
-  withContentTable_ASC
-  withContentTable_DESC
   lastUpdate_ASC
   lastUpdate_DESC
   schedule_ASC
@@ -2553,6 +2560,8 @@ enum UserFeedOrderByInput {
   unsubscribeTokenExpiry_DESC
   updatedAt_ASC
   updatedAt_DESC
+  withContentTable_ASC
+  withContentTable_DESC
 }
 
 type UserFeedPreviousValues {
@@ -2561,12 +2570,12 @@ type UserFeedPreviousValues {
   activationToken: String
   activationTokenExpiry: DateTime
   createdAt: DateTime!
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
   updatedAt: DateTime!
+  withContentTable: SettingState
 }
 
 input UserFeedScalarWhereInput {
@@ -2706,10 +2715,6 @@ input UserFeedScalarWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
-  withContentTable: Boolean
-
-  """All values that are not equal to given value."""
-  withContentTable_not: Boolean
   lastUpdate: DateTime
 
   """All values that are not equal to given value."""
@@ -2826,6 +2831,16 @@ input UserFeedScalarWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  withContentTable: SettingState
+
+  """All values that are not equal to given value."""
+  withContentTable_not: SettingState
+
+  """All values that are contained in given list."""
+  withContentTable_in: [SettingState!]
+
+  """All values that are not contained in given list."""
+  withContentTable_not_in: [SettingState!]
 }
 
 type UserFeedSubscriptionPayload {
@@ -2869,11 +2884,11 @@ input UserFeedUpdateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
@@ -2882,22 +2897,22 @@ input UserFeedUpdateManyDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
 }
 
 input UserFeedUpdateManyMutationInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
@@ -2933,11 +2948,11 @@ input UserFeedUpdateWithoutFeedDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
@@ -2945,11 +2960,11 @@ input UserFeedUpdateWithoutUserDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
-  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
   unsubscribeTokenExpiry: DateTime
+  withContentTable: SettingState
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
 
@@ -3112,10 +3127,6 @@ input UserFeedWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
-  withContentTable: Boolean
-
-  """All values that are not equal to given value."""
-  withContentTable_not: Boolean
   lastUpdate: DateTime
 
   """All values that are not equal to given value."""
@@ -3232,6 +3243,16 @@ input UserFeedWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  withContentTable: SettingState
+
+  """All values that are not equal to given value."""
+  withContentTable_not: SettingState
+
+  """All values that are contained in given list."""
+  withContentTable_in: [SettingState!]
+
+  """All values that are not contained in given list."""
+  withContentTable_not_in: [SettingState!]
   feed: FeedWhereInput
   user: UserWhereInput
 }
@@ -3264,6 +3285,8 @@ enum UserOrderByInput {
   dailyDigestHour_DESC
   shareEnable_ASC
   shareEnable_DESC
+  withContentTableDefault_ASC
+  withContentTableDefault_DESC
 }
 
 type UserPreviousValues {
@@ -3280,6 +3303,7 @@ type UserPreviousValues {
   dailyDigestHour: Int
   shareEnable: Boolean
   filterShare: [String!]!
+  withContentTableDefault: Boolean
 }
 
 type UserSubscriptionPayload {
@@ -3332,6 +3356,7 @@ input UserUpdateInput {
   timeZone: String
   dailyDigestHour: Int
   shareEnable: Boolean
+  withContentTableDefault: Boolean
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
   feeds: UserFeedUpdateManyWithoutUserInput
@@ -3346,6 +3371,7 @@ input UserUpdateManyMutationInput {
   timeZone: String
   dailyDigestHour: Int
   shareEnable: Boolean
+  withContentTableDefault: Boolean
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
 }
@@ -3370,6 +3396,7 @@ input UserUpdateWithoutFeedsDataInput {
   timeZone: String
   dailyDigestHour: Int
   shareEnable: Boolean
+  withContentTableDefault: Boolean
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
 }
@@ -3720,6 +3747,10 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   shareEnable_not: Boolean
+  withContentTableDefault: Boolean
+
+  """All values that are not equal to given value."""
+  withContentTableDefault_not: Boolean
   feeds_every: UserFeedWhereInput
   feeds_some: UserFeedWhereInput
   feeds_none: UserFeedWhereInput
