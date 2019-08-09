@@ -26,10 +26,12 @@ type UserFeed {
     lastUpdate: DateTime
     createdAt: DateTime
     activated: Boolean
+    withContentTable: Boolean
 }
 
 input MyFeedUpdateInput {
     schedule: DigestSchedule
+    withContentTable: Boolean
 }
 
 input MyInfoUpdateInput {

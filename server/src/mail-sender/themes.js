@@ -10,6 +10,7 @@ const compileHbsPart = (path, part) => Handlebars.compile(fs.readFileSync(`${pat
 module.exports = {
     default: {
         header: compileHbsPart(themeFolders.default, 'header'),
+        contentTable: compileHbsPart(themeFolders.default, 'content_table'),
         item: compileHbsPart(themeFolders.default, 'item'),
         footer: compileHbsPart(themeFolders.default, 'footer'),
     },

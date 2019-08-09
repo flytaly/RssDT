@@ -74,9 +74,11 @@ describe('', () => {
         const { userFeedId: id } = globalData;
         const oldData = {
             schedule: mocks.feed.schedule,
+            withContentTable: false,
         };
         const newData = {
             schedule: 'EVERY2HOURS',
+            withContentTable: true,
         };
         const before = await db.query.userFeed({ where: { id } });
 
@@ -86,6 +88,7 @@ describe('', () => {
                 id,
                 data: {
                     schedule: 'EVERY2HOURS',
+                    withContentTable: true,
                 },
             },
         }));

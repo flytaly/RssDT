@@ -12,6 +12,7 @@ async function setUserFeedLastUpdate(userFeedId, timestamp) {
 }
 
 async function getActiveUserFeeds(feedUrl) {
+    const userFields = 'user { email timeZone locale shareEnable filterShare dailyDigestHour }';
     return db.query.userFeeds({
         where: {
             feed: {
@@ -19,7 +20,7 @@ async function getActiveUserFeeds(feedUrl) {
             },
             activated: true,
         },
-    }, '{ id lastUpdate schedule user { email timeZone locale shareEnable filterShare dailyDigestHour } }');
+    }, `{ id lastUpdate schedule withContentTable ${userFields} }`);
 }
 
 async function getFeedInfo(url) {
@@ -34,7 +35,7 @@ async function getItemsNewerThan(url, time, first) {
         },
         ...(first && { first }),
         orderBy: 'pubDate_DESC',
-    }, '{ title summary description link pubDate imageUrl enclosures { url type length } }');
+    }, '{ id title summary description link pubDate imageUrl enclosures { url type length } }');
 }
 
 module.exports = {

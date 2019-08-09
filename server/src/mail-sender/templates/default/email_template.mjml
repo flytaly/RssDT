@@ -18,15 +18,39 @@
       </mj-column>
     </mj-section>
 
+    <!-- ======= TABLE OF CONTENT ======= -->
+
+    <mj-section>
+      <mj-column width="100%">
+        <mj-text>
+          <b>Table of Content:</b>
+          <ol>
+            {{#each items}}
+              <li style="margin-bottom: 5px">
+                <a style="color: inherit; text-decoration: none;" href="#{{id}}">
+                  {{title}}
+                </a>
+              </li>
+            {{/each}}
+          </ol>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+
     <!-- ======= ITEMS ======= -->
 
     <mj-section padding="16px 0px 0px 0px">
       <mj-column width="75%" vertical-align="middle">
         <mj-text padding-bottom="0px" padding-top="0px">
-          <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+          <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
         </mj-text>
         <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
-        <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" line-height="20px" color="#505050"><a href="#" style="text-decoration: none; ">share block</a></mj-text>
+        <mj-text>
+          {{#each share}}
+            <a style="margin-right: 4px;" href="{{url}}"><img style="width: 16px;" src="{{iconUrl}}" title="{{title}}" /></a>
+          {{/each}}
+        </mj-text>
       </mj-column>
       <mj-column width="25%" vertical-align="middle">
         {{#if imageUrl}}
@@ -36,13 +60,14 @@
     </mj-section>
     <mj-section>
       <mj-column width="100%">
-        <mj-text>{{{summary}}} {{#if enclosures.length}}
+        <mj-text>{{{content}}} {{#if enclosures.length}}
             <br /><b>Files:</b><br /> {{/if}}
           {{#each enclosures}}
             <a href="{{url}}">{{title}}</a> [{{type}}]<br />
           {{/each}}</mj-text>
       </mj-column>
     </mj-section>
+
 
 
     <!-- ======= ITEMS END ======= -->

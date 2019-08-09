@@ -1,5 +1,5 @@
-# source: http://localhost:4466/digester/dev
-# timestamp: Fri Jun 07 2019 01:31:29 GMT+0300 (Moscow Standard Time)
+# source: http://localhost:4466/feedmailu/dev
+# timestamp: Fri Aug 09 2019 20:36:08 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2451,6 +2451,7 @@ type UserFeed implements Node {
   activationToken: String
   activationTokenExpiry: DateTime
   createdAt: DateTime!
+  withContentTable: Boolean
   feed: Feed!
   lastUpdate: DateTime
   schedule: DigestSchedule
@@ -2475,6 +2476,7 @@ input UserFeedCreateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2498,6 +2500,7 @@ input UserFeedCreateWithoutFeedInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2510,6 +2513,7 @@ input UserFeedCreateWithoutUserInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2537,6 +2541,8 @@ enum UserFeedOrderByInput {
   activationTokenExpiry_DESC
   createdAt_ASC
   createdAt_DESC
+  withContentTable_ASC
+  withContentTable_DESC
   lastUpdate_ASC
   lastUpdate_DESC
   schedule_ASC
@@ -2555,6 +2561,7 @@ type UserFeedPreviousValues {
   activationToken: String
   activationTokenExpiry: DateTime
   createdAt: DateTime!
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2699,6 +2706,10 @@ input UserFeedScalarWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  withContentTable: Boolean
+
+  """All values that are not equal to given value."""
+  withContentTable_not: Boolean
   lastUpdate: DateTime
 
   """All values that are not equal to given value."""
@@ -2858,6 +2869,7 @@ input UserFeedUpdateInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2870,6 +2882,7 @@ input UserFeedUpdateManyDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2880,6 +2893,7 @@ input UserFeedUpdateManyMutationInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2919,6 +2933,7 @@ input UserFeedUpdateWithoutFeedDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -2930,6 +2945,7 @@ input UserFeedUpdateWithoutUserDataInput {
   activated: Boolean
   activationToken: String
   activationTokenExpiry: DateTime
+  withContentTable: Boolean
   lastUpdate: DateTime
   schedule: DigestSchedule
   unsubscribeToken: String
@@ -3096,6 +3112,10 @@ input UserFeedWhereInput {
 
   """All values greater than or equal the given value."""
   createdAt_gte: DateTime
+  withContentTable: Boolean
+
+  """All values that are not equal to given value."""
+  withContentTable_not: Boolean
   lastUpdate: DateTime
 
   """All values that are not equal to given value."""

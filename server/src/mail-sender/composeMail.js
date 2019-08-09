@@ -51,6 +51,7 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
     /* eslint-disable no-param-reassign */
     const {
         id: userFeedId = '',
+        withContentTable = false,
         user: {
             timeZone = 'GMT',
             locale = 'en',
@@ -75,9 +76,12 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
         item.content = item.summary || item.description;
         return acc + theme.item(item);
     }, '');
+
+    const tableOfContent = withContentTable ? theme.contentTable({ items: feedItems }) : '';
+
     const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;
     const footer = theme.footer({ unsubscribeUrl });
-    return mjml2html(header + items + footer, { minify: true });
+    return mjml2html(header + tableOfContent + items + footer, { minify: true });
 };
 
 module.exports = { composeHTML };

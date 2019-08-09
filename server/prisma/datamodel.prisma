@@ -36,6 +36,7 @@ type UserFeed {
     activationToken: String
     activationTokenExpiry: DateTime
     createdAt: DateTime! @createdAt
+    withContentTable: Boolean @default(value: false)
     feed: Feed! @relation(link: TABLE)
     lastUpdate: DateTime
     schedule: DigestSchedule @default(value: DAILY)

@@ -10,6 +10,7 @@ const generateHTML = async () => {
         url
         title
         items {
+            id
             title
             description
             summary
@@ -23,7 +24,7 @@ const generateHTML = async () => {
         }}`);
 
         for (const [idx, feed] of feeds.entries()) {
-            const { html } = composeHTML(feed, feed.items);
+            const { html } = composeHTML(feed, feed.items, { withContentTable: true });
             const dir = `${__dirname}/digests`;
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);

@@ -99,6 +99,7 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
   ) {
     id
     schedule
+    withContentTable
   }
 }`;
 
