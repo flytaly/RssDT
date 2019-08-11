@@ -5,10 +5,7 @@ import Meta from './meta';
 import theme from './themes/default';
 import '@reach/menu-button/styles.css';
 import Logo from './logo';
-
-const StyledPage = styled.div`
-  color: black;
-`;
+import Footer from './footer';
 
 const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
@@ -20,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
   }
   body {
     background: ${props => props.theme.pageBackground};
+    color: ${props => props.theme.fontColor};
     padding: 0;
     margin: 0;
     font-size: 1.3rem;
@@ -35,21 +33,30 @@ const Container = styled.div`
   padding: 1rem;
 `;
 const Center = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
   align-self: center;
+`;
+
+const PushToBottom = styled.div`
+  flex: 1 0 1rem;
 `;
 
 const Page = ({ children }) => (
     <ThemeProvider theme={theme}>
-        <StyledPage>
+        <>
             <GlobalStyle />
             <Meta />
             <Container>
                 <Center>
                     <Logo />
                     {children}
+                    <PushToBottom />
+                    <Footer />
                 </Center>
             </Container>
-        </StyledPage>
+        </>
     </ThemeProvider>
 );
 

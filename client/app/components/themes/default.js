@@ -6,6 +6,8 @@ const theme = {
     cardBackground: '#FFFFFF',
     welcomeCardBackground: 'url(/static/background_01.jpg) #FFFFFF',
     fontColor: '#000000',
+    footerFontColor: '#b2b2b2',
+    footerHoverLinkColor: '#dddddd',
     greyDark: '#707070',
     greyMedium: '#e6e6e6',
     greyLight: 'rgba(90%, 90%, 90%, 60%)',
