@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
+import { render, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import WelcomeCard from '../components/welcome/welcome-card';
 import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
@@ -32,8 +32,6 @@ const mocks = [{
 ME_QUERY_MOCK,
 UPDATE_MY_INFO_MOCK,
 ];
-
-afterEach(cleanup);
 
 describe('Add feed form', () => {
     test('the form should not have accessibility violations', async () => {

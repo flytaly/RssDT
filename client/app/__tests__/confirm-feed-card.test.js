@@ -27,24 +27,28 @@ UPDATE_MY_INFO_MOCK,
 ];
 
 describe('Confirm a feed subscription', () => {
-    const { getByTestId, rerender } = render(
-        <ApolloMockedProvider mocks={mocks}>
-            <ConfirmFeed token="token" />
-        </ApolloMockedProvider>,
-    );
-
     test('should display response message', async () => {
+        const { getByTestId } = render(
+            <ApolloMockedProvider mocks={mocks}>
+                <ConfirmFeed token="token" />
+            </ApolloMockedProvider>,
+        );
         await wait(() => {
             expect(getByTestId('confirm-message')).toHaveTextContent(successMessage);
         });
     });
 
     test('should render header', () => {
+        const { getByTestId } = render(
+            <ApolloMockedProvider mocks={mocks}>
+                <ConfirmFeed token="token" />
+            </ApolloMockedProvider>,
+        );
         expect(getByTestId('card-header')).toBeVisible();
     });
 
     test('should display error message', async () => {
-        rerender(
+        const { getByTestId } = render(
             <ApolloMockedProvider mocks={mocks}>
                 <ConfirmFeed token="wrongToken" />
             </ApolloMockedProvider>,

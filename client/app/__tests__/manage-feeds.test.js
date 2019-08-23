@@ -41,28 +41,30 @@ const mocks = [{
 }];
 
 describe('Manage feeds', () => {
-    let container;
+    const component = (
+        <ApolloMockedProvider mocks={mocks}>
+            <StateProvider>
+                <ManageFeeds />
+            </StateProvider>
+        </ApolloMockedProvider>);
 
-    beforeAll(async () => {
+    const getContainer = async () => {
+        let container;
         await act(async () => {
-            ({ container } = render(
-                <ApolloMockedProvider mocks={mocks}>
-                    <StateProvider>
-                        <ManageFeeds />
-                    </StateProvider>
-                </ApolloMockedProvider>,
-            ));
+            ({ container } = render(component));
         });
-    });
-
+        return container;
+    };
 
     test('should match snapshot', async () => {
+        const container = await getContainer();
         await wait(() => {
             expect(container.firstChild).toMatchSnapshot();
         });
     });
 
     test('should render date and time in current locale', async () => {
+        const container = await getContainer();
         const createdAtLocale = new Date(createdAt).toLocaleDateString();
         const lastUpdateLocale = new Date(lastUpdate).toLocaleString();
         await wait(() => {

@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, cleanup, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
+import { render, fireEvent, wait, waitForElement, getByText, act } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import router from 'next/router';
 import LoginCard from '../components/login/login-card';
@@ -31,7 +31,7 @@ UPDATE_MY_INFO_MOCK,
 ];
 
 describe('Log In form', () => {
-    afterEach(() => { cleanup(); jest.clearAllMocks(); });
+    afterEach(() => { jest.clearAllMocks(); });
 
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
@@ -112,7 +112,7 @@ describe('Log In form', () => {
 
 
 describe('Request password change form', () => {
-    afterEach(() => { cleanup(); jest.clearAllMocks(); });
+    afterEach(() => { jest.clearAllMocks(); });
 
 
     test('should render request password form with link to login form', () => {
@@ -166,7 +166,7 @@ describe('Set password form', () => {
     },
     ];
 
-    afterEach(() => { cleanup(); jest.clearAllMocks(); });
+    afterEach(() => { jest.clearAllMocks(); });
 
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
