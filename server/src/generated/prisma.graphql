@@ -1,5 +1,5 @@
 # source: http://localhost:4466/feedmailu/dev
-# timestamp: Fri Aug 09 2019 21:22:03 GMT+0300 (Moscow Standard Time)
+# timestamp: Wed Aug 14 2019 02:19:07 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2389,6 +2389,7 @@ type User implements Node {
   shareEnable: Boolean
   filterShare: [String!]!
   withContentTableDefault: Boolean
+  customSubject: String
 }
 
 """A connection to a list of items."""
@@ -2416,6 +2417,7 @@ input UserCreateInput {
   dailyDigestHour: Int
   shareEnable: Boolean
   withContentTableDefault: Boolean
+  customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
   feeds: UserFeedCreateManyWithoutUserInput
@@ -2441,6 +2443,7 @@ input UserCreateWithoutFeedsInput {
   dailyDigestHour: Int
   shareEnable: Boolean
   withContentTableDefault: Boolean
+  customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
 }
@@ -3287,6 +3290,8 @@ enum UserOrderByInput {
   shareEnable_DESC
   withContentTableDefault_ASC
   withContentTableDefault_DESC
+  customSubject_ASC
+  customSubject_DESC
 }
 
 type UserPreviousValues {
@@ -3304,6 +3309,7 @@ type UserPreviousValues {
   shareEnable: Boolean
   filterShare: [String!]!
   withContentTableDefault: Boolean
+  customSubject: String
 }
 
 type UserSubscriptionPayload {
@@ -3357,6 +3363,7 @@ input UserUpdateInput {
   dailyDigestHour: Int
   shareEnable: Boolean
   withContentTableDefault: Boolean
+  customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
   feeds: UserFeedUpdateManyWithoutUserInput
@@ -3372,6 +3379,7 @@ input UserUpdateManyMutationInput {
   dailyDigestHour: Int
   shareEnable: Boolean
   withContentTableDefault: Boolean
+  customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
 }
@@ -3397,6 +3405,7 @@ input UserUpdateWithoutFeedsDataInput {
   dailyDigestHour: Int
   shareEnable: Boolean
   withContentTableDefault: Boolean
+  customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
 }
@@ -3751,6 +3760,46 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   withContentTableDefault_not: Boolean
+  customSubject: String
+
+  """All values that are not equal to given value."""
+  customSubject_not: String
+
+  """All values that are contained in given list."""
+  customSubject_in: [String!]
+
+  """All values that are not contained in given list."""
+  customSubject_not_in: [String!]
+
+  """All values less than the given value."""
+  customSubject_lt: String
+
+  """All values less than or equal the given value."""
+  customSubject_lte: String
+
+  """All values greater than the given value."""
+  customSubject_gt: String
+
+  """All values greater than or equal the given value."""
+  customSubject_gte: String
+
+  """All values containing the given string."""
+  customSubject_contains: String
+
+  """All values not containing the given string."""
+  customSubject_not_contains: String
+
+  """All values starting with the given string."""
+  customSubject_starts_with: String
+
+  """All values not starting with the given string."""
+  customSubject_not_starts_with: String
+
+  """All values ending with the given string."""
+  customSubject_ends_with: String
+
+  """All values not ending with the given string."""
+  customSubject_not_ends_with: String
   feeds_every: UserFeedWhereInput
   feeds_some: UserFeedWhereInput
   feeds_none: UserFeedWhereInput

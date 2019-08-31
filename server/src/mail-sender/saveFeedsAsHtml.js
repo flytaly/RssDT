@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { URL } = require('url');
 const db = require('../bind-prisma');
-const { composeHTML } = require('./composeMail');
+const { composeHTML } = require('./compose-mail');
 
 /** Converts feeds with item to HTML and saves in folder "digest". */
 const generateHTML = async () => {

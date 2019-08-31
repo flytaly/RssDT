@@ -131,4 +131,40 @@ describe('updateMyInfo mutation', () => {
         }));
         expect(errors[0].message).toBe('Not valid argument: filterShare');
     });
+
+    test('should update and reset custom subject', async () => {
+        const { linkWithAuthCookies, userId: id } = globalData;
+        const data = {
+            customSubject: '123456789abcdef',
+        };
+        const before = await db.query.user({ where: { id } }, '{ customSubject }');
+        const { data: { updateMyInfo } } = await makePromise(execute(linkWithAuthCookies, {
+            query: UPDATE_MY_INFO_MUTATION,
+            variables: { data },
+        }));
+
+        const after = await db.query.user({ where: { id } }, '{ customSubject }');
+
+        expect(before.customSubject).toBeNull();
+        expect(after).toMatchObject(data);
+        expect(updateMyInfo).toMatchObject(data);
+
+        const { data: { updateMyInfo: updateMyInfo2 } } = await makePromise(execute(linkWithAuthCookies, {
+            query: UPDATE_MY_INFO_MUTATION,
+            variables: { data: { customSubject: null } },
+        }));
+
+        expect(updateMyInfo2.customSubject).toBeNull();
+    });
+
+    test('should return error if custom subject is too long', async () => {
+        const { linkWithAuthCookies } = globalData;
+        const customSubject = new Array(60).fill('a').join('');
+        const { errors } = await makePromise(execute(linkWithAuthCookies, {
+            query: UPDATE_MY_INFO_MUTATION,
+            variables: { data: { customSubject } },
+        }));
+
+        expect(errors[0].message).toBe('Not valid argument: customSubject. Too long.');
+    });
 });

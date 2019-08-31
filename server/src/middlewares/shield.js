@@ -19,6 +19,10 @@ const valids = {
         .string()
         .email('Not valid argument: email')
         .required('Not valid argument: email'),
+    customSubject: yup
+        .string()
+        .nullable()
+        .max(50, 'Not valid argument: customSubject. Too long.'),
 };
 
 const addFeedValidation = inputRule(yup => yup.object({
@@ -43,6 +47,7 @@ const updateMyInfoValidation = inputRule(yup => yup.object({
             }),
         locale: valids.locale,
         dailyDigestHour: valids.dailyDigestHour,
+        customSubject: valids.customSubject,
     })
         .required(),
 }));

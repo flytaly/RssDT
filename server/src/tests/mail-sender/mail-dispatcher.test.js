@@ -6,8 +6,8 @@ const periods = require('../../periods');
 const { buildAndSendDigests } = require('../../mail-sender/dispatcher');
 const { isFeedReady } = require('../../mail-sender/is-feed-ready');
 const { setUserFeedLastUpdate } = require('../../db-queries');
-const { composeHTML } = require('../../mail-sender/composeMail');
-const periodsNames = require('../../periods-names');
+const { composeHTML } = require('../../mail-sender/compose-mail');
+const { composeEmailSubject } = require('../../mail-sender/compose-subject');
 
 jest.mock('../../mail-sender/transport.js', () => ({
     sendMail: jest.fn(async () => ({})),
@@ -17,8 +17,12 @@ jest.mock('../../mail-sender/is-feed-ready.js', () => ({
     isFeedReady: jest.fn(() => true),
 }));
 
-jest.mock('../../mail-sender/composeMail.js', () => ({
+jest.mock('../../mail-sender/compose-mail.js', () => ({
     composeHTML: jest.fn(() => ({ html: 'OK', errors: [] })),
+}));
+
+jest.mock('../../mail-sender/compose-subject', () => ({
+    composeEmailSubject: jest.fn(() => 'email subject'),
 }));
 
 const deleteUser = async email => db.mutation.deleteUser({ where: { email } });
@@ -60,7 +64,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault } }',
+            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault customSubject } }',
         );
         expect(isFeedReady).toHaveBeenCalled();
         expect(isFeedReady.mock.calls[0][0]).toMatchObject({ id: userFeed.id });
@@ -74,9 +78,11 @@ describe('Build digest', () => {
         expect(transport.sendMail).toHaveBeenCalledWith(expect.objectContaining({
             from: process.env.MAIL_FROM,
             to: data.user.email,
-            subject: `${feed.title}: ${periodsNames[userFeed.schedule]} digest`,
+            subject: 'email subject',
             html: 'OK',
         }));
+
+        expect(composeEmailSubject).toHaveBeenCalledWith(feed.title, userFeed.schedule, null);
     });
 
     test('should not build digest if there are NO NEW ITEMS', async () => {
@@ -105,7 +111,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault} }',
+            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault customSubject} }',
         );
         expect(composeHTML.mock.calls[0][1]).toHaveLength(newItems.length);
         expect(composeHTML).toHaveBeenCalledWith(
@@ -114,5 +120,17 @@ describe('Build digest', () => {
             expect.objectContaining({ ...userFeedAfter, lastUpdate: lastUpdate.toISOString() }),
         );
         expect(transport.sendMail).toHaveBeenCalled();
+    });
+
+    test('should send mail with custom subject', async () => {
+        const customSubject = '{{title}}';
+        await db.mutation.updateUser({ where: { id: data.user.id }, data: { customSubject } });
+        const url = data.urls[0];
+        const feed = await db.query.feed({ where: { url } }, '{ title userFeeds { id schedule } }');
+        const userFeed = feed.userFeeds[0];
+        const lastUpdate = new Date(Date.now() - 3600000 * 24);
+        await setUserFeedLastUpdate(userFeed.id, lastUpdate);
+        await buildAndSendDigests(url);
+        expect(composeEmailSubject).toHaveBeenCalledWith(feed.title, userFeed.schedule, customSubject);
     });
 });

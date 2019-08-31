@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const { extractFragmentReplacements } = require('prisma-binding');
 const Mutation = require('./Mutation');
 const Query = require('./Query');
@@ -9,7 +10,6 @@ const resolvers = {
         // to prevent warning 'Type "Node" is missing a "__resolveType" resolver...'
         // see: https://github.com/prisma/prisma/issues/2225#issuecomment-413265367
         __resolveType(obj) {
-            // eslint-disable-next-line no-underscore-dangle
             return obj.__typename;
         },
     },

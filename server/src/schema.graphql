@@ -17,6 +17,7 @@ type User {
     shareEnable: Boolean
     filterShare: [String!]!
     withContentTableDefault: Boolean
+    customSubject: String
 }
 
 type UserFeed {
@@ -42,6 +43,7 @@ input MyInfoUpdateInput {
     shareEnable: Boolean
     filterShare: [String]
     withContentTableDefault: Boolean
+    customSubject: String
 }
 
 type Feed {

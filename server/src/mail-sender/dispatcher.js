@@ -1,13 +1,13 @@
 const pLimit = require('p-limit');
 const transport = require('./transport');
 const logger = require('../logger');
-const { composeHTML } = require('./composeMail');
+const { composeHTML } = require('./compose-mail');
 const {
     getActiveUserFeeds, getFeedInfo, getItemsNewerThan, setUserFeedLastUpdate,
 } = require('../db-queries');
 const { isFeedReady } = require('./is-feed-ready');
 const { limitEmailsNumber, maxItemsPerMail } = require('./config');
-const periodsNames = require('../periods-names');
+const { composeEmailSubject } = require('./compose-subject');
 
 const limitEmails = pLimit(limitEmailsNumber);
 
@@ -34,11 +34,10 @@ async function buildAndSendDigests(url) {
             const timestamp = new Date();
             const { html, errors } = composeHTML(feed, items, userFeed);
             if (!errors.length) {
-                const digestTime = `${periodsNames[userFeed.schedule]} digest`;
                 const result = await transport.sendMail({
                     from: process.env.MAIL_FROM,
                     to: userFeed.user.email,
-                    subject: `${feed.title}: ${digestTime}`,
+                    subject: composeEmailSubject(feed.title, userFeed.schedule, userFeed.user.customSubject),
                     // text:,
                     html,
                 });
