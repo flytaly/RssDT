@@ -20,7 +20,7 @@ const addTitlesToEnclosures = enclosures => enclosures.reduce((acc, enc) => {
     return acc;
 }, []);
 
-const imagesTypes = ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/tiff', 'image/webp'];
+const imagesTypes = ['image/gif', 'image/jpg', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/tiff', 'image/webp'];
 
 const getImageFromEnclosures = (enclosures) => {
     const enc = enclosures.find(({ type }) => imagesTypes.includes(type));
