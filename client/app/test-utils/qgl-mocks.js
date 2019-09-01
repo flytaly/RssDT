@@ -12,6 +12,7 @@ export const user = {
     shareEnable: true,
     filterShare: [],
     withContentTableDefault: false,
+    customSubject: null,
 };
 const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
 

@@ -10,6 +10,7 @@ export const meFields = gql`
             shareEnable
             filterShare
             withContentTableDefault
+            customSubject
 }`;
 
 const ME_QUERY = gql`

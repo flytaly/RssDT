@@ -14,7 +14,8 @@ export default [
         headerText: 'Choosing time and periods',
         content: (
             <div>
-                You can choose how often you want to receive digests.If you prefer daily digests you can also pick an hour of the digests in the
+                You can choose how often you want to receive digests. If you prefer daily digests you can also pick
+                an hour of the digests in the
                 {' '}
                 <a href="/settings">settings page</a>
                 .

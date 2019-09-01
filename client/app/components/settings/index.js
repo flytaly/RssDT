@@ -1,11 +1,13 @@
 import React, { useCallback, useReducer, useRef } from 'react';
 import styled from 'styled-components';
 import { useQuery, useMutation } from 'react-apollo-hooks';
-import ME_QUERY from '../queries/me-query';
-import { UPDATE_MY_INFO_MUTATION } from '../queries';
-import shareServices from '../types/share-services';
-import CheckBox from './styled/checkbox';
-import Spinner from './spinner';
+import ME_QUERY from '../../queries/me-query';
+import { UPDATE_MY_INFO_MUTATION } from '../../queries';
+import shareServices from '../../types/share-services';
+import CheckBox from '../styled/checkbox';
+import Spinner from '../spinner';
+import CustomSubject from './custom-subject-option';
+import updateMeQuery from './update-me-query';
 
 const OuterContainer = styled.main`
     padding: 2rem;
@@ -47,16 +49,6 @@ const ErrorMsg = styled.div`
     color: ${props => props.theme.errorMsgColor};
 `;
 
-const updateMeQuery = (dataProxy, mutationResult) => {
-    try {
-        const data = dataProxy.readQuery({ query: ME_QUERY });
-        data.me = { ...data.me, ...mutationResult.data.updateMyInfo };
-        dataProxy.writeQuery({ query: ME_QUERY, data });
-    } catch (e) {
-        console.error(e);
-    }
-};
-
 const range = (start = 0, stop = 23) => {
     const result = [];
     for (let i = start; i <= stop; i += 1) {
@@ -74,6 +66,7 @@ const initialState = {
     digestHour: { isSaving: false, error: null },
     withContentTableDefault: { isSaving: false, error: null },
     share: { isSaving: 0, error: null },
+    customSubject: { isSaving: false, error: null },
 };
 function settingsStateReducer(state, action) {
     switch (action.type) {
@@ -85,6 +78,9 @@ function settingsStateReducer(state, action) {
             const { isSaving } = state.share;
             const inc = action.payload.isSaving;
             return { ...state, share: { ...action.payload, isSaving: inc ? isSaving + 1 : isSaving - 1 } };
+        }
+        case 'customSubject': {
+            return { ...state, customSubject: action.payload };
         }
         default:
             return state;
@@ -200,7 +196,9 @@ const SettingsComponent = () => {
                             disabled={state.withContentTableDefault.isSaving}
                         />
                         <LoaderContainer>{state.withContentTableDefault.isSaving ? <Spinner /> : null}</LoaderContainer>
-                        {state.withContentTableDefault.error ? <ErrorMsg>{state.withContentTableDefault.error}</ErrorMsg> : null}
+                        {state.withContentTableDefault.error
+                            ? <ErrorMsg>{state.withContentTableDefault.error}</ErrorMsg>
+                            : null}
                     </article>
                     <article>
                         <h3>
@@ -216,6 +214,14 @@ const SettingsComponent = () => {
                         </form>
                         {state.share.error ? <ErrorMsg>{state.share.error}</ErrorMsg> : null}
                         <LoaderContainer>{state.share.isSaving ? <Spinner /> : null}</LoaderContainer>
+                    </article>
+                    <article>
+                        <h3>
+                            Edit email subject
+                        </h3>
+                        <CustomSubject me={me} dispatch={dispatch} isSaving={state.customSubject.isSaving} />
+                        {state.customSubject.error ? <ErrorMsg>{state.customSubject.error}</ErrorMsg> : null}
+                        <LoaderContainer>{state.customSubject.isSaving ? <Spinner /> : null}</LoaderContainer>
                     </article>
                 </Section>
             </InnerContainer>
