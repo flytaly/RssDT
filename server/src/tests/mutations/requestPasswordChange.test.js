@@ -26,7 +26,7 @@ const mocks = {
 };
 
 jest.mock('../../feed-parser', () => ({
-    getFeedStream: jest.fn(() => true),
+    getFeedStream: jest.fn(feedUrl => ({ feedStream: 'feedStream', feedUrl })),
     checkFeedInfo: jest.fn(() => ({
         isFeed: true,
         meta: { title: mocks.feedTitle },

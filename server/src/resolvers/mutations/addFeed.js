@@ -6,13 +6,16 @@ const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
 
 async function addFeed(parent, args, ctx) {
     let feedMeta = {};
-    const { feedSchedule: schedule, locale, timeZone } = args;
-    const { email, feedUrl: url } = args;
+    const { feedSchedule: schedule, locale, timeZone, email } = args;
+    let { feedUrl: url } = args;
 
     // check if url is a valid feed before adding it to db
     if (!await ctx.db.exists.Feed({ url })) {
         try {
-            const feedStream = await getFeedStream(url, { timeout: 3000 });
+            const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 3000 }, true);
+
+            url = feedUrl;
+
             const { isFeed, meta } = await checkFeedInfo(feedStream);
 
             if (!isFeed) throw new Error('Not a feed');

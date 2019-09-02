@@ -31,6 +31,6 @@ cases('Make custom email subject', (opts) => {
         title: 'Feed\'s Title',
         digestType: 'DAILY',
         template: `My ${tokens.title} ${tokens.digestName} digest`,
-        result: `My Feed\'s Title ${periodsNames.DAILY} digest`,
+        result: `My Feed's Title ${periodsNames.DAILY} digest`,
     },
 ]);

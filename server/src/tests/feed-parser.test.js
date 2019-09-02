@@ -32,13 +32,13 @@ describe('Test feed stream', () => {
     });
 
     it('should have pipe method', async () => {
-        const feedStream = await getFeedStream(url.href);
+        const { feedStream } = await getFeedStream(url.href);
         // expect(feedStream.statusCode).toBe(200);
         expect(typeof feedStream.pipe).toBe('function');
     });
 
     it('should emit raw feed body', async () => {
-        const feedStream = await getFeedStream(url.href);
+        const { feedStream } = await getFeedStream(url.href);
         let feedBody = '';
         feedStream.on('data', (chunk) => {
             feedBody += chunk;
@@ -48,6 +48,100 @@ describe('Test feed stream', () => {
         });
     });
 });
+
+describe('Find feed url in html <head>', () => {
+    const pages = {
+        pageWithRSS: {
+            url: new URL('https://rss.com/'),
+            body: '<html><head>'
+            + '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss" />'
+            + '</head><body></body></html>',
+        },
+        pageWithAtom: {
+            url: new URL('https://atom.com/'),
+            body: '<html><head>'
+            + '<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom" />'
+            + '</head><body></body></html>',
+        },
+        pageWithAbsoluteUrl: {
+            url: new URL('https://absoluteurl.com/'),
+            body: '<html><head>'
+            + '<link rel="alternate" type="application/rss+xml" title="Rss Feed" href="https://feed.absoluteurl.com/path/to/feed" />'
+            + '</head><body></body></html>',
+        },
+        rssFeed: {
+            url: new URL('https://rss.com/rss'),
+            body: 'RSS feed body',
+        },
+        atomFeed: {
+            url: new URL('https://atom.com/atom'),
+            body: 'Atom feed body',
+        },
+        absoluteUrlFeed: {
+            url: new URL('https://feed.absoluteurl.com/path/to/feed'),
+            body: 'absolute path feed',
+        },
+    };
+    beforeAll(() => {
+        Object.values(pages).map(page => nock(page.url.origin)
+            .persist()
+            .get(page.url.pathname)
+            .reply(200, page.body));
+    });
+
+    afterAll(() => {
+        nock.cleanAll();
+    });
+    test('should return stream with page body', async () => {
+        const { url } = pages.pageWithRSS;
+        const { feedStream, feedUrl } = await getFeedStream(url.href, {}, false);
+        expect(feedUrl).toBe(url.href);
+        let feedBody = '';
+        feedStream.on('data', (chunk) => {
+            feedBody += chunk;
+        });
+        feedStream.on('end', () => {
+            expect(feedBody).toBe(pages.pageWithRSS.body);
+        });
+    });
+    test('should find feed and return stream with RSS feed\'s body', async () => {
+        const { url } = pages.pageWithRSS;
+        const { feedStream, feedUrl } = await getFeedStream(url.href, {}, true);
+        expect(feedUrl).toBe(pages.rssFeed.url.href);
+        let feedBody = '';
+        feedStream.on('data', (chunk) => {
+            feedBody += chunk;
+        });
+        feedStream.on('end', () => {
+            expect(feedBody).toBe(pages.rssFeed.body);
+        });
+    });
+    test('should find feed and return stream with Atom feed\'s body', async () => {
+        const { url } = pages.pageWithAtom;
+        const { feedStream, feedUrl } = await getFeedStream(url.href, {}, true);
+        expect(feedUrl).toBe(pages.atomFeed.url.href);
+        let feedBody = '';
+        feedStream.on('data', (chunk) => {
+            feedBody += chunk;
+        });
+        feedStream.on('end', () => {
+            expect(feedBody).toBe(pages.atomFeed.body);
+        });
+    });
+    test('should find feed with absolute path', async () => {
+        const { url } = pages.pageWithAbsoluteUrl;
+        const { feedStream, feedUrl } = await getFeedStream(url.href, {}, true);
+        expect(feedUrl).toBe(pages.absoluteUrlFeed.url.href);
+        let feedBody = '';
+        feedStream.on('data', (chunk) => {
+            feedBody += chunk;
+        });
+        feedStream.on('end', () => {
+            expect(feedBody).toBe(pages.absoluteUrlFeed.body);
+        });
+    });
+});
+
 
 describe('Test feed parser', () => {
     beforeEach(() => {
@@ -67,7 +161,7 @@ describe('Test feed parser', () => {
 
     feedUrls.forEach(({ url }) => {
         it(`should return array of feeds ${url.hostname}`, async () => {
-            const feedStream = await getFeedStream(url.href);
+            const { feedStream } = await getFeedStream(url.href);
 
             const { feedItems: feed } = await parseFeed(feedStream);
             expect(Array.isArray(feed)).toBeTruthy();
@@ -100,7 +194,7 @@ describe('Test checkFeedInfo function', () => {
     });
 
     it(`should be a feed ${url.href}`, async () => {
-        const feedStream = await getFeedStream(url.href);
+        const { feedStream } = await getFeedStream(url.href);
         const { isFeed, meta, error } = await checkFeedInfo(feedStream);
         expect(isFeed).toBeTruthy();
         expect(typeof meta === 'object').toBeTruthy();

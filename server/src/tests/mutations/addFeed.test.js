@@ -3,6 +3,7 @@
 const { execute, makePromise } = require('apollo-link');
 const { deleteData, runServer, getApolloLink } = require('./_common');
 const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
+const { getFeedStream } = require('../../feed-parser');
 const db = require('../../bind-prisma');
 const gq = require('./_gql-queries');
 
@@ -31,9 +32,10 @@ const mocks = {
 };
 
 jest.mock('../../feed-parser', () => ({
-    getFeedStream: jest.fn((url) => {
-        if (url === mocks.addNotAFeed.feedUrl) return 'fakeFeedStream';
-        return 'feedStream';
+    getFeedStream: jest.fn((feedUrl) => {
+        let feedStream = 'feedStream';
+        if (feedUrl === mocks.addNotAFeed.feedUrl) feedStream = 'fakeFeedStream';
+        return { feedStream, feedUrl };
     }),
     checkFeedInfo: jest.fn(stream => ({
         isFeed: stream === 'feedStream',
@@ -76,6 +78,7 @@ describe('addFeed mutation', () => {
             query: gq.ADD_FEED_MUTATION,
             variables: { email, feedUrl, feedSchedule },
         }));
+        expect(getFeedStream).toHaveBeenCalledWith(feedUrl, { timeout: 3000 }, true);
         const user = await db.query.user({ where: { email } }, '{ email locale timeZone permissions feeds { schedule activated activationToken feed { url } }  }');
         expect(errors).toBeUndefined();
         expect(message).toEqual(`Activation link has been sent to ${email.toLowerCase()}`);

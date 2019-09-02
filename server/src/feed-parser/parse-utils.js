@@ -2,8 +2,47 @@ const axios = require('axios');
 const FeedParser = require('feedparser');
 const iconv = require('iconv-lite');
 const { Readable } = require('stream');
+const jsdom = require('jsdom');
 
 const MAX_ITEMS = 1000;
+const defaultAxiosOptions = {
+    method: 'get',
+    responseType: 'arraybuffer',
+    maxContentLength: 10000000,
+    headers: {
+        Accept: '*/*',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
+        + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+    },
+};
+
+/**
+ * Find feed url in the <link rel="alternate" type="application/rss+xml"...> tag
+ * see: https://www.petefreitag.com/item/384.cfm
+ * @param {string} html - HTML page
+ * @param {string} baseUrl
+ */
+const findFeedUrl = (html, baseUrl) => {
+    const dom = new jsdom.JSDOM(html);
+
+    const rss = dom.window.document.querySelector('link[type="application/rss+xml"]');
+    const atom = dom.window.document.querySelector('link[type="application/atom+xml"]');
+    if (rss) {
+        const href = rss.getAttribute('href');
+        if (href) {
+            const url = new URL(href, baseUrl).href;
+            if (url) return url;
+        }
+    }
+    if (atom) {
+        const href = atom.getAttribute('href');
+        if (href) {
+            const url = new URL(href, baseUrl).href;
+            if (url) return url;
+        }
+    }
+    return null;
+};
 
 /**
  * Some feeds have an encoding in their declaration (like <?xml version="1.0" encoding="windows-1251"?>)
@@ -12,10 +51,11 @@ const MAX_ITEMS = 1000;
  * The function was taken from github.com/szwacz/sputnik:
  * https://github.com/szwacz/sputnik/blob/5a68359a920aa3c1be4684c1f12b0d0d64e5745d/app/core/helpers/feed_parser.js#L42
  * @param {ArrayBuffer} bodyBuf
+ * @param {String} [bodyStr]
  * @return {String}
  */
-const normalizeEncoding = (bodyBuf) => {
-    let body = bodyBuf.toString();
+const normalizeEncoding = (bodyBuf, bodyStr) => {
+    let body = bodyStr || bodyBuf.toString();
     let encoding;
 
     const xmlDeclaration = body.match(/^<\?xml .*\?>/);
@@ -41,33 +81,29 @@ const normalizeEncoding = (bodyBuf) => {
  * Generate readable stream with content on given url
  * @param {string} url
  * @param {object} [options={}] - axios options
- * @returns {Promise<stream>}
+ * @param {boolean} [tryFindFeedUrl=false] - if true indicates that given url could be an HTML page
+ * and url of the feed could be contained in <link> tag of the HTML page
+ * @returns {Promise<{stream, feedUrl}>}
  */
-function getFeedStream(url, options = {}) {
-    const axiosOptions = {
-        method: 'get',
-        responseType: 'arraybuffer',
-        maxContentLength: 10000000,
-        headers: {
-            Accept: '*/*',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
-            + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
-        },
-        ...options,
-    };
+async function getFeedStream(url, options = {}, tryFindFeedUrl = false) {
+    const { data: bufData } = await axios({ ...defaultAxiosOptions, ...options, url });
 
-    return axios({
-        ...axiosOptions,
-        url,
-    })
-        .then(response => response.data)
-        .then(buf => normalizeEncoding(buf))
-        .then((data) => {
-            const stream = new Readable();
-            stream.push(data);
-            stream.push(null);
-            return stream;
-        });
+    const body = bufData.toString();
+
+    let feedUrl;
+    if (tryFindFeedUrl) {
+        feedUrl = findFeedUrl(body, url);
+        if (feedUrl) {
+            return getFeedStream(feedUrl, options, false);
+        }
+    }
+
+    const data = normalizeEncoding(bufData, body);
+
+    const feedStream = new Readable();
+    feedStream.push(data);
+    feedStream.push(null);
+    return { feedStream, feedUrl: feedUrl || url };
 }
 
 /**
@@ -142,7 +178,7 @@ function parseFeed(stream, existingItems = [{ pubDate: 0 }], filter) {
  * @returns {FeedObject}
  */
 async function getNewItems(url, existingItems = [{ pubDate: 0 }], filter) {
-    const feedStream = await getFeedStream(url);
+    const { feedStream } = await getFeedStream(url);
     const feed = await parseFeed(feedStream,
         existingItems.length ? existingItems : [{ pubDate: 0 }],
         filter);
