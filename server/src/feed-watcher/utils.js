@@ -12,7 +12,19 @@ function filterMeta(feedMeta) {
 }
 
 function filterAndClearHtml(item) {
-    const cleanHtml = dirty => sanitizeHtml(dirty, { allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']) });
+    const imgSchemes = ['https', 'http'];
+    const cleanHtml = dirty => sanitizeHtml(dirty, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+        allowedSchemesByTag: { img: imgSchemes },
+        // Only allow imgs with absolute paths
+        exclusiveFilter(frame) {
+            if (frame.tag === 'img') {
+                const { src } = frame.attribs;
+                return !src || imgSchemes.every(scheme => !src.startsWith(`${scheme}://`));
+            }
+            return false;
+        },
+    });
 
     const fields = ['title', 'description', 'summary', 'pubDate', 'link', 'guid'];
     const encFields = ['url', 'type', 'length'];

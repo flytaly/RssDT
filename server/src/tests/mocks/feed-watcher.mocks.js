@@ -9,8 +9,18 @@ const feed = {
 const oldFeedItems = [{ guid: `${moduleName}_guid1`, pubDate: 'Fri, 30 Nov 2018 20:00:00 GMT' }];
 const newFeedItems = [{ guid: `${moduleName}_guid2`, pubDate: 'Fri, 30 Nov 2018 22:00:00 GMT' }];
 
-const descriptionDirty = '<b class="some-class">description</b><video width="320"><source src="movie.mp4" type="video/mp4"></video><script>document.getElementById("id").innerHTML = "Hello";</script><ul><li>List Element</li></ul>';
-const descriptionClean = '<b>description</b><ul><li>List Element</li></ul>';
+const descriptionDirty = '<b class="some-class">description</b>'
+    + '<img></img>'
+    + '<img src="javascript:alert(\'!\')"></img>'
+    + '<img src="http://absolute.path/img.jpg"></img>'
+    + '<img src="relative.path"></img>'
+    + '<video width="320"><source src="movie.mp4"'
+    + 'type="video/mp4"></video>'
+    + '<script>document.getElementById("id").innerHTML = "Hello";</script>'
+    + '<ul><li>List Element</li></ul>';
+const descriptionClean = '<b>description</b>'
+    + '<img src="http://absolute.path/img.jpg" />'
+    + '<ul><li>List Element</li></ul>';
 const item = {
     title: 'title',
     description: descriptionDirty,
