@@ -21,7 +21,7 @@ const SmallScreen = styled.div`
 const BigScreen = styled.div`
     display: block;
     width: 23%;
-    min-width: 15rem;
+    min-width: 23%;
     padding: 2rem 0 1rem 0;
     border-bottom-left-radius: 9px;
     background-color: ${props => props.theme.feedListBgColor};
