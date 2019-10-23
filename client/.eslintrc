@@ -44,6 +44,7 @@
             "required": {
               "some": [ "nesting", "id"  ]
             }
-          }]
+          }],
+        "arrow-parens": "off"
     }
 }
