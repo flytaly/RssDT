@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import logoBlackIcon from '../static/icon-black.png';
+import logoBlackIcon from '../public/static/icon-black.png';
 
 const LinkWithLogo = styled.a`
         display: inline-flex;

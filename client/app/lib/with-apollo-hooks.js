@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import initApollo from './init-apollo';
 
 export default App => class Apollo extends React.Component {
+    // eslint-disable-next-line react/static-property-placement
     static displayName = 'withApollo(App)'
 
     static async getInitialProps(ctx) {

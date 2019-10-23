@@ -56,8 +56,7 @@ const AddNewFeedModal = () => {
                     <Message color={error ? 'red' : 'green'}>
                         {error && <GraphQLError error={error} />}
                         {success}
-                    </Message>)
-                }
+                    </Message>)}
                 <AddFeedForm setMessages={setMessages} user={user} />
             </FormContainer>
         </ReactModal>

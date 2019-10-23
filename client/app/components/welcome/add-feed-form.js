@@ -9,9 +9,9 @@ import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import Select from '../forms/select-with-icon';
 import periods, { periodNames } from '../../types/digest-periods';
-import RssIcon from '../../static/rss-square.svg';
-import EmailIcon from '../../static/envelope.svg';
-import ClockIcon from '../../static/clock.svg';
+import RssIcon from '../../public/static/rss-square.svg';
+import EmailIcon from '../../public/static/envelope.svg';
+import ClockIcon from '../../public/static/clock.svg';
 
 const ADD_FEED_MUTATION = gql`
   mutation ADD_FEED_MUTATION(

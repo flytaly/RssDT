@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
-import PasswordIcon from '../../static/key.svg';
+import PasswordIcon from '../../public/static/key.svg';
 
 const SET_PASSWORD_MUTATION = gql`
   mutation SET_PASSWORD_MUTATION(

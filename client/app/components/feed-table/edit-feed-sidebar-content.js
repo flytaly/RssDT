@@ -7,7 +7,7 @@ import { useMutation, useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import get from 'lodash.get';
 import { GreenButtonLink, NoStylesButton, SubmitButton } from '../styled/buttons';
-import ArrowLeft from '../../static/arrow-left.svg';
+import ArrowLeft from '../../public/static/arrow-left.svg';
 import periods, { periodNames } from '../../types/digest-periods';
 import { ME_QUERY } from '../../queries';
 

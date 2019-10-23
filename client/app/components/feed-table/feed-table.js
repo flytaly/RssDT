@@ -7,8 +7,8 @@ import get from 'lodash.get';
 import ReactModal from 'react-modal';
 import { Table, Th, Tr, Td, ButtonWithIcon } from './styled-table-parts';
 import { DeleteButton, CancelButton } from '../styled/buttons';
-import TrashIcon from '../../static/trash.svg';
-import EditIcon from '../../static/edit.svg';
+import TrashIcon from '../../public/static/trash.svg';
+import EditIcon from '../../public/static/edit.svg';
 import EditFeedSidebar from './edit-feed-sidebar';
 import { periodNames } from '../../types/digest-periods';
 import { MY_FEEDS_QUERY, ME_QUERY } from '../../queries';
@@ -114,7 +114,7 @@ const ResponsiveTable = () => {
     }
 
     return (
-        <React.Fragment>
+        <>
             <Table>
                 <Tr key="header">
                     <Th>FEED</Th>
@@ -181,7 +181,7 @@ const ResponsiveTable = () => {
                 </DeleteButton>
             </ReactModal>
             <EditFeedSidebar editFeed={editFeed} setEditFeed={setEditFeed} />
-        </React.Fragment>
+        </>
     );
 };
 

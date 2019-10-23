@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SpinnerIcon from '../static/spinner.svg';
+import SpinnerIcon from '../public/static/spinner.svg';
 
 const StyledSpinner = styled.div`
     width: 2rem;

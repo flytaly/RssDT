@@ -19,13 +19,12 @@ const CardHeader = ({ me }) => (
     <Menu data-testid="card-header">
         <li><a href="/">Add new feed</a></li>
         {!me
-            ? <li><Link prefetch href="/login"><a href="/login">Log in</a></Link></li>
+            ? <li><Link href="/login"><a href="/login">Log in</a></Link></li>
             : (
                 <>
                     <li><Link href="/feeds/manage"><a href="/feeds/manage">Manage</a></Link></li>
                     <li><Link href="/logout"><a href="/logout">Log out</a></Link></li>
-                </>)
-        }
+                </>)}
     </Menu>
 );
 

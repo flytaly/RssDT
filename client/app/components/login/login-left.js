@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { StyledLightHalf as CardHalf } from '../styled/card-half';
 import GraphQLError from '../graphql-error';
-import AlertCircleIcon from '../../static/alert-circle.svg';
-import CheckCircleIcon from '../../static/check-circle.svg';
+import AlertCircleIcon from '../../public/static/alert-circle.svg';
+import CheckCircleIcon from '../../public/static/check-circle.svg';
 import { Message, MessageLine, SuccessMessage, ErrorMessage, useEmergeTransition } from '../styled/animated-messages';
 import formTypes from './form-types';
 

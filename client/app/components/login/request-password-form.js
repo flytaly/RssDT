@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
-import EmailIcon from '../../static/envelope.svg';
+import EmailIcon from '../../public/static/envelope.svg';
 
 const REQUEST_PASSWORD_CHANGE = gql`
   mutation REQUEST_PASSWORD_CHANGE(

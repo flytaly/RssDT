@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { SubmitButton } from '../styled/buttons';
 import Input from '../forms/input-with-icon';
 import StyledForm from './styled-login-form';
-import EmailIcon from '../../static/envelope.svg';
-import PasswordIcon from '../../static/key.svg';
+import EmailIcon from '../../public/static/envelope.svg';
+import PasswordIcon from '../../public/static/key.svg';
 import ME_QUERY, { meFields } from '../../queries/me-query';
 
 export const updateMeAfterSignIn = (dataProxy, mutationResult) => {

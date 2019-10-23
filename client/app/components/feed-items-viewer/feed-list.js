@@ -6,7 +6,7 @@ import { withRouter } from 'next/router';
 import { useQuery } from 'react-apollo-hooks';
 import PropTypes from 'prop-types';
 import { MY_FEEDS_QUERY } from '../../queries';
-import PlusIcon from '../../static/plus.svg';
+import PlusIcon from '../../public/static/plus.svg';
 import { NoStylesButton } from '../styled/buttons';
 import { useDispatch, types } from '../state';
 

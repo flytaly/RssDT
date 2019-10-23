@@ -81,8 +81,7 @@ const RequestUnsubscribe = ({ id }) => {
                             </h2>
                             <DeleteButton onClick={clickHandler} disabled={loadingRequest}>Unsubscribe</DeleteButton>
                         </>
-                    )
-                }
+                    )}
             </Container>
         </StyledCard>
     );

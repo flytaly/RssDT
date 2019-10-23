@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { withRouter } from 'next/router';
 import { removeButtonStylesMixin, scaleOnHoverActiveMixin } from './styled/buttons';
-import UserCircleIcon from '../static/user-circle-solid.svg';
+import UserCircleIcon from '../public/static/user-circle-solid.svg';
 import { SettingsTitles } from './settings';
 
 const Header = styled.header`

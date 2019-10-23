@@ -61,8 +61,7 @@ const Help = () => (
                         {contentList.map(({ id, headerText }) => (
                             <li key={id}>
                                 <a href={`#${id}`}>{headerText}</a>
-                            </li>))
-                        }
+                            </li>))}
                     </ul>
                 </TableOfContent>)}
         </Sticky>

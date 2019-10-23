@@ -102,7 +102,7 @@ const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable
             {description ? <ElementBody dangerouslySetInnerHTML={{ __html: description }} /> : null}
             {enclosures && enclosures.length
                 ? (
-                    <React.Fragment>
+                    <>
                         <b>Attachments:</b>
                         <Enclosures>
                             {enclosures.map(enc => (
@@ -111,9 +111,8 @@ const FeedItemsListElement = ({ item, locale, timeZone, filterShare, shareEnable
                                     <span>{` (${enc.type})`}</span>
                                 </li>))}
                         </Enclosures>
-                    </React.Fragment>)
-                : null
-            }
+                    </>)
+                : null}
         </ListElement>);
 };
 

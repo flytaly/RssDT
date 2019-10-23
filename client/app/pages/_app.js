@@ -1,5 +1,5 @@
 import React from 'react';
-import App, { Container } from 'next/app';
+import App from 'next/app';
 // import { ApolloProvider } from 'react-apollo';
 // import withApollo from '../lib/with-apollo';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
@@ -21,15 +21,13 @@ class MyApp extends App {
         const { Component, pageProps, apolloClient } = this.props;
 
         return (
-            <Container>
-                <ApolloHooksProvider client={apolloClient}>
-                    <StateProvider>
-                        <Page>
-                            <Component {...pageProps} />
-                        </Page>
-                    </StateProvider>
-                </ApolloHooksProvider>
-            </Container>
+            <ApolloHooksProvider client={apolloClient}>
+                <StateProvider>
+                    <Page>
+                        <Component {...pageProps} />
+                    </Page>
+                </StateProvider>
+            </ApolloHooksProvider>
         );
     }
 }
