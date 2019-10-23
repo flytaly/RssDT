@@ -113,14 +113,22 @@ const getSubRow = (page) => {
 const BigCardHeader = ({ page, router }) => {
     const getTitle = () => {
         if (page === 'settings') return 'Settings';
-        return 'Subscriptions';
+        return 'Feeds';
     };
 
     return (
         <Header>
             <HeaderRow>
                 <Title>{getTitle()}</Title>
-                {page !== 'manage' && page !== 'view' && <Link href="/feeds"><a href="/feeds">Feeds</a></Link>}
+                {/* page !== 'manage' && page !== 'view' &&  */(
+                    <>
+                        <Link href="/feeds">
+                            <a href="/feeds">Feeds</a>
+                        </Link>
+                        <Link href="/settings">
+                            <a href="/settings">Settings</a>
+                        </Link>
+                    </>)}
                 <Menu>
                     <MenuButtonModified><UserCircleIcon title="Profile" /></MenuButtonModified>
                     <MenuListModified>
