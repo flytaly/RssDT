@@ -32,7 +32,7 @@ const Description = styled.span`
 const Logo = () => (
     <Link href="/">
         <LinkWithLogo href="/">
-            <Icon src={logoBlackIcon} />
+            <Icon src={logoBlackIcon} alt="Logo" />
             <div>
                 <Title>FeedMailu</Title>
                 <Description>feed to email aggregator</Description>

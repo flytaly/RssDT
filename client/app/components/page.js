@@ -17,8 +17,8 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
   }
   body {
-    background: ${props => props.theme.pageBackground};
-    color: ${props => props.theme.fontColor};
+    background: ${(props) => props.theme.pageBackground};
+    color: ${(props) => props.theme.fontColor};
     padding: 0;
     margin: 0;
     font-size: 1.3rem;

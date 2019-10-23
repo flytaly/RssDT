@@ -9,6 +9,7 @@ import RequestPasswordForm, { REQUEST_PASSWORD_CHANGE } from '../components/logi
 import SetPasswordForm, { SET_PASSWORD_MUTATION } from '../components/login/set-password-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import { user, ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
+import Page from '../components/page';
 
 expect.extend(toHaveNoViolations);
 
@@ -36,9 +37,11 @@ describe('Log In form', () => {
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
         render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <LoginCard />
+                </ApolloMockedProvider>
+            </Page>,
             { container },
         );
         let result;
@@ -49,9 +52,11 @@ describe('Log In form', () => {
 
     test('should replace url after successful logging in', async () => {
         const { getByLabelText, getByTestId } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <LoginCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const submitBtn = getByText(getByTestId('login').querySelector('button'), /log in/i);
         const inputs = {
@@ -78,9 +83,11 @@ describe('Log In form', () => {
         }];
 
         const { getByLabelText, getByTestId } = render(
-            <ApolloMockedProvider mocks={errorMocks}>
-                <LoginCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={errorMocks}>
+                    <LoginCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const submitBtn = getByText(getByTestId('login').querySelector('button'), /log in/i);
         const inputs = {
@@ -100,9 +107,11 @@ describe('Log In form', () => {
 
     test('should have link to request password form', () => {
         const { container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <LoginCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const link = getByText(container, /I forgot or don't have password/i);
         expect(link).toHaveAttribute('href', '/request-reset');
@@ -117,9 +126,11 @@ describe('Request password change form', () => {
 
     test('should render request password form with link to login form', () => {
         const { getByTestId, container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard form={formTypes.request_password} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <LoginCard form={formTypes.request_password} />
+                </ApolloMockedProvider>
+            </Page>,
         );
         expect(getByTestId('request_password')).toBeInTheDocument();
         const link = getByText(container, /back to log in form/i);
@@ -130,9 +141,11 @@ describe('Request password change form', () => {
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
         render(
-            <ApolloMockedProvider mocks={mocks}>
-                <RequestPasswordForm setMessages={() => {}} changeForm={() => {}} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <RequestPasswordForm setMessages={() => {}} changeForm={() => {}} />
+                </ApolloMockedProvider>
+            </Page>,
             { container },
         );
 
@@ -143,9 +156,11 @@ describe('Request password change form', () => {
 
     test('should send graphql query on submit', async () => {
         const { getByTestId, getByLabelText, container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <LoginCard form={formTypes.request_password} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <LoginCard form={formTypes.request_password} />
+                </ApolloMockedProvider>
+            </Page>,
         );
         expect(getByTestId('request_password')).toBeInTheDocument();
         fireEvent.change(getByLabelText(/email/i), { target: { value: values.email } });
@@ -171,9 +186,11 @@ describe('Set password form', () => {
     test('the form should not have accessibility violations', async () => {
         const container = document.createElement('div');
         render(
-            <ApolloMockedProvider mocks={setPasswordMocks}>
-                <SetPasswordForm setMessages={() => {}} token="token" />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={setPasswordMocks}>
+                    <SetPasswordForm setMessages={() => {}} token="token" />
+                </ApolloMockedProvider>
+            </Page>,
             { container },
         );
 
@@ -184,18 +201,22 @@ describe('Set password form', () => {
 
     test('should render set password form', () => {
         const { getByTestId } = render(
-            <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form={formTypes.set_password} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={setPasswordMocks}>
+                    <LoginCard token={token} form={formTypes.set_password} />
+                </ApolloMockedProvider>
+            </Page>,
         );
         expect(getByTestId('set_password')).toBeInTheDocument();
     });
 
     test('should show errors if password is invalid', async () => {
         const { getByLabelText, container } = render(
-            <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form={formTypes.set_password} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={setPasswordMocks}>
+                    <LoginCard token={token} form={formTypes.set_password} />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const inputs = {
             password: getByLabelText(/^Password/i),
@@ -213,9 +234,11 @@ describe('Set password form', () => {
 
     test('should send graphql query on submit', async () => {
         const { getByTestId, getByLabelText, container } = render(
-            <ApolloMockedProvider mocks={setPasswordMocks}>
-                <LoginCard token={token} form={formTypes.set_password} />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={setPasswordMocks}>
+                    <LoginCard token={token} form={formTypes.set_password} />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const inputs = {
             password: getByLabelText(/^Password/i),

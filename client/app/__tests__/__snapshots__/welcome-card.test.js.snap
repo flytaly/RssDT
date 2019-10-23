@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Snapshot should match snapshot 1`] = `
-.c0 {
+.c6 {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -25,7 +25,7 @@ exports[`Snapshot should match snapshot 1`] = `
   background: rgba(255,255,255,0.88);
 }
 
-.c0:before {
+.c6:before {
   content: " ";
   position: absolute;
   border-radius: 10px;
@@ -37,7 +37,7 @@ exports[`Snapshot should match snapshot 1`] = `
   background: url(/static/background_01.jpg) #FFFFFF;
 }
 
-.c1 {
+.c7 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -54,7 +54,7 @@ exports[`Snapshot should match snapshot 1`] = `
   padding: 1rem 3rem;
 }
 
-.c4 {
+.c10 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -74,7 +74,7 @@ exports[`Snapshot should match snapshot 1`] = `
   border-radius: 10px;
 }
 
-.c2 {
+.c8 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -91,18 +91,18 @@ exports[`Snapshot should match snapshot 1`] = `
   will-change: transform,opacity;
 }
 
-.c2:hover {
+.c8:hover {
   box-shadow: 0rem 5px 10px 0px rgba(0,0,0,0.35);
 }
 
-.c2 svg {
+.c8 svg {
   height: 1.6em;
   width: 1.6em;
   min-width: 1.6em;
   margin-right: 1rem;
 }
 
-.c3 {
+.c9 {
   background-color: #707070;
   height: 100%;
   min-width: 3px;
@@ -110,7 +110,7 @@ exports[`Snapshot should match snapshot 1`] = `
   border-radius: 10px;
 }
 
-.c12 {
+.c18 {
   width: 100%;
   padding: 1rem 0;
   margin-top: 1rem;
@@ -122,25 +122,25 @@ exports[`Snapshot should match snapshot 1`] = `
   cursor: pointer;
 }
 
-.c12:disabled,
-.c12 [disabled] {
+.c18:disabled,
+.c18 [disabled] {
   background-color: #ae7f9e;
   cursor: default;
 }
 
-.c12:focus,
-.c12:hover:not(:disabled) {
+.c18:focus,
+.c18:hover:not(:disabled) {
   outline: none;
   box-shadow: 0 0 1.5rem #ac247d;
 }
 
-.c12:active:not(:disabled) {
+.c18:active:not(:disabled) {
   -webkit-transform: scale(0.96);
   -ms-transform: scale(0.96);
   transform: scale(0.96);
 }
 
-.c8 {
+.c14 {
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -160,20 +160,20 @@ exports[`Snapshot should match snapshot 1`] = `
   border-radius: 30px;
 }
 
-.c8:hover {
+.c14:hover {
   border-width: 2px;
 }
 
-.c8 svg {
+.c14 svg {
   fill: #455765;
 }
 
-.c9 {
+.c15 {
   width: 2rem;
   height: 2rem;
 }
 
-.c10 {
+.c16 {
   -moz-appearance: none;
   -webkit-appearance: none;
   -webkit-appearance: none;
@@ -191,7 +191,7 @@ exports[`Snapshot should match snapshot 1`] = `
   background-color: #e6e6e6;
 }
 
-.c11 {
+.c17 {
   -moz-appearance: none;
   -webkit-appearance: none;
   -webkit-appearance: none;
@@ -211,7 +211,7 @@ exports[`Snapshot should match snapshot 1`] = `
   background-color: #e6e6e6;
 }
 
-.c6 {
+.c12 {
   -webkit-align-self: center;
   -ms-flex-item-align: center;
   align-self: center;
@@ -232,13 +232,13 @@ exports[`Snapshot should match snapshot 1`] = `
   width: 30rem;
 }
 
-.c7 {
+.c13 {
   -webkit-align-self: center;
   -ms-flex-item-align: center;
   align-self: center;
 }
 
-.c5 {
+.c11 {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -252,8 +252,118 @@ exports[`Snapshot should match snapshot 1`] = `
   align-self: flex-end;
 }
 
-.c5 li {
+.c11 li {
   margin-left: 1rem;
+}
+
+.c2 {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: rgba(255,255,255,0.66);
+  padding: 0.2rem 1rem;
+  color: inherit;
+  -webkit-text-decoration: none;
+  text-decoration: none;
+}
+
+.c3 {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: 1rem;
+}
+
+.c4 {
+  font-weight: bold;
+  font-size: 1.8rem;
+  margin-right: 1rem;
+}
+
+.c5 {
+  color: dimgray;
+  font-size: 1.2rem;
+}
+
+.c20 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.c21 {
+  display: inline-block;
+  font-size: 1.3rem;
+  color: #b2b2b2;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.c21 > span {
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.c21 svg {
+  vertical-align: middle;
+}
+
+.c21 a:active,
+.c21 a:visited,
+.c21 a:link,
+.c21 a {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  color: inherit;
+}
+
+.c21 a:hover {
+  color: #dddddd;
+}
+
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.c1 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
+
+.c19 {
+  -webkit-flex: 1 0 1rem;
+  -ms-flex: 1 0 1rem;
+  flex: 1 0 1rem;
 }
 
 <div
@@ -262,159 +372,230 @@ exports[`Snapshot should match snapshot 1`] = `
   <div
     class="c1"
   >
-    <div
+    <a
       class="c2"
-      style="transform: translate3d(0, 100%, 0); opacity: 0;"
+      href="/"
     >
-      <div
+      <img
+        alt="Logo"
         class="c3"
+        src="/static/icon-black.png"
       />
-      FeedMailu aggregates RSS or Atom feeds into digests and send them to you via email
-    </div>
+      <div>
+        <span
+          class="c4"
+        >
+          FeedMailu
+        </span>
+        <span
+          class="c5"
+        >
+          feed to email aggregator
+        </span>
+      </div>
+    </a>
     <div
-      class="c2"
-      style="transform: translate3d(0, 100%, 0); opacity: 0;"
-    >
-      <div
-        class="c3"
-      />
-      To start receiving digests just enter an address of desired feed, email and digest period
-    </div>
-  </div>
-  <div
-    class="c4"
-  >
-    <ul
-      class="c5"
-      data-testid="card-header"
-    >
-      <li>
-        <a
-          href="/"
-        >
-          Add new feed
-        </a>
-      </li>
-      <li>
-        <a
-          href="/login"
-        >
-          Log in
-        </a>
-      </li>
-    </ul>
-    <form
       class="c6"
     >
-      <h2
+      <div
         class="c7"
       >
-        Add a feed
-      </h2>
-      <label
-        class="c8"
-        title="The RSS or Atom feed url"
-      >
         <div
-          class="c9"
+          class="c8"
+          style="transform: translate3d(0, 100%, 0); opacity: 0;"
         >
-          <svg
-            data-file-name="SvgRssSquare"
-            style="width: 100%; height: 100%;"
+          <div
+            class="c9"
           />
+          FeedMailu aggregates RSS or Atom feeds into digests and send them to you via email
         </div>
-        <input
-          aria-label="The RSS or Atom feed url"
-          class="c10"
-          id="url"
-          placeholder="http://..."
-          required=""
-          title="The RSS or Atom feed url"
-          type="url"
-          value="http://"
-        />
-      </label>
-      <label
-        class="c8"
-        title="Email address"
-      >
         <div
-          class="c9"
+          class="c8"
+          style="transform: translate3d(0, 100%, 0); opacity: 0;"
         >
-          <svg
-            data-file-name="SvgEnvelope"
-            style="width: 100%; height: 100%;"
+          <div
+            class="c9"
           />
+          To start receiving digests just enter an address of desired feed, email and digest period
         </div>
-        <input
-          aria-label="Email address"
-          class="c10"
-          id="email"
-          placeholder="Email"
-          required=""
-          title="Email address"
-          type="email"
-          value=""
-        />
-      </label>
-      <label
-        class="c8"
-        title="Select a digest period"
+      </div>
+      <div
+        class="c10"
       >
-        <div
-          class="c9"
-        >
-          <svg
-            data-file-name="SvgClock"
-            style="width: 100%; height: 100%;"
-          />
-        </div>
-        <select
-          aria-label="Select a digest period"
+        <ul
           class="c11"
-          id="period"
-          title="Select a digest period"
+          data-testid="card-header"
         >
-          <option
-            value="EVERYHOUR"
+          <li>
+            <a
+              href="/"
+            >
+              Add new feed
+            </a>
+          </li>
+          <li>
+            <a
+              href="/login"
+            >
+              Log in
+            </a>
+          </li>
+        </ul>
+        <form
+          class="c12"
+        >
+          <h2
+            class="c13"
           >
-            Hourly digest
-          </option>
-          <option
-            value="EVERY2HOURS"
+            Add a feed
+          </h2>
+          <label
+            class="c14"
+            title="The RSS or Atom feed url"
           >
-            2-hourly digest
-          </option>
-          <option
-            value="EVERY3HOURS"
+            <div
+              class="c15"
+            >
+              <svg
+                data-file-name="SvgRssSquare"
+                style="width: 100%; height: 100%;"
+              />
+            </div>
+            <input
+              aria-label="The RSS or Atom feed url"
+              class="c16"
+              id="url"
+              placeholder="http://..."
+              required=""
+              title="The RSS or Atom feed url"
+              type="url"
+              value="http://"
+            />
+          </label>
+          <label
+            class="c14"
+            title="Email address"
           >
-            3-hourly digest
-          </option>
-          <option
-            value="EVERY6HOURS"
+            <div
+              class="c15"
+            >
+              <svg
+                data-file-name="SvgEnvelope"
+                style="width: 100%; height: 100%;"
+              />
+            </div>
+            <input
+              aria-label="Email address"
+              class="c16"
+              id="email"
+              placeholder="Email"
+              required=""
+              title="Email address"
+              type="email"
+              value=""
+            />
+          </label>
+          <label
+            class="c14"
+            title="Select a digest period"
           >
-            6-hourly digest
-          </option>
-          <option
-            value="EVERY12HOURS"
+            <div
+              class="c15"
+            >
+              <svg
+                data-file-name="SvgClock"
+                style="width: 100%; height: 100%;"
+              />
+            </div>
+            <select
+              aria-label="Select a digest period"
+              class="c17"
+              id="period"
+              title="Select a digest period"
+            >
+              <option
+                value="EVERYHOUR"
+              >
+                Hourly digest
+              </option>
+              <option
+                value="EVERY2HOURS"
+              >
+                2-hourly digest
+              </option>
+              <option
+                value="EVERY3HOURS"
+              >
+                3-hourly digest
+              </option>
+              <option
+                value="EVERY6HOURS"
+              >
+                6-hourly digest
+              </option>
+              <option
+                value="EVERY12HOURS"
+              >
+                12-hourly digest
+              </option>
+              <option
+                selected=""
+                value="DAILY"
+              >
+                Daily digest
+              </option>
+            </select>
+          </label>
+          <button
+            class="c18"
+            type="submit"
           >
-            12-hourly digest
-          </option>
-          <option
-            selected=""
-            value="DAILY"
-          >
-            Daily digest
-          </option>
-        </select>
-      </label>
-      <button
-        class="c12"
-        type="submit"
+            SUBSCRIBE
+          </button>
+        </form>
+      </div>
+    </div>
+    <div
+      class="c19"
+    />
+    <footer
+      class="c20"
+    >
+      <div
+        class="c21"
       >
-        SUBSCRIBE
-      </button>
-    </form>
+        <span>
+          <a
+            href="/help"
+          >
+            Help
+          </a>
+        </span>
+        <span>
+          <a
+            href="mailto:support@feedmailu.com"
+          >
+            Contact
+          </a>
+        </span>
+      </div>
+      <div
+        class="c21"
+      >
+        <span>
+          2019
+        </span>
+        <span>
+          <a
+            href="https://github.com/flytaly/"
+          >
+            <span>
+              Vitaly Yerofeyevsky
+            </span>
+          </a>
+        </span>
+      </div>
+    </footer>
   </div>
 </div>
 `;

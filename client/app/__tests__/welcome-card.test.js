@@ -6,6 +6,7 @@ import { ADD_FEED_MUTATION } from '../components/welcome/add-feed-form';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import periods from '../types/digest-periods';
 import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
+import Page from '../components/page';
 
 expect.extend(toHaveNoViolations);
 
@@ -40,9 +41,11 @@ describe('Add feed form', () => {
         // https://github.com/nickcolley/jest-axe/issues/56#issuecomment-476872378
         const container = document.createElement('div');
         render(
-            <ApolloMockedProvider mocks={mocks}>
-                <WelcomeCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <WelcomeCard />
+                </ApolloMockedProvider>
+            </Page>,
             { container },
         );
 
@@ -56,9 +59,11 @@ describe('Add feed form', () => {
 
     test('should show form errors', async () => {
         const { getByLabelText, container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <WelcomeCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <WelcomeCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
         const inputs = {
@@ -84,9 +89,11 @@ describe('Submitting data', () => {
         const {
             getByLabelText, getByTestId, container,
         } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <WelcomeCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <WelcomeCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
         const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
 
@@ -126,9 +133,11 @@ describe('Submitting data', () => {
         }, ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK];
 
         const { getByLabelText, getByTestId, container } = render(
-            <ApolloMockedProvider mocks={errorMocks}>
-                <WelcomeCard />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={errorMocks}>
+                    <WelcomeCard />
+                </ApolloMockedProvider>
+            </Page>,
         );
 
         const submitBtn = getByText(container.querySelector('form'), /subscribe/i);
@@ -156,11 +165,13 @@ describe('Snapshot', () => {
         const { default: theme } = require('../components/themes/default');
 
         const { container } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <ThemeProvider theme={theme}>
-                    <WelcomeCard />
-                </ThemeProvider>
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <ThemeProvider theme={theme}>
+                        <WelcomeCard />
+                    </ThemeProvider>
+                </ApolloMockedProvider>
+            </Page>,
         );
 
         expect(container.firstChild).toMatchSnapshot();

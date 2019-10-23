@@ -5,15 +5,18 @@ import CardHeader from '../components/card-header';
 import ME_QUERY from '../queries/me-query';
 import withAuth from '../components/decorators/withAuth';
 import { ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK } from '../test-utils/qgl-mocks';
+import Page from '../components/page';
 
 describe('Navigation menu', () => {
     const HeaderWithAuth = withAuth(false)(CardHeader);
 
     test('should have "Log out" link if user is logged in', async () => {
         const { queryByText } = render(
-            <ApolloMockedProvider mocks={[ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK]}>
-                <HeaderWithAuth />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={[ME_QUERY_MOCK, UPDATE_MY_INFO_MOCK]}>
+                    <HeaderWithAuth />
+                </ApolloMockedProvider>
+            </Page>,
         );
         await wait(() => {
             expect(queryByText(/log in/i)).toBeNull;
@@ -32,9 +35,12 @@ describe('Navigation menu', () => {
         UPDATE_MY_INFO_MOCK,
         ];
         const { queryByText } = render(
-            <ApolloMockedProvider mocks={mocks}>
-                <HeaderWithAuth />
-            </ApolloMockedProvider>,
+            <Page>
+                <ApolloMockedProvider mocks={mocks}>
+                    <HeaderWithAuth />
+                </ApolloMockedProvider>
+            </Page>
+            ,
         );
         await wait(() => {
             expect(queryByText(/log in/i)).toBeInTheDocument();

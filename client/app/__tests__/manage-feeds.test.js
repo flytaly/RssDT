@@ -6,6 +6,7 @@ import { MY_FEEDS_QUERY } from '../queries';
 import ApolloMockedProvider from '../test-utils/apollo-mocked-provider';
 import types from '../types/digest-periods';
 import { StateProvider } from '../components/state';
+import Page from '../components/page';
 
 const getByNameAttribute = queryHelpers.queryByAttribute.bind(
     null,
@@ -42,11 +43,13 @@ const mocks = [{
 
 describe('Manage feeds', () => {
     const component = (
-        <ApolloMockedProvider mocks={mocks}>
-            <StateProvider>
-                <ManageFeeds />
-            </StateProvider>
-        </ApolloMockedProvider>);
+        <Page>
+            <ApolloMockedProvider mocks={mocks}>
+                <StateProvider>
+                    <ManageFeeds />
+                </StateProvider>
+            </ApolloMockedProvider>
+        </Page>);
 
     const getContainer = async () => {
         let container;
