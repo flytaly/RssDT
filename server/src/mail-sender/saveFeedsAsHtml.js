@@ -1,7 +1,7 @@
 const fs = require('fs');
 const { URL } = require('url');
 const db = require('../bind-prisma');
-const { composeHTML } = require('./compose-mail');
+const { composeHTML, composeTXT } = require('./compose-mail');
 
 /** Converts feeds with item to HTML and saves in folder "digest". */
 const generateHTML = async () => {
@@ -35,6 +35,20 @@ const generateHTML = async () => {
             }
             const filename = `${idx}-${new URL(feed.url).hostname}`;
             fs.writeFileSync(`${dir}/${filename}.html`, html);
+        }
+
+        for (const [idx, feed] of feeds.entries()) {
+            const txt = composeTXT(feed, feed.items, {
+                withContentTable: 'DEFAULT',
+                itemBody: 'DEFAULT',
+                attachments: 'DEFAULT',
+            });
+            const dir = `${__dirname}/digests`;
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+            }
+            const filename = `${idx}-${new URL(feed.url).hostname}`;
+            fs.writeFileSync(`${dir}/${filename}.txt`, txt);
         }
     } catch (e) {
         console.error(e);

@@ -3,6 +3,8 @@ const url = require('url');
 const moment = require('moment-timezone');
 const themes = require('./themes');
 const share = require('./share');
+const { htmlToTxt } = require('../feed-watcher/utils');
+
 /**
  * @typedef {Object} enclosure
  * @property {String} type
@@ -48,7 +50,6 @@ const getImageFromEnclosures = (enclosures) => {
  * @return {{html: String, errors: Array}}
  */
 const composeHTML = (info, feedItems, userFeed = {}) => {
-    /* eslint-disable no-param-reassign */
     const {
         id: userFeedId = '',
         user: {
@@ -71,14 +72,15 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
 
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
-    const items = feedItems.reduce((acc, item) => {
+    const items = feedItems.reduce((acc, _item) => {
+        const item = { ..._item };
         // if there is no image try to find it in enclosures. Many feeds save images in enclosures.
         if (!item.imageUrl) { item.imageUrl = getImageFromEnclosures(item.enclosures); }
 
         if (!withAttachments) item.enclosures = [];
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
 
-        item.pubDate = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
+        item.date = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
         item.share = shareEnable
             ? share
                 //  Empty filterShare array means nothing should be filtered!
@@ -99,4 +101,37 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
     return mjml2html(header + tableOfContent + items + footer, { minify: true });
 };
 
-module.exports = { composeHTML };
+const composeTXT = (info, feedItems, userFeed = {}) => {
+    const {
+        id: userFeedId = '',
+        user: {
+            timeZone = 'GMT',
+            locale = 'en',
+            itemBodyDefault = true,
+            attachmentsDefault = true,
+        } = {},
+        itemBody = 'DEFAULT',
+        attachments = 'DEFAULT',
+    } = userFeed;
+
+    const withItemBody = itemBody === 'DEFAULT' ? itemBodyDefault : itemBody === 'ENABLE';
+    const withAttachments = attachments === 'DEFAULT' ? attachmentsDefault : attachments === 'ENABLE';
+
+    const header = `${info.title} digest\n`;
+    const items = feedItems.reduce((acc, _item) => {
+        const item = { ..._item };
+
+        if (!withAttachments) item.enclosures = [];
+        if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
+        item.date = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
+        item.content = htmlToTxt(withItemBody ? item.summary || item.description : '');
+
+        return `${acc}\n\n${item.title}\n${item.date}\n${item.link}\n\n${item.content}\n`;
+    }, '');
+
+    const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?id=${userFeedId}`;
+    const footer = `\n\n========\nUnsubscribe: ${unsubscribeUrl}`;
+    return header + items + footer;
+};
+
+module.exports = { composeHTML, composeTXT };

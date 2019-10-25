@@ -32,7 +32,7 @@ describe('Build digest', () => {
     const data = {};
     const userFields = 'user { email timeZone locale shareEnable filterShare '
         + 'dailyDigestHour withContentTableDefault customSubject itemBodyDefault attachmentsDefault}';
-    const userFeedFields = 'id lastUpdate schedule withContentTable itemBody attachments';
+    const userFeedFields = 'id lastUpdate schedule withContentTable itemBody attachments theme';
 
     beforeAll(async () => {
         faker.seed(33);

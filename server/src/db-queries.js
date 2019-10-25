@@ -21,7 +21,7 @@ async function getActiveUserFeeds(feedUrl) {
             },
             activated: true,
         },
-    }, `{ id lastUpdate schedule withContentTable itemBody attachments ${userFields} }`);
+    }, `{ id lastUpdate schedule withContentTable itemBody attachments theme ${userFields} }`);
 }
 
 async function getFeedInfo(url) {

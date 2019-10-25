@@ -42,5 +42,9 @@ function filterAndClearHtml(item) {
     return obj;
 }
 
+function htmlToTxt(html) {
+    const cleanText = dirty => sanitizeHtml(dirty, { allowedTags: [] });
+    return cleanText(html);
+}
 
-module.exports = { filterAndClearHtml, filterMeta };
+module.exports = { filterAndClearHtml, htmlToTxt, filterMeta };

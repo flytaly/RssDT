@@ -1,5 +1,5 @@
 # source: http://localhost:4466/feedmailu/dev
-# timestamp: Fri Oct 25 2019 20:08:43 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Oct 25 2019 21:49:33 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2373,6 +2373,11 @@ type Subscription {
   feedItem(where: FeedItemSubscriptionWhereInput): FeedItemSubscriptionPayload
 }
 
+enum Themes {
+  DEFAULT
+  TEXT
+}
+
 type User implements Node {
   id: ID!
   email: String!
@@ -2391,6 +2396,7 @@ type User implements Node {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
 }
 
@@ -2421,6 +2427,7 @@ input UserCreateInput {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
@@ -2449,6 +2456,7 @@ input UserCreateWithoutFeedsInput {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
@@ -2479,6 +2487,7 @@ type UserFeed implements Node {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
 }
 
 """A connection to a list of items."""
@@ -2503,6 +2512,7 @@ input UserFeedCreateInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
 }
@@ -2529,6 +2539,7 @@ input UserFeedCreateWithoutFeedInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   user: UserCreateOneWithoutFeedsInput!
 }
 
@@ -2544,6 +2555,7 @@ input UserFeedCreateWithoutUserInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
 
@@ -2583,6 +2595,8 @@ enum UserFeedOrderByInput {
   itemBody_DESC
   attachments_ASC
   attachments_DESC
+  theme_ASC
+  theme_DESC
 }
 
 type UserFeedPreviousValues {
@@ -2599,6 +2613,7 @@ type UserFeedPreviousValues {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
 }
 
 input UserFeedScalarWhereInput {
@@ -2884,6 +2899,16 @@ input UserFeedScalarWhereInput {
 
   """All values that are not contained in given list."""
   attachments_not_in: [SettingState!]
+  theme: Themes
+
+  """All values that are not equal to given value."""
+  theme_not: Themes
+
+  """All values that are contained in given list."""
+  theme_in: [Themes!]
+
+  """All values that are not contained in given list."""
+  theme_not_in: [Themes!]
 }
 
 type UserFeedSubscriptionPayload {
@@ -2934,6 +2959,7 @@ input UserFeedUpdateInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
@@ -2949,6 +2975,7 @@ input UserFeedUpdateManyDataInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
 }
 
 input UserFeedUpdateManyMutationInput {
@@ -2962,6 +2989,7 @@ input UserFeedUpdateManyMutationInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
@@ -3004,6 +3032,7 @@ input UserFeedUpdateWithoutFeedDataInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
@@ -3018,6 +3047,7 @@ input UserFeedUpdateWithoutUserDataInput {
   withContentTable: SettingState
   itemBody: SettingState
   attachments: SettingState
+  theme: Themes
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
 
@@ -3326,6 +3356,16 @@ input UserFeedWhereInput {
 
   """All values that are not contained in given list."""
   attachments_not_in: [SettingState!]
+  theme: Themes
+
+  """All values that are not equal to given value."""
+  theme_not: Themes
+
+  """All values that are contained in given list."""
+  theme_in: [Themes!]
+
+  """All values that are not contained in given list."""
+  theme_not_in: [Themes!]
   feed: FeedWhereInput
   user: UserWhereInput
 }
@@ -3364,6 +3404,8 @@ enum UserOrderByInput {
   itemBodyDefault_DESC
   attachmentsDefault_ASC
   attachmentsDefault_DESC
+  themeDefault_ASC
+  themeDefault_DESC
   customSubject_ASC
   customSubject_DESC
 }
@@ -3385,6 +3427,7 @@ type UserPreviousValues {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
 }
 
@@ -3441,6 +3484,7 @@ input UserUpdateInput {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3459,6 +3503,7 @@ input UserUpdateManyMutationInput {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3487,6 +3532,7 @@ input UserUpdateWithoutFeedsDataInput {
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
   attachmentsDefault: Boolean
+  themeDefault: Themes
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3850,6 +3896,16 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   attachmentsDefault_not: Boolean
+  themeDefault: Themes
+
+  """All values that are not equal to given value."""
+  themeDefault_not: Themes
+
+  """All values that are contained in given list."""
+  themeDefault_in: [Themes!]
+
+  """All values that are not contained in given list."""
+  themeDefault_not_in: [Themes!]
   customSubject: String
 
   """All values that are not equal to given value."""
