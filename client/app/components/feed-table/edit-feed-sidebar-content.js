@@ -22,6 +22,9 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
     id
     schedule
     withContentTable
+    itemBody,
+    attachments,
+    theme,
   }
 }`;
 
@@ -85,21 +88,34 @@ const SubmitSideBarButton = styled(SubmitButton)`
 const EditFeed = ({ feedInfo, closeSidebar }) => {
     const { id, createdAt, lastUpdate, schedule } = feedInfo;
     const withContentTable = feedInfo.withContentTable || 'DEFAULT';
+    const itemBody = feedInfo.itemBody || 'DEFAULT';
+    const attachments = feedInfo.attachments || 'DEFAULT';
+    const theme = feedInfo.theme || 'DEFAULT';
     const { title, link, url, imageTitle = '', imageUrl } = feedInfo.feed || {};
     const [updateFeedMutation] = useMutation(UPDATE_MY_FEED_MUTATION);
     const { data } = useQuery(ME_QUERY);
     const withContentTableDefault = get(data, 'me.withContentTableDefault', false) ? 'ENABLE' : 'DISABLE';
+    const itemBodyDefault = get(data, 'me.itemBodyDefault', false) ? 'ENABLE' : 'DISABLE';
+    const attachmentsDefault = get(data, 'me.attachmentsDefault', false) ? 'ENABLE' : 'DISABLE';
 
     return (
         <Formik
-            initialValues={{ period: schedule, contentTable: withContentTable }}
+            initialValues={{ period: schedule, contentTable: withContentTable, itemBody, attachments, theme }}
             onSubmit={async (variables, { setSubmitting, resetForm }) => {
-                const { period, contentTable } = variables;
-                if (period !== schedule || contentTable !== withContentTable) {
+                const { period, contentTable, itemBody: itemBodyNew, attachments: attachmentsNew, theme: themeNew } = variables;
+                const oldValues = [schedule, withContentTable, itemBody, attachments, theme];
+                const newValues = [period, contentTable, itemBodyNew, attachmentsNew, themeNew];
+                if (oldValues.some((v, i) => newValues[i] !== v)) {
                     try {
                         await updateFeedMutation({ variables: {
-                            data: { schedule: period, withContentTable: contentTable },
                             id,
+                            data: {
+                                schedule: period,
+                                withContentTable: contentTable,
+                                itemBody: itemBodyNew,
+                                attachments: attachmentsNew,
+                                theme: themeNew,
+                            },
                         } });
                         resetForm();
                     } catch (e) {
@@ -152,6 +168,21 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                         </Select>
                     </Row>
                     <Row>
+                        <FieldTitle>Theme</FieldTitle>
+                        <Select
+                            id="theme"
+                            name="theme"
+                            disabled={isSubmitting}
+                            defaultValue={theme}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            title="Theme"
+                        >
+                            <option value="DEFAULT">Default</option>
+                            <option value="TEXT">Only text</option>
+                        </Select>
+                    </Row>
+                    <Row>
                         <FieldTitle>Table of Content</FieldTitle>
                         <Select
                             id="contentTable"
@@ -163,6 +194,38 @@ const EditFeed = ({ feedInfo, closeSidebar }) => {
                             title="Include table of content in the digests?"
                         >
                             <option value="DEFAULT">{`DEFAULT (${withContentTableDefault})`}</option>
+                            <option value="ENABLE">ENABLE</option>
+                            <option value="DISABLE">DISABLE</option>
+                        </Select>
+                    </Row>
+                    <Row>
+                        <FieldTitle>Attachments</FieldTitle>
+                        <Select
+                            id="attachments"
+                            name="attachments"
+                            disabled={isSubmitting}
+                            defaultValue={attachments}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            title="Include links to attachments?"
+                        >
+                            <option value="DEFAULT">{`DEFAULT (${attachmentsDefault})`}</option>
+                            <option value="ENABLE">ENABLE</option>
+                            <option value="DISABLE">DISABLE</option>
+                        </Select>
+                    </Row>
+                    <Row>
+                        <FieldTitle>Feed items content</FieldTitle>
+                        <Select
+                            id="itemBody"
+                            name="itemBody"
+                            disabled={isSubmitting}
+                            defaultValue={itemBody}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            title="Include feed items body in the digests?"
+                        >
+                            <option value="DEFAULT">{`DEFAULT (${itemBodyDefault})`}</option>
                             <option value="ENABLE">ENABLE</option>
                             <option value="DISABLE">DISABLE</option>
                         </Select>
@@ -210,6 +273,9 @@ EditFeed.propTypes = {
         createdAt: PropTypes.string,
         schedule: PropTypes.string,
         withContentTable: PropTypes.oneOf(['DISABLE', 'ENABLE', 'DEFAULT']),
+        itemBody: PropTypes.oneOf(['DISABLE', 'ENABLE', 'DEFAULT']),
+        attachments: PropTypes.oneOf(['DISABLE', 'ENABLE', 'DEFAULT']),
+        theme: PropTypes.oneOf(['TEXT', 'DEFAULT']),
     }).isRequired,
     closeSidebar: PropTypes.func.isRequired,
 };
