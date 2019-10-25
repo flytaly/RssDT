@@ -65,6 +65,8 @@ export const SettingsTitles = [
 const initialState = {
     digestHour: { isSaving: false, error: null },
     withContentTableDefault: { isSaving: false, error: null },
+    itemBodyDefault: { isSaving: false, error: null },
+    attachmentsDefault: { isSaving: false, error: null },
     share: { isSaving: 0, error: null },
     customSubject: { isSaving: false, error: null },
 };
@@ -74,6 +76,10 @@ function settingsStateReducer(state, action) {
             return { ...state, digestHour: action.payload };
         case 'withContentTableDefault':
             return { ...state, withContentTableDefault: action.payload };
+        case 'itemBodyDefault':
+            return { ...state, itemBodyDefault: action.payload };
+        case 'attachmentsDefault':
+            return { ...state, attachmentsDefault: action.payload };
         case 'share': {
             const { isSaving } = state.share;
             const inc = action.payload.isSaving;
@@ -130,6 +136,44 @@ const SettingsComponent = () => {
         }
     }, [me, updateMyInfo]);
 
+    const updateItemBodyDefault = useCallback(async ({ target }) => {
+        dispatch({ type: 'itemBodyDefault', payload: { isSaving: true } });
+        const itemBodyDefault = target.checked;
+
+        try {
+            await updateMyInfo({
+                variables: { data: { itemBodyDefault } },
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateMyInfo: { __typename: 'User', ...me, itemBodyDefault },
+                },
+            });
+            dispatch({ type: 'itemBodyDefault', payload: { isSaving: false } });
+        } catch (e) {
+            console.error(e);
+            dispatch({ type: 'itemBodyDefault', payload: { isSaving: false, error: 'Error occurred during saving' } });
+        }
+    }, [me, updateMyInfo]);
+
+    const updateAttachmentsDefault = useCallback(async ({ target }) => {
+        dispatch({ type: 'attachmentsDefault', payload: { isSaving: true } });
+        const attachmentsDefault = target.checked;
+
+        try {
+            await updateMyInfo({
+                variables: { data: { attachmentsDefault } },
+                optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateMyInfo: { __typename: 'User', ...me, attachmentsDefault },
+                },
+            });
+            dispatch({ type: 'attachmentsDefault', payload: { isSaving: false } });
+        } catch (e) {
+            console.error(e);
+            dispatch({ type: 'itemBodyDefault', payload: { isSaving: false, error: 'Error occurred during saving' } });
+        }
+    }, [me, updateMyInfo]);
+
     const updateShareLinks = useCallback(async (formRef) => {
         if (!formRef.current) return;
         dispatch({ type: 'share', payload: { isSaving: true } });
@@ -150,7 +194,11 @@ const SettingsComponent = () => {
             dispatch({ type: 'share', payload: { isSaving: false, error: 'Error occurred during saving' } });
         }
     }, [me, updateMyInfo]);
-    const { timeZone, locale, email, dailyDigestHour = 18, withContentTableDefault } = me;
+
+    const {
+        timeZone, locale, email, dailyDigestHour = 18,
+        withContentTableDefault, itemBodyDefault, attachmentsDefault,
+    } = me;
 
     return (
         <OuterContainer>
@@ -187,7 +235,7 @@ const SettingsComponent = () => {
                         {state.digestHour.error ? <ErrorMsg>{state.digestHour.error}</ErrorMsg> : null}
                     </article>
                     <article>
-                        <label htmlFor="digest-hour-select"><h3>Table of Content</h3></label>
+                        <h3>Table of Content</h3>
                         <CheckBox
                             id="withContentTableDefault"
                             title="Include table of content"
@@ -198,6 +246,34 @@ const SettingsComponent = () => {
                         <LoaderContainer>{state.withContentTableDefault.isSaving ? <Spinner /> : null}</LoaderContainer>
                         {state.withContentTableDefault.error
                             ? <ErrorMsg>{state.withContentTableDefault.error}</ErrorMsg>
+                            : null}
+                    </article>
+                    <article>
+                        <h3>Feed items content</h3>
+                        <CheckBox
+                            id="withItemBody"
+                            title="Show items content"
+                            checked={itemBodyDefault}
+                            onChangeHandler={updateItemBodyDefault}
+                            disabled={state.itemBodyDefault.isSaving}
+                        />
+                        <LoaderContainer>{state.itemBodyDefault.isSaving ? <Spinner /> : null}</LoaderContainer>
+                        {state.itemBodyDefault.error
+                            ? <ErrorMsg>{state.itemBodyDefault.error}</ErrorMsg>
+                            : null}
+                    </article>
+                    <article>
+                        <h3>Attachments</h3>
+                        <CheckBox
+                            id="attachmentsDefault"
+                            title="Include links to attachments (enclosures)"
+                            checked={attachmentsDefault}
+                            onChangeHandler={updateAttachmentsDefault}
+                            disabled={state.attachmentsDefault.isSaving}
+                        />
+                        <LoaderContainer>{state.attachmentsDefault.isSaving ? <Spinner /> : null}</LoaderContainer>
+                        {state.attachmentsDefault.error
+                            ? <ErrorMsg>{state.attachmentsDefault.error}</ErrorMsg>
                             : null}
                     </article>
                     <article>

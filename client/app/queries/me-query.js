@@ -11,6 +11,9 @@ export const meFields = gql`
             filterShare
             withContentTableDefault
             customSubject
+            itemBodyDefault
+            attachmentsDefault
+            themeDefault
 }`;
 
 const ME_QUERY = gql`

@@ -13,6 +13,9 @@ export const user = {
     filterShare: [],
     withContentTableDefault: false,
     customSubject: null,
+    itemBodyDefault: true,
+    attachmentsDefault: false,
+    themeDefault: 'DEFAULT',
 };
 const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
 

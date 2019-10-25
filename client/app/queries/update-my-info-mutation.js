@@ -13,6 +13,9 @@ const UPDATE_MY_INFO_MUTATION = gql`mutation (
         filterShare
         withContentTableDefault
         customSubject
+        itemBodyDefault
+        attachmentsDefault
+        themeDefault
     }
   }
 `;
