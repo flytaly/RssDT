@@ -13,7 +13,7 @@ async function setUserFeedLastUpdate(userFeedId, timestamp) {
 
 async function getActiveUserFeeds(feedUrl) {
     const userFields = 'user { email timeZone locale shareEnable filterShare '
-    + 'dailyDigestHour withContentTableDefault customSubject }';
+    + 'dailyDigestHour withContentTableDefault customSubject itemBodyDefault }';
     return db.query.userFeeds({
         where: {
             feed: {
@@ -21,7 +21,7 @@ async function getActiveUserFeeds(feedUrl) {
             },
             activated: true,
         },
-    }, `{ id lastUpdate schedule withContentTable ${userFields} }`);
+    }, `{ id lastUpdate schedule withContentTable itemBody ${userFields} }`);
 }
 
 async function getFeedInfo(url) {

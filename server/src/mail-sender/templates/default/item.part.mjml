@@ -1,27 +1,42 @@
 <mj-section padding="16px 0px 0px 0px">
-  <mj-column width="75%" vertical-align="middle">
-    <mj-text padding-bottom="0px" padding-top="0px">
-      <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
-    </mj-text>
-    <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
-    <mj-text>
-      {{#each share}}
-        <a style="margin-right: 4px;" href="{{url}}"><img style="width: 16px;" src="{{iconUrl}}" title="{{title}}" /></a>
-      {{/each}}
-    </mj-text>
+  {{#if imageUrl}}
+    <mj-column width="75%" vertical-align="middle">
+  {{else}}
+    <mj-column width="100%" vertical-align="middle">
+  {{/if}}
+  <mj-text padding-bottom="0px" padding-top="0px">
+    <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+  </mj-text>
+  <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{pubDate}}</mj-text>
+  <mj-text>
+    {{#each share}}
+      <a style="margin-right: 4px;" href="{{url}}"><img style="width: 16px;" src="{{iconUrl}}" title="{{title}}" /></a>
+    {{/each}}
+  </mj-text>
   </mj-column>
-  <mj-column width="25%" vertical-align="middle">
-    {{#if imageUrl}}
+  {{#if imageUrl}}
+    <mj-column width="25%" vertical-align="middle">
       <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
-    {{/if}}
-  </mj-column>
+    </mj-column>
+  {{/if}}
 </mj-section>
-<mj-section>
-  <mj-column width="100%">
-    <mj-text>{{{content}}} {{#if enclosures.length}}
-        <br /><b>Files:</b><br /> {{/if}}
-      {{#each enclosures}}
-        <a href="{{url}}">{{title}}</a> [{{type}}]<br />
-      {{/each}}</mj-text>
-  </mj-column>
-</mj-section>
+
+{{#if content}}
+  <mj-section>
+    <mj-column width="100%">
+      <mj-text>{{{content}}}</mj-text>
+    </mj-column>
+  </mj-section>
+{{/if}}
+
+{{#if enclosures.length}}
+  <mj-section>
+    <mj-column width="100%">
+      <mj-text>
+        <b>Files:</b><br />
+        {{#each enclosures}}
+          <a href="{{url}}">{{title}}</a> [{{type}}]<br />
+        {{/each}}</mj-text>
+    </mj-column>
+  </mj-section>
+{{/if}}

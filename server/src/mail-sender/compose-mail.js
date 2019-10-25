@@ -57,10 +57,14 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
             shareEnable = true,
             filterShare = [],
             withContentTableDefault = false,
+            itemBodyDefault = true,
         } = {},
+        withContentTable = 'DEFAULT',
+        itemBody = 'DEFAULT',
     } = userFeed;
 
-    const withContentTable = userFeed.withContentTable || 'DEFAULT';
+    const withToC = withContentTable === 'DEFAULT' ? withContentTableDefault : withContentTable === 'ENABLE';
+    const withItemBody = itemBody === 'DEFAULT' ? itemBodyDefault : itemBody === 'ENABLE';
 
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
@@ -75,12 +79,12 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
                 .filter(s => !filterShare.length || filterShare.includes(s.id))
                 .map(s => ({ ...s, url: s.getUrl(item.link, item.title) }))
             : [];
-        item.content = item.summary || item.description;
+        item.content = withItemBody ? item.summary || item.description : '';
         return acc + theme.item(item);
     }, '');
 
     let tableOfContent = '';
-    if ((withContentTable === 'DEFAULT' && withContentTableDefault) || (withContentTable === 'ENABLE')) {
+    if (withToC) {
         tableOfContent = theme.contentTable({ items: feedItems });
     }
 

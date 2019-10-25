@@ -30,6 +30,9 @@ const deleteFeed = async url => db.mutation.deleteFeed({ where: { url } });
 
 describe('Build digest', () => {
     const data = {};
+    const userFields = 'user { email timeZone locale shareEnable filterShare '
+        + 'dailyDigestHour withContentTableDefault customSubject itemBodyDefault }';
+    const userFeedFields = 'id lastUpdate schedule withContentTable itemBody';
 
     beforeAll(async () => {
         faker.seed(33);
@@ -64,7 +67,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault customSubject } }',
+            `{ ${userFeedFields} ${userFields} }`,
         );
         expect(isFeedReady).toHaveBeenCalled();
         expect(isFeedReady.mock.calls[0][0]).toMatchObject({ id: userFeed.id });
@@ -111,7 +114,7 @@ describe('Build digest', () => {
         await buildAndSendDigests(url);
         const userFeedAfter = await db.query.userFeed(
             { where: { id: userFeed.id } },
-            '{ id lastUpdate schedule withContentTable user { email locale timeZone shareEnable filterShare dailyDigestHour withContentTableDefault customSubject} }',
+            `{ ${userFields} ${userFeedFields} }`,
         );
         expect(composeHTML.mock.calls[0][1]).toHaveLength(newItems.length);
         expect(composeHTML).toHaveBeenCalledWith(
