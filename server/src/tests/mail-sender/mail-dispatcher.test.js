@@ -31,8 +31,8 @@ const deleteFeed = async url => db.mutation.deleteFeed({ where: { url } });
 describe('Build digest', () => {
     const data = {};
     const userFields = 'user { email timeZone locale shareEnable filterShare '
-        + 'dailyDigestHour withContentTableDefault customSubject itemBodyDefault }';
-    const userFeedFields = 'id lastUpdate schedule withContentTable itemBody';
+        + 'dailyDigestHour withContentTableDefault customSubject itemBodyDefault attachmentsDefault}';
+    const userFeedFields = 'id lastUpdate schedule withContentTable itemBody attachments';
 
     beforeAll(async () => {
         faker.seed(33);

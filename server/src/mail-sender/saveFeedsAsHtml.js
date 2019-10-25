@@ -27,6 +27,7 @@ const generateHTML = async () => {
             const { html } = composeHTML(feed, feed.items, {
                 withContentTable: 'DEFAULT',
                 itemBody: 'DEFAULT',
+                attachments: 'DEFAULT',
             });
             const dir = `${__dirname}/digests`;
             if (!fs.existsSync(dir)) {

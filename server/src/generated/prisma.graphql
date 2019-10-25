@@ -1,5 +1,5 @@
 # source: http://localhost:4466/feedmailu/dev
-# timestamp: Fri Oct 25 2019 19:16:58 GMT+0300 (Moscow Standard Time)
+# timestamp: Fri Oct 25 2019 20:08:43 GMT+0300 (Moscow Standard Time)
 
 type AggregateFeed {
   count: Int!
@@ -2390,6 +2390,7 @@ type User implements Node {
   filterShare: [String!]!
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
 }
 
@@ -2419,6 +2420,7 @@ input UserCreateInput {
   shareEnable: Boolean
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
@@ -2446,6 +2448,7 @@ input UserCreateWithoutFeedsInput {
   shareEnable: Boolean
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
   permissions: UserCreatepermissionsInput
   filterShare: UserCreatefilterShareInput
@@ -2475,6 +2478,7 @@ type UserFeed implements Node {
   user: User!
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
 }
 
 """A connection to a list of items."""
@@ -2498,6 +2502,7 @@ input UserFeedCreateInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   feed: FeedCreateOneWithoutUserFeedsInput!
   user: UserCreateOneWithoutFeedsInput!
 }
@@ -2523,6 +2528,7 @@ input UserFeedCreateWithoutFeedInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   user: UserCreateOneWithoutFeedsInput!
 }
 
@@ -2537,6 +2543,7 @@ input UserFeedCreateWithoutUserInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   feed: FeedCreateOneWithoutUserFeedsInput!
 }
 
@@ -2574,6 +2581,8 @@ enum UserFeedOrderByInput {
   withContentTable_DESC
   itemBody_ASC
   itemBody_DESC
+  attachments_ASC
+  attachments_DESC
 }
 
 type UserFeedPreviousValues {
@@ -2589,6 +2598,7 @@ type UserFeedPreviousValues {
   updatedAt: DateTime!
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
 }
 
 input UserFeedScalarWhereInput {
@@ -2864,6 +2874,16 @@ input UserFeedScalarWhereInput {
 
   """All values that are not contained in given list."""
   itemBody_not_in: [SettingState!]
+  attachments: SettingState
+
+  """All values that are not equal to given value."""
+  attachments_not: SettingState
+
+  """All values that are contained in given list."""
+  attachments_in: [SettingState!]
+
+  """All values that are not contained in given list."""
+  attachments_not_in: [SettingState!]
 }
 
 type UserFeedSubscriptionPayload {
@@ -2913,6 +2933,7 @@ input UserFeedUpdateInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
@@ -2927,6 +2948,7 @@ input UserFeedUpdateManyDataInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
 }
 
 input UserFeedUpdateManyMutationInput {
@@ -2939,6 +2961,7 @@ input UserFeedUpdateManyMutationInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
 }
 
 input UserFeedUpdateManyWithoutFeedInput {
@@ -2980,6 +3003,7 @@ input UserFeedUpdateWithoutFeedDataInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   user: UserUpdateOneRequiredWithoutFeedsInput
 }
 
@@ -2993,6 +3017,7 @@ input UserFeedUpdateWithoutUserDataInput {
   unsubscribeTokenExpiry: DateTime
   withContentTable: SettingState
   itemBody: SettingState
+  attachments: SettingState
   feed: FeedUpdateOneRequiredWithoutUserFeedsInput
 }
 
@@ -3291,6 +3316,16 @@ input UserFeedWhereInput {
 
   """All values that are not contained in given list."""
   itemBody_not_in: [SettingState!]
+  attachments: SettingState
+
+  """All values that are not equal to given value."""
+  attachments_not: SettingState
+
+  """All values that are contained in given list."""
+  attachments_in: [SettingState!]
+
+  """All values that are not contained in given list."""
+  attachments_not_in: [SettingState!]
   feed: FeedWhereInput
   user: UserWhereInput
 }
@@ -3327,6 +3362,8 @@ enum UserOrderByInput {
   withContentTableDefault_DESC
   itemBodyDefault_ASC
   itemBodyDefault_DESC
+  attachmentsDefault_ASC
+  attachmentsDefault_DESC
   customSubject_ASC
   customSubject_DESC
 }
@@ -3347,6 +3384,7 @@ type UserPreviousValues {
   filterShare: [String!]!
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
 }
 
@@ -3402,6 +3440,7 @@ input UserUpdateInput {
   shareEnable: Boolean
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3419,6 +3458,7 @@ input UserUpdateManyMutationInput {
   shareEnable: Boolean
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3446,6 +3486,7 @@ input UserUpdateWithoutFeedsDataInput {
   shareEnable: Boolean
   withContentTableDefault: Boolean
   itemBodyDefault: Boolean
+  attachmentsDefault: Boolean
   customSubject: String
   permissions: UserUpdatepermissionsInput
   filterShare: UserUpdatefilterShareInput
@@ -3805,6 +3846,10 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   itemBodyDefault_not: Boolean
+  attachmentsDefault: Boolean
+
+  """All values that are not equal to given value."""
+  attachmentsDefault_not: Boolean
   customSubject: String
 
   """All values that are not equal to given value."""

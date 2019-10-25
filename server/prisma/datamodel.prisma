@@ -36,6 +36,7 @@ type User {
     filterShare: [String!]! @scalarList(strategy: RELATION)
     withContentTableDefault: Boolean @default(value: false)
     itemBodyDefault: Boolean @default(value: true)
+    attachmentsDefault: Boolean @default(value: true)
     customSubject: String
 }
 
@@ -54,6 +55,7 @@ type UserFeed {
     user: User! @relation(link: TABLE, name: "UserFeeds")
     withContentTable: SettingState @default(value: DEFAULT)
     itemBody: SettingState @default(value: DEFAULT)
+    attachments: SettingState @default(value: DEFAULT)
 }
 
 type Feed {

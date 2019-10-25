@@ -58,20 +58,26 @@ const composeHTML = (info, feedItems, userFeed = {}) => {
             filterShare = [],
             withContentTableDefault = false,
             itemBodyDefault = true,
+            attachmentsDefault = true,
         } = {},
         withContentTable = 'DEFAULT',
         itemBody = 'DEFAULT',
+        attachments = 'DEFAULT',
     } = userFeed;
 
     const withToC = withContentTable === 'DEFAULT' ? withContentTableDefault : withContentTable === 'ENABLE';
     const withItemBody = itemBody === 'DEFAULT' ? itemBodyDefault : itemBody === 'ENABLE';
+    const withAttachments = attachments === 'DEFAULT' ? attachmentsDefault : attachments === 'ENABLE';
 
     const theme = themes[info.theme ? info.theme : 'default'];
     const header = theme.header(info);
     const items = feedItems.reduce((acc, item) => {
         // if there is no image try to find it in enclosures. Many feeds save images in enclosures.
         if (!item.imageUrl) { item.imageUrl = getImageFromEnclosures(item.enclosures); }
+
+        if (!withAttachments) item.enclosures = [];
         if (item.enclosures) { item.enclosures = addTitlesToEnclosures(item.enclosures); }
+
         item.pubDate = moment(item.pubDate).tz(timeZone).locale(locale).format('llll');
         item.share = shareEnable
             ? share
