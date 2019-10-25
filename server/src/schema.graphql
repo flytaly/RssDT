@@ -17,6 +17,9 @@ type User {
     shareEnable: Boolean
     filterShare: [String!]!
     withContentTableDefault: Boolean
+    itemBodyDefault: Boolean
+    attachmentsDefault: Boolean
+    themeDefault: Themes
     customSubject: String
 }
 
@@ -29,11 +32,17 @@ type UserFeed {
     createdAt: DateTime
     activated: Boolean
     withContentTable: SettingState
+    itemBody: SettingState
+    attachments: SettingState
+    theme: Themes
 }
 
 input MyFeedUpdateInput {
     schedule: DigestSchedule
     withContentTable: SettingState
+    itemBody: SettingState
+    attachments: SettingState
+    theme: Themes
 }
 
 input MyInfoUpdateInput {
@@ -43,6 +52,9 @@ input MyInfoUpdateInput {
     shareEnable: Boolean
     filterShare: [String]
     withContentTableDefault: Boolean
+    itemBodyDefault: Boolean
+    attachmentsDefault: Boolean
+    themeDefault: Themes
     customSubject: String
 }
 

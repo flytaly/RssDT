@@ -100,6 +100,9 @@ const UPDATE_MY_FEED_MUTATION = gql`mutation (
     id
     schedule
     withContentTable
+    itemBody
+    attachments
+    theme
   }
 }`;
 
@@ -126,6 +129,9 @@ const UPDATE_MY_INFO_MUTATION = gql`mutation (
       filterShare
       withContentTableDefault
       customSubject
+      itemBodyDefault
+      attachmentsDefault
+      themeDefault
     }
 }`;
 

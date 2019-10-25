@@ -30,6 +30,9 @@ const addTestData = async () => {
         permissions: { set: ['USER'] },
         shareEnable: false,
         withContentTableDefault: false,
+        itemBodyDefault: true,
+        attachmentsDefault: false,
+        themeDefault: 'DEFAULT',
     };
     const { id } = await db.mutation.createUser({ data: newUser }, '{ id }');
     globalData.userId = id;
@@ -78,6 +81,9 @@ describe('updateMyInfo mutation', () => {
             locale: 'ru',
             dailyDigestHour: 20,
             withContentTableDefault: true,
+            itemBodyDefault: false,
+            attachmentsDefault: true,
+            themeDefault: 'TEXT',
         };
         const before = await db.query.user({ where: { id } });
         const { data: { updateMyInfo } } = await makePromise(execute(linkWithAuthCookies, {

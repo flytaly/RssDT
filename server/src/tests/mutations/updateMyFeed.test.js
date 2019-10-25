@@ -75,10 +75,16 @@ describe('', () => {
         const oldData = {
             schedule: mocks.feed.schedule,
             withContentTable: 'DEFAULT',
+            itemBody: 'DEFAULT',
+            attachments: 'DEFAULT',
+            theme: 'DEFAULT',
         };
         const newData = {
             schedule: 'EVERY2HOURS',
             withContentTable: 'ENABLE',
+            itemBody: 'DISABLE',
+            attachments: 'DISABLE',
+            theme: 'TEXT',
         };
         const before = await db.query.userFeed({ where: { id } });
 
