@@ -1,6 +1,6 @@
 const { CronJob } = require('cron');
 const pLimit = require('p-limit');
-const logger = require('../logger');
+const { logger } = require('../logger');
 const { getNewItems } = require('../feed-parser');
 const { filterAndClearHtml, filterMeta } = require('./utils');
 const { buildAndSendDigests } = require('../mail-sender/dispatcher');

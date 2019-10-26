@@ -1,6 +1,6 @@
 const pLimit = require('p-limit');
 const transport = require('./transport');
-const logger = require('../logger');
+const { logger } = require('../logger');
 const { composeHTML, composeTXT } = require('./compose-mail');
 const {
     getActiveUserFeeds, getFeedInfo, getItemsNewerThan, setUserFeedLastUpdate,

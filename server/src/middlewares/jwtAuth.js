@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const logger = require('../logger');
+const { logger } = require('../logger');
 
 /*  EXPRESS middleware */
 module.exports = db => async (req, res, next) => {

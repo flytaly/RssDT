@@ -1,4 +1,4 @@
-const logger = require('../../logger');
+const { logger } = require('../../logger');
 const { setUserFeedLastUpdate } = require('../../db-queries');
 const cache = require('../../cache');
 

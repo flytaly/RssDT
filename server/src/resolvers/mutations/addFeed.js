@@ -1,7 +1,7 @@
 const nanoid = require('nanoid');
 const { getFeedStream, checkFeedInfo } = require('../../feed-parser');
 const { filterMeta } = require('../../feed-watcher/utils');
-const logger = require('../../logger');
+const { logger } = require('../../logger');
 const { sendConfirmSubscription } = require('../../mail-sender/dispatcher');
 
 async function addFeed(parent, args, ctx) {

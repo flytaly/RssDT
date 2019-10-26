@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "NODE_ENV=development nodemon -e js,graphql -x node src/index.js -i src/tests  | pino-pretty -c -t",
+    "start:server": "node src/index.js",
+    "start:watcher": "node src/start-watcher.js",
+    "dev:server": "nodemon -e js,graphql -x node src/index.js -i src/tests  | pino-pretty -c -t",
+    "dev:watcher": "nodemon -e js,graphql -x node src/start-watcher.js -i src/tests  | pino-pretty -c -t",
+    "dev": "NODE_ENV=development concurrently npm:dev:server npm:dev:watcher",
     "delete:dev": "prisma delete --env-file .env.dev --force",
     "deploy:prod": "prisma deploy",
     "deploy:dev": "prisma deploy --env-file .env.dev",
@@ -21,6 +24,7 @@
     "@types/jest": "^24.0.19",
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
+    "concurrently": "^5.0.0",
     "faker": "^4.1.0",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
@@ -28,6 +32,7 @@
     "nock": "^11.5.0",
     "node-fetch": "^2.6.0",
     "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
     "pino-pretty": "^3.2.2"
   },
   "dependencies": {
