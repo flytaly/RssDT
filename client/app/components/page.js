@@ -6,6 +6,7 @@ import theme from './themes/default';
 import '@reach/menu-button/styles.css';
 import Logo from './logo';
 import Footer from './footer';
+import './nprogress';
 
 const GlobalStyle = createGlobalStyle`
   *, *:before, *:after {
