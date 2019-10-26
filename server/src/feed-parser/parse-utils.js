@@ -9,12 +9,14 @@ const defaultAxiosOptions = {
     method: 'get',
     responseType: 'arraybuffer',
     maxContentLength: 10000000,
+    timeout: 25000,
     headers: {
         Accept: '*/*',
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) '
         + 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
     },
 };
+const axiosInstance = axios.create(defaultAxiosOptions);
 
 /**
  * Find feed url in the <link rel="alternate" type="application/rss+xml"...> tag
@@ -86,7 +88,7 @@ const normalizeEncoding = (bodyBuf, bodyStr) => {
  * @returns {Promise<{stream, feedUrl}>}
  */
 async function getFeedStream(url, options = {}, tryFindFeedUrl = false) {
-    const { data: bufData } = await axios({ ...defaultAxiosOptions, ...options, url });
+    const { data: bufData } = await axiosInstance({ ...options, url });
 
     const body = bufData.toString();
 
