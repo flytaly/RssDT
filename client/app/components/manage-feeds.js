@@ -8,7 +8,7 @@ const ManageFeedsContainer = styled.main`
     padding: 0 2rem 1rem;
 `;
 
-const StyledH1 = styled.h1`
+const StyledH2 = styled.h2`
     font-size: 1.8rem;
 `;
 
@@ -20,7 +20,7 @@ const ManageFeeds = () => {
     const dispatch = useDispatch();
     return (
         <ManageFeedsContainer>
-            <StyledH1>Edit subscriptions</StyledH1>
+            <StyledH2>Edit subscriptions</StyledH2>
             <ResponsiveTable />
             <StyledButton onClick={() => { dispatch({ type: types.toggleNewFeedModal }); }}>
                 Add new feed

@@ -57,7 +57,7 @@ const withAuth = (redirectOnFail = false) => (Component) => {
         }
 
         if (redirectOnFail && !data.me) {
-            return <StyledCard><h1>{loading ? 'Loading' : 'You are not logged in. Redirect...'}</h1></StyledCard>;
+            return <StyledCard><h2>{loading ? 'Loading' : 'You are not logged in. Redirect...'}</h2></StyledCard>;
         }
 
         return <Component {...props} me={data.me} />;

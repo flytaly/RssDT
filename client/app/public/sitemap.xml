@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' href='sitemap.xsl'?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <url>
+    <loc>https://feedmailu.com/</loc>
+    <changefreq>Monthly</changefreq>
+    <priority>1</priority>
+    <lastmod>2019-10-28T19:33:52Z</lastmod>
+  </url>
+  <url>
+    <loc>https://feedmailu.com/login</loc>
+    <changefreq>Monthly</changefreq>
+    <priority>1</priority>
+    <lastmod>2019-10-28T19:33:52Z</lastmod>
+  </url>
+  <url>
+    <loc>https://feedmailu.com/request-reset</loc>
+    <changefreq>Monthly</changefreq>
+    <priority>1</priority>
+    <lastmod>2019-10-28T19:33:52Z</lastmod>
+  </url>
+  <url>
+    <loc>https://feedmailu.com/help</loc>
+    <changefreq>Monthly</changefreq>
+    <priority>1</priority>
+    <lastmod>2019-10-28T19:33:52Z</lastmod>
+  </url>
+  <url>
+    <loc>https://feedmailu.com/settings</loc>
+    <changefreq>Monthly</changefreq>
+    <priority>1</priority>
+    <lastmod>2019-10-28T19:33:52Z</lastmod>
+  </url>
+</urlset>

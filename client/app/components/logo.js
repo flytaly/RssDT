@@ -11,6 +11,12 @@ const LinkWithLogo = styled.a`
         padding: 0.2rem 1rem;
         color: inherit;
         text-decoration: none;
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-weight: inherit;
+            font-size: inherit;
+        }
 `;
 
 const Icon = styled.img`
@@ -33,10 +39,10 @@ const Logo = () => (
     <Link href="/">
         <LinkWithLogo href="/">
             <Icon src={logoBlackIcon} alt="Logo" />
-            <div>
+            <h1>
                 <Title>FeedMailu</Title>
                 <Description>feed to email aggregator</Description>
-            </div>
+            </h1>
         </LinkWithLogo>
     </Link>
 );

@@ -20,9 +20,6 @@
         }
     ],
     "routes": [
-        { "src": "/favicon.ico", "dest": "/app/static/_meta/favicon.ico" },
-        { "src": "/manifest.json", "dest": "/app/static/_meta/manifest.json" },
-        { "src": "/browserconfig.xml", "dest": "/app/static/_meta/browserconfig.xml" },
         {
             "src": "/static/(?<folder>css|media|js)/(?<file>.*)",
             "headers": { "cache-control": "s-maxage=31536000,immutable" },

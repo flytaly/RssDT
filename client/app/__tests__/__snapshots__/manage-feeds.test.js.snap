@@ -142,6 +142,13 @@ exports[`Manage feeds should match snapshot 1`] = `
   text-decoration: none;
 }
 
+.c2 h1 {
+  margin: 0;
+  padding: 0;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
 .c3 {
   width: 2.5rem;
   height: 2.5rem;
@@ -301,7 +308,7 @@ exports[`Manage feeds should match snapshot 1`] = `
         class="c3"
         src="/static/icon-black.png"
       />
-      <div>
+      <h1>
         <span
           class="c4"
         >
@@ -312,16 +319,16 @@ exports[`Manage feeds should match snapshot 1`] = `
         >
           feed to email aggregator
         </span>
-      </div>
+      </h1>
     </a>
     <main
       class="c6"
     >
-      <h1
+      <h2
         class="c7"
       >
         Edit subscriptions
-      </h1>
+      </h2>
       <ul
         class="c8"
       >

@@ -8,7 +8,7 @@ const HelpPageContainer = styled.div`
     width: 100%;
     font-size: 1.4rem;
     line-height: 1.4;
-    h1 {
+    h2 {
         font-size: 1.7em;
         text-align: center;
     }
@@ -38,7 +38,7 @@ const Content = styled.div`
     @media all and (min-width: 550px) {
         margin-left: 16rem;
     }
-    h2 {
+    h3 {
         font-size: 1.4em;
         margin-top: 4rem;
     }
@@ -53,7 +53,7 @@ const Content = styled.div`
 
 const Help = () => (
     <HelpPageContainer>
-        <h1>Help</h1>
+        <h2>Help</h2>
         <Sticky>
             {isFixed => (
                 <TableOfContent isFixed={isFixed}>
@@ -68,7 +68,7 @@ const Help = () => (
         <Content>
             {contentList.map(({ id, headerText, content }) => (
                 <article key={id}>
-                    <h2 id={id}>{headerText}</h2>
+                    <h3 id={id}>{headerText}</h3>
                     {content}
                 </article>))}
         </Content>
