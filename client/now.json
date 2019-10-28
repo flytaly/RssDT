@@ -5,7 +5,8 @@
     "build": {
         "env": {
             "API_URL": "@api_url",
-            "REACT_APP_API_URL": "@api_url"
+            "REACT_APP_API_URL": "@api_url",
+            "GA_TRACKING_ID": "@ga_id_feedmailu"
         }
     },
     "builds": [
