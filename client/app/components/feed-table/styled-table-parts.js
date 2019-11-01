@@ -29,7 +29,6 @@ export const Tr = styled.li`
 
 export const Td = styled.div`
     min-width: ${props => props.minWidth || '10rem'};
-    word-break: break-all;
     @media all and (max-width: ${props => props.theme.tableMinWidth}) {
         :before {
             content: attr(data-name);
