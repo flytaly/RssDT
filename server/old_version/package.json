@@ -1,0 +1,81 @@
+{
+  "name": "feedmailu-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "node src/index.js",
+    "start:watcher": "node src/start-watcher.js",
+    "dev:server": "nodemon -e js,graphql -x node src/index.js -i src/tests  | pino-pretty -c -t",
+    "dev:watcher": "nodemon -e js,graphql -x node src/start-watcher.js -i src/tests  | pino-pretty -c -t",
+    "dev": "NODE_ENV=development concurrently npm:dev:server npm:dev:watcher",
+    "delete:dev": "prisma delete --env-file .env.dev --force",
+    "deploy:prod": "prisma deploy",
+    "deploy:dev": "prisma deploy --env-file .env.dev",
+    "redis-run": "docker run -d --name redis-server --restart always -p 127.0.0.1:6379:6379 redis",
+    "prisma-up": "docker-compose --file prisma/docker-compose.yml up -d",
+    "prisma-down": "docker-compose --file prisma/docker-compose.yml down",
+    "test": "NODE_ENV=test dotenv -e .env.dev -- jest --coverage",
+    "test:watch": "NODE_ENV=test dotenv -e .env.dev -- jest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "apollo-link": "^1.2.13",
+    "apollo-link-http": "^1.5.16",
+    "concurrently": "^5.0.0",
+    "faker": "^4.1.0",
+    "jest": "^24.9.0",
+    "jest-cli": "^24.9.0",
+    "jest-in-case": "^1.0.2",
+    "nock": "^11.5.0",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.19.4",
+    "npm-run-all": "^4.1.5",
+    "pino-pretty": "^3.2.2"
+  },
+  "dependencies": {
+    "apollo-server": "^2.9.7",
+    "axios": "^0.19.0",
+    "bcrypt": "^5.0.0",
+    "cookie-parser": "^1.4.4",
+    "cron": "^1.7.2",
+    "dotenv": "^8.2.0",
+    "dotenv-cli": "^3.0.0",
+    "feedparser": "^2.2.9",
+    "graphql": "^14.5.8",
+    "graphql-cli": "^3.0.14",
+    "graphql-shield": "^6.1.0",
+    "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.5",
+    "graphql-yoga": "^1.18.3",
+    "handlebars": "^4.4.5",
+    "iconv-lite": "^0.5.0",
+    "jsdom": "^15.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash.pick": "^4.4.0",
+    "mjml": "^4.5.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.27",
+    "nanoid": "^2.1.4",
+    "nodemailer": "^6.3.1",
+    "normalize-url": "^4.5.0",
+    "p-limit": "^2.2.1",
+    "pino": "^5.13.5",
+    "pino-tee": "^0.2.2",
+    "prisma": "^1.34.10",
+    "prisma-binding": "^2.3.16",
+    "redis": "^2.8.0",
+    "sanitize-html": "^1.20.1",
+    "yup": "^0.27.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "setupFilesAfterEnv": [
+      "./setupTest.js"
+    ]
+  }
+}
