@@ -6,5 +6,7 @@ module.exports = {
     rules: {
         'no-console': 'off',
         'no-plusplus': 'off',
+        'import/prefer-default-export': 'off',
+        'class-methods-use-this': 'off',
     },
 };
