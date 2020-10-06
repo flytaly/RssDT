@@ -4,7 +4,7 @@ import { TestEntity } from '../entities/TestEntity';
 @Resolver()
 export class TestResolver {
     @Query(() => [TestEntity], { nullable: true })
-    records() {
+    testRecords() {
         return TestEntity.find();
     }
 

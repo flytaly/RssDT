@@ -1,6 +1,6 @@
 import { createConnection } from 'typeorm';
 import path from 'path';
-import { IS_PROD } from './constants';
+import { IS_DEV, IS_PROD, IS_TEST } from './constants';
 import { TestEntity } from './entities/TestEntity';
 
 export const initDbConnection = async () => {
@@ -9,19 +9,19 @@ export const initDbConnection = async () => {
         './migrations/',
         IS_PROD ? 'production/*' : 'development/*',
     );
-    console.log('migrationPath:', migrationPath);
+
     const dbConnection = await createConnection({
         type: 'postgres',
         database: process.env.DB_NAME,
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
-        logging: true,
-        migrations: [migrationPath],
+        logging: IS_DEV,
+        migrations: IS_TEST ? undefined : [migrationPath],
         synchronize: !IS_PROD,
         entities: [TestEntity],
     });
 
-    dbConnection.runMigrations();
+    await dbConnection.runMigrations();
 
     return dbConnection;
 };

@@ -1,0 +1,5 @@
+mutation testMutation($text: String!) {
+    createTestRecord(text: $text) {
+        text
+    }
+}
