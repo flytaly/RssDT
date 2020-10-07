@@ -17,6 +17,7 @@
     "dependencies": {
         "@types/jest": "^26.0.14",
         "apollo-server-express": "^2.18.2",
+        "argon2": "^0.27.0",
         "dotenv-safe": "^8.2.0",
         "express": "^4.17.1",
         "pg": "^8.4.0",
@@ -33,6 +34,7 @@
         "@graphql-codegen/typescript-operations": "^1.17.8",
         "@types/dotenv-safe": "^8.1.1",
         "@types/express": "^4.17.8",
+        "@types/faker": "^5.1.2",
         "@typescript-eslint/eslint-plugin": "^4.4.0",
         "class-validator": "^0.12.2",
         "eslint": "^7.10.0",
@@ -40,6 +42,7 @@
         "eslint-config-prettier": "^6.12.0",
         "eslint-plugin-import": "^2.22.1",
         "eslint-plugin-jest": "^24.1.0",
+        "faker": "^5.1.0",
         "graphql-request": "^3.1.0",
         "jest": "^26.5.0",
         "nodemon": "^2.0.4",
@@ -50,7 +53,7 @@
     "author": "",
     "license": "ISC",
     "jest": {
-        "globalSetup": "./dist/tests/setup.js",
-        "globalTeardown": "./dist/tests/teardown.js"
+        "globalSetup": "./dist/tests/_setup.js",
+        "globalTeardown": "./dist/tests/_teardown.js"
     }
 }

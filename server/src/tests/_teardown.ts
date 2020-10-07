@@ -1,4 +1,4 @@
-import { MyGlobal } from './setup';
+import { MyGlobal } from './_setup';
 
 const myGlobal = global as MyGlobal;
 

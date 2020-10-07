@@ -14,62 +14,73 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  testRecords?: Maybe<Array<TestEntity>>;
+  users?: Maybe<Array<User>>;
 };
 
-export type TestEntity = {
-  __typename?: 'TestEntity';
+export type User = {
+  __typename?: 'User';
   id: Scalars['Float'];
-  text: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createTestRecord: TestEntity;
-  clearRecords: Scalars['Boolean'];
+  register: UserResponse;
 };
 
 
-export type MutationCreateTestRecordArgs = {
-  text: Scalars['String'];
+export type MutationRegisterArgs = {
+  params: EmailPasswordInput;
 };
 
-export type TestMutationMutationVariables = Exact<{
-  text: Scalars['String'];
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type EmailPasswordInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type RegisterMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
 }>;
 
 
-export type TestMutationMutation = (
+export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & { createTestRecord: (
-    { __typename?: 'TestEntity' }
-    & Pick<TestEntity, 'text'>
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'email'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message' | 'field'>
+    )>> }
   ) }
 );
 
-export type TestQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
-
-export type TestQueryQuery = (
-  { __typename?: 'Query' }
-  & { testRecords?: Maybe<Array<(
-    { __typename?: 'TestEntity' }
-    & Pick<TestEntity, 'text'>
-  )>> }
-);
-
-
-export const TestMutationDocument = gql`
-    mutation testMutation($text: String!) {
-  createTestRecord(text: $text) {
-    text
-  }
-}
-    `;
-export const TestQueryDocument = gql`
-    query testQuery {
-  testRecords {
-    text
+export const RegisterDocument = gql`
+    mutation register($email: String!, $password: String!) {
+  register(params: {email: $email, password: $password}) {
+    user {
+      email
+    }
+    errors {
+      message
+      field
+    }
   }
 }
     `;
@@ -80,11 +91,8 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    testMutation(variables: TestMutationMutationVariables): Promise<TestMutationMutation> {
-      return withWrapper(() => client.request<TestMutationMutation>(print(TestMutationDocument), variables));
-    },
-    testQuery(variables?: TestQueryQueryVariables): Promise<TestQueryQuery> {
-      return withWrapper(() => client.request<TestQueryQuery>(print(TestQueryDocument), variables));
+    register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
+      return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
     }
   };
 }

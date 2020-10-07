@@ -3,12 +3,15 @@ import { Entity, Column, BaseEntity, PrimaryGeneratedColumn } from 'typeorm';
 
 @ObjectType()
 @Entity()
-export class TestEntity extends BaseEntity {
+export class User extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()
     id!: number;
 
     @Field()
+    @Column({ unique: true })
+    email!: string;
+
     @Column()
-    text!: string;
+    password!: string;
 }
