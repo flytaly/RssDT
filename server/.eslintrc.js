@@ -11,6 +11,7 @@ module.exports = {
         'no-console': 'off',
         'no-plusplus': 'off',
         'import/prefer-default-export': 'off',
+        'import/no-extraneous-dependencies': 'off',
         'class-methods-use-this': 'off',
         'no-underscore-dangle': 'off',
         'max-classes-per-file': 'off',

@@ -12,5 +12,5 @@ const closeServer = () =>
 module.exports = async () => {
     await closeServer();
     await myGlobal.__dbConnection.close();
-    console.log('--- shut down server after tests');
+    console.log('🏁 shut down server after tests');
 };

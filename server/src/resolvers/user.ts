@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
-import { Arg, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
 import { User } from '../entities/User';
+import { MyContext } from '../types';
 
 @ObjectType()
 class FieldError {
@@ -23,10 +24,10 @@ class UserResponse {
 @InputType()
 export class EmailPasswordInput {
     @Field()
-    email: string;
+    email!: string;
 
     @Field()
-    password: string;
+    password!: string;
 }
 
 @Resolver()
@@ -36,8 +37,19 @@ export class UserResolver {
         return User.find();
     }
 
+    @Query(() => User, { nullable: true })
+    me(@Ctx() { req }: MyContext) {
+        if (!req.session.userId) {
+            return null;
+        }
+        return User.findOne(req.session.userId);
+    }
+
     @Mutation(() => UserResponse)
-    async register(@Arg('params') params: EmailPasswordInput) {
+    async register(
+        @Arg('params') params: EmailPasswordInput, //
+        @Ctx() { req }: MyContext,
+    ) {
         // TODO: VALIDATION
         const { email, password: plainPassword } = params;
         const password = await argon2.hash(plainPassword);
@@ -50,6 +62,30 @@ export class UserResolver {
                 return { errors: [{ field: 'email', message: 'User already exists' }] };
             }
         }
+
+        if (!user) return null;
+
+        req.session.userId = user.id;
+
+        return { user };
+    }
+
+    @Mutation(() => UserResponse)
+    async login(
+        @Arg('params') { email, password }: EmailPasswordInput, //
+        @Ctx() { req }: MyContext,
+    ) {
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return { errors: [{ field: 'email', message: "User with such email don't exist" }] };
+        }
+        const isMatch = await argon2.verify(user.password, password);
+        if (!isMatch) {
+            return { errors: [{ field: 'password', message: 'Wrong password' }] };
+        }
+
+        req.session.userId = user.id;
 
         return { user };
     }

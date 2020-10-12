@@ -6,17 +6,13 @@ import { getSdk } from './generated/graphql';
 import getTestClient from './utils/getClient';
 import { User } from '../entities/User';
 
-let sdk: ReturnType<typeof getSdk>;
 let dbConnection: Connection;
 
 beforeAll(async () => {
-    sdk = getSdk(getTestClient());
     dbConnection = await initDbConnection();
 });
 
-afterAll(async () => {
-    await dbConnection.close();
-});
+afterAll(() => dbConnection.close());
 
 const deleteUserWithEmail = (email: string) =>
     dbConnection
@@ -36,13 +32,24 @@ describe('User creation', () => {
         await deleteUserWithEmail(email);
     });
 
-    afterAll(async () => {
-        await deleteUserWithEmail(email);
-    });
+    afterAll(() => deleteUserWithEmail(email));
 
-    test('should create user and return', async () => {
+    test('should create user and return cookie', async () => {
+        const { client, lastHeaders } = getTestClient();
+        const sdk = getSdk(client);
         const { register } = await sdk.register({ email, password });
         expect(register.user?.email).toBe(email);
+
+        const cookie = lastHeaders.pop()?.get('set-cookie');
+        client.setHeader('cookie', cookie!);
+        const { me } = await sdk.me();
+        expect(me?.email).toBe(email);
+    });
+
+    test('should not be logged in without cookie', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const { me } = await sdk.me();
+        expect(me).toBeNull();
     });
 
     test('should hash password', async () => {
@@ -52,10 +59,70 @@ describe('User creation', () => {
     });
 
     test('should return error message if user already exist', async () => {
+        const sdk = getSdk(getTestClient().client);
         const { register } = await sdk.register({ email, password });
         expect(register.errors![0]).toMatchObject({
             message: 'User already exists',
             field: 'email',
+        });
+    });
+});
+
+describe('Logging-in', () => {
+    let email: string;
+    let password: string;
+
+    beforeAll(async () => {
+        email = faker.internet.email();
+        password = faker.internet.password(8);
+        await deleteUserWithEmail(email);
+    });
+
+    afterAll(() => deleteUserWithEmail(email));
+
+    test('should register', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const { register } = await sdk.register({ email, password });
+        expect(register.user?.email).toBe(email);
+    });
+
+    test('should log in and set cookie with correct password', async () => {
+        const { client, lastHeaders } = getTestClient();
+        const sdk = getSdk(client);
+        const { login } = await sdk.login({ email, password });
+        expect(login.user?.email).toBe(email);
+
+        const cookie = lastHeaders.pop()?.get('set-cookie');
+        client.setHeader('cookie', cookie!);
+        const { me } = await sdk.me();
+        expect(me?.email).toBe(email);
+    });
+
+    test('should return error with incorrect email', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const { login } = await sdk.login({ email: 'wrongemail@something.com', password });
+        expect(login.user).toBeNull();
+        expect(login.errors![0]).toMatchObject({
+            message: "User with such email don't exist",
+            field: 'email',
+        });
+    });
+
+    test('should return error with incorrect password', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const { login: login1 } = await sdk.login({ email, password: 'password1234' });
+        expect(login1.user).toBeNull();
+        expect(login1.errors![0]).toMatchObject({
+            message: 'Wrong password',
+            field: 'password',
+        });
+
+        const { login: login2 } = await sdk.login({ email, password: '' });
+        console.log('login2:', login2);
+        expect(login2.user).toBeNull();
+        expect(login2.errors![0]).toMatchObject({
+            message: 'Wrong password',
+            field: 'password',
         });
     });
 });

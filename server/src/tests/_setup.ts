@@ -3,8 +3,10 @@ import dotenv from 'dotenv-safe';
 import express from 'express';
 import { Connection } from 'typeorm';
 import { Server } from 'http';
+import Redis from 'ioredis-mock';
 import { initApolloServer } from '../apollo';
 import { initDbConnection } from '../dbConnection';
+import { initSession } from '../session';
 
 export type MyGlobal = typeof global & {
     __dbConnection: Connection;
@@ -18,10 +20,14 @@ module.exports = async () => {
 
     const app = express();
     const dbcon = await initDbConnection();
-    await initApolloServer(app);
+
+    const redis = new Redis();
+    initSession(app, redis);
+
+    await initApolloServer(app, redis);
 
     const server = app.listen(PORT, () => {
-        console.log(`start server on port:${PORT} for testing`);
+        console.log(`🚀 start server on port:${PORT} for testing`);
     });
 
     (global as MyGlobal).__dbConnection = dbcon;
