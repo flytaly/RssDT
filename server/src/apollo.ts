@@ -3,12 +3,14 @@ import { Express } from 'express';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/user';
+import { normalizeInput } from './middlewares/normalizeInputs';
 import { MyContext, ReqWithSession } from './types';
 
 export const initApolloServer = async (app: Express, redis: Redis) => {
     const schema = await buildSchema({
         resolvers: [UserResolver],
         validate: false,
+        globalMiddlewares: [normalizeInput],
     });
 
     const apolloServer = new ApolloServer({

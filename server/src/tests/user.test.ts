@@ -5,6 +5,7 @@ import { initDbConnection } from '../dbConnection';
 import { getSdk } from './generated/graphql';
 import getTestClient from './utils/getClient';
 import { User } from '../entities/User';
+import { deleteUserWithEmail } from './utils/dbQueries';
 
 let dbConnection: Connection;
 
@@ -14,20 +15,12 @@ beforeAll(async () => {
 
 afterAll(() => dbConnection.close());
 
-const deleteUserWithEmail = (email: string) =>
-    dbConnection
-        .createQueryBuilder()
-        .delete()
-        .from(User)
-        .where('email = :email', { email })
-        .execute();
-
 describe('User creation', () => {
     let email: string;
     let password: string;
 
     beforeAll(async () => {
-        email = faker.internet.email();
+        email = faker.internet.email().toLowerCase();
         password = faker.internet.password(8);
         await deleteUserWithEmail(email);
     });
@@ -73,7 +66,7 @@ describe('Logging-in', () => {
     let password: string;
 
     beforeAll(async () => {
-        email = faker.internet.email();
+        email = faker.internet.email().toLowerCase();
         password = faker.internet.password(8);
         await deleteUserWithEmail(email);
     });
@@ -118,7 +111,6 @@ describe('Logging-in', () => {
         });
 
         const { login: login2 } = await sdk.login({ email, password: '' });
-        console.log('login2:', login2);
         expect(login2.user).toBeNull();
         expect(login2.errors![0]).toMatchObject({
             message: 'Wrong password',

@@ -32,12 +32,14 @@ export type Mutation = {
 
 
 export type MutationRegisterArgs = {
-  params: EmailPasswordInput;
+  password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 
 export type MutationLoginArgs = {
-  params: EmailPasswordInput;
+  password: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -50,11 +52,6 @@ export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
   message: Scalars['String'];
-};
-
-export type EmailPasswordInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
 };
 
 export type LoginMutationVariables = Exact<{
@@ -111,7 +108,7 @@ export type MeQuery = (
 
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
-  login(params: {email: $email, password: $password}) {
+  login(email: $email, password: $password) {
     user {
       id
       email
@@ -125,7 +122,7 @@ export const LoginDocument = gql`
     `;
 export const RegisterDocument = gql`
     mutation register($email: String!, $password: String!) {
-  register(params: {email: $email, password: $password}) {
+  register(email: $email, password: $password) {
     user {
       email
     }

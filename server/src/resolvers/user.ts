@@ -47,11 +47,11 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     async register(
-        @Arg('params') params: EmailPasswordInput, //
+        @Arg('email') email: string,
+        @Arg('password') plainPassword: string,
         @Ctx() { req }: MyContext,
     ) {
         // TODO: VALIDATION
-        const { email, password: plainPassword } = params;
         const password = await argon2.hash(plainPassword);
         let user: User | undefined;
 
@@ -72,7 +72,8 @@ export class UserResolver {
 
     @Mutation(() => UserResponse)
     async login(
-        @Arg('params') { email, password }: EmailPasswordInput, //
+        @Arg('email') email: string,
+        @Arg('password') plainPassword: string,
         @Ctx() { req }: MyContext,
     ) {
         const user = await User.findOne({ where: { email } });
@@ -80,7 +81,7 @@ export class UserResolver {
         if (!user) {
             return { errors: [{ field: 'email', message: "User with such email don't exist" }] };
         }
-        const isMatch = await argon2.verify(user.password, password);
+        const isMatch = await argon2.verify(user.password, plainPassword);
         if (!isMatch) {
             return { errors: [{ field: 'password', message: 'Wrong password' }] };
         }
