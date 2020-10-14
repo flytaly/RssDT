@@ -1,16 +1,20 @@
 import argon2 from 'argon2';
-import { Arg, Ctx, Field, InputType, Mutation, ObjectType, Query, Resolver } from 'type-graphql';
+import {
+    Arg,
+    Ctx,
+    Field,
+    FieldResolver,
+    Info,
+    Mutation,
+    ObjectType,
+    Query,
+    Resolver,
+    Root,
+} from 'type-graphql';
 import { User } from '../entities/User';
+import { UserFeed } from '../entities/UserFeed';
 import { MyContext } from '../types';
-
-@ObjectType()
-class FieldError {
-    @Field()
-    field: string;
-
-    @Field()
-    message: string;
-}
+import { FieldError } from './common/FieldError';
 
 @ObjectType()
 class UserResponse {
@@ -21,24 +25,24 @@ class UserResponse {
     user?: User;
 }
 
-@InputType()
-export class EmailPasswordInput {
-    @Field()
-    email!: string;
-
-    @Field()
-    password!: string;
-}
-
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+    @FieldResolver(() => [UserFeed])
+    async feeds(@Root() root: User) {
+        // TODO: use dataloader
+        if (!root.id) return null;
+        return UserFeed.find({ where: { userId: root.id } });
+    }
+
+    // TODO: ADMIN ONLY
     @Query(() => [User], { nullable: true })
     users() {
         return User.find();
     }
 
     @Query(() => User, { nullable: true })
-    me(@Ctx() { req }: MyContext) {
+    me(@Ctx() { req }: MyContext, @Info() info: any) {
+        console.log('info:', JSON.stringify(info));
         if (!req.session.userId) {
             return null;
         }
@@ -81,7 +85,10 @@ export class UserResolver {
         if (!user) {
             return { errors: [{ field: 'email', message: "User with such email don't exist" }] };
         }
-        const isMatch = await argon2.verify(user.password, plainPassword);
+
+        const isMatch =
+            user.password && // password could be empty
+            (await argon2.verify(user.password, plainPassword));
         if (!isMatch) {
             return { errors: [{ field: 'password', message: 'Wrong password' }] };
         }

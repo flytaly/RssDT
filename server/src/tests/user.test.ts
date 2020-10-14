@@ -48,7 +48,7 @@ describe('User creation', () => {
     test('should hash password', async () => {
         const user = await User.findOne({ where: { email } });
         expect(user).not.toBeUndefined();
-        expect(await argon2.verify(user!.password, password)).toBeTruthy();
+        expect(await argon2.verify(user!.password!, password)).toBeTruthy();
     });
 
     test('should return error message if user already exist', async () => {

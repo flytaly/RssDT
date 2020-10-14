@@ -1,32 +1,30 @@
 /* eslint-disable import/no-cycle */
-import { ObjectType, Field } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
 import {
-    Entity,
-    Column,
     BaseEntity,
-    PrimaryGeneratedColumn,
+    Column,
     CreateDateColumn,
-    UpdateDateColumn,
+    Entity,
     OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 import { UserFeed } from './UserFeed';
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Feed extends BaseEntity {
     @Field()
     @PrimaryGeneratedColumn()
     id!: number;
 
     @Field()
     @Column({ unique: true })
-    email!: string;
+    url!: string;
 
-    @Column({ nullable: true, default: null })
-    password?: string;
-
+    // TODO: should be protected
     @Field(() => [UserFeed], { nullable: true })
-    @OneToMany(() => UserFeed, (userFeed) => userFeed.user, { nullable: true })
+    @OneToMany(() => UserFeed, (userFeed) => userFeed.feed, { nullable: true })
     userFeeds: UserFeed[];
 
     @Field(() => Date)

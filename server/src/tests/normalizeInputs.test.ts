@@ -29,6 +29,6 @@ describe('Normalize input middleware', () => {
 
         const user = await User.findOne({ email: correctEmail });
         expect(user?.email).toBe(correctEmail);
-        expect(await argon2.verify(user!.password, password.trim())).toBeTruthy();
+        expect(await argon2.verify(user!.password!, password.trim())).toBeTruthy();
     });
 });
