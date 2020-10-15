@@ -1,0 +1,16 @@
+mutation addFeedWithEmail($email: String!, $url: String!) {
+    addFeedWithEmail(email: $email, url: $url) {
+        userFeed {
+            id
+            activated
+            feed {
+                id
+                url
+            }
+        }
+        errors {
+            message
+            field
+        }
+    }
+}

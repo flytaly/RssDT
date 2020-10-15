@@ -28,11 +28,11 @@ export class UserFeed extends BaseEntity {
     feedId: number;
 
     @Field(() => User)
-    @ManyToOne(() => User, (user) => user.userFeeds)
+    @ManyToOne(() => User, (user) => user.userFeeds, { onDelete: 'CASCADE' })
     user: User;
 
     @Field(() => Feed)
-    @ManyToOne(() => Feed, (feed) => feed.userFeeds)
+    @ManyToOne(() => Feed, (feed) => feed.userFeeds, { onDelete: 'CASCADE' })
     feed: Feed;
 
     @Field()

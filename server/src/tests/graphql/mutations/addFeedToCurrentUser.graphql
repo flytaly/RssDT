@@ -1,0 +1,16 @@
+mutation addFeedToCurrentUser($url: String!) {
+    addFeedToCurrentUser(url: $url) {
+        userFeed {
+            id
+            activated
+            feed {
+                id
+                url
+            }
+        }
+        errors {
+            message
+            field
+        }
+    }
+}
