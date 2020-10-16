@@ -1,4 +1,4 @@
-import { Connection, getConnection } from 'typeorm';
+import { Connection } from 'typeorm';
 import argon2 from 'argon2';
 import { initDbConnection } from '../dbConnection';
 import { getSdk } from './generated/graphql';

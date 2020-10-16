@@ -11,6 +11,11 @@ import {
 } from 'typeorm';
 import { UserFeed } from './UserFeed';
 
+export enum Role {
+    USER = 'USER',
+    ADMIN = 'ADMIN',
+}
+
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
@@ -21,6 +26,10 @@ export class User extends BaseEntity {
     @Field()
     @Column({ unique: true })
     email!: string;
+
+    @Field()
+    @Column({ default: Role.USER })
+    role: Role;
 
     @Column({ nullable: true, default: null })
     password?: string;

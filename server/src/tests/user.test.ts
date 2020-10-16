@@ -41,8 +41,13 @@ describe('User creation', () => {
 
     test('should not be logged in without cookie', async () => {
         const sdk = getSdk(getTestClient().client);
-        const { me } = await sdk.me();
-        expect(me).toBeNull();
+        let error;
+        try {
+            await sdk.me();
+        } catch (e) {
+            error = e;
+        }
+        expect(error.message.startsWith('not authenticated')).toBeTruthy();
     });
 
     test('should hash password', async () => {
@@ -96,7 +101,7 @@ describe('Logging-in', () => {
         const { login } = await sdk.login({ email: 'wrongemail@something.com', password });
         expect(login.user).toBeNull();
         expect(login.errors![0]).toMatchObject({
-            message: "User with such email don't exist",
+            message: "User with such email doesn't exist",
             field: 'email',
         });
     });

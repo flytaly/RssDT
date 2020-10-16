@@ -8,9 +8,11 @@ import {
     Query,
     Resolver,
     Root,
+    UseMiddleware,
 } from 'type-graphql';
 import { Feed } from '../entities/Feed';
 import { UserFeed } from '../entities/UserFeed';
+import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
 import { createUserFeed } from './common/createUserFeed';
 import { FieldError } from './common/FieldError';
@@ -33,6 +35,7 @@ export class UserFeedResolver {
         return Feed.findOne({ where: { id: root.feedId } });
     }
 
+    @UseMiddleware(auth())
     @Query(() => [UserFeed], { nullable: true })
     async myFeeds(@Ctx() { req }: MyContext) {
         return UserFeed.find({ where: { userId: req.session.userId } });
@@ -50,8 +53,8 @@ export class UserFeedResolver {
     }
 
     /* Add feed to current user account */
+    @UseMiddleware(auth())
     @Mutation(() => UserFeedResponse)
-    // AUTH
     async addFeedToCurrentUser(
         @Arg('feedUrl') url: string, //
         @Ctx() { req }: MyContext,

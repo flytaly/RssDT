@@ -1,5 +1,5 @@
-query me {
-    me {
+query users {
+    users {
         ...UserFields
     }
 }

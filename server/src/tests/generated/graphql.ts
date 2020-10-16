@@ -25,6 +25,7 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   email: Scalars['String'];
+  role: Scalars['String'];
   userFeeds?: Maybe<Array<UserFeed>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -102,6 +103,22 @@ export type UserFeedResponse = {
   userFeed?: Maybe<UserFeed>;
 };
 
+export type UserFieldsFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'role' | 'email'>
+);
+
+export type UsualUserResponseFragment = (
+  { __typename?: 'UserResponse' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )>, errors?: Maybe<Array<(
+    { __typename?: 'FieldError' }
+    & Pick<FieldError, 'message' | 'field'>
+  )>> }
+);
+
 export type AddFeedToCurrentUserMutationVariables = Exact<{
   feedUrl: Scalars['String'];
 }>;
@@ -159,13 +176,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'UserResponse' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'email'>
-    )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'field' | 'message'>
-    )>> }
+    & UsualUserResponseFragment
   ) }
 );
 
@@ -179,13 +190,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'UserResponse' }
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'email'>
-    )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'message' | 'field'>
-    )>> }
+    & UsualUserResponseFragment
   ) }
 );
 
@@ -196,11 +201,39 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
+    & UserFieldsFragment
   )> }
 );
 
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type UsersQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<Array<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )>> }
+);
+
+export const UserFieldsFragmentDoc = gql`
+    fragment UserFields on User {
+  id
+  role
+  email
+}
+    `;
+export const UsualUserResponseFragmentDoc = gql`
+    fragment UsualUserResponse on UserResponse {
+  user {
+    ...UserFields
+  }
+  errors {
+    message
+    field
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const AddFeedToCurrentUserDocument = gql`
     mutation addFeedToCurrentUser($feedUrl: String!) {
   addFeedToCurrentUser(feedUrl: $feedUrl) {
@@ -240,38 +273,31 @@ export const AddFeedWithEmailDocument = gql`
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
-    user {
-      id
-      email
-    }
-    errors {
-      field
-      message
-    }
+    ...UsualUserResponse
   }
 }
-    `;
+    ${UsualUserResponseFragmentDoc}`;
 export const RegisterDocument = gql`
     mutation register($email: String!, $password: String!) {
   register(email: $email, password: $password) {
-    user {
-      email
-    }
-    errors {
-      message
-      field
-    }
+    ...UsualUserResponse
   }
 }
-    `;
+    ${UsualUserResponseFragmentDoc}`;
 export const MeDocument = gql`
     query me {
   me {
-    id
-    email
+    ...UserFields
   }
 }
-    `;
+    ${UserFieldsFragmentDoc}`;
+export const UsersDocument = gql`
+    query users {
+  users {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -293,6 +319,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     me(variables?: MeQueryVariables): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));
+    },
+    users(variables?: UsersQueryVariables): Promise<UsersQuery> {
+      return withWrapper(() => client.request<UsersQuery>(print(UsersDocument), variables));
     }
   };
 }

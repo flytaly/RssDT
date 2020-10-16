@@ -9,11 +9,18 @@ import {
     Query,
     Resolver,
     Root,
+    UseMiddleware,
 } from 'type-graphql';
-import { User } from '../entities/User';
+import { Role, User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
-import { MyContext } from '../types';
+import { auth } from '../middlewares/auth';
+import { MyContext, ReqWithSession } from '../types';
 import { FieldError } from './common/FieldError';
+
+const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
+    req.session.userId = userId;
+    req.session.role = role;
+};
 
 @ObjectType()
 class UserResponse {
@@ -33,12 +40,13 @@ export class UserResolver {
         return UserFeed.find({ where: { userId: root.id } });
     }
 
-    // TODO: ADMIN ONLY
+    @UseMiddleware(auth(Role.ADMIN))
     @Query(() => [User], { nullable: true })
     users() {
         return User.find();
     }
 
+    @UseMiddleware(auth())
     @Query(() => User, { nullable: true })
     me(@Ctx() { req }: MyContext) {
         if (!req.session.userId) {
@@ -66,8 +74,7 @@ export class UserResolver {
         }
 
         if (!user) return null;
-
-        req.session.userId = user.id;
+        setSession(req, user.id, user.role);
 
         return { user };
     }
@@ -81,7 +88,7 @@ export class UserResolver {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return { errors: [{ field: 'email', message: "User with such email don't exist" }] };
+            return { errors: [{ field: 'email', message: "User with such email doesn't exist" }] };
         }
 
         const isMatch =
@@ -91,7 +98,7 @@ export class UserResolver {
             return { errors: [{ field: 'password', message: 'Wrong password' }] };
         }
 
-        req.session.userId = user.id;
+        setSession(req, user.id, user.role);
 
         return { user };
     }
