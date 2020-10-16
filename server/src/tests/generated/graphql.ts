@@ -75,13 +75,13 @@ export type MutationLoginArgs = {
 
 
 export type MutationAddFeedWithEmailArgs = {
-  url: Scalars['String'];
+  feedUrl: Scalars['String'];
   email: Scalars['String'];
 };
 
 
 export type MutationAddFeedToCurrentUserArgs = {
-  url: Scalars['String'];
+  feedUrl: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -103,7 +103,7 @@ export type UserFeedResponse = {
 };
 
 export type AddFeedToCurrentUserMutationVariables = Exact<{
-  url: Scalars['String'];
+  feedUrl: Scalars['String'];
 }>;
 
 
@@ -127,7 +127,7 @@ export type AddFeedToCurrentUserMutation = (
 
 export type AddFeedWithEmailMutationVariables = Exact<{
   email: Scalars['String'];
-  url: Scalars['String'];
+  feedUrl: Scalars['String'];
 }>;
 
 
@@ -202,8 +202,8 @@ export type MeQuery = (
 
 
 export const AddFeedToCurrentUserDocument = gql`
-    mutation addFeedToCurrentUser($url: String!) {
-  addFeedToCurrentUser(url: $url) {
+    mutation addFeedToCurrentUser($feedUrl: String!) {
+  addFeedToCurrentUser(feedUrl: $feedUrl) {
     userFeed {
       id
       activated
@@ -220,8 +220,8 @@ export const AddFeedToCurrentUserDocument = gql`
 }
     `;
 export const AddFeedWithEmailDocument = gql`
-    mutation addFeedWithEmail($email: String!, $url: String!) {
-  addFeedWithEmail(email: $email, url: $url) {
+    mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
+  addFeedWithEmail(email: $email, feedUrl: $feedUrl) {
     userFeed {
       id
       activated

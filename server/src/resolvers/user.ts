@@ -4,7 +4,6 @@ import {
     Ctx,
     Field,
     FieldResolver,
-    Info,
     Mutation,
     ObjectType,
     Query,
@@ -41,8 +40,7 @@ export class UserResolver {
     }
 
     @Query(() => User, { nullable: true })
-    me(@Ctx() { req }: MyContext, @Info() info: any) {
-        console.log('info:', JSON.stringify(info));
+    me(@Ctx() { req }: MyContext) {
         if (!req.session.userId) {
             return null;
         }

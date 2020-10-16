@@ -1,5 +1,5 @@
-mutation addFeedToCurrentUser($url: String!) {
-    addFeedToCurrentUser(url: $url) {
+mutation addFeedToCurrentUser($feedUrl: String!) {
+    addFeedToCurrentUser(feedUrl: $feedUrl) {
         userFeed {
             id
             activated

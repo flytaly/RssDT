@@ -43,7 +43,7 @@ export class UserFeedResolver {
     @Mutation(() => UserFeedResponse, { nullable: true })
     async addFeedWithEmail(
         @Arg('email') email: string, //
-        @Arg('url') url: string,
+        @Arg('feedUrl') url: string,
     ) {
         // TODO: url validation
         return createUserFeed({ url, email, userId: null });
@@ -53,7 +53,7 @@ export class UserFeedResolver {
     @Mutation(() => UserFeedResponse)
     // AUTH
     async addFeedToCurrentUser(
-        @Arg('url') url: string, //
+        @Arg('feedUrl') url: string, //
         @Ctx() { req }: MyContext,
     ) {
         return createUserFeed({ url, email: null, userId: req.session.userId });

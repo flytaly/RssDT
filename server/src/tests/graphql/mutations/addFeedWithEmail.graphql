@@ -1,5 +1,5 @@
-mutation addFeedWithEmail($email: String!, $url: String!) {
-    addFeedWithEmail(email: $email, url: $url) {
+mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
+    addFeedWithEmail(email: $email, feedUrl: $feedUrl) {
         userFeed {
             id
             activated
