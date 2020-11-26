@@ -1,8 +1,14 @@
-/*  global Express */
+import Session from 'express-session';
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
+import { Role } from '../entities/User';
 
-export type ReqWithSession = Request & { session: Express.Session & { userId: number } };
+type MySession = Session.Session & {
+    userId: number;
+    role: Role;
+};
+
+export type ReqWithSession = Request & { session: MySession };
 export type MyContext = {
     req: ReqWithSession;
     res: Response;

@@ -3,7 +3,7 @@ import { MyGlobal } from './_setup';
 const myGlobal = global as MyGlobal;
 
 const closeServer = () =>
-    new Promise((resolve) => {
+    new Promise<void>((resolve) => {
         myGlobal.__server.close(() => {
             resolve();
         });
