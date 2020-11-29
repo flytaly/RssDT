@@ -2,15 +2,12 @@ import {
     Arg,
     Ctx,
     Field,
-    FieldResolver,
     Mutation,
     ObjectType,
     Query,
     Resolver,
-    Root,
     UseMiddleware,
 } from 'type-graphql';
-import { Feed } from '../entities/Feed';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
@@ -28,12 +25,12 @@ class UserFeedResponse {
 
 @Resolver(UserFeed)
 export class UserFeedResolver {
+    /*  // Currently it could be accessed from user { feeds { feed } }
     @FieldResolver(() => [UserFeed])
     async feed(@Root() root: UserFeed) {
-        // TODO: use dataloader
         if (!root.feedId) return null;
         return Feed.findOne({ where: { id: root.feedId } });
-    }
+    } */
 
     @UseMiddleware(auth())
     @Query(() => [UserFeed], { nullable: true })

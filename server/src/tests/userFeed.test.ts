@@ -17,7 +17,7 @@ beforeAll(async () => {
 
 afterAll(() => dbConnection.close());
 
-describe('Add user feed without logining', () => {
+describe('Add user feed without logging', () => {
     let feedUrl: string;
     let feedUrl2: string;
     let email: string;
@@ -120,5 +120,13 @@ describe('Add user feed after logged in', () => {
         const user = await User.findOne({ where: { email } });
         const uFeed = await UserFeed.find({ where: { userId: user?.id } });
         expect(uFeed).toHaveLength(2);
+    });
+
+    test('get user feeds', async () => {
+        const { me } = await sdk.meWithFeeds();
+        expect(me?.feeds).toHaveLength(2);
+        expect(me?.feeds[0].activated).toBe(false);
+        expect(me?.feeds[0].feed).toHaveProperty('url', feedUrl);
+        expect(me?.feeds[1].feed).toHaveProperty('url', feedUrl2);
     });
 });

@@ -11,6 +11,7 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { Role, User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
@@ -35,9 +36,13 @@ class UserResponse {
 export class UserResolver {
     @FieldResolver(() => [UserFeed])
     async feeds(@Root() root: User) {
-        // TODO: use dataloader
         if (!root.id) return null;
-        return UserFeed.find({ where: { userId: root.id } });
+        return getConnection()
+            .getRepository(UserFeed)
+            .createQueryBuilder('uf')
+            .where({ userId: root.id })
+            .innerJoinAndSelect('uf.feed', 'f', 'f.id = uf.feedId')
+            .getMany();
     }
 
     @UseMiddleware(auth(Role.ADMIN))

@@ -3,6 +3,8 @@ import { print } from 'graphql';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -194,6 +196,25 @@ export type RegisterMutation = (
   ) }
 );
 
+export type MeWithFeedsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeWithFeedsQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { feeds: Array<(
+      { __typename?: 'UserFeed' }
+      & Pick<UserFeed, 'activated' | 'createdAt'>
+      & { feed: (
+        { __typename?: 'Feed' }
+        & Pick<Feed, 'url'>
+      ) }
+    )> }
+    & UserFieldsFragment
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -284,6 +305,20 @@ export const RegisterDocument = gql`
   }
 }
     ${UsualUserResponseFragmentDoc}`;
+export const MeWithFeedsDocument = gql`
+    query meWithFeeds {
+  me {
+    ...UserFields
+    feeds {
+      activated
+      createdAt
+      feed {
+        url
+      }
+    }
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const MeDocument = gql`
     query me {
   me {
@@ -316,6 +351,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
+    },
+    meWithFeeds(variables?: MeWithFeedsQueryVariables): Promise<MeWithFeedsQuery> {
+      return withWrapper(() => client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables));
     },
     me(variables?: MeQueryVariables): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));
