@@ -4,6 +4,7 @@ import {
     Ctx,
     Field,
     FieldResolver,
+    InputType,
     Mutation,
     ObjectType,
     Query,
@@ -16,7 +17,8 @@ import { Role, User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { MyContext, ReqWithSession } from '../types';
-import { FieldError } from './common/FieldError';
+import { ArgumentError } from './common/ArgumentError';
+import { NormalizeAndValidateArgs, InputMetadata } from '../middlewares/normalize-validate-args';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -25,11 +27,22 @@ const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
 
 @ObjectType()
 class UserResponse {
-    @Field(() => [FieldError], { nullable: true })
-    errors?: FieldError[];
+    @Field(() => [ArgumentError], { nullable: true })
+    errors?: ArgumentError[];
 
     @Field(() => User, { nullable: true })
     user?: User;
+}
+
+@InputType()
+export class EmailPasswordInput {
+    @InputMetadata('email')
+    @Field()
+    email: string;
+
+    @InputMetadata('password')
+    @Field()
+    password: string;
 }
 
 @Resolver(User)
@@ -60,13 +73,11 @@ export class UserResolver {
         return User.findOne(req.session.userId);
     }
 
+    @NormalizeAndValidateArgs(EmailPasswordInput, 'input')
     @Mutation(() => UserResponse)
-    async register(
-        @Arg('email') email: string,
-        @Arg('password') plainPassword: string,
-        @Ctx() { req }: MyContext,
-    ) {
-        // TODO: VALIDATION
+    async register(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
+        const { password: plainPassword, email } = input;
+
         const password = await argon2.hash(plainPassword);
         let user: User | undefined;
 
@@ -74,7 +85,7 @@ export class UserResolver {
             user = await User.create({ email, password }).save();
         } catch (err) {
             if (err.code === '23505') {
-                return { errors: [{ field: 'email', message: 'User already exists' }] };
+                return { errors: [new ArgumentError('email', 'User already exists')] };
             }
         }
 
@@ -84,23 +95,24 @@ export class UserResolver {
         return { user };
     }
 
+    @NormalizeAndValidateArgs(EmailPasswordInput, 'input')
     @Mutation(() => UserResponse)
-    async login(
-        @Arg('email') email: string,
-        @Arg('password') plainPassword: string,
-        @Ctx() { req }: MyContext,
-    ) {
+    async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
+        const { password: plainPassword, email } = input;
+
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return { errors: [{ field: 'email', message: "User with such email doesn't exist" }] };
+            return {
+                errors: [new ArgumentError('email', "User with such email doesn't exist")],
+            };
         }
 
         const isMatch =
             user.password && // password could be empty
             (await argon2.verify(user.password, plainPassword));
         if (!isMatch) {
-            return { errors: [{ field: 'password', message: 'Wrong password' }] };
+            return { errors: [new ArgumentError('password', 'Wrong password')] };
         }
 
         setSession(req, user.id, user.role);

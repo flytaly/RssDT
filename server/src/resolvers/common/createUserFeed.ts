@@ -1,7 +1,7 @@
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
 import { Feed } from '../../entities/Feed';
 import { UserFeed } from '../../entities/UserFeed';
-import { FieldError } from './FieldError';
+import { ArgumentError } from './ArgumentError';
 
 const upsertUserAndGetId = async (
     conn: Connection | EntityManager | QueryRunner,
@@ -34,7 +34,7 @@ interface CreateUserFeedArgs {
 export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs) => {
     if (!email && !userId) throw new Error('Not enough arguments to create new feed');
 
-    let errors: FieldError[] | null = null;
+    let errors: ArgumentError[] | null = null;
     let feed = await Feed.findOne({ where: { url } });
     const userFeed = new UserFeed();
 
@@ -70,7 +70,7 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
         await queryRunner.commitTransaction();
     } catch (err) {
         const field = err.message === 'feed was already added' ? 'url' : '';
-        errors = [new FieldError(field, err.message)];
+        errors = [new ArgumentError(field, err.message)];
         await queryRunner.rollbackTransaction();
     } finally {
         await queryRunner.release();
