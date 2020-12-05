@@ -1,4 +1,4 @@
-import { getSdk } from '../generated/graphql';
+import { getSdk } from '../graphql/generated';
 import getTestClient from './getClient';
 
 export const getSdkWithLoggedInUser = async (email: string, password: string) => {

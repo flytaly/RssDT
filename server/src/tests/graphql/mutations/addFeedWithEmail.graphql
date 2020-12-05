@@ -1,5 +1,5 @@
 mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
-    addFeedWithEmail(email: $email, feedUrl: $feedUrl) {
+    addFeedWithEmail(input: { email: $email, feedUrl: $feedUrl }) {
         userFeed {
             id
             activated
@@ -10,7 +10,7 @@ mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
         }
         errors {
             message
-            field
+            argument
         }
     }
 }

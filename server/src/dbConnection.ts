@@ -19,6 +19,7 @@ export const initDbConnection = async () => {
         password: process.env.DB_PASSWORD,
         logging: IS_DEV,
         migrations: IS_TEST ? undefined : [migrationPath],
+        dropSchema: IS_TEST,
         synchronize: !IS_PROD,
         entities: [User, Feed, UserFeed],
     });

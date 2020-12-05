@@ -2,10 +2,10 @@ import { Connection } from 'typeorm';
 import faker from 'faker';
 import argon2 from 'argon2';
 import { initDbConnection } from '../dbConnection';
-import { getSdk } from './generated/graphql';
-import getTestClient from './utils/getClient';
+import { getSdk } from './graphql/generated';
+import getTestClient from './test-utils/getClient';
 import { User } from '../entities/User';
-import { deleteUserWithEmail } from './utils/dbQueries';
+import { deleteUserWithEmail } from './test-utils/dbQueries';
 
 let dbConnection: Connection;
 
@@ -61,7 +61,7 @@ describe('User creation', () => {
         const { register } = await sdk.register({ email, password });
         expect(register.errors![0]).toMatchObject({
             message: 'User already exists',
-            field: 'email',
+            argument: 'email',
         });
     });
 });
@@ -102,7 +102,7 @@ describe('Logging-in', () => {
         expect(login.user).toBeNull();
         expect(login.errors![0]).toMatchObject({
             message: "User with such email doesn't exist",
-            field: 'email',
+            argument: 'email',
         });
     });
 
@@ -112,14 +112,14 @@ describe('Logging-in', () => {
         expect(login1.user).toBeNull();
         expect(login1.errors![0]).toMatchObject({
             message: 'Wrong password',
-            field: 'password',
+            argument: 'password',
         });
 
         const { login: login2 } = await sdk.login({ email, password: '' });
         expect(login2.user).toBeNull();
         expect(login2.errors![0]).toMatchObject({
-            message: 'Wrong password',
-            field: 'password',
+            message: '"password" is not allowed to be empty',
+            argument: 'password',
         });
     });
 });

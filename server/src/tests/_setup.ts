@@ -23,9 +23,8 @@ module.exports = async () => {
 
     const redis = new Redis();
     initSession(app, redis);
-
+    // Connection.da
     await initApolloServer(app, redis);
-
     const server = app.listen(PORT, () => {
         console.log(`🚀 start server on port:${PORT} for testing`);
     });

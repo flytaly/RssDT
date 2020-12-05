@@ -2,11 +2,11 @@ import { Connection } from 'typeorm';
 import faker from 'faker';
 import argon2 from 'argon2';
 import { initDbConnection } from '../dbConnection';
-import { getSdk } from './generated/graphql';
-import getTestClient from './utils/getClient';
+import { getSdk } from './graphql/generated';
+import getTestClient from './test-utils/getClient';
 import { User } from '../entities/User';
-import { deleteUserWithEmail, deleteFeedWithUrl } from './utils/dbQueries';
-import { getSdkWithLoggedInUser } from './utils/login';
+import { deleteUserWithEmail, deleteFeedWithUrl } from './test-utils/dbQueries';
+import { getSdkWithLoggedInUser } from './test-utils/login';
 import { UserFeed } from '../entities/UserFeed';
 
 let dbConnection: Connection;
@@ -54,7 +54,7 @@ describe('Add user feed without logging', () => {
         expect(userFeed).toBeNull();
         expect(Array.isArray(errors)).toBeTruthy();
         expect(errors![0]).toMatchObject({
-            field: 'url',
+            argument: 'url',
             message: 'feed was already added',
         });
     });
@@ -109,7 +109,7 @@ describe('Add user feed after logged in', () => {
         const { userFeed, errors } = addFeedToCurrentUser!;
         expect(userFeed).toBeNull();
         expect(Array.isArray(errors)).toBeTruthy();
-        expect(errors![0]).toMatchObject({ field: 'url', message: 'feed was already added' });
+        expect(errors![0]).toMatchObject({ argument: 'url', message: 'feed was already added' });
     });
 
     test('should add another feed to the same user', async () => {

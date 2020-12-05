@@ -66,43 +66,54 @@ export type Mutation = {
 
 
 export type MutationRegisterArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  input: EmailPasswordInput;
 };
 
 
 export type MutationLoginArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  input: EmailPasswordInput;
 };
 
 
 export type MutationAddFeedWithEmailArgs = {
-  feedUrl: Scalars['String'];
-  email: Scalars['String'];
+  input: AddFeedEmailInput;
 };
 
 
 export type MutationAddFeedToCurrentUserArgs = {
-  feedUrl: Scalars['String'];
+  input: AddFeedInput;
 };
 
 export type UserResponse = {
   __typename?: 'UserResponse';
-  errors?: Maybe<Array<FieldError>>;
+  errors?: Maybe<Array<ArgumentError>>;
   user?: Maybe<User>;
 };
 
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
+export type ArgumentError = {
+  __typename?: 'ArgumentError';
+  argument?: Maybe<Scalars['String']>;
   message: Scalars['String'];
+};
+
+export type EmailPasswordInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserFeedResponse = {
   __typename?: 'UserFeedResponse';
-  errors?: Maybe<Array<FieldError>>;
+  errors?: Maybe<Array<ArgumentError>>;
   userFeed?: Maybe<UserFeed>;
+};
+
+export type AddFeedEmailInput = {
+  feedUrl: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type AddFeedInput = {
+  feedUrl: Scalars['String'];
 };
 
 export type UserFieldsFragment = (
@@ -116,8 +127,8 @@ export type UsualUserResponseFragment = (
     { __typename?: 'User' }
     & UserFieldsFragment
   )>, errors?: Maybe<Array<(
-    { __typename?: 'FieldError' }
-    & Pick<FieldError, 'message' | 'field'>
+    { __typename?: 'ArgumentError' }
+    & Pick<ArgumentError, 'message' | 'argument'>
   )>> }
 );
 
@@ -138,8 +149,8 @@ export type AddFeedToCurrentUserMutation = (
         & Pick<Feed, 'id' | 'url'>
       ) }
     )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'message' | 'field'>
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
     )>> }
   ) }
 );
@@ -162,8 +173,8 @@ export type AddFeedWithEmailMutation = (
         & Pick<Feed, 'id' | 'url'>
       ) }
     )>, errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'message' | 'field'>
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
     )>> }
   )> }
 );
@@ -251,13 +262,13 @@ export const UsualUserResponseFragmentDoc = gql`
   }
   errors {
     message
-    field
+    argument
   }
 }
     ${UserFieldsFragmentDoc}`;
 export const AddFeedToCurrentUserDocument = gql`
     mutation addFeedToCurrentUser($feedUrl: String!) {
-  addFeedToCurrentUser(feedUrl: $feedUrl) {
+  addFeedToCurrentUser(input: {feedUrl: $feedUrl}) {
     userFeed {
       id
       activated
@@ -268,14 +279,14 @@ export const AddFeedToCurrentUserDocument = gql`
     }
     errors {
       message
-      field
+      argument
     }
   }
 }
     `;
 export const AddFeedWithEmailDocument = gql`
     mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
-  addFeedWithEmail(email: $email, feedUrl: $feedUrl) {
+  addFeedWithEmail(input: {email: $email, feedUrl: $feedUrl}) {
     userFeed {
       id
       activated
@@ -286,21 +297,21 @@ export const AddFeedWithEmailDocument = gql`
     }
     errors {
       message
-      field
+      argument
     }
   }
 }
     `;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
+  login(input: {email: $email, password: $password}) {
     ...UsualUserResponse
   }
 }
     ${UsualUserResponseFragmentDoc}`;
 export const RegisterDocument = gql`
     mutation register($email: String!, $password: String!) {
-  register(email: $email, password: $password) {
+  register(input: {email: $email, password: $password}) {
     ...UsualUserResponse
   }
 }

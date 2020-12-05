@@ -60,7 +60,6 @@ export function InputMetadata(inputType: InputType): PropertyDecorator {
 export function NormalizeAndValidateArgs(InputSchema: Object, path: string): MethodDecorator {
     return createMethodDecorator(async ({ args }, next) => {
         const argsObj = path ? args[path] : args;
-        console.log('argsObj:', argsObj);
 
         // Normalization
         const normalizeArgs = Reflect.getOwnMetadata(NORM_METADATA_KEY, InputSchema);

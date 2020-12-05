@@ -4,6 +4,6 @@ fragment UsualUserResponse on UserResponse {
     }
     errors {
         message
-        field
+        argument
     }
 }

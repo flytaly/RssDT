@@ -1,5 +1,5 @@
 mutation addFeedToCurrentUser($feedUrl: String!) {
-    addFeedToCurrentUser(feedUrl: $feedUrl) {
+    addFeedToCurrentUser(input: { feedUrl: $feedUrl }) {
         userFeed {
             id
             activated
@@ -10,7 +10,7 @@ mutation addFeedToCurrentUser($feedUrl: String!) {
         }
         errors {
             message
-            field
+            argument
         }
     }
 }

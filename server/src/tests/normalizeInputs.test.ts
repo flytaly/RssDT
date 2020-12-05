@@ -1,9 +1,9 @@
 import { Connection } from 'typeorm';
 import argon2 from 'argon2';
 import { initDbConnection } from '../dbConnection';
-import { getSdk } from './generated/graphql';
-import getTestClient from './utils/getClient';
-import { deleteFeedWithUrl, deleteUserWithEmail } from './utils/dbQueries';
+import { getSdk } from './graphql/generated';
+import getTestClient from './test-utils/getClient';
+import { deleteFeedWithUrl, deleteUserWithEmail } from './test-utils/dbQueries';
 import { User } from '../entities/User';
 import { Feed } from '../entities/Feed';
 
@@ -15,7 +15,7 @@ beforeAll(async () => {
 
 afterAll(() => dbConnection.close());
 
-describe('Normalize input middleware', () => {
+describe('Normalize input', () => {
     const email = ' EmailWithCamelCase@Gmail.Com   ';
     const correctEmail = email.trim().toLowerCase();
     const password = ' password ';
@@ -35,7 +35,7 @@ describe('Normalize input middleware', () => {
 
     test('should normalizeURL', async () => {
         const feedUrl = 'someURL.COM/feed/';
-        const normUrl = 'http://someurl.com/feed';
+        const normUrl = 'https://someurl.com/feed';
         const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl });
         const { id } = addFeedWithEmail!.userFeed!.feed;
         const feed = await Feed.findOne({ id });
