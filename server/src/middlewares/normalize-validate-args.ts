@@ -63,9 +63,20 @@ export function NormalizeAndValidateArgs(InputSchema: Object, path: string): Met
 
         // Normalization
         const normalizeArgs = Reflect.getOwnMetadata(NORM_METADATA_KEY, InputSchema);
-        Object.keys(normalizeArgs).forEach((key) => {
-            argsObj[key] = normalizeArgs[key](argsObj[key]);
-        });
+        try {
+            Object.keys(normalizeArgs).forEach((key) => {
+                argsObj[key] = normalizeArgs[key](argsObj[key]);
+            });
+        } catch (error) {
+            return {
+                errors: [
+                    new ArgumentError(
+                        error.message.startsWith('Invalid URL') ? 'feedUrl' : '',
+                        error.message,
+                    ),
+                ],
+            };
+        }
 
         // Validation
         const validateSchema = Reflect.getOwnMetadata(VAL_METADATA_KEY, InputSchema);

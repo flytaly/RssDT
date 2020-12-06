@@ -1,11 +1,11 @@
 import { Connection } from 'typeorm';
 import faker from 'faker';
 import argon2 from 'argon2';
-import { initDbConnection } from '../dbConnection';
-import { getSdk } from './graphql/generated';
-import getTestClient from './test-utils/getClient';
-import { User } from '../entities/User';
-import { deleteUserWithEmail } from './test-utils/dbQueries';
+import { initDbConnection } from '../../dbConnection';
+import { getSdk, LoginMutation, RegisterMutation } from '../graphql/generated';
+import getTestClient from '../test-utils/getClient';
+import { User } from '../../entities/User';
+import { deleteUserWithEmail } from '../test-utils/dbQueries';
 
 let dbConnection: Connection;
 
@@ -121,5 +121,64 @@ describe('Logging-in', () => {
             message: '"password" is not allowed to be empty',
             argument: 'password',
         });
+    });
+});
+
+describe('Normalization', () => {
+    let email: string;
+    let password: string;
+
+    beforeAll(async () => {
+        email = ` ${faker.internet.email().toUpperCase()} `;
+        password = ' password  ';
+        await deleteUserWithEmail(email);
+    });
+
+    afterAll(() => deleteUserWithEmail(email));
+    test('should normalize inputs', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const normEmail = email.trim().toLowerCase();
+        const normPassword = password.trim().toLowerCase();
+        const { register } = await sdk.register({
+            email: normEmail,
+            password: normPassword,
+        });
+        expect(register.user?.email).toBe(normEmail);
+
+        const { login } = await sdk.login({
+            email: normEmail,
+            password: normPassword,
+        });
+        expect(login?.user?.email).toBe(normEmail);
+    });
+});
+
+describe('Validation', () => {
+    const email = 'This is definitely not an email';
+    const password = 'short';
+
+    test('should response with errors on register', async () => {
+        const sdk = getSdk(getTestClient().client);
+        const wrongArgument = (resp: RegisterMutation, argument: string) => {
+            expect(resp.register?.errors?.[0].argument).toBe(argument);
+        };
+
+        wrongArgument(await sdk.register({ email: '', password: '32742374892374' }), 'email');
+        wrongArgument(
+            await sdk.register({ email: faker.internet.email(), password: '' }),
+            'password',
+        );
+        wrongArgument(await sdk.register({ email, password: '32742374892374' }), 'email');
+        wrongArgument(await sdk.register({ email: faker.internet.email(), password }), 'password');
+    });
+    test('should response with errors on login', async () => {
+        const wrongArgument = (resp: LoginMutation, argument: string) => {
+            expect(resp.login?.errors?.[0].argument).toBe(argument);
+        };
+        const sdk = getSdk(getTestClient().client);
+        wrongArgument(await sdk.login({ email: '', password: '32742374892374' }), 'email');
+        wrongArgument(await sdk.login({ email: faker.internet.email(), password: '' }), 'password');
+        wrongArgument(await sdk.login({ email, password: '32742374892374' }), 'email');
+        wrongArgument(await sdk.login({ email: faker.internet.email(), password }), 'password');
     });
 });

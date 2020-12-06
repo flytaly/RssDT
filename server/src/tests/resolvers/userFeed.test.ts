@@ -1,13 +1,13 @@
 import { Connection } from 'typeorm';
 import faker from 'faker';
 import argon2 from 'argon2';
-import { initDbConnection } from '../dbConnection';
-import { getSdk } from './graphql/generated';
-import getTestClient from './test-utils/getClient';
-import { User } from '../entities/User';
-import { deleteUserWithEmail, deleteFeedWithUrl } from './test-utils/dbQueries';
-import { getSdkWithLoggedInUser } from './test-utils/login';
-import { UserFeed } from '../entities/UserFeed';
+import { initDbConnection } from '../../dbConnection';
+import { getSdk } from '../graphql/generated';
+import getTestClient from '../test-utils/getClient';
+import { User } from '../../entities/User';
+import { deleteUserWithEmail, deleteFeedWithUrl } from '../test-utils/dbQueries';
+import { getSdkWithLoggedInUser } from '../test-utils/login';
+import { UserFeed } from '../../entities/UserFeed';
 
 let dbConnection: Connection;
 
@@ -128,5 +128,36 @@ describe('Add user feed after logged in', () => {
         expect(me?.feeds[0].activated).toBe(false);
         expect(me?.feeds[0].feed).toHaveProperty('url', feedUrl);
         expect(me?.feeds[1].feed).toHaveProperty('url', feedUrl2);
+    });
+});
+
+describe('Normalize', () => {
+    let feedUrl: string;
+    let email: string;
+    let sdk: ReturnType<typeof getSdk>;
+    beforeAll(async () => {
+        email = faker.internet.email().toLowerCase();
+        feedUrl = 'domain.com/test.rss';
+        sdk = getSdk(getTestClient().client);
+        await deleteUserWithEmail(email);
+    });
+    afterAll(() =>
+        Promise.all([
+            deleteUserWithEmail(email), //
+            deleteFeedWithUrl(feedUrl),
+        ]),
+    );
+    test('should normalize url', async () => {
+        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl });
+        expect(addFeedWithEmail?.userFeed?.feed.url).toBe(`https://${feedUrl.trim()}`);
+    });
+    test('should validate url', async () => {
+        const wrongUrls = ['', 'https:', 'https://', 'ftp://asdf.com', 'juststring'];
+        await Promise.all(
+            wrongUrls.map(async (url) => {
+                const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: url });
+                expect(addFeedWithEmail?.errors?.[0].argument).toBe('feedUrl');
+            }),
+        );
     });
 });
