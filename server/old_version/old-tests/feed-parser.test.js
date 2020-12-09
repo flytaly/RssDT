@@ -5,9 +5,7 @@ const httpAdapter = require('axios/lib/adapters/http');
 const { Readable } = require('stream');
 const { URL } = require('url');
 const { feeds, updatedFeeds } = require('./mocks/feeds');
-const {
-    getNewItems, getFeedStream, parseFeed, checkFeedInfo,
-} = require('../feed-parser');
+const { getNewItems, getFeedStream, parseFeed, checkFeedInfo } = require('../feed-parser');
 
 axios.defaults.adapter = httpAdapter;
 
@@ -21,10 +19,7 @@ describe('Test feed stream', () => {
     const { url, mock } = feedUrls[0];
 
     beforeAll(() => {
-        nock(url.origin)
-            .persist()
-            .get(url.pathname)
-            .reply(200, feeds[mock]);
+        nock(url.origin).persist().get(url.pathname).reply(200, feeds[mock]);
     });
 
     afterAll(() => {
@@ -53,21 +48,24 @@ describe('Find feed url in html <head>', () => {
     const pages = {
         pageWithRSS: {
             url: new URL('https://rss.com/'),
-            body: '<html><head>'
-            + '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss" />'
-            + '</head><body></body></html>',
+            body:
+                '<html><head>' +
+                '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss" />' +
+                '</head><body></body></html>',
         },
         pageWithAtom: {
             url: new URL('https://atom.com/'),
-            body: '<html><head>'
-            + '<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom" />'
-            + '</head><body></body></html>',
+            body:
+                '<html><head>' +
+                '<link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom" />' +
+                '</head><body></body></html>',
         },
         pageWithAbsoluteUrl: {
             url: new URL('https://absoluteurl.com/'),
-            body: '<html><head>'
-            + '<link rel="alternate" type="application/rss+xml" title="Rss Feed" href="https://feed.absoluteurl.com/path/to/feed" />'
-            + '</head><body></body></html>',
+            body:
+                '<html><head>' +
+                '<link rel="alternate" type="application/rss+xml" title="Rss Feed" href="https://feed.absoluteurl.com/path/to/feed" />' +
+                '</head><body></body></html>',
         },
         rssFeed: {
             url: new URL('https://rss.com/rss'),
@@ -83,10 +81,9 @@ describe('Find feed url in html <head>', () => {
         },
     };
     beforeAll(() => {
-        Object.values(pages).map(page => nock(page.url.origin)
-            .persist()
-            .get(page.url.pathname)
-            .reply(200, page.body));
+        Object.values(pages).map((page) =>
+            nock(page.url.origin).persist().get(page.url.pathname).reply(200, page.body),
+        );
     });
 
     afterAll(() => {
@@ -104,7 +101,7 @@ describe('Find feed url in html <head>', () => {
             expect(feedBody).toBe(pages.pageWithRSS.body);
         });
     });
-    test('should find feed and return stream with RSS feed\'s body', async () => {
+    test("should find feed and return stream with RSS feed's body", async () => {
         const { url } = pages.pageWithRSS;
         const { feedStream, feedUrl } = await getFeedStream(url.href, {}, true);
         expect(feedUrl).toBe(pages.rssFeed.url.href);
@@ -116,7 +113,7 @@ describe('Find feed url in html <head>', () => {
             expect(feedBody).toBe(pages.rssFeed.body);
         });
     });
-    test('should find feed and return stream with Atom feed\'s body', async () => {
+    test("should find feed and return stream with Atom feed's body", async () => {
         const { url } = pages.pageWithAtom;
         const { feedStream, feedUrl } = await getFeedStream(url.href, {}, true);
         expect(feedUrl).toBe(pages.atomFeed.url.href);
@@ -141,7 +138,6 @@ describe('Find feed url in html <head>', () => {
         });
     });
 });
-
 
 describe('Test feed parser', () => {
     beforeEach(() => {
@@ -175,7 +171,9 @@ describe('Test feed parser', () => {
         it(`should return only new items after update ${url.hostname}`, async () => {
             const { feedItems: feed } = await getNewItems(url.href);
             const { feedItems: feedUpdate } = await getNewItems(url.href, feed);
-            const intersect = feedUpdate.filter(({ pubDate }) => feed[feed.length - 1].pubDate > pubDate);
+            const intersect = feedUpdate.filter(
+                ({ pubDate }) => feed[feed.length - 1].pubDate > pubDate,
+            );
             expect(feed.length).not.toBe(0);
             expect(feedUpdate.length).not.toBe(0);
             expect(intersect.length).toBe(0);
@@ -185,10 +183,7 @@ describe('Test feed parser', () => {
 
 describe('Test checkFeedInfo function', () => {
     const { url, mock } = feedUrls[0];
-    nock(url.origin)
-        .persist()
-        .get(url.pathname)
-        .reply(200, feeds[mock]);
+    nock(url.origin).persist().get(url.pathname).reply(200, feeds[mock]);
     afterAll(() => {
         nock.cleanAll();
     });
@@ -203,7 +198,9 @@ describe('Test checkFeedInfo function', () => {
 
     it('should be broken but still a feed', async () => {
         const stream = new Readable();
-        stream.push('<?xml version="1.0"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><item><title>Test</title></item>');
+        stream.push(
+            '<?xml version="1.0"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><item><title>Test</title></item>',
+        );
         stream.push(null);
         const { isFeed, meta, error } = await checkFeedInfo(stream);
         expect(isFeed).toBeTruthy();

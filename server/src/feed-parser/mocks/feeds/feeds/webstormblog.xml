@@ -1,0 +1,1253 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>WebStorm Blog</title>
+	<atom:link href="https://blog.jetbrains.com/webstorm/feed/" rel="self" type="application/rss+xml" />
+	<link>https://blog.jetbrains.com/webstorm</link>
+	<description>Tips &#38; tricks, news, how-to’s</description>
+	<lastBuildDate>Mon, 29 Oct 2018 10:20:53 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.4.16</generator>
+	<item>
+		<title>Testing with Jest in WebStorm</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#comments</comments>
+		<pubDate>Fri, 26 Oct 2018 10:25:14 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Tutorials]]></category>
+		<category><![CDATA[Jest]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[react]]></category>
+		<category><![CDATA[testing]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9994</guid>
+		<description><![CDATA[Jest, the testing platform developed by Facebook, is becoming more and more popular with each day, especially for testing React applications. Jest is fast, easy to get started with, and has lots of features (such as snapshot testing and test &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><a href="https://jestjs.io/">Jest</a>, the testing platform developed by Facebook, is becoming more and more popular with each day, especially for testing React applications. Jest is fast, easy to get started with, and has lots of features (such as snapshot testing and test coverage) available out of the box.</p>
+<p>In WebStorm we wanted to streamline the whole testing workflow and make writing, running, and debugging tests with Jest even smoother and easier. Let’s see how WebStorm can help you test your app with Jest.</p>
+<p>As an example, we’ll use the <a href="https://github.com/react-dropzone/react-dropzone">react-dropzone</a> project that uses <a href="https://github.com/facebook/jest">Jest</a> and <a href="https://github.com/airbnb/enzyme">Enzyme</a>. Enzyme helps you manipulate your React components while testing.</p>
+<p>We won’t go into the details of installing and setting up Jest in a project. For that, we recommend <a href="https://jestjs.io/docs/en/getting-started">Jest&#8217;s official documentation</a> and this <a href="https://medium.freecodecamp.org/components-testing-in-react-what-and-how-to-test-with-jest-and-enzyme-7c1cace99de5">blog post</a><a href="https://medium.freecodecamp.org/components-testing-in-react-what-and-how-to-test-with-jest-and-enzyme-7c1cace99de5"> on testing React apps</a>.</p>
+<ul>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#configure_code_completion">Configure code completion</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#run_tests">Run tests</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#run_a_single_test_test_suite_or_file">Run a single test, test suite or file</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#rerun_only_failed_tests">Rerun failed tests</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#run_tests_in_watch_mode">Run tests in watch mode</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#snapshot_testing">Snapshot testing</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#debug_tests">Debug tests</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/#test_coverage">Test coverage</a></li>
+</ul>
+<h2 id="configure_code_completion">Configure code completion</h2>
+<p>You might have noticed that some of the global Jest methods (like describe and beforeEach) in JavaScript files are marked as unresolved in the editor. To fix that, install the TypeScript type definition files for Jest: Go to <em>Preferences | Languages &amp; Frameworks | JavaScript | Libraries</em>, click Download on the right-hand side of the dialog, then search for Jest in the list and click Install. Or add <code>@types/jest</code> to <code>devDependencies</code> in project’s <em>package.json</em>.</p>
+<p><img class="alignnone size-full wp-image-9995" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/javascript-libraries-configuration.png" alt="JavaScript libraries configuration dialog in WebStorm" width="600" /></p>
+<p>This happens because Jest defines these methods in the global scope – so you don’t need to import them in each test file. But it also makes it harder for WebStorm to learn about them from the static analysis of the Jest sources – that’s why they are marked by default as unresolved.</p>
+<h2 id="run_tests">Run tests</h2>
+<p>Create a run configuration to run all tests in the project<br />
+First, let’s run all the tests we have in our project. We need to create a run/debug configuration:</p>
+<ul>
+<li>in the menu Run, select <em>Edit configurations</em></li>
+<li>then click <code>+</code> and select <em>Jest</em> from the drop-down list</li>
+</ul>
+<p>Usually, you don’t have to change anything in the configuration, but if there’s a Jest configuration file in the project or you need to pass additional flags to Jest, you should do so in this configuration.</p>
+<p><img class="alignnone size-full wp-image-9997" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-debug-configuration-for-all-tests.png" alt="Run debug configuration for running all Jest tests" width="600" /><span id="more-9994"></span></p>
+<p>For now, we will just select <em>All tests</em> at the bottom of the dialog and click <em>OK</em> to save the configuration. You will immediately see the new configuration at the top right corner of the IDE – now click the green icon next to it to run it.</p>
+<p><img class="alignnone size-full wp-image-9998" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-configuration-from-toolbar.png" alt="Run configuration from the IDE toolbar" width="600" /></p>
+<h3>View test results</h3>
+<p>In the test tool window that opens, you can track the test progress and see all the test results (you can also see the test result in the editor, right next to the test). All the tests will be listed in a tree view on the left side of the tool window. On the right, you will see a stack trace for the tests that failed.</p>
+<p><img class="alignnone size-full wp-image-9999" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/test-results-in-tool-window.png" alt="Test results in the tool window" width="800" /></p>
+<p>Double-click the test name in the list to open it in the editor. In WebStorm 2018.3, for failed tests, it will open the line that was at the top of the stack trace.</p>
+<p>Use the icons at the top of the tool window to hide all the passed and ignored tests from the results.</p>
+<p><img src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/show-only-failed-tests.png" alt="Show only failed tests" width="600" /></p>
+<p>If you want to find a particular test in the test results, just start typing its name and then use the up and down arrows to jump between the matched test names.</p>
+<p><img class="alignnone size-full wp-image-10001" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/quick-search-in-test-tool-window.png" alt="Quick search in the test tool window" width="800" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/quick-search-in-test-tool-window.gif" /></p>
+<h2 id="run_a_single_test_test_suite_or_file">Run a single test, test suite, or file</h2>
+<p>If you have lots of tests and you only want to run some of them, you have a bunch of options available.</p>
+<p>In the editor, next to each test and test suite you can see an icon – it shows the test status for the tests that you have recently run. If you click it, you can select whether you want to run or debug this particular test or suite.</p>
+<p><img class="alignnone size-full wp-image-10003" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-or-debug-a-single-test.png" alt="Run or debug a single test" width="600" /></p>
+<p>This way, we can very quickly run or debug a test – there is no need to create a new run/debug configuration yourself. WebStorm will use the template for the new Jest run configuration that can be modified in the menu <em>Run | Edit configurations &#8211; Default configurations &#8211; Jest</em>.</p>
+<p>If you want to run the whole test file with Jest, right-click it and select Run.</p>
+<p><img class="alignnone size-full wp-image-10004" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-or-debug-a-test-file.png" alt="Run or debug a test file" width="600" /></p>
+<h2 id="rerun_only_failed_tests">Rerun only failed tests</h2>
+<p>If you have implemented a fix for the failed tests and now want to rerun them to check the fix, click the <em>Rerun failed tests</em> button in the tool window.</p>
+<p><img class="alignnone size-full wp-image-10005" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/rerun-failed-tests.png" alt="Rerun only failed tests" width="600" /></p>
+<h2 id="run_tests_in_watch_mode">Run tests in watch mode</h2>
+<p>One of the greatest features that Jest has is a watch mode for running tests. In this mode, once you’ve made changes to the test or related files, the tests will be restarted automatically. By default, WebStorm doesn’t enable the watch mode when running all tests, but it’s very easy to enable it.</p>
+<p>Open the Jest run/debug configuration that we created earlier and add <code>--watchAll</code> to the Jest options field, save the configuration, and then run it again.</p>
+<p>Now, if you fix our failing test or add a new test and save the changes, Jest will rerun the tests and you will see the new results in the test tool window.</p>
+<p><img class="alignnone size-full wp-image-10006" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/jest-tests-in-watch-mode.png" alt="Running Jest tests in watch mode" width="800" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/jest-tests-in-watch-mode.gif" /></p>
+<p>This is particularly handy if you’re doing <a href="https://medium.freecodecamp.org/a-quick-introduction-to-test-driven-development-with-jest-cac71cb94e50">test-driven development</a> and you first develop the tests and then add the feature they cover – you will see how your tests turn from red to green in the test view without having to restart them every time.</p>
+<p>By the way, you can quickly jump from the file to its test file and back using the shortcut <em>Cmd-Shift-T / Ctrl-Shift-T</em>. This navigation works if the files follow one of the popular naming conventions (e.g. are named <em>app.js</em> and <em>app.spec.js</em> or <em>app.test.js</em>).</p>
+<p>Note that the individual tests started from the editor will not be run in the watch mode until you add <code>--watch</code> to the template for the Jest configuration.</p>
+<h2 id="snapshot_testing">Snapshot testing</h2>
+<p>Another feature provided by Jest is <a href="https://jestjs.io/docs/en/snapshot-testing">snapshot testing</a>. Snapshot files describe the DOM elements in a special format, so your tests can check the UI against these snapshots and the IDE will warn you if the UI component changes unexpectedly.</p>
+<p>The first time you run the test that has a <code>.toMatchSnapshot()</code> method, Jest creates a snapshot file in the <em>__snapshots__</em> folder. You can jump from the test to the related snapshot by clicking the camera icon next to it:</p>
+<p><img class="alignnone size-full wp-image-10008" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/go-to-snapshot.png" alt="Go to snapshot" width="600" /></p>
+<p>Then, if the tested component has changed and it no longer matches the snapshot, the test will fail.</p>
+<p>To make it easier to spot the difference between the actual and expected results, we’ve added a diff view for snapshots. Click the link in the test output next to the stack trace to see the diff.</p>
+<p><img class="alignnone size-full wp-image-10010" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/diff-view-for-jest-snapshots.png" alt="Diff view for Jest snapshots" width="800" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/diff-view-for-jest-snapshots.gif" /></p>
+<p>If the change was actually intentional, you can update the snapshot by clicking another link in the tool window:</p>
+<p><img class="alignnone size-full wp-image-10009" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/update-snapshot.png" alt="Update snapshot" width="600" /></p>
+<h2 id="debug_tests">Debug tests</h2>
+<p>To investigate why a test is failing, you can debug it in WebStorm. Click the gutter icon next to the test in the editor, and then select Debug</p>
+<p>to debug just one test. Alternatively, click the green debug icon next to the All tests configuration that we created earlier.</p>
+<p>The breakpoint can be set either in the test file or in the source code that is tested. Once the breakpoint is hit, you can step through the code, see the call stack and variables, use the console, and so on.</p>
+<p><img class="alignnone size-full wp-image-10012" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/debug-jest-tests.png" alt="Debug Jest tests" width="800" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/debug-jest-tests.gif" /></p>
+<p>When using Jest with JavaScript and the babel-jest package, the inline source maps that are needed for debugging should work out of the box. If using them with TypeScript, don’t forget to add these options to your <em>tsconfig.json</em>: <code>"sourceMap": true</code>, and <code>"inlineSourceMap": true</code>.</p>
+<h2 id="test_coverage">Test coverage</h2>
+<p>To make sure that all your source code is well tested, you can build a code coverage report. All you need to do is to click the ‘Run with coverage’ button next to the run/debug configuration. The report will show how many files were covered with tests and what percentage of lines in those files are covered.</p>
+<p><img class="alignnone size-full wp-image-10014" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-tests-with-coverage.png" alt="Run tests with coverage" width="600" /></p>
+<p>From this report, you can jump to the file and see which lines were covered (marked green) and which ones were not (marked red).</p>
+<p><img class="alignnone size-full wp-image-10015" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/test-coverage-report.png" alt="Tes coverage report" width="800" /></p>
+<p>That’s it! We hope you find this guide useful and have a great experience testing with Jest in WebStorm. If you run into any problems or would like to share your suggestions, feel free to submit an issue in our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>.</p>
+<p><em>Your WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/testing-with-jest-in-webstorm/feed/</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #8: support for Vuetify, move CSS ruleset, JSON improvements</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-8/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-8/#respond</comments>
+		<pubDate>Thu, 25 Oct 2018 13:51:02 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[AngularJS]]></category>
+		<category><![CDATA[json]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[Vue.js]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9984</guid>
+		<description><![CDATA[WebStorm 2018.3 Early Preview build #8 is now available! If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the previous EAP blog posts. Toolbox App is the &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-8/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.3 Early Preview build #8 is now available!</strong></p>
+<p>If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #7 (build 183.3975.16). For the full list of issues fixed in this update, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.3975.16+Release+Notes">Release Notes</a>.</p>
+<h2 id="support_for_vuetify">Support for Vuetify</h2>
+<p>WebStorm now provides code completion for components from <a href="https://vuetifyjs.com/">Vuetify</a> version 1.1 or above. Type the name of a component name in the template section of the .vue file or press <em>Ctrl-Space</em> for a list of all the components and then select the one you need.</p>
+<p><img class="alignnone size-full wp-image-9986" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/vuetify-components.png" alt="vuetify-components" width="600" /></p>
+<h2 id="angularjs_improvements">AngularJS improvements</h2>
+<p>We know that many people still use AngularJS, that’s why we’ve fixed the problem which was most voted for that relates to the AngularJS support in WebStorm: completion and resolve for <code>$ctrl</code> or the name defined, using the <code>controllerAs</code> property in the template.</p>
+<p><img class="alignnone size-full wp-image-9987" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/controlleras.png" alt="controlleras" width="600" /><span id="more-9984"></span></p>
+<h2 id="move_ruleset_to_another_file">Move ruleset to another file</h2>
+<p>Want to move a set of rulesets from one style sheet file to another? Now you can use the Move refactoring for that – select one or several rulesets in a CSS, SCSS, Sass, or Less file, then press <em>F6</em> or select <em>Move</em></p>
+<p><img class="alignnone size-full wp-image-9988" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/move-css-ruleset.png" alt="move-css-ruleset" width="600" /></p>
+<h2 id="improvements_in_json_support">Improvements in JSON support</h2>
+<p>We’ve made some improvements to make editing JSON files easier. First, WebStorm will add or remove commas when you move lines in JSON with the Move statement up or down actions (<em>Cmd/Ctrl-Shift-Up/Down</em>).</p>
+<p><img class="alignnone size-full wp-image-9989" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/move-up-down-in-json.gif" alt="Mov line up and down in JSON" width="600" /></p>
+<p>Second, now when you add a new line inside an object, the IDE will add a comma.</p>
+<p><img class="alignnone size-full wp-image-9990" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/json-add-comma.gif" alt="Add comma in JSON" width="600" /></p>
+<p>Third, you can now use the <em>Surround with</em> action (<em>Alt-Cmd/Ctrl-T</em>) in JSON to surround items with quotes, curly or square braces.</p>
+<p><img class="alignnone size-full wp-image-9991" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/surround-with-in-json.png" alt="Surround with in JSON" width="600" /></p>
+<p>Last but not least, now when you paste in JSON, WebStorm will automatically escape symbols.</p>
+<p><img class="alignnone size-full wp-image-9992" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/paste-quoted-value-in-json.png" alt="Escape symbols on paste in JSON" width="600" /></p>
+<p>Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-8/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2.5 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-5/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-5/#comments</comments>
+		<pubDate>Fri, 19 Oct 2018 10:20:36 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9975</guid>
+		<description><![CDATA[WebStorm 2018.2.5 is now available! Update to it using Toolbox App or from the IDE. You can also download WebStorm 2018.2.5 from our website. This update fixes a performance problem with the TypeScript projects caused by the links to the files outside the project (WEB-34669). &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-5/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.2.5</strong> is now available! Update to it using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or from the IDE. You can also download WebStorm 2018.2.5 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<p>This update fixes a performance problem with the TypeScript projects caused by the links to the files outside the project (<a href="https://youtrack.jetbrains.com/issue/WEB-34669">WEB-34669</a>).</p>
+<p>From the IntelliJ platform, there are fixes related to logging into the GitHub account (<a href="https://youtrack.jetbrains.com/issue/IDEA-198120">IDEA-198120</a>), the Find in path dialog (<a href="https://youtrack.jetbrains.com/issue/IDEA-198588">IDEA-198588</a>;  the problem still persists on Windows 7, we are currently working on it; as a workaround on Linux with Gnome, we have enabled the old layout for this dialog, the usual UI will be back in WebStorm 2018.3) and the input of the accented characters in popups.</p>
+<p>Please also see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.4892.25+Release+Notes">Release notes</a> for this update.</p>
+<p><em>Your WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-5/feed/</wfw:commentRss>
+		<slash:comments>9</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #7: GitHub Pull Requests, HTML accessibility inspections</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-7/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-7/#comments</comments>
+		<pubDate>Thu, 18 Oct 2018 10:56:59 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[GitHub]]></category>
+		<category><![CDATA[html]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[Protractor]]></category>
+		<category><![CDATA[testing]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9957</guid>
+		<description><![CDATA[WebStorm 2018.3 Early Preview build #7 is now available! If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the previous EAP blog posts. Toolbox App is the &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-7/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.3 Early Preview build #7 is now available!</strong></p>
+<p>If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #7 (build 183.3795.15). For the full list of issues fixed in this update, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.3795.15+Release+Notes">Release Notes</a>.</p>
+<h2 id="github_pull_requests">GitHub Pull Requests</h2>
+<p>This update brings with it an exciting new feature – GitHub Pull Requests. In the menu VCS &#8211; Git select View Pull Requests to open a new tool window with a list of all the pull requests in your project. You can see the description, assignee, labels, and changed files from the pull request. Right click on the pull request to create a new local branch from it.</p>
+<p><img class="alignnone size-full wp-image-9960" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/github-pull-requests.png" alt="View GitHub Pull Requests" width="600" /></p>
+<p>We plan to add further features like merge, close, comment, and more in the upcoming releases.</p>
+<h2 id="accessibility_inspections_for_html">Accessibility inspections for HTML</h2>
+<p>To help you to write more accessible HTML code, we’ve added a bunch of new inspections that are based on recommendations from the <a href="https://www.w3.org/TR/WCAG20-TECHS/">Web Content Accessibility Guidelines 2.0 (WCAG)</a> developed by W3C. Even though these inspections can’t guarantee that the resulting website is going to be 100% accessible, we still think that they can help and have a lot of value.<span id="more-9957"></span></p>
+<p>You can find the new inspections under the group HTML &#8211; Accessibility in <em>Preferences | Editor | Inspections</em>. We have enabled most of them by default, with the exception of one inspection that suggests adding a title attribute for the link tags (technique <a href="https://www.w3.org/TR/WCAG20-TECHS/H33.html">H33 in WCAG</a>), as this should be used with caution, and another one that suggests adding a summary attribute to a table (<a href="https://www.w3.org/TR/WCAG20-TECHS/H73.html">H73 in WCAG</a>) which is recommended only for tables with a complex structure.</p>
+<p>All these inspections have quick fixes that you can see and apply if you press <em>Alt-Enter</em>.</p>
+<p>In addition to the inspections that warn you about missing lang attributes for the <em>html</em> tag, we’ve added completion for <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">language two-letter codes</a>.</p>
+<p><img class="alignnone size-full wp-image-9961" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/completion-for-language-codes.png" alt="Completion for language two-letter codes" width="600" /></p>
+<p>Here are examples of other inspections in this group.</p>
+<p>Add an <code>alt</code> attribute for the image:</p>
+<p><img class="alignnone size-full wp-image-9962" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/insect-alt-attribute-for-image-tag.png" alt="Add an alt attribute for the image" width="600" /></p>
+<p>Add a label for <code>input</code> and <code>textarea</code> elements:</p>
+<p><img class="alignnone size-full wp-image-9963" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/add-label-for-input.png" alt="Add a label for input and textarea elements" width="600" /></p>
+<h2 id="indent_size_in_the_status_bar">Indent size in the status bar</h2>
+<p>We know that the indents used by WebStorm can sometimes not be what you expected: there could be an <em>.editorconfig</em> file in the project root that overrides the IDE code style settings, or WebStorm would detect and follow the currently used indentation in a file.</p>
+<p>That’s why we’ve decided to show the size of the indent directly in the status bar. This indent will be applied to the current file when you start editing the code or if you decide to reformat it.</p>
+<p><img class="alignnone size-full wp-image-9964" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/indent-info.png" alt="Indent info in status bar" width="600" /></p>
+<p>Hover over the value to see why it was applied.</p>
+<p><img class="alignnone size-full wp-image-9965" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/indent-info-detected.png" alt="Indent info: detected" width="600" /></p>
+<p>And if you click on the value, you’ll see the different options available for adjusting the indent style:</p>
+<p><img class="alignnone size-full wp-image-9966" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/configure-indentation.png" alt="Configure indentation" width="600" /></p>
+<h2 id="running_single_protractor_test_or_suite">Running single Protractor test or suite</h2>
+<p>You can now run a single <a href="https://www.protractortest.org/#/">Protractor</a> test from the editor – click on the icon next to the test in the editor and select run or debug.</p>
+<p><img class="alignnone size-full wp-image-9967" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-single-protractor-test.png" alt="Run a single Protractor test" width="600" /></p>
+<p>In the Protractor run/debug configuration you can now select if you want to run all tests, a test file, or a single specific test.</p>
+<p><img class="alignnone size-full wp-image-9968" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/protractor-run-debug-configuration.png" alt="Protractor run/debug configuration" width="600" /></p>
+<p>If you have suites defined in the Protractor configuration file, you can also run them with the gutter icon – the suite name will be passed to Protractor with the <code>--suite=suite_name</code> option.</p>
+<p><img src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/run-protractor-suite-from-config.png" alt="Run Protractor suite from config" width="600" /></p>
+<p>By the way, you can add additional command line options to the new Protractor options field in the run/debug configuration.</p>
+<p>Other improvements:</p>
+<ul>
+<li>When debugging a Node.js app, WebStorm now uses the <a href="https://medium.com/the-node-js-collection/node-options-has-landed-in-8-x-5fba57af703d">NODE_OPTIONS environment variable</a> that has landed in Node.js 8 to pass the debug flags. Thanks to this, you no longer need to explicitly pass the <em>&#8211;inspect</em> flag to the <a href="https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options">forked</a> processes.</li>
+<li>We have disabled the notification that suggested compiling TypeScript to JavaScript when using the IDE’s built-in TypeScript compiler. You can still enable the compilation on changes in <em>Preferences | Languages &amp; Frameworks | TypeScript</em> or use the <em>Compile action</em> on the TypeScript tool window or via the Find action.</li>
+</ul>
+<p>Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-7/feed/</wfw:commentRss>
+		<slash:comments>6</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #6: debugging Node.js workers, high-contrast theme, new code style options for style sheets</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-6/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-6/#comments</comments>
+		<pubDate>Thu, 11 Oct 2018 09:35:46 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[css]]></category>
+		<category><![CDATA[debugger]]></category>
+		<category><![CDATA[eslint]]></category>
+		<category><![CDATA[javascript]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[node.js]]></category>
+		<category><![CDATA[TSLint]]></category>
+		<category><![CDATA[TypeScript]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9934</guid>
+		<description><![CDATA[WebStorm 2018.3 Early Preview build #6 is now available! If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the previous EAP blog posts. Toolbox App is the &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-6/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.3 Early Preview build #6 is now available!</strong></p>
+<p>If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #6 (build 183.3647.15). For the full list of issues fixed in this update, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.3647.15+Release+Notes">Release Notes</a>.</p>
+<h2 id="debugging_node_js_worker_thread">Debugging Node.js worker thread</h2>
+<p>Node.js 10.5 introduced a new experimental feature – worker threads, which can be used for CPU-intensive tasks (check out this <a href="https://medium.com/dailyjs/threads-in-node-10-5-0-a-practical-intro-3b85a0a3c953">blog post</a> for a great overview of the feature).</p>
+<p>WebStorm now provides code completion for the <a href="https://nodejs.org/api/worker_threads.html">worker threads API</a> and allows you to debug workers. Debugging workers is available in <a href="https://nodejs.org/en/blog/release/v10.12.0/">Node.js 10.12</a> that was released today. You also need to pass the <em>&#8211;experimental-worker</em> flag to the node.</p>
+<p>When debugging workers in WebStorm, you will see in what thread the breakpoint was hit and you will be able to switch between threads to see the call stack and variables.</p>
+<p><img class="alignnone size-full wp-image-9942" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/debugging-node-workers.png" alt="Debugger tool window when debugging node workers" width="600" /></p>
+<h2 id="new_code_style_options_for_style_sheets">New code style options for style sheets</h2>
+<p>We have updated the code style options for style sheet languages. First, each language now has its own configuration with a full set of options. Before, most of the options were inherited from the CSS code style and only indents could be configured for each language.<span id="more-9934"></span></p>
+<p>Second, we’ve made the use of blank lines in the files more configurable. There are 3 new options located on the Blank lines tab for each language under <em>Preferences | Editor | Code Style | Style Sheets</em>.</p>
+<p><em>Keep Maximum Blank Lines in Code</em> will remove extra empty lines when you reformat the code (Alt-Cmd-L / &lt;&gt;). In this example, with the option set to 2, WebStorm will remove one extra empty line. Note that this option doesn’t add any lines but only removes extra (the resulting code is on the right):</p>
+<p><img class="alignnone size-full wp-image-9937" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/reformatted-code-with-max-blank-lines-two.png" alt="Code before and after the Reformat code action with Max blank lines code style option set to 2" width="500" /></p>
+<p><em>Minimum Blank Lines Around Top-level Block and Around Nested Selector</em> will, on the contrary, add empty lines. Here both options are set to 1:</p>
+<p><img class="alignnone size-full wp-image-9938" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/reformatted-code-with-min-blank-lines-around-blocks.png" alt="Code before and after the Reformat code action with Minimum blank lines code style options set to 1" width="500" /></p>
+<p>In addition, CSS code style configurations now have the new Arrangement tab. Use it to enable and configure sorting for the properties inside rulesets. Once enabled, you can use the Rearrange code action to sort the properties. In the advanced formatting dialog (<em>Shift-Alt-Cmd-L</em>), you can enable running Rearrange code every time you reformat the code.</p>
+<p><img class="alignnone size-full wp-image-9939" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/advanced-formatting-dialog-enabale-rearrange.png" alt="Advanced formatting dialog with Rearrange code check box enabled" width="400" /></p>
+<h2 id="extract_ruleset_and_replace_var_with_its_fallback_value">Extract ruleset and replace var() with its fallback value</h2>
+<p>The new intention <em>Replace var() with its fallback value</em> allows you to quickly remove CSS custom properties/variables from the code:</p>
+<p><img class="alignnone size-full wp-image-9940" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/replace-css-var-with-fallback-value.png" alt="Replace CSS var() with the fallback value intention" width="600" /></p>
+<p>With the new <em>Extract ruleset</em> intention, you can move selected properties to a new block and then modify its selector.</p>
+<p><img class="alignnone size-full wp-image-9941" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/extract-ruleset.gif" alt="Extract ruleset intention" width="600" /></p>
+<h2 id="suggestions_for_variable_names">Suggestions for variable names</h2>
+<p>Among the IDE JavaScript preferences, you can find a new option called <em>Suggest variable names</em>. This feature comes from IntelliJ IDEA’s support for Kotlin, where it first appeared and is on by default.</p>
+<p>This new option provides suggestions for variable names based on the names of classes, types, and interfaces defined in the project, and the libraries you use and those found in standard APIs.</p>
+<p><img class="alignnone size-full wp-image-9943" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/suggestions-for-variable-names.png" alt="Suggestions for variable names" width="600" /></p>
+<h2 id="completion_for_overrides_adds_method_body">Completion for overrides adds method body</h2>
+<p>Now, when you want to override a method from the parent class or interface and select it from the completion suggestions, WebStorm will automatically add parameters, super() call and, if possible, the type info. Here’s an example of the generated method:</p>
+<p><img class="alignnone size-full wp-image-9944" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/override-completion-adds-method-body.png" alt="Generated method after using code completion for override" width="600" /></p>
+<p>You can disable this behavior in <em>Preferences | Languages and Frameworks | JavaScript &#8211; Expand method bodies in completion for overrides</em>.</p>
+<h2 id="override_severity_from_eslint_or_tslint_config">Override severity from ESLint or TSLint config</h2>
+<p>By default, WebStorm uses the severity levels from the ESLint or TSLint configuration files when highlighting errors and warnings from these linters in the editor. Based on your requests, we have made it possible to ignore the severities in the config file and show everything reported by the linter as errors, warnings, or in custom color.</p>
+<p>To use this, go to Preferences | Editor | Inspections &#8211; TSLint or ESLint and clear the checkbox “Use rule severity from the configuration file”. Then select the severity level you want to use instead in the drop-down above the checkbox.</p>
+<p><img class="alignnone size-full wp-image-9945" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/override-severity-from-linter-config.png" alt="Disable using severity levels from linter config file" width="600" /></p>
+<h2 id="high_contrast_theme_and_accessibility_improvements">High-contrast theme and accessibility improvements</h2>
+<p>The big feature from IntelliJ Platform that has landed in this update is the new high-contrast theme. It is part of our long-term effort to make the IDE more accessible to everyone and we plan to continue working in this direction.</p>
+<p>You can enable the new theme in the <em>IDE Preferences | Appearance and Behavior | Appearance</em>. Or, use the <em>Ctrl-`</em> shortcut and select <em>Look and Feel &#8211; High Contrast</em>.</p>
+<p>We are still improving the theme and would appreciate your feedback very much!</p>
+<p><img class="alignnone size-full wp-image-9946" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/high-contrast-theme.png" alt="High contrast theme in WebStorm" width="800" /></p>
+<p>In addition to that, WebStorm now allows a screen reader to read the line numbers, VCS annotations, breakpoints, and other gutter icons. To enable screen reader support, please follow the instructions in our <a href="https://www.jetbrains.com/help/webstorm/accessibility.html#screen_reader">docs</a>. Then, use the screen reader by following these steps:</p>
+<ul>
+<li>Use the [<em>Alt + Shift + 6] + F</em> key combination to focus on the gutter.</li>
+<li>Move between the lines and gutter elements using the arrow keys.</li>
+<li>When the focus is on the gutter icon, press [<em>Alt + Shift + 6] + T</em> for the screen reader to read a tooltip on the icon.</li>
+<li>To get back to the editor, press <em>Esc</em>.</li>
+</ul>
+<p>Furthermore, with valuable help from our contributor Mohammed Laachir, it is now possible for screen readers to access the tables in the dialog.</p>
+<p>We are working on further improvements in the screen readers and support for screen magnifiers. Stay tuned!</p>
+<div class="entry-content">
+<p>Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+</div>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-6/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2.4 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-4/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-4/#respond</comments>
+		<pubDate>Thu, 04 Oct 2018 12:46:17 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[CoffeeScript]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9927</guid>
+		<description><![CDATA[WebStorm 2018.2.4 is now available! Update to it using Toolbox App or from the IDE, or download WebStorm 2018.2.4 from our website. This update brings a bunch of improvements in the CoffeeScript support, including the final fix for the problem with parsing the slash symbol &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-4/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.2.4</strong> is now available! Update to it using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or from the IDE, or download WebStorm 2018.2.4 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<p>This update brings a bunch of improvements in the CoffeeScript support, including the final fix for the problem with parsing the slash symbol (<a href="https://youtrack.jetbrains.com/issue/WEB-15683">WEB-15683</a>).</p>
+<p>For the full list of issues addressed in this bug-fix update, please refer to the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.4505.50+Release+Notes">Release notes</a>.</p>
+<p><em>Your WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-2-4/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #5: new intentions and inspections, TypeScript 3.1</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-5/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-5/#comments</comments>
+		<pubDate>Thu, 04 Oct 2018 10:49:01 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[eslint]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[TypeScript]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9915</guid>
+		<description><![CDATA[WebStorm 2018.3 Early Preview build #5 is now available! If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the previous EAP blog posts. Toolbox App is the &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-5/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.3 Early Preview build #5 is now available!</strong></p>
+<p>If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p>Toolbox App is the easiest way to get EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Without further ado, here are the new features you can and should try in this week’s EAP (build 183.3283.12).</p>
+<h2 id="convert_function_to_variable_holding_arrow_function">Convert a function to a variable holding arrow function</h2>
+<p>You can now very easily convert a function to a variable that holds an arrow function. Press Alt-Enter on the name in the function definition and select the corresponding intention!</p>
+<p><img class="alignnone size-full wp-image-9916" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/convert-to-var-and-arrow-function.png" alt="convert-to-var-and-arrow-function" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/convert-to-var-and-arrow-function.gif" /></p>
+<p>The new intention also works for methods in classes. Here’s an example with a React component: substitute an arrow function for the event handler with the field, and you can now remove the binding in the constructor.</p>
+<p><img class="alignnone size-full wp-image-9917" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/convert-to-field-with-arrow-function.png" alt="convert-to-field-with-arrow-function" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/convert-to-field-with-arrow-function.gif" /></p>
+<h2 id="better_null_and_undefined_check">Better ‘null’ and ‘undefined’ check</h2>
+<p>With the new inspection called <em>Object in ‘null’ or ‘undefined’</em>, WebStorm can now better detect situations when you will get a TypeError because a method is invoked on a value that is <code>undefined</code> or <code>null</code>, or it is passed to a function, or its property is used.<span id="more-9915"></span></p>
+<p><img class="alignnone size-full wp-image-9918" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/is-null-or-undefined.png" alt="is-null-or-undefined" width="600" /></p>
+<p>We have also improved the Unsound type guard inspection, which validates the conditions with <code>typeof</code>. Now it can warn you if the <code>== null</code> or <code>!= null</code> check is always true or always false.</p>
+<p><img class="alignnone size-full wp-image-9919" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/null-check-is-always-false.png" alt="null-check-is-always-false" width="600" /></p>
+<h2 id="typescript_3.1">TypeScript 3.1</h2>
+<p>TypeScript 3.1 has been released and WebStorm now supports its new features: mappable tuple and array types, and new property assignments.<br />
+We have updated WebStorm’s bundled TypeScript to version 3.1 which was released just recently. You can select this version in <em>Preferences | Languages and Frameworks | TypeScript</em>.</p>
+<p>The new intention to convert Promises to async functions, which was added in TypeScript 3.1, works in TypeScript files in WebStorm as well. Note that the compilation target in your tsconfig.json file should be set to <code>“es6”</code>.</p>
+<p><img class="alignnone size-full wp-image-9920" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/10/typescript-3-1-async.png" alt="typescript-3-1-async" width="600" /></p>
+<h2 id="linting typescript files with eslint">Linting TypeScript files with ESLint</h2>
+<p>If you’re using ESLint to check your TypeScript files, we have some good news for you: now it’s possible to see ESLint errors and warnings in the .ts files in WebStorm. To get this working, you’ll need to have <code>"parser":"babel-eslint"</code>, <code>"parser":"typescript-eslint-parser"</code> or <code>“eslint-plugin-typescript”</code> in your ESLint configuration.</p>
+<p>If you use these parsers or the plugin but don’t want to lint TypeScript files with ESLint, add <em>*.ts</em> to <em>.eslintignore</em>.</p>
+<p><em>Your WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/10/webstorm-2018-3-eap-5/feed/</wfw:commentRss>
+		<slash:comments>10</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #4: Git Submodules, Live Edit without Chrome extension</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-4/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-4/#comments</comments>
+		<pubDate>Thu, 27 Sep 2018 13:11:24 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[git]]></category>
+		<category><![CDATA[live edit]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9906</guid>
+		<description><![CDATA[It’s time for the fourth WebStorm 2018.3 Early Preview build! If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features that were introduced last week, check out the previous EAP &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-4/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>It’s time for the fourth <strong>WebStorm 2018.3 Early Preview</strong> build!</p>
+<p>If you’re unfamiliar with our Early Access Program or if you want to catch up on all the new features that were introduced last week, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p>Toolbox App is the easiest way to get the EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #4 (build 183.2940.11).</p>
+<h2 id="git_submodules">Git Submodules</h2>
+<p>WebStorm 2018.3 now supports working with Git submodules!</p>
+<p>When you clone a repository that has submodules, WebStorm will clone the root repo and all its submodules. Moreover, when you update your project, all the submodules will now be correctly updated according to their state. The Diff, History, and Conflict resolution now all work for submodule folders too.</p>
+<h2 id="live_edit_without_chrome_extension">Live Edit without Chrome extension</h2>
+<p>For a while now, WebStorm has included a feature called <a href="https://www.jetbrains.com/help/webstorm/live-editing.html">Live Edit</a> that worked during the JavaScript debug session to allow you to see the changes you made in your HTML and CSS files immediately in the browser. To use it, WebStorm required you to install the “JetBrains IDE Support” Chrome extension.</p>
+<p>Starting with WebStorm 2018.3, you can use the Live Edit feature without installing the plugin: open the HTML file you want to “live edit” and in its context menu select Debug. This will start a JavaScript debugger in WebStorm and open your file in a new instance of Chrome. As you start editing your HTML code or the linked CSS file, you will see the changes you make in the browser, without ever having to reload the page.<span id="more-9906"></span></p>
+<p><img class="alignnone size-full wp-image-9907" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/live-edit.png" alt="live-edit" width="800" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/live-edit.gif" /></p>
+<p>In <em>Preferences | Build, Execution, Deployment | Debugger | Live Edit</em>, you can configure how quickly the browser will react to the changes you make. You can also enable the Live Edit feature for the client-side JavaScript code (that doesn’t require compilation) and Node.js.</p>
+<h2 id="multiline_code_snippets_in_find_and_replace">Multiline code snippets in Find and Replace</h2>
+<p>The Find and Replace in Path dialogs now have better support for multiline code snippets: paste the code you want to search for or type the query – when you need to add a new line, click the icon on the right-hand side of the input field or press <em>Cmd/Ctrl-Shift-Enter</em>. Please note that search is indent-sensitive.</p>
+<p><img class="alignnone size-full wp-image-9909" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/multiline-replace.png" alt="multiline-replace" width="600" /></p>
+<p>For the full list of issues fixed by the WebStorm team, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.2940.11+Release+Notes">Release Notes</a>.<br />
+Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-4/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #3: improved Angular support and better completion for versions in package.json</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-3/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-3/#comments</comments>
+		<pubDate>Wed, 19 Sep 2018 17:21:46 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[Angular]]></category>
+		<category><![CDATA[package.json]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9894</guid>
+		<description><![CDATA[The third WebStorm 2018.3 Early Preview build is now available! If you’re not familiar with our Early Access Program or if you want to catch up on the new features introduced last week, check out the previous EAP blog posts. &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-3/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>The third <strong>WebStorm 2018.3 Early Preview</strong> build is now available!</p>
+<p>If you’re not familiar with our Early Access Program or if you want to catch up on the new features introduced last week, check out the <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-3/">previous EAP blog posts</a>.</p>
+<p>Toolbox App is the easiest way to get the EAP builds. You can also get notified right from the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #3 (build <span class="MiddleEllipsis__head--2N global__ellipsis--15">183.26</span><span class="MiddleEllipsis__tail--3K">35.17</span>).</p>
+<h2>Major improvements in Angular support</h2>
+<p>For the past few weeks we’ve been working on completely re-implementing support for the Angular template language – we’ve written a new parser and lexer, and improved how the metadata available in the Angular sources is used for coding assistance for pipes and type evaluation.</p>
+<p>As a result of these changes, we’ve been able to improve the overall experience of working with templates (both inline templates in the TypeScript files and external templates in the HTML files) and fixed a bunch of known issues.<br />
+Here’re some of the improvements that are already available:</p>
+<ul>
+<li>Code completion and the resolve for variables inside HTML templates have become much more precise. This also includes a fix for the problem where some variables were being marked as unused (<a href="https://youtrack.jetbrains.com/issue/WEB-33907">WEB-33907</a> and <a href="https://youtrack.jetbrains.com/issue/WEB-34522">WEB-34522</a>) and another where private properties created in the constructor were marked as unresolved in the templates (<a href="https://youtrack.jetbrains.com/issue/WEB-23606">WEB-23606</a>).</li>
+<li>In general, code completion in expressions inside templates is now more type-accurate. For example, here WebStorm knows about the variable’s type and can provide better suggestions for its properties:<img class="alignnone size-full wp-image-9896" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/type-aware-completion-in-templates.png" alt="type-aware-completion-in-templates" width="600" /></li>
+<li>Completion and resolve for template reference variables also works better now, the unused variable inspection is more accurate and the Rename refactoring works correctly:<img class="alignnone size-full wp-image-9899" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/templare-reference-vars.png" alt="templare-reference-vars" width="600" /></li>
+<li>Much better code assistance when using pipes and async pipes (<a href="https://youtrack.jetbrains.com/issue/WEB-34352">WEB-34352</a>, <a href="https://youtrack.jetbrains.com/issue/WEB-27239">WEB-27239</a>, and more). For example, WebStorm will suggest the available pipes:<img class="alignnone size-full wp-image-9897" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/completion-for-pipes.png" alt="completion-for-pipes" width="600" /></li>
+<li>Improved coding assistance for the <code>*ngFor</code> microsyntax and in the <code>*ngFor</code> context:<img class="alignnone size-full wp-image-9898" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/ngfor-context-completion.png" alt="ngfor-context-completion" width="600" /></li>
+<li>Performance has also been improved, thanks to the better caching that WebStorm can do with the new implementation.</li>
+</ul>
+<p>On our <a href="https://youtrack.jetbrains.com/releasenotes/WEB?q=Fix%20versions:%202018.3%20%23Angular">tracker</a> you can file a list of over 40 issues related to the Angular support that have been fixed.</p>
+<h2 id="completion_for_previous_package_versions_in_package_json">Completion for previous package versions in package.json</h2>
+<p>For the dependencies in a package.json WebStorm now provides more suggestions for the available versions. After you’ve added the name of the dependency, you will first see suggestions for the latest versions for each tag.</p>
+<p><img class="alignnone size-full wp-image-9901" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/package-json-version-latest.png" alt="package-json-version-latest" width="600" /></p>
+<p>Now, if you press <em>Ctrl-Space</em> or start typing a different version number, WebStorm will provide you with suggestions of all the previous versions of the package.</p>
+<p><img class="alignnone size-full wp-image-9902" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/package-json-all-versions.png" alt="package-json-all-versions" width="600" /><span id="more-9894"></span></p>
+<h2 id="disabling_code_formatting_for_specific_files_and_folders">Disabling code formatting for specific files and folders</h2>
+<p>You can now disable the Reformat code, Optimize imports, and Rearrange code actions in a specific set of files. For that, go to the <em>Preferences | Editor | Code Style</em>, in the <em>Formatter Control</em> tab you can now configure and select the scope where the code formatting will be disabled.</p>
+<p><img class="alignnone size-full wp-image-9900" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/formatter-control.png" alt="formatter-control" width="600" /></p>
+<h2 id="other_improvements">Other improvements</h2>
+<ul>
+<li>We have sped up the Redundant local variable inspection in JavaScript and TypeScript making code analysis faster. In case of the TypeScript sources that we use for performance testing, the project-wide code analysis (via Inspect code) now runs 30% faster than before.</li>
+<li>In the JavaScript and TypeScript code style settings, there’s now a new option <em>Spaces within array brackets.</em></li>
+<li>Support for <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-2/#multiline_todos_in_javascript_and_typescript">multiline todo comments</a> in CSS, SCSS, and other style sheets.</li>
+</ul>
+<p>For the full list of issues fixed by the WebStorm team, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.2635.17+Release+Notes">Release Notes</a>.<br />
+Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-3/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 EAP #2: multiline todos, improved Jump to source for tests</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-2/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-2/#comments</comments>
+		<pubDate>Thu, 13 Sep 2018 12:08:28 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9884</guid>
+		<description><![CDATA[The second WebStorm 2018.3 Early Preview build is now available! If you’re not familiar with our Early Preview Program or if you want to catch up on the new features introduced last week, check out the previous blog post. Toolbox &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-2/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>The second <strong>WebStorm 2018.3 Early Preview</strong> build is now available!</p>
+<p>If you’re not familiar with our Early Preview Program or if you want to catch up on the new features introduced last week, check out the <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-early-access-preview/">previous blog post</a>.</p>
+<p>Toolbox App is the easiest way to get the EAP builds. You can also get notifications right in the IDE when a new EAP build is available: go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em> and select <em>“Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #2 (build 183.2407.4).</p>
+<h2 id="multiline_todos_in_javascript_and_typescript">Multiline Todos in JavaScript and TypeScript</h2>
+<p>As you might know, you can leave reminders in code comments, which you can then see in the Todo tool window. The comment should start with <code>Todo</code>, <code>Fixme</code>, or any other custom pattern that you add to <em>Preferences | Editor | Todo</em>.</p>
+<p>Now WebStorm also supports multiline todo comments in JavaScript and TypeScript files! Support for CSS and HTML files is coming soon.</p>
+<p>Start the todo comment with the usual <code>Todo</code> and then add extra indents on the next lines to continue the todo. If you remove the indentation, WebStorm will treat it as a normal comment.</p>
+<p><img class="alignnone size-full wp-image-9885" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/multiline-todo.png" alt="multiline-todo" width="600" /></p>
+<h2 id="jump_to_failure_for_tests">Jump to failure for tests</h2>
+<p>For failed tests, <em>Jump to source</em> (<em>Cmd-Down</em> on macOS or <em>F4</em> on Windows and Linux) in the test tool window will now take you to the failure line in the test from the stack trace.<span id="more-9884"></span></p>
+<p><img class="alignnone size-full wp-image-9886" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/jump-to-failure.png" alt="jump-to-failure" width="600" /></p>
+<p>This works for Jest, Karma and Mocha tests.</p>
+<p>If the exact line is not in the stack trace, you will be taken to the test definition.</p>
+<h2 id="drag_folder_to_welcome_screen_to_open_it">Drag folder to Welcome screen to open it</h2>
+<p>If you want to open a new project in WebStorm, you can now simply drag its folder to the IDE’s Welcome Screen from the file manager or the desktop.</p>
+<p><img class="alignnone size-full wp-image-9887" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/drag-folder-to-open.gif" alt="drag-folder-to-open" width="600" /></p>
+<h2 id="debugging_linked_modules">Debugging linked modules</h2>
+<p>If your project uses modules linked with <a href="https://docs.npmjs.com/cli/link">npm link</a>, you can now put breakpoints in these linked files when debugging your app in WebStorm. Stepping into these files should work fine as well.</p>
+<p>For the full list of issues fixed by the WebStorm team, see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+183.2407.4+Release+Notes">Release Notes</a>.<br />
+Please report any issues on our <a href="https://youtrack.jetbrains.com/issues/WEB">tracker</a>. And stay tuned for the next week’s update!</p>
+<p><em>The WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-eap-2/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.3 Early Access Preview: parameter hints in JavaScript, Structure view for tests, redesigned Search Everywhere</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-early-access-preview/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-early-access-preview/#comments</comments>
+		<pubDate>Thu, 06 Sep 2018 15:24:41 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[debugger]]></category>
+		<category><![CDATA[javascript]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[TSLint]]></category>
+		<category><![CDATA[WebStorm 2018.3]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9856</guid>
+		<description><![CDATA[Today we are starting the Early Access Program for WebStorm 2018.3. This means that every week through mid-November (that’s when a stable release of v2018.3 is coming), there’s going to be a new EAP build that you can use to &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-early-access-preview/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>Today we are starting the <strong>Early Access Program for WebStorm 2018.3</strong>. This means that every week through mid-November (that’s when a stable release of v2018.3 is coming), there’s going to be a new EAP build that you can use to try the latest features and improvements.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.3 EAP</a></p>
+<p>Toolbox App is the easiest way to get the EAP builds. You can also get notifications right in the IDE when a new EAP build is available: select <em>“Automatically check updates for Early Access Program”</em> in <em>Preferences | Appearance &amp; Behavior | System Settings | Updates</em>.</p>
+<p>If you’re not yet familiar with our Early Access Programs, here are some details:</p>
+<ul>
+<li><em>Every week</em> we publish a fresh build for the upcoming version of WebStorm.</li>
+<li>EAP builds provide access to the <em>newest features</em> we’re currently developing.</li>
+<li>EAP builds are <em>free</em> to use but expire within <em>30 days</em> of the build date.</li>
+<li>You can install an EAP build side by side with a stable WebStorm version.</li>
+<li>Your feedback is very welcome in our issue tracker: youtrack.jetbrains.com/issues/WEB. Please don’t forget to mention the build number you’re using.</li>
+</ul>
+<p><strong>Important! WebStorm EAP builds are not fully tested and might be unstable.</strong></p>
+<p>Here are some of the highlights of WebStorm 2018.3 EAP #1 (build 183.2153.10).</p>
+<h2 id="new_in_javascript_support">New in JavaScript support</h2>
+<h3 id="auto_import_symbols_from_the_project_s_dependencies">Autoimport symbols from the project’s dependencies</h3>
+<p>We have extended the autoimports in JavaScript files to symbols defined in the project’s dependencies. This will work if there’s a TypeScript definition file present inside the package (like in <a href="https://www.npmjs.com/package/moment">moment</a> or <a href="https://www.npmjs.com/package/redux">redux</a>) or if the package contains sources written as ES modules.</p>
+<p><img class="alignnone size-full wp-image-9857" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/auto-import-from-node-modules.png" alt="auto-import-from-node-modules" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/auto-import-from-node-modules.gif" /></p>
+<p>And of course, autoimports in JavaScript work for symbols exported in the ES modules in your project.</p>
+<h3 id="parameter_hints_in_javascript">Parameter hints in JavaScript</h3>
+<p>If you work with TypeScript files in WebStorm, you should be familiar with the parameter hints that show you the names of a method’s parameters. Now, we have enabled similar parameter hints in JavaScript files as well!</p>
+<p><img class="alignnone size-full wp-image-9859" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/parameter-hints-in-js.png" alt="parameter-hints-in-js" width="600" /></p>
+<p>You can configure their behavior or disable them completely in <em>Preferences | Editor | General | Appearance – Show parameter name hints</em>. Let us know what you think about this feature!<span id="more-9856"></span></p>
+<h2 id="structure_view_for_test_files">Structure view for test files</h2>
+<p>The Structure view now works for test files! It shows the names of the tests and suites, as well as other symbols defined in this file. Use it to quickly navigate through the file.</p>
+<p><img class="alignnone size-full wp-image-9860" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/structure-view-for-tests.png" alt="structure-view-for-tests" width="600" /></p>
+<p>You can jump to the Structure view tool window located next to the editor by pressing <em>Cmd-7</em> on macOS or Alt-7 on Windows and Linux. Alternatively, you can use it in the editor, as a popup; the shortcut for this is <em>Cmd/Ctrl-F12</em>.</p>
+<h2 id="improved_remove_action_for_html_and_jsx">Improved Remove action for HTML and JSX</h2>
+<p>The <em>Unwrap/Remove action</em> for tags (which, as the name suggests, removes the opening and closing tag) now automatically updates the indents, so you no longer need to run Reformat code or fix them manually.</p>
+<p><img class="alignnone size-full wp-image-9870" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/remove-tag.png" alt="remove-tag" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/remove-tag.gif" /></p>
+<p>You can run this action with <em>Shift-Cmd-Backspace</em> on macOS and <em>Ctrl-Shift-Delete</em> on Windows and Linux, or by using the Find Action popup.</p>
+<p>Now it is also available as an intention, which means you can just press <em>Alt-Enter</em> on the tag and select <em>Remove tag</em> from the list.</p>
+<p>In other good news, the <em>Remove tag</em> action now also works in JSX code.</p>
+<h2 id="updated_css_inspection_for_shorthand_properties">Updated CSS inspection for shorthand properties</h2>
+<p>For a long time, WebStorm had an inspection that checked that a set of properties could be replaced with one shorthand property. Unfortunately, that suggested changes that were too aggressive in some cases (e.g. for background-* properties), which changed the code semantics.</p>
+<p>We decided to replace the old inspection with two new ones. The first one, <em>Properties may be safely replaced with shorthand, </em>shows a weak warning when there&#8217;s a full set of longhand properties and switching to the shorthand one is 100% safe. The second one, <em>Properties may probably be replaced with shorthand</em>, doesn’t highlight the code but provides a quick-fix (<em>Alt-Enter</em>) for cases when the conversion might change the code.</p>
+<p>Here are a couple of examples:</p>
+<p><img class="alignnone size-full wp-image-9861" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/replace-with-shorthand-safe.png" alt="replace-with-shorthand-safe" width="600" /><br />
+The warning is reported because the properties can be safely replaced with the shorthand.</p>
+<p><img class="alignnone size-full wp-image-9862" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/replace-with-shorthand-unsave.png" alt="replace-with-shorthand-unsave" width="600" /><br />
+Here we only have an intention when you press Alt-Enter that would result in the following:</p>
+<p><img class="alignnone size-full wp-image-9863" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/replace-with-shorthand-result.png" alt="replace-with-shorthand-result" width="600" /></p>
+<h2 id="add_comments_to_disable_tslint_rules">Add comments to disable TSLint rules</h2>
+<p>If you press Alt-Enter on a warning or error reported by TSLint, and then press the right arrow, you now have an option to add a special TSLint disable comment for this rule. Disable comments follow this format:<br />
+<code>// tslint:disable-next-line:</code> or <code>/* tslint:disable:quotemark */</code></p>
+<p><img class="alignnone size-full wp-image-9864" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/add-tslint-disable-comment.png" alt="add-tslint-disable-comment" width="600" /></p>
+<h2 id="add_multiple_variables_to_debugger_s_watches">Add multiple variables to debugger’s watches</h2>
+<p>You can now select several variables in the debugger’s Variables view and add them all to Watches. This is a small but hopefully useful improvement.</p>
+<p><img class="alignnone size-full wp-image-9865" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/add-to-watches.png" alt="add-to-watches" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/add-to-watches.gif" /></p>
+<h2 id="new_search_everywhere_popup">New Search Everywhere popup</h2>
+<p>A big new feature that has landed in the whole IntelliJ Platform is the new Search Everywhere popup. Actually, it’s much more than just Search Everywhere (<em>Shift-Shift</em>): now it incorporates the Find Action (<em>Cmd/Ctrl-Shift-A</em>), Go to class (<em>Cmd-O/Ctrl-N</em>), Go to file (<em>Shift-Cmd-O/Ctrl-Shift-N</em>), and Go to symbol (<em>Alt-Cmd-O/Ctrl-Alt-Shift-N</em>) actions!</p>
+<p><img class="alignnone size-full wp-image-9867" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/new-search-everywhere.png" alt="new-search-everywhere" width="600" /></p>
+<p>One of the main reasons we’ve decided to completely redesign and reimplement the popup was to tackle and confront dozens of different problems and bugs that kept cropping up in this old dialog. The new <em>Search Everywhere</em> doesn’t lose focus, the size of the dialog doesn’t depend on the contents, it’s size doesn’t change unexpectedly, and there are many more fixes that have come about as a result, including <a href="https://youtrack.jetbrains.com/issue/IDEA-170407">IDEA-170407</a>, <a href="https://youtrack.jetbrains.com/issue/IDEA-117031">IDEA-117031</a>, <a href="https://youtrack.jetbrains.com/issue/IDEA-130670">IDEA-130670</a>, and <a href="https://youtrack.jetbrains.com/issue/IDEA-142909">IDEA-142909</a>. We hope you’ll like the new popup!</p>
+<h2 id="new_plugins_configuration">New Plugins configuration</h2>
+<p>Another big change in the platform is the redesigned Plugins pages in Preferences. We wanted to make it easier to manage the existing plugins and to search for and install new ones. You can now search plugins by categories, and you can sort the search results by the number of downloads, rating, or update date.</p>
+<p><img class="alignnone size-full wp-image-9868" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/new-plugins-page.png" alt="new-plugins-page" width="600" /></p>
+<p>You can also view all the new and updated plugins, the top downloaded plugins, and the top-rated plugins.</p>
+<p>The IDE now shows all the downloaded and bundled plugins separately in the Installed tab. To see the plugins that need to be updated, use the Updates tab.</p>
+<p>You can find a list of issues fixed by the WebStorm team in these <a href="https://youtrack.jetbrains.com/releasenotes/WEB?q=fix%20version:%202018.3%20%23Resolved%20resolved%20date:%202018-05%20..%202018-09-03">Release Notes</a>.</p>
+<p>Stay tuned for the next week&#8217;s update!</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-3-early-access-preview/feed/</wfw:commentRss>
+		<slash:comments>13</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2.3 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-2-3/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-2-3/#respond</comments>
+		<pubDate>Wed, 05 Sep 2018 12:22:40 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9852</guid>
+		<description><![CDATA[The new WebStorm 2018.2.3 is now available! Update to it using Toolbox App or from the IDE, or download WebStorm 2018.2.3 from our website. What&#8217;s new: You can now pass additional option to Angular CLI when creating a new project from the IDE Welcome &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-2-3/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>The new <strong>WebStorm 2018.2.3</strong> is now available! Update to it using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or from the IDE, or download WebStorm 2018.2.3 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<p>What&#8217;s new:</p>
+<ul>
+<li>You can now pass additional option to Angular CLI when creating a new project from the IDE Welcome screen. As you start typing the option name or press Ctrl-Space, WebStorm will show you available options and their description.</li>
+</ul>
+<p><img class="alignnone size-full wp-image-9853" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/09/ng-cli-wizard.png" alt="ng-cli-wizard" width="600" /></p>
+<ul>
+<li>We have also improved the way the new <a href="https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-2/">Add all missing TypeScript import</a> action works: before, the action wasn&#8217;t available for symbols with multiple import options, and now, if you invoke the action for such symbol, WebStorm will add all unambiguous missing imports in this file and then will show you a popup where you can select the desired import for this symbol.</li>
+</ul>
+<p>What&#8217;s fixed:</p>
+<ul>
+<li>Vue component imports are now resolved correctly in the Vue CLI 3 apps located not in the root of the project (<a href="https://youtrack.jetbrains.com/issue/WEB-32564">WEB-32564</a>)</li>
+<li>The problem with the slash symbol in the CoffeeScript files has been fixed</li>
+<li>The <em>Extract React Component</em> refactoring now handles better the <em>key</em> attribute (<a href="https://youtrack.jetbrains.com/issue/WEB-34489">WEB-34489</a>)</li>
+</ul>
+<p>For the full list of issues addressed in this bug-fix update, please refer to the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.4323.44+Release+Notes">Release notes</a>.</p>
+<div class="entry-content">
+<p><em>WebStorm Team</em></p>
+</div>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/09/webstorm-2018-2-3/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2.2 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-2/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-2/#respond</comments>
+		<pubDate>Wed, 22 Aug 2018 09:53:38 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[CoffeeScript]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[react-native]]></category>
+		<category><![CDATA[TypeScript]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9831</guid>
+		<description><![CDATA[WebStorm 2018.2.2 is now available! You can install this update by using Toolbox App or the IDE, or by downloading WebStorm 2018.2 from our website. React Native improvements There&#8217;s now code completion for properties in the standard React Native components: &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-2/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.2.2</strong> is now available!</p>
+<p>You can install this update by using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or the IDE, or by downloading WebStorm 2018.2 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<h2>React Native improvements</h2>
+<p>There&#8217;s now code completion for properties in the standard React Native components:</p>
+<p><img class="alignnone size-full wp-image-9833" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/08/react-native-attributes.png" alt="react-native-attributes" width="600" /></p>
+<h2>Add all missing TypeScript imports in the current file</h2>
+<p>Now, if there is more than one missing unambiguous imports in your file, you can press <em>Alt-Shift-Enter</em> to add them all at once. Look for the blue import popup.</p>
+<p><img class="alignnone size-full wp-image-9835" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/08/add-imports-popup.png" alt="add-imports-popup" width="600" /></p>
+<p>If you have the auto import popup disabled, you can press Alt-Enter and then select the <em>Add all unambiguous imports</em> quick-fix.</p>
+<p><img class="alignnone size-full wp-image-9834" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/08/add-all-imports-quick-fix.png" alt="add-all-imports-quick-fix" width="600" /></p>
+<h2>Other improvements and fixes</h2>
+<ul>
+<li>Initial support for JSX in CoffeeScript is now available</li>
+<li>Node.js debugger now shows the async call stack for the forked child process (<a href="https://youtrack.jetbrains.com/issue/WEB-33667">WEB-33667</a>)</li>
+<li>Extract React component now generates prop types as a type declaration in Flow (<a href="https://youtrack.jetbrains.com/issue/WEB-34010">WEB-34010</a>)</li>
+<li>Extract React component also works correctly with shorthand object properties (<a href="https://youtrack.jetbrains.com/issue/WEB-34157">WEB-34157</a>)</li>
+</ul>
+<p>For the full list of issues addressed in this bug-fix update, please refer to the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.4129.32+Release+Notes">Release notes</a>.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-2/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2.1 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-1/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-1/#comments</comments>
+		<pubDate>Thu, 09 Aug 2018 10:09:56 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[TypeScript]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9825</guid>
+		<description><![CDATA[WebStorm 2018.2.1, the first bug-fix update for the recently released WebStorm 2018.2 is now available! You can install this update using Toolbox App or the IDE or download WebStorm 2018.2 from our website. What&#8217;s new: Auto imports now work better in projects &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-1/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.2.1</strong>, the first bug-fix update for the recently released <a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/">WebStorm 2018.2</a> is now available!</p>
+<p>You can install this update using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or the IDE or download WebStorm 2018.2 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<p>What&#8217;s new:</p>
+<ul>
+<li>Auto imports now work better in projects that use lerna, yarn workspaces or TypeScript 3.0 project references (<a href="https://youtrack.jetbrains.com/issue/WEB-30212">WEB-30212</a>)</li>
+<li>The bundled TypeScript version was update to 3.0 (<a href="https://youtrack.jetbrains.com/issue/WEB-34144">WEB-34144</a>)</li>
+<li>&#8220;Surround selection on typing quote or brace&#8221; option is now on by default (<a href="https://youtrack.jetbrains.com/issue/WEB-33249">WEB-33249</a>)</li>
+<li>Support for the <a href="https://github.com/tc39/proposal-nullish-coalescing">Nullish Coalescing proposal</a> in JavaScript (<a href="https://youtrack.jetbrains.com/issue/WEB-32660">WEB-32660</a>)</li>
+</ul>
+<p>What&#8217;s fixed:</p>
+<ul>
+<li>JavaScript code completion now works better in webpack configuration files (<a href="https://youtrack.jetbrains.com/issue/WEB-33420">WEB-33420</a>)</li>
+<li>Changing the opening tag of the Vue component now updates the closing tag as well (<a href="https://youtrack.jetbrains.com/issue/WEB-33452">WEB-33452</a>)</li>
+</ul>
+<p>Please find a full list of issues addressed in WebStorm 2018.2.1 in <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.3911.37+Release+Notes">Release Notes</a>.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/08/webstorm-2018-2-1/feed/</wfw:commentRss>
+		<slash:comments>1</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.1.6 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-1-6/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-1-6/#comments</comments>
+		<pubDate>Mon, 30 Jul 2018 12:12:26 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[WebStorm 2018.1]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9818</guid>
+		<description><![CDATA[WebStorm 2018.1.6 is now available! Please update using Toolbox App or the IDE or download WebStorm 2018.1.6 from our website. This final bug-fix for WebStorm 2018.1 brings stability improvements, including the fix for the Throwable exception (IDEA-181227). Please see the Release Notes for a full list &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-1-6/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.1.6</strong> is now available! Please update using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or the IDE or download WebStorm 2018.1.6 from our <a href="https://www.jetbrains.com/webstorm/download/previous.html">website</a>.</p>
+<p>This final bug-fix for WebStorm 2018.1 brings stability improvements, including the fix for the Throwable exception (<a href="https://youtrack.jetbrains.com/issue/IDEA-181227">IDEA-181227</a>).</p>
+<p>Please see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+181.5540.11+Release+Notes">Release Notes</a> for a full list of all the issues addressed in WebStorm 2018.1.6.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-1-6/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2: Extract React component, integration with &#8216;ng add&#8217;, Node.js on WSL, and more</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#comments</comments>
+		<pubDate>Mon, 23 Jul 2018 10:38:26 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[Angular]]></category>
+		<category><![CDATA[debugging]]></category>
+		<category><![CDATA[eslint]]></category>
+		<category><![CDATA[Jest]]></category>
+		<category><![CDATA[karma]]></category>
+		<category><![CDATA[Linters]]></category>
+		<category><![CDATA[Mocha]]></category>
+		<category><![CDATA[node.js]]></category>
+		<category><![CDATA[react]]></category>
+		<category><![CDATA[testing]]></category>
+		<category><![CDATA[TSLint]]></category>
+		<category><![CDATA[Vue.js]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9787</guid>
+		<description><![CDATA[&#x1f389; Today we’re announcing WebStorm 2018.2! &#x1f389; WebStorm 2018.2 brings a lot of new powerful features and improvements, including the Extract React component refactoring, new integrations with Angular CLI, better testing workflow and Node.js debugging experience. Explore the top new &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><img src="https://s.w.org/images/core/emoji/72x72/1f389.png" alt="<img src="https://s.w.org/images/core/emoji/72x72/1f389.png" alt="&#x1f389;" class="wp-smiley" style="height: 1em; max-height: 1em;" />" class="wp-smiley" style="height: 1em; max-height: 1em;" /> Today we’re announcing WebStorm 2018.2! <img src="https://s.w.org/images/core/emoji/72x72/1f389.png" alt="<img src="https://s.w.org/images/core/emoji/72x72/1f389.png" alt="&#x1f389;" class="wp-smiley" style="height: 1em; max-height: 1em;" />" class="wp-smiley" style="height: 1em; max-height: 1em;" /></p>
+<p>WebStorm 2018.2 brings a lot of new powerful features and improvements, including the Extract React component refactoring, new integrations with Angular CLI, better testing workflow and Node.js debugging experience.</p>
+<p><a href="https://www.jetbrains.com/webstorm/whatsnew/">Explore the top new features and download WebStorm 2018.2 on our website.</a></p>
+<p><iframe width="640" height="360" src="https://www.youtube.com/embed/CZFooXiqxs8?feature=oembed&#038;enablejsapi=1&#038;origin=https://blog.jetbrains.com/webstorm" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></p>
+<p>We’ve been running the Early Access Preview program for WebStorm 2018.2 for the past two months. We published WebStorm EAP builds on a weekly basis, covering all the new features on this blog. Now we want to share with you the detailed release notes for the WebStorm 2018.2 update as compiled from these <a href="https://blog.jetbrains.com/webstorm/tag/webstorm-2018-2/">EAP blog posts</a>.</p>
+<p>Here are the features and improvements grouped by the WebStorm subsystems:</p>
+<ul>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#development_with_react">Development with React</a>: Extract React Component refactoring, convert class components into functional components, and code snippets.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#development_with_angular">Development with Angular</a>: faster project startup, add new features using the integration with ng add, and run schematics from the IDE.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#development_with_vue">Development with Vue.js</a>: completion for Vue events and event modifiers.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#node_js_development">Node.js development</a>: support for Node.js on Windows Subsystem for Linux, an ability to automatically reconnect the debugger to the running node process, and remote mappings in Attach to Node.js configuration.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#built_in_tools">Built-in tools</a>: find unused code in the client-side app with Code Coverage reports, global File Watchers.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#editor">Editor</a>: new UI for inspection tooltip.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#javascript_and_typescript_support">JavaScript and TypeScript support</a>: custom templates for postfix completion, and TypeScript 2.9 and 3.0 supported.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#json_support">JSON support</a>: JSON5, and Iimproved support for JSON Schemas.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#linters">Linters integrations</a>: different highlighting for TSLint errors and warnings, and an ability to automatically apply code style rules from all types of ESLint and TSLint configuration files.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#debugger">Debugging</a>: breakpoint intentions, Drop Frame action, and debugging JavaScript scratch files.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#testing">Testing</a>: rerun failed tests, navigate to Jest snapshot, compare Jest snapshots, and debugging Karma tests using Chrome Headless.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#version_control">Version Control</a>: Browse Repository at Revision action, completion for tags, register roots automatically.</li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/#other_ide_improvements">Other IDE improvements</a>: Touch Bar support.</li>
+</ul>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/download">Download WebStorm 2018.2</a></p>
+<h2 id="development_with_react">Development with React</h2>
+<h3 id="extract_react_component">Extract React component</h3>
+<p>We’re very excited about this feature! WebStorm can now help you create a new React component, by extracting the JSX code from the render method of an existing one.</p>
+<p>Select the code you want to extract, and then select <em>Component…</em> from the <em>Refactor this… </em>popup (<em>Ctrl-T</em> on macOS or <em>Ctrl-Alt-Shift-T</em> on Windows and Linux). Name the component and select whether it should be a class component or a functional component.</p>
+<p>That’s it! Now your new component is defined next to the existing one and used in it.</p>
+<p><img class="alignnone size-full wp-image-9721" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/extract-react-component.png" alt="extract-react-component" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/extract-react-component.gif" /><span id="more-9787"></span></p>
+<p>You can then use the <em>Move</em> refactoring to move the new component and all the required imports to a separate file. (Do let us know if you’d like this option to be available right on the Extract Component refactoring dialog.)</p>
+<p><img class="alignnone size-full wp-image-9724" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/move-react-component.png" alt="move-react-component" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/move-react-component.gif" /></p>
+<p>In this <a href="https://gist.github.com/prigara/c394275935aed6e079f042b354ae180a">Gist</a> you can see the code before and after the refactoring.</p>
+<p>You can modify the code templates WebStorm uses for the new components, by going to <em>Preferences | Editor | File and Code Templates</em> and selecting the <em>Code </em>tab. For example, you can switch from using <code>Component</code> to using <code>React.Component</code> or <code>PureComponent</code> when creating a class component. Or, change the template for functional components to using arrow function. You can also change the style of using PropTypes or remove them altogether.</p>
+<p><img class="alignnone size-full wp-image-9725" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/code-template-for-extract-react-component.png" alt="code-template-for-extract-react-component" width="600" /></p>
+<h3>Convert React class components into functional components</h3>
+<p>With the new intentions, you can now convert React class components into functional components and back again – press <em>Alt-Enter</em> on the component definition and select the action you need.</p>
+<p><img class="alignnone size-full wp-image-9794" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/convert-react-component.png" alt="convert-react-component" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/convert-react-component.gif" /></p>
+<h3 id="react_code_snippets">React code snippets</h3>
+<p>WebStorm now has a collection of code snippets for React. It has over 50 abbreviations that expand into different statements and blocks of code often used in React apps. The collection was adapted from the popular <a href="https://github.com/xabikos/vscode-react">plugin</a> for VS Code.</p>
+<p>Type the abbreviation in the editor and then press Tab to expand it. Or press <em>Cmd/Ctrl-J</em> (<em>Insert Live Template</em>) and select the snippet from the list. All abbreviations are also available in the completion popup.</p>
+<p>Here we use the abbreviation <code>rcjc</code> to create a class that defines a new React component:</p>
+<p><img class="alignnone size-full wp-image-9629" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/react-live-template.png" alt="react-live-template" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/react-live-template.gif" /></p>
+<p>You can find the full list of available templates in <em>Preferences | Editor | Live Templates &#8211; React</em>.</p>
+<p>For the JSX tags, you can now also see the breadcrumbs and colorful highlighting for the tag tree on the editor gutter.</p>
+<p><img class="alignnone size-full wp-image-9623" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/jsx-tree-highlighting.png" alt="jsx-tree-highlighting" width="600" /></p>
+<h3 id="better_support_for_proptypes">Better support for PropTypes</h3>
+<p>Code completion is now more precise when you use <a href="https://reactjs.org/docs/typechecking-with-proptypes.html">PropTypes</a> like <code>shape</code>, <code>oneOf</code>, <code>instanceOf</code>, or <code>arrayOf</code>. Here are a couple of examples. Here in the completion we have the values listed using <code>PropTypes.oneOf</code>:</p>
+<p><img class="alignnone size-full wp-image-9727" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/props-one-of.png" alt="props-one-of" width="600" /></p>
+<p>And here we have completion for array methods because <code>PropTypes.arrayOf</code> is used:</p>
+<p><img class="alignnone size-full wp-image-9728" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/props-array-of.png" alt="props-array-of" width="600" /></p>
+<h3 id="react_code_snippets"></h3>
+<h3 id="support_for_react_namespaced_components">Support for React namespaced components</h3>
+<p>WebStorm now has better support for React components that have a namespace in their name. You can now get appropriate code completion and navigation to the definition for these components in JavaScript and TypeScript files.</p>
+<p><img class="alignnone size-full wp-image-9726" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/react-namespaced-components.png" alt="react-namespaced-components" width="600" /></p>
+<h2 id="development_with_angular">Development with Angular</h2>
+<h3 id="faster_project_startup">Faster project startup</h3>
+<p>Previously, when you opened your Angular project for the first time, WebStorm would spend significant time indexing the compiled JavaScript files shipped with the Angular core modules.</p>
+<p>We’ve decided to update the way WebStorm handles the core Angular module and modules written in TypeScript in general. Now, if the module’s package.json has a <code>typings</code> field with the path to the <em>*.d.ts</em> file, then WebStorm indexes only the TypeScript files and ignores all the JavaScript files.</p>
+<p>As a result, we’ve <em>halved the time WebStorm needs to index a new Angular project</em>, with no compromises affecting the quality of code completion and resolve (which also work faster now, too!).</p>
+<h3 id="run_more_angular_schematics_using_the_angular_cli_integration">Run more Angular schematics using the Angular CLI integration</h3>
+<p>With the <em>New&#8230; &#8211; Angular Schematic…</em> action in the Project view, you can now generate code using schematics that are defined in libraries like @angular/material (note that you need to use Angular 6 for this). Previously, you could only generate components, services, and other blueprints defined in the Angular CLI itself.</p>
+<p><img class="alignnone size-full wp-image-9733" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-material-component.png" alt="generate-material-component" width="600" /></p>
+<p>In addition, WebStorm now shows the schematic’s description and provides code completion and description for available options.</p>
+<p><img class="alignnone size-full wp-image-9734" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-component-options.png" alt="generate-component-options" width="600" /></p>
+<h3 id="adding_new_features_to_an_angular_app_with_ng_add">Adding new features to an Angular app with ng add</h3>
+<p>Another new feature introduced by the <a href="https://blog.angular.io/version-6-of-angular-now-available-cc56b0efa7a4">Angular and Angular CLI 6 update</a> in the new <code>ng add</code> command to help add new capabilities to your app. It will install the selected dependency and then invoke the installation script to take care of all the rest.</p>
+<p>In WebStorm, you can now use the new <em>Angular Dependency… </em>action to install libraries that support installation with <code>ng add</code> without using the terminal. This action is available via the <em>Find Action</em> (<em>Cmd-Shift-A/Ctrl+Shift+A</em>) popup or the <em>New…</em> popup (<em>Cmd-N/Alt+Insert</em>) in the Project view.</p>
+<p>In the list you can select the library you want to add. Right now it contains only the libraries that we know have <code>ng add</code> support, but you can also specify any package name you want. By the way, the list is available on <a href="https://github.com/JetBrains/intellij-plugins/blob/master/AngularJS/resources/org/angularjs/cli/ng-packages.json">GitHub</a> and you can send us Pull Requests to add more libraries.</p>
+<p>In this example, we are adding Angular Material to our project:<br />
+<img class="alignnone size-full wp-image-9760" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-ng-add.png" alt="webstorm-ng-add" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-ng-add.gif" /></p>
+<p>If you add a dependency to package.json that WebStorm knows supports <code>ng add</code>, the IDE will suggest installing it with <code>ng add</code>:</p>
+<p><img class="alignnone size-full wp-image-9758" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-install-with-ng-add-inspection.png" alt="webstorm-install-with-ng-add-inspection" width="600" /></p>
+<p>And even if a dependency is already installed, it can still make sense to reinstall it with <code>ng add</code>. To do so, press <em>Alt-Enter</em> on the package name in package.json and select <em>Reinstall with <code>ng add</code></em>:</p>
+<p><img class="alignnone size-full wp-image-9759" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-reinstall-with-ng-add.png" alt="webstorm-reinstall-with-ng-add" width="600" /></p>
+<h3 id="run_configurations_for_new_angular_projects">Run configurations for new Angular projects</h3>
+<p>If you create a new Angular project using Angular CLI in the IDE, WebStorm now automatically adds run/debug configurations that will help you start and debug the app and run Karma and Protractor tests in the IDE.</p>
+<p><img class="alignnone size-full wp-image-9756" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/angular-cli-project-configurations.png" alt="angular-cli-project-configurations" width="600" /></p>
+<h2 id="development_with_vue">Development with Vue.js</h2>
+<h3 id="completion_for_vue_events_and_event_modifiers">Completion for Vue events and event modifiers</h3>
+<p>In Vue templates, WebStorm now provides code completion for events and event modifiers.</p>
+<p>The list of events is available following <code>v-on:</code>:</p>
+<p><img class="alignnone size-full wp-image-9664" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/v-on-vue.png" alt="v-on-vue" width="600" /></p>
+<p>You can also use the shorthand notation, <code>@event</code>:</p>
+<p><img class="alignnone size-full wp-image-9665" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/vue-event-shorthand.png" alt="vue-event-shorthand" width="600" /></p>
+<p>Event modifiers can also be automatically completed:</p>
+<p><img class="alignnone size-full wp-image-9666" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/vue-event-modifier.png" alt="vue-event-modifier" width="600" /></p>
+<h2 id="node_js_development">Node.js development</h2>
+<h3 id="support_for_node_js_on_windows_subsystem_for_linux">Support for Node.js on Windows Subsystem for Linux</h3>
+<p>If you’re using Node.js on WSL, we have some good news for you: you can now run and debug Node.js apps using Node.js on WSL right in WebStorm.</p>
+<p>You can select Node.js on WSL as a project’s node version in <em>Preferences | Languages &amp; Frameworks | Node.js and </em><em>npm</em> or you can configure and use this node version in a Node.js Run/Debug configuration.</p>
+<p>In <em>Preferences | Languages &amp; Frameworks | Node.js and npm</em>, click <em>…</em> next to the field with the path to Node.js, then click <em>+</em> in the opened dialog and select <em>Add Node.js on WSL.</em></p>
+<p><img class="alignnone size-full wp-image-9694" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/select-wsl-in-preferences.png" alt="select-wsl-in-preferences" width="600" height="833" /></p>
+<p>Now select the Linux distribution you’re using from the drop-down menu and set the path to Node.js and click Save.</p>
+<p><img class="alignnone size-full wp-image-9695" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/select-linux-and-node-on-wsl.png" alt="select-linux-and-node-on-wsl" width="400" /></p>
+<p>WebStorm will now use this Node.js version when running npm scripts or creating new Node.js run/debug configurations.</p>
+<p>If you want to use Node.js on WSL only in some specific run/debug configuration, instead of changing the project’s node version in Preferences, you can add a new Node.js WSL interpreter in the Node.js configuration. Again, click on the <em>…</em> button next to the path and follow the steps described above.</p>
+<p><img class="alignnone size-full wp-image-9696" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/node-on-wsl-in-debug-configuration.png" alt="node-on-wsl-in-debug-configuration" width="600" /></p>
+<p>This integration is still work in progress. We are now working on support for Node.js on WSL for test runners, linters, and build tools integrated in WebStorm. Stay tuned!</p>
+<h3 id="reconnect_the_debugger_to_the_running_node_process">Reconnect  the debugger to the running node process</h3>
+<p>We have added a new <em>Reconnect automatically</em> option to the <em>Attach to Node.js/Chrome</em> debug configuration.</p>
+<p>Thanks to this option, it is now easier to debug Node.js apps that use <a href="https://nodemon.io/">nodemon</a>. Nodemon is a utility that automatically reloads your node process when you change the code of your app.</p>
+<p><img class="alignnone size-full wp-image-9616" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/attach-to-node-reconnect.png" alt="attach-to-node-reconnect" width="600" /></p>
+<p>Here’s how you can debug such an application:</p>
+<ul>
+<li>Start your app in the debug mode. To do this, pass an <code>--inspect</code> flag to nodemon. You can create and run a new <code>npm debug script</code> that would look like this: <code>debug": "nodemon --inspect ./app.js</code> (be sure to replace <em>./app.js</em> with the path to the file that starts your app).</li>
+<li>Create a new Attach to a Node.js/Chrome configuration and select the <em>Reconnect automatically</em> check-box.</li>
+<li>Usually, you don’t need to change the port in the configuration (9229) because it’s the default port the debugger is listening on. But you can double-check what port is used in the message logged when you run the app in the debug mode.</li>
+</ul>
+<p><img class="alignnone size-full wp-image-9620" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/debug-port-nodemon.png" alt="debug-port-nodemon" width="600" /></p>
+<ul>
+<li>Now run the new configuration. The debugger will stop on the breakpoints that you’ve put in your code in the IDE.</li>
+<li>If you make any changes to the code and click Save, nodemon will automatically reload the app. The debugger will now be able to automatically re-attach to the restarted process.</li>
+</ul>
+<h3 id="remote_mappings_in_attach_to_node_js_configuration">Remote mappings in Attach to Node.js configuration</h3>
+<p>We have added another Node.js-related improvement in the Attach to Node.js configuration that you can use to attach WebStorm’s debugger to the running node application.</p>
+<p>You can now specify the remote paths for the project folders. Which is useful if the app root folder on the remote server or the Docker container have a different name to the local root folder.</p>
+<p><img class="alignnone size-full wp-image-9697" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/remote-mappings-in-attach-to-node-configuration.png" alt="remote-mappings-in-attach-to-node-configuration" width="600" /></p>
+<h3 id="breakpoint_intentions">Manage logs when running a Node.js app</h3>
+<p>If you’re using a logging tool like <a href="https://www.npmjs.com/package/morgan">morgan</a> in your Node.js app, and the tool writes logs to a file, you can now see these logs on the Console tab in the Node.js Run tool window. To enable this, go to the new Logs tab in the Node.js run/debug configuration. While there, you can also enable saving the console output to a log file.</p>
+<p><img class="alignnone size-full wp-image-9732" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/logs-in-node-configuration.png" alt="logs-in-node-configuration" width="600" /></p>
+<h2 id="built_in_tools">Built-in tools</h2>
+<h3 id="javascript_code_coverage">Find unused code in the client-side app with Code Coverage reports</h3>
+<p>You can now find unused JavaScript (or TypeScript) as well as CSS code in your client-side app thanks to the new <em>Code Coverage</em> feature.</p>
+<p>Run your app in the browser and then see the report in WebStorm showing how much code in every file and folder was used.</p>
+<p>The great thing is that the coverage will be shown for your source files and not for the compiled code that was actually run in the browser (as long as the source maps are available).<br />
+Here’s how it works:</p>
+<ul>
+<li>Create a new JavaScript debug configuration by selecting <em>Run &#8211; Edit configurations&#8230;</em></li>
+<li>Specify the URL your app is running on and save the configuration.</li>
+</ul>
+<p><img class="alignnone size-full wp-image-9684" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/javascript-debug-configuration.png" alt="javascript-debug-configuration" width="600" /></p>
+<ul>
+<li>Now click <em>Run with Coverage</em>.</li>
+</ul>
+<p><img class="alignnone size-full wp-image-9683" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/run-with-coverage.png" alt="run-with-coverage" width="600" /></p>
+<ul>
+<li>Once your app opens in Chrome, wait till the page is loaded if you want to know what code was executed during the page load, and then stop the configuration in the IDE. If you want to see the coverage report for some specific features of your app, use these features in the browser and then stop the configuration.</li>
+</ul>
+<p>The coverage report will now open in the Coverage tool window: look at the Project view for info about the coverage of files and folders. Meanwhile, if you look at the left gutter in the editor, you will see green and red markers next to some lines. Green means that the line was executed, and red means it was not. And if you click on the market, you&#8217;ll see how many times this particular block of code was executed.</p>
+<p><img class="alignnone size-full wp-image-9682" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/coverage-report-with-editor.png" alt="coverage-report-with-editor" width="600" /></p>
+<p>In the example above, we see that the <code>togglePast</code> method is marked with red because we haven’t clicked the link that shows the past events.</p>
+<h3 id="global_file_watchers">Global File Watchers</h3>
+<p>With File Watchers, you can run command-line tools like <a href="https://prettier.io/">Prettier</a> automatically when you change or save a file. Before, it was only possible to configure and use a file watcher in a specific project. If you wanted to use the same watcher in a different project, you had to repeat the whole configuration. But now you can create and store File Watchers on the IDE level, and easily enable them in different projects.</p>
+<p>To create a global File Watcher, open the IDE Preferences (from the project or from the Welcome screen) and go to <em>Tools | File Watchers</em>, click the <em>+</em> button, and select <em>Custom </em>from the list. Now configure the File Watcher for the tool you want to use (for more information on how to do that, see our <a href="https://www.jetbrains.com/help/webstorm/using-file-watchers.html">documentation</a>).</p>
+<p>Once you’ve saved the new File Watcher, you can decide if it’s going to be available only in the current project &#8211; select Project in the right column or for all projects &#8211; then select Global.</p>
+<p><img class="alignnone size-full wp-image-9739" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/enable-global-watcher.png" alt="enable-global-watcher" width="600" /></p>
+<p>Note that the global File Watchers will be available in all projects, but disabled by default. If you want to use it, go to the project’s <em>Preferences | Tools | File Watchers</em> and select the check-box next to it.</p>
+<p>Let’s create a new global File Watcher for Prettier following the steps described in the <a href="https://prettier.io/docs/en/webstorm.html#running-prettier-on-save-using-file-watcher">Prettier docs</a>. What we want to change is the path to Prettier – for every project where we want to enable this File Watcher, we want to use Prettier installed in the project’s node_modules folder. To do that, we use a macro in the path: <em>$ProjectFileDir$/node_modules/.bin/prettier</em>.</p>
+<p><img class="alignnone size-full wp-image-9730" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/global-watcher-for-prettier.png" alt="global-watcher-for-prettier" width="600" /></p>
+<h2 id="editor">Editor</h2>
+<h3 id="new_ui_for_inspection_tooltip">New UI for inspection tooltip</h3>
+<p>Probably the most notable (and definitely the most visible) change in this week’s Early Preview build is the new inspection tooltip.</p>
+<p>You see these tooltips when you hover over the warning or errors in the code. As you might know, for all the warnings WebStorm will offer quick fixes that you can see if you press Alt-Enter or click on the bulb icon.</p>
+<p>And to make these quick fixes more discoverable, we now show the first available fix right next to the error description. You can then press <em>Alt-Shift-Enter</em> to apply the fix or <em>Alt-Enter</em> to see the usual pop up with all the available quick fixes and intentions.</p>
+<p><img class="alignnone size-full wp-image-9692" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/new-error-tooltips.png" alt="new-error-tooltips" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/new-error-tooltips.gif" /></p>
+<h2 id="javascript_and_typescript_support">JavaScript and TypeScript support</h2>
+<h3 id="new_intentions_in_javascript_typescript_and_json">New intentions in JavaScript and TypeScript</h3>
+<p>We’ve added a bunch of new intentions that are available in the TypeScript and partially in JavaScript code. To use an intention, press <em>Alt-Enter</em>, select it in the list and press Enter.</p>
+<p>Here’s what was added:<br />
+<em><strong>Implement interface and Create derived class</strong></em></p>
+<p>The <em>Implement interface</em> intention works for the TypeScript interfaces and creates a new class that implements this interface.</p>
+<p>The <em>Create derived class</em> intention creates a new class in the JavaScript or TypeScript file that extends another class</p>
+<p><img class="alignnone size-full wp-image-9698" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/implement-interface.png" alt="implement-interface-create-class" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/implement-interface-create-class.gif" /></p>
+<p><em><b>Implement interface or abstract class member</b></em></p>
+<p>This TypeScript intention allows you to implement properties and members of an interface or an abstract class in classes that directly implement or extend them.</p>
+<p><img class="alignnone size-full wp-image-9700" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/implement-members.png" alt="implement-members" width="600" /></p>
+<p><em><b>Generate cases for ‘switch’</b></em></p>
+<p>This intention helps to generate the switch block when a switch argument is an enum.</p>
+<p><img class="alignnone size-full wp-image-9701" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-cases-for-enum.png" alt="generate-cases-for-enum" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-cases-for-enum.gif" /></p>
+<p>In JavaScript this intention can use the information from an argument provided in the JSDoc comment:</p>
+<p><img class="alignnone size-full wp-image-9702" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-cases-in-js.png" alt="generate-cases-in-js" width="600" /></p>
+<p><em><b>Iterate with ‘for..of’</b></em></p>
+<p>This intention is available for an array or symbol that you can iterate over with <code>for..of</code> in the JavaScript and TypeScript files.</p>
+<p><img class="alignnone size-full wp-image-9704" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/iterate.png" alt="iterate-with-for-of" width="600" height="400" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/iterate-with-for-of.gif" /></p>
+<p><em><b>Convert type alias to enum</b></em></p>
+<p>This intention can convert a type alias with string literals in it into an enum and is available only in TypeScript.</p>
+<p><img class="alignnone size-full wp-image-9706" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/convert-type-alias-to-enum.png" alt="convert-type-alias-to-enum" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/convert-type-alias-to-enum.gif" /></p>
+<p><em><b>Add and remove digit separators</b></em></p>
+<p>This intention uses the <a href="https://github.com/tc39/proposal-numeric-separator/">numeric separators</a> feature of JavaScript (now it’s a Stage 3 proposal) which allows you to add underscores to the numeric values to improve their readability.</p>
+<p><img class="alignnone size-full wp-image-9708" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/add-digit-separators.png" alt="add-digit-separators" width="600" /></p>
+<p><img class="alignnone size-full wp-image-9709" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/remove-digit-separators.png" alt="remove-digit-separators" width="600" /></p>
+<h3 id="custom_templates_for_postfix_completion">Custom templates for postfix completion</h3>
+<p>Postfix completion is a great feature for adding template code around an expression you’ve just typed. The available templates are listed in <em>Preferences | Editor | General | Postfix Completion</em>. They expand when you press Tab or when you select them in the code completion popup.</p>
+<p><img class="alignnone size-full wp-image-9626" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/postfix-completion.png" alt="postfix-completion" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/postfix-completion.gif" /></p>
+<p>Now you can add your own templates for postfix completion!</p>
+<p>Let’s see how we can create a template that will expand into a class for a new React component:</p>
+<ul>
+<li>In <em>Preferences | Editor | General | Postfix Completion</em>, click the <em>+</em> icon.</li>
+<li>Select the language where the template will work. Note that all JavaScript templates will also be available in TypeScript files.</li>
+<li>Select the key (abbreviation). We’ll use <code>rcomp</code></li>
+<li>Specify the JavaScript language level. For our template, we want it to work only in JSX code.</li>
+<li>Now add the template code and add <code>$EXPR$</code> in the places where the initial expression should appear. Add <code>$END$</code> where you want the cursor to be at the end:</li>
+</ul>
+<p></p><pre class="crayon-plain-tag">class $EXPR$ extends Component {
+  render() {
+    return (
+      &lt;div&gt;
+        
+      &lt;/div&gt;
+    );
+  }
+}
+
+export default $EXPR$;</pre><p></p>
+<ul>
+<li>Save the template. Now you can use it in the editor!</li>
+</ul>
+<p><img class="alignnone size-full wp-image-9619" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/custom-postfix-template-in-action.png" alt="custom-postfix-template-in-action" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/custom-postfix-template-in-action.gif" /></p>
+<h3 id="typescript">Support for TypeScript 2.9 and 3.0</h3>
+<p>WebStorm adds support for the following TypeScript 2.9 and 3.0 features:</p>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/23327"><code>import.meta</code> property</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/issues/14844">import(&#8230;)-ing types</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/23430">Passing generics to tagged template calls</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/23592">Using number and symbol named properties with keyof and mapped types</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/24897">Tuples in rest parameters and spread expressions</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/24439">New unknown top type</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/23696">Named type arguments &amp; partial type argument inference</a></li>
+</ul>
+<h3 id="more_typescript_quick_fixes">TypeScript quick fixes from the language service</h3>
+<p>WebStorm now shows more quick fixes provided by the TypeScript language service. Now you can use not only the quick fixes for the reported errors, but also suggestions like this one:</p>
+<p><img class="alignnone size-full wp-image-9772" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/quick-fix-from-ts.png" alt="quick-fix-from-ts" width="600" /></p>
+<p>Press <em>Alt-Enter</em> to see the available intentions provided by WebStorm, and those from the TypeScript language service.</p>
+<h3 id="new_quick_fix_make_method_protected_or_public">New quick-fix “Make method protected or public” in TypeScript</h3>
+<p>We’ve also added a new quick-fix that fixes the visibility of a method if it was inaccessible:</p>
+<p><img class="alignnone size-full wp-image-9796" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/ts-fix-method-visibility.png" alt="ts-fix-method-visibility" width="600" /></p>
+<h3 id="use_typescript_language_service_for_all_projects_with_typescript_files">Use TypeScript Language Service for all projects with TypeScript files</h3>
+<p>Now WebStorm uses the TypeScript Language Service for any TypeScript file, even if the project doesn’t have a <em>tsconfig.json</em> file. WebStorm will then use the bundled TypeScript version and the default configuration.</p>
+<p>You can disable this behavior if you uncheck the <em>“Also for projects without tsconfig.json”</em> option in <em>Preferences | Languages &amp; Frameworks | TypeScript.</em></p>
+<h2 id="json_support">JSON support</h2>
+<h3 id="support_for_json">Support for JSON5</h3>
+<p>WebStorm 2018.2 now supports the <a href="https://json5.org/">JSON5</a> standard. By default, you can use the new syntax only in files with the <em>.json5</em> extension, but you can extend it to all .json files. To do this, open <em>Preferences | Editor | File types</em>, find JSON5 in the list and add <em>*.json</em> to the registered pattern for it.</p>
+<p><img class="alignnone size-full wp-image-9621" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/json-five.png" alt="json-five" width="600" /></p>
+<h3 id="copy_json_pointer">Copy JSON Pointer</h3>
+<p>Another useful improvement in this area is the new action that allows you to copy the JSON pointer, a path-like string for the selected object.</p>
+<p><img class="alignnone size-full wp-image-9617" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/copy-json-pointer.png" alt="copy-json-pointer" width="600" /></p>
+<h3 id="improved_support_for_json_schemas">Improved support for JSON Schemas</h3>
+<p>For some time already, WebStorm has been able to validate JSON files and provide code completion in such files using JSON Schema, a special format for describing their structure and contents.</p>
+<p>In WebStorm 2018.2, we have improved support for JSON Schema in many ways.<br />
+WebStorm can now automatically download and use schemas from the <a href="http://schemastore.org/json/">JSON Schema Store</a> that hosts schema files for many popular configuration files.</p>
+<p>As soon as you’ve opened a file whose name is associated with one of the available schemas (for example, <em>composer.json</em>), WebStorm will download and use this schema for it. You will see the name of the applied schema in the status bar.</p>
+<p><img class="alignnone size-full wp-image-9622" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/json-schema-from-store.png" alt="json-schema-from-store" width="600" /></p>
+<p>If you have a custom name for a config file, you can manually select a required schema from the list on the status bar.</p>
+<p>We have also updated the configuration of custom JSON Schemas that you can add to the IDE and use for specific files in your project. You can now specify the URL of the schema file. It’s available in <em>Preferences | Languages and Frameworks | Schemas and DTDs | JSON Schema Mappings</em>.</p>
+<h3 id="add_missing_required_properties_in_json_files">Add missing required properties in JSON files</h3>
+<p>As we’ve already mentioned in one of the earlier EAP updates, WebStorm can <a href="https://blog.jetbrains.com/webstorm/2018/05/webstorm-2018-2-eap/#improved_support_for_json_schemas">validate your JSON files using the JSON Schema</a>. We’ve added a quick fix that allows you to add all the missing required properties to your JSON file.<br />
+<img class="alignnone size-full wp-image-9710" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/json-add-required-properties.png" alt="json-add-required-properties" width="600" /></p>
+<h2 id="linters">Linters integration</h2>
+<h3 id="different_highlighting_for_tslint_errors_and_warnings">Different highlighting for TSLint errors and warnings</h3>
+<p>WebStorm now respects severity levels selected for rules enabled in the TSLint configuration file. By default, the errors will now be highlighted with a red squiggly line, while warnings will be marked with a yellow background.</p>
+<p><img class="alignnone size-full wp-image-9649" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/tslint-severity.png" alt="tslint-severity" width="600" /></p>
+<p><img class="alignnone size-full wp-image-9650" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/tslint-severity-highlighting.png" alt="tslint-severity-highlighting" width="600" /></p>
+<h3 id="tslint_and_eslint">Automatically apply code style rules from all types of ESLint and TSLint configuration files</h3>
+<p>For some time already, WebStorm has enabled you to apply the known code style rules specified in the ESLint and TSLint configuration files to the IDE JavaScript or TypeScript code style settings.</p>
+<p>Now WebStorm can <em>automatically import known rules from any configs</em> when you open your project for the first time, as long as you have ESLint (or TSLint) installed. (This is because WebStorm needs to run ESLint itself to transform the config into JSON that the IDE understands.)</p>
+<p>Before, WebStorm did this only for simpler configs written using JSON. For configs written in JavaScript or YAML or extending some preset, WebStorm required you to use the <em>Apply ESLint Code Style Rules</em> action. Now, you still need to use the action if you’ve updated your ESLint or TSLint configuration. It’s available via the <em>Find Action</em> popup or in the file’s context menu.</p>
+<p><img class="alignnone size-full wp-image-9668" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/apply-tslint-rules.png" alt="apply-tslint-rules" width="600" /></p>
+<p>By the way, you can now also apply code style for the TSLint configurations that have the <code>extends</code> field. For example, if your <em>tslint.json</em> file extends the <em>tslint-config-standard</em> preset, WebStorm will automatically apply the rules related to the use of semicolons and defined in the preset to the TypeScript code style settings in the IDE.</p>
+<h2 id="debugger">Debugging</h2>
+<h3 id="breakpoint_intentions">Breakpoint intentions</h3>
+<p>You can now simply press Alt-Enter on a line with a breakpoint and see the breakpoint-related actions in the list, along with all the other available intentions!</p>
+<p><img class="alignnone size-full wp-image-9799" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/brk-intentions.png" alt="brk-intentions" width="600" /></p>
+<h3>Drop frame in debugger</h3>
+<p>Now you can use the Drop frame action when debugging JavaScript and Node.js. This can be helpful to re-enter a function if you missed a critical spot you would like to see again.</p>
+<p><img class="alignnone size-full wp-image-9653" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/drop-frame.png" alt="drop-frame" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/drop-frame.gif" /></p>
+<h3 id="debug_scratch_files">Debug scratch files</h3>
+<p>You can now debug JavaScript scratch files – temporary files that you can quickly create by using the <em>Cmd-Shift-N</em> shortcut on macOS or <em>Ctrl+Shift+Alt+Insert</em> on Windows and Linux.</p>
+<p>Put the breakpoints anywhere in your file and then press <em>Ctrl-Alt-D / Alt+Shift+F9</em> to start debugging it using the built-in Node.js debugger. Please keep in mind that your code will be run using node, which means it should not use any browser APIs or any syntax that is currently not supported in node.</p>
+<p><img class="alignnone size-full wp-image-9667" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/debug-scratch-file.png" alt="debug-scratch-file" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/debug-scratch-file.gif" /></p>
+<h2 id="testing">Testing</h2>
+<h3 id="rerun_failed_tests">Rerun failed tests</h3>
+<p>There’s a new <em>Rerun Failed Tests</em> action available when you run tests with Karma, Jest, or Mocha in WebStorm. As the name suggests, it allows you to rerun only those tests that have failed, instead of running all tests after the fix.</p>
+<p><img class="alignnone size-full wp-image-9731" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/rerun-failed-tests-button.png" alt="rerun-failed-tests-button" width="600" /></p>
+<h3 id="navigate_to_jest_snapshot">Navigate to Jest snapshot</h3>
+<p>If you are doing snapshot testing with Jest, you will notice a new icon shown on the left editor gutter when your test file is opened. Use it to navigate to the related snapshot file. Or put the caret on <em>toMatchSnapshot</em> and use the <em>Related Symbol</em> action.</p>
+<p><img class="alignnone size-full wp-image-9800" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/navigate-to-jest-snapshot.png" alt="navigate-to-jest-snapshot" width="600" /></p>
+<h3>Diff view for Jest snapshots</h3>
+<p>If your Jest test has failed because of the mismatch in the snapshot, you can now see why using the familiar IDE side-by-side diff view. To open it, click on the link in the Run tests tool window.</p>
+<p><img class="alignnone size-full wp-image-9793" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/jest-diff.png" alt="jest-diff" width="600" height="1195" /></p>
+<h3 id="debugging_karma_tests_using_chrome_headless">Debugging Karma tests using Chrome Headless</h3>
+<p>Karma allows you to use Chrome Headless for running your tests (check out this great <a href="https://developers.google.com/web/updates/2017/06/headless-karma-mocha-chai">tutorial</a> in the Chrome blog). With Karma, your tests are executed in a real browser environment but without the overhead created by running a full Chrome instance.</p>
+<p>WebStorm now enables you to debug Karma tests in Chrome Headless (whereas previously you could only run them there).</p>
+<p>To run and debug tests in Chrome Headless using Karma, add <code>browsers: ['ChromeHeadless']</code> to the <em>karma.conf.js</em> file, or list it as a browser in WebStorm’s Karma configuration (see the screenshot below). For more info on setting up your project to use Chrome Headless, see this <a href="https://developers.google.com/web/updates/2017/06/headless-karma-mocha-chai">tutorial</a>.</p>
+<p><img class="alignnone size-full wp-image-9624" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/05/karma-headless-debug-config.png" alt="karma-headless-debug-config" width="600" /></p>
+<h3 id="test_files_in_the_tests_scope">Test files in the Tests scope</h3>
+<p>Now, test files whose names follow common patterns like <em>*.test.js</em> or <em>*.spec.js</em> are now automatically added to the default Tests scope. You can select this scope in the Project view to see the test files available in the project. Or you can use it to configure the use and severity of inspections.</p>
+<p><img class="alignnone size-full wp-image-9680" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/tests-scope-in-project-view.png" alt="tests-scope-in-project-view" width="600" /></p>
+<p><img class="alignnone size-full wp-image-9681" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/tests-scope-in-inspection-profile.png" alt="tests-scope-in-inspection-profile" width="600" /></p>
+<h2 id="version_control">Version Control</h2>
+<h3 id="improvements_in_the_version_control">Automatically register Git and Mercurial repos as VCS roots</h3>
+<p>If you open a folder that is part of a Git or Mercurial repository, WebStorm now automatically enables version control integration for it. So, no more “unregistered roots detected” notifications when you open a project.</p>
+<h3 id="new_browse_repository_at_revision_action">New Browse Repository at Revision action</h3>
+<p>With the new <em>Browse Repository at Revision</em> action, which is available from the context menu in the VCS Log or from the file history, you can now explore files in your project at any given revision without a checkout. From the special Repositories view, you can see the project structure and view the files in read-only mode.</p>
+<p><img class="alignnone size-full wp-image-9773" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/repositories-tool-window.png" alt="repositories-tool-window" width="600" /></p>
+<h3 id="delete_a_git_tag_in_log">Delete a Git tag in Log</h3>
+<p>You can now remove Git tags from a commit right from the context menu of the Log tab.</p>
+<p><img class="alignnone size-full wp-image-9774" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/delete-tag.png" alt="delete-tag" width="600" /></p>
+<h3 id="completion_for_git_tags">Completion for Git tags</h3>
+<p>WebStorm now autocompletes tags in the <em>Checkout</em> dialog.</p>
+<p><img class="alignnone size-full wp-image-9775" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/completion-for-tags.png" alt="completion-for-tags" width="600" /></p>
+<h3 id="perforce_and_cvs_plugins">Plugins for Perforce and CVS now need to be installed separately</h3>
+<p>If you want to use the <a href="https://plugins.jetbrains.com/plugin/69-perforce-integration">integration with Perforce</a> or <a href="https://plugins.jetbrains.com/plugin/10746-cvs-integration">CVS</a> in WebStorm, you now need to install the corresponding plugin via <em>Preferences | Plugins &#8211; Install JetBrains plugins</em>. These plugins fully bring the functionality that was earlier available in WebStorm out-of-the-box.</p>
+<h2 id="other_ide_improvements">Other IDE improvements</h2>
+<h3 id="global_file_watchers">Touch Bar support</h3>
+<p>Last, but not least is the <strong>MacBook Touch Bar</strong> support.</p>
+<p>Now you can run, build, and debug your project, along with committing changes or updating the project right from the Touch Bar. The Touch Bar shows the controls depending on the context or which modifier keys you press. We support the most popular contexts, and even better – the contexts can be customized! Read more in the <a href="https://blog.jetbrains.com/idea/2018/05/intellij-idea-2018-2-early-access-program-is-open/">IntelliJ IDEA’s blog</a>.</p>
+<h3 id="dark_window_headers_on_macos">Dark window headers on macOS</h3>
+<p>If you like the dark theme and you use macOS, you can now make WebStorm ever darker with the dark window headers. To turn them on, go to <em>Preferences | Appearance &amp; Behavior | Appearance</em>, select the new <em>Use dark window headers</em> option, and restart the IDE to apply the changes.</p>
+<p><img class="alignnone size-full wp-image-9776" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/dark-header-mac.png" alt="dark-header-mac" width="600" /></p>
+<p>For the full list issues and bugs fixed in WebStorm 2018.2, please see the <a href="https://youtrack.jetbrains.com/releasenotes/WEB?q=Fix%20versions:%202018.2%20%23Resolved%20">release notes</a>.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2/feed/</wfw:commentRss>
+		<slash:comments>23</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2 EAP, 182.3569: TypeScript quick fixes, Version Control improvements</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2-eap-182-3569/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2-eap-182-3569/#comments</comments>
+		<pubDate>Wed, 04 Jul 2018 14:40:05 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[git]]></category>
+		<category><![CDATA[newsletter]]></category>
+		<category><![CDATA[TypeScript]]></category>
+		<category><![CDATA[VCS]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9771</guid>
+		<description><![CDATA[A new WebStorm 2018.2 Early Preview build is now available! As we are getting closer and closer to the official release, there are fewer new features for us to announce. We are now mostly working on the final fixes and &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2-eap-182-3569/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>A new <strong>WebStorm 2018.2 Early Preview</strong> build is now available!</p>
+<p>As we are getting closer and closer to the official release, there are fewer new features for us to announce. We are now mostly working on the final fixes and improvements. To see all the different features that have been added in WebStorm 2018.2 EAP, please visit this <a href="https://www.jetbrains.com/webstorm/eap/">page</a>.</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notifications right in the IDE when a new EAP build is available: simply go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates </em>and select “<em>Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap">Download WebStorm 2018.2 EAP</a></p>
+<p>Here are some highlights from WebStorm 2018.2 EAP #8 (182.3569.4):</p>
+<h2 id="more_typescript_quick_fixes">More TypeScript quick fixes</h2>
+<p>WebStorm now shows more quick fixes provided by the TypeScript language service. Now you can use not only the quick fixes for the reported errors, but also suggestions like this one:</p>
+<p><img class="alignnone size-full wp-image-9772" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/quick-fix-from-ts.png" alt="quick-fix-from-ts" width="600" /></p>
+<p>Press <em>Alt-Enter</em> to see the available intentions provided by WebStorm, and those from the TypeScript language service.</p>
+<h2 id="improvements_in_the_version_control">Improvements in the Version Control</h2>
+<p>Let me talk a bit about the new features in the version control integration that we haven’t announced previously.</p>
+<h3 id="automatically_register_git_and_mercurial_repos_as_vcs_roots">Automatically register Git and Mercurial repos as VCS roots</h3>
+<p>If you open a folder that is part of a Git or Mercurial repository, WebStorm now automatically enables version control integration for it. So, no more “unregistered roots detected” notifications when you open a project.<span id="more-9771"></span></p>
+<h3 id="new_browse_repository_at_revision_action">New Browse Repository at Revision action</h3>
+<p>With the new <em>Browse Repository at Revision</em> action, which is available from the context menu in the VCS Log or from the file history, you can now explore files in your project at any given revision without a checkout. From the special Repositories view, you can see the project structure and view the files in read-only mode.</p>
+<p><img class="alignnone size-full wp-image-9773" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/repositories-tool-window.png" alt="repositories-tool-window" width="600" /></p>
+<h3 id="delete_a_git_tag_in_log">Delete a Git tag in Log</h3>
+<p>You can now remove Git tags from a commit right from the context menu of the Log tab.</p>
+<p><img class="alignnone size-full wp-image-9774" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/delete-tag.png" alt="delete-tag" width="600" /></p>
+<h3 id="completion_for_git_tags">Completion for Git tags</h3>
+<p>WebStorm now autocompletes tags in the <em>Checkout</em> dialog.</p>
+<p><img class="alignnone size-full wp-image-9775" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/completion-for-tags.png" alt="completion-for-tags" width="600" /></p>
+<h2 id="dark_window_headers_on_macos">Dark window headers on macOS</h2>
+<p>If you like the dark theme and you use macOS, you can now make WebStorm ever darker with the dark window headers. To turn them on, go to <em>Preferences | Appearance &amp; Behavior | Appearance</em>, select the new <em>Use dark window headers</em> option, and restart the IDE to apply the changes.</p>
+<p><img class="alignnone size-full wp-image-9776" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/07/dark-header-mac.png" alt="dark-header-mac" width="600" /></p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/07/webstorm-2018-2-eap-182-3569/feed/</wfw:commentRss>
+		<slash:comments>10</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2 EAP, 182.3458: integration with ng add, support for TypeScript 3.0, improved support for React Native</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/#comments</comments>
+		<pubDate>Thu, 28 Jun 2018 09:45:04 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9753</guid>
+		<description><![CDATA[WebStorm 2018.2 EAP #7 is now available! With less than a month left before the official release of WebStorm 2018.2, we are announcing the final features it will include. Toolbox App is the easiest way to get EAP builds. You &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.2 EAP #7</strong> is now available!</p>
+<p>With less than a month left before the official release of WebStorm 2018.2, we are announcing the final features it will include.</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notifications right in the IDE when a new EAP build is available: simply go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates </em>and select “<em>Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.2 EAP</a></p>
+<p>If you’re not yet familiar with our Early Access Programs, or if you want to find out what features were added in WebStorm 2018.2 EAP, check out this <a href="https://www.jetbrains.com/webstorm/eap/">page</a>.</p>
+<p>Here are some highlights from WebStorm 2018.2 EAP #7 (182.3458.21):</p>
+<ul>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/#adding_new_features_to_an_angular_app_with_ng_add">Integration with <code>ng add</code></a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/#support_for_the_new_typescript_features">Support for the new TypeScript 3.0 features</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/#completion_for_properties_for_react_native_components">Code completion for props for standard React Native components</a></li>
+</ul>
+<h2 id="adding_new_features_to_an_angular_app_with_ng_add">Adding new features to an Angular app with ng add</h2>
+<p>The <a href="https://blog.angular.io/version-6-of-angular-now-available-cc56b0efa7a4">Angular and Angular CLI 6 update</a> introduced lots of new features, including the new <code>ng add</code> command to help add new capabilities to your app. It will install the selected dependency and then invoke the installation script to take care of all the rest.</p>
+<p>In WebStorm, you can now use the new <em>Angular Dependency… </em>action to install libraries that support installation with <code>ng add</code> without using the terminal. This action is available via the <em>Find Action</em> (<em>Cmd-Shift-A/Ctrl+Shift+A</em>) popup or the <em>New…</em> popup (<em>Cmd-N/Alt+Insert</em>) in the Project view.</p>
+<p>In the list you can select the library you want to add. Right now it contains only the libraries that we know have <code>ng add</code> support, but you can also specify any package name you want. By the way, the list is available on <a href="https://github.com/JetBrains/intellij-plugins/blob/master/AngularJS/resources/org/angularjs/cli/ng-packages.json">GitHub</a> and you can send us Pull Requests to add more libraries.</p>
+<p>In this example, we are adding Angular Material to our project:<br />
+<img class="alignnone size-full wp-image-9760" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-ng-add.png" alt="webstorm-ng-add" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-ng-add.gif" /></p>
+<p><span id="more-9753"></span></p>
+<p>If you add a dependency to package.json that WebStorm knows supports <code>ng add</code>, the IDE will suggest installing it with <code>ng add</code>:</p>
+<p><img class="alignnone size-full wp-image-9758" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-install-with-ng-add-inspection.png" alt="webstorm-install-with-ng-add-inspection" width="600" /></p>
+<p>And even if a dependency is already installed, it can still make sense to reinstall it with <code>ng add</code>. To do so, press <em>Alt-Enter</em> on the package name in package.json and select <em>Reinstall with <code>ng add</code></em>:</p>
+<p><img class="alignnone size-full wp-image-9759" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/webstorm-reinstall-with-ng-add.png" alt="webstorm-reinstall-with-ng-add" width="600" /></p>
+<h2 id="run_configurations_for_new_angular_projects">Run configurations for new Angular projects</h2>
+<p>If you create a new Angular project using Angular CLI in the IDE, WebStorm now automatically adds run/debug configurations that will help you start and debug the app and run Karma and Protractor tests in the IDE.</p>
+<p><img class="alignnone size-full wp-image-9756" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/angular-cli-project-configurations.png" alt="angular-cli-project-configurations" width="600" /></p>
+<h2 id="support_for_the_new_typescript_features">Support for the new TypeScript 3.0 features</h2>
+<p>The next TypeScript release is coming in July and WebStorm already adds support for its new features:</p>
+<ul>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/24897">Tuples in rest parameters and spread expressions</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/24439">New unknown top type</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript/pull/23696">Named type arguments &amp; partial type argument inference</a></li>
+</ul>
+<h2 id="completion_for_properties_for_react_native_components">Completion for properties for React Native components</h2>
+<p>For standard React Native components, WebStorm now provides completion for available props. If the component is not yet imported, press <em>Alt-Enter</em> on the component name to add a missing import.</p>
+<p><img class="alignnone size-full wp-image-9757" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/react-native-props-completion.png" alt="react-native-props-completion" width="600" /></p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3458/feed/</wfw:commentRss>
+		<slash:comments>6</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.2 EAP, 182.3341: extract React component, global file watchers, rerun failed tests</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#comments</comments>
+		<pubDate>Thu, 21 Jun 2018 09:36:07 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Early Access Preview]]></category>
+		<category><![CDATA[Angular]]></category>
+		<category><![CDATA[File Watchers]]></category>
+		<category><![CDATA[node.js]]></category>
+		<category><![CDATA[react]]></category>
+		<category><![CDATA[refactoring]]></category>
+		<category><![CDATA[WebStorm 2018.2]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9720</guid>
+		<description><![CDATA[Please welcome WebStorm 2018.2 EAP #6! Toolbox App is the easiest way to get EAP builds. You can also get notifications right in the IDE when a new EAP build is available: simply go to Preferences &#124; Appearance &#38; Behavior &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p>Please welcome <strong>WebStorm 2018.2 EAP #6</strong>!</p>
+<p><a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> is the easiest way to get EAP builds. You can also get notifications right in the IDE when a new EAP build is available: simply go to <em>Preferences | Appearance &amp; Behavior | System Settings | Updates </em>and select “<em>Automatically check updates for Early Access Program”</em>.</p>
+<p align="center"><a class="jb-download-button" href="https://www.jetbrains.com/webstorm/eap"><i class="download-icon"></i>Download WebStorm 2018.2 EAP</a></p>
+<p>If you’re not yet familiar with our Early Access Programs, or if you want to find out what features were added in WebStorm 2018.2 EAP, check out this <a href="https://www.jetbrains.com/webstorm/eap/">page</a>.</p>
+<p>Here are some highlights from WebStorm 2018.2 EAP #6 (182.3341.1):</p>
+<ul>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#extract_react_component">New Extract React component refactoring</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#support_for_react_namespaced_components">Improved support for React namespaced components and PropTypes</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#global_file_watchers">Option to configure a global File Watcher available in all projects</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#rerun_failed_tests">New Rerun failed tests action for Karma, Jest, and Mocha</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#run_more_angular_schematics_using_the_angular_cli_integration">Improved support for the Angular CLI&#8217;s schematics</a></li>
+<li><a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/#manage_logs_when_running_a_node_js_app">Manage logs on the new Logs tab in the Node.js run/debug configuration</a></li>
+</ul>
+<h2 id="extract_react_component">Extract React component</h2>
+<p>We’re very excited about this feature! WebStorm can now help you create a new React component, by extracting the JSX code from the render method of an existing one.</p>
+<p>Select the code you want to extract, and then select <em>Component…</em> from the <em>Refactor this… </em>popup (<em>Ctrl-T</em> on macOS or <em>Ctrl-Alt-Shift-T</em> on Windows and Linux). Name the component and select whether it should be a class component or a functional component.</p>
+<p>That’s it! Now your new component is defined next to the existing one and used in it.</p>
+<p><img class="alignnone size-full wp-image-9721" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/extract-react-component.png" alt="extract-react-component" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/extract-react-component.gif" /></p>
+<p>You can then use the <em>Move</em> refactoring to move the new component and all the required imports to a separate file. (Do let us know if you’d like this option to be available right on the Extract Component refactoring dialog.)</p>
+<p><img class="alignnone size-full wp-image-9724" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/move-react-component.png" alt="move-react-component" width="600" data-gif-src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/move-react-component.gif" /></p>
+<p>In this <a href="https://gist.github.com/prigara/c394275935aed6e079f042b354ae180a">Gist</a> you can see the code before and after the refactoring.</p>
+<p>You can modify the code templates WebStorm uses for the new components, by going to <em>Preferences | Editor | File and Code Templates</em> and selecting the <em>Code </em>tab. For example, you can switch from using <code>PureComponent</code> to using <code>Component</code> or <code>React.Component</code> when creating a class component. Or, change the template for functional components to using arrow function. You can also change the style of using PropTypes or remove them altogether.</p>
+<p><img class="alignnone size-full wp-image-9725" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/code-template-for-extract-react-component.png" alt="code-template-for-extract-react-component" width="600" /></p>
+<p>We hope you like this new feature and get a lot of use out of it! Please share your feedback with us in the comments below or on our <a href="https://youtrack.jetbrains.com/issues/WEB">issue tracker</a>.</p>
+<h2 id="support_for_react_namespaced_components">Support for React namespaced components</h2>
+<p>WebStorm now has better support for React components that have a namespace in their name. You can now get appropriate code completion and navigation to the definition for these components in JavaScript and TypeScript files.</p>
+<p><img class="alignnone size-full wp-image-9726" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/react-namespaced-components.png" alt="react-namespaced-components" width="600" /></p>
+<h2 id="better_support_for_proptypes">Better support for PropTypes</h2>
+<p>Code completion is now more precise when you use <a href="https://reactjs.org/docs/typechecking-with-proptypes.html">PropTypes</a> like <code>shape</code>, <code>oneOf</code>, <code>instanceOf</code>, or <code>arrayOf</code>. Here are a couple of examples:<span id="more-9720"></span></p>
+<p>Here in the completion we have the values listed using <code>PropTypes.oneOf</code>:</p>
+<p><img class="alignnone size-full wp-image-9727" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/props-one-of.png" alt="props-one-of" width="600" /></p>
+<p>And here we have completion for array methods because <code>PropTypes.arrayOf</code> is used:</p>
+<p><img class="alignnone size-full wp-image-9728" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/props-array-of.png" alt="props-array-of" width="600" /></p>
+<h2 id="global_file_watchers">Global File Watchers</h2>
+<p>With File Watchers, you can run command-line tools like <a href="https://prettier.io/">Prettier</a> automatically when you change or save a file. Before, it was only possible to configure and use a file watcher in a specific project. If you wanted to use the same watcher in a different project, you had to repeat the whole configuration. But now you can create and store File Watchers on the IDE level, and easily enable them in different projects.</p>
+<p>To create a global File Watcher, open the IDE Preferences (from the project or from the Welcome screen) and go to <em>Tools | File Watchers</em>, click the <em>+</em> button, and select <em>Custom </em>from the list. Now configure the File Watcher for the tool you want to use (for more information on how to do that, see our <a href="https://www.jetbrains.com/help/webstorm/using-file-watchers.html">documentation</a>).</p>
+<p>Once you’ve saved the new File Watcher, you can decide if it’s going to be available only in the current project &#8211; select Project in the right column or for all projects &#8211; then select Global.</p>
+<p><img src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/enable-global-watcher.png" alt="enable-global-watcher" width="600" class="alignnone size-full wp-image-9739" /></p>
+<p>Note that the global File Watchers will be available in all projects, but disabled by default. If you want to use it, go to the project’s <em>Preferences | Tools | File Watchers</em> and select the check-box next to it.</p>
+<p>Let’s create a new global File Watcher for Prettier following the steps described in the <a href="https://prettier.io/docs/en/webstorm.html#running-prettier-on-save-using-file-watcher">Prettier docs</a>. What we want to change is the path to Prettier – for every project where we want to enable this File Watcher, we want to use Prettier installed in the project’s node_modules folder. To do that, we use a macro in the path: <em>$ProjectFileDir$/node_modules/.bin/prettier</em>.</p>
+<p><img class="alignnone size-full wp-image-9730" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/global-watcher-for-prettier.png" alt="global-watcher-for-prettier" width="600" /></p>
+<h2 id="rerun_failed_tests">Rerun failed tests</h2>
+<p>There’s a new <em>Rerun Failed Tests</em> action available when you run tests with Karma, Jest, or Mocha in WebStorm. As the name suggests, it allows you to rerun only those tests that have failed, instead of running all tests after the fix.</p>
+<p><img class="alignnone size-full wp-image-9731" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/rerun-failed-tests-button.png" alt="rerun-failed-tests-button" width="600" /></p>
+<h2 id="run_more_angular_schematics_using_the_angular_cli_integration">Run more Angular schematics using the Angular CLI integration</h2>
+<p>With the <em>New&#8230; &#8211; Angular CLI…</em> action in the Project view, you can now generate code using schematics that are defined in libraries like @angular/material (note that you need to use Angular 6 for this). Previously, you could only generate components, services, and other blueprints defined in the Angular CLI itself.</p>
+<p><img class="alignnone size-full wp-image-9733" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-material-component.png" alt="generate-material-component" width="600" /></p>
+<p>In addition, WebStorm now shows the schematic’s description and provides code completion and description for available options.</p>
+<p><img class="alignnone size-full wp-image-9734" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/generate-component-options.png" alt="generate-component-options" width="600" /></p>
+<h2 id="manage_logs_when_running_a_node_js_app">Manage logs when running a Node.js app</h2>
+<p>If you’re using a logging tool like <a href="https://www.npmjs.com/package/morgan">morgan</a> in your Node.js app, and the tool writes logs to a file, you can now see these logs on the Console tab in the Node.js Run tool window. To enable this, go to the new Logs tab in the Node.js run/debug configuration. While there, you can also enable saving the console output to a log file.</p>
+<p><img class="alignnone size-full wp-image-9732" src="https://d3nmt5vlzunoa1.cloudfront.net/webstorm/files/2018/06/logs-in-node-configuration.png" alt="logs-in-node-configuration" width="600" /></p>
+<p>Please see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+182.3341.1+Release+Notes">Release Notes</a> for a full list of issues.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-2-eap-182-3341/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+		</item>
+		<item>
+		<title>WebStorm 2018.1.5 is now available</title>
+		<link>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-1-5/</link>
+		<comments>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-1-5/#comments</comments>
+		<pubDate>Fri, 15 Jun 2018 13:27:43 +0000</pubDate>
+		<dc:creator><![CDATA[Ekaterina Prigara]]></dc:creator>
+				<category><![CDATA[Release Announcements]]></category>
+		<category><![CDATA[WebStorm 2018.1]]></category>
+
+		<guid isPermaLink="false">http://blog.jetbrains.com/webstorm/?p=9714</guid>
+		<description><![CDATA[WebStorm 2018.1.5 is now available! Please update using Toolbox App or the IDE or download WebStorm 2018.1.5 from our website. This bug-fix update fixes two unpleasant regressions introduced in WebStorm 2018.1.4: the problem with the focus after using or canceling &#8230; <a href="https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-1-5/">Continue reading <span class="meta-nav">&#8594;</span></a>]]></description>
+				<content:encoded><![CDATA[<p><strong>WebStorm 2018.1.5</strong> is now available! Please update using <a href="https://www.jetbrains.com/toolbox/app/">Toolbox App</a> or the IDE or download WebStorm 2018.1.5 from our <a href="https://www.jetbrains.com/webstorm/download/">website</a>.</p>
+<p>This bug-fix update fixes two unpleasant regressions introduced in WebStorm 2018.1.4: the problem with the focus after using or canceling the navigation pop-up (<a href="https://youtrack.jetbrains.com/issue/IDEA-191839">IDEA-191839</a>) and the problem that you couldn&#8217;t open files with a click when using the <em>Go to…</em> pop-up (<a href="https://youtrack.jetbrains.com/issue/IDEA-191860">IDEA-191860</a>).</p>
+<p>Please see the <a href="https://confluence.jetbrains.com/display/WI/WebStorm+181.5281.31+Release+Notes">Release Notes</a> for a full list of all the issues addressed in WebStorm 2018.1.5.</p>
+<p><em>WebStorm Team</em></p>
+]]></content:encoded>
+			<wfw:commentRss>https://blog.jetbrains.com/webstorm/2018/06/webstorm-2018-1-5/feed/</wfw:commentRss>
+		<slash:comments>2</slash:comments>
+		</item>
+	</channel>
+</rss>
+
+<!-- Performance optimized by W3 Total Cache. Learn more: https://www.w3-edge.com/products/
+
+Page Caching using disk: enhanced
+Content Delivery Network via Amazon Web Services: CloudFront: d3nmt5vlzunoa1.cloudfront.net
+
+ Served from: blog.jetbrains.com @ 2018-11-12 16:58:51 by W3 Total Cache -->
