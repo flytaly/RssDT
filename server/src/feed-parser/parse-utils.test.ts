@@ -127,15 +127,15 @@ describe('Test feed parser', () => {
         });
     });
 
-    feeds.forEach(({ url }) => {
+    feeds.forEach(({ url, itemsNum, itemsNumUpdated }) => {
         it(`should return only new items after update ${url.hostname}`, async () => {
             const { feedItems: items } = await getNewItems(url.href);
             const { feedItems: itemsUpd } = await getNewItems(url.href, items);
             const intersect = itemsUpd.filter(
                 ({ pubdate }) => items[items.length - 1].pubdate! > pubdate!,
             );
-            expect(items.length).not.toBe(0);
-            expect(itemsUpd.length).not.toBe(0);
+            expect(items.length).toBe(itemsNum);
+            expect(itemsUpd.length).toBe(itemsNumUpdated);
             expect(intersect.length).toBe(0);
         });
     });
