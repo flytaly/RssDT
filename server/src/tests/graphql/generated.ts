@@ -71,6 +71,7 @@ export type Mutation = {
   login: UserResponse;
   addFeedWithEmail?: Maybe<UserFeedResponse>;
   addFeedToCurrentUser: UserFeedResponse;
+  deleteMyFeeds: DeletedFeedResponse;
 };
 
 
@@ -91,6 +92,11 @@ export type MutationAddFeedWithEmailArgs = {
 
 export type MutationAddFeedToCurrentUserArgs = {
   input: AddFeedInput;
+};
+
+
+export type MutationDeleteMyFeedsArgs = {
+  ids: Array<Scalars['Float']>;
 };
 
 export type UserResponse = {
@@ -123,6 +129,12 @@ export type AddFeedEmailInput = {
 
 export type AddFeedInput = {
   feedUrl: Scalars['String'];
+};
+
+export type DeletedFeedResponse = {
+  __typename?: 'DeletedFeedResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  ids?: Maybe<Array<Scalars['String']>>;
 };
 
 export type FeedFieldsFragment = (
@@ -195,6 +207,23 @@ export type AddFeedWithEmailMutation = (
       & Pick<ArgumentError, 'message' | 'argument'>
     )>> }
   )> }
+);
+
+export type DeleteMyFeedsMutationVariables = Exact<{
+  ids: Array<Scalars['Float']>;
+}>;
+
+
+export type DeleteMyFeedsMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteMyFeeds: (
+    { __typename?: 'DeletedFeedResponse' }
+    & Pick<DeletedFeedResponse, 'ids'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -355,6 +384,16 @@ export const AddFeedWithEmailDocument = gql`
   }
 }
     `;
+export const DeleteMyFeedsDocument = gql`
+    mutation deleteMyFeeds($ids: [Float!]!) {
+  deleteMyFeeds(ids: $ids) {
+    ids
+    errors {
+      message
+    }
+  }
+}
+    `;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(input: {email: $email, password: $password}) {
@@ -422,6 +461,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     addFeedWithEmail(variables: AddFeedWithEmailMutationVariables): Promise<AddFeedWithEmailMutation> {
       return withWrapper(() => client.request<AddFeedWithEmailMutation>(print(AddFeedWithEmailDocument), variables));
+    },
+    deleteMyFeeds(variables: DeleteMyFeedsMutationVariables): Promise<DeleteMyFeedsMutation> {
+      return withWrapper(() => client.request<DeleteMyFeedsMutation>(print(DeleteMyFeedsDocument), variables));
     },
     login(variables: LoginMutationVariables): Promise<LoginMutation> {
       return withWrapper(() => client.request<LoginMutation>(print(LoginDocument), variables));

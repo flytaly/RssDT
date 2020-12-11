@@ -41,11 +41,11 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
     const userFeed = new UserFeed();
 
     let feedMeta: FeedParser.Meta | undefined;
-
+    let newUrl: string = url;
     if (!feed) {
         try {
             const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
-            url = feedUrl;
+            newUrl = feedUrl;
             const { isFeed, meta } = await checkFeedInfo(feedStream);
             if (!isFeed) throw new Error('Not a feed');
             feedMeta = meta;
@@ -58,6 +58,12 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
                 errors: [new ArgumentError('url', `Couldn't get access to feed`)],
             };
         }
+    }
+
+    // actual url of the feed
+    if (newUrl !== url) {
+        url = newUrl;
+        feed = await Feed.findOne({ where: { url } });
     }
 
     const queryRunner = getConnection().createQueryRunner();

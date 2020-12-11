@@ -54,10 +54,11 @@ describe('Normalize', () => {
 });
 
 describe('My Feeds', () => {
-    const feeds = [generateFeed(), generateFeed()];
+    const feeds = [generateFeed(), generateFeed(), generateFeed()];
     const password = faker.internet.password(8);
     const email = faker.internet.email().toLowerCase();
     let sdk: ReturnType<typeof getSdk>;
+    const idsList: number[] = [];
 
     beforeAll(async () => {
         feeds.forEach((f) => f.mockRequests());
@@ -72,14 +73,29 @@ describe('My Feeds', () => {
             ...feeds.map((f) => deleteFeedWithUrl(f.feedUrl)),
         ]),
     );
-    test('should response with feeds', async () => {
-        const responses = feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ feedUrl }));
-        await Promise.all(responses);
-        const { myFeeds } = await sdk.myFeeds();
-        expect(myFeeds).toHaveLength(feeds.length);
-        myFeeds!.forEach((f, idx) => {
-            expect(f.feed).toMatchObject(feeds[idx].meta);
-            expect(f.feed.userFeeds).toBeNull();
+
+    describe('Get my feeds', () => {
+        test('should response with feeds', async () => {
+            const responses = feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ feedUrl }));
+            await Promise.all(responses);
+            const { myFeeds } = await sdk.myFeeds();
+            expect(myFeeds).toHaveLength(feeds.length);
+            myFeeds!.forEach((f, idx) => {
+                idsList.push(f.id);
+                expect(f.feed).toMatchObject(feeds[idx].meta);
+                expect(f.feed.userFeeds).toBeNull();
+            });
+        });
+    });
+    describe('Remove my feeds', () => {
+        test('should remove feeds', async () => {
+            const idsToDelete = idsList.slice(0, 2);
+            const { deleteMyFeeds } = await sdk.deleteMyFeeds({ ids: idsToDelete });
+            expect(deleteMyFeeds.ids).toEqual(
+                expect.arrayContaining(idsToDelete.map((id) => String(id))),
+            );
+            const { myFeeds } = await sdk.myFeeds();
+            expect(myFeeds![0].feed.id).toBe(idsList[idsToDelete.length]);
         });
     });
 });

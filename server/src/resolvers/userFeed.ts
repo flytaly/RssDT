@@ -1,5 +1,7 @@
 import {
     Arg,
+    Args,
+    ArgsType,
     Ctx,
     Field,
     InputType,
@@ -9,6 +11,7 @@ import {
     Resolver,
     UseMiddleware,
 } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
@@ -32,6 +35,21 @@ export class AddFeedInput {
     @InputMetadata('feedUrl')
     @Field()
     feedUrl: string;
+}
+
+@ArgsType()
+export class DeleteFeedArgs {
+    @Field(() => [Number])
+    ids: number[];
+}
+
+@ObjectType()
+class DeletedFeedResponse {
+    @Field(() => [ArgumentError], { nullable: true })
+    errors?: ArgumentError[];
+
+    @Field(() => [String], { nullable: true })
+    ids?: string[];
 }
 
 @InputType()
@@ -75,5 +93,28 @@ export class UserFeedResolver {
         @Ctx() { req }: MyContext,
     ) {
         return createUserFeed({ url, email: null, userId: req.session.userId });
+    }
+
+    /* Add feed to current user account */
+    @UseMiddleware(auth())
+    @Mutation(() => DeletedFeedResponse)
+    async deleteMyFeeds(
+        @Args() { ids }: DeleteFeedArgs, //
+        @Ctx() { req }: MyContext,
+    ) {
+        try {
+            const result = await getConnection()
+                .getRepository(UserFeed)
+                .createQueryBuilder('uf')
+                .delete()
+                .where('userId = :userId', { userId: req.session.userId })
+                .andWhereInIds(ids)
+                .returning('id')
+                .execute();
+            return { ids: result.raw.map((r: UserFeed) => r.id) };
+        } catch (error) {
+            console.error(`Couldn't delete: ${error.message}`);
+            return { errors: [new ArgumentError('ids', "Couldn't delete")] };
+        }
     }
 }
