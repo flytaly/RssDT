@@ -1,11 +1,11 @@
-import { Connection } from 'typeorm';
 import argon2 from 'argon2';
 import faker from 'faker';
+import { Connection } from 'typeorm';
 import { initDbConnection } from '../dbConnection';
-import { getSdk } from './graphql/generated';
-import getTestClient from './test-utils/getClient';
-import { deleteUserWithEmail } from './test-utils/dbQueries';
 import { User } from '../entities/User';
+import { getSdk } from './graphql/generated';
+import { deleteUserWithEmail } from './test-utils/dbQueries';
+import getTestClient from './test-utils/getClient';
 import { getSdkWithLoggedInUser } from './test-utils/login';
 
 let dbConnection: Connection;

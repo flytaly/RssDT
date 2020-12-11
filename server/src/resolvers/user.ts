@@ -12,13 +12,13 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
-import { Role, User } from '../entities/User';
+import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
-import { MyContext, ReqWithSession } from '../types';
+import { Role, MyContext, ReqWithSession } from '../types';
 import { ArgumentError } from './common/ArgumentError';
 import { NormalizeAndValidateArgs, InputMetadata } from '../middlewares/normalize-validate-args';
+import { getUserFeeds } from './common/getUserFeeds';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -50,12 +50,7 @@ export class UserResolver {
     @FieldResolver(() => [UserFeed])
     async feeds(@Root() root: User) {
         if (!root.id) return null;
-        return getConnection()
-            .getRepository(UserFeed)
-            .createQueryBuilder('uf')
-            .where({ userId: root.id })
-            .innerJoinAndSelect('uf.feed', 'f', 'f.id = uf.feedId')
-            .getMany();
+        return getUserFeeds(root.id);
     }
 
     @UseMiddleware(auth(Role.ADMIN))

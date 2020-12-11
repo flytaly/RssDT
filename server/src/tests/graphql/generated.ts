@@ -50,6 +50,15 @@ export type Feed = {
   __typename?: 'Feed';
   id: Scalars['Float'];
   url: Scalars['String'];
+  link?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  description: Scalars['String'];
+  activated: Scalars['Boolean'];
+  language?: Maybe<Scalars['String']>;
+  favicon?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  imageTitle?: Maybe<Scalars['String']>;
+  lastSuccessful?: Maybe<Scalars['DateTime']>;
   userFeeds?: Maybe<Array<UserFeed>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -115,6 +124,15 @@ export type AddFeedEmailInput = {
 export type AddFeedInput = {
   feedUrl: Scalars['String'];
 };
+
+export type FeedFieldsFragment = (
+  { __typename?: 'Feed' }
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'activated' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessful' | 'createdAt' | 'updatedAt'>
+  & { userFeeds?: Maybe<Array<(
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'userId'>
+  )>> }
+);
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
@@ -207,6 +225,17 @@ export type RegisterMutation = (
   ) }
 );
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )> }
+);
+
 export type MeWithFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -219,22 +248,26 @@ export type MeWithFeedsQuery = (
       & Pick<UserFeed, 'activated' | 'createdAt'>
       & { feed: (
         { __typename?: 'Feed' }
-        & Pick<Feed, 'url'>
+        & FeedFieldsFragment
       ) }
     )> }
     & UserFieldsFragment
   )> }
 );
 
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = (
+export type MyFeedsQuery = (
   { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'User' }
-    & UserFieldsFragment
-  )> }
+  & { myFeeds?: Maybe<Array<(
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'id' | 'userId' | 'activated'>
+    & { feed: (
+      { __typename?: 'Feed' }
+      & FeedFieldsFragment
+    ) }
+  )>> }
 );
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -248,6 +281,26 @@ export type UsersQuery = (
   )>> }
 );
 
+export const FeedFieldsFragmentDoc = gql`
+    fragment feedFields on Feed {
+  id
+  url
+  link
+  title
+  description
+  activated
+  language
+  favicon
+  imageUrl
+  imageTitle
+  lastSuccessful
+  userFeeds {
+    userId
+  }
+  createdAt
+  updatedAt
+}
+    `;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   id
@@ -316,6 +369,13 @@ export const RegisterDocument = gql`
   }
 }
     ${UsualUserResponseFragmentDoc}`;
+export const MeDocument = gql`
+    query me {
+  me {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const MeWithFeedsDocument = gql`
     query meWithFeeds {
   me {
@@ -324,19 +384,25 @@ export const MeWithFeedsDocument = gql`
       activated
       createdAt
       feed {
-        url
+        ...feedFields
       }
     }
   }
 }
-    ${UserFieldsFragmentDoc}`;
-export const MeDocument = gql`
-    query me {
-  me {
-    ...UserFields
+    ${UserFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
+export const MyFeedsDocument = gql`
+    query myFeeds {
+  myFeeds {
+    id
+    userId
+    activated
+    feed {
+      ...feedFields
+    }
   }
 }
-    ${UserFieldsFragmentDoc}`;
+    ${FeedFieldsFragmentDoc}`;
 export const UsersDocument = gql`
     query users {
   users {
@@ -363,11 +429,14 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
     },
+    me(variables?: MeQueryVariables): Promise<MeQuery> {
+      return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));
+    },
     meWithFeeds(variables?: MeWithFeedsQueryVariables): Promise<MeWithFeedsQuery> {
       return withWrapper(() => client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables));
     },
-    me(variables?: MeQueryVariables): Promise<MeQuery> {
-      return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));
+    myFeeds(variables?: MyFeedsQueryVariables): Promise<MyFeedsQuery> {
+      return withWrapper(() => client.request<MyFeedsQuery>(print(MyFeedsDocument), variables));
     },
     users(variables?: UsersQueryVariables): Promise<UsersQuery> {
       return withWrapper(() => client.request<UsersQuery>(print(UsersDocument), variables));

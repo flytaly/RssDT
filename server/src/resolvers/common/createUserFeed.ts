@@ -1,6 +1,8 @@
+import FeedParser from 'feedparser';
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
 import { Feed } from '../../entities/Feed';
 import { UserFeed } from '../../entities/UserFeed';
+import { checkFeedInfo, getFeedStream } from '../../feed-parser';
 import { ArgumentError } from './ArgumentError';
 
 const upsertUserAndGetId = async (
@@ -38,8 +40,24 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
     let feed = await Feed.findOne({ where: { url } });
     const userFeed = new UserFeed();
 
+    let feedMeta: FeedParser.Meta | undefined;
+
     if (!feed) {
-        // TODO: check if url actually works and get feed's info
+        try {
+            const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
+            url = feedUrl;
+            const { isFeed, meta } = await checkFeedInfo(feedStream);
+            if (!isFeed) throw new Error('Not a feed');
+            feedMeta = meta;
+        } catch (e) {
+            if (e.message === 'Not a feed') {
+                return { errors: [new ArgumentError('url', e.message)] };
+            }
+            console.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
+            return {
+                errors: [new ArgumentError('url', `Couldn't get access to feed`)],
+            };
+        }
     }
 
     const queryRunner = getConnection().createQueryRunner();
@@ -47,12 +65,12 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
     await queryRunner.startTransaction();
     try {
         if (!userId) {
-            // eslint-disable-next-line no-param-reassign
             userId = await upsertUserAndGetId(queryRunner, email!);
         }
         if (!feed) {
             feed = new Feed();
             feed.url = url;
+            feed.addMeta(feedMeta);
             await queryRunner.manager.save(feed);
         } else {
             const alreadyExist = await queryRunner.manager.findOne(UserFeed, {

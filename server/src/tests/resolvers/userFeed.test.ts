@@ -1,13 +1,14 @@
-import { Connection } from 'typeorm';
-import faker from 'faker';
 import argon2 from 'argon2';
+import faker from 'faker';
+import nock from 'nock';
+import { Connection } from 'typeorm';
 import { initDbConnection } from '../../dbConnection';
-import { getSdk } from '../graphql/generated';
-import getTestClient from '../test-utils/getClient';
 import { User } from '../../entities/User';
-import { deleteUserWithEmail, deleteFeedWithUrl } from '../test-utils/dbQueries';
+import { getSdk } from '../graphql/generated';
+import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
+import { generateFeed } from '../test-utils/generate-feed';
+import getTestClient from '../test-utils/getClient';
 import { getSdkWithLoggedInUser } from '../test-utils/login';
-import { UserFeed } from '../../entities/UserFeed';
 
 let dbConnection: Connection;
 
@@ -15,141 +16,31 @@ beforeAll(async () => {
     dbConnection = await initDbConnection();
 });
 
-afterAll(() => dbConnection.close());
-
-describe('Add user feed without logging', () => {
-    let feedUrl: string;
-    let feedUrl2: string;
-    let email: string;
-    let sdk: ReturnType<typeof getSdk>;
-
-    beforeAll(async () => {
-        email = faker.internet.email().toLowerCase();
-        feedUrl = faker.internet.url();
-        feedUrl2 = faker.internet.url();
-        sdk = getSdk(getTestClient().client);
-        await deleteUserWithEmail(email);
-    });
-
-    afterAll(() =>
-        Promise.all([
-            deleteUserWithEmail(email), //
-            deleteFeedWithUrl(feedUrl),
-            deleteFeedWithUrl(feedUrl2),
-        ]),
-    );
-
-    test('should create feed and user if email is passed', async () => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl });
-        const { userFeed, errors } = addFeedWithEmail!;
-        expect(errors).toBeNull();
-        expect(userFeed).not.toBeNull();
-        expect(userFeed?.feed.url).toBe(feedUrl);
-        expect(userFeed?.activated).toBe(false);
-    });
-
-    test('should return error if user already have this feed', async () => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl });
-        const { userFeed, errors } = addFeedWithEmail!;
-        expect(userFeed).toBeNull();
-        expect(Array.isArray(errors)).toBeTruthy();
-        expect(errors![0]).toMatchObject({
-            argument: 'url',
-            message: 'feed was already added',
-        });
-    });
-
-    test('should add another feed to the same user', async () => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: feedUrl2 });
-        const { userFeed, errors } = addFeedWithEmail!;
-        expect(errors).toBeNull();
-        expect(userFeed?.feed.url).toBe(feedUrl2);
-        const user = await User.findOne({ where: { email } });
-        const uFeed = await UserFeed.find({ where: { userId: user?.id } });
-        expect(uFeed).toHaveLength(2);
-    });
-});
-
-describe('Add user feed after logged in', () => {
-    let password: string;
-    let email: string;
-    let feedUrl: string;
-    let feedUrl2: string;
-    let sdk: ReturnType<typeof getSdk>;
-
-    beforeAll(async () => {
-        email = faker.internet.email().toLowerCase();
-        password = faker.internet.password(8);
-        feedUrl = faker.internet.url();
-        feedUrl2 = faker.internet.url();
-        await deleteUserWithEmail(email);
-        await User.create({ email, password: await argon2.hash(password) }).save();
-    });
-
-    afterAll(() =>
-        Promise.all([
-            deleteUserWithEmail(email), //
-            deleteFeedWithUrl(feedUrl),
-            deleteFeedWithUrl(feedUrl2),
-        ]),
-    );
-
-    test('should add feed to current user', async () => {
-        sdk = await getSdkWithLoggedInUser(email, password);
-        const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({ feedUrl });
-        const { errors, userFeed } = addFeedToCurrentUser!;
-        expect(errors).toBeNull();
-        expect(userFeed).not.toBeNull();
-        expect(userFeed?.feed.url).toBe(feedUrl);
-        expect(userFeed?.activated).toBe(false);
-    });
-
-    test('should return error if user already have this feed', async () => {
-        const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({ feedUrl });
-        const { userFeed, errors } = addFeedToCurrentUser!;
-        expect(userFeed).toBeNull();
-        expect(Array.isArray(errors)).toBeTruthy();
-        expect(errors![0]).toMatchObject({ argument: 'url', message: 'feed was already added' });
-    });
-
-    test('should add another feed to the same user', async () => {
-        const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({ feedUrl: feedUrl2 });
-        const { userFeed, errors } = addFeedToCurrentUser!;
-        expect(errors).toBeNull();
-        expect(userFeed?.feed.url).toBe(feedUrl2);
-        const user = await User.findOne({ where: { email } });
-        const uFeed = await UserFeed.find({ where: { userId: user?.id } });
-        expect(uFeed).toHaveLength(2);
-    });
-
-    test('get user feeds', async () => {
-        const { me } = await sdk.meWithFeeds();
-        expect(me?.feeds).toHaveLength(2);
-        expect(me?.feeds[0].activated).toBe(false);
-        expect(me?.feeds[0].feed).toHaveProperty('url', feedUrl);
-        expect(me?.feeds[1].feed).toHaveProperty('url', feedUrl2);
-    });
+afterAll(() => {
+    nock.cleanAll();
+    return dbConnection.close();
 });
 
 describe('Normalize', () => {
-    let feedUrl: string;
-    let email: string;
+    const inputUrl = ' domain.com ';
+    const correctUrl = `https://${inputUrl.trim()}`;
+    const feed = generateFeed({ feedUrl: correctUrl });
+    const email = faker.internet.email().toLowerCase();
     let sdk: ReturnType<typeof getSdk>;
     beforeAll(async () => {
-        email = faker.internet.email().toLowerCase();
-        feedUrl = 'domain.com/test.rss';
+        feed.mockRequests();
         sdk = getSdk(getTestClient().client);
         await deleteUserWithEmail(email);
     });
     afterAll(() =>
         Promise.all([
             deleteUserWithEmail(email), //
-            deleteFeedWithUrl(feedUrl),
+            deleteFeedWithUrl(feed.feedUrl),
         ]),
     );
     test('should normalize url', async () => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl });
-        expect(addFeedWithEmail?.userFeed?.feed.url).toBe(`https://${feedUrl.trim()}`);
+        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: inputUrl });
+        expect(addFeedWithEmail?.userFeed?.feed.url).toBe(correctUrl);
     });
     test('should validate url', async () => {
         const wrongUrls = ['', 'https:', 'https://', 'ftp://asdf.com', 'juststring'];
@@ -159,5 +50,36 @@ describe('Normalize', () => {
                 expect(addFeedWithEmail?.errors?.[0].argument).toBe('feedUrl');
             }),
         );
+    });
+});
+
+describe('My Feeds', () => {
+    const feeds = [generateFeed(), generateFeed()];
+    const password = faker.internet.password(8);
+    const email = faker.internet.email().toLowerCase();
+    let sdk: ReturnType<typeof getSdk>;
+
+    beforeAll(async () => {
+        feeds.forEach((f) => f.mockRequests());
+        await deleteUserWithEmail(email);
+        await User.create({ email, password: await argon2.hash(password) }).save();
+        sdk = await getSdkWithLoggedInUser(email, password);
+    });
+
+    afterAll(() =>
+        Promise.all([
+            deleteUserWithEmail(email),
+            ...feeds.map((f) => deleteFeedWithUrl(f.feedUrl)),
+        ]),
+    );
+    test('should response with feeds', async () => {
+        const responses = feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ feedUrl }));
+        await Promise.all(responses);
+        const { myFeeds } = await sdk.myFeeds();
+        expect(myFeeds).toHaveLength(feeds.length);
+        myFeeds!.forEach((f, idx) => {
+            expect(f.feed).toMatchObject(feeds[idx].meta);
+            expect(f.feed.userFeeds).toBeNull();
+        });
     });
 });

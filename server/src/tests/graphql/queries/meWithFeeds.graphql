@@ -5,7 +5,7 @@ query meWithFeeds {
             activated
             createdAt
             feed {
-                url
+                ...feedFields
             }
         }
     }

@@ -14,6 +14,7 @@ module.exports = {
         'import/no-extraneous-dependencies': 'off',
         'class-methods-use-this': 'off',
         'no-underscore-dangle': 'off',
+        'no-param-reassign': 'off',
         'max-classes-per-file': 'off',
     },
 };

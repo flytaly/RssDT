@@ -1,7 +1,11 @@
 import Session from 'express-session';
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
-import { Role } from '../entities/User';
+
+export enum Role {
+    USER = 'USER',
+    ADMIN = 'ADMIN',
+}
 
 type MySession = Session.Session & {
     userId: number;
@@ -13,4 +17,31 @@ export type MyContext = {
     req: ReqWithSession;
     res: Response;
     redis: Redis;
+};
+
+export type FeedMeta = {
+    title: string;
+    description: string;
+    link: string;
+    language: string;
+    favicon?: string | null;
+    imageUrl?: string;
+    imageTitle?: string;
+};
+
+export type ItemEnclosure = {
+    length?: string;
+    type?: string;
+    url: string;
+};
+
+export type FeedItem = {
+    title: string;
+    description?: string | null;
+    summary?: string | null;
+    pubdate: Date | null;
+    link: string;
+    guid: string;
+    imageUrl?: string;
+    enclosures?: ItemEnclosure[] | null;
 };

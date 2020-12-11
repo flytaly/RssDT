@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import normalizeUrl from 'normalize-url';
 import Joi, { AnySchema } from 'joi';
 import { createMethodDecorator } from 'type-graphql';

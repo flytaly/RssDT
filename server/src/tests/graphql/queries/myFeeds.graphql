@@ -1,0 +1,10 @@
+query myFeeds {
+    myFeeds {
+        id
+        userId
+        activated
+        feed {
+            ...feedFields
+        }
+    }
+}

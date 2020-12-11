@@ -10,11 +10,7 @@ import {
     OneToMany,
 } from 'typeorm';
 import { UserFeed } from './UserFeed';
-
-export enum Role {
-    USER = 'USER',
-    ADMIN = 'ADMIN',
-}
+import { Role } from '../types';
 
 @ObjectType()
 @Entity()

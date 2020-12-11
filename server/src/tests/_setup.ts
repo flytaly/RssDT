@@ -29,6 +29,9 @@ module.exports = async () => {
         console.log(`🚀 start server on port:${PORT} for testing`);
     });
 
+    server.keepAliveTimeout = 0;
+    server.timeout = 1000;
+
     (global as MyGlobal).__dbConnection = dbcon;
     (global as MyGlobal).__server = server;
 };

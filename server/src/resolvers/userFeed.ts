@@ -15,6 +15,7 @@ import { MyContext } from '../types';
 import { createUserFeed } from './common/createUserFeed';
 import { ArgumentError } from './common/ArgumentError';
 import { InputMetadata, NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { getUserFeeds } from './common/getUserFeeds';
 
 @ObjectType()
 class UserFeedResponse {
@@ -52,7 +53,7 @@ export class UserFeedResolver {
     @UseMiddleware(auth())
     @Query(() => [UserFeed], { nullable: true })
     async myFeeds(@Ctx() { req }: MyContext) {
-        return UserFeed.find({ where: { userId: req.session.userId } });
+        return getUserFeeds(req.session.userId);
     }
 
     /* Add feed digest to user with given email. If user doesn't exist

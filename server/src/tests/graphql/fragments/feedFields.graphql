@@ -1,0 +1,18 @@
+fragment feedFields on Feed {
+    id
+    url
+    link
+    title
+    description
+    activated
+    language
+    favicon
+    imageUrl
+    imageTitle
+    lastSuccessful
+    userFeeds {
+        userId
+    }
+    createdAt
+    updatedAt
+}
