@@ -51,14 +51,14 @@ export type Feed = {
   id: Scalars['Float'];
   url: Scalars['String'];
   link?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
-  description: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   activated: Scalars['Boolean'];
   language?: Maybe<Scalars['String']>;
   favicon?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   imageTitle?: Maybe<Scalars['String']>;
-  lastSuccessful?: Maybe<Scalars['DateTime']>;
+  lastSuccessfulUpd: Scalars['DateTime'];
   userFeeds?: Maybe<Array<UserFeed>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -139,7 +139,7 @@ export type DeletedFeedResponse = {
 
 export type FeedFieldsFragment = (
   { __typename?: 'Feed' }
-  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'activated' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessful' | 'createdAt' | 'updatedAt'>
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'activated' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'createdAt' | 'updatedAt'>
   & { userFeeds?: Maybe<Array<(
     { __typename?: 'UserFeed' }
     & Pick<UserFeed, 'userId'>
@@ -322,7 +322,7 @@ export const FeedFieldsFragmentDoc = gql`
   favicon
   imageUrl
   imageTitle
-  lastSuccessful
+  lastSuccessfulUpd
   userFeeds {
     userId
   }

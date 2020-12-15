@@ -1,7 +1,10 @@
+/* eslint-disable import/no-cycle */
 import { Meta, Item } from 'feedparser';
 import sanitizeHtml from 'sanitize-html';
 import pick from 'lodash.pick';
-import { FeedItem, FeedMeta } from '../types';
+import { FeedMeta } from '../types';
+import { Item as FeedItem } from '../entities/Item';
+import { Enclosure } from '../entities/Enclosure';
 
 export function filterMeta(feedMeta?: Meta): FeedMeta {
     if (!feedMeta) return {} as FeedMeta;
@@ -13,7 +16,8 @@ export function filterMeta(feedMeta?: Meta): FeedMeta {
     return meta as FeedMeta;
 }
 
-export function filterAndSanitizeHtml(item: Item) {
+// filter, sanitize Html and return Items
+export function createSanitizedItem(item: Item) {
     const imgSchemes = ['https', 'http'];
     const cleanHtml = (dirty: string) =>
         sanitizeHtml(dirty, {
@@ -31,18 +35,20 @@ export function filterAndSanitizeHtml(item: Item) {
 
     const fields = ['title', 'description', 'summary', 'pubdate', 'link', 'guid'];
 
-    const obj: Partial<FeedItem> = pick(item, fields);
+    const resultItem = new FeedItem();
+    Object.assign(resultItem, pick(item, fields));
     if (item.image && item.image.url) {
-        obj.imageUrl = item.image.url;
+        resultItem.imageUrl = item.image.url;
     }
 
-    // const encFields = ['url', 'type', 'length'];
-    // if (item.enclosures && item.enclosures.length) {
-    //     obj.enclosures = item.enclosures.map((e) => pick(e, encFields));
-    // }
+    const encFields = ['url', 'type', 'length'];
+    if (item.enclosures && item.enclosures.length) {
+        resultItem.enclosures = item.enclosures.map((e) =>
+            Object.assign(new Enclosure(), pick(e, encFields)),
+        );
+    }
+    resultItem.description = resultItem.description ? cleanHtml(resultItem.description) : '';
+    resultItem.summary = resultItem.summary ? cleanHtml(resultItem.summary) : '';
 
-    obj.description = obj.description ? cleanHtml(obj.description) : null;
-    obj.summary = obj.summary ? cleanHtml(obj.summary) : null;
-
-    return obj as FeedItem;
+    return resultItem;
 }

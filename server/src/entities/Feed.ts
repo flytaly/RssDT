@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { filterMeta } from '../feed-parser/filter-item';
 import { UserFeed } from './UserFeed';
+import { Item } from './Item';
 
 @ObjectType()
 @Entity()
@@ -33,12 +34,12 @@ export class Feed extends BaseEntity {
     @Column({ nullable: true })
     link: string;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ default: '', nullable: true })
     title: string;
 
-    @Field()
-    @Column({ default: '', nullable: true })
+    @Field({ nullable: true })
+    @Column({ type: 'text', default: '', nullable: true })
     description: string;
 
     @Field()
@@ -61,18 +62,24 @@ export class Feed extends BaseEntity {
     @Column({ default: '', nullable: true })
     imageTitle: string;
 
-    @Field(() => Date, { nullable: true })
-    @Column({ nullable: true })
-    lastSuccessful: Date;
+    @Field(() => Date)
+    @Column({ default: new Date(0) })
+    lastSuccessfulUpd: Date;
+
+    @Column({ default: new Date(0) })
+    lastUpdAttempt: Date;
 
     // TODO: should be protected
     @Field(() => [UserFeed], { nullable: true })
     @OneToMany(() => UserFeed, (userFeed) => userFeed.feed, { nullable: true })
     userFeeds: UserFeed[];
 
-    // @Field(() => [FeedItem], { nullable: true })
-    // @OneToMany(() => FeedItem, (item) => item.feed, { nullable: true })
-    // items: FeedItem[]
+    @Field(() => [Item], { nullable: true })
+    @OneToMany(() => Item, (item) => item.feed, { nullable: true })
+    items: Item[];
+
+    @Column({ default: 0 })
+    throttled: number;
 
     @Field(() => Date)
     @CreateDateColumn()

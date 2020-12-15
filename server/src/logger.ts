@@ -40,5 +40,7 @@ export const initLogFiles = (prefix = '', suffix = '') => {
         if (IS_DEV) {
             logThrough.pipe(process.stdout);
         }
+        return child;
     }
+    return null;
 };

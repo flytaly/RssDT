@@ -9,7 +9,7 @@ fragment feedFields on Feed {
     favicon
     imageUrl
     imageTitle
-    lastSuccessful
+    lastSuccessfulUpd
     userFeeds {
         userId
     }

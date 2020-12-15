@@ -1,9 +1,11 @@
 import { createConnection } from 'typeorm';
 import path from 'path';
 import { IS_DEV, IS_PROD, IS_TEST } from './constants';
-import { User } from './entities/User';
+import { Item } from './entities/Item';
 import { UserFeed } from './entities/UserFeed';
+import { User } from './entities/User';
 import { Feed } from './entities/Feed';
+import { Enclosure } from './entities/Enclosure';
 
 export const initDbConnection = async () => {
     const migrationPath = path.join(
@@ -21,7 +23,7 @@ export const initDbConnection = async () => {
         migrations: IS_TEST ? undefined : [migrationPath],
         dropSchema: IS_TEST,
         synchronize: !IS_PROD,
-        entities: [User, Feed, UserFeed],
+        entities: [User, Feed, UserFeed, Item, Enclosure],
     });
 
     await dbConnection.runMigrations();

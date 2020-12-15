@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { Readable } from 'stream';
-import FeedParser, { Meta, Item } from 'feedparser';
+import FeedParser, { Item, Meta } from 'feedparser';
 import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
+import { Readable } from 'stream';
 
 const MAX_ITEMS = 1000;
 const defaultAxiosOptions: AxiosRequestConfig = {
@@ -168,7 +168,7 @@ export function parseFeed(
 }
 
 /** Parse feed on given url and return new items if existing items are provided */
-export async function getNewItems(url: string, existingItems?: Item[]) {
+export async function getNewItems(url: string, existingItems?: ItemWithPubdate[]) {
     const { feedStream } = await getFeedStream(url);
     const feed = await parseFeed(feedStream, existingItems);
     return feed;

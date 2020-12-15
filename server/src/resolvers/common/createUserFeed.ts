@@ -3,6 +3,7 @@ import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
 import { Feed } from '../../entities/Feed';
 import { UserFeed } from '../../entities/UserFeed';
 import { checkFeedInfo, getFeedStream } from '../../feed-parser';
+import { logger } from '../../logger';
 import { ArgumentError } from './ArgumentError';
 
 const upsertUserAndGetId = async (
@@ -53,7 +54,7 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
             if (e.message === 'Not a feed') {
                 return { errors: [new ArgumentError('url', e.message)] };
             }
-            console.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
+            logger.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
             return {
                 errors: [new ArgumentError('url', `Couldn't get access to feed`)],
             };
