@@ -1,5 +1,5 @@
-import { abortPendingRequests } from 'nock/types';
 import { getConnection, LessThan } from 'typeorm';
+import { IS_TEST } from '../constants';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
 import { getNewItems } from '../feed-parser';
@@ -58,21 +58,26 @@ export const updateFeedData = async (url: string) => {
     let status: Status = Status.Fail;
     // TODO: Lock feed
     const feed = await Feed.findOne({ where: { url } });
+    const ts = new Date();
     if (feed) {
+        feed.lastUpdAttempt = ts;
         try {
             const prevItems = await getItemsWithPubDate(feed.id);
             const { feedItems, feedMeta } = await getNewItems(url, prevItems);
             feed.addMeta(feedMeta);
+            feed.lastSuccessfulUpd = ts;
             feed.throttled = Math.max(0, feed.throttled - 2);
             await feed.save();
             if (feedItems?.length) {
-                await insertNewItems(feedItems.map(createSanitizedItem));
+                await insertNewItems(feedItems.map((item) => createSanitizedItem(item, feed.id)));
                 newItemsNum += feedItems.length;
             }
             status = Status.Success;
             logger.info({ url, newItemsNum }, `feed was updated`);
         } catch (error) {
             logger.error({ url }, `feed wasn't updated: ${error.message}`);
+            if (IS_TEST) throw error;
+
             feed.throttled = Math.min(10, feed.throttled + 1);
             await feed.save();
         }

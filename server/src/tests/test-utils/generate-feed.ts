@@ -7,16 +7,15 @@ export const generateMeta = (): FeedMeta => ({
     description: faker.commerce.productDescription(),
     link: faker.internet.url(),
     language: 'en',
-    favicon: null,
     imageUrl: faker.image.imageUrl(),
     imageTitle: 'image',
 });
 
-export const generateItem = (): FeedItem => ({
+export const generateItem = (pubdate = new Date()): FeedItem => ({
     title: faker.lorem.slug(),
     description: faker.lorem.text(),
     summary: faker.lorem.text(),
-    pubdate: new Date(),
+    pubdate,
     link: faker.internet.url(),
     guid: faker.internet.url(),
     imageUrl: faker.image.imageUrl(),
@@ -48,7 +47,6 @@ export const generateFeed = ({
     <description>${meta.description}</description>
     <link>${meta.link}</link>
     <language>${meta.language}</language>
-    <favicon>${meta.language}</favicon>
     <image>
       <title>${meta.imageTitle}</title>
       <url>${meta.imageUrl}</url>

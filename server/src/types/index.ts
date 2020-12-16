@@ -24,7 +24,7 @@ export type FeedMeta = {
     description: string;
     link: string;
     language: string;
-    favicon?: string | null;
+    favicon?: string | undefined;
     imageUrl?: string;
     imageTitle?: string;
 };

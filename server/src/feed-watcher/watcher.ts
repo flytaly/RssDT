@@ -49,8 +49,7 @@ export default class Watcher {
                     }
                 }),
         );
-        console.log({ totalFeeds, totalItems });
-
+        logger.info({ totalFeeds, totalItems }, 'End updating');
         this.updating = false;
     }
 

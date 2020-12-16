@@ -47,6 +47,9 @@ export class Item extends BaseEntity {
     @Column({ default: '', nullable: true })
     imageUrl: string;
 
+    @Column({ nullable: true })
+    feedId: number;
+
     @Field(() => Feed)
     @ManyToOne(() => Feed, (feed) => feed.items, { onDelete: 'CASCADE' })
     feed: Feed;

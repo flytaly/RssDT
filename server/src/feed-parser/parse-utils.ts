@@ -109,14 +109,12 @@ export async function getFeedStream(
 
 /**
  * Check if an item doesn't already exist.
- * 'existingItems' should be sorted by date, i.e. the last item in array
- * is the newest by date.
+ * existingItems should be sorted DESC
  */
 function isNewItem(newItem: ItemWithPubdate, existingItems?: ItemWithPubdate[]): boolean {
     if (!existingItems || !existingItems.length) return true;
 
-    const lastItem = existingItems[existingItems.length - 1];
-
+    const lastItem = existingItems[0];
     if (lastItem.pubdate && newItem.pubdate) {
         const oldDate = new Date(lastItem.pubdate);
         const newDate = new Date(newItem.pubdate);
