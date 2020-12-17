@@ -54,7 +54,7 @@ export class Item extends BaseEntity {
     @ManyToOne(() => Feed, (feed) => feed.items, { onDelete: 'CASCADE' })
     feed: Feed;
 
-    @Field(() => Enclosure, { nullable: true })
+    @Field(() => [Enclosure], { nullable: true })
     @OneToMany(() => Enclosure, (enc) => enc.item, { nullable: true, eager: true, cascade: true })
     enclosures: Enclosure[];
 

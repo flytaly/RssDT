@@ -62,24 +62,10 @@ export class Feed extends BaseEntity {
     @Column({ default: '', nullable: true })
     imageTitle: string;
 
-    @Field(() => Date)
-    @Column({ default: new Date(0) })
-    lastSuccessfulUpd: Date;
-
-    @Column({ default: new Date(0) })
-    lastUpdAttempt: Date;
-
     // TODO: should be protected
     @Field(() => [UserFeed], { nullable: true })
     @OneToMany(() => UserFeed, (userFeed) => userFeed.feed, { nullable: true })
     userFeeds: UserFeed[];
-
-    @Field(() => [Item], { nullable: true })
-    @OneToMany(() => Item, (item) => item.feed, { nullable: true })
-    items: Item[];
-
-    @Column({ default: 0 })
-    throttled: number;
 
     @Field(() => Date)
     @CreateDateColumn()
@@ -88,4 +74,17 @@ export class Feed extends BaseEntity {
     @Field(() => Date)
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Field(() => Date)
+    @Column({ default: new Date(0) })
+    lastSuccessfulUpd: Date;
+
+    @Column({ default: new Date(0) })
+    lastUpdAttempt: Date;
+
+    @OneToMany(() => Item, (item) => item.feed, { nullable: true })
+    items: Item[];
+
+    @Column({ default: 0 })
+    throttled: number;
 }

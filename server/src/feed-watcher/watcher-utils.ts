@@ -1,5 +1,6 @@
 import { getConnection, LessThan } from 'typeorm';
 import { IS_TEST } from '../constants';
+import { Enclosure } from '../entities/Enclosure';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
 import { getNewItems } from '../feed-parser';
@@ -50,8 +51,18 @@ const getItemsWithPubDate = (feedId: number) =>
         }[]
     >;
 
-const insertNewItems = (items: Item[]) =>
-    getConnection().createQueryBuilder().insert().into(Item).values(items).execute();
+const insertNewItems = async (items: Item[]) => {
+    const con = getConnection();
+    const result = await con.createQueryBuilder().insert().into(Item).values(items).execute();
+    const encs: Enclosure[] = [];
+    items.forEach(({ enclosures }) => {
+        if (enclosures?.length) {
+            encs.push(...enclosures);
+        }
+    });
+    await con.createQueryBuilder().insert().into(Enclosure).values(encs).execute();
+    return result;
+};
 
 export const updateFeedData = async (url: string) => {
     let newItemsNum = 0;

@@ -5,10 +5,11 @@ import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/user';
 import { MyContext, ReqWithSession } from './types';
 import { UserFeedResolver } from './resolvers/userFeed';
+import { FeedResolver } from './resolvers/feed';
 
 export const initApolloServer = async (app: Express, redis: Redis) => {
     const schema = await buildSchema({
-        resolvers: [UserResolver, UserFeedResolver],
+        resolvers: [UserResolver, UserFeedResolver, FeedResolver],
         validate: false,
     });
 

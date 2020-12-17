@@ -43,9 +43,12 @@ export function createSanitizedItem(item: Item, feedId?: number) {
 
     const encFields = ['url', 'type', 'length'];
     if (item.enclosures && item.enclosures.length) {
-        resultItem.enclosures = item.enclosures.map((e) =>
-            Object.assign(new Enclosure(), pick(e, encFields)),
-        );
+        resultItem.enclosures = item.enclosures.map((e) => {
+            const enc = new Enclosure();
+            Object.assign(enc, pick(e, encFields));
+            enc.item = resultItem;
+            return enc;
+        });
     }
     resultItem.description = resultItem.description ? cleanHtml(resultItem.description) : '';
     resultItem.summary = resultItem.summary ? cleanHtml(resultItem.summary) : '';

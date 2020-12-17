@@ -4,7 +4,7 @@ import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
 import { Readable } from 'stream';
 
-const MAX_ITEMS = 1000;
+const MAX_ITEMS = 500;
 const defaultAxiosOptions: AxiosRequestConfig = {
     method: 'get',
     responseType: 'arraybuffer',
