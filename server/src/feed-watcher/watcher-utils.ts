@@ -1,4 +1,5 @@
-import { getConnection, LessThan } from 'typeorm';
+import { getConnection, getManager, LessThan } from 'typeorm';
+import moment from 'moment';
 import { IS_TEST } from '../constants';
 import { Enclosure } from '../entities/Enclosure';
 import { Feed } from '../entities/Feed';
@@ -64,8 +65,44 @@ export const insertNewItems = async (items: Item[]) => {
     return result;
 };
 
+/**
+ * Delete items that exceeded limits
+ * @param limitWeekOld - limit items that was created > one week ago
+ * */
+export const deleteOldItems = async (feedId: number, limitTotal = 500, limitWeekOld = 50) => {
+    if (feedId) {
+        const [, deletedNum] = await getManager().query(`
+        DELETE FROM item
+        WHERE item."feedId" = ${feedId}
+        AND item."id" IN ((
+                SELECT it."id"
+                FROM item it
+                WHERE
+                    it."feedId" = ${feedId}
+                ORDER BY
+                    it."createdAt" DESC,
+                    it."pubdate" DESC
+                OFFSET ${limitTotal}
+            ) UNION (
+                SELECT it."id"
+                FROM item it
+                WHERE
+                    it."feedId" = ${feedId}
+                    AND it."createdAt" <= '${moment().subtract(1, 'week').toISOString()}'
+                ORDER BY
+                    it."createdAt" DESC,
+                    it."pubdate" DESC
+                OFFSET ${limitWeekOld}
+            ));
+    `);
+        return deletedNum as number;
+    }
+    return 0;
+};
+
 export const updateFeedData = async (url: string) => {
     let newItemsNum = 0;
+    let deletedItemsNum = 0;
     let status: Status = Status.Fail;
     // TODO: Lock feed
     const feed = await Feed.findOne({ where: { url } });
@@ -80,11 +117,14 @@ export const updateFeedData = async (url: string) => {
             feed.throttled = Math.max(0, feed.throttled - 2);
             await feed.save();
             if (feedItems?.length) {
-                await insertNewItems(feedItems.map((item) => createSanitizedItem(item, feed.id)));
-                newItemsNum += feedItems.length;
+                const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
+                await insertNewItems(itemsToSave);
+                const deleted = await deleteOldItems(feed.id);
+                deletedItemsNum += deleted;
+                newItemsNum += itemsToSave.length;
             }
             status = Status.Success;
-            logger.info({ url, newItemsNum }, `feed was updated`);
+            logger.info({ url, newItemsNum, deletedItemsNum }, `feed was updated`);
         } catch (error) {
             logger.error({ url }, `feed wasn't updated: ${error.message}`);
             if (IS_TEST) throw error;
