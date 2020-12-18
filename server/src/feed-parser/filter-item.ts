@@ -17,7 +17,7 @@ export function filterMeta(feedMeta?: Meta): FeedMeta {
 }
 
 // filter, sanitize Html and return Items
-export function createSanitizedItem(item: Item, feedId?: number) {
+export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
     const imgSchemes = ['https', 'http'];
     const cleanHtml = (dirty: string) =>
         sanitizeHtml(dirty, {

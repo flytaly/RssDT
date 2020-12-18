@@ -20,7 +20,7 @@ export class PaginatedItemsResponse {
     items: Item[];
 
     @Field()
-    hasMore: boolean;
+    count: number;
 }
 
 @InputType()
@@ -49,16 +49,12 @@ export class FeedResolver {
 
         if (!uf) throw new Error("couldn't find feed");
 
-        const limitPlusOne = Math.min(40, Math.max(1, take)) + 1;
-        const items = await Item.find({
+        const [items, count] = await Item.findAndCount({
             skip,
-            take: limitPlusOne,
+            take: Math.min(40, Math.max(1, take)),
             where: { feedId },
             order: { pubdate: 'DESC' },
         });
-        return {
-            items: items.slice(0, limitPlusOne - 1),
-            hasMore: items.length === limitPlusOne,
-        };
+        return { items, count };
     }
 }

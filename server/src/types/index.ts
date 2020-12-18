@@ -37,11 +37,11 @@ export type ItemEnclosure = {
 
 export type FeedItem = {
     title: string;
-    description?: string | null;
-    summary?: string | null;
-    pubdate: Date | null;
+    description?: string;
+    summary?: string;
+    pubdate: Date;
     link: string;
     guid: string;
     imageUrl?: string;
-    enclosures?: ItemEnclosure[] | null;
+    enclosures?: ItemEnclosure[];
 };

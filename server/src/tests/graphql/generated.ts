@@ -21,6 +21,12 @@ export type Query = {
   users?: Maybe<Array<User>>;
   me?: Maybe<User>;
   myFeeds?: Maybe<Array<UserFeed>>;
+  myFeedItems: PaginatedItemsResponse;
+};
+
+
+export type QueryMyFeedItemsArgs = {
+  input: ItemsInput;
 };
 
 export type User = {
@@ -58,12 +64,46 @@ export type Feed = {
   favicon?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   imageTitle?: Maybe<Scalars['String']>;
-  lastSuccessfulUpd: Scalars['DateTime'];
   userFeeds?: Maybe<Array<UserFeed>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  lastSuccessfulUpd: Scalars['DateTime'];
 };
 
+
+export type PaginatedItemsResponse = {
+  __typename?: 'PaginatedItemsResponse';
+  items: Array<Item>;
+  count: Scalars['Float'];
+};
+
+export type Item = {
+  __typename?: 'Item';
+  id: Scalars['Float'];
+  guid?: Maybe<Scalars['String']>;
+  pubdate?: Maybe<Scalars['DateTime']>;
+  link?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  summary?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  feed: Feed;
+  enclosures?: Maybe<Array<Enclosure>>;
+  createdAt: Scalars['DateTime'];
+};
+
+export type Enclosure = {
+  __typename?: 'Enclosure';
+  url: Scalars['String'];
+  length?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type ItemsInput = {
+  feedId: Scalars['Float'];
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -143,6 +183,15 @@ export type FeedFieldsFragment = (
   & { userFeeds?: Maybe<Array<(
     { __typename?: 'UserFeed' }
     & Pick<UserFeed, 'userId'>
+  )>> }
+);
+
+export type ItemFieldsFragment = (
+  { __typename?: 'Item' }
+  & Pick<Item, 'id' | 'guid' | 'pubdate' | 'link' | 'title' | 'description' | 'summary' | 'imageUrl' | 'createdAt'>
+  & { enclosures?: Maybe<Array<(
+    { __typename?: 'Enclosure' }
+    & Pick<Enclosure, 'url' | 'length' | 'type'>
   )>> }
 );
 
@@ -284,6 +333,25 @@ export type MeWithFeedsQuery = (
   )> }
 );
 
+export type MyFeedItemsQueryVariables = Exact<{
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  feedId: Scalars['Float'];
+}>;
+
+
+export type MyFeedItemsQuery = (
+  { __typename?: 'Query' }
+  & { myFeedItems: (
+    { __typename?: 'PaginatedItemsResponse' }
+    & Pick<PaginatedItemsResponse, 'count'>
+    & { items: Array<(
+      { __typename?: 'Item' }
+      & ItemFieldsFragment
+    )> }
+  ) }
+);
+
 export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -328,6 +396,24 @@ export const FeedFieldsFragmentDoc = gql`
   }
   createdAt
   updatedAt
+}
+    `;
+export const ItemFieldsFragmentDoc = gql`
+    fragment itemFields on Item {
+  id
+  guid
+  pubdate
+  link
+  title
+  description
+  summary
+  imageUrl
+  enclosures {
+    url
+    length
+    type
+  }
+  createdAt
 }
     `;
 export const UserFieldsFragmentDoc = gql`
@@ -430,6 +516,16 @@ export const MeWithFeedsDocument = gql`
 }
     ${UserFieldsFragmentDoc}
 ${FeedFieldsFragmentDoc}`;
+export const MyFeedItemsDocument = gql`
+    query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
+  myFeedItems(input: {skip: $skip, take: $take, feedId: $feedId}) {
+    items {
+      ...itemFields
+    }
+    count
+  }
+}
+    ${ItemFieldsFragmentDoc}`;
 export const MyFeedsDocument = gql`
     query myFeeds {
   myFeeds {
@@ -476,6 +572,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     meWithFeeds(variables?: MeWithFeedsQueryVariables): Promise<MeWithFeedsQuery> {
       return withWrapper(() => client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables));
+    },
+    myFeedItems(variables: MyFeedItemsQueryVariables): Promise<MyFeedItemsQuery> {
+      return withWrapper(() => client.request<MyFeedItemsQuery>(print(MyFeedItemsDocument), variables));
     },
     myFeeds(variables?: MyFeedsQueryVariables): Promise<MyFeedsQuery> {
       return withWrapper(() => client.request<MyFeedsQuery>(print(MyFeedsDocument), variables));

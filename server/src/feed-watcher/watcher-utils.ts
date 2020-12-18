@@ -51,7 +51,7 @@ const getItemsWithPubDate = (feedId: number) =>
         }[]
     >;
 
-const insertNewItems = async (items: Item[]) => {
+export const insertNewItems = async (items: Item[]) => {
     const con = getConnection();
     const result = await con.createQueryBuilder().insert().into(Item).values(items).execute();
     const encs: Enclosure[] = [];

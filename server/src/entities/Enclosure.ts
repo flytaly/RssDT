@@ -1,13 +1,23 @@
 /* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToOne,
+    PrimaryColumn,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Item } from './Item';
 
 @ObjectType()
 @Entity()
 export class Enclosure extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id!: number;
+
     @Field()
-    @PrimaryColumn()
+    @Column()
     url: string;
 
     @Field({ nullable: true })
@@ -18,7 +28,6 @@ export class Enclosure extends BaseEntity {
     @Column({ nullable: true })
     type?: string;
 
-    @Field(() => Item)
     @ManyToOne(() => Item, (item) => item.enclosures, { onDelete: 'CASCADE' })
     item: Item;
 }
