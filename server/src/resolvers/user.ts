@@ -4,7 +4,6 @@ import {
     Ctx,
     Field,
     FieldResolver,
-    InputType,
     Mutation,
     ObjectType,
     Query,
@@ -13,14 +12,15 @@ import {
     UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+import { Options } from '../entities/Options';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
-import { Role, MyContext, ReqWithSession } from '../types';
+import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { MyContext, ReqWithSession, Role } from '../types';
 import { ArgumentError } from './common/ArgumentError';
-import { NormalizeAndValidateArgs, InputMetadata } from '../middlewares/normalize-validate-args';
 import { getUserFeeds } from './common/getUserFeeds';
-import { Options } from '../entities/Options';
+import { EmailPasswordInput, UserInfoInput } from './common/inputs';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -34,17 +34,6 @@ class UserResponse {
 
     @Field(() => User, { nullable: true })
     user?: User;
-}
-
-@InputType()
-export class EmailPasswordInput {
-    @InputMetadata('email')
-    @Field()
-    email: string;
-
-    @InputMetadata('password')
-    @Field()
-    password: string;
 }
 
 @Resolver(User)
@@ -70,11 +59,15 @@ export class UserResolver {
         return User.findOne(req.session.userId);
     }
 
-    @NormalizeAndValidateArgs(EmailPasswordInput, 'input')
+    @NormalizeAndValidateArgs([EmailPasswordInput, 'input'], [UserInfoInput, 'info'])
     @Mutation(() => UserResponse)
-    async register(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
+    async register(
+        @Arg('input') input: EmailPasswordInput,
+        @Arg('info', { nullable: true }) info: UserInfoInput,
+        @Ctx() { req }: MyContext,
+    ) {
         const { password: plainPassword, email } = input;
-
+        const { locale, timeZone } = info || {};
         const password = await argon2.hash(plainPassword);
         let user: User | undefined;
         try {
@@ -82,7 +75,9 @@ export class UserResolver {
                 .manager.create(User, {
                     email,
                     password,
-                    options: Options.create(),
+                    locale,
+                    timeZone,
+                    options: new Options(),
                 })
                 .save();
         } catch (err) {
@@ -90,14 +85,13 @@ export class UserResolver {
                 return { errors: [new ArgumentError('email', 'User already exists')] };
             }
         }
-
         if (!user) return null;
         setSession(req, user.id, user.role);
 
         return { user };
     }
 
-    @NormalizeAndValidateArgs(EmailPasswordInput, 'input')
+    @NormalizeAndValidateArgs([EmailPasswordInput, 'input'])
     @Mutation(() => UserResponse)
     async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
         const { password: plainPassword, email } = input;

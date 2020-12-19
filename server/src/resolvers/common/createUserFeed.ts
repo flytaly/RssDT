@@ -7,23 +7,30 @@ import { checkFeedInfo, getFeedStream } from '../../feed-parser';
 import { logger } from '../../logger';
 import { ArgumentError } from './ArgumentError';
 
+type UserInfo = {
+    locale?: string;
+    timeZone?: string;
+};
+
 const upsertUserAndGetId = async (
     conn: Connection | EntityManager | QueryRunner,
     email: string,
+    userInfo?: UserInfo | null,
 ) => {
+    const { locale = 'en-GB', timeZone = 'GMT' } = userInfo || {};
     // https://stackoverflow.com/a/60443582
     const result = await conn.query(
         `
         WITH new_user AS (
-            INSERT INTO "user" ("email")
-            VALUES ($1)
+            INSERT INTO "user" ("email", "locale", "timeZone")
+            VALUES ($1, $2, $3)
             ON CONFLICT("email") DO NOTHING
             RETURNING id
             ) SELECT COALESCE(
                 (SELECT id FROM new_user),
                 (SELECT id FROM "user" WHERE email = $1)
                 );`,
-        [email],
+        [email, locale, timeZone],
     );
     return result[0].coalesce as number;
 };
@@ -32,10 +39,11 @@ interface CreateUserFeedArgs {
     url: string;
     email?: string | null;
     userId?: number | null;
+    userInfo?: UserInfo | null;
 }
 
 // Creates userFeed record and upsert feed and user records based on url and email respectively
-export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs) => {
+export const createUserFeed = async ({ url, email, userId, userInfo }: CreateUserFeedArgs) => {
     if (!email && !userId) throw new Error('Not enough arguments to create new feed');
 
     let errors: ArgumentError[] | null = null;
@@ -73,7 +81,7 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
     await queryRunner.startTransaction();
     try {
         if (!userId) {
-            userId = await upsertUserAndGetId(queryRunner, email!);
+            userId = await upsertUserAndGetId(queryRunner, email!, userInfo);
             const options = Options.create({ userId });
             await queryRunner.manager.save(options);
         }

@@ -4,7 +4,6 @@ import {
     ArgsType,
     Ctx,
     Field,
-    InputType,
     Mutation,
     ObjectType,
     Query,
@@ -17,8 +16,9 @@ import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
 import { createUserFeed } from './common/createUserFeed';
 import { ArgumentError } from './common/ArgumentError';
-import { InputMetadata, NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { getUserFeeds } from './common/getUserFeeds';
+import { AddFeedEmailInput, AddFeedInput, UserInfoInput } from './common/inputs';
 
 @ObjectType()
 class UserFeedResponse {
@@ -27,14 +27,6 @@ class UserFeedResponse {
 
     @Field(() => UserFeed, { nullable: true })
     userFeed?: UserFeed;
-}
-
-// @InputType()
-@InputType()
-export class AddFeedInput {
-    @InputMetadata('feedUrl')
-    @Field()
-    feedUrl: string;
 }
 
 @ArgsType()
@@ -50,13 +42,6 @@ class DeletedFeedResponse {
 
     @Field(() => [String], { nullable: true })
     ids?: string[];
-}
-
-@InputType()
-class AddFeedEmailInput extends AddFeedInput {
-    @InputMetadata('email')
-    @Field()
-    email: string;
 }
 
 @Resolver(UserFeed)
@@ -76,17 +61,18 @@ export class UserFeedResolver {
 
     /* Add feed digest to user with given email. If user doesn't exist
     this mutation creates new account without password. */
-    @NormalizeAndValidateArgs(AddFeedEmailInput, 'input')
+    @NormalizeAndValidateArgs([AddFeedEmailInput, 'input'], [UserInfoInput, 'userInfo'])
     @Mutation(() => UserFeedResponse, { nullable: true })
     async addFeedWithEmail(
         @Arg('input') { email, feedUrl: url }: AddFeedEmailInput, //
+        @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput, //
     ) {
-        return createUserFeed({ url, email, userId: null });
+        return createUserFeed({ url, email, userId: null, userInfo });
     }
 
     /* Add feed to current user account */
     @UseMiddleware(auth())
-    @NormalizeAndValidateArgs(AddFeedInput, 'input')
+    @NormalizeAndValidateArgs([AddFeedInput, 'input'])
     @Mutation(() => UserFeedResponse)
     async addFeedToCurrentUser(
         @Arg('input') { feedUrl: url }: AddFeedInput, //

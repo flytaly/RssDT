@@ -6,7 +6,7 @@ import { ArgumentError } from '../resolvers/common/ArgumentError';
 const NORM_METADATA_KEY = Symbol('normalize_meta');
 const VAL_METADATA_KEY = Symbol('validate_meta');
 
-type InputType = 'email' | 'password' | 'feedUrl';
+type InputType = 'email' | 'password' | 'feedUrl' | 'locale' | 'timeZone';
 
 const validates: Record<InputType, AnySchema> = {
     email: Joi.string().email().required(),
@@ -16,6 +16,8 @@ const validates: Record<InputType, AnySchema> = {
         scheme: ['http', 'https'],
         domain: {},
     }),
+    locale: Joi.string(),
+    timeZone: Joi.string(),
 };
 
 const normalizes: Record<InputType, Function> = {
@@ -25,6 +27,8 @@ const normalizes: Record<InputType, Function> = {
         normalizeUrl(arg, {
             defaultProtocol: 'https://',
         }),
+    locale: (arg: string) => arg,
+    timeZone: (arg: string) => arg,
 };
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {
@@ -56,38 +60,42 @@ export function InputMetadata(inputType: InputType): PropertyDecorator {
     };
 }
 
-export function NormalizeAndValidateArgs(InputSchema: Object, path: string): MethodDecorator {
+type SchemaAndPath = [InputSchema: Object, path: string];
+
+export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): MethodDecorator {
     return createMethodDecorator(async ({ args }, next) => {
-        const argsObj = path ? args[path] : args;
+        for (const [InputSchema, path] of schemasWithPaths) {
+            const argsObj = path ? args[path] : args;
+            if (!argsObj) return next();
 
-        // Normalization
-        const normalizeArgs = Reflect.getOwnMetadata(NORM_METADATA_KEY, InputSchema);
-        try {
-            Object.keys(normalizeArgs).forEach((key) => {
-                argsObj[key] = normalizeArgs[key](argsObj[key]);
-            });
-        } catch (error) {
-            return {
-                errors: [
-                    new ArgumentError(
-                        error.message.startsWith('Invalid URL') ? 'feedUrl' : '',
-                        error.message,
-                    ),
-                ],
-            };
+            // Normalization
+            const normalizeArgs = Reflect.getOwnMetadata(NORM_METADATA_KEY, InputSchema);
+            try {
+                Object.keys(normalizeArgs).forEach((key) => {
+                    argsObj[key] = normalizeArgs[key](argsObj[key]);
+                });
+            } catch (error) {
+                return {
+                    errors: [
+                        new ArgumentError(
+                            error.message.startsWith('Invalid URL') ? 'feedUrl' : '',
+                            error.message,
+                        ),
+                    ],
+                };
+            }
+
+            // Validation
+            const validateSchema = Reflect.getOwnMetadata(VAL_METADATA_KEY, InputSchema);
+            const { error } = Joi.object(validateSchema).validate(argsObj);
+            if (error) {
+                const argumentErrors: ArgumentError[] = error.details.map((e) => ({
+                    argument: e.context?.key,
+                    message: e.message,
+                }));
+                return { errors: argumentErrors };
+            }
         }
-
-        // Validation
-        const validateSchema = Reflect.getOwnMetadata(VAL_METADATA_KEY, InputSchema);
-        const { error } = Joi.object(validateSchema).validate(argsObj);
-        if (error) {
-            const argumentErrors: ArgumentError[] = error.details.map((e) => ({
-                argument: e.context?.key,
-                message: e.message,
-            }));
-            return { errors: argumentErrors };
-        }
-
         return next();
     });
 }
