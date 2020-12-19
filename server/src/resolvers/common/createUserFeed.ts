@@ -1,6 +1,7 @@
 import FeedParser from 'feedparser';
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
 import { Feed } from '../../entities/Feed';
+import { Options } from '../../entities/Options';
 import { UserFeed } from '../../entities/UserFeed';
 import { checkFeedInfo, getFeedStream } from '../../feed-parser';
 import { logger } from '../../logger';
@@ -73,6 +74,8 @@ export const createUserFeed = async ({ url, email, userId }: CreateUserFeedArgs)
     try {
         if (!userId) {
             userId = await upsertUserAndGetId(queryRunner, email!);
+            const options = Options.create({ userId });
+            await queryRunner.manager.save(options);
         }
         if (!feed) {
             feed = new Feed();

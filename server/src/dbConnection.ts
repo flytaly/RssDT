@@ -6,6 +6,7 @@ import { UserFeed } from './entities/UserFeed';
 import { User } from './entities/User';
 import { Feed } from './entities/Feed';
 import { Enclosure } from './entities/Enclosure';
+import { Options } from './entities/Options';
 
 export const initDbConnection = async () => {
     const migrationPath = path.join(
@@ -23,7 +24,7 @@ export const initDbConnection = async () => {
         migrations: IS_TEST ? undefined : [migrationPath],
         dropSchema: IS_TEST,
         synchronize: !IS_PROD,
-        entities: [User, Feed, UserFeed, Item, Enclosure],
+        entities: [User, Feed, UserFeed, Item, Enclosure, Options],
     });
 
     await dbConnection.runMigrations();

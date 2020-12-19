@@ -3,8 +3,9 @@ import FeedParser, { Item, Meta } from 'feedparser';
 import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
 import { Readable } from 'stream';
+import { maxItemsInFeed } from '../constants';
 
-const MAX_ITEMS = 500;
+const MAX_ITEMS = maxItemsInFeed;
 const defaultAxiosOptions: AxiosRequestConfig = {
     method: 'get',
     responseType: 'arraybuffer',

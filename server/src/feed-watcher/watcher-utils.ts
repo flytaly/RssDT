@@ -1,6 +1,6 @@
 import { getConnection, getManager, LessThan } from 'typeorm';
 import moment from 'moment';
-import { IS_TEST } from '../constants';
+import { IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
 import { Enclosure } from '../entities/Enclosure';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
@@ -69,7 +69,11 @@ export const insertNewItems = async (items: Item[]) => {
  * Delete items that exceeded limits
  * @param limitWeekOld - limit items that was created > one week ago
  * */
-export const deleteOldItems = async (feedId: number, limitTotal = 500, limitWeekOld = 50) => {
+export const deleteOldItems = async (
+    feedId: number,
+    limitTotal = maxItemsInFeed,
+    limitWeekOld = maxOldItemsInFeed,
+) => {
     if (feedId) {
         const [, deletedNum] = await getManager().query(`
         DELETE FROM item

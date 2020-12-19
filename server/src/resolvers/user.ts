@@ -12,6 +12,7 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
@@ -19,6 +20,7 @@ import { Role, MyContext, ReqWithSession } from '../types';
 import { ArgumentError } from './common/ArgumentError';
 import { NormalizeAndValidateArgs, InputMetadata } from '../middlewares/normalize-validate-args';
 import { getUserFeeds } from './common/getUserFeeds';
+import { Options } from '../entities/Options';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -75,9 +77,14 @@ export class UserResolver {
 
         const password = await argon2.hash(plainPassword);
         let user: User | undefined;
-
         try {
-            user = await User.create({ email, password }).save();
+            user = await getConnection()
+                .manager.create(User, {
+                    email,
+                    password,
+                    options: Options.create(),
+                })
+                .save();
         } catch (err) {
             if (err.code === '23505') {
                 return { errors: [new ArgumentError('email', 'User already exists')] };

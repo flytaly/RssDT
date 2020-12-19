@@ -1,10 +1,8 @@
 import { CronJob, CronTime } from 'cron';
-import { Any, getConnection, IsNull, LessThan, Raw } from 'typeorm';
 import PQueue from 'p-queue';
-import { Feed } from '../entities/Feed';
+import { throttleMultiplier } from '../constants';
 import { logger } from '../logger';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
-import { throttleMultiplier } from '../configs';
 
 type WatcherProps = {
     /** Cron Time */
@@ -24,7 +22,7 @@ export default class Watcher {
 
     updating = false;
 
-    constructor({ cron = '*/5 * * * *', concurrency = 2 }: WatcherProps = {}) {
+    constructor({ cron = '*/5 * * * *', concurrency = 20 }: WatcherProps = {}) {
         this.cron = cron;
         this.initJob();
         this.queue = new PQueue({ concurrency });
