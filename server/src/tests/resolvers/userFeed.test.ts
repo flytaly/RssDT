@@ -4,11 +4,14 @@ import nock from 'nock';
 import { Connection } from 'typeorm';
 import { initDbConnection } from '../../dbConnection';
 import { User } from '../../entities/User';
+import { UserFeed } from '../../entities/UserFeed';
+import { UserFeedOptionsInput } from '../../resolvers/common/inputs';
+import { DigestSchedule, TernaryState, Theme } from '../../types/enums';
 import { getSdk } from '../graphql/generated';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
 import { generateFeed } from '../test-utils/generate-feed';
 import getTestClient from '../test-utils/getClient';
-import { getSdkWithLoggedInUser } from '../test-utils/login';
+import { generateUserAndGetSdk } from '../test-utils/login';
 
 let dbConnection: Connection;
 
@@ -32,12 +35,7 @@ describe('Normalize', () => {
         sdk = getSdk(getTestClient().client);
         await deleteUserWithEmail(email);
     });
-    afterAll(() =>
-        Promise.all([
-            deleteUserWithEmail(email), //
-            deleteFeedWithUrl(feed.feedUrl),
-        ]),
-    );
+    afterAll(() => Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl)]));
     test('should normalize url', async () => {
         const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: inputUrl });
         expect(addFeedWithEmail?.userFeed?.feed.url).toBe(correctUrl);
@@ -55,24 +53,19 @@ describe('Normalize', () => {
 
 describe('My Feeds', () => {
     const feeds = [generateFeed(), generateFeed(), generateFeed()];
-    const password = faker.internet.password(8);
-    const email = faker.internet.email().toLowerCase();
     let sdk: ReturnType<typeof getSdk>;
+    let user: User;
     const idsList: number[] = [];
 
     beforeAll(async () => {
         feeds.forEach((f) => f.mockRequests());
-        await deleteUserWithEmail(email);
-        await User.create({ email, password: await argon2.hash(password) }).save();
-        sdk = await getSdkWithLoggedInUser(email, password);
+        ({ user, sdk } = await generateUserAndGetSdk('testmyfeeds@test.com'));
     });
 
-    afterAll(() =>
-        Promise.all([
-            deleteUserWithEmail(email),
-            ...feeds.map((f) => deleteFeedWithUrl(f.feedUrl)),
-        ]),
-    );
+    afterAll(async () => {
+        await user.remove();
+        return Promise.all(feeds.map((f) => deleteFeedWithUrl(f.feedUrl)));
+    });
 
     describe('Get my feeds', () => {
         test('should response with feeds', async () => {
@@ -80,11 +73,6 @@ describe('My Feeds', () => {
             await Promise.all(responses);
             const { myFeeds } = await sdk.myFeeds();
             expect(myFeeds).toHaveLength(feeds.length);
-            myFeeds!.forEach((f, idx) => {
-                idsList.push(f.id);
-                expect(f.feed).toMatchObject(feeds[idx].meta);
-                expect(f.feed.userFeeds).toBeNull();
-            });
         });
     });
     describe('Remove my feeds', () => {
@@ -94,8 +82,62 @@ describe('My Feeds', () => {
             expect(deleteMyFeeds.ids).toEqual(
                 expect.arrayContaining(idsToDelete.map((id) => String(id))),
             );
-            const { myFeeds } = await sdk.myFeeds();
-            expect(myFeeds![0].feed.id).toBe(idsList[idsToDelete.length]);
         });
+    });
+});
+
+describe('UserFeed options', () => {
+    const feed = generateFeed();
+    let sdk: ReturnType<typeof getSdk>;
+    let user: User;
+    let userFeedId: number | undefined;
+
+    beforeAll(async () => {
+        feed.mockRequests();
+        ({ user, sdk } = await generateUserAndGetSdk('testmyfeeds2@test.com'));
+        const response = await sdk.addFeedToCurrentUser({ feedUrl: feed.feedUrl });
+
+        userFeedId = response.addFeedToCurrentUser.userFeed?.id;
+    });
+
+    afterAll(async () => {
+        await user.remove();
+        deleteFeedWithUrl(feed.feedUrl);
+    });
+
+    test('should contain user feed options', async () => {
+        const { myFeeds } = await sdk.myFeeds();
+        expect(myFeeds?.[0]).toMatchObject({
+            activated: false,
+            schedule: DigestSchedule.daily,
+            withContentTable: TernaryState.default,
+            itemBody: TernaryState.default,
+            attachments: TernaryState.default,
+            theme: Theme.default,
+        });
+    });
+    test('should update user feed options', async () => {
+        const opts: UserFeedOptionsInput = {
+            schedule: DigestSchedule.every6hours,
+            withContentTable: TernaryState.disable,
+            itemBody: TernaryState.enable,
+            attachments: TernaryState.enable,
+            theme: Theme.text,
+        };
+        const { setFeedOptions } = await sdk.setFeedOptions({ id: userFeedId!, opts });
+        expect(setFeedOptions.userFeed).toMatchObject(opts);
+    });
+
+    test("should forbid updating of someone else's feed", async () => {
+        const anotherUser = await generateUserAndGetSdk('someoneelse@test.com');
+        const opts = { attachments: TernaryState.disable };
+        const ufBefore = await UserFeed.findOne(userFeedId);
+        ufBefore!.attachments = TernaryState.enable;
+        await ufBefore!.save();
+        const { setFeedOptions } = await anotherUser.sdk.setFeedOptions({ id: userFeedId!, opts });
+        expect(setFeedOptions.userFeed).toBeNull();
+        const ufAfter = await UserFeed.findOne(userFeedId);
+        expect(ufAfter?.attachments).toBe(TernaryState.enable);
+        await anotherUser.user.remove();
     });
 });

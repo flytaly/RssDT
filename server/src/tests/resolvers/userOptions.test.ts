@@ -6,7 +6,7 @@ import { getSdk, SetOptionsMutation } from '../graphql/generated';
 import { generateUserAndGetSdk } from '../test-utils/login';
 import { defaultLocale, defaultTimeZone } from '../../constants';
 import { OptionsInput } from '../../resolvers/common/inputs';
-import { THEME } from '../../entities/Options';
+import { Theme } from '../../types/enums';
 import getTestClient from '../test-utils/getClient';
 
 let dbConnection: Connection;
@@ -69,7 +69,7 @@ describe('User Options', () => {
         const opts: OptionsInput = {
             shareEnable: true,
             attachmentsDefault: false,
-            themeDefault: THEME.text,
+            themeDefault: Theme.text,
             dailyDigestHour: 12,
         };
         const { setOptions } = await sdk.setOptions({ opts });

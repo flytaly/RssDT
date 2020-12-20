@@ -4,15 +4,11 @@ fragment feedFields on Feed {
     link
     title
     description
-    activated
     language
     favicon
     imageUrl
     imageTitle
     lastSuccessfulUpd
-    userFeeds {
-        userId
-    }
     createdAt
     updatedAt
 }

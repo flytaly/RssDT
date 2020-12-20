@@ -30,9 +30,6 @@ export class User extends BaseEntity {
     @Column({ default: Role.USER })
     role: Role;
 
-    @Column({ nullable: true, default: null })
-    password?: string;
-
     @Field()
     @Column({ default: defaultLocale })
     locale: string;
@@ -56,4 +53,9 @@ export class User extends BaseEntity {
     @Field(() => Date)
     @UpdateDateColumn()
     updatedAt: Date;
+
+    // === DB ONLY FIELDS ===
+
+    @Column({ nullable: true, default: null })
+    password?: string;
 }

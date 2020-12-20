@@ -18,7 +18,12 @@ import { createUserFeed } from './common/createUserFeed';
 import { ArgumentError } from './common/ArgumentError';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { getUserFeeds } from './common/getUserFeeds';
-import { AddFeedEmailInput, AddFeedInput, UserInfoInput } from './common/inputs';
+import {
+    AddFeedEmailInput,
+    AddFeedInput,
+    UserFeedOptionsInput,
+    UserInfoInput,
+} from './common/inputs';
 
 @ObjectType()
 class UserFeedResponse {
@@ -81,7 +86,7 @@ export class UserFeedResolver {
         return createUserFeed({ url, email: null, userId: req.session.userId });
     }
 
-    /* Add feed to current user account */
+    /* Delete feed from current user */
     @UseMiddleware(auth())
     @Mutation(() => DeletedFeedResponse)
     async deleteMyFeeds(
@@ -102,5 +107,23 @@ export class UserFeedResolver {
             console.error(`Couldn't delete: ${error.message}`);
             return { errors: [new ArgumentError('ids', "Couldn't delete")] };
         }
+    }
+
+    @UseMiddleware(auth())
+    @Mutation(() => UserFeedResponse)
+    async setFeedOptions(
+        @Ctx() { req }: MyContext,
+        @Arg('id') id: number,
+        @Arg('opts') opts: UserFeedOptionsInput,
+    ) {
+        const result = await getConnection()
+            .createQueryBuilder()
+            .update(UserFeed)
+            .set({ ...opts })
+            .where('id = :id', { id })
+            .andWhere('userId = :userId', { userId: req.session.userId })
+            .returning('*')
+            .execute();
+        return { userFeed: result.raw[0] as UserFeed };
     }
 }

@@ -1,0 +1,10 @@
+mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
+    setFeedOptions(id: $id, opts: $opts) {
+        userFeed {
+            ...userFeedFields
+        }
+        errors {
+            message
+        }
+    }
+}

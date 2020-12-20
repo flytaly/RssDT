@@ -42,10 +42,6 @@ export class Feed extends BaseEntity {
     @Column({ type: 'text', default: '', nullable: true })
     description: string;
 
-    @Field()
-    @Column({ default: false })
-    activated: boolean;
-
     @Field({ nullable: true })
     @Column({ nullable: true })
     language: string;
@@ -62,11 +58,6 @@ export class Feed extends BaseEntity {
     @Column({ default: '', nullable: true })
     imageTitle: string;
 
-    // TODO: should be protected
-    @Field(() => [UserFeed], { nullable: true })
-    @OneToMany(() => UserFeed, (userFeed) => userFeed.feed, { nullable: true })
-    userFeeds: UserFeed[];
-
     @Field(() => Date)
     @CreateDateColumn()
     createdAt: Date;
@@ -78,6 +69,16 @@ export class Feed extends BaseEntity {
     @Field(() => Date)
     @Column({ default: new Date(0) })
     lastSuccessfulUpd: Date;
+
+    // TODO: should be protected
+    @Field(() => [UserFeed], { nullable: true })
+    @OneToMany(() => UserFeed, (userFeed) => userFeed.feed, { nullable: true })
+    userFeeds: UserFeed[];
+
+    // === DB ONLY FIELDS ===
+
+    @Column({ default: false })
+    activated: boolean;
 
     @Column({ default: new Date(0) })
     lastUpdAttempt: Date;

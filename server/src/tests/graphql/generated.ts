@@ -47,11 +47,14 @@ export type User = {
 export type UserFeed = {
   __typename?: 'UserFeed';
   id: Scalars['Float'];
-  userId: Scalars['Float'];
-  feedId: Scalars['Float'];
   user: User;
   feed: Feed;
   activated: Scalars['Boolean'];
+  schedule: DigestSchedule;
+  withContentTable: TernaryState;
+  itemBody: TernaryState;
+  attachments: TernaryState;
+  theme: Theme;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -63,17 +66,37 @@ export type Feed = {
   link?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  activated: Scalars['Boolean'];
   language?: Maybe<Scalars['String']>;
   favicon?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   imageTitle?: Maybe<Scalars['String']>;
-  userFeeds?: Maybe<Array<UserFeed>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   lastSuccessfulUpd: Scalars['DateTime'];
+  userFeeds?: Maybe<Array<UserFeed>>;
 };
 
+
+export enum DigestSchedule {
+  Realtime = 'realtime',
+  Everyhour = 'everyhour',
+  Every2hours = 'every2hours',
+  Every3hours = 'every3hours',
+  Every6hours = 'every6hours',
+  Every12hours = 'every12hours',
+  Daily = 'daily'
+}
+
+export enum TernaryState {
+  Enable = 'enable',
+  Disable = 'disable',
+  Default = 'default'
+}
+
+export enum Theme {
+  Default = 'default',
+  Text = 'text'
+}
 
 export type Options = {
   __typename?: 'Options';
@@ -86,11 +109,6 @@ export type Options = {
   shareEnable: Scalars['Boolean'];
   shareList?: Maybe<Array<Scalars['String']>>;
 };
-
-export enum Theme {
-  Default = 'default',
-  Text = 'text'
-}
 
 export type PaginatedItemsResponse = {
   __typename?: 'PaginatedItemsResponse';
@@ -135,6 +153,7 @@ export type Mutation = {
   addFeedWithEmail?: Maybe<UserFeedResponse>;
   addFeedToCurrentUser: UserFeedResponse;
   deleteMyFeeds: DeletedFeedResponse;
+  setFeedOptions: UserFeedResponse;
 };
 
 
@@ -172,6 +191,12 @@ export type MutationAddFeedToCurrentUserArgs = {
 
 export type MutationDeleteMyFeedsArgs = {
   ids: Array<Scalars['Float']>;
+};
+
+
+export type MutationSetFeedOptionsArgs = {
+  opts: UserFeedOptionsInput;
+  id: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -234,13 +259,17 @@ export type DeletedFeedResponse = {
   ids?: Maybe<Array<Scalars['String']>>;
 };
 
+export type UserFeedOptionsInput = {
+  schedule?: Maybe<Scalars['String']>;
+  withContentTable?: Maybe<Scalars['String']>;
+  itemBody?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Scalars['String']>;
+  theme?: Maybe<Scalars['String']>;
+};
+
 export type FeedFieldsFragment = (
   { __typename?: 'Feed' }
-  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'activated' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'createdAt' | 'updatedAt'>
-  & { userFeeds?: Maybe<Array<(
-    { __typename?: 'UserFeed' }
-    & Pick<UserFeed, 'userId'>
-  )>> }
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'createdAt' | 'updatedAt'>
 );
 
 export type ItemFieldsFragment = (
@@ -255,6 +284,11 @@ export type ItemFieldsFragment = (
 export type OptionsFieldsFragment = (
   { __typename?: 'Options' }
   & Pick<Options, 'dailyDigestHour' | 'withContentTableDefault' | 'itemBodyDefault' | 'attachmentsDefault' | 'themeDefault' | 'customSubject' | 'shareEnable' | 'shareList'>
+);
+
+export type UserFeedFieldsFragment = (
+  { __typename?: 'UserFeed' }
+  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'updatedAt'>
 );
 
 export type UserFieldsFragment = (
@@ -365,6 +399,26 @@ export type RegisterMutation = (
   ) }
 );
 
+export type SetFeedOptionsMutationVariables = Exact<{
+  id: Scalars['Float'];
+  opts: UserFeedOptionsInput;
+}>;
+
+
+export type SetFeedOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setFeedOptions: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type SetOptionsMutationVariables = Exact<{
   opts: OptionsInput;
 }>;
@@ -468,11 +522,11 @@ export type MyFeedsQuery = (
   { __typename?: 'Query' }
   & { myFeeds?: Maybe<Array<(
     { __typename?: 'UserFeed' }
-    & Pick<UserFeed, 'id' | 'userId' | 'activated'>
     & { feed: (
       { __typename?: 'Feed' }
       & FeedFieldsFragment
     ) }
+    & UserFeedFieldsFragment
   )>> }
 );
 
@@ -505,15 +559,11 @@ export const FeedFieldsFragmentDoc = gql`
   link
   title
   description
-  activated
   language
   favicon
   imageUrl
   imageTitle
   lastSuccessfulUpd
-  userFeeds {
-    userId
-  }
   createdAt
   updatedAt
 }
@@ -546,6 +596,19 @@ export const OptionsFieldsFragmentDoc = gql`
   customSubject
   shareEnable
   shareList
+}
+    `;
+export const UserFeedFieldsFragmentDoc = gql`
+    fragment userFeedFields on UserFeed {
+  id
+  activated
+  schedule
+  withContentTable
+  itemBody
+  attachments
+  theme
+  createdAt
+  updatedAt
 }
     `;
 export const UserFieldsFragmentDoc = gql`
@@ -628,6 +691,18 @@ export const RegisterDocument = gql`
   }
 }
     ${UsualUserResponseFragmentDoc}`;
+export const SetFeedOptionsDocument = gql`
+    mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
+  setFeedOptions(id: $id, opts: $opts) {
+    userFeed {
+      ...userFeedFields
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
 export const SetOptionsDocument = gql`
     mutation setOptions($opts: OptionsInput!) {
   setOptions(opts: $opts) {
@@ -695,15 +770,14 @@ export const MyFeedItemsDocument = gql`
 export const MyFeedsDocument = gql`
     query myFeeds {
   myFeeds {
-    id
-    userId
-    activated
+    ...userFeedFields
     feed {
       ...feedFields
     }
   }
 }
-    ${FeedFieldsFragmentDoc}`;
+    ${UserFeedFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
 export const MyOptionsDocument = gql`
     query myOptions {
   myOptions {
@@ -739,6 +813,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
+    },
+    setFeedOptions(variables: SetFeedOptionsMutationVariables): Promise<SetFeedOptionsMutation> {
+      return withWrapper(() => client.request<SetFeedOptionsMutation>(print(SetFeedOptionsDocument), variables));
     },
     setOptions(variables: SetOptionsMutationVariables): Promise<SetOptionsMutation> {
       return withWrapper(() => client.request<SetOptionsMutation>(print(SetOptionsDocument), variables));

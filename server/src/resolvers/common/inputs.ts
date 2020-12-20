@@ -1,6 +1,6 @@
 import { Field, InputType } from 'type-graphql';
-import { THEME } from '../../entities/Options';
 import { InputMetadata } from '../../middlewares/normalize-validate-args';
+import { Theme, DigestSchedule, TernaryState } from '../../types/enums';
 
 @InputType()
 export class EmailPasswordInput {
@@ -65,5 +65,23 @@ export class OptionsInput {
     attachmentsDefault?: boolean;
 
     @Field({ nullable: true })
-    themeDefault?: THEME;
+    themeDefault?: Theme;
+}
+
+@InputType()
+export class UserFeedOptionsInput {
+    @Field({ nullable: true })
+    schedule: DigestSchedule;
+
+    @Field({ nullable: true })
+    withContentTable: TernaryState;
+
+    @Field({ nullable: true })
+    itemBody: TernaryState;
+
+    @Field({ nullable: true })
+    attachments: TernaryState;
+
+    @Field({ nullable: true })
+    theme: Theme;
 }

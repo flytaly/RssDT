@@ -1,14 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { Field, ObjectType, registerEnumType } from 'type-graphql';
+import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { Theme } from '../types/enums';
 import { User } from './User';
-
-export enum THEME {
-    default = 'default',
-    text = 'text',
-}
-
-registerEnumType(THEME, { name: 'THEME' });
 
 @ObjectType()
 @Entity('options')
@@ -36,9 +30,9 @@ export class Options extends BaseEntity {
     @Column({ default: true })
     attachmentsDefault: boolean;
 
-    @Field(() => THEME)
-    @Column({ type: 'enum', enum: THEME, default: THEME.default })
-    themeDefault: THEME;
+    @Field(() => Theme)
+    @Column({ type: 'enum', enum: Theme, default: Theme.default })
+    themeDefault: Theme;
 
     @Field({ nullable: true })
     @Column({ nullable: true })

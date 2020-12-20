@@ -17,9 +17,9 @@ export const getSdkWithLoggedInUser = async (email: string, password: string) =>
     return sdk;
 };
 
-export const generateUserAndGetSdk = async () => {
-    const password = faker.internet.password(8);
-    const email = faker.internet.email().toLowerCase();
+export const generateUserAndGetSdk = async (email?: string, password?: string) => {
+    password = password || faker.internet.password(8);
+    email = email || faker.internet.email().toLowerCase();
     const user = await User.create({
         email,
         password: await argon2.hash(password),
