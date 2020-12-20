@@ -1,0 +1,6 @@
+mutation updateUserInfo($userInfo: UserInfoInput!) {
+    updateUserInfo(userInfo: $userInfo) {
+        timeZone
+        locale
+    }
+}

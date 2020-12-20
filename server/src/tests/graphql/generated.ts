@@ -20,6 +20,7 @@ export type Query = {
   __typename?: 'Query';
   users?: Maybe<Array<User>>;
   me?: Maybe<User>;
+  myOptions: Options;
   myFeeds?: Maybe<Array<UserFeed>>;
   myFeedItems: PaginatedItemsResponse;
 };
@@ -34,7 +35,10 @@ export type User = {
   id: Scalars['Float'];
   email: Scalars['String'];
   role: Scalars['String'];
+  locale: Scalars['String'];
+  timeZone: Scalars['String'];
   userFeeds?: Maybe<Array<UserFeed>>;
+  options: Options;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   feeds: Array<UserFeed>;
@@ -70,6 +74,23 @@ export type Feed = {
   lastSuccessfulUpd: Scalars['DateTime'];
 };
 
+
+export type Options = {
+  __typename?: 'Options';
+  dailyDigestHour: Scalars['Float'];
+  withContentTableDefault: Scalars['Boolean'];
+  itemBodyDefault: Scalars['Boolean'];
+  attachmentsDefault?: Maybe<Scalars['Boolean']>;
+  themeDefault: Theme;
+  customSubject?: Maybe<Scalars['String']>;
+  shareEnable: Scalars['Boolean'];
+  shareList: Array<Scalars['String']>;
+};
+
+export enum Theme {
+  Default = 'DEFAULT',
+  Text = 'TEXT'
+}
 
 export type PaginatedItemsResponse = {
   __typename?: 'PaginatedItemsResponse';
@@ -109,6 +130,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
   login: UserResponse;
+  updateUserInfo: User;
+  setOptions: Options;
   addFeedWithEmail?: Maybe<UserFeedResponse>;
   addFeedToCurrentUser: UserFeedResponse;
   deleteMyFeeds: DeletedFeedResponse;
@@ -116,6 +139,7 @@ export type Mutation = {
 
 
 export type MutationRegisterArgs = {
+  userInfo?: Maybe<UserInfoInput>;
   input: EmailPasswordInput;
 };
 
@@ -125,7 +149,18 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationUpdateUserInfoArgs = {
+  userInfo: UserInfoInput;
+};
+
+
+export type MutationSetOptionsArgs = {
+  opts: OptionsInput;
+};
+
+
 export type MutationAddFeedWithEmailArgs = {
+  userInfo?: Maybe<UserInfoInput>;
   input: AddFeedEmailInput;
 };
 
@@ -151,9 +186,25 @@ export type ArgumentError = {
   message: Scalars['String'];
 };
 
+export type UserInfoInput = {
+  locale?: Maybe<Scalars['String']>;
+  timeZone?: Maybe<Scalars['String']>;
+};
+
 export type EmailPasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type OptionsInput = {
+  dailyDigestHour?: Maybe<Scalars['Float']>;
+  withContentTableDefault?: Maybe<Scalars['Boolean']>;
+  itemBodyDefault?: Maybe<Scalars['Boolean']>;
+  attachmentsDefault?: Maybe<Scalars['Boolean']>;
+  themeDefault?: Maybe<Scalars['String']>;
+  customSubject?: Maybe<Scalars['String']>;
+  shareEnable?: Maybe<Scalars['Boolean']>;
+  shareList?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UserFeedResponse = {
@@ -195,9 +246,14 @@ export type ItemFieldsFragment = (
   )>> }
 );
 
+export type OptionsFieldsFragment = (
+  { __typename?: 'Options' }
+  & Pick<Options, 'dailyDigestHour' | 'withContentTableDefault' | 'itemBodyDefault' | 'attachmentsDefault' | 'themeDefault' | 'customSubject' | 'shareEnable' | 'shareList'>
+);
+
 export type UserFieldsFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'role' | 'email'>
+  & Pick<User, 'id' | 'role' | 'email' | 'locale' | 'timeZone'>
 );
 
 export type UsualUserResponseFragment = (
@@ -303,6 +359,32 @@ export type RegisterMutation = (
   ) }
 );
 
+export type SetOptionsMutationVariables = Exact<{
+  opts: OptionsInput;
+}>;
+
+
+export type SetOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setOptions: (
+    { __typename?: 'Options' }
+    & OptionsFieldsFragment
+  ) }
+);
+
+export type UpdateUserInfoMutationVariables = Exact<{
+  userInfo: UserInfoInput;
+}>;
+
+
+export type UpdateUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserInfo: (
+    { __typename?: 'User' }
+    & Pick<User, 'timeZone' | 'locale'>
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -329,6 +411,21 @@ export type MeWithFeedsQuery = (
         & FeedFieldsFragment
       ) }
     )> }
+    & UserFieldsFragment
+  )> }
+);
+
+export type MeWithOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeWithOptionsQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { options: (
+      { __typename?: 'Options' }
+      & OptionsFieldsFragment
+    ) }
     & UserFieldsFragment
   )> }
 );
@@ -365,6 +462,17 @@ export type MyFeedsQuery = (
       & FeedFieldsFragment
     ) }
   )>> }
+);
+
+export type MyOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyOptionsQuery = (
+  { __typename?: 'Query' }
+  & { myOptions: (
+    { __typename?: 'Options' }
+    & OptionsFieldsFragment
+  ) }
 );
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
@@ -416,11 +524,25 @@ export const ItemFieldsFragmentDoc = gql`
   createdAt
 }
     `;
+export const OptionsFieldsFragmentDoc = gql`
+    fragment optionsFields on Options {
+  dailyDigestHour
+  withContentTableDefault
+  itemBodyDefault
+  attachmentsDefault
+  themeDefault
+  customSubject
+  shareEnable
+  shareList
+}
+    `;
 export const UserFieldsFragmentDoc = gql`
     fragment UserFields on User {
   id
   role
   email
+  locale
+  timeZone
 }
     `;
 export const UsualUserResponseFragmentDoc = gql`
@@ -494,6 +616,21 @@ export const RegisterDocument = gql`
   }
 }
     ${UsualUserResponseFragmentDoc}`;
+export const SetOptionsDocument = gql`
+    mutation setOptions($opts: OptionsInput!) {
+  setOptions(opts: $opts) {
+    ...optionsFields
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
+export const UpdateUserInfoDocument = gql`
+    mutation updateUserInfo($userInfo: UserInfoInput!) {
+  updateUserInfo(userInfo: $userInfo) {
+    timeZone
+    locale
+  }
+}
+    `;
 export const MeDocument = gql`
     query me {
   me {
@@ -516,6 +653,17 @@ export const MeWithFeedsDocument = gql`
 }
     ${UserFieldsFragmentDoc}
 ${FeedFieldsFragmentDoc}`;
+export const MeWithOptionsDocument = gql`
+    query meWithOptions {
+  me {
+    ...UserFields
+    options {
+      ...optionsFields
+    }
+  }
+}
+    ${UserFieldsFragmentDoc}
+${OptionsFieldsFragmentDoc}`;
 export const MyFeedItemsDocument = gql`
     query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
   myFeedItems(input: {skip: $skip, take: $take, feedId: $feedId}) {
@@ -538,6 +686,13 @@ export const MyFeedsDocument = gql`
   }
 }
     ${FeedFieldsFragmentDoc}`;
+export const MyOptionsDocument = gql`
+    query myOptions {
+  myOptions {
+    ...optionsFields
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
 export const UsersDocument = gql`
     query users {
   users {
@@ -567,17 +722,29 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
     },
+    setOptions(variables: SetOptionsMutationVariables): Promise<SetOptionsMutation> {
+      return withWrapper(() => client.request<SetOptionsMutation>(print(SetOptionsDocument), variables));
+    },
+    updateUserInfo(variables: UpdateUserInfoMutationVariables): Promise<UpdateUserInfoMutation> {
+      return withWrapper(() => client.request<UpdateUserInfoMutation>(print(UpdateUserInfoDocument), variables));
+    },
     me(variables?: MeQueryVariables): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));
     },
     meWithFeeds(variables?: MeWithFeedsQueryVariables): Promise<MeWithFeedsQuery> {
       return withWrapper(() => client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables));
     },
+    meWithOptions(variables?: MeWithOptionsQueryVariables): Promise<MeWithOptionsQuery> {
+      return withWrapper(() => client.request<MeWithOptionsQuery>(print(MeWithOptionsDocument), variables));
+    },
     myFeedItems(variables: MyFeedItemsQueryVariables): Promise<MyFeedItemsQuery> {
       return withWrapper(() => client.request<MyFeedItemsQuery>(print(MyFeedItemsDocument), variables));
     },
     myFeeds(variables?: MyFeedsQueryVariables): Promise<MyFeedsQuery> {
       return withWrapper(() => client.request<MyFeedsQuery>(print(MyFeedsDocument), variables));
+    },
+    myOptions(variables?: MyOptionsQueryVariables): Promise<MyOptionsQuery> {
+      return withWrapper(() => client.request<MyOptionsQuery>(print(MyOptionsDocument), variables));
     },
     users(variables?: UsersQueryVariables): Promise<UsersQuery> {
       return withWrapper(() => client.request<UsersQuery>(print(UsersDocument), variables));

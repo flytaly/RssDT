@@ -1,7 +1,9 @@
 import normalizeUrl from 'normalize-url';
 import Joi, { AnySchema } from 'joi';
 import { createMethodDecorator } from 'type-graphql';
+import { DateTime } from 'luxon';
 import { ArgumentError } from '../resolvers/common/ArgumentError';
+import { defaultLocale, defaultTimeZone } from '../constants';
 
 const NORM_METADATA_KEY = Symbol('normalize_meta');
 const VAL_METADATA_KEY = Symbol('validate_meta');
@@ -27,8 +29,20 @@ const normalizes: Record<InputType, Function> = {
         normalizeUrl(arg, {
             defaultProtocol: 'https://',
         }),
-    locale: (arg: string) => arg,
-    timeZone: (arg: string) => arg,
+    locale: (locale: string) => {
+        if (!locale) return locale;
+        let result: string | undefined;
+        try {
+            result = DateTime.fromObject({ locale }).resolvedLocaleOpts().locale;
+        } catch (error) {
+            //
+        }
+        return result || defaultLocale;
+    },
+    timeZone: (timeZone: string) => {
+        if (!timeZone) return timeZone;
+        return DateTime.local().setZone(timeZone).isValid ? timeZone : defaultTimeZone;
+    },
 };
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {

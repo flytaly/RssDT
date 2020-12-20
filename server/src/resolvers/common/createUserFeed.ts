@@ -1,5 +1,6 @@
 import FeedParser from 'feedparser';
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
+import { defaultLocale, defaultTimeZone } from '../../constants';
 import { Feed } from '../../entities/Feed';
 import { Options } from '../../entities/Options';
 import { UserFeed } from '../../entities/UserFeed';
@@ -17,7 +18,7 @@ const upsertUserAndGetId = async (
     email: string,
     userInfo?: UserInfo | null,
 ) => {
-    const { locale = 'en-GB', timeZone = 'GMT' } = userInfo || {};
+    const { locale = defaultLocale, timeZone = defaultTimeZone } = userInfo || {};
     // https://stackoverflow.com/a/60443582
     const result = await conn.query(
         `

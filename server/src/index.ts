@@ -9,7 +9,6 @@ import { logger, initLogFiles } from './logger';
 
 const entry = async () => {
     const app = express();
-
     const redis = new Redis();
     initSession(app, redis);
     await initDbConnection();

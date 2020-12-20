@@ -13,6 +13,7 @@ import {
 import { UserFeed } from './UserFeed';
 import { Role } from '../types';
 import { Options } from './Options';
+import { defaultLocale, defaultTimeZone } from '../constants';
 
 @ObjectType()
 @Entity()
@@ -33,11 +34,11 @@ export class User extends BaseEntity {
     password?: string;
 
     @Field()
-    @Column({ default: 'en-GB' })
+    @Column({ default: defaultLocale })
     locale: string;
 
     @Field()
-    @Column({ default: 'GMT' })
+    @Column({ default: defaultTimeZone })
     timeZone: string;
 
     @Field(() => [UserFeed], { nullable: true })
@@ -45,7 +46,7 @@ export class User extends BaseEntity {
     userFeeds: UserFeed[];
 
     @Field(() => Options)
-    @OneToOne(() => Options, (opts) => opts.user, { cascade: true })
+    @OneToOne(() => Options, (opts) => opts.user, { cascade: true, eager: true })
     options: Options;
 
     @Field(() => Date)

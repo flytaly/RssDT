@@ -1,0 +1,10 @@
+fragment optionsFields on Options {
+    dailyDigestHour
+    withContentTableDefault
+    itemBodyDefault
+    attachmentsDefault
+    themeDefault
+    customSubject
+    shareEnable
+    shareList
+}

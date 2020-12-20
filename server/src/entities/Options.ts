@@ -4,8 +4,8 @@ import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 
 import { User } from './User';
 
 export enum THEME {
-    DEFAULT = 'default',
-    TEXT = 'text',
+    default = 'default',
+    text = 'text',
 }
 
 registerEnumType(THEME, { name: 'THEME' });
@@ -16,7 +16,6 @@ export class Options extends BaseEntity {
     @PrimaryColumn()
     userId: number;
 
-    @Field(() => User)
     @OneToOne(() => User, (user) => user.options, { onDelete: 'CASCADE' })
     @JoinColumn()
     user: User;
@@ -38,10 +37,10 @@ export class Options extends BaseEntity {
     attachmentsDefault: boolean;
 
     @Field(() => THEME)
-    @Column({ type: 'enum', enum: THEME, default: THEME.DEFAULT })
+    @Column({ type: 'enum', enum: THEME, default: THEME.default })
     themeDefault: THEME;
 
-    @Field()
+    @Field({ nullable: true })
     @Column({ nullable: true })
     customSubject: string;
 
@@ -51,5 +50,5 @@ export class Options extends BaseEntity {
 
     @Field(() => [String])
     @Column('varchar', { array: true, default: {}, nullable: true })
-    filterShare: string[];
+    shareList: string[];
 }

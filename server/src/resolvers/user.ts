@@ -20,7 +20,7 @@ import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args
 import { MyContext, ReqWithSession, Role } from '../types';
 import { ArgumentError } from './common/ArgumentError';
 import { getUserFeeds } from './common/getUserFeeds';
-import { EmailPasswordInput, UserInfoInput } from './common/inputs';
+import { EmailPasswordInput, OptionsInput, UserInfoInput } from './common/inputs';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -52,22 +52,28 @@ export class UserResolver {
 
     @UseMiddleware(auth())
     @Query(() => User, { nullable: true })
-    me(@Ctx() { req }: MyContext) {
+    async me(@Ctx() { req }: MyContext) {
         if (!req.session.userId) {
             return null;
         }
         return User.findOne(req.session.userId);
     }
 
-    @NormalizeAndValidateArgs([EmailPasswordInput, 'input'], [UserInfoInput, 'info'])
+    @UseMiddleware(auth())
+    @Query(() => Options)
+    async myOptions(@Ctx() { req }: MyContext) {
+        return Options.findOne({ where: { userId: req.session.userId } });
+    }
+
+    @NormalizeAndValidateArgs([EmailPasswordInput, 'input'], [UserInfoInput, 'userInfo'])
     @Mutation(() => UserResponse)
     async register(
         @Arg('input') input: EmailPasswordInput,
-        @Arg('info', { nullable: true }) info: UserInfoInput,
+        @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput,
         @Ctx() { req }: MyContext,
     ) {
         const { password: plainPassword, email } = input;
-        const { locale, timeZone } = info || {};
+        const { locale, timeZone } = userInfo || {};
         const password = await argon2.hash(plainPassword);
         let user: User | undefined;
         try {
@@ -114,5 +120,32 @@ export class UserResolver {
         setSession(req, user.id, user.role);
 
         return { user };
+    }
+
+    @UseMiddleware(auth())
+    @NormalizeAndValidateArgs([UserInfoInput, 'userInfo'])
+    @Mutation(() => User)
+    async updateUserInfo(
+        @Ctx() { req }: MyContext,
+        @Arg('userInfo') { locale, timeZone }: UserInfoInput,
+    ) {
+        const user = await User.findOne(req.session.userId);
+        if (!req.session.userId || !user) return null;
+        if (locale) user.locale = locale;
+        if (timeZone) user.timeZone = timeZone;
+        return user.save();
+    }
+
+    @UseMiddleware(auth())
+    @Mutation(() => Options)
+    async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
+        const result = await getConnection()
+            .createQueryBuilder()
+            .update(Options)
+            .set({ ...opts })
+            .where('userId = :id', { id: req.session.userId })
+            .returning('*')
+            .execute();
+        return result.raw[0] as Options;
     }
 }

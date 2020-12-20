@@ -1,0 +1,8 @@
+query meWithOptions {
+    me {
+        ...UserFields
+        options {
+            ...optionsFields
+        }
+    }
+}

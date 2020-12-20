@@ -3,6 +3,7 @@ import argon2 from 'argon2';
 import { getSdk } from '../graphql/generated';
 import getTestClient from './getClient';
 import { User } from '../../entities/User';
+import { Options } from '../../entities/Options';
 
 export const getSdkWithLoggedInUser = async (email: string, password: string) => {
     const { client, lastHeaders } = getTestClient();
@@ -19,7 +20,11 @@ export const getSdkWithLoggedInUser = async (email: string, password: string) =>
 export const generateUserAndGetSdk = async () => {
     const password = faker.internet.password(8);
     const email = faker.internet.email().toLowerCase();
-    const user = await User.create({ email, password: await argon2.hash(password) }).save();
+    const user = await User.create({
+        email,
+        password: await argon2.hash(password),
+        options: new Options(),
+    }).save();
     const sdk = await getSdkWithLoggedInUser(email, password);
     return { user, sdk };
 };

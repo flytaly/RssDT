@@ -1,0 +1,5 @@
+mutation setOptions($opts: OptionsInput!) {
+    setOptions(opts: $opts) {
+        ...optionsFields
+    }
+}
