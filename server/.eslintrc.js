@@ -7,6 +7,7 @@ module.exports = {
     env: {
         'jest/globals': true,
     },
+    ignorePatterns: ['**/graphql/generated.ts'],
     rules: {
         'no-console': 'off',
         'no-plusplus': 'off',

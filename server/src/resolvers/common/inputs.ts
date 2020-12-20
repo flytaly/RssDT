@@ -1,5 +1,5 @@
 import { Field, InputType } from 'type-graphql';
-import { Options, THEME } from '../../entities/Options';
+import { THEME } from '../../entities/Options';
 import { InputMetadata } from '../../middlewares/normalize-validate-args';
 
 @InputType()

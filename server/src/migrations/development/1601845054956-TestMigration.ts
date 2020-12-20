@@ -8,5 +8,6 @@ export class TestMigration1601845054956 implements MigrationInterface {
         `);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public async down(/* queryRunner: QueryRunner */): Promise<void> {}
 }
