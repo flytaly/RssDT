@@ -1,7 +1,8 @@
 import { Connection } from 'typeorm';
+import faker from 'faker';
 import { initDbConnection } from '../../dbConnection';
 import { User } from '../../entities/User';
-import { getSdk } from '../graphql/generated';
+import { getSdk, SetOptionsMutation } from '../graphql/generated';
 import { generateUserAndGetSdk } from '../test-utils/login';
 import { defaultLocale, defaultTimeZone } from '../../constants';
 import { OptionsInput } from '../../resolvers/common/inputs';
@@ -72,7 +73,7 @@ describe('User Options', () => {
             dailyDigestHour: 12,
         };
         const { setOptions } = await sdk.setOptions({ opts });
-        expect(setOptions).toMatchObject(opts);
+        expect(setOptions.options).toMatchObject(opts);
     });
 
     test('should throw error if user is not authenticated', async () => {
@@ -83,5 +84,19 @@ describe('User Options', () => {
             errMsg = error.message;
         }
         expect(errMsg?.startsWith('not authenticated')).toBeTruthy();
+    });
+
+    test('should validate', async () => {
+        const expectError = ({ setOptions }: SetOptionsMutation, msg: string) =>
+            expect(setOptions?.errors?.[0].message).toBe(msg);
+
+        expectError(
+            await sdk.setOptions({ opts: { customSubject: faker.random.alpha({ count: 51 }) } }),
+            '"customSubject" length must be less than or equal to 50 characters long',
+        );
+        expectError(
+            await sdk.setOptions({ opts: { dailyDigestHour: 26 } }),
+            '"dailyDigestHour" must be less than or equal to 23',
+        );
     });
 });

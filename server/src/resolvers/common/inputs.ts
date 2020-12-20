@@ -40,8 +40,20 @@ export class AddFeedEmailInput extends AddFeedInput {
 
 @InputType()
 export class OptionsInput {
+    @InputMetadata('dailyDigestHour')
     @Field({ nullable: true })
     dailyDigestHour?: number;
+
+    @InputMetadata('customSubject')
+    @Field({ nullable: true })
+    customSubject?: string;
+
+    @InputMetadata('shareList')
+    @Field(() => [String], { nullable: true })
+    shareList?: string[];
+
+    @Field({ nullable: true })
+    shareEnable?: boolean;
 
     @Field({ nullable: true })
     withContentTableDefault?: boolean;
@@ -54,13 +66,4 @@ export class OptionsInput {
 
     @Field({ nullable: true })
     themeDefault?: THEME;
-
-    @Field({ nullable: true })
-    customSubject?: string;
-
-    @Field({ nullable: true })
-    shareEnable?: boolean;
-
-    @Field(() => [String], { nullable: true })
-    shareList?: string[];
 }

@@ -48,7 +48,7 @@ export class Options extends BaseEntity {
     @Column({ default: true })
     shareEnable: boolean;
 
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     @Column('varchar', { array: true, default: {}, nullable: true })
     shareList: string[];
 }

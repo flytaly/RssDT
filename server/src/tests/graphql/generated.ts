@@ -84,12 +84,12 @@ export type Options = {
   themeDefault: Theme;
   customSubject?: Maybe<Scalars['String']>;
   shareEnable: Scalars['Boolean'];
-  shareList: Array<Scalars['String']>;
+  shareList?: Maybe<Array<Scalars['String']>>;
 };
 
 export enum Theme {
-  Default = 'DEFAULT',
-  Text = 'TEXT'
+  Default = 'default',
+  Text = 'text'
 }
 
 export type PaginatedItemsResponse = {
@@ -131,7 +131,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   updateUserInfo: User;
-  setOptions: Options;
+  setOptions: OptionsResponse;
   addFeedWithEmail?: Maybe<UserFeedResponse>;
   addFeedToCurrentUser: UserFeedResponse;
   deleteMyFeeds: DeletedFeedResponse;
@@ -196,15 +196,21 @@ export type EmailPasswordInput = {
   password: Scalars['String'];
 };
 
+export type OptionsResponse = {
+  __typename?: 'OptionsResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  options?: Maybe<Options>;
+};
+
 export type OptionsInput = {
   dailyDigestHour?: Maybe<Scalars['Float']>;
+  customSubject?: Maybe<Scalars['String']>;
+  shareList?: Maybe<Array<Scalars['String']>>;
+  shareEnable?: Maybe<Scalars['Boolean']>;
   withContentTableDefault?: Maybe<Scalars['Boolean']>;
   itemBodyDefault?: Maybe<Scalars['Boolean']>;
   attachmentsDefault?: Maybe<Scalars['Boolean']>;
   themeDefault?: Maybe<Scalars['String']>;
-  customSubject?: Maybe<Scalars['String']>;
-  shareEnable?: Maybe<Scalars['Boolean']>;
-  shareList?: Maybe<Array<Scalars['String']>>;
 };
 
 export type UserFeedResponse = {
@@ -367,8 +373,14 @@ export type SetOptionsMutationVariables = Exact<{
 export type SetOptionsMutation = (
   { __typename?: 'Mutation' }
   & { setOptions: (
-    { __typename?: 'Options' }
-    & OptionsFieldsFragment
+    { __typename?: 'OptionsResponse' }
+    & { options?: Maybe<(
+      { __typename?: 'Options' }
+      & OptionsFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
   ) }
 );
 
@@ -619,7 +631,13 @@ export const RegisterDocument = gql`
 export const SetOptionsDocument = gql`
     mutation setOptions($opts: OptionsInput!) {
   setOptions(opts: $opts) {
-    ...optionsFields
+    options {
+      ...optionsFields
+    }
+    errors {
+      message
+      argument
+    }
   }
 }
     ${OptionsFieldsFragmentDoc}`;

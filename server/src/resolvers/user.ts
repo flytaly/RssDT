@@ -35,6 +35,14 @@ class UserResponse {
     @Field(() => User, { nullable: true })
     user?: User;
 }
+@ObjectType()
+class OptionsResponse {
+    @Field(() => [ArgumentError], { nullable: true })
+    errors?: ArgumentError[];
+
+    @Field(() => Options, { nullable: true })
+    options?: Options;
+}
 
 @Resolver(User)
 export class UserResolver {
@@ -136,8 +144,9 @@ export class UserResolver {
         return user.save();
     }
 
+    @NormalizeAndValidateArgs([OptionsInput, 'opts'])
     @UseMiddleware(auth())
-    @Mutation(() => Options)
+    @Mutation(() => OptionsResponse)
     async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
         const result = await getConnection()
             .createQueryBuilder()
@@ -146,6 +155,6 @@ export class UserResolver {
             .where('userId = :id', { id: req.session.userId })
             .returning('*')
             .execute();
-        return result.raw[0] as Options;
+        return { options: result.raw[0] as Options };
     }
 }

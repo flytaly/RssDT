@@ -8,7 +8,9 @@ import { defaultLocale, defaultTimeZone } from '../constants';
 const NORM_METADATA_KEY = Symbol('normalize_meta');
 const VAL_METADATA_KEY = Symbol('validate_meta');
 
-type InputType = 'email' | 'password' | 'feedUrl' | 'locale' | 'timeZone';
+type UserFields = 'email' | 'password' | 'feedUrl' | 'locale' | 'timeZone';
+type OptionsFields = 'shareList' | 'customSubject' | 'dailyDigestHour';
+type InputType = UserFields | OptionsFields;
 
 const validates: Record<InputType, AnySchema> = {
     email: Joi.string().email().required(),
@@ -20,8 +22,12 @@ const validates: Record<InputType, AnySchema> = {
     }),
     locale: Joi.string(),
     timeZone: Joi.string(),
+    shareList: Joi.array().items(Joi.string()),
+    customSubject: Joi.string().max(50),
+    dailyDigestHour: Joi.number().integer().max(23).min(0),
 };
 
+const pass = (arg: any) => arg;
 const normalizes: Record<InputType, Function> = {
     email: (arg: string) => arg?.trim().toLowerCase(),
     password: (arg: string) => arg?.trim(),
@@ -43,6 +49,9 @@ const normalizes: Record<InputType, Function> = {
         if (!timeZone) return timeZone;
         return DateTime.local().setZone(timeZone).isValid ? timeZone : defaultTimeZone;
     },
+    shareList: (arg: Array<string>) => (arg === null ? [] : arg),
+    customSubject: pass,
+    dailyDigestHour: pass,
 };
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {
@@ -101,7 +110,7 @@ export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): 
 
             // Validation
             const validateSchema = Reflect.getOwnMetadata(VAL_METADATA_KEY, InputSchema);
-            const { error } = Joi.object(validateSchema).validate(argsObj);
+            const { error } = Joi.object(validateSchema).validate(argsObj, { allowUnknown: true });
             if (error) {
                 const argumentErrors: ArgumentError[] = error.details.map((e) => ({
                     argument: e.context?.key,
