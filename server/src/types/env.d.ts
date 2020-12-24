@@ -5,5 +5,11 @@ declare namespace NodeJS {
     DB_USERNAME: string;
     DB_PASSWORD: string;
     COOKIE_SECRET: string;
+    FRONTEND_URL: string;
+    MAIL_SMTP: string;
+    MAIL_PORT: string;
+    MAIL_FROM: string;
+    MAIL_USER: string;
+    MAIL_PASS: string;
   }
 }

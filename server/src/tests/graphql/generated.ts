@@ -34,6 +34,7 @@ export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   email: Scalars['String'];
+  emailVerified: Scalars['Boolean'];
   role: Scalars['String'];
   locale: Scalars['String'];
   timeZone: Scalars['String'];
@@ -147,6 +148,10 @@ export type ItemsInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
+  requestEmailVerification: Scalars['Boolean'];
+  requestPasswordReset: MessageResponse;
+  resetPassword: UserResponse;
+  verifyEmail: UserResponse;
   login: UserResponse;
   updateUserInfo: User;
   setOptions: OptionsResponse;
@@ -160,6 +165,22 @@ export type Mutation = {
 export type MutationRegisterArgs = {
   userInfo?: Maybe<UserInfoInput>;
   input: EmailPasswordInput;
+};
+
+
+export type MutationRequestPasswordResetArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationResetPasswordArgs = {
+  input: PasswordResetInput;
+};
+
+
+export type MutationVerifyEmailArgs = {
+  userId: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -219,6 +240,17 @@ export type UserInfoInput = {
 export type EmailPasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type MessageResponse = {
+  __typename?: 'MessageResponse';
+  message: Scalars['String'];
+};
+
+export type PasswordResetInput = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type OptionsResponse = {
@@ -293,7 +325,7 @@ export type UserFeedFieldsFragment = (
 
 export type UserFieldsFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'role' | 'email' | 'locale' | 'timeZone'>
+  & Pick<User, 'id' | 'role' | 'email' | 'emailVerified' | 'locale' | 'timeZone'>
 );
 
 export type UsualUserResponseFragment = (
@@ -399,6 +431,27 @@ export type RegisterMutation = (
   ) }
 );
 
+export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RequestEmailVerificationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'requestEmailVerification'>
+);
+
+export type RequestPasswordResetMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type RequestPasswordResetMutation = (
+  { __typename?: 'Mutation' }
+  & { requestPasswordReset: (
+    { __typename?: 'MessageResponse' }
+    & Pick<MessageResponse, 'message'>
+  ) }
+);
+
 export type SetFeedOptionsMutationVariables = Exact<{
   id: Scalars['Float'];
   opts: UserFeedOptionsInput;
@@ -448,6 +501,26 @@ export type UpdateUserInfoMutation = (
   & { updateUserInfo: (
     { __typename?: 'User' }
     & Pick<User, 'timeZone' | 'locale'>
+  ) }
+);
+
+export type VerifyEmailMutationVariables = Exact<{
+  userId: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+
+export type VerifyEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { verifyEmail: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'email' | 'emailVerified'>
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
   ) }
 );
 
@@ -616,6 +689,7 @@ export const UserFieldsFragmentDoc = gql`
   id
   role
   email
+  emailVerified
   locale
   timeZone
 }
@@ -691,6 +765,18 @@ export const RegisterDocument = gql`
   }
 }
     ${UsualUserResponseFragmentDoc}`;
+export const RequestEmailVerificationDocument = gql`
+    mutation requestEmailVerification {
+  requestEmailVerification
+}
+    `;
+export const RequestPasswordResetDocument = gql`
+    mutation requestPasswordReset($email: String!) {
+  requestPasswordReset(email: $email) {
+    message
+  }
+}
+    `;
 export const SetFeedOptionsDocument = gql`
     mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
   setFeedOptions(id: $id, opts: $opts) {
@@ -721,6 +807,20 @@ export const UpdateUserInfoDocument = gql`
   updateUserInfo(userInfo: $userInfo) {
     timeZone
     locale
+  }
+}
+    `;
+export const VerifyEmailDocument = gql`
+    mutation verifyEmail($userId: String!, $token: String!) {
+  verifyEmail(userId: $userId, token: $token) {
+    user {
+      id
+      email
+      emailVerified
+    }
+    errors {
+      message
+    }
   }
 }
     `;
@@ -814,6 +914,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     register(variables: RegisterMutationVariables): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables));
     },
+    requestEmailVerification(variables?: RequestEmailVerificationMutationVariables): Promise<RequestEmailVerificationMutation> {
+      return withWrapper(() => client.request<RequestEmailVerificationMutation>(print(RequestEmailVerificationDocument), variables));
+    },
+    requestPasswordReset(variables: RequestPasswordResetMutationVariables): Promise<RequestPasswordResetMutation> {
+      return withWrapper(() => client.request<RequestPasswordResetMutation>(print(RequestPasswordResetDocument), variables));
+    },
     setFeedOptions(variables: SetFeedOptionsMutationVariables): Promise<SetFeedOptionsMutation> {
       return withWrapper(() => client.request<SetFeedOptionsMutation>(print(SetFeedOptionsDocument), variables));
     },
@@ -822,6 +928,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     updateUserInfo(variables: UpdateUserInfoMutationVariables): Promise<UpdateUserInfoMutation> {
       return withWrapper(() => client.request<UpdateUserInfoMutation>(print(UpdateUserInfoDocument), variables));
+    },
+    verifyEmail(variables: VerifyEmailMutationVariables): Promise<VerifyEmailMutation> {
+      return withWrapper(() => client.request<VerifyEmailMutation>(print(VerifyEmailDocument), variables));
     },
     me(variables?: MeQueryVariables): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables));

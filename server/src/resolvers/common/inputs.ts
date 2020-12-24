@@ -14,6 +14,19 @@ export class EmailPasswordInput {
 }
 
 @InputType()
+export class PasswordResetInput {
+    @InputMetadata('password')
+    @Field()
+    password: string;
+
+    @Field()
+    token: string;
+
+    @Field()
+    userId: string;
+}
+
+@InputType()
 export class UserInfoInput {
     @InputMetadata('locale')
     @Field({ nullable: true })

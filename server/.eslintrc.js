@@ -18,5 +18,6 @@ module.exports = {
         'no-param-reassign': 'off',
         'no-restricted-syntax': 'off',
         'max-classes-per-file': 'off',
+        radix: 'off',
     },
 };

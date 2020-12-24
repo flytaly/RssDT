@@ -27,6 +27,10 @@ export class User extends BaseEntity {
     email!: string;
 
     @Field()
+    @Column({ default: false })
+    emailVerified!: boolean;
+
+    @Field()
     @Column({ default: Role.USER })
     role: Role;
 

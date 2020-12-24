@@ -1,11 +1,15 @@
-import { Connection } from 'typeorm';
+import { Connection, getCustomRepository } from 'typeorm';
 import faker from 'faker';
 import argon2 from 'argon2';
+import Redis from 'ioredis-mock';
+import { addMockFunctionsToSchema } from 'apollo-server-express';
 import { initDbConnection } from '../../dbConnection';
 import { getSdk, LoginMutation, RegisterMutation } from '../graphql/generated';
 import getTestClient from '../test-utils/getClient';
 import { User } from '../../entities/User';
 import { deleteUserWithEmail } from '../test-utils/dbQueries';
+import { deleteEmails, getEmailByAddress } from '../test-utils/test-emails';
+import { getSdkWithLoggedInUser } from '../test-utils/login';
 
 let dbConnection: Connection;
 
@@ -37,6 +41,37 @@ describe('User creation', () => {
         client.setHeader('cookie', cookie!);
         const { me } = await sdk.me();
         expect(me?.email).toBe(email);
+        expect(me?.emailVerified).toBe(false);
+    });
+
+    describe('Activation', () => {
+        const sdkAnonym = getSdk(getTestClient().client);
+        afterEach(() => deleteEmails());
+
+        async function expectToActivate() {
+            const mail = await getEmailByAddress(email);
+            expect(mail).not.toBeUndefined();
+            expect(mail).toHaveProperty('subject', 'Confirm registration');
+            const found = mail?.text.match(/confirm-register\?token=(?<token>.+)&id=(?<id>\d+)/);
+            expect(found).not.toBeUndefined();
+            expect(found?.groups).not.toBeUndefined();
+            const { verifyEmail } = await sdkAnonym.verifyEmail({
+                token: found!.groups!.token,
+                userId: found!.groups!.id,
+            });
+            expect(verifyEmail.user).toMatchObject({ email, emailVerified: true });
+        }
+        test('should send confirmation email and activate with token', async () => {
+            await expectToActivate();
+        });
+
+        test('requestEmailVerification: should send confirmation email', async () => {
+            expect(sdkAnonym.requestEmailVerification()).rejects.toThrowError();
+            const sdk = await getSdkWithLoggedInUser(email, password);
+            const response = await sdk.requestEmailVerification();
+            expect(response.requestEmailVerification).toBe(true);
+            await expectToActivate();
+        });
     });
 
     test('should not be logged in without cookie', async () => {

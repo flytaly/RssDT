@@ -11,7 +11,7 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
+import { EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants';
 import { Options } from '../entities/Options';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
@@ -19,8 +19,15 @@ import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { MyContext, ReqWithSession, Role } from '../types';
 import { ArgumentError } from './common/ArgumentError';
+import { resetPasswordEmail, verificationEmail } from './common/confirmationMail';
 import { getUserFeeds } from './common/getUserFeeds';
-import { EmailPasswordInput, OptionsInput, UserInfoInput } from './common/inputs';
+import {
+    EmailPasswordInput,
+    OptionsInput,
+    PasswordResetInput,
+    UserInfoInput,
+} from './common/inputs';
+import { createUser, updateUser, updateUserOptions } from './common/userDBQueries';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
     req.session.userId = userId;
@@ -44,6 +51,12 @@ class OptionsResponse {
     options?: Options;
 }
 
+@ObjectType()
+class MessageResponse {
+    @Field(() => String)
+    message?: string;
+}
+
 @Resolver(User)
 export class UserResolver {
     @FieldResolver(() => [UserFeed])
@@ -61,9 +74,7 @@ export class UserResolver {
     @UseMiddleware(auth())
     @Query(() => User, { nullable: true })
     async me(@Ctx() { req }: MyContext) {
-        if (!req.session.userId) {
-            return null;
-        }
+        if (!req.session.userId) return null;
         return User.findOne(req.session.userId);
     }
 
@@ -78,55 +89,81 @@ export class UserResolver {
     async register(
         @Arg('input') input: EmailPasswordInput,
         @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput,
-        @Ctx() { req }: MyContext,
+        @Ctx() { req, redis }: MyContext,
     ) {
         const { password: plainPassword, email } = input;
-        const { locale, timeZone } = userInfo || {};
         const password = await argon2.hash(plainPassword);
-        let user: User | undefined;
-        try {
-            user = await getConnection()
-                .manager.create(User, {
-                    email,
-                    password,
-                    locale,
-                    timeZone,
-                    options: new Options(),
-                })
-                .save();
-        } catch (err) {
-            if (err.code === '23505') {
-                return { errors: [new ArgumentError('email', 'User already exists')] };
-            }
-        }
+        const { error, user } = await createUser({ ...(userInfo || {}), password, email });
+        if (error) return { errors: [error] };
         if (!user) return null;
         setSession(req, user.id, user.role);
 
+        await verificationEmail(redis, user.id, email);
         return { user };
+    }
+
+    @UseMiddleware(auth())
+    @Mutation(() => Boolean)
+    async requestEmailVerification(@Ctx() { redis, req }: MyContext) {
+        const user = await User.findOne(req.session.userId);
+        if (!user) return false;
+        await verificationEmail(redis, user.id, user.email);
+        return true;
+    }
+
+    @Mutation(() => MessageResponse)
+    async requestPasswordReset(@Arg('email') email: string, @Ctx() { redis }: MyContext) {
+        const user = await User.findOne({ where: { email } });
+        if (!user) return { message: "User doesn't exist" };
+        await resetPasswordEmail(redis, user.id, user.email);
+        return { message: 'OK' };
+    }
+
+    @NormalizeAndValidateArgs([PasswordResetInput, 'input'])
+    @Mutation(() => UserResponse)
+    async resetPassword(
+        @Ctx() { redis }: MyContext,
+        @Arg('input') { userId, token, password: plainPassword }: PasswordResetInput,
+    ) {
+        const key = PASSWORD_RESET_PREFIX + token;
+        const id = await redis.get(key);
+        if (!id || id !== userId) {
+            return { errors: [new ArgumentError('token', 'wrong or expired token')] };
+        }
+        const password = await argon2.hash(plainPassword);
+        return updateUser(parseInt(userId), { password, emailVerified: true });
+    }
+
+    @Mutation(() => UserResponse)
+    async verifyEmail(
+        @Ctx() { redis }: MyContext,
+        @Arg('token') token: string,
+        @Arg('userId') userId: string,
+    ) {
+        const key = EMAIL_CONFIRM_PREFIX + token;
+        const id = await redis.get(key);
+        if (!id || id !== userId) {
+            return { errors: [new ArgumentError('token', 'wrong or expired token')] };
+        }
+        await redis.del(key);
+        return updateUser(parseInt(userId), { emailVerified: true });
     }
 
     @NormalizeAndValidateArgs([EmailPasswordInput, 'input'])
     @Mutation(() => UserResponse)
     async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
         const { password: plainPassword, email } = input;
-
         const user = await User.findOne({ where: { email } });
-
         if (!user) {
-            return {
-                errors: [new ArgumentError('email', "User with such email doesn't exist")],
-            };
+            return { errors: [new ArgumentError('email', "User with such email doesn't exist")] };
         }
-
         const isMatch =
             user.password && // password could be empty
             (await argon2.verify(user.password, plainPassword));
         if (!isMatch) {
             return { errors: [new ArgumentError('password', 'Wrong password')] };
         }
-
         setSession(req, user.id, user.role);
-
         return { user };
     }
 
@@ -148,13 +185,6 @@ export class UserResolver {
     @UseMiddleware(auth())
     @Mutation(() => OptionsResponse)
     async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
-        const result = await getConnection()
-            .createQueryBuilder()
-            .update(Options)
-            .set({ ...opts })
-            .where('userId = :id', { id: req.session.userId })
-            .returning('*')
-            .execute();
-        return { options: result.raw[0] as Options };
+        return updateUserOptions(req.session.userId, opts);
     }
 }

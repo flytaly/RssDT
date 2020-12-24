@@ -2,6 +2,7 @@ fragment UserFields on User {
     id
     role
     email
+    emailVerified
     locale
     timeZone
 }
