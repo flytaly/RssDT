@@ -1,15 +1,18 @@
-import { Connection, getCustomRepository } from 'typeorm';
-import faker from 'faker';
 import argon2 from 'argon2';
-import Redis from 'ioredis-mock';
-import { addMockFunctionsToSchema } from 'apollo-server-express';
+import faker from 'faker';
+import { Connection } from 'typeorm';
 import { initDbConnection } from '../../dbConnection';
-import { getSdk, LoginMutation, RegisterMutation } from '../graphql/generated';
-import getTestClient from '../test-utils/getClient';
 import { User } from '../../entities/User';
+import { getSdk, LoginMutation, RegisterMutation } from '../graphql/generated';
 import { deleteUserWithEmail } from '../test-utils/dbQueries';
-import { deleteEmails, getEmailByAddress } from '../test-utils/test-emails';
+import getTestClient from '../test-utils/getClient';
 import { getSdkWithLoggedInUser } from '../test-utils/login';
+import {
+    deleteEmails,
+    getConfirmRegisterData,
+    getEmailByAddress,
+    getPasswordResetData,
+} from '../test-utils/test-emails';
 
 let dbConnection: Connection;
 
@@ -44,45 +47,9 @@ describe('User creation', () => {
         expect(me?.emailVerified).toBe(false);
     });
 
-    describe('Activation', () => {
-        const sdkAnonym = getSdk(getTestClient().client);
-        afterEach(() => deleteEmails());
-
-        async function expectToActivate() {
-            const mail = await getEmailByAddress(email);
-            expect(mail).not.toBeUndefined();
-            expect(mail).toHaveProperty('subject', 'Confirm registration');
-            const found = mail?.text.match(/confirm-register\?token=(?<token>.+)&id=(?<id>\d+)/);
-            expect(found).not.toBeUndefined();
-            expect(found?.groups).not.toBeUndefined();
-            const { verifyEmail } = await sdkAnonym.verifyEmail({
-                token: found!.groups!.token,
-                userId: found!.groups!.id,
-            });
-            expect(verifyEmail.user).toMatchObject({ email, emailVerified: true });
-        }
-        test('should send confirmation email and activate with token', async () => {
-            await expectToActivate();
-        });
-
-        test('requestEmailVerification: should send confirmation email', async () => {
-            expect(sdkAnonym.requestEmailVerification()).rejects.toThrowError();
-            const sdk = await getSdkWithLoggedInUser(email, password);
-            const response = await sdk.requestEmailVerification();
-            expect(response.requestEmailVerification).toBe(true);
-            await expectToActivate();
-        });
-    });
-
     test('should not be logged in without cookie', async () => {
         const sdk = getSdk(getTestClient().client);
-        let error;
-        try {
-            await sdk.me();
-        } catch (e) {
-            error = e;
-        }
-        expect(error.message.startsWith('not authenticated')).toBeTruthy();
+        expect(sdk.me()).rejects.toThrowError(/not authenticated/);
     });
 
     test('should hash password', async () => {
@@ -97,6 +64,49 @@ describe('User creation', () => {
         expect(register.errors![0]).toMatchObject({
             message: 'User already exists',
             argument: 'email',
+        });
+    });
+
+    describe('Email confirmation', () => {
+        const sdkAnonym = getSdk(getTestClient().client);
+        afterEach(() => deleteEmails());
+
+        async function expectToGetTokenAndActivate() {
+            const mail = await getEmailByAddress(email);
+            expect(mail).not.toBeUndefined();
+            expect(mail).toHaveProperty('subject', 'Confirm registration');
+            const { verifyEmail } = await sdkAnonym.verifyEmail(getConfirmRegisterData(mail!));
+            expect(verifyEmail.user).toMatchObject({ email, emailVerified: true });
+        }
+        test('should send confirmation email and activate with token', async () => {
+            await expectToGetTokenAndActivate();
+        });
+
+        test('requestEmailVerification: should send confirmation email', async () => {
+            expect(sdkAnonym.requestEmailVerification()).rejects.toThrowError(/not authenticated/);
+            const sdk = await getSdkWithLoggedInUser(email, password);
+            const response = await sdk.requestEmailVerification();
+            expect(response.requestEmailVerification).toBe(true);
+            await expectToGetTokenAndActivate();
+        });
+    });
+
+    describe('Password reset', () => {
+        const sdk = getSdk(getTestClient().client);
+        const newPassword = faker.internet.password(10);
+        afterEach(() => deleteEmails());
+        test('should reset password', async () => {
+            const { requestPasswordReset } = await sdk.requestPasswordReset({ email });
+            expect(requestPasswordReset).toMatchObject({ message: 'OK' });
+            const mail = await getEmailByAddress(email);
+            expect(mail).not.toBeUndefined();
+            const tokenAndId = getPasswordResetData(mail!);
+            const { resetPassword } = await sdk.resetPassword({
+                input: { ...tokenAndId, password: newPassword },
+            });
+            expect(resetPassword.user).toHaveProperty('email', email);
+            const userRecord = await User.findOne(tokenAndId.userId);
+            expect(await argon2.verify(userRecord!.password!, newPassword)).toBeTruthy();
         });
     });
 });

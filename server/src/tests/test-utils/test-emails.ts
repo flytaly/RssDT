@@ -54,3 +54,20 @@ export const getEmailByAddress = async (address: string) => {
 };
 
 export const deleteEmails = () => axios.delete(`${url}/email/all`);
+
+export const getConfirmRegisterData = (mail: MailDevEmail) => {
+    const found = mail?.text.match(/confirm-register\?token=(?<token>.+)&id=(?<id>\d+)/);
+    if (!found || !found.groups) throw new Error("Couldn't find token and id");
+    return {
+        token: found.groups.token,
+        userId: found.groups.id,
+    };
+};
+export const getPasswordResetData = (mail: MailDevEmail) => {
+    const found = mail?.text.match(/reset\?token=(?<token>.+)&id=(?<id>\d+)/);
+    if (!found || !found.groups) throw new Error("Couldn't find token and id");
+    return {
+        token: found.groups.token,
+        userId: found.groups.id,
+    };
+};

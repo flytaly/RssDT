@@ -452,6 +452,25 @@ export type RequestPasswordResetMutation = (
   ) }
 );
 
+export type ResetPasswordMutationVariables = Exact<{
+  input: PasswordResetInput;
+}>;
+
+
+export type ResetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { resetPassword: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & UserFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type SetFeedOptionsMutationVariables = Exact<{
   id: Scalars['Float'];
   opts: UserFeedOptionsInput;
@@ -777,6 +796,18 @@ export const RequestPasswordResetDocument = gql`
   }
 }
     `;
+export const ResetPasswordDocument = gql`
+    mutation resetPassword($input: PasswordResetInput!) {
+  resetPassword(input: $input) {
+    user {
+      ...UserFields
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 export const SetFeedOptionsDocument = gql`
     mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
   setFeedOptions(id: $id, opts: $opts) {
@@ -919,6 +950,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     requestPasswordReset(variables: RequestPasswordResetMutationVariables): Promise<RequestPasswordResetMutation> {
       return withWrapper(() => client.request<RequestPasswordResetMutation>(print(RequestPasswordResetDocument), variables));
+    },
+    resetPassword(variables: ResetPasswordMutationVariables): Promise<ResetPasswordMutation> {
+      return withWrapper(() => client.request<ResetPasswordMutation>(print(ResetPasswordDocument), variables));
     },
     setFeedOptions(variables: SetFeedOptionsMutationVariables): Promise<SetFeedOptionsMutation> {
       return withWrapper(() => client.request<SetFeedOptionsMutation>(print(SetFeedOptionsDocument), variables));
