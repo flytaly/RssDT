@@ -21,5 +21,6 @@ export enum DigestSchedule {
     every6hours = 'every6hours',
     every12hours = 'every12hours',
     daily = 'daily',
+    disable = 'disable',
 }
 registerEnumType(DigestSchedule, { name: 'DigestSchedule' });

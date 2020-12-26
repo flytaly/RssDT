@@ -34,8 +34,13 @@ Otherwise, ignore this message.`,
 }
 
 /** Send an email to confirm subscription */
-export async function sendConfirmSubscription(email: string, token: string, title: string) {
-    const url = `${process.env.FRONTEND_URL}/confirm?token=${token}`;
+export async function sendConfirmSubscription(
+    email: string,
+    token: string,
+    userFeedId: number,
+    title: string,
+) {
+    const url = `${process.env.FRONTEND_URL}/confirm?token=${token}&id=${userFeedId}`;
     const result = await transport.sendMail({
         from: process.env.MAIL_FROM,
         to: email,

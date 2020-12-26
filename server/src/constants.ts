@@ -5,6 +5,7 @@ export const IS_DEV = !IS_PROD && !IS_TEST;
 export const COOKIE_NAME = 'qid';
 export const EMAIL_CONFIRM_PREFIX = 'email-confirm:';
 export const PASSWORD_RESET_PREFIX = 'password-reset:';
+export const SUBSCRIPTION_CONFIRM_PREFIX = 'subscription-confirm:';
 
 export const defaultLocale = 'en-US';
 export const defaultTimeZone = 'UTC';

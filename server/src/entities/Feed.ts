@@ -77,6 +77,7 @@ export class Feed extends BaseEntity {
 
     // === DB ONLY FIELDS ===
 
+    /** Activated means that it was added by user with confirmed email */
     @Column({ default: false })
     activated: boolean;
 

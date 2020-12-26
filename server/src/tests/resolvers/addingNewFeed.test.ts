@@ -72,6 +72,8 @@ describe('Add user feed without authentication', () => {
         const uFeed = await UserFeed.find({ where: { userId: user?.id } });
         expect(uFeed).toHaveLength(2);
     });
+
+    describe('Feed activation', () => {});
 });
 
 describe('Add user feed after authentication', () => {

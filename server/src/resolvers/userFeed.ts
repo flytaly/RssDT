@@ -24,6 +24,10 @@ import {
     UserFeedOptionsInput,
     UserInfoInput,
 } from './common/inputs';
+import { subscriptionVerifyEmail } from './common/confirmationMail';
+import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
+import { Feed } from '../entities/Feed';
+import { activateUserFeed } from './common/feedDBQueries';
 
 @ObjectType()
 class UserFeedResponse {
@@ -51,13 +55,6 @@ class DeletedFeedResponse {
 
 @Resolver(UserFeed)
 export class UserFeedResolver {
-    /*  // Currently it could be accessed from user { feeds { feed } }
-    @FieldResolver(() => [UserFeed])
-    async feed(@Root() root: UserFeed) {
-        if (!root.feedId) return null;
-        return Feed.findOne({ where: { id: root.feedId } });
-    } */
-
     @UseMiddleware(auth())
     @Query(() => [UserFeed], { nullable: true })
     async myFeeds(@Ctx() { req }: MyContext) {
@@ -71,8 +68,18 @@ export class UserFeedResolver {
     async addFeedWithEmail(
         @Arg('input') { email, feedUrl: url }: AddFeedEmailInput, //
         @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput, //
+        @Ctx() { redis }: MyContext,
     ) {
-        return createUserFeed({ url, email, userId: null, userInfo });
+        const { errors, userFeed, feed } = await createUserFeed({
+            url,
+            email,
+            userId: null,
+            userInfo,
+        });
+        if (!errors) {
+            await subscriptionVerifyEmail(redis, email, feed!.title, userFeed!.id);
+        }
+        return { errors, userFeed };
     }
 
     /* Add feed to current user account */
@@ -84,6 +91,22 @@ export class UserFeedResolver {
         @Ctx() { req }: MyContext,
     ) {
         return createUserFeed({ url, email: null, userId: req.session.userId });
+    }
+
+    @Mutation(() => UserFeedResponse)
+    async activateFeed(
+        @Arg('token') token: string,
+        @Arg('id') userFeedId: string,
+        @Ctx() { redis }: MyContext,
+    ) {
+        const key = SUBSCRIPTION_CONFIRM_PREFIX + token;
+        const id = await redis.get(key);
+        if (id !== userFeedId) {
+            return { errors: [new ArgumentError('token', 'wrong or expired token')] };
+        }
+        const userFeed = await activateUserFeed(parseInt(userFeedId));
+        await redis.del(key);
+        return { userFeed };
     }
 
     /* Delete feed from current user */
