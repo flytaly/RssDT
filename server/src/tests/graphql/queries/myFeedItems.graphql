@@ -1,7 +1,7 @@
 query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
     myFeedItems(input: { skip: $skip, take: $take, feedId: $feedId }) {
         items {
-            ...itemFields
+            ...ItemFields
         }
         count
     }

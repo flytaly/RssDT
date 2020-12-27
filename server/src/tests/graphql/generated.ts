@@ -85,7 +85,8 @@ export enum DigestSchedule {
   Every3hours = 'every3hours',
   Every6hours = 'every6hours',
   Every12hours = 'every12hours',
-  Daily = 'daily'
+  Daily = 'daily',
+  Disable = 'disable'
 }
 
 export enum TernaryState {
@@ -157,6 +158,8 @@ export type Mutation = {
   setOptions: OptionsResponse;
   addFeedWithEmail?: Maybe<UserFeedResponse>;
   addFeedToCurrentUser: UserFeedResponse;
+  activateFeed: UserFeedResponse;
+  setFeedActivated: UserFeedResponse;
   deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
 };
@@ -200,13 +203,26 @@ export type MutationSetOptionsArgs = {
 
 
 export type MutationAddFeedWithEmailArgs = {
+  feedOpts?: Maybe<UserFeedOptionsInput>;
   userInfo?: Maybe<UserInfoInput>;
   input: AddFeedEmailInput;
 };
 
 
 export type MutationAddFeedToCurrentUserArgs = {
+  feedOpts?: Maybe<UserFeedOptionsInput>;
   input: AddFeedInput;
+};
+
+
+export type MutationActivateFeedArgs = {
+  userFeedId: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationSetFeedActivatedArgs = {
+  userFeedId: Scalars['Float'];
 };
 
 
@@ -276,6 +292,14 @@ export type UserFeedResponse = {
   userFeed?: Maybe<UserFeed>;
 };
 
+export type UserFeedOptionsInput = {
+  schedule?: Maybe<Scalars['String']>;
+  withContentTable?: Maybe<Scalars['String']>;
+  itemBody?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Scalars['String']>;
+  theme?: Maybe<Scalars['String']>;
+};
+
 export type AddFeedEmailInput = {
   feedUrl: Scalars['String'];
   email: Scalars['String'];
@@ -289,14 +313,6 @@ export type DeletedFeedResponse = {
   __typename?: 'DeletedFeedResponse';
   errors?: Maybe<Array<ArgumentError>>;
   ids?: Maybe<Array<Scalars['String']>>;
-};
-
-export type UserFeedOptionsInput = {
-  schedule?: Maybe<Scalars['String']>;
-  withContentTable?: Maybe<Scalars['String']>;
-  itemBody?: Maybe<Scalars['String']>;
-  attachments?: Maybe<Scalars['String']>;
-  theme?: Maybe<Scalars['String']>;
 };
 
 export type FeedFieldsFragment = (
@@ -339,8 +355,33 @@ export type UsualUserResponseFragment = (
   )>> }
 );
 
+export type ActivateFeedMutationVariables = Exact<{
+  token: Scalars['String'];
+  userFeedId: Scalars['String'];
+}>;
+
+
+export type ActivateFeedMutation = (
+  { __typename?: 'Mutation' }
+  & { activateFeed: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & { feed: (
+        { __typename?: 'Feed' }
+        & Pick<Feed, 'id' | 'url' | 'title'>
+      ) }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type AddFeedToCurrentUserMutationVariables = Exact<{
-  feedUrl: Scalars['String'];
+  feedOpts?: Maybe<UserFeedOptionsInput>;
+  input: AddFeedInput;
 }>;
 
 
@@ -363,8 +404,9 @@ export type AddFeedToCurrentUserMutation = (
 );
 
 export type AddFeedWithEmailMutationVariables = Exact<{
-  email: Scalars['String'];
-  feedUrl: Scalars['String'];
+  feedOpts?: Maybe<UserFeedOptionsInput>;
+  userInfo?: Maybe<UserInfoInput>;
+  input: AddFeedEmailInput;
 }>;
 
 
@@ -374,11 +416,11 @@ export type AddFeedWithEmailMutation = (
     { __typename?: 'UserFeedResponse' }
     & { userFeed?: Maybe<(
       { __typename?: 'UserFeed' }
-      & Pick<UserFeed, 'id' | 'activated'>
       & { feed: (
         { __typename?: 'Feed' }
-        & Pick<Feed, 'id' | 'url'>
+        & Pick<Feed, 'id' | 'url' | 'title'>
       ) }
+      & UserFeedFieldsFragment
     )>, errors?: Maybe<Array<(
       { __typename?: 'ArgumentError' }
       & Pick<ArgumentError, 'message' | 'argument'>
@@ -645,7 +687,7 @@ export type UsersQuery = (
 );
 
 export const FeedFieldsFragmentDoc = gql`
-    fragment feedFields on Feed {
+    fragment FeedFields on Feed {
   id
   url
   link
@@ -661,7 +703,7 @@ export const FeedFieldsFragmentDoc = gql`
 }
     `;
 export const ItemFieldsFragmentDoc = gql`
-    fragment itemFields on Item {
+    fragment ItemFields on Item {
   id
   guid
   pubdate
@@ -679,7 +721,7 @@ export const ItemFieldsFragmentDoc = gql`
 }
     `;
 export const OptionsFieldsFragmentDoc = gql`
-    fragment optionsFields on Options {
+    fragment OptionsFields on Options {
   dailyDigestHour
   withContentTableDefault
   itemBodyDefault
@@ -691,7 +733,7 @@ export const OptionsFieldsFragmentDoc = gql`
 }
     `;
 export const UserFeedFieldsFragmentDoc = gql`
-    fragment userFeedFields on UserFeed {
+    fragment UserFeedFields on UserFeed {
   id
   activated
   schedule
@@ -724,9 +766,26 @@ export const UsualUserResponseFragmentDoc = gql`
   }
 }
     ${UserFieldsFragmentDoc}`;
+export const ActivateFeedDocument = gql`
+    mutation activateFeed($token: String!, $userFeedId: String!) {
+  activateFeed(token: $token, userFeedId: $userFeedId) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
 export const AddFeedToCurrentUserDocument = gql`
-    mutation addFeedToCurrentUser($feedUrl: String!) {
-  addFeedToCurrentUser(input: {feedUrl: $feedUrl}) {
+    mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
+  addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
     userFeed {
       id
       activated
@@ -743,14 +802,14 @@ export const AddFeedToCurrentUserDocument = gql`
 }
     `;
 export const AddFeedWithEmailDocument = gql`
-    mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
-  addFeedWithEmail(input: {email: $email, feedUrl: $feedUrl}) {
+    mutation addFeedWithEmail($feedOpts: UserFeedOptionsInput, $userInfo: UserInfoInput, $input: AddFeedEmailInput!) {
+  addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
     userFeed {
-      id
-      activated
+      ...UserFeedFields
       feed {
         id
         url
+        title
       }
     }
     errors {
@@ -759,7 +818,7 @@ export const AddFeedWithEmailDocument = gql`
     }
   }
 }
-    `;
+    ${UserFeedFieldsFragmentDoc}`;
 export const DeleteMyFeedsDocument = gql`
     mutation deleteMyFeeds($ids: [Float!]!) {
   deleteMyFeeds(ids: $ids) {
@@ -812,7 +871,7 @@ export const SetFeedOptionsDocument = gql`
     mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
   setFeedOptions(id: $id, opts: $opts) {
     userFeed {
-      ...userFeedFields
+      ...UserFeedFields
     }
     errors {
       message
@@ -824,7 +883,7 @@ export const SetOptionsDocument = gql`
     mutation setOptions($opts: OptionsInput!) {
   setOptions(opts: $opts) {
     options {
-      ...optionsFields
+      ...OptionsFields
     }
     errors {
       message
@@ -870,7 +929,7 @@ export const MeWithFeedsDocument = gql`
       activated
       createdAt
       feed {
-        ...feedFields
+        ...FeedFields
       }
     }
   }
@@ -882,7 +941,7 @@ export const MeWithOptionsDocument = gql`
   me {
     ...UserFields
     options {
-      ...optionsFields
+      ...OptionsFields
     }
   }
 }
@@ -892,7 +951,7 @@ export const MyFeedItemsDocument = gql`
     query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
   myFeedItems(input: {skip: $skip, take: $take, feedId: $feedId}) {
     items {
-      ...itemFields
+      ...ItemFields
     }
     count
   }
@@ -901,9 +960,9 @@ export const MyFeedItemsDocument = gql`
 export const MyFeedsDocument = gql`
     query myFeeds {
   myFeeds {
-    ...userFeedFields
+    ...UserFeedFields
     feed {
-      ...feedFields
+      ...FeedFields
     }
   }
 }
@@ -912,7 +971,7 @@ ${FeedFieldsFragmentDoc}`;
 export const MyOptionsDocument = gql`
     query myOptions {
   myOptions {
-    ...optionsFields
+    ...OptionsFields
   }
 }
     ${OptionsFieldsFragmentDoc}`;
@@ -930,6 +989,9 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    activateFeed(variables: ActivateFeedMutationVariables): Promise<ActivateFeedMutation> {
+      return withWrapper(() => client.request<ActivateFeedMutation>(print(ActivateFeedDocument), variables));
+    },
     addFeedToCurrentUser(variables: AddFeedToCurrentUserMutationVariables): Promise<AddFeedToCurrentUserMutation> {
       return withWrapper(() => client.request<AddFeedToCurrentUserMutation>(print(AddFeedToCurrentUserDocument), variables));
     },

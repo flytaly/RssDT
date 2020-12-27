@@ -151,11 +151,12 @@ export const createUserFeed = async ({
     if (errors) return { errors };
 
     let userFeed: UserFeed | undefined;
+    let user: User | undefined;
     const qR = getConnection().createQueryRunner();
     await qR.connect();
     await qR.startTransaction();
     try {
-        const user = await upsertUserAndReturn(qR, userId, email, userInfo);
+        user = await upsertUserAndReturn(qR, userId, email, userInfo);
         userId = user.id;
         const shouldActivate = isUserLoggedIn && user.emailVerified;
         if (!feed) {
@@ -189,5 +190,5 @@ export const createUserFeed = async ({
         await qR.release();
     }
 
-    return { errors, userFeed: errors ? null : userFeed, feed };
+    return { errors, userFeed: errors ? null : userFeed, feed, user };
 };

@@ -1,4 +1,4 @@
-fragment optionsFields on Options {
+fragment OptionsFields on Options {
     dailyDigestHour
     withContentTableDefault
     itemBodyDefault

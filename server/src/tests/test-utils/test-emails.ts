@@ -71,3 +71,11 @@ export const getPasswordResetData = (mail: MailDevEmail) => {
         userId: found.groups.id,
     };
 };
+export const getSubscriptionConfirmData = (mail: MailDevEmail) => {
+    const found = mail?.text.match(/confirm\?token=(?<token>.+)&id=(?<id>\d+)/);
+    if (!found || !found.groups) throw new Error("Couldn't find token and id");
+    return {
+        token: found.groups.token,
+        userFeedId: found.groups.id,
+    };
+};

@@ -44,7 +44,7 @@ describe('protected queries', () => {
     test('should throw Authentication Error', async () => {
         const feedUrl = 'http://feed.com';
         await expectAuthError(() => sdkNoUser.me());
-        await expectAuthError(() => sdkNoUser.addFeedToCurrentUser({ feedUrl }));
+        await expectAuthError(() => sdkNoUser.addFeedToCurrentUser({ input: { feedUrl } }));
         await expectAuthError(() => sdkNoUser.users());
     });
 

@@ -1,4 +1,4 @@
-fragment itemFields on Item {
+fragment ItemFields on Item {
     id
     guid
     pubdate

@@ -1,7 +1,7 @@
 mutation setOptions($opts: OptionsInput!) {
     setOptions(opts: $opts) {
         options {
-            ...optionsFields
+            ...OptionsFields
         }
         errors {
             message

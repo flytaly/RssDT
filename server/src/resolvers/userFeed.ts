@@ -71,8 +71,6 @@ export class UserFeedResolver {
         @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
         @Ctx() { redis }: MyContext,
     ) {
-        console.log({ feedOpts });
-
         const { errors, userFeed, feed } = await createUserFeed({
             url,
             email,
@@ -93,15 +91,24 @@ export class UserFeedResolver {
     async addFeedToCurrentUser(
         @Arg('input') { feedUrl: url }: AddFeedInput,
         @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
-        @Ctx() { req }: MyContext,
+        @Ctx() { req, redis }: MyContext,
     ) {
-        return createUserFeed({ url, email: null, userId: req.session.userId, feedOpts });
+        const { errors, userFeed, feed, user } = await createUserFeed({
+            url,
+            email: null,
+            userId: req.session.userId,
+            feedOpts,
+        });
+        if (!errors && !user?.emailVerified) {
+            await subscriptionVerifyEmail(redis, user?.email!, feed!.title, userFeed!.id);
+        }
+        return { errors, userFeed };
     }
 
     @Mutation(() => UserFeedResponse)
     async activateFeed(
         @Arg('token') token: string,
-        @Arg('id') userFeedId: string,
+        @Arg('userFeedId') userFeedId: string,
         @Ctx() { redis }: MyContext,
     ) {
         const key = SUBSCRIPTION_CONFIRM_PREFIX + token;

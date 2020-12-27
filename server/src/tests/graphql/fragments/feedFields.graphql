@@ -1,4 +1,4 @@
-fragment feedFields on Feed {
+fragment FeedFields on Feed {
     id
     url
     link

@@ -1,11 +1,15 @@
-mutation addFeedWithEmail($email: String!, $feedUrl: String!) {
-    addFeedWithEmail(input: { email: $email, feedUrl: $feedUrl }) {
+mutation addFeedWithEmail(
+    $feedOpts: UserFeedOptionsInput
+    $userInfo: UserInfoInput
+    $input: AddFeedEmailInput!
+) {
+    addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
         userFeed {
-            id
-            activated
+            ...UserFeedFields
             feed {
                 id
                 url
+                title
             }
         }
         errors {

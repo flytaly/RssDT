@@ -1,4 +1,4 @@
-fragment userFeedFields on UserFeed {
+fragment UserFeedFields on UserFeed {
     id
     activated
     schedule

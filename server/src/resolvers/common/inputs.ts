@@ -84,17 +84,17 @@ export class OptionsInput {
 @InputType()
 export class UserFeedOptionsInput {
     @Field({ nullable: true })
-    schedule: DigestSchedule;
+    schedule?: DigestSchedule;
 
     @Field({ nullable: true })
-    withContentTable: TernaryState;
+    withContentTable?: TernaryState;
 
     @Field({ nullable: true })
-    itemBody: TernaryState;
+    itemBody?: TernaryState;
 
     @Field({ nullable: true })
-    attachments: TernaryState;
+    attachments?: TernaryState;
 
     @Field({ nullable: true })
-    theme: Theme;
+    theme?: Theme;
 }

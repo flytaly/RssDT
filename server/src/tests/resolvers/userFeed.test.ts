@@ -1,4 +1,3 @@
-import argon2 from 'argon2';
 import faker from 'faker';
 import nock from 'nock';
 import { Connection } from 'typeorm';
@@ -37,14 +36,18 @@ describe('Normalize', () => {
     });
     afterAll(() => Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl)]));
     test('should normalize url', async () => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: inputUrl });
+        const { addFeedWithEmail } = await sdk.addFeedWithEmail({
+            input: { email, feedUrl: inputUrl },
+        });
         expect(addFeedWithEmail?.userFeed?.feed.url).toBe(correctUrl);
     });
     test('should validate url', async () => {
         const wrongUrls = ['', 'https:', 'https://', 'ftp://asdf.com', 'juststring'];
         await Promise.all(
             wrongUrls.map(async (url) => {
-                const { addFeedWithEmail } = await sdk.addFeedWithEmail({ email, feedUrl: url });
+                const { addFeedWithEmail } = await sdk.addFeedWithEmail({
+                    input: { email, feedUrl: url },
+                });
                 expect(addFeedWithEmail?.errors?.[0].argument).toBe('feedUrl');
             }),
         );
@@ -69,7 +72,9 @@ describe('My Feeds', () => {
 
     describe('Get my feeds', () => {
         test('should response with feeds', async () => {
-            const responses = feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ feedUrl }));
+            const responses = feeds.map(({ feedUrl }) =>
+                sdk.addFeedToCurrentUser({ input: { feedUrl } }),
+            );
             await Promise.all(responses);
             const { myFeeds } = await sdk.myFeeds();
             expect(myFeeds).toHaveLength(feeds.length);
@@ -95,7 +100,7 @@ describe('UserFeed options', () => {
     beforeAll(async () => {
         feed.mockRequests();
         ({ user, sdk } = await generateUserAndGetSdk('testmyfeeds2@test.com'));
-        const response = await sdk.addFeedToCurrentUser({ feedUrl: feed.feedUrl });
+        const response = await sdk.addFeedToCurrentUser({ input: { feedUrl: feed.feedUrl } });
 
         userFeedId = response.addFeedToCurrentUser.userFeed?.id;
     });
