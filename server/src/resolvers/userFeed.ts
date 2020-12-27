@@ -11,13 +11,16 @@ import {
     UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
-import { number } from 'joi';
+import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
+import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
-import { MyContext } from '../types';
-import { createUserFeed } from './common/createUserFeed';
-import { ArgumentError } from './common/ArgumentError';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { MyContext } from '../types';
+import { ArgumentError } from './common/ArgumentError';
+import { subscriptionVerifyEmail } from './common/confirmationMail';
+import { createUserFeed } from './common/createUserFeed';
+import { activateUserFeed } from './common/feedDBQueries';
 import { getUserFeeds } from './common/getUserFeeds';
 import {
     AddFeedEmailInput,
@@ -25,11 +28,6 @@ import {
     UserFeedOptionsInput,
     UserInfoInput,
 } from './common/inputs';
-import { subscriptionVerifyEmail } from './common/confirmationMail';
-import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
-import { Feed } from '../entities/Feed';
-import { activateUserFeed } from './common/feedDBQueries';
-import { User } from '../entities/User';
 
 @ObjectType()
 class UserFeedResponse {
@@ -68,15 +66,19 @@ export class UserFeedResolver {
     @NormalizeAndValidateArgs([AddFeedEmailInput, 'input'], [UserInfoInput, 'userInfo'])
     @Mutation(() => UserFeedResponse, { nullable: true })
     async addFeedWithEmail(
-        @Arg('input') { email, feedUrl: url }: AddFeedEmailInput, //
-        @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput, //
+        @Arg('input') { email, feedUrl: url }: AddFeedEmailInput,
+        @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput,
+        @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
         @Ctx() { redis }: MyContext,
     ) {
+        console.log({ feedOpts });
+
         const { errors, userFeed, feed } = await createUserFeed({
             url,
             email,
             userId: null,
             userInfo,
+            feedOpts,
         });
         if (!errors) {
             await subscriptionVerifyEmail(redis, email, feed!.title, userFeed!.id);
@@ -89,10 +91,11 @@ export class UserFeedResolver {
     @NormalizeAndValidateArgs([AddFeedInput, 'input'])
     @Mutation(() => UserFeedResponse)
     async addFeedToCurrentUser(
-        @Arg('input') { feedUrl: url }: AddFeedInput, //
+        @Arg('input') { feedUrl: url }: AddFeedInput,
+        @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
         @Ctx() { req }: MyContext,
     ) {
-        return createUserFeed({ url, email: null, userId: req.session.userId });
+        return createUserFeed({ url, email: null, userId: req.session.userId, feedOpts });
     }
 
     @Mutation(() => UserFeedResponse)

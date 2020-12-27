@@ -1,6 +1,5 @@
 import FeedParser from 'feedparser';
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { defaultLocale, defaultTimeZone } from '../../constants';
 import { Feed } from '../../entities/Feed';
 import { Options } from '../../entities/Options';
@@ -8,9 +7,8 @@ import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
 import { checkFeedInfo, getFeedStream } from '../../feed-parser';
 import { logger } from '../../logger';
-import { sendConfirmSubscription } from '../../mail/dispatcher';
 import { ArgumentError } from './ArgumentError';
-import { UserInfoInput } from './inputs';
+import { UserFeedOptionsInput } from './inputs';
 
 type UserInfo = {
     locale?: string;
@@ -92,6 +90,7 @@ interface CreateUserFeedArgs {
     email?: string | null;
     userId?: number | null;
     userInfo?: UserInfo | null;
+    feedOpts?: UserFeedOptionsInput;
 }
 
 /**
@@ -104,6 +103,7 @@ export const createUserFeed = async ({
     email,
     userId,
     userInfo,
+    feedOpts,
 }: CreateUserFeedArgs) => {
     if (!email && !userId) throw new Error('Not enough arguments to create new user feed');
     const isUserLoggedIn = !!userId;
@@ -131,13 +131,16 @@ export const createUserFeed = async ({
         }
         if (userFeed && userFeed.activated) throw new Error('feed was already added');
 
-        userFeed = UserFeed.create({
-            activated: shouldActivate,
-            feed,
-            userId,
-            feedId: feed.id,
-        });
-
+        userFeed =
+            userFeed ||
+            UserFeed.create({
+                activated: shouldActivate,
+                feed,
+                userId,
+                feedId: feed.id,
+            });
+        userFeed.feed = feed;
+        if (feedOpts) qR.manager.getRepository(UserFeed).merge(userFeed, feedOpts);
         await qR.manager.save(userFeed);
         await qR.commitTransaction();
     } catch (err) {
