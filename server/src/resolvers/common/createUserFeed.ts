@@ -129,7 +129,7 @@ export const createUserFeed = async ({
                 where: { userId, feedId: feed.id },
             });
         }
-        if (userFeed) throw new Error('feed was already added');
+        if (userFeed && userFeed.activated) throw new Error('feed was already added');
 
         userFeed = UserFeed.create({
             activated: shouldActivate,

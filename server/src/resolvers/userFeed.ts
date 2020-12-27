@@ -11,6 +11,7 @@ import {
     UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+import { number } from 'joi';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
@@ -28,6 +29,7 @@ import { subscriptionVerifyEmail } from './common/confirmationMail';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
 import { Feed } from '../entities/Feed';
 import { activateUserFeed } from './common/feedDBQueries';
+import { User } from '../entities/User';
 
 @ObjectType()
 class UserFeedResponse {
@@ -104,9 +106,22 @@ export class UserFeedResolver {
         if (id !== userFeedId) {
             return { errors: [new ArgumentError('token', 'wrong or expired token')] };
         }
-        const userFeed = await activateUserFeed(parseInt(userFeedId));
+        const result = await activateUserFeed(parseInt(userFeedId));
         await redis.del(key);
-        return { userFeed };
+        return result;
+    }
+
+    /**  If user has verified their email they can activate anonymously added feed
+    that wasn't yet activated */
+    @UseMiddleware(auth())
+    @Mutation(() => UserFeedResponse)
+    async setFeedActivated(@Arg('userFeedId') userFeedId: number, @Ctx() { req }: MyContext) {
+        const { userId } = req.session;
+        const user = await User.findOne(userId);
+        if (!user?.emailVerified) {
+            return { errors: [{ message: "user didn't verified email" }] };
+        }
+        return activateUserFeed(userFeedId, userId);
     }
 
     /* Delete feed from current user */
