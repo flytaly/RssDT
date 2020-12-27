@@ -3,6 +3,7 @@ import FeedParser, { Item, Meta } from 'feedparser';
 import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
 import { Readable } from 'stream';
+import normalizeUrl from 'normalize-url';
 import { maxItemsInFeed } from '../constants';
 
 const MAX_ITEMS = maxItemsInFeed;
@@ -30,8 +31,11 @@ type ItemWithPubdate = {
  * see: https://www.petefreitag.com/item/384.cfm
  * @param html - HTML page
  */
-const findFeedUrl = (html: string, baseUrl: string) => {
+const findFeedUrl = (html: string, baseUrl: string, normalize = true) => {
     const dom = new jsdom.JSDOM(html);
+
+    const normUrl = (url: string) =>
+        normalize ? normalizeUrl(url, { defaultProtocol: 'https://' }) : url;
 
     const rss = dom.window.document.querySelector('link[type="application/rss+xml"]');
     const atom = dom.window.document.querySelector('link[type="application/atom+xml"]');
@@ -39,14 +43,14 @@ const findFeedUrl = (html: string, baseUrl: string) => {
         const href = rss.getAttribute('href');
         if (href) {
             const url = new URL(href, baseUrl).href;
-            if (url) return url;
+            if (url) return normUrl(url);
         }
     }
     if (atom) {
         const href = atom.getAttribute('href');
         if (href) {
             const url = new URL(href, baseUrl).href;
-            if (url) return url;
+            if (url) return normUrl(url);
         }
     }
     return null;

@@ -1,4 +1,4 @@
-import { getConnection, getManager, LessThan } from 'typeorm';
+import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
 import moment from 'moment';
 import { IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
 import { Enclosure } from '../entities/Enclosure';
@@ -52,16 +52,18 @@ const getItemsWithPubDate = (feedId: number) =>
         }[]
     >;
 
-export const insertNewItems = async (items: Item[]) => {
-    const con = getConnection();
-    const result = await con.createQueryBuilder().insert().into(Item).values(items).execute();
+export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) => {
+    const qB = queryRunner
+        ? queryRunner.manager.createQueryBuilder()
+        : getConnection().createQueryBuilder();
+    const result = await qB.insert().into(Item).values(items).execute();
     const encs: Enclosure[] = [];
     items.forEach(({ enclosures }) => {
         if (enclosures?.length) {
             encs.push(...enclosures);
         }
     });
-    await con.createQueryBuilder().insert().into(Enclosure).values(encs).execute();
+    await qB.insert().into(Enclosure).values(encs).execute();
     return result;
 };
 

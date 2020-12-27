@@ -5,7 +5,9 @@ import { Feed } from '../../entities/Feed';
 import { Options } from '../../entities/Options';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
-import { checkFeedInfo, getFeedStream } from '../../feed-parser';
+import { getFeedStream, parseFeed } from '../../feed-parser';
+import { createSanitizedItem } from '../../feed-parser/filter-item';
+import { insertNewItems } from '../../feed-watcher/watcher-utils';
 import { logger } from '../../logger';
 import { ArgumentError } from './ArgumentError';
 import { UserFeedOptionsInput } from './inputs';
@@ -57,32 +59,69 @@ const upsertUserAndReturn = async (
     return user;
 };
 
-const processFeed = async (url: string) => {
-    let feed = await Feed.findOne({ where: { url } });
+const getFeedVariations = (url: string) => {
+    const urlsArray = [{ url }];
+    const httpsUrl = url.replace(/^http:\/\//, 'https://');
+    if (httpsUrl !== url) {
+        urlsArray.push({ url: httpsUrl });
+    }
+    return urlsArray;
+};
 
-    let feedMeta: FeedParser.Meta | undefined;
+const processFeed = async (url: string) => {
+    let feed = await Feed.findOne({ where: getFeedVariations(url) });
+    if (feed) return { feed };
+    let feedMeta: FeedParser.Meta;
+    let feedItems: FeedParser.Item[];
     let newUrl: string = url;
-    if (!feed) {
-        try {
-            const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
-            newUrl = feedUrl;
-            const { isFeed, meta } = await checkFeedInfo(feedStream);
-            if (!isFeed) throw new Error('Not a feed');
-            feedMeta = meta;
-        } catch (e) {
-            if (e.message === 'Not a feed') {
-                return { errors: [new ArgumentError('url', e.message)] };
-            }
-            logger.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
-            return { errors: [new ArgumentError('url', `Couldn't get access to feed`)] };
+    try {
+        const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
+        newUrl = feedUrl;
+        ({ feedMeta, feedItems } = await parseFeed(feedStream));
+        if (!feedMeta) throw new Error('Not a feed');
+    } catch (e) {
+        if (e.message === 'Not a feed') {
+            return { errors: [new ArgumentError('url', e.message)] };
         }
+        logger.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
+        return { errors: [new ArgumentError('url', `Couldn't get access to feed`)] };
     }
     // actual url of the feed
     if (newUrl !== url) {
         url = newUrl;
-        feed = await Feed.findOne({ where: { url } });
+        feed = await Feed.findOne({ where: getFeedVariations(url) });
     }
-    return { feedMeta, feed, url, errors: null };
+    return { feedMeta, feedItems, url, feed };
+};
+
+// creates activated feed with items
+const saveActivatedFeed = async (
+    url: string,
+    feedMeta: FeedParser.Meta,
+    feedItems: FeedParser.Item[],
+    queryRunner: QueryRunner,
+) => {
+    const ts = new Date();
+    const feed = Feed.create({ url });
+    feed.addMeta(feedMeta);
+    feed.activated = true;
+    feed.lastUpdAttempt = ts;
+    feed.lastSuccessfulUpd = ts;
+    await queryRunner.manager.save(feed);
+    if (feedItems?.length) {
+        const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
+        await insertNewItems(itemsToSave, queryRunner);
+    }
+    return feed;
+};
+
+// creates activated feed with items
+const saveNotActivatedFeed = async (url: string, feedMeta: FeedParser.Meta, qR: QueryRunner) => {
+    const feed = Feed.create({ url });
+    feed.addMeta(feedMeta);
+    feed.activated = false;
+    await qR.manager.save(feed);
+    return feed;
 };
 
 interface CreateUserFeedArgs {
@@ -108,7 +147,7 @@ export const createUserFeed = async ({
     if (!email && !userId) throw new Error('Not enough arguments to create new user feed');
     const isUserLoggedIn = !!userId;
     // eslint-disable-next-line prefer-const
-    let { feed, errors, url, feedMeta } = await processFeed($url);
+    let { feed, errors, url, feedMeta, feedItems } = await processFeed($url);
     if (errors) return { errors };
 
     let userFeed: UserFeed | undefined;
@@ -120,10 +159,9 @@ export const createUserFeed = async ({
         userId = user.id;
         const shouldActivate = isUserLoggedIn && user.emailVerified;
         if (!feed) {
-            feed = Feed.create({ url });
-            feed.addMeta(feedMeta);
-            feed.activated = shouldActivate;
-            await qR.manager.save(feed);
+            feed = shouldActivate
+                ? await saveActivatedFeed(url!, feedMeta!, feedItems!, qR)
+                : await saveNotActivatedFeed(url!, feedMeta!, qR);
         } else {
             userFeed = await qR.manager.findOne(UserFeed, {
                 where: { userId, feedId: feed.id },
