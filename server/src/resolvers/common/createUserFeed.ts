@@ -1,5 +1,6 @@
 import FeedParser from 'feedparser';
 import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 import { defaultLocale, defaultTimeZone } from '../../constants';
 import { Feed } from '../../entities/Feed';
 import { Options } from '../../entities/Options';
@@ -178,6 +179,7 @@ export const createUserFeed = async ({
                 userId,
                 feedId: feed.id,
             });
+        if (!userFeed.unsubscribeToken) userFeed.unsubscribeToken = uuidv4();
         userFeed.feed = feed;
         if (feedOpts) qR.manager.getRepository(UserFeed).merge(userFeed, feedOpts);
         await qR.manager.save(userFeed);

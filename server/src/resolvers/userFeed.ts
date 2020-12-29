@@ -174,4 +174,18 @@ export class UserFeedResolver {
             .execute();
         return { userFeed: result.raw[0] as UserFeed };
     }
+
+    @Mutation(() => Boolean)
+    async unsubscribeByToken(@Arg('token') token: string, @Arg('id') id: string) {
+        if (!token || !id) return false;
+        const result = await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(UserFeed)
+            .where('id = :id', { id })
+            .andWhere('unsubscribeToken = :token', { token })
+            .execute();
+        if (result?.affected) return true;
+        return false;
+    }
 }

@@ -2,6 +2,7 @@ import argon2 from 'argon2';
 import faker from 'faker';
 import nock from 'nock';
 import { Connection } from 'typeorm';
+import * as uuid from 'uuid';
 import { initDbConnection } from '../../dbConnection';
 import { Feed } from '../../entities/Feed';
 import { Item } from '../../entities/Item';
@@ -78,6 +79,9 @@ describe('Add user feed without authentication', () => {
         expect(userFeedInDB?.user).toMatchObject({ ...userInfo, emailVerified: activated });
         expect(userFeedInDB?.feed).toMatchObject({ url: input.feedUrl, activated });
         expect(userFeedInDB).toMatchObject({ ...feedOpts, activated });
+
+        expect(userFeedInDB?.unsubscribeToken).not.toBeUndefined();
+        expect(uuid.validate(userFeedInDB!.unsubscribeToken)).toBeTruthy();
     }
 
     test('should create feed, user and send activation mail', async () => {
@@ -162,6 +166,9 @@ describe('Add user feed after authentication', () => {
         expect(userFeed).not.toBeNull();
         expect(userFeed?.feed.url).toBe(feed1.feedUrl);
         expect(userFeed?.activated).toBe(false);
+        const userFeedInDB = await UserFeed.findOne(userFeed?.id);
+        expect(userFeedInDB?.unsubscribeToken).not.toBeUndefined();
+        expect(uuid.validate(userFeedInDB!.unsubscribeToken)).toBeTruthy();
         tokenAndId = await testMailAndGetToken(email, userFeed?.id!);
     });
 

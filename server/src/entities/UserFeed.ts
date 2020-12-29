@@ -66,6 +66,6 @@ export class UserFeed extends BaseEntity {
     @Column()
     feedId: number;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, unique: true })
     unsubscribeToken: string;
 }

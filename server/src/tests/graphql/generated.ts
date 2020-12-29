@@ -162,6 +162,7 @@ export type Mutation = {
   setFeedActivated: UserFeedResponse;
   deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
+  unsubscribeByToken: Scalars['Boolean'];
 };
 
 
@@ -234,6 +235,12 @@ export type MutationDeleteMyFeedsArgs = {
 export type MutationSetFeedOptionsArgs = {
   opts: UserFeedOptionsInput;
   id: Scalars['Float'];
+};
+
+
+export type MutationUnsubscribeByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -550,6 +557,17 @@ export type SetOptionsMutation = (
       & Pick<ArgumentError, 'message' | 'argument'>
     )>> }
   ) }
+);
+
+export type UnsubscribeByTokenMutationVariables = Exact<{
+  token: Scalars['String'];
+  id: Scalars['String'];
+}>;
+
+
+export type UnsubscribeByTokenMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'unsubscribeByToken'>
 );
 
 export type UpdateUserInfoMutationVariables = Exact<{
@@ -892,6 +910,11 @@ export const SetOptionsDocument = gql`
   }
 }
     ${OptionsFieldsFragmentDoc}`;
+export const UnsubscribeByTokenDocument = gql`
+    mutation unsubscribeByToken($token: String!, $id: String!) {
+  unsubscribeByToken(token: $token, id: $id)
+}
+    `;
 export const UpdateUserInfoDocument = gql`
     mutation updateUserInfo($userInfo: UserInfoInput!) {
   updateUserInfo(userInfo: $userInfo) {
@@ -1021,6 +1044,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     setOptions(variables: SetOptionsMutationVariables): Promise<SetOptionsMutation> {
       return withWrapper(() => client.request<SetOptionsMutation>(print(SetOptionsDocument), variables));
+    },
+    unsubscribeByToken(variables: UnsubscribeByTokenMutationVariables): Promise<UnsubscribeByTokenMutation> {
+      return withWrapper(() => client.request<UnsubscribeByTokenMutation>(print(UnsubscribeByTokenDocument), variables));
     },
     updateUserInfo(variables: UpdateUserInfoMutationVariables): Promise<UpdateUserInfoMutation> {
       return withWrapper(() => client.request<UpdateUserInfoMutation>(print(UpdateUserInfoDocument), variables));

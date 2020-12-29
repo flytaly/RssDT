@@ -1,6 +1,8 @@
 import faker from 'faker';
 import nock from 'nock';
 import { Connection } from 'typeorm';
+import argon2 from 'argon2';
+import * as uuid from 'uuid';
 import { initDbConnection } from '../../dbConnection';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
@@ -10,7 +12,8 @@ import { getSdk } from '../graphql/generated';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
 import { generateFeed } from '../test-utils/generate-feed';
 import getTestClient from '../test-utils/getClient';
-import { generateUserAndGetSdk } from '../test-utils/login';
+import { generateUserAndGetSdk, getSdkWithLoggedInUser } from '../test-utils/login';
+import { deleteEmails } from '../test-utils/test-emails';
 
 let dbConnection: Connection;
 
@@ -144,5 +147,47 @@ describe('UserFeed options', () => {
         const ufAfter = await UserFeed.findOne(userFeedId);
         expect(ufAfter?.attachments).toBe(TernaryState.enable);
         await anotherUser.user.remove();
+    });
+});
+
+describe('Unsubscribe', () => {
+    const password = faker.internet.password(8);
+    const feed = generateFeed();
+    const email = faker.internet.email().toLowerCase();
+    let sdk: ReturnType<typeof getSdk>;
+
+    beforeAll(async () => {
+        feed.mockRequests();
+        await deleteUserWithEmail(email);
+        await User.create({
+            email,
+            password: await argon2.hash(password),
+            emailVerified: true,
+        }).save();
+        sdk = await getSdkWithLoggedInUser(email, password);
+    });
+
+    afterAll(() =>
+        Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl), deleteEmails()]),
+    );
+
+    test('unsubscribeByToken mutation: should unsubscribe', async () => {
+        const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({
+            input: { feedUrl: feed.feedUrl },
+        });
+        const { userFeed, errors } = addFeedToCurrentUser!;
+        expect(errors).toBeNull();
+        expect(userFeed).not.toBeNull();
+        const { id } = userFeed!;
+        const uf = await UserFeed.findOne(id);
+        expect(uf?.unsubscribeToken).not.toBeNull();
+        expect(uuid.validate(uf!.unsubscribeToken)).toBe(true);
+        const { unsubscribeByToken } = await sdk.unsubscribeByToken({
+            id: String(id),
+            token: uf!.unsubscribeToken,
+        });
+        expect(unsubscribeByToken).toBe(true);
+        const afterDelete = await UserFeed.findOne(id);
+        expect(afterDelete).toBeUndefined();
     });
 });
