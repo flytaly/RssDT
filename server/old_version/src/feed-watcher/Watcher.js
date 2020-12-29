@@ -17,14 +17,17 @@ class Watcher {
      * @param {number} options.storeNumberOfItems - number of items to store after itemMaxTime
      * @param {object} options.cache - cache for locking current loading url
      */
-    constructor(db, {
-        cron = '*/5 * * * *',
-        maxConnections = 40,
-        maxNewItems = 150,
-        itemMaxTime = (1000 * 60 * 60 * 24) * 2, // 2 days
-        storeNumberOfItems = 30,
-        cache = redisCache,
-    } = {}) {
+    constructor(
+        db,
+        {
+            cron = '*/5 * * * *',
+            maxConnections = 40,
+            maxNewItems = 150,
+            itemMaxTime = 1000 * 60 * 60 * 24 * 2, // 2 days
+            storeNumberOfItems = 30,
+            cache = redisCache,
+        } = {},
+    ) {
         this.db = db;
         this.cron = cron;
         this.maxConnections = maxConnections;
@@ -41,7 +44,10 @@ class Watcher {
     }
 
     async getItems(url) {
-        const { items } = await this.db.query.feed({ where: { url } }, '{ items { pubDate guid } }');
+        const { items } = await this.db.query.feed(
+            { where: { url } },
+            '{ items { pubDate guid } }',
+        );
         return items;
     }
 
@@ -50,18 +56,22 @@ class Watcher {
      */
     async deleteOldItems(url) {
         try {
-            const lastItem = (await this.db.query.feedItems({
-                skip: this.storeNumberOfItems,
-                last: 1,
-                where: { feed: { url } },
-            },
-            '{ id }'));
+            const lastItem = await this.db.query.feedItems(
+                {
+                    skip: this.storeNumberOfItems,
+                    last: 1,
+                    where: { feed: { url } },
+                },
+                '{ id }',
+            );
             const lastItemId = lastItem[0] ? lastItem[0].id : null;
             if (lastItemId) {
                 const oldItems = {
-                    AND: [{ createdAt_lt: new Date(Date.now() - this.itemMaxTime) },
+                    AND: [
+                        { createdAt_lt: new Date(Date.now() - this.itemMaxTime) },
                         { feed: { url } },
-                        { id_lte: lastItemId }],
+                        { id_lte: lastItemId },
+                    ],
                 };
                 await this.db.mutation.deleteManyItemEnclosures({
                     where: {
@@ -71,7 +81,9 @@ class Watcher {
                 const { count } = await this.db.mutation.deleteManyFeedItems({
                     where: oldItems,
                 });
-                if (count) { logger.info({ count, url }, 'items were deleted'); }
+                if (count) {
+                    logger.info({ count, url }, 'items were deleted');
+                }
             }
         } catch (e) {
             logger.error(e);
@@ -79,9 +91,7 @@ class Watcher {
     }
 
     async saveFeed(url, newItems) {
-        const items = newItems
-            .sort((a, b) => a.pubDate - b.pubDate)
-            .slice(-this.maxNewItems);
+        const items = newItems.sort((a, b) => a.pubDate - b.pubDate).slice(-this.maxNewItems);
         const query = {
             where: { url },
             data: { items: { create: items } },
@@ -105,7 +115,7 @@ class Watcher {
                 data: meta,
             });
         } catch ({ message }) {
-            logger.warn({ url, message }, 'meta wasn\'t updated');
+            logger.warn({ url, message }, "meta wasn't updated");
         }
     }
 
@@ -114,28 +124,39 @@ class Watcher {
         const feeds = await this.getFeedsInfo();
         const limit = pLimit(this.maxConnections);
         let [totalFeeds, totalNewItems] = [0, 0];
-        await Promise.all(feeds.map(({ url }) => limit(async () => this.cache.isLocked(url)
-            .then(async (isLocked) => {
-                try {
-                    if (isLocked) {
-                        logger.error({ url }, 'The feed is locked, skip updating');
-                        return;
-                    }
-                    await this.cache.lock(url);
-                    /* accumulator += await... -- doesn't work in map because before promise resolves,
+        await Promise.all(
+            feeds.map(({ url }) =>
+                limit(async () =>
+                    this.cache
+                        .isLocked(url)
+                        .then(async (isLocked) => {
+                            try {
+                                if (isLocked) {
+                                    logger.error({ url }, 'The feed is locked, skip updating');
+                                    return;
+                                }
+                                await this.cache.lock(url);
+                                /* accumulator += await... -- doesn't work in map because before promise resolves,
                     accumulation value in every function stays 0 */
-                    totalNewItems = await this.updateFeed(url) + totalNewItems;
-                    await this.setFeedUpdateTime(url);
-                    totalFeeds += 1;
-                } catch (error) {
-                    logger.error({ url, message: error.message }, 'Couldn\'t update a feed');
-                }
-                await this.cache.unlock(url);
-            })
-            .catch(e => logger.error(e)) // Catch cache errors
-            .then(() => {
-                buildAndSendDigests(url);
-            }))));
+                                totalNewItems = (await this.updateFeed(url)) + totalNewItems;
+                                await this.setFeedUpdateTime(url);
+                                totalFeeds += 1;
+                            } catch (error) {
+                                logger.error(
+                                    { url, message: error.message },
+                                    "Couldn't update a feed",
+                                );
+                            }
+                            j;
+                            await this.cache.unlock(url);
+                        })
+                        .catch((e) => logger.error(e)) // Catch cache errors
+                        .then(() => {
+                            buildAndSendDigests(url);
+                        }),
+                ),
+            ),
+        );
         logger.info({ totalFeeds, totalNewItems }, 'Feeds were updated');
     }
 

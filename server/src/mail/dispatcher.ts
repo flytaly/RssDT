@@ -1,7 +1,11 @@
 import { logger } from '../logger';
 import { DigestSchedule } from '../types/enums';
-import { digestNames } from './digestNames';
+import { digestNames } from './digest-names';
 import { transport } from './transport';
+
+export async function buildAndSendDigests(url: string) {
+    // TODO: implement queue
+}
 
 export async function sendConfirmEmail(email: string, token: string, userId: number) {
     const url = `${process.env.FRONTEND_URL}/confirm-register?token=${token}&id=${userId}`;

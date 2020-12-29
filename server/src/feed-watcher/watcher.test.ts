@@ -1,28 +1,30 @@
-/* eslint-disable import/first */
-
 import moment from 'moment';
-import { Connection, getRepository } from 'typeorm';
 import faker from 'faker';
-import { getNewItems } from '../feed-parser/parse-utils';
-import { initDbConnection } from '../dbConnection';
-import { deleteFeedWithUrl } from '../tests/test-utils/dbQueries';
-import { generateItem, generateMeta } from '../tests/test-utils/generate-feed';
 import Watcher from './watcher';
-import { Feed } from '../entities/Feed';
-import { Item } from '../entities/Item';
+import * as watcherUtils from './watcher-utils';
+import { throttleMultiplier } from '../constants';
+import { buildAndSendDigests } from '../mail/dispatcher';
 
-jest.mock('../feed-parser/parse-utils.ts', () => ({
-    getNewItems: jest.fn(async () => {}),
+const updateFeedData = watcherUtils.updateFeedData as jest.Mock;
+const getFeedsToUpdate = watcherUtils.getFeedsToUpdate as jest.Mock;
+
+jest.mock('./watcher-utils.ts', () => ({
+    updateFeedData: jest.fn(async () => [0, 0]),
+    getFeedsToUpdate: jest.fn(async () => []),
+}));
+jest.mock('../mail/dispatcher.ts', () => ({
+    buildAndSendDigests: jest.fn(async () => {}),
 }));
 
-let db: Connection;
+const realDate = Date.now;
+const tsNow = 1600000000000;
 
-beforeAll(async () => {
-    db = await initDbConnection();
+beforeAll(() => {
+    global.Date.now = jest.fn(() => tsNow); // 2020-09-13T12:26:40.000
 });
 
 afterAll(() => {
-    return db.close();
+    global.Date.now = realDate;
 });
 
 describe('Feed watcher schedule', () => {
@@ -45,56 +47,37 @@ describe('Feed watcher schedule', () => {
     // });
 });
 
+function generatePartialFeeds(num: number, sinceLastUpdateTs = 1000 * 60 * 5) {
+    return new Array(num).fill({}).map((_, index) => {
+        const ts = new Date(tsNow - sinceLastUpdateTs);
+        const feed: watcherUtils.PartialFeed = {
+            url: `${faker.internet.url()}/feed.rss`,
+            id: index,
+            throttled: 0,
+            lastSuccessfulUpd: ts,
+            lastUpdAttempt: ts,
+        };
+        return feed;
+    });
+}
+
 describe('Watcher Update', () => {
     const feedWatcher = new Watcher();
-    const feedUrl = faker.internet.url();
-    const oldItems = [
-        generateItem(new Date(Date.now() - 2 * 360000)),
-        generateItem(new Date(Date.now() - 3 * 360000)),
-        generateItem(new Date(Date.now() - 360000)),
-    ];
-    const feedMeta = generateMeta();
+    const feeds = generatePartialFeeds(6, throttleMultiplier + 100);
+    feeds[0].throttled = 1;
+    feeds[1].throttled = 2;
+    feeds[2].throttled = 3;
+    getFeedsToUpdate.mockImplementation(async () => feeds);
 
-    beforeAll(async () => {
-        const feed = await getRepository(Feed).merge(new Feed(), feedMeta, { url: feedUrl }).save();
-        await Promise.all(
-            oldItems.map((i) => {
-                const item = new Item();
-                Object.assign(item, i, { feedId: feed.id });
-                return item.save();
-            }),
-        );
-    });
-    afterAll(() => Promise.all([deleteFeedWithUrl(feedUrl)]));
-
-    test('should update', async () => {
-        const newItems = [
-            generateItem(new Date(Date.now() - 1000)),
-            generateItem(new Date(Date.now())),
-        ];
-        const newMeta = {
-            title: 'new Title',
-            description: 'new description',
-        };
-
-        (getNewItems as jest.Mock).mockImplementation(
-            async (url: string, items: Array<{ pubdate: Date; guid: string }>) => {
-                expect(url).toBe(feedUrl);
-                expect(items).toHaveLength(oldItems.length);
-                const sorted = oldItems.sort(
-                    (a, b) => b.pubdate?.getTime()! - a.pubdate?.getTime()!,
-                );
-                items.forEach((i, idx) => expect(i.guid).toBe(sorted[idx].guid));
-                return { feedItems: newItems, feedMeta: newMeta };
-            },
-        );
+    test('should call updateFeedData on not throttled feed', async () => {
         await feedWatcher.update();
-        expect(getNewItems).toHaveBeenCalled();
-        const feedUpd = await Feed.findOneOrFail({ where: { url: feedUrl }, relations: ['items'] });
-        expect(feedUpd).toMatchObject(newMeta);
-        expect(feedUpd.items).toHaveLength(oldItems.length + newItems.length);
-        newItems.forEach(({ guid }) => {
-            expect(feedUpd.items.find((i) => guid === i.guid)).toBeTruthy();
-        });
+        expect(getFeedsToUpdate).toHaveBeenCalled();
+        expect(updateFeedData).toHaveBeenCalledTimes(4);
+        expect(updateFeedData).toHaveBeenCalledWith(feeds[0].url);
+        expect(updateFeedData).not.toHaveBeenCalledWith(feeds[1].url);
+    });
+
+    test('should call buildAndSendDigests after updating', async () => {
+        feeds.forEach(({ url }) => expect(buildAndSendDigests).toHaveBeenCalledWith(url));
     });
 });

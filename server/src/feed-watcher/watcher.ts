@@ -2,6 +2,7 @@ import { CronJob, CronTime } from 'cron';
 import PQueue from 'p-queue';
 import { throttleMultiplier } from '../constants';
 import { logger } from '../logger';
+import { buildAndSendDigests } from '../mail/dispatcher';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
 type WatcherProps = {
@@ -22,7 +23,7 @@ export default class Watcher {
 
     updating = false;
 
-    constructor({ cron = '*/5 * * * *', concurrency = 20 }: WatcherProps = {}) {
+    constructor({ cron = '*/5 * * * *', concurrency = 10 }: WatcherProps = {}) {
         this.cron = cron;
         this.initJob();
         this.queue = new PQueue({ concurrency });
@@ -37,15 +38,17 @@ export default class Watcher {
         const now = Date.now();
         let [totalFeeds, totalItems] = [0, 0];
         await this.queue.addAll(
-            feeds
-                .filter((f) => now > throttleMultiplier * f.throttled + f.lastUpdAttempt.getTime())
-                .map(({ url }) => async () => {
+            feeds.map(({ url, throttled, lastUpdAttempt }) => async () => {
+                if (now > throttleMultiplier * throttled + lastUpdAttempt.getTime()) {
                     const [isSuccessful, itemsNum] = await updateFeedData(url);
                     if (isSuccessful) {
                         totalFeeds += 1;
                         totalItems += itemsNum;
                     }
-                }),
+                }
+
+                buildAndSendDigests(url);
+            }),
         );
         logger.info({ totalFeeds, totalItems }, 'End updating');
         this.updating = false;

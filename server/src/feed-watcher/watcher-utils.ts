@@ -8,7 +8,7 @@ import { getNewItems } from '../feed-parser';
 import { createSanitizedItem } from '../feed-parser/filter-item';
 import { logger } from '../logger';
 
-type PartialFeed = {
+export type PartialFeed = {
     id: number;
     url: string;
     throttled: number;
