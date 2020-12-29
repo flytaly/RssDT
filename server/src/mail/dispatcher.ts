@@ -1,4 +1,6 @@
 import { logger } from '../logger';
+import { DigestSchedule } from '../types/enums';
+import { digestNames } from './digestNames';
 import { transport } from './transport';
 
 export async function sendConfirmEmail(email: string, token: string, userId: number) {
@@ -33,21 +35,35 @@ Otherwise, ignore this message.`,
     logger.info(result, 'rest password email has been sent');
 }
 
+export interface ConfirmFeedProps {
+    email: string;
+    token: string;
+    userFeedId: number;
+    title: string;
+    digestType: DigestSchedule;
+}
+
 /** Send an email to confirm subscription */
-export async function sendConfirmSubscription(
-    email: string,
-    token: string,
-    userFeedId: number,
-    title: string,
-) {
+export async function sendConfirmSubscription({
+    email,
+    token,
+    userFeedId,
+    title,
+    digestType,
+}: ConfirmFeedProps) {
+    const digestString =
+        digestType && digestType !== DigestSchedule.disable ? `(${digestNames[digestType]})` : '';
     const url = `${process.env.FRONTEND_URL}/confirm?token=${token}&id=${userFeedId}`;
     const result = await transport.sendMail({
         from: process.env.MAIL_FROM,
         to: email,
         subject: `Confirm subscription to ${title}`,
-        text: `Please, confirm subscription to ${title}: ${url}
+        text: `Please, confirm subscription to ${title} ${digestString}:
+        ${url}
+
         Ignore this message if you didn't subscribe`,
-        html: `Please, confirm subscription to <b>${title}</b>: <a href="${url}">${url}</a><br><br>
+        html: `Please, confirm subscription to <b>${title}</b> ${digestString}: <br>
+        <a href="${url}">${url}</a><br><br>
         Ignore this message if you didn't subscribe`,
     });
     logger.info(result, 'feed confirmation email has been sent');

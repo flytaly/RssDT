@@ -78,7 +78,11 @@ describe('Add user feed without authentication', () => {
         });
         expect(userFeedInDB?.user).toMatchObject({ ...userInfo, emailVerified: activated });
         expect(userFeedInDB?.feed).toMatchObject({ url: input.feedUrl, activated });
-        expect(userFeedInDB).toMatchObject({ ...feedOpts, activated });
+        expect(userFeedInDB).toMatchObject({
+            ...feedOpts,
+            schedule: DigestSchedule.daily,
+            activated,
+        });
 
         expect(userFeedInDB?.unsubscribeToken).not.toBeUndefined();
         expect(uuid.validate(userFeedInDB!.unsubscribeToken)).toBeTruthy();

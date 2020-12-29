@@ -5,10 +5,12 @@ import {
     PASSWORD_RESET_PREFIX,
     SUBSCRIPTION_CONFIRM_PREFIX,
 } from '../../constants';
+import { UserFeed } from '../../entities/UserFeed';
 import {
     sendConfirmEmail,
     sendConfirmSubscription,
     sendPasswordReset,
+    ConfirmFeedProps,
 } from '../../mail/dispatcher';
 
 export async function verificationEmail(redis: Redis, userId: number, email: string) {
@@ -23,13 +25,11 @@ export async function resetPasswordEmail(redis: Redis, userId: number, email: st
     return sendPasswordReset(email, token, userId);
 }
 
-export async function subscriptionVerifyEmail(
-    redis: Redis,
-    email: string,
-    title: string,
-    userFeedId: number,
-) {
+interface PartialConfirmFeedProps extends Omit<ConfirmFeedProps, 'token'> {}
+
+export async function subscriptionVerifyEmail(redis: Redis, props: PartialConfirmFeedProps) {
     const token = uuidv4();
+    const { userFeedId } = props;
     await redis.set(SUBSCRIPTION_CONFIRM_PREFIX + token, userFeedId, 'EX', 60 * 60 * 24 * 2);
-    return sendConfirmSubscription(email, token, userFeedId, title);
+    return sendConfirmSubscription({ ...props, token });
 }

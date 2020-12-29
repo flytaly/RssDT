@@ -17,6 +17,7 @@ import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { MyContext } from '../types';
+import { DigestSchedule } from '../types/enums';
 import { ArgumentError } from './common/ArgumentError';
 import { subscriptionVerifyEmail } from './common/confirmationMail';
 import { createUserFeed } from './common/createUserFeed';
@@ -71,17 +72,18 @@ export class UserFeedResolver {
         @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
         @Ctx() { redis }: MyContext,
     ) {
-        const { errors, userFeed, feed } = await createUserFeed({
-            url,
-            email,
-            userId: null,
-            userInfo,
-            feedOpts,
-        });
-        if (!errors) {
-            await subscriptionVerifyEmail(redis, email, feed!.title, userFeed!.id);
+        feedOpts = feedOpts || {};
+        if (!feedOpts.schedule || feedOpts.schedule === DigestSchedule.disable) {
+            feedOpts.schedule = DigestSchedule.daily;
         }
-        return { errors, userFeed };
+        const results = await createUserFeed({ url, email, userId: null, userInfo, feedOpts });
+        if (results.errors) return { errors: results.errors };
+
+        const { title } = results.feed!;
+        const { id: userFeedId, schedule: digestType } = results.userFeed!;
+        await subscriptionVerifyEmail(redis, { email, title, userFeedId, digestType });
+
+        return { userFeed: results.userFeed };
     }
 
     /* Add feed to current user account */
@@ -99,10 +101,17 @@ export class UserFeedResolver {
             userId: req.session.userId,
             feedOpts,
         });
-        if (!errors && !user?.emailVerified) {
-            await subscriptionVerifyEmail(redis, user?.email!, feed!.title, userFeed!.id);
+        if (errors) return { errors };
+
+        if (userFeed?.schedule !== 'disable' && !user?.emailVerified) {
+            await subscriptionVerifyEmail(redis, {
+                email: user!.email,
+                title: feed!.title,
+                userFeedId: userFeed!.id,
+                digestType: userFeed!.schedule,
+            });
         }
-        return { errors, userFeed };
+        return { userFeed };
     }
 
     @Mutation(() => UserFeedResponse)
