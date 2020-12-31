@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import 'dotenv-safe/config';
+import '../dotenv';
 import Watcher from './watcher';
 import { initLogFiles } from '../logger';
 import { IS_DEV } from '../constants';

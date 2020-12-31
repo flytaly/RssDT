@@ -27,7 +27,7 @@ export const getFeedsToUpdate = (minutes = 4) =>
             },
             where: [
                 {
-                    // TODO: activated: true,
+                    activated: true,
                     lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * minutes)),
                 },
             ],

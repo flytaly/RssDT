@@ -78,6 +78,6 @@ describe('Watcher Update', () => {
     });
 
     test('should call buildAndSendDigests after updating', async () => {
-        feeds.forEach(({ url }) => expect(buildAndSendDigests).toHaveBeenCalledWith(url));
+        feeds.forEach(({ id }) => expect(buildAndSendDigests).toHaveBeenCalledWith(id));
     });
 });

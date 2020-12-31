@@ -32,7 +32,7 @@ export class UserFeed extends BaseEntity {
     activated: boolean;
 
     @Field(() => DigestSchedule)
-    @Column({ type: 'enum', enum: DigestSchedule, default: DigestSchedule.daily })
+    @Column({ type: 'enum', enum: DigestSchedule, default: DigestSchedule.disable })
     schedule: DigestSchedule;
 
     @Field(() => TernaryState)
@@ -50,6 +50,10 @@ export class UserFeed extends BaseEntity {
     @Field(() => Theme)
     @Column({ type: 'enum', enum: Theme, default: Theme.default })
     theme: Theme;
+
+    @Field(() => Date)
+    @CreateDateColumn({})
+    lastDigestSentAt: Date;
 
     @Field(() => Date)
     @CreateDateColumn()

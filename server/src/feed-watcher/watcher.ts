@@ -38,7 +38,7 @@ export default class Watcher {
         const now = Date.now();
         let [totalFeeds, totalItems] = [0, 0];
         await this.queue.addAll(
-            feeds.map(({ url, throttled, lastUpdAttempt }) => async () => {
+            feeds.map(({ id, url, throttled, lastUpdAttempt }) => async () => {
                 if (now > throttleMultiplier * throttled + lastUpdAttempt.getTime()) {
                     const [isSuccessful, itemsNum] = await updateFeedData(url);
                     if (isSuccessful) {
@@ -47,7 +47,7 @@ export default class Watcher {
                     }
                 }
 
-                buildAndSendDigests(url);
+                buildAndSendDigests(id);
             }),
         );
         logger.info({ totalFeeds, totalItems }, 'End updating');
