@@ -1,40 +1,49 @@
-import PQueue from 'p-queue';
-import { Not } from 'typeorm';
+import PQueue, * as pq from 'p-queue';
+import PriorityQueue from 'p-queue/dist/priority-queue';
+import { IS_TEST, maxItemsInDigest } from '../constants';
 import { Feed } from '../entities/Feed';
 import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
 import { DigestSchedule } from '../types/enums';
+import { composeDigest } from './compose-mail';
 import { digestNames } from './digest-names';
 import { isFeedReady } from './is-feed-ready';
+import { getItemsNewerThan, userFeedsWithDigests } from './query-helpers';
 import { transport } from './transport';
 
-const digestQueue = new PQueue({ concurrency: 5, interval: 1000, intervalCap: 10 });
-const emailQueue = new PQueue({ concurrency: 5, interval: 1000, intervalCap: 20 });
+const queueOpts = IS_TEST ? {} : { concurrency: 5, interval: 1000, intervalCap: 10 };
+const digestQueue = new PQueue(queueOpts);
+const emailQueue = new PQueue(queueOpts);
 
-export const filterReadyUserFeeds = (userFeeds: UserFeed[] = []) => userFeeds.filter(isFeedReady);
-
-const userFeedsWithDigests = async (feedId: number) => {
-    // ? Maybe 1 request with feed relation would be better, not sure.
-    //  At least, this way there is single feed object instead of multiple copies
-    return Promise.all([
-        UserFeed.find({
-            where: { feedId, activated: true, schedule: Not(DigestSchedule.disable) },
-            loadEagerRelations: true,
-            relations: ['user'],
-        }),
-        Feed.findOne(feedId),
-    ]);
+const hour = 1000 * 60 * 60;
+const getPeriod = (uf: UserFeed) => {
+    return new Date(Math.max(uf.lastDigestSentAt.getTime(), Date.now() - hour * 48));
 };
 
-export const buildAndSendDigests = (feedId: number) =>
-    digestQueue.add(async () => {
-        const [userFeeds, feed] = await userFeedsWithDigests(feedId);
-        const readyUF = filterReadyUserFeeds(userFeeds);
-        if (!readyUF.length) return;
-
-        // TODO: select items that newer than lastDigestSentAt and! newer than "current time - schedule duration".
-        // TODO: BUILD AND SEND
-    });
+export const buildAndSendDigests = async (feedId: number) => {
+    const userFeeds = await userFeedsWithDigests(feedId);
+    const readyUFs = userFeeds.filter(isFeedReady);
+    if (!readyUFs.length) return;
+    const feed = await Feed.findOneOrFail(feedId);
+    await digestQueue.addAll(
+        readyUFs.map((uf) => async () => {
+            const items = await getItemsNewerThan(feedId, getPeriod(uf), maxItemsInDigest);
+            if (!items.length) return;
+            const { text, html, errors } = composeDigest(uf, feed, items);
+            if (!errors?.length) {
+                const result = await transport.sendMail({
+                    from: process.env.MAIL_FROM,
+                    to: uf.user.email,
+                    // TODO:
+                    subject: 'TODO: make subject',
+                    text,
+                    html,
+                });
+                logger.info(result, 'digest email has been sent');
+            }
+        }),
+    );
+};
 
 export const sendConfirmEmail = async (email: string, token: string, userId: number) =>
     emailQueue.add(async () => {

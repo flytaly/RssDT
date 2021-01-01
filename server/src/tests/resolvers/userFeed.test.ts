@@ -117,7 +117,7 @@ describe('UserFeed options', () => {
         const { myFeeds } = await sdk.myFeeds();
         expect(myFeeds?.[0]).toMatchObject({
             activated: false,
-            schedule: DigestSchedule.daily,
+            schedule: DigestSchedule.disable,
             withContentTable: TernaryState.default,
             itemBody: TernaryState.default,
             attachments: TernaryState.default,

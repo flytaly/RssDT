@@ -13,7 +13,9 @@ export const defaultLocale = 'en-US';
 export const defaultTimeZone = 'UTC';
 
 export const throttleMultiplier = 1000 * 60 * 8; // 8 min
-export const maxItemsInFeed = 300;
+
+export const maxItemsInFeed = 500;
+export const maxItemsInDigest = 100;
 export const maxOldItemsInFeed = 30; // maximum number of items that was created more than one week ago
 
 export const windowDuration = 3; // hours - duration of the window in which Daily digest could be sent
