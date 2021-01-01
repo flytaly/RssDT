@@ -20,9 +20,7 @@ beforeAll(async () => {
     db = await initDbConnection();
 });
 
-afterAll(() => {
-    return db.close();
-});
+afterAll(() => db.close());
 
 describe('updateFeedData', () => {
     const feedUrl = faker.internet.url();

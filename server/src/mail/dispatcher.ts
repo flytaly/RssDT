@@ -1,11 +1,11 @@
-import PQueue, * as pq from 'p-queue';
-import PriorityQueue from 'p-queue/dist/priority-queue';
+import PQueue from 'p-queue';
 import { IS_TEST, maxItemsInDigest } from '../constants';
 import { Feed } from '../entities/Feed';
 import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
 import { DigestSchedule } from '../types/enums';
 import { composeDigest } from './compose-mail';
+import { composeEmailSubject } from './compose-subject';
 import { digestNames } from './digest-names';
 import { isFeedReady } from './is-feed-ready';
 import { getItemsNewerThan, userFeedsWithDigests } from './query-helpers';
@@ -27,19 +27,31 @@ export const buildAndSendDigests = async (feedId: number) => {
     const feed = await Feed.findOneOrFail(feedId);
     await digestQueue.addAll(
         readyUFs.map((uf) => async () => {
-            const items = await getItemsNewerThan(feedId, getPeriod(uf), maxItemsInDigest);
-            if (!items.length) return;
-            const { text, html, errors } = composeDigest(uf, feed, items);
-            if (!errors?.length) {
-                const result = await transport.sendMail({
-                    from: process.env.MAIL_FROM,
-                    to: uf.user.email,
-                    // TODO:
-                    subject: 'TODO: make subject',
-                    text,
-                    html,
-                });
-                logger.info(result, 'digest email has been sent');
+            try {
+                const timestamp = new Date();
+                const items = await getItemsNewerThan(feedId, getPeriod(uf), maxItemsInDigest);
+                if (!items.length) return;
+                const { text, html, errors } = composeDigest(uf, feed, items);
+                if (!errors?.length) {
+                    const result = await transport.sendMail({
+                        from: process.env.MAIL_FROM,
+                        to: uf.user.email,
+                        subject: composeEmailSubject(
+                            feed.title,
+                            uf.schedule,
+                            uf.user.options.customSubject,
+                        ),
+                        text,
+                        html,
+                    });
+                    logger.info(result, 'digest email has been sent');
+                    uf.lastDigestSentAt = timestamp;
+                    await uf.save();
+                } else {
+                    logger.error(errors);
+                }
+            } catch (error) {
+                logger.error(error);
             }
         }),
     );
@@ -98,7 +110,7 @@ export const sendConfirmSubscription = ({
     emailQueue.add(async () => {
         const digestString =
             digestType && digestType !== DigestSchedule.disable
-                ? `(${digestNames[digestType]})`
+                ? `(${digestNames[digestType]} digest)`
                 : '';
         const url = `${process.env.FRONTEND_URL}/confirm?token=${token}&id=${userFeedId}`;
         const result = await transport.sendMail({

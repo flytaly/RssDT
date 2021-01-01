@@ -5,7 +5,6 @@ import {
     PASSWORD_RESET_PREFIX,
     SUBSCRIPTION_CONFIRM_PREFIX,
 } from '../../constants';
-import { UserFeed } from '../../entities/UserFeed';
 import {
     sendConfirmEmail,
     sendConfirmSubscription,

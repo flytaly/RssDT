@@ -9,6 +9,7 @@ import { composeDigest } from './compose-mail';
 import { buildAndSendDigests } from './dispatcher';
 import { UserFeed } from '../entities/UserFeed';
 import { Item } from '../entities/Item';
+import { composeEmailSubject } from './compose-subject';
 
 jest.mock('./is-feed-ready', () => ({
     isFeedReady: jest.fn((uf: UserFeed) => {
@@ -66,7 +67,7 @@ describe('Build and Send Digests', () => {
 
         expect(transport.sendMail).toHaveBeenCalledWith({
             from: process.env.MAIL_FROM,
-            subject: 'TODO: make subject',
+            subject: composeEmailSubject(feed.title, userFeed.schedule, user.options.customSubject),
             to: user.email,
             html: 'html',
             text: 'text',
