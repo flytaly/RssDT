@@ -171,7 +171,7 @@ describe('Unsubscribe', () => {
         Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl), deleteEmails()]),
     );
 
-    test('unsubscribeByToken mutation: should unsubscribe', async () => {
+    test('unsubscribeByToken mutation: should unsubscribe from digests', async () => {
         const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({
             input: { feedUrl: feed.feedUrl },
         });
@@ -187,7 +187,10 @@ describe('Unsubscribe', () => {
             token: uf!.unsubscribeToken,
         });
         expect(unsubscribeByToken).toBe(true);
-        const afterDelete = await UserFeed.findOne(id);
-        expect(afterDelete).toBeUndefined();
+        const afterUnsubscribe = await UserFeed.findOne(id);
+        expect(afterUnsubscribe).toMatchObject({
+            id,
+            schedule: DigestSchedule.disable,
+        });
     });
 });

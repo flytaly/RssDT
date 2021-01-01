@@ -10,7 +10,7 @@ export const activateUserFeed = async (userFeedId: number, userId?: number) => {
     // Update UserFeed
     const updResult = await qb
         .update(UserFeed)
-        .set({ activated: true })
+        .set({ activated: true, lastDigestSentAt: new Date() })
         .where({ id: userFeedId, ...(userId ? { userId } : {}) })
         .returning('*')
         .execute();
@@ -31,7 +31,14 @@ export const activateUserFeed = async (userFeedId: number, userId?: number) => {
     // Update User
     await qb.update(User).set({ emailVerified: true }).where({ id: userFeed.userId }).execute();
 
-    updateFeedData(feed.url);
+    (async () => {
+        await updateFeedData(feed.url);
+        await qb
+            .update(UserFeed)
+            .set({ lastDigestSentAt: new Date() })
+            .where({ id: userFeedId, ...(userId ? { userId } : {}) })
+            .execute();
+    })();
 
     return { userFeed };
 };

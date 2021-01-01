@@ -11,6 +11,7 @@ import {
     UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
@@ -173,10 +174,15 @@ export class UserFeedResolver {
         @Arg('id') id: number,
         @Arg('opts') opts: UserFeedOptionsInput,
     ) {
+        const updateDigestTime = opts.schedule && opts.schedule !== DigestSchedule.disable;
+        const valuesToSet: QueryDeepPartialEntity<UserFeed> = updateDigestTime
+            ? { ...opts, lastDigestSentAt: new Date() }
+            : opts;
+
         const result = await getConnection()
             .createQueryBuilder()
             .update(UserFeed)
-            .set({ ...opts })
+            .set(valuesToSet)
             .where('id = :id', { id })
             .andWhere('userId = :userId', { userId: req.session.userId })
             .returning('*')
@@ -189,8 +195,8 @@ export class UserFeedResolver {
         if (!token || !id) return false;
         const result = await getConnection()
             .createQueryBuilder()
-            .delete()
-            .from(UserFeed)
+            .update(UserFeed)
+            .set({ schedule: DigestSchedule.disable })
             .where('id = :id', { id })
             .andWhere('unsubscribeToken = :token', { token })
             .execute();
