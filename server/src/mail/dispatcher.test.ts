@@ -6,10 +6,16 @@ import { generateItemEntity, generateUserWithFeed } from '../tests/test-utils/ge
 import { User } from '../entities/User';
 import { transport } from './transport';
 import { composeDigest } from './compose-mail';
-import { buildAndSendDigests } from './dispatcher';
+import {
+    buildAndSendDigests,
+    sendConfirmEmail,
+    sendConfirmSubscription,
+    sendPasswordReset,
+} from './dispatcher';
 import { UserFeed } from '../entities/UserFeed';
 import { Item } from '../entities/Item';
 import { composeEmailSubject } from './compose-subject';
+import { DigestSchedule } from '../types/enums';
 
 jest.mock('./is-feed-ready', () => ({
     isFeedReady: jest.fn((uf: UserFeed) => {
@@ -21,7 +27,15 @@ jest.mock('./is-feed-ready', () => ({
 }));
 jest.mock('./transport', () => ({ transport: { sendMail: jest.fn(async () => {}) } }));
 jest.mock('./compose-mail', () => ({
-    composeDigest: jest.fn(() => ({ text: 'text', html: 'html', errors: [] })),
+    composeDigest: jest.fn((uf: UserFeed, feed: Feed, items: Item[]) => {
+        expect(uf.schedule).toBeDefined();
+        expect(uf.user.timeZone).toBeDefined();
+        expect(uf.user.options.dailyDigestHour).toBeDefined();
+        expect(feed.title).toBeDefined();
+        expect(items.length > 0).toBeTruthy();
+        expect(items[0].guid).toBeDefined();
+        return { text: 'text', html: 'html', errors: [] };
+    }),
 }));
 
 let user: User;
@@ -88,5 +102,31 @@ describe('Build and Send Digests', () => {
 
         const ids = new Set([...oldItems, ...newItems].map((i) => i.id));
         itemsPassed.forEach((item) => expect(ids.has(item.id)).toBeTruthy());
+    });
+});
+
+describe('transaction emails', () => {
+    const sendMail = transport.sendMail as jest.Mock;
+    beforeEach(() => {
+        sendMail.mockClear();
+    });
+
+    test('sendConfirmEmail', async () => {
+        await sendConfirmEmail('email', 'token', 333);
+        expect(sendMail.mock.calls).toMatchSnapshot();
+    });
+    test('sendPasswordReset', async () => {
+        await sendPasswordReset('email', 'token', 333);
+        expect(sendMail.mock.calls).toMatchSnapshot();
+    });
+    test('sendConfirmSubscription', async () => {
+        await sendConfirmSubscription({
+            email: 'email',
+            token: 'token',
+            userFeedId: 333,
+            title: 'title',
+            digestType: DigestSchedule.daily,
+        });
+        expect(sendMail.mock.calls).toMatchSnapshot();
     });
 });
