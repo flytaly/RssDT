@@ -11,10 +11,11 @@ import {
     Root,
     UseMiddleware,
 } from 'type-graphql';
-import { EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants';
+import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants';
 import { Options } from '../entities/Options';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
+import { logger } from '../logger';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { MyContext, ReqWithSession, Role } from '../types';
@@ -165,6 +166,22 @@ export class UserResolver {
         }
         setSession(req, user.id, user.role);
         return { user };
+    }
+
+    @UseMiddleware(auth())
+    @Mutation(() => Boolean)
+    logout(@Ctx() { req, res }: MyContext) {
+        return new Promise((resolve) =>
+            req.session.destroy((error) => {
+                res.clearCookie(COOKIE_NAME);
+                if (error) {
+                    logger.error(error);
+                    resolve(error);
+                    return;
+                }
+                resolve(true);
+            }),
+        );
     }
 
     @UseMiddleware(auth())
