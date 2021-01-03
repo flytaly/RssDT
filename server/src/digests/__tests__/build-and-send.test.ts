@@ -1,23 +1,17 @@
 import 'reflect-metadata';
-import '../tests/test-utils/connection';
-import { isFeedReady } from './is-feed-ready';
-import { Feed } from '../entities/Feed';
-import { generateItemEntity, generateUserWithFeed } from '../tests/test-utils/generate-feed';
-import { User } from '../entities/User';
-import { transport } from './transport';
-import { composeDigest } from './compose-mail';
-import {
-    buildAndSendDigests,
-    sendConfirmEmail,
-    sendConfirmSubscription,
-    sendPasswordReset,
-} from './dispatcher';
-import { UserFeed } from '../entities/UserFeed';
-import { Item } from '../entities/Item';
-import { composeEmailSubject } from './compose-subject';
-import { DigestSchedule } from '../types/enums';
+import { Feed } from '../../entities/Feed';
+import { Item } from '../../entities/Item';
+import { User } from '../../entities/User';
+import { UserFeed } from '../../entities/UserFeed';
+import '../../tests/test-utils/connection';
+import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed';
+import { transport } from '../../mail/transport';
+import { buildAndSendDigests } from '../build-and-send';
+import { composeDigest } from '../compose-mail';
+import { composeEmailSubject } from '../compose-subject';
+import { isFeedReady } from '../is-feed-ready';
 
-jest.mock('./is-feed-ready', () => ({
+jest.mock('../is-feed-ready', () => ({
     isFeedReady: jest.fn((uf: UserFeed) => {
         expect(uf.schedule).toBeDefined();
         expect(uf.user.timeZone).toBeDefined();
@@ -25,8 +19,8 @@ jest.mock('./is-feed-ready', () => ({
         return true;
     }),
 }));
-jest.mock('./transport', () => ({ transport: { sendMail: jest.fn(async () => {}) } }));
-jest.mock('./compose-mail', () => ({
+jest.mock('../../mail/transport', () => ({ transport: { sendMail: jest.fn(async () => {}) } }));
+jest.mock('../compose-mail', () => ({
     composeDigest: jest.fn((uf: UserFeed, feed: Feed, items: Item[]) => {
         expect(uf.schedule).toBeDefined();
         expect(uf.user.timeZone).toBeDefined();
@@ -102,31 +96,5 @@ describe('Build and Send Digests', () => {
 
         const ids = new Set([...oldItems, ...newItems].map((i) => i.id));
         itemsPassed.forEach((item) => expect(ids.has(item.id)).toBeTruthy());
-    });
-});
-
-describe('transaction emails', () => {
-    const sendMail = transport.sendMail as jest.Mock;
-    beforeEach(() => {
-        sendMail.mockClear();
-    });
-
-    test('sendConfirmEmail', async () => {
-        await sendConfirmEmail('email', 'token', 333);
-        expect(sendMail.mock.calls).toMatchSnapshot();
-    });
-    test('sendPasswordReset', async () => {
-        await sendPasswordReset('email', 'token', 333);
-        expect(sendMail.mock.calls).toMatchSnapshot();
-    });
-    test('sendConfirmSubscription', async () => {
-        await sendConfirmSubscription({
-            email: 'email',
-            token: 'token',
-            userFeedId: 333,
-            title: 'title',
-            digestType: DigestSchedule.daily,
-        });
-        expect(sendMail.mock.calls).toMatchSnapshot();
     });
 });

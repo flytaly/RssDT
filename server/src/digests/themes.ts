@@ -1,15 +1,16 @@
 import fs from 'fs';
+import path from 'path';
 import Handlebars from 'handlebars';
 import { Item } from '../entities/Item';
 import { EnclosureWithTitle, Share } from '../types';
 import { Theme } from '../types/enums';
 
 const themeFolders = {
-    default: `${__dirname}/templates/default`,
+    default: path.resolve(`${__dirname}/../../mail-templates/digest-default`),
 };
 
-const compileHbsPart = (path: string, part: string) =>
-    Handlebars.compile(fs.readFileSync(`${path}/${part}.part.mjml`, 'utf-8'));
+const compileHbsPart = (pathStr: string, part: string) =>
+    Handlebars.compile(fs.readFileSync(`${pathStr}/${part}.part.mjml`, 'utf-8'));
 
 type HTMLMailThemeTmp = {
     header: HandlebarsTemplateDelegate<{ title: string; digestName: string }>;

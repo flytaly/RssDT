@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import { isFeedReady } from './is-feed-ready';
-import { UserFeed } from '../entities/UserFeed';
-import { DigestSchedule } from '../types/enums';
-import { User } from '../entities/User';
-import { Options } from '../entities/Options';
-import '../tests/test-utils/connection';
+import { isFeedReady } from '../is-feed-ready';
+import { UserFeed } from '../../entities/UserFeed';
+import { DigestSchedule } from '../../types/enums';
+import { User } from '../../entities/User';
+import { Options } from '../../entities/Options';
+import '../../tests/test-utils/connection';
 
 const dailyDigestHourDefault = 18;
 const userFeed = new UserFeed();
