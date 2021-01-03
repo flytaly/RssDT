@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import mjml2html from 'mjml';
 import url from 'url';
+import sanitizeHtml from 'sanitize-html';
 import { Enclosure } from '../entities/Enclosure';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
@@ -10,6 +11,10 @@ import { TernaryState } from '../types/enums';
 import { digestNames } from './digest-names';
 import shareProviders from './share';
 import themes, { HTMLMailTheme } from './themes';
+
+function getUnsubscribeUrl(unsubscribeToken: string) {
+    return `${process.env.FRONTEND_URL}/unsubscribe?token=${unsubscribeToken}`;
+}
 
 function ternaryToBool(value: TernaryState, defaultValue: boolean): boolean {
     if (value === TernaryState.default) return defaultValue;
@@ -55,7 +60,6 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
     if (withToC) {
         resultStr += theme.contentTable({ items });
     }
-    const unsubscribeUrl = `${process.env.FRONTEND_URL}/unsubscribe?token=${userFeed.unsubscribeToken}`;
     resultStr += items.reduce((acc, item_) => {
         const { id, title, link } = item_;
         const imageUrl = item_.imageUrl || getImageFromEnclosures(item_.enclosures);
@@ -69,13 +73,13 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
         const share: Share[] = options.shareEnable
             ? shareProviders
                   .filter((s) => !options.shareList?.length || options.shareList.includes(s.id))
-                  .map((s) => ({ ...s, url: s.getUrl(item_.link, item_.title) }))
+                  .map((s) => ({ ...s, url: s.getUrl(link, title) }))
             : [];
         const content = withItemBody ? item_.summary || item_.description : '';
         return acc + theme.item({ id, title, link, imageUrl, date, enclosures, content, share });
     }, '');
 
-    resultStr += theme.footer({ unsubscribeUrl });
+    resultStr += theme.footer({ unsubscribeUrl: getUnsubscribeUrl(userFeed.unsubscribeToken) });
     resultStr += '</mjml>';
     return mjml2html(resultStr);
 };
@@ -84,16 +88,36 @@ export const composeText = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
     const { user } = userFeed;
     const { options } = userFeed.user;
     // const withToC = ternaryToBool(userFeed.withContentTable, options.withContentTableDefault);
+    // const withAttachments = ternaryToBool(userFeed.attachments, options.attachmentsDefault);
     const withItemBody = ternaryToBool(userFeed.itemBody, options.itemBodyDefault);
-    const withAttachments = ternaryToBool(userFeed.attachments, options.attachmentsDefault);
 
-    // TODO:
-    return '';
+    let result = '';
+
+    // header
+    result += `${feed.title} [${digestNames[userFeed.schedule]} digest]\n`;
+
+    // items
+    result += items.reduce((acc, item_) => {
+        const date = DateTime.fromJSDate(item_.pubdate)
+            .setZone(user.timeZone)
+            .setLocale(user.locale)
+            .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
+        const contentHtml = withItemBody ? item_.summary || item_.description : '';
+        const contentText = sanitizeHtml(contentHtml, { allowedTags: [] });
+        return `${acc}\n\n${item_.title}\n${date}\n${item_.link}\n\n${contentText}\n`;
+    }, '');
+
+    // footer
+    result += `\n\n========
+You are receiving this digest because you subscribed to it on FeedMailu.com
+\nUnsubscribe: ${getUnsubscribeUrl(userFeed.unsubscribeToken)}`;
+
+    return result;
 };
 
 export const composeDigest = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
     if (!userFeed?.user?.options)
-        throw new Error('userFeed should have user and user.options objects');
+        return { errors: [{ message: 'userFeed should have user and user.options objects' }] };
     let html: string = '';
     let errors: Array<{ message: string }> | null = null;
     if (userFeed.theme === 'default') {

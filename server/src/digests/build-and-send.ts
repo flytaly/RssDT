@@ -30,14 +30,11 @@ export const buildAndSendDigests = async (feedId: number) => {
                 if (!items.length) return;
                 const { text, html, errors } = composeDigest(uf, feed, items);
                 if (!errors?.length) {
+                    const { customSubject } = uf.user.options;
                     const result = await transport.sendMail({
                         from: process.env.MAIL_FROM,
                         to: uf.user.email,
-                        subject: composeEmailSubject(
-                            feed.title,
-                            uf.schedule,
-                            uf.user.options.customSubject,
-                        ),
+                        subject: composeEmailSubject(feed.title, uf.schedule, customSubject),
                         text,
                         html,
                     });

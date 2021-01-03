@@ -1,9 +1,9 @@
-import moment from 'moment';
 import faker from 'faker';
+import moment from 'moment';
+import { throttleMultiplier } from '../constants';
+import { buildAndSendDigests } from '../digests/build-and-send';
 import Watcher from './watcher';
 import * as watcherUtils from './watcher-utils';
-import { throttleMultiplier } from '../constants';
-import { buildAndSendDigests } from '../mail/dispatcher';
 
 const updateFeedData = watcherUtils.updateFeedData as jest.Mock;
 const getFeedsToUpdate = watcherUtils.getFeedsToUpdate as jest.Mock;
@@ -12,7 +12,7 @@ jest.mock('./watcher-utils.ts', () => ({
     updateFeedData: jest.fn(async () => [0, 0]),
     getFeedsToUpdate: jest.fn(async () => []),
 }));
-jest.mock('../mail/dispatcher.ts', () => ({
+jest.mock('../digests/build-and-send.ts', () => ({
     buildAndSendDigests: jest.fn(async () => {}),
 }));
 

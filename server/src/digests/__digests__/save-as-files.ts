@@ -26,6 +26,7 @@ async function generateDigestsAndSave() {
                 withContentTable: TernaryState.enable,
                 itemBody: TernaryState.enable,
                 attachments: TernaryState.enable,
+                unsubscribeToken: 'unsubscribe-token',
             });
             const user = User.create({ locale: 'ru-RU', timeZone: 'Europe/Moscow' });
             const options = Options.create({ shareEnable: true });

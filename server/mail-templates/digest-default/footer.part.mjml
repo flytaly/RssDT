@@ -1,11 +1,20 @@
-<mj-section>
-  <mj-column width="100%">
-    <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
-  </mj-column>
-</mj-section>
-<mj-section>
-  <mj-column width="100%">
-    <mj-text padding-bottom="13px" padding-top="0px" font-size="13px" line-height="20px"><a href="{{unsubscribeUrl}}">Unsubscribe</a> from this feed.</mj-text>
-  </mj-column>
-</mj-section>
-</mj-body>
+        <mj-section>
+            <mj-column width="100%">
+                <mj-divider border-width="1px" border-color="#E0E0E0"></mj-divider>
+            </mj-column>
+        </mj-section>
+        <mj-section>
+            <mj-column width="100%">
+                <mj-text padding-top="0px" padding-bottom="10px" font-size="12px" align="center">
+                    <div>
+                        You are receiving this digest because you subscribed to it on
+                        <a href="https://feedmailu.com">FeedMailu.com</a>
+                    </div>
+                    <div>
+                        <a href="{{unsubscribeUrl}}">Unsubscribe</a> or
+                        <a href="https://feedmailu.com/feeds/manage">manage feeds</a>
+                    </div>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+    </mj-body>
