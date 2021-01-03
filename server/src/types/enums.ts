@@ -24,3 +24,10 @@ export enum DigestSchedule {
     disable = 'disable',
 }
 registerEnumType(DigestSchedule, { name: 'DigestSchedule' });
+
+export enum ShareId {
+    pocket = 'pocket',
+    evernote = 'evernote',
+    trello = 'trello',
+}
+registerEnumType(ShareId, { name: 'ShareId' });

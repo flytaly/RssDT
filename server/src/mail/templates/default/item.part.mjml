@@ -1,0 +1,43 @@
+<mj-section padding="16px 0px 0px 0px">
+  {{#if imageUrl}}
+    <mj-column width="75%" vertical-align="middle">
+  {{else}}
+    <mj-column width="100%" vertical-align="middle">
+  {{/if}}
+  <mj-text padding-bottom="0px" padding-top="0px">
+    <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+  </mj-text>
+  <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{date}}</mj-text>
+  <mj-text>
+    {{#each share}}
+      <a style="margin-right: 4px;" href="{{url}}"><img style="width: 16px;" src="{{iconUrl}}" title="{{title}}" /></a>
+    {{/each}}
+  </mj-text>
+  </mj-column>
+  {{#if imageUrl}}
+    <mj-column width="25%" vertical-align="middle">
+      <mj-image width="100px" href="{{link}}" src="{{imageUrl}}"></mj-image>
+    </mj-column>
+  {{/if}}
+</mj-section>
+
+{{#if content}}
+  <mj-section>
+    <mj-column width="100%">
+      <mj-text>{{{content}}}</mj-text>
+    </mj-column>
+  </mj-section>
+{{/if}}
+
+{{#if enclosures.length}}
+  <mj-section>
+    <mj-column width="100%">
+      <mj-text>
+        <b>Files:</b><br />
+        {{#each enclosures}}
+          <a href="{{url}}">{{title}}</a> <span style="font-size: 0.9em;" >{{type}}</span>
+          <br />
+        {{/each}}</mj-text>
+    </mj-column>
+  </mj-section>
+{{/if}}

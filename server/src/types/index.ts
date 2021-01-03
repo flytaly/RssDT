@@ -45,3 +45,6 @@ export type FeedItem = {
     imageUrl?: string;
     enclosures?: ItemEnclosure[];
 };
+
+export type EnclosureWithTitle = { length: string; url: string; type?: string; title: string };
+export type Share = { url: string; iconUrl: string; title: string };

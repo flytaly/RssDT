@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
-import { Theme } from '../types/enums';
+import { ShareId, Theme } from '../types/enums';
 import { User } from './User';
 
 @ObjectType()
@@ -36,13 +36,13 @@ export class Options extends BaseEntity {
 
     @Field({ nullable: true })
     @Column({ nullable: true })
-    customSubject: string;
+    customSubject?: string;
 
     @Field()
     @Column({ default: true })
     shareEnable: boolean;
 
-    @Field(() => [String], { nullable: true })
+    @Field(() => [ShareId], { nullable: true })
     @Column('varchar', { array: true, default: {}, nullable: true })
-    shareList: string[];
+    shareList?: string[];
 }
