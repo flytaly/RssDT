@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import './dotenv';
 import express from 'express';
 import Redis from 'ioredis';
+import cors from 'cors';
 import { initDbConnection } from './dbConnection';
 import { initApolloServer } from './apollo';
 import { initSession } from './session';
@@ -9,6 +10,8 @@ import { logger, initLogFiles } from './logger';
 
 const entry = async () => {
     const app = express();
+    app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+
     const redis = new Redis();
     initSession(app, redis);
     await initDbConnection();

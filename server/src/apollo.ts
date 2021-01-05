@@ -22,7 +22,7 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
         }),
     });
 
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ app, cors: { origin: process.env.FRONTEND_URL } });
 
     return apolloServer;
 };

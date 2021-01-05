@@ -23,6 +23,7 @@
         "axios": "^0.21.1",
         "cheerio": "^1.0.0-rc.5",
         "connect-redis": "^5.0.0",
+        "cors": "^2.8.5",
         "cron": "^1.8.2",
         "dataloader": "^2.0.0",
         "dotenv-safe": "^8.2.0",
