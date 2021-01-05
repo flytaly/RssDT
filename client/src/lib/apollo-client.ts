@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+
+/* From example: https://github.com/vercel/next.js/tree/canary/examples/with-apollo */
+
 import { useMemo } from 'react';
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCache } from '@apollo/client';
-import { concatPagination } from '@apollo/client/utilities';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 

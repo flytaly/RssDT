@@ -19,8 +19,9 @@ module.exports = {
     'no-plusplus': 'off',
     'no-restricted-syntax': 'off',
     'no-underscore-dangle': 'off',
-    'react/react-in-jsx-scope': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'off',
     radix: 'off',
   },
 };
