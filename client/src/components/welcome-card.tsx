@@ -1,4 +1,6 @@
 import React from 'react';
+import Input from './forms/input-icon';
+import RssSquareIcon from '../../public/static/rss-square.svg';
 
 const WelcomeCard = () => {
   return (
@@ -8,9 +10,9 @@ const WelcomeCard = () => {
       </section>
       <section className="flex-grow flex flex-col items-center bg-gray-300 bg-opacity-60 rounded-md border-1 border-gray-500 border-solid border p-3 px-12 md:w-1/2">
         <h2 className="text-xl font-bold mb-4">Add a feed</h2>
-        <input className="p-0.5 mb-4 w-full max-w-xs rounded-lg" type="text" />
-        <input className="p-0.5 mb-4 w-full max-w-xs rounded-lg" type="text" />
-        <input className="p-0.5 mb-4 w-full max-w-xs rounded-lg" type="text" />
+        <Input IconSVG={RssSquareIcon} />
+        <Input error="error" touched />
+        <Input />
         <button type="submit" className="btn w-full max-w-xs text-xl tracking-wider">
           subscribe
         </button>
