@@ -22,6 +22,10 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
+
+    // next.js automatically adds anchors in Link components
+    'jsx-a11y/anchor-is-valid': 'off',
+
     radix: 'off',
   },
 };

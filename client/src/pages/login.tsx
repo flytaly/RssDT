@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '../components/layout/layout';
 import WelcomeCard from '../components/welcome-card';
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
   return (
     <Layout>
       <WelcomeCard />
@@ -11,4 +11,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Login;

@@ -1,0 +1,21 @@
+.hover-underline-link {
+  position: relative;
+}
+
+.hover-underline-link:active {
+  @apply text-primary;
+}
+
+.hover-underline-link::after {
+  content: '';
+  width: 0;
+  height: 2px;
+  bottom: -3px;
+
+  @apply absolute bg-primary mx-auto inset-x-0 transition-all ease-out duration-200;
+}
+
+.hover-underline-link.active::after,
+.hover-underline-link:hover::after {
+  width: 100%;
+}

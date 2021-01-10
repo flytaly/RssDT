@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useMeQuery } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
 
@@ -9,9 +10,13 @@ const NavBar = () => {
   else if (data?.me) {
     content = <div>{`Logged in (${data?.me.email})`}</div>;
   } else {
-    content = <div>Logged out</div>;
+    content = (
+      <Link href="/login">
+        <a className="hover-underline-link">Log in</a>
+      </Link>
+    );
   }
-  return <nav>{content}</nav>;
+  return <nav className="text-sm">{content}</nav>;
 };
 
 export default NavBar;

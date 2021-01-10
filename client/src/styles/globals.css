@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import './hover-underline-link.css';
+
+html,
+body {
+  min-height: 100vh;
+}
+
+@layer utilities {
+  .small-card-w {
+    width: 30rem;
+    max-width: calc(100vw - 2rem);
+  }
+
+  @screen md {
+    .small-card-w {
+      width: 46rem;
+    }
+  }
+
+  .btn {
+    @apply text-white uppercase rounded-lg bg-primary py-0.5 px-4;
+  }
+}
