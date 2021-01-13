@@ -4,6 +4,10 @@
 
 @import './hover-underline-link.css';
 
+html {
+  --primary: #ac247d;
+}
+
 html,
 body {
   min-height: 100vh;
@@ -22,6 +26,14 @@ body {
   }
 
   .btn {
-    @apply text-white uppercase rounded-lg bg-primary py-0.5 px-4;
+    @apply text-white uppercase rounded-3xl bg-primary py-0.5 px-4 transition-transform ease-in-out;
+  }
+
+  .btn:hover {
+    box-shadow: 0 0 1rem var(--primary);
+  }
+
+  .btn:active {
+    transform: scale(0.97);
   }
 }

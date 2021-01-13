@@ -1,15 +1,14 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useRef, JSXElementConstructor, ImgHTMLAttributes } from 'react';
+/* eslint-disable
+  jsx-a11y/control-has-associated-label,
+  jsx-a11y/no-noninteractive-element-interactions,
+  jsx-a11y/click-events-have-key-events,
+  jsx-a11y/label-has-associated-control
+*/
+import React, { useState, useRef } from 'react';
+import { CommonProps } from './types';
 
-interface InputProps {
-  IconSVG?: JSXElementConstructor<any>;
-  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  error?: string;
-  title?: string;
-  touched?: boolean;
+interface InputProps extends CommonProps {
+  //
 }
 
 const Input: React.FC<InputProps> = (props) => {
@@ -18,11 +17,13 @@ const Input: React.FC<InputProps> = (props) => {
   const { IconSVG, onFocus, onBlur, error = '', title = '', touched = false } = props;
 
   const borderCol = isFocused ? 'border-primary' : '';
-  const iconCol = isFocused ? 'text-primary' : 'text-gray-500';
+  const iconCol = isFocused ? 'text-primary' : 'text-gray';
+  const shadowColor = isFocused ? 'shadow-input-primary' : 'hover:shadow-input-gray';
+
   return (
-    <div className="mb-5">
+    <div className="mb-3 w-full">
       <label
-        className={`flex items-center w-full p-2 rounded-3xl border hover:border-2 border-gray-500 hover:border-primary ${borderCol} hover:shadow-input`}
+        className={`flex items-center w-full p-2 rounded-3xl border hover:border-2 border-gray  ${borderCol} ${shadowColor}`}
         onClick={() => inputEl.current?.focus()}
         title={title}
       >
@@ -30,8 +31,7 @@ const Input: React.FC<InputProps> = (props) => {
           {IconSVG ? <IconSVG className="fill-current w-full h-full" /> : null}
         </div>
         <input
-          {...props}
-          className="outline-none bg-transparent ml-1"
+          className="outline-none bg-transparent ml-1 w-full"
           onFocus={(event) => {
             setIsFocused(true);
             onFocus?.(event);
