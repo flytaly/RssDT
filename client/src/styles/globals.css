@@ -25,15 +25,23 @@ body {
     }
   }
 
+  input::placeholder {
+    @apply text-gray-700;
+  }
+
   .btn {
     @apply text-white uppercase rounded-3xl bg-primary py-0.5 px-4 transition-transform ease-in-out;
   }
 
-  .btn:hover {
+  .btn:disabled {
+    @apply bg-gray-400;
+  }
+
+  .btn:hover:not(:disabled) {
     box-shadow: 0 0 1rem var(--primary);
   }
 
-  .btn:active {
+  .btn:active:not(:disabled) {
     transform: scale(0.97);
   }
 

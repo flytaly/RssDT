@@ -2,28 +2,43 @@
   jsx-a11y/control-has-associated-label,
   jsx-a11y/no-noninteractive-element-interactions,
   jsx-a11y/click-events-have-key-events,
-  jsx-a11y/label-has-associated-control
 */
 import React, { useRef } from 'react';
 import { CommonProps, useInputClasses } from './common';
 
 interface InputProps extends CommonProps {
-  //
+  value: string | number | readonly string[] | undefined;
+  placeholder?: string;
+  required?: boolean;
 }
 
-const Input: React.FC<InputProps> = (props) => {
+const Input: React.FC<InputProps> = ({
+  error = '',
+  IconSVG,
+  id,
+  onBlur,
+  onFocus,
+  title = '',
+  touched = false,
+  ...restProps
+}) => {
   const inputEl = useRef<HTMLInputElement>(null);
-  const { IconSVG, onFocus, onBlur, error = '', title = '', touched = false } = props;
 
   const { classes, setIsFocused } = useInputClasses();
 
   return (
     <div className="mb-3 w-full">
-      <label className={classes.label} onClick={() => inputEl.current?.focus()} title={title}>
+      <label
+        htmlFor={id}
+        className={classes.label}
+        onClick={() => inputEl.current?.focus()}
+        title={title}
+      >
         <div className={classes.iconContainer}>
           {IconSVG ? <IconSVG className={classes.icon} /> : null}
         </div>
         <input
+          id={id}
           className={classes.input}
           onFocus={(event) => {
             setIsFocused(true);
@@ -35,6 +50,7 @@ const Input: React.FC<InputProps> = (props) => {
           }}
           ref={inputEl}
           aria-label={title}
+          {...restProps}
         />
       </label>
       <div className={classes.error}>{error && touched ? error : ''}</div>

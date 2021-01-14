@@ -2,23 +2,26 @@
   jsx-a11y/control-has-associated-label,
   jsx-a11y/no-noninteractive-element-interactions,
   jsx-a11y/click-events-have-key-events,
-  jsx-a11y/label-has-associated-control
 */
 import React, { useRef } from 'react';
 import { CommonProps, useInputClasses } from './common';
 
 interface SelectProps extends CommonProps {
   children: React.ReactNode;
+  defaultValue: string | number | readonly string[] | undefined;
 }
 
 const Select: React.FC<SelectProps> = ({
-  IconSVG,
-  onFocus,
-  onBlur,
+  children,
+  defaultValue,
   error = '',
+  IconSVG,
+  id,
+  onBlur,
+  onChange,
+  onFocus,
   title = '',
   touched = false,
-  children,
 }) => {
   const inputEl = useRef<HTMLSelectElement>(null);
 
@@ -26,11 +29,17 @@ const Select: React.FC<SelectProps> = ({
 
   return (
     <div className="mb-3 w-full">
-      <label className={classes.label} onClick={() => inputEl.current?.focus()} title={title}>
+      <label
+        htmlFor={id}
+        className={classes.label}
+        onClick={() => inputEl.current?.focus()}
+        title={title}
+      >
         <div className={classes.iconContainer}>
           {IconSVG ? <IconSVG className={classes.icon} /> : null}
         </div>
         <select
+          id={id}
           className={`${classes.input} select`}
           onFocus={(event) => {
             setIsFocused(true);
@@ -42,6 +51,8 @@ const Select: React.FC<SelectProps> = ({
           }}
           ref={inputEl}
           aria-label={title}
+          defaultValue={defaultValue}
+          onChange={onChange}
         >
           {children}
         </select>
