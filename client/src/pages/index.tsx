@@ -28,7 +28,7 @@ const initialMessages: MessageItem[] = [
         <Link href="/login">
           <a className="underline text-primary">log in</a>
         </Link>
-        {' / '}
+        {' or '}
         <Link href="/register">
           <a className="underline text-primary">register</a>
         </Link>

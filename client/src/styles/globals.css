@@ -6,6 +6,13 @@
 
 html {
   --primary: #ac247d;
+  --gray: #777d8c;
+  --success: rgb(0, 140, 0);
+  --success-shadow: rgba(0, 140, 0, 0.25);
+  --success-shadow-hover: rgba(0, 140, 0, 0.4);
+  --error: rgb(200, 0, 0);
+  --error-shadow: rgba(200, 0, 0, 0.25);
+  --error-shadow-hover: rgb(200, 0, 0, 0.4);
 }
 
 html,
