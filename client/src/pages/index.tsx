@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import AddFeedForm from '../components/forms/add-feed-form';
 import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
@@ -40,14 +40,14 @@ const initialMessages: MessageItem[] = [
 
 const Home: NextPage = () => {
   const { data } = useMeQuery({ skip: isServer() });
-  const messages = [...initialMessages];
+  const [messages, setMessages] = useState<MessageItem[]>([]);
   return (
     <Layout>
       <WelcomeCard>
-        <MessagesSide items={messages} />
+        <MessagesSide items={[...initialMessages, ...messages]} />
         <FormSide>
           <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
-          <AddFeedForm email={data?.me?.email} />
+          <AddFeedForm email={data?.me?.email} setMessages={setMessages} />
         </FormSide>
       </WelcomeCard>
     </Layout>

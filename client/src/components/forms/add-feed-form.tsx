@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Input from './input';
@@ -8,6 +8,8 @@ import ClockIcon from '../../../public/static/clock.svg';
 import Select from './select';
 import { periodNames as names, DigestSchedule } from '../../types';
 import { useAddFeedWithEmailMutation } from '../../generated/graphql';
+import { MessageItem } from '../welcome-card/animated-message';
+import GraphQLError from '../graphql-error';
 
 // VALIDATION
 const AddFeedSchema = Yup.object().shape({
@@ -25,9 +27,25 @@ const getUserInfo = () => {
 
 interface AddFeedFormProps {
   email?: string;
+  setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
 
-const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '' }) => {
+function makeSuccessMessage(email: string, title: string, schedule: DigestSchedule) {
+  const content = (
+    <span>
+      <div>
+        <b>{title}</b>
+        <span> [</span>
+        <b>{`${names[(schedule as unknown) as DigestSchedule]} digest`}</b>
+        <span>] </span>
+      </div>
+      <div>{`Activation link has been sent to ${email}.`}</div>
+    </span>
+  );
+  return { key: `success${Math.random() * 1000}`, content, type: 'success' } as MessageItem;
+}
+
+const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) => {
   const [addFeed] = useAddFeedWithEmailMutation();
   return (
     <Formik
@@ -43,17 +61,27 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '' }) => {
             },
           });
           if (data?.addFeedWithEmail?.userFeed) {
-            console.log('success');
-            // setMessages({ success: 'success' });
+            const { userFeed } = data?.addFeedWithEmail;
+            setMessages?.([
+              makeSuccessMessage(
+                formVariables.email,
+                userFeed.feed.title || '',
+                (userFeed.schedule as unknown) as DigestSchedule,
+              ),
+            ]);
+            // resetForm();
           } else {
-            console.error(data?.addFeedWithEmail?.errors);
-            // setMessages({ error: data?.addFeedWithEmail?.errors?.[0].message });
+            const errMessages: MessageItem[] | undefined = data?.addFeedWithEmail?.errors?.map(
+              (e, idx) => ({
+                key: `error_${idx}`,
+                text: e.message,
+                type: 'error',
+              }),
+            );
+            setMessages?.(errMessages || []);
           }
-
-          resetForm();
         } catch (err) {
-          console.error({ error: err.message });
-          // setMessages({ error: err.message });
+          setMessages?.([{ key: 'error', content: <GraphQLError error={err.message} /> }]);
         }
         setSubmitting(false);
       }}

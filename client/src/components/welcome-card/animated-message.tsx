@@ -12,6 +12,7 @@ export type MessageItem = {
 
 export const useEmergeTransition = (items: MessageItem[]) =>
   useTransition(items, (item) => item.key, {
+    config: { mass: 1, friction: 12 },
     from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
     enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
     leave: { position: 'absolute' },
