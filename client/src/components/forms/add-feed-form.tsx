@@ -1,13 +1,13 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Input from './forms/input';
-import RssSquareIcon from '../../public/static/rss-square.svg';
-import MailIcon from '../../public/static/envelope.svg';
-import ClockIcon from '../../public/static/clock.svg';
-import Select from './forms/select';
-import { periodNames as names, DigestSchedule } from '../types';
-import { useAddFeedWithEmailMutation } from '../generated/graphql';
+import Input from './input';
+import RssSquareIcon from '../../../public/static/rss-square.svg';
+import MailIcon from '../../../public/static/envelope.svg';
+import ClockIcon from '../../../public/static/clock.svg';
+import Select from './select';
+import { periodNames as names, DigestSchedule } from '../../types';
+import { useAddFeedWithEmailMutation } from '../../generated/graphql';
 
 // VALIDATION
 const AddFeedSchema = Yup.object().shape({
