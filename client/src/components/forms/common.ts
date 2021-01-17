@@ -26,7 +26,7 @@ export function useInputClasses() {
     iconContainer: `h-5 w-5 ${iconCol}`,
     icon: 'fill-current w-full h-full',
     input: 'outline-none bg-transparent ml-2 w-full',
-    error: 'h-5 text-sm text-red-800 ml-8',
+    error: 'text-sm text-red-800 ml-8 min-h-5 mb-2',
   };
 
   return { classes, setIsFocused };

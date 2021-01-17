@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      minHeight: {
+        5: '1.25rem',
+      },
       colors: {
         primary: {
           DEFAULT: 'var(--primary)',

@@ -1,4 +1,4 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Input from './input';
@@ -69,7 +69,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
                 (userFeed.schedule as unknown) as DigestSchedule,
               ),
             ]);
-            // resetForm();
+            resetForm();
           } else {
             const errMessages: MessageItem[] | undefined = data?.addFeedWithEmail?.errors?.map(
               (e, idx) => ({

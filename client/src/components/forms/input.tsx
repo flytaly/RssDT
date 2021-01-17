@@ -27,7 +27,7 @@ const Input: React.FC<InputProps> = ({
   const { classes, setIsFocused } = useInputClasses();
 
   return (
-    <div className="mb-3 w-full">
+    <div className="w-full">
       <label
         htmlFor={id}
         className={classes.label}
