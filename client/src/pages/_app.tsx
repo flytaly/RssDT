@@ -8,7 +8,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={apolloClient}>
       <Component {...pageProps} />
-      {/* <ReactQueryDevtools /> */}
     </ApolloProvider>
   );
 }

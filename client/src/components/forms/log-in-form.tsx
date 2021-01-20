@@ -11,7 +11,7 @@ import { MessageItem } from '../welcome-card/animated-message';
 import Input from './input';
 
 // VALIDATION
-const AddFeedSchema = Yup.object().shape({
+const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('The field is required'),
   password: Yup.string().min(8).max(100).required('The field is required'),
 });
@@ -26,7 +26,7 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
-      validationSchema={AddFeedSchema}
+      validationSchema={LoginSchema}
       onSubmit={async ({ email, password }, { setSubmitting }) => {
         try {
           const { data } = await logIn({
