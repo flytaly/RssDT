@@ -33,7 +33,11 @@ body {
   }
 
   input::placeholder {
-    @apply text-gray-700;
+    @apply text-gray-400;
+  }
+
+  input[disabled] {
+    @apply text-gray-500;
   }
 
   .btn {

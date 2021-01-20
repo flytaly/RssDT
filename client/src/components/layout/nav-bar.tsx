@@ -8,7 +8,14 @@ const NavBar = () => {
 
   if (loading) content = <div />;
   else if (data?.me) {
-    content = <div>{`Logged in (${data?.me.email})`}</div>;
+    content = (
+      <>
+        <div>{`Logged in (${data?.me.email})`}</div>
+        <Link href="/logout">
+          <a className="hover-underline-link">logout</a>
+        </Link>
+      </>
+    );
   } else {
     content = (
       <Link href="/login">
@@ -16,7 +23,7 @@ const NavBar = () => {
       </Link>
     );
   }
-  return <nav className="text-sm">{content}</nav>;
+  return <nav className="flex gap-x-2 text-sm">{content}</nav>;
 };
 
 export default NavBar;

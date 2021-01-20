@@ -10,7 +10,7 @@ import WelcomeCard from '../components/welcome-card/welcome-card';
 import { useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 
-const initialMessages: MessageItem[] = [
+const infoMessages: MessageItem[] = [
   {
     text:
       'FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
@@ -21,6 +21,9 @@ const initialMessages: MessageItem[] = [
       'To start receiving digests just enter an address of the desired feed, email, and digest period',
     key: 'digest-message',
   },
+];
+
+const ifLogoutMsg: MessageItem[] = [
   {
     content: (
       <span>
@@ -39,12 +42,15 @@ const initialMessages: MessageItem[] = [
 ];
 
 const Home: NextPage = () => {
-  const { data } = useMeQuery({ skip: isServer() });
+  const { data, loading } = useMeQuery({ skip: isServer() });
   const [messages, setMessages] = useState<MessageItem[]>([]);
+  console.log(messages);
+
+  const items = [...infoMessages, ...(!loading && !data?.me ? ifLogoutMsg : []), ...messages];
   return (
     <Layout>
       <WelcomeCard>
-        <MessagesSide items={[...initialMessages, ...messages]} />
+        <MessagesSide items={items} />
         <FormSide>
           <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
           <AddFeedForm email={data?.me?.email} setMessages={setMessages} />

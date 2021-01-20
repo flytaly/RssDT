@@ -5,7 +5,7 @@ import React from 'react';
 import * as Yup from 'yup';
 import MailIcon from '../../../public/static/envelope.svg';
 import PasswordIcon from '../../../public/static/key.svg';
-import { useLoginMutation } from '../../generated/graphql';
+import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
 import { MessageItem } from '../welcome-card/animated-message';
 import Input from './input';
@@ -29,7 +29,15 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
       validationSchema={AddFeedSchema}
       onSubmit={async ({ email, password }, { setSubmitting }) => {
         try {
-          const { data } = await logIn({ variables: { email, password } });
+          const { data } = await logIn({
+            variables: { email, password },
+            update: (cache, result) => {
+              cache.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: { __typename: 'Query', me: result.data?.login.user },
+              });
+            },
+          });
           if (data?.login?.user) {
             router.push('/feeds/manage');
           } else {

@@ -47,9 +47,12 @@ function makeSuccessMessage(email: string, title: string, schedule: DigestSchedu
 
 const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) => {
   const [addFeed] = useAddFeedWithEmailMutation();
+  console.log(email);
+
   return (
     <Formik
-      initialValues={{ email: '', url: 'https://', digest: DigestSchedule.daily }}
+      initialValues={{ email, url: 'https://', digest: DigestSchedule.daily }}
+      enableReinitialize
       validationSchema={AddFeedSchema}
       onSubmit={async (formVariables, { setSubmitting, resetForm }) => {
         try {
@@ -73,7 +76,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
           } else {
             const errMessages: MessageItem[] | undefined = data?.addFeedWithEmail?.errors?.map(
               (e, idx) => ({
-                key: `error_${idx}`,
+                key: `error_${idx + Math.random()}`,
                 text: e.message,
                 type: 'error',
               }),
@@ -99,6 +102,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
             touched={touched.url}
             error={errors.url}
             title="The RSS or Atom feed url"
+            disabled={isSubmitting}
             required
           />
           <Input
@@ -111,7 +115,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
             onBlur={handleBlur}
             touched={touched.email}
             error={errors.email}
-            disabled={isSubmitting || !!email}
+            disabled={!!email || isSubmitting}
             title="Email address"
             required
           />
@@ -122,6 +126,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
             onChange={handleChange}
             onBlur={handleBlur}
             error={errors.digest}
+            disabled={isSubmitting}
           >
             {Object.values(DigestSchedule).map((sc) => (
               <option key={sc} value={sc}>{`${names[sc]} digest`}</option>

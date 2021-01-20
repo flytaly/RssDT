@@ -15,7 +15,7 @@ export const useEmergeTransition = (items: MessageItem[]) =>
     config: { mass: 1, friction: 12 },
     from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
     enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
-    leave: { position: 'absolute' },
+    leave: { transform: 'translate3d(0, 0, 0)' },
   });
 
 interface AnimatedMessageProps {
@@ -43,7 +43,7 @@ const AnimatedMessage: React.FC<AnimatedMessageProps> = ({
   return (
     <animated.div
       style={style}
-      className={`group flex items-center text-sm p-2 my-2 mx-2 w-full rounded-md break-words ${colors}`}
+      className={`group flex items-center text-sm p-2 my-2 mx-2 w-full rounded-md break-words bg-gray-50 ${colors}`}
     >
       {withline ? (
         <div className="flex-shrink-0 bg-gray group-hover:bg-primary h-full w-1 mr-2 rounded-xl" />

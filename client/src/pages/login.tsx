@@ -30,7 +30,6 @@ const initialMessages: MessageItem[] = [
 ];
 
 const Login: NextPage = () => {
-  const { data } = useMeQuery({ skip: isServer() });
   const [messages, setMessages] = useState<MessageItem[]>([]);
   return (
     <Layout>

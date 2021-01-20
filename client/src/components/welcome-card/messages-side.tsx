@@ -10,7 +10,7 @@ interface MessagesSideProps {
 const MessagesSide: React.FC<MessagesSideProps> = ({ items }) => {
   const transitions = useEmergeTransition(items);
   return (
-    <section className="flex-grow flex flex-col items-center rounded-md p-3 md:w-1/2">
+    <section className="relative flex-grow flex flex-col items-center rounded-md p-3 md:w-1/2">
       {transitions.map(({ item, props, key }) => {
         const Icon: typeof CheckCircleIcon | null | undefined =
           item.type &&
