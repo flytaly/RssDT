@@ -1,15 +1,12 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import AddFeedForm from '../components/forms/add-feed-form';
 import LoginForm from '../components/forms/log-in-form';
 import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import FormSide from '../components/welcome-card/form-side';
 import MessagesSide from '../components/welcome-card/messages-side';
 import WelcomeCard from '../components/welcome-card/welcome-card';
-import { useMeQuery } from '../generated/graphql';
-import { isServer } from '../utils/is-server';
 
 const initialMessages: MessageItem[] = [
   {

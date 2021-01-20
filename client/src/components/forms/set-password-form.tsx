@@ -1,0 +1,99 @@
+import { Formik } from 'formik';
+import { useRouter } from 'next/dist/client/router';
+import React from 'react';
+import * as Yup from 'yup';
+import PasswordIcon from '../../../public/static/key.svg';
+import { MeDocument, MeQuery, useResetPasswordMutation } from '../../generated/graphql';
+import GraphQLError from '../graphql-error';
+import { MessageItem } from '../welcome-card/animated-message';
+import Input from './input';
+
+// VALIDATION
+const SetPasswordSchema = Yup.object().shape({
+  password: Yup.string().min(8).max(100).required('Password is required'),
+  confirm: Yup.string()
+    .oneOf([Yup.ref('password'), null], "Passwords don't match")
+    .required('Confirm Password is required'),
+});
+
+interface SetPasswordProps {
+  token: string;
+  userId: string;
+  setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
+}
+
+const SetPasswordForm: React.FC<SetPasswordProps> = ({ setMessages, token, userId }) => {
+  const [resetPassword] = useResetPasswordMutation();
+  const router = useRouter();
+  const disabled = !token || !userId;
+  return (
+    <Formik
+      initialValues={{ password: '', confirm: '' }}
+      validationSchema={SetPasswordSchema}
+      onSubmit={async ({ password }, { setSubmitting }) => {
+        try {
+          const { data } = await resetPassword({
+            variables: { input: { password, token, userId } },
+            update: (cache, result) => {
+              cache.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: { __typename: 'Query', me: result.data?.resetPassword.user },
+              });
+            },
+          });
+          if (data?.resetPassword?.user) {
+            router.push('/');
+          } else {
+            setMessages?.([
+              { type: 'error', key: 'error', text: data?.resetPassword.errors?.[0].message },
+            ]);
+          }
+        } catch (err) {
+          setMessages?.([{ key: 'error', content: <GraphQLError error={err.message} /> }]);
+        }
+        setSubmitting(false);
+      }}
+    >
+      {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        <form className="w-full" onSubmit={handleSubmit}>
+          <Input
+            id="password"
+            type="Password"
+            IconSVG={PasswordIcon}
+            placeholder="Password"
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            touched={touched.password}
+            error={errors.password}
+            disabled={isSubmitting || disabled}
+            required
+          />
+
+          <Input
+            id="confirm"
+            type="Password"
+            IconSVG={PasswordIcon}
+            placeholder="Confirm password"
+            value={values.confirm}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            touched={touched.confirm}
+            error={errors.confirm}
+            disabled={isSubmitting || disabled}
+            required
+          />
+          <button
+            type="submit"
+            className="btn w-full text-xl tracking-wider"
+            disabled={isSubmitting || disabled}
+          >
+            {isSubmitting ? 'Setting...' : 'Set password'}
+          </button>
+        </form>
+      )}
+    </Formik>
+  );
+};
+
+export default SetPasswordForm;

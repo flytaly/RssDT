@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 
 export type FocusEvent = React.FocusEvent<HTMLInputElement | HTMLSelectElement>;
 
