@@ -369,6 +369,30 @@ export type UsualUserResponseFragment = (
   )>> }
 );
 
+export type ActivateFeedMutationVariables = Exact<{
+  token: Scalars['String'];
+  userFeedId: Scalars['String'];
+}>;
+
+
+export type ActivateFeedMutation = (
+  { __typename?: 'Mutation' }
+  & { activateFeed: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & { feed: (
+        { __typename?: 'Feed' }
+        & Pick<Feed, 'id' | 'url' | 'title'>
+      ) }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  ) }
+);
+
 export type AddFeedWithEmailMutationVariables = Exact<{
   feedOpts?: Maybe<UserFeedOptionsInput>;
   userInfo?: Maybe<UserInfoInput>;
@@ -545,6 +569,50 @@ export const UsualUserResponseFragmentDoc = gql`
   }
 }
     ${UserFieldsFragmentDoc}`;
+export const ActivateFeedDocument = gql`
+    mutation activateFeed($token: String!, $userFeedId: String!) {
+  activateFeed(token: $token, userFeedId: $userFeedId) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
+    }
+    errors {
+      message
+      argument
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export type ActivateFeedMutationFn = Apollo.MutationFunction<ActivateFeedMutation, ActivateFeedMutationVariables>;
+
+/**
+ * __useActivateFeedMutation__
+ *
+ * To run a mutation, you first call `useActivateFeedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useActivateFeedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [activateFeedMutation, { data, loading, error }] = useActivateFeedMutation({
+ *   variables: {
+ *      token: // value for 'token'
+ *      userFeedId: // value for 'userFeedId'
+ *   },
+ * });
+ */
+export function useActivateFeedMutation(baseOptions?: Apollo.MutationHookOptions<ActivateFeedMutation, ActivateFeedMutationVariables>) {
+        return Apollo.useMutation<ActivateFeedMutation, ActivateFeedMutationVariables>(ActivateFeedDocument, baseOptions);
+      }
+export type ActivateFeedMutationHookResult = ReturnType<typeof useActivateFeedMutation>;
+export type ActivateFeedMutationResult = Apollo.MutationResult<ActivateFeedMutation>;
+export type ActivateFeedMutationOptions = Apollo.BaseMutationOptions<ActivateFeedMutation, ActivateFeedMutationVariables>;
 export const AddFeedWithEmailDocument = gql`
     mutation addFeedWithEmail($feedOpts: UserFeedOptionsInput, $userInfo: UserInfoInput, $input: AddFeedEmailInput!) {
   addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
