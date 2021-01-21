@@ -190,6 +190,12 @@ export class UserFeedResolver {
     return { userFeed: result.raw[0] as UserFeed };
   }
 
+  @Query(() => UserFeed, { nullable: true })
+  async getFeedInfoByToken(@Arg('token') token: string, @Arg('id') id: string) {
+    if (!token || !id) return null;
+    return UserFeed.findOne({ unsubscribeToken: token, id: Number(id) }, { relations: ['feed'] });
+  }
+
   @Mutation(() => Boolean)
   async unsubscribeByToken(@Arg('token') token: string, @Arg('id') id: string) {
     if (!token || !id) return false;

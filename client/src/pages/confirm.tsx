@@ -20,7 +20,7 @@ const getMessages = (data: ActivateFeedMutation): MessageItem[] => {
     return [
       {
         key: 'activation-success',
-        text: `Feed ${userFeed.feed.title} activated successfully`,
+        text: `Feed ${userFeed.feed.title || userFeed.feed.url} activated successfully`,
         type: 'success',
       },
     ];

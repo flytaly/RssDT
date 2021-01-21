@@ -21,7 +21,14 @@ export type Query = {
   me?: Maybe<User>;
   myOptions: Options;
   myFeeds?: Maybe<Array<UserFeed>>;
+  getFeedInfoByToken?: Maybe<UserFeed>;
   myFeedItems: PaginatedItemsResponse;
+};
+
+
+export type QueryGetFeedInfoByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -491,6 +498,23 @@ export type UnsubscribeByTokenMutation = (
   & Pick<Mutation, 'unsubscribeByToken'>
 );
 
+export type GetFeedInfoByTokenQueryVariables = Exact<{
+  id: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+
+export type GetFeedInfoByTokenQuery = (
+  { __typename?: 'Query' }
+  & { getFeedInfoByToken?: Maybe<(
+    { __typename?: 'UserFeed' }
+    & { feed: (
+      { __typename?: 'Feed' }
+      & Pick<Feed, 'title' | 'url'>
+    ) }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -859,6 +883,43 @@ export function useUnsubscribeByTokenMutation(baseOptions?: Apollo.MutationHookO
 export type UnsubscribeByTokenMutationHookResult = ReturnType<typeof useUnsubscribeByTokenMutation>;
 export type UnsubscribeByTokenMutationResult = Apollo.MutationResult<UnsubscribeByTokenMutation>;
 export type UnsubscribeByTokenMutationOptions = Apollo.BaseMutationOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
+export const GetFeedInfoByTokenDocument = gql`
+    query getFeedInfoByToken($id: String!, $token: String!) {
+  getFeedInfoByToken(id: $id, token: $token) {
+    feed {
+      title
+      url
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetFeedInfoByTokenQuery__
+ *
+ * To run a query within a React component, call `useGetFeedInfoByTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFeedInfoByTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFeedInfoByTokenQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useGetFeedInfoByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>) {
+        return Apollo.useQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(GetFeedInfoByTokenDocument, baseOptions);
+      }
+export function useGetFeedInfoByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>) {
+          return Apollo.useLazyQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(GetFeedInfoByTokenDocument, baseOptions);
+        }
+export type GetFeedInfoByTokenQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenQuery>;
+export type GetFeedInfoByTokenLazyQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenLazyQuery>;
+export type GetFeedInfoByTokenQueryResult = Apollo.QueryResult<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>;
 export const MeDocument = gql`
     query me {
   me {

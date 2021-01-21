@@ -1,10 +1,15 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import MessagesSide from '../components/welcome-card/messages-side';
 import WelcomeCard from '../components/welcome-card/welcome-card';
-import { useUnsubscribeByTokenMutation } from '../generated/graphql';
+import {
+  GetFeedInfoByTokenDocument,
+  GetFeedInfoByTokenQuery,
+  useUnsubscribeByTokenMutation,
+} from '../generated/graphql';
+import { initializeApollo } from '../lib/apollo-client';
 
 const wrongQueryMsg: MessageItem = {
   key: 'query-error',
@@ -12,12 +17,12 @@ const wrongQueryMsg: MessageItem = {
   type: 'error',
 };
 
-type UnsubscribeProps = { id?: string; token?: string };
+type UnsubscribeProps = { id?: string; token?: string; title?: string; url?: string };
 
-const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token }) => {
+const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token, title, url }) => {
+  const [unsubscribeMutation, { called, loading, data, error }] = useUnsubscribeByTokenMutation();
   const messages: MessageItem[] = [];
   if (!id || !token) messages.push(wrongQueryMsg);
-  const [unsubscribeMutation, { called, loading, data, error }] = useUnsubscribeByTokenMutation();
   if (error) messages.push({ key: 'error', text: error.message, type: 'error' });
   if (called && !loading) {
     if (data?.unsubscribeByToken) {
@@ -28,8 +33,6 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token }) => {
     }
   }
 
-  const title = ''; // TODO: FETCH title
-
   const clickHandler = () => {
     if (id && token) unsubscribeMutation({ variables: { id, token } });
   };
@@ -39,7 +42,11 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token }) => {
         <div className="flex flex-col items-center w-full h-full text-center p-4 mt-6">
           <div>
             <div>Click on the button to unsubscribe from the feed</div>
-            <b>{title}</b>
+            {url ? (
+              <a className="font-bold hover:underline" href={url}>
+                {title || url}
+              </a>
+            ) : null}
           </div>
           <button
             type="submit"
@@ -56,9 +63,23 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token }) => {
   );
 };
 
-export const getServerSideProps = (context: GetServerSidePropsContext) => {
+const fetchFeedInfo = async (id?: string, token?: string) => {
+  if (!id || !token) return { title: '', url: '' };
+  const apolloClient = initializeApollo();
+  const result = await apolloClient.query<GetFeedInfoByTokenQuery>({
+    query: GetFeedInfoByTokenDocument,
+    variables: { id, token },
+  });
+  const feed = result.data.getFeedInfoByToken?.feed;
+  return { title: feed?.title || '', url: feed?.url || '' };
+};
+
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const { id, token } = context.query as { id?: string; token?: string };
-  return { props: { id: id || null, token: token || null } } as { props: UnsubscribeProps };
+  const { title, url } = await fetchFeedInfo(id, token);
+  return { props: { id: id || null, token: token || null, url, title } } as {
+    props: UnsubscribeProps;
+  };
 };
 
 export default Unsubscribe;
