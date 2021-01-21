@@ -480,6 +480,17 @@ export type ResetPasswordMutation = (
   ) }
 );
 
+export type UnsubscribeByTokenMutationVariables = Exact<{
+  id: Scalars['String'];
+  token: Scalars['String'];
+}>;
+
+
+export type UnsubscribeByTokenMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'unsubscribeByToken'>
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -817,6 +828,37 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const UnsubscribeByTokenDocument = gql`
+    mutation unsubscribeByToken($id: String!, $token: String!) {
+  unsubscribeByToken(id: $id, token: $token)
+}
+    `;
+export type UnsubscribeByTokenMutationFn = Apollo.MutationFunction<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
+
+/**
+ * __useUnsubscribeByTokenMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeByTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeByTokenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeByTokenMutation, { data, loading, error }] = useUnsubscribeByTokenMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      token: // value for 'token'
+ *   },
+ * });
+ */
+export function useUnsubscribeByTokenMutation(baseOptions?: Apollo.MutationHookOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>) {
+        return Apollo.useMutation<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>(UnsubscribeByTokenDocument, baseOptions);
+      }
+export type UnsubscribeByTokenMutationHookResult = ReturnType<typeof useUnsubscribeByTokenMutation>;
+export type UnsubscribeByTokenMutationResult = Apollo.MutationResult<UnsubscribeByTokenMutation>;
+export type UnsubscribeByTokenMutationOptions = Apollo.BaseMutationOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
 export const MeDocument = gql`
     query me {
   me {
