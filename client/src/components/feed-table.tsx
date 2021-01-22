@@ -7,56 +7,67 @@ type FeedTableProps = {
 
 interface CellProps {
   children: React.ReactNode;
-  name: string;
+  name?: string;
+  header?: boolean;
 }
 
-const Cell: React.FC<CellProps> = ({ children, name }) => (
-  <span className="flex-1 feed-table-column" data-name={name}>
-    {children}
-  </span>
-);
+const Cell: React.FC<CellProps> = ({ children, name = '', header = false }) => {
+  return React.createElement(
+    header ? 'th' : 'td',
+    { className: 'feed-table-column', 'data-name': name },
+    <span className="flex-1">{children}</span>,
+  );
+};
 
 interface RowProps {
   children: React.ReactNode;
   isOdd?: boolean;
 }
 const Row: React.FC<RowProps> = ({ children, isOdd = true }) => (
-  <li className={`feed-table gap-2 py-4 sm:py-1 hover:bg-primary-2 ${isOdd ? '' : 'bg-gray-1'}`}>
+  <tr
+    className={`grid feed-table-template gap-2 py-4 sm:py-1 hover:bg-primary-2 ${
+      isOdd ? '' : 'bg-gray-1'
+    }`}
+  >
     {children}
-  </li>
+  </tr>
 );
 
 const HeaderRow: React.FC = ({ children }) => (
-  <li className="feed-table gap-2 font-bold  py-4 sm:py-1 hover:bg-primary-2">{children}</li>
+  <tr className="feed-table-template hidden sm:grid gap-2 font-bold  py-4 sm:py-1 hover:bg-primary-2">
+    {children}
+  </tr>
 );
 
 const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '');
   const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
   return (
-    <ul className="text-sm">
-      <HeaderRow>
-        <Cell name="Feed">Feed</Cell>
-        <Cell name="Added">Added</Cell>
-        <Cell name="Last digest date">Last digest date</Cell>
-        <Cell name="Digest Schedule">Digest Schedule</Cell>
-        <Cell name="Actions">Actions</Cell>
-      </HeaderRow>
+    <div>
+      <table className="w-full text-sm">
+        <HeaderRow>
+          <Cell name="Feed">Feed</Cell>
+          <Cell name="Added">Added</Cell>
+          <Cell name="Last digest date">Last digest date</Cell>
+          <Cell name="Digest Schedule">Digest Schedule</Cell>
+          <Cell name="Actions">Actions</Cell>
+        </HeaderRow>
 
-      {feeds.map((uf, idx) => (
-        <Row isOdd={!(idx % 2)}>
-          <Cell name="Feed">
-            <a className="underline" href={uf.feed.link || uf.feed.url}>
-              {uf.feed.title}
-            </a>
-          </Cell>
-          <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
-          <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
-          <Cell name="Digest Schedule">{uf.schedule}</Cell>
-          <Cell name="Actions">actions</Cell>
-        </Row>
-      ))}
-    </ul>
+        {feeds.map((uf, idx) => (
+          <Row isOdd={!(idx % 2)}>
+            <Cell name="Feed">
+              <a className="underline" href={uf.feed.link || uf.feed.url}>
+                {uf.feed.title}
+              </a>
+            </Cell>
+            <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
+            <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
+            <Cell name="Digest Schedule">{uf.schedule}</Cell>
+            <Cell name="Actions">actions</Cell>
+          </Row>
+        ))}
+      </table>
+    </div>
   );
 };
 
