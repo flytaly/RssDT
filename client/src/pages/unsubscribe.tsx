@@ -3,7 +3,7 @@ import React from 'react';
 import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import MessagesSide from '../components/welcome-card/messages-side';
-import WelcomeCard from '../components/welcome-card/welcome-card';
+import MainCard from '../components/welcome-card/main-card';
 import {
   GetFeedInfoByTokenDocument,
   GetFeedInfoByTokenQuery,
@@ -38,7 +38,7 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token, title, url }) => {
   };
   return (
     <Layout>
-      <WelcomeCard>
+      <MainCard>
         <div className="flex flex-col items-center w-full h-full text-center p-4 mt-6">
           <div>
             <div>Click on the button to unsubscribe from the feed</div>
@@ -58,7 +58,7 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token, title, url }) => {
           </button>
           <MessagesSide items={messages} />
         </div>
-      </WelcomeCard>
+      </MainCard>
     </Layout>
   );
 };

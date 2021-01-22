@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import MessagesSide from '../components/welcome-card/messages-side';
-import WelcomeCard from '../components/welcome-card/welcome-card';
+import MainCard from '../components/welcome-card/main-card';
 import { ActivateFeedMutation, useActivateFeedMutation } from '../generated/graphql';
 
 type ConfirmFeedProps = { id?: string; token?: string };
@@ -49,13 +49,13 @@ const ConfirmFeed: NextPage<ConfirmFeedProps> = ({ id, token }) => {
 
   return (
     <Layout>
-      <WelcomeCard>
+      <MainCard>
         <div className="flex flex-col items-center w-full text-center p-4">
           <h2 className="text-xl font-bold mb-4 text-center">Confirm feed</h2>
           {loading ? <b>Confirming</b> : null}
           <MessagesSide items={messages} />
         </div>
-      </WelcomeCard>
+      </MainCard>
     </Layout>
   );
 };

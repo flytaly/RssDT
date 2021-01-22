@@ -10,9 +10,12 @@ module.exports = {
       colors: {
         primary: {
           DEFAULT: 'var(--primary)',
+          1: 'var(--primary-1)',
+          2: 'var(--primary-2)',
         },
         gray: {
           DEFAULT: 'var(--gray)',
+          1: 'var(--gray-1)',
         },
         error: {
           DEFAULT: 'var(--error)',

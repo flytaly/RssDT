@@ -6,7 +6,7 @@ import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import FormSide from '../components/welcome-card/form-side';
 import MessagesSide from '../components/welcome-card/messages-side';
-import WelcomeCard from '../components/welcome-card/welcome-card';
+import MainCard from '../components/welcome-card/main-card';
 import { useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 
@@ -49,13 +49,13 @@ const Home: NextPage = () => {
   const items = [...infoMessages, ...(!loading && !data?.me ? ifLogoutMsg : []), ...messages];
   return (
     <Layout>
-      <WelcomeCard>
+      <MainCard>
         <MessagesSide items={items} />
         <FormSide>
           <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
           <AddFeedForm email={data?.me?.email} setMessages={setMessages} />
         </FormSide>
-      </WelcomeCard>
+      </MainCard>
     </Layout>
   );
 };

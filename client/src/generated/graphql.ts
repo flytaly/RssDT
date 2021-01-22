@@ -357,7 +357,7 @@ export type OptionsFieldsFragment = (
 
 export type UserFeedFieldsFragment = (
   { __typename?: 'UserFeed' }
-  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme'>
+  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'lastDigestSentAt'>
 );
 
 export type UserFieldsFragment = (
@@ -526,6 +526,21 @@ export type MeQuery = (
   )> }
 );
 
+export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyFeedsQuery = (
+  { __typename?: 'Query' }
+  & { myFeeds?: Maybe<Array<(
+    { __typename?: 'UserFeed' }
+    & { feed: (
+      { __typename?: 'Feed' }
+      & FeedFieldsFragment
+    ) }
+    & UserFeedFieldsFragment
+  )>> }
+);
+
 export const FeedFieldsFragmentDoc = gql`
     fragment FeedFields on Feed {
   id
@@ -581,6 +596,8 @@ export const UserFeedFieldsFragmentDoc = gql`
   itemBody
   attachments
   theme
+  createdAt
+  lastDigestSentAt
 }
     `;
 export const UserFieldsFragmentDoc = gql`
@@ -952,3 +969,39 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MyFeedsDocument = gql`
+    query myFeeds {
+  myFeeds {
+    ...UserFeedFields
+    feed {
+      ...FeedFields
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
+
+/**
+ * __useMyFeedsQuery__
+ *
+ * To run a query within a React component, call `useMyFeedsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyFeedsQuery(baseOptions?: Apollo.QueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>) {
+        return Apollo.useQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+      }
+export function useMyFeedsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>) {
+          return Apollo.useLazyQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+        }
+export type MyFeedsQueryHookResult = ReturnType<typeof useMyFeedsQuery>;
+export type MyFeedsLazyQueryHookResult = ReturnType<typeof useMyFeedsLazyQuery>;
+export type MyFeedsQueryResult = Apollo.QueryResult<MyFeedsQuery, MyFeedsQueryVariables>;

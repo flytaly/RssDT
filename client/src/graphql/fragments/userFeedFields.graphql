@@ -6,4 +6,6 @@ fragment UserFeedFields on UserFeed {
   itemBody
   attachments
   theme
+  createdAt
+  lastDigestSentAt
 }

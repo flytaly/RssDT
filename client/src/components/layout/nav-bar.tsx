@@ -10,9 +10,14 @@ const NavBar = () => {
   else if (data?.me) {
     content = (
       <>
-        <div>{`Logged in (${data?.me.email})`}</div>
+        <Link href="/feeds/reader">
+          <a className="hover-underline-link">reader</a>
+        </Link>
+        <Link href="/feeds/manage">
+          <a className="hover-underline-link">manage</a>
+        </Link>
         <Link href="/logout">
-          <a className="hover-underline-link">logout</a>
+          <a className="hover-underline-link">{`logout (${data?.me.email})`}</a>
         </Link>
       </>
     );

@@ -5,7 +5,7 @@ import Layout from '../components/layout/layout';
 import { MessageItem } from '../components/welcome-card/animated-message';
 import FormSide from '../components/welcome-card/form-side';
 import MessagesSide from '../components/welcome-card/messages-side';
-import WelcomeCard from '../components/welcome-card/welcome-card';
+import MainCard from '../components/welcome-card/main-card';
 
 const initialMessages: MessageItem[] = [
   {
@@ -28,13 +28,13 @@ const ResetPassword: NextPage<ResetPasswordProps> = ({ id, token }) => {
 
   return (
     <Layout>
-      <WelcomeCard>
+      <MainCard>
         <MessagesSide items={msgItems} />
         <FormSide>
           <h2 className="text-xl font-bold mb-4 text-center">Reset password</h2>
           <SetPasswordForm token={token || ''} userId={id || ''} setMessages={setMessages} />
         </FormSide>
-      </WelcomeCard>
+      </MainCard>
     </Layout>
   );
 };

@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
 import Layout from '../components/layout/layout';
-import WelcomeCard from '../components/welcome-card/welcome-card';
+import MainCard from '../components/welcome-card/main-card';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 
@@ -26,11 +26,11 @@ const Logout: NextPage = () => {
 
   return (
     <Layout>
-      <WelcomeCard>
+      <MainCard>
         <div className="p-12 w-full h-full text-center">
           <b className="text-2xl w-full text-center">Logging out...</b>
         </div>
-      </WelcomeCard>
+      </MainCard>
     </Layout>
   );
 };
