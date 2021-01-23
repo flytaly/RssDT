@@ -13,6 +13,12 @@ module.exports = {
           1: 'var(--primary-1)',
           2: 'var(--primary-2)',
         },
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+        },
+        tertiary: {
+          DEFAULT: 'var(--tertiary)',
+        },
         gray: {
           DEFAULT: 'var(--gray)',
           1: 'var(--gray-1)',

@@ -7,7 +7,7 @@ import MailIcon from '../../../public/static/envelope.svg';
 import PasswordIcon from '../../../public/static/key.svg';
 import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
-import { MessageItem } from '../welcome-card/animated-message';
+import { MessageItem } from '../main-card/animated-message';
 import Input from './input';
 
 // VALIDATION
@@ -86,7 +86,7 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
           </div>
           <button
             type="submit"
-            className="btn w-full text-xl tracking-wider"
+            className="submit-btn w-full text-xl tracking-wider"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Logging in...' : 'Log in'}

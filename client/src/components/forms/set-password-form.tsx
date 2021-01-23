@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import PasswordIcon from '../../../public/static/key.svg';
 import { MeDocument, MeQuery, useResetPasswordMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
-import { MessageItem } from '../welcome-card/animated-message';
+import { MessageItem } from '../main-card/animated-message';
 import Input from './input';
 
 // VALIDATION
@@ -85,7 +85,7 @@ const SetPasswordForm: React.FC<SetPasswordProps> = ({ setMessages, token, userI
           />
           <button
             type="submit"
-            className="btn w-full text-xl tracking-wider"
+            className="submit-btn w-full text-xl tracking-wider"
             disabled={isSubmitting || disabled}
           >
             {isSubmitting ? 'Setting...' : 'Set password'}

@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import MailIcon from '../../../public/static/envelope.svg';
 import { useRequestPasswordResetMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
-import { MessageItem } from '../welcome-card/animated-message';
+import { MessageItem } from '../main-card/animated-message';
 import Input from './input';
 
 // VALIDATION
@@ -63,7 +63,7 @@ const RequestPasswordChangeForm: React.FC<RequestPassProps> = ({ setMessages }) 
           </div>
           <button
             type="submit"
-            className="btn w-full text-xl tracking-wider"
+            className="submit-btn w-full text-xl tracking-wider"
             disabled={isSubmitting || wasSuccess}
           >
             {isSubmitting ? 'Loading...' : 'Email me'}

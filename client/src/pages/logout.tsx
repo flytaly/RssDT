@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
 import Layout from '../components/layout/layout';
-import MainCard from '../components/welcome-card/main-card';
+import MainCard from '../components/main-card/main-card';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 

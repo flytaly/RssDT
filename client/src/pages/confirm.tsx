@@ -1,9 +1,9 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
 import React, { useEffect } from 'react';
 import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/welcome-card/animated-message';
-import MessagesSide from '../components/welcome-card/messages-side';
-import MainCard from '../components/welcome-card/main-card';
+import { MessageItem } from '../components/main-card/animated-message';
+import MessagesSide from '../components/main-card/messages-side';
+import MainCard from '../components/main-card/main-card';
 import { ActivateFeedMutation, useActivateFeedMutation } from '../generated/graphql';
 
 type ConfirmFeedProps = { id?: string; token?: string };

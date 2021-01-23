@@ -2,10 +2,10 @@ import { NextPage } from 'next';
 import React, { useState } from 'react';
 import RequestPasswordChangeForm from '../components/forms/request-password-change';
 import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/welcome-card/animated-message';
-import FormSide from '../components/welcome-card/form-side';
-import MessagesSide from '../components/welcome-card/messages-side';
-import MainCard from '../components/welcome-card/main-card';
+import { MessageItem } from '../components/main-card/animated-message';
+import FormSide from '../components/main-card/form-side';
+import MessagesSide from '../components/main-card/messages-side';
+import MainCard from '../components/main-card/main-card';
 
 const initialMessages: MessageItem[] = [
   {

@@ -8,6 +8,8 @@ html {
   --primary: rgb(172, 36, 125);
   --primary-1: rgb(172, 36, 125, 0.05);
   --primary-2: rgb(172, 36, 125, 0.1);
+  --secondary: rgb(0, 115, 209);
+  --tertiary: rgb(0, 165, 144);
   --gray: #777d8c;
   --gray-1: #dfe0e5;
   --success: rgb(0, 140, 0);
@@ -62,20 +64,29 @@ body {
   input[disabled] {
     @apply text-gray-500;
   }
-
   .btn {
-    @apply text-white uppercase rounded-3xl bg-primary py-0.5 px-4 transition-transform ease-in-out;
+    @apply text-white text-sm py-1 px-2 rounded-md;
+  }
+  .btn:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0 0);
+  }
+  .btn:active {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.4) 0 0);
   }
 
-  .btn:disabled {
+  .submit-btn {
+    @apply text-white uppercase rounded-xl bg-primary py-0.5 px-4 transition-transform ease-in-out;
+  }
+
+  .submit-btn:disabled {
     @apply bg-gray-400;
   }
 
-  .btn:hover:not(:disabled) {
+  .submit-btn:hover:not(:disabled) {
     box-shadow: 0 0 1rem var(--primary);
   }
 
-  .btn:active:not(:disabled) {
+  .submit-btn:active:not(:disabled) {
     transform: scale(0.97);
   }
 

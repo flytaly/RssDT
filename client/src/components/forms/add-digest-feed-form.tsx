@@ -8,7 +8,7 @@ import ClockIcon from '../../../public/static/clock.svg';
 import Select from './select';
 import { periodNames as names, DigestSchedule } from '../../types';
 import { useAddFeedWithEmailMutation } from '../../generated/graphql';
-import { MessageItem } from '../welcome-card/animated-message';
+import { MessageItem } from '../main-card/animated-message';
 import GraphQLError from '../graphql-error';
 
 // VALIDATION
@@ -25,7 +25,7 @@ const getUserInfo = () => {
   return null;
 };
 
-interface AddFeedFormProps {
+interface AddDigestFeedFormProps {
   email?: string;
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
@@ -45,9 +45,8 @@ function makeSuccessMessage(email: string, title: string, schedule: DigestSchedu
   return { key: `success${Math.random() * 1000}`, content, type: 'success' } as MessageItem;
 }
 
-const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) => {
+const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMessages }) => {
   const [addFeed] = useAddFeedWithEmailMutation();
-  console.log(email);
 
   return (
     <Formik
@@ -134,7 +133,7 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
           </Select>
           <button
             type="submit"
-            className="btn w-full text-xl tracking-wider"
+            className="submit-btn w-full text-xl tracking-wider"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'loading...' : 'subscribe'}
@@ -145,4 +144,4 @@ const AddFeedForm: React.FC<AddFeedFormProps> = ({ email = '', setMessages }) =>
   );
 };
 
-export default AddFeedForm;
+export default AddDigestFeedForm;

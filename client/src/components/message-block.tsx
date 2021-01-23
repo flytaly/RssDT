@@ -1,16 +1,16 @@
 import React from 'react';
-import AnimatedMessage, { MessageItem, useEmergeTransition } from './animated-message';
-import AlertCircleIcon from '../../../public/static/alert-circle.svg';
-import CheckCircleIcon from '../../../public/static/check-circle.svg';
+import AnimatedMessage, { MessageItem, useEmergeTransition } from './main-card/animated-message';
+import AlertCircleIcon from '../../public/static/alert-circle.svg';
+import CheckCircleIcon from '../../public/static/check-circle.svg';
 
-interface MessagesSideProps {
+interface MessageBlockProps {
   items: MessageItem[];
 }
 
-const MessagesSide: React.FC<MessagesSideProps> = ({ items }) => {
+const MessageBlock: React.FC<MessageBlockProps> = ({ items }) => {
   const transitions = useEmergeTransition(items);
   return (
-    <section className="relative flex-grow flex flex-col items-center rounded-md p-3 md:w-1/2">
+    <>
       {transitions.map(({ item, props, key }) => {
         const Icon: typeof CheckCircleIcon | null | undefined =
           item.type &&
@@ -28,8 +28,8 @@ const MessagesSide: React.FC<MessagesSideProps> = ({ items }) => {
           </AnimatedMessage>
         );
       })}
-    </section>
+    </>
   );
 };
 
-export default MessagesSide;
+export default MessageBlock;

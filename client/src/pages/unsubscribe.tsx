@@ -1,9 +1,9 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
 import React from 'react';
 import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/welcome-card/animated-message';
-import MessagesSide from '../components/welcome-card/messages-side';
-import MainCard from '../components/welcome-card/main-card';
+import { MessageItem } from '../components/main-card/animated-message';
+import MessagesSide from '../components/main-card/messages-side';
+import MainCard from '../components/main-card/main-card';
 import {
   GetFeedInfoByTokenDocument,
   GetFeedInfoByTokenQuery,
@@ -50,7 +50,7 @@ const Unsubscribe: NextPage<UnsubscribeProps> = ({ id, token, title, url }) => {
           </div>
           <button
             type="submit"
-            className="btn mt-3"
+            className="submit-btn mt-3"
             onClick={clickHandler}
             disabled={called || loading}
           >

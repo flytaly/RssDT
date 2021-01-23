@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import AddFeedForm from '../components/forms/add-feed-form';
+import AddDigestFeedForm from '../components/forms/add-digest-feed-form';
 import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/welcome-card/animated-message';
-import FormSide from '../components/welcome-card/form-side';
-import MessagesSide from '../components/welcome-card/messages-side';
-import MainCard from '../components/welcome-card/main-card';
+import { MessageItem } from '../components/main-card/animated-message';
+import FormSide from '../components/main-card/form-side';
+import MessagesSide from '../components/main-card/messages-side';
+import MainCard from '../components/main-card/main-card';
 import { useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 
@@ -44,7 +44,6 @@ const ifLogoutMsg: MessageItem[] = [
 const Home: NextPage = () => {
   const { data, loading } = useMeQuery({ skip: isServer() });
   const [messages, setMessages] = useState<MessageItem[]>([]);
-  console.log(messages);
 
   const items = [...infoMessages, ...(!loading && !data?.me ? ifLogoutMsg : []), ...messages];
   return (
@@ -53,7 +52,7 @@ const Home: NextPage = () => {
         <MessagesSide items={items} />
         <FormSide>
           <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
-          <AddFeedForm email={data?.me?.email} setMessages={setMessages} />
+          <AddDigestFeedForm email={data?.me?.email} setMessages={setMessages} />
         </FormSide>
       </MainCard>
     </Layout>
