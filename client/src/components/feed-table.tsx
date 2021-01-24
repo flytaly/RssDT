@@ -45,27 +45,30 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   return (
     <div>
       <table className="w-full text-sm">
-        <HeaderRow>
-          <Cell name="Feed">Feed</Cell>
-          <Cell name="Added">Added</Cell>
-          <Cell name="Last digest date">Last digest date</Cell>
-          <Cell name="Digest Schedule">Digest Schedule</Cell>
-          <Cell name="Actions">Actions</Cell>
-        </HeaderRow>
-
-        {feeds.map((uf, idx) => (
-          <Row isOdd={!(idx % 2)}>
-            <Cell name="Feed">
-              <a className="underline" href={uf.feed.link || uf.feed.url}>
-                {uf.feed.title}
-              </a>
-            </Cell>
-            <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
-            <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
-            <Cell name="Digest Schedule">{uf.schedule}</Cell>
-            <Cell name="Actions">actions</Cell>
-          </Row>
-        ))}
+        <thead>
+          <HeaderRow>
+            <Cell name="Feed">Feed</Cell>
+            <Cell name="Added">Added</Cell>
+            <Cell name="Last digest date">Last digest date</Cell>
+            <Cell name="Digest Schedule">Digest Schedule</Cell>
+            <Cell name="Actions">Actions</Cell>
+          </HeaderRow>
+        </thead>
+        <tbody>
+          {feeds.map((uf, idx) => (
+            <Row isOdd={!(idx % 2)} key={uf.id}>
+              <Cell name="Feed">
+                <a className="underline" href={uf.feed.link || uf.feed.url}>
+                  {uf.feed.title}
+                </a>
+              </Cell>
+              <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
+              <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
+              <Cell name="Digest Schedule">{uf.schedule}</Cell>
+              <Cell name="Actions">actions</Cell>
+            </Row>
+          ))}
+        </tbody>
       </table>
     </div>
   );
