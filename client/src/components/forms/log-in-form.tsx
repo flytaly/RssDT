@@ -8,7 +8,7 @@ import PasswordIcon from '../../../public/static/key.svg';
 import { MeDocument, MeQuery, useLoginMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
 import { MessageItem } from '../main-card/animated-message';
-import Input from './input';
+import InputWithIcon from './input-with-icon';
 
 // VALIDATION
 const LoginSchema = Yup.object().shape({
@@ -51,7 +51,7 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
     >
       {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form className="w-full" onSubmit={handleSubmit}>
-          <Input
+          <InputWithIcon
             id="email"
             type="email"
             IconSVG={MailIcon}
@@ -66,7 +66,7 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
             required
           />
 
-          <Input
+          <InputWithIcon
             id="password"
             type="Password"
             IconSVG={PasswordIcon}

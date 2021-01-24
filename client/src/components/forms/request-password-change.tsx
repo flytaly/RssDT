@@ -6,7 +6,7 @@ import MailIcon from '../../../public/static/envelope.svg';
 import { useRequestPasswordResetMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
 import { MessageItem } from '../main-card/animated-message';
-import Input from './input';
+import InputWithIcon from './input-with-icon';
 
 // VALIDATION
 const RequestResetSchema = Yup.object().shape({
@@ -42,7 +42,7 @@ const RequestPasswordChangeForm: React.FC<RequestPassProps> = ({ setMessages }) 
     >
       {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form className="w-full" onSubmit={handleSubmit}>
-          <Input
+          <InputWithIcon
             id="email"
             type="email"
             IconSVG={MailIcon}

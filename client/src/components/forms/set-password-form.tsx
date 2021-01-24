@@ -6,7 +6,7 @@ import PasswordIcon from '../../../public/static/key.svg';
 import { MeDocument, MeQuery, useResetPasswordMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
 import { MessageItem } from '../main-card/animated-message';
-import Input from './input';
+import InputWithIcon from './input-with-icon';
 
 // VALIDATION
 const SetPasswordSchema = Yup.object().shape({
@@ -56,7 +56,7 @@ const SetPasswordForm: React.FC<SetPasswordProps> = ({ setMessages, token, userI
     >
       {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form className="w-full" onSubmit={handleSubmit}>
-          <Input
+          <InputWithIcon
             id="password"
             type="Password"
             IconSVG={PasswordIcon}
@@ -70,7 +70,7 @@ const SetPasswordForm: React.FC<SetPasswordProps> = ({ setMessages, token, userI
             required
           />
 
-          <Input
+          <InputWithIcon
             id="confirm"
             type="Password"
             IconSVG={PasswordIcon}

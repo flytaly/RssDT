@@ -6,28 +6,29 @@
 import React, { useRef } from 'react';
 import { CommonProps, useInputClasses } from './common';
 
-interface InputProps extends CommonProps {
-  value: string | number | readonly string[] | undefined;
-  placeholder?: string;
-  required?: boolean;
+interface SelectWithIconProps extends CommonProps {
+  children: React.ReactNode;
+  defaultValue: string | number | readonly string[] | undefined;
 }
 
-const Input: React.FC<InputProps> = ({
+const SelectWithIcon: React.FC<SelectWithIconProps> = ({
+  children,
+  defaultValue,
   error = '',
   IconSVG,
   id,
   onBlur,
+  onChange,
   onFocus,
   title = '',
   touched = false,
-  ...restProps
 }) => {
-  const inputEl = useRef<HTMLInputElement>(null);
+  const inputEl = useRef<HTMLSelectElement>(null);
 
   const { classes, setIsFocused } = useInputClasses();
 
   return (
-    <div className="w-full">
+    <div className="mb-3 w-full">
       <label
         htmlFor={id}
         className={classes.label}
@@ -37,9 +38,9 @@ const Input: React.FC<InputProps> = ({
         <div className={classes.iconContainer}>
           {IconSVG ? <IconSVG className={classes.icon} /> : null}
         </div>
-        <input
+        <select
           id={id}
-          className={classes.input}
+          className={`${classes.input} select`}
           onFocus={(event) => {
             setIsFocused(true);
             onFocus?.(event);
@@ -50,12 +51,15 @@ const Input: React.FC<InputProps> = ({
           }}
           ref={inputEl}
           aria-label={title}
-          {...restProps}
-        />
+          defaultValue={defaultValue}
+          onChange={onChange}
+        >
+          {children}
+        </select>
       </label>
       <div className={classes.error}>{error && touched ? error : ''}</div>
     </div>
   );
 };
 
-export default Input;
+export default SelectWithIcon;

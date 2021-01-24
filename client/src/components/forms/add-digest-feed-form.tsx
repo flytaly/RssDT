@@ -1,11 +1,11 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Input from './input';
+import InputWithIcon from './input-with-icon';
 import RssSquareIcon from '../../../public/static/rss-square.svg';
 import MailIcon from '../../../public/static/envelope.svg';
 import ClockIcon from '../../../public/static/clock.svg';
-import Select from './select';
+import SelectWithIcon from './select-with-icon';
 import { periodNames as names, DigestSchedule } from '../../types';
 import { useAddFeedWithEmailMutation } from '../../generated/graphql';
 import { MessageItem } from '../main-card/animated-message';
@@ -90,7 +90,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
     >
       {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
         <form className="flex flex-col w-full" onSubmit={handleSubmit}>
-          <Input
+          <InputWithIcon
             id="url"
             type="url"
             IconSVG={RssSquareIcon}
@@ -104,7 +104,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
             disabled={isSubmitting}
             required
           />
-          <Input
+          <InputWithIcon
             id="email"
             type="email"
             IconSVG={MailIcon}
@@ -118,7 +118,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
             title="Email address"
             required
           />
-          <Select
+          <SelectWithIcon
             id="digest"
             IconSVG={ClockIcon}
             defaultValue={DigestSchedule.daily}
@@ -130,7 +130,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
             {Object.values(DigestSchedule).map((sc) => (
               <option key={sc} value={sc}>{`${names[sc]} digest`}</option>
             ))}
-          </Select>
+          </SelectWithIcon>
           <button
             type="submit"
             className="submit-btn w-full text-xl tracking-wider"
