@@ -449,6 +449,23 @@ export type AddFeedWithEmailMutation = (
   )> }
 );
 
+export type DeleteMyFeedsMutationVariables = Exact<{
+  ids: Array<Scalars['Float']> | Scalars['Float'];
+}>;
+
+
+export type DeleteMyFeedsMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteMyFeeds: (
+    { __typename?: 'DeletedFeedResponse' }
+    & Pick<DeletedFeedResponse, 'ids'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -777,6 +794,41 @@ export function useAddFeedWithEmailMutation(baseOptions?: Apollo.MutationHookOpt
 export type AddFeedWithEmailMutationHookResult = ReturnType<typeof useAddFeedWithEmailMutation>;
 export type AddFeedWithEmailMutationResult = Apollo.MutationResult<AddFeedWithEmailMutation>;
 export type AddFeedWithEmailMutationOptions = Apollo.BaseMutationOptions<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>;
+export const DeleteMyFeedsDocument = gql`
+    mutation deleteMyFeeds($ids: [Float!]!) {
+  deleteMyFeeds(ids: $ids) {
+    ids
+    errors {
+      message
+    }
+  }
+}
+    `;
+export type DeleteMyFeedsMutationFn = Apollo.MutationFunction<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>;
+
+/**
+ * __useDeleteMyFeedsMutation__
+ *
+ * To run a mutation, you first call `useDeleteMyFeedsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMyFeedsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMyFeedsMutation, { data, loading, error }] = useDeleteMyFeedsMutation({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useDeleteMyFeedsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>) {
+        return Apollo.useMutation<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>(DeleteMyFeedsDocument, baseOptions);
+      }
+export type DeleteMyFeedsMutationHookResult = ReturnType<typeof useDeleteMyFeedsMutation>;
+export type DeleteMyFeedsMutationResult = Apollo.MutationResult<DeleteMyFeedsMutation>;
+export type DeleteMyFeedsMutationOptions = Apollo.BaseMutationOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(input: {email: $email, password: $password}) {

@@ -1,8 +1,21 @@
-import React from 'react';
-import { FeedFieldsFragment, UserFeedFieldsFragment } from '../generated/graphql';
+import React, { useState } from 'react';
+import {
+  FeedFieldsFragment,
+  MyFeedsDocument,
+  MyFeedsQuery,
+  useDeleteMyFeedsMutation,
+  UserFeedFieldsFragment,
+} from '../generated/graphql';
+import TrashIcon from '../../public/static/trash.svg';
+import EditIcon from '../../public/static/edit.svg';
+import ConfirmFeed from '../pages/confirm';
+import ConfirmModal from './confirm-modal';
+import { updateAfterDelete as update } from '../utils/update-after-delete';
+
+type UserFeed = { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
 
 type FeedTableProps = {
-  feeds: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
+  feeds: Array<UserFeed>;
 };
 
 interface CellProps {
@@ -15,7 +28,7 @@ const Cell: React.FC<CellProps> = ({ children, name = '', header = false }) => {
   return React.createElement(
     header ? 'th' : 'td',
     { className: 'feed-table-column', 'data-name': name },
-    <span className="flex-1">{children}</span>,
+    children,
   );
 };
 
@@ -39,9 +52,33 @@ const HeaderRow: React.FC = ({ children }) => (
   </tr>
 );
 
+const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ feeds, error }) => (
+  <div>
+    Are you sure you want to delete the feeds:{' '}
+    <ul>
+      {feeds.map((uf) => (
+        <li key={uf.id}>
+          <b>{uf.feed.title}</b>
+        </li>
+      ))}
+    </ul>
+    <div className="text-error">{error}</div>
+  </div>
+);
+
 const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
+  const [feedsToDelete, setFeedsToDelete] = useState<UserFeed[]>([]);
+  const [deleteError, setDeleteError] = useState('');
+  const [deleteMyFeeds, { loading }] = useDeleteMyFeedsMutation();
+
+  const closeModal = () => {
+    setDeleteError('');
+    setFeedsToDelete([]);
+  };
+
   const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '');
   const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
+
   return (
     <div>
       <table className="w-full text-sm">
@@ -65,11 +102,31 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
               <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
               <Cell name="Digest Schedule">{uf.schedule}</Cell>
-              <Cell name="Actions">actions</Cell>
+              <Cell name="Actions">
+                <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
+                  <TrashIcon className="w-4 h-4 mr-1" />
+                </button>
+                <button type="button" className="icon-btn">
+                  <EditIcon className="w-4 h-4" />
+                </button>
+              </Cell>
             </Row>
           ))}
         </tbody>
       </table>
+      <ConfirmModal
+        isOpen={!!feedsToDelete.length}
+        closeModal={closeModal}
+        onConfirm={async () => {
+          const ids = feedsToDelete.map(({ id }) => id);
+          const result = await deleteMyFeeds({ variables: { ids }, update });
+          if (result.errors?.length) setDeleteError("Couldn't delete feeds");
+          else closeModal();
+        }}
+        disableButtons={loading}
+        error={deleteError}
+        message={<ConfirmDeleteMsg feeds={feedsToDelete} />}
+      />
     </div>
   );
 };

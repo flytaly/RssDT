@@ -11,6 +11,7 @@ import {
 } from '../generated/graphql';
 import { DigestDisable, DigestSchedule, periodNames } from '../types';
 import { isServer } from '../utils/is-server';
+import { updateAfterAdding as update } from '../utils/update-after-adding';
 import InputUnderline from './forms/input-underline';
 
 interface AddFeedModalProps {
@@ -69,24 +70,11 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
             try {
               const { data } = await addFeed({
                 variables: { input: { feedUrl: url }, feedOpts: { schedule: digest } },
-                update: (cache, result) => {
-                  const uf = result.data?.addFeedToCurrentUser.userFeed;
-                  if (uf) {
-                    const prevQ = cache.readQuery<MyFeedsQuery>({ query: MyFeedsDocument });
-                    const prevFeeds = prevQ?.myFeeds || [];
-                    cache.writeQuery<MyFeedsQuery>({
-                      query: MyFeedsDocument,
-                      data: { __typename: 'Query', myFeeds: [...prevFeeds, uf] } as MyFeedsQuery,
-                    });
-                  }
-                },
+                update,
               });
-              if (data?.addFeedToCurrentUser.userFeed) {
-                closeModal();
-              }
-              if (data?.addFeedToCurrentUser.errors) {
+              if (data?.addFeedToCurrentUser.errors)
                 setErrorMsg(data?.addFeedToCurrentUser.errors[0].message);
-              }
+              else closeModal();
             } catch (error) {
               setErrorMsg(error.message);
             }
