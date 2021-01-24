@@ -12,6 +12,7 @@ module.exports = {
           DEFAULT: 'var(--primary)',
           1: 'var(--primary-1)',
           2: 'var(--primary-2)',
+          dark: 'var(--primary-dark)',
         },
         secondary: {
           DEFAULT: 'var(--secondary)',

@@ -8,6 +8,7 @@ html {
   --primary: rgb(172, 36, 125);
   --primary-1: rgb(172, 36, 125, 0.05);
   --primary-2: rgb(172, 36, 125, 0.1);
+  --primary-dark: rgb(94, 19, 68);
   --secondary: rgb(0, 115, 209);
   --secondary-focus: rgba(0, 115, 209, 0.6);
   --tertiary: rgb(0, 165, 144);

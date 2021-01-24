@@ -2,20 +2,30 @@
   position: relative;
 }
 
+.hover-underline-link.active,
 .hover-underline-link:active {
-  @apply text-primary;
-}
-
-.hover-underline-link::after {
-  content: '';
-  width: 0;
-  height: 2px;
-  bottom: -3px;
-
-  @apply absolute bg-primary mx-auto inset-x-0 transition-all ease-out duration-200;
+  color: var(--primary-dark);
 }
 
 .hover-underline-link.active::after,
+.hover-underline-link::after {
+  content: '';
+  height: 1px;
+  bottom: -3px;
+  background-color: var(--primary-dark);
+  @apply absolute mx-auto inset-x-0 transition-all ease-out duration-150;
+}
+
+.hover-underline-link::after {
+  width: 0;
+}
+
+.hover-underline-link:hover::after {
+  height: 2px;
+}
+
+.hover-underline-link.active::after,
+.hover-underline-link:active::after,
 .hover-underline-link:hover::after {
   width: 100%;
 }
