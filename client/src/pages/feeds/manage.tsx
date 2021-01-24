@@ -8,9 +8,9 @@ import { useMyFeedsQuery } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
 
 const FeedManager: NextPage = () => {
-  const { data } = useMyFeedsQuery({ skip: isServer() });
+  const { data, loading } = useMyFeedsQuery({ skip: isServer() });
   const myFeeds = data?.myFeeds || [];
-  const empty = <div className="text-center">You have no feeds</div>;
+  const empty = <div className="text-center">{loading ? 'Loading...' : 'You have no feeds'}</div>;
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <Layout>
