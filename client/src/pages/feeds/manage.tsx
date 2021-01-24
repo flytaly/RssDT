@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
-import AddFeedModal from '../../components/add-feed-modal';
+import AddFeedModal from '../../components/modals/add-feed-modal';
 import FeedTable from '../../components/feed-table';
 import CardNavBar from '../../components/main-card/card-nav-bar';
 import Layout from '../../components/layout/layout';

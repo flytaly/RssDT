@@ -9,7 +9,8 @@ const MainCard: React.FC<MainCardProps> = ({ children, big = false }) => {
   const size = big ? 'big-card-w' : 'small-card-w';
   return (
     <article
-      className={`flex flex-col md:flex-row ${size} min-h-84 bg-gray-200 rounded-md shadow-modal`}
+      id="card-root"
+      className={`relative flex flex-col md:flex-row ${size} min-h-100 bg-gray-200 rounded-md shadow-modal mx-auto`}
     >
       {children}
     </article>

@@ -8,11 +8,11 @@ import {
   MyFeedsDocument,
   MyFeedsQuery,
   useAddFeedToCurrentUserMutation,
-} from '../generated/graphql';
-import { DigestDisable, DigestSchedule, periodNames } from '../types';
-import { isServer } from '../utils/is-server';
-import { updateAfterAdding as update } from '../utils/update-after-adding';
-import InputUnderline from './forms/input-underline';
+} from '../../generated/graphql';
+import { DigestDisable, DigestSchedule, periodNames } from '../../types';
+import { isServer } from '../../utils/is-server';
+import { updateAfterAdding as update } from '../../utils/update-after-adding';
+import InputUnderline from '../forms/input-underline';
 
 interface AddFeedModalProps {
   isOpen: boolean;

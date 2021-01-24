@@ -2,7 +2,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
-import { isServer } from '../utils/is-server';
+import { isServer } from '../../utils/is-server';
 
 interface AddFeedModalProps {
   isOpen: boolean;

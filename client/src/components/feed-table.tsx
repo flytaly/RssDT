@@ -8,7 +8,8 @@ import {
 } from '../generated/graphql';
 import { periodNames } from '../types';
 import { updateAfterDelete as update } from '../utils/update-after-delete';
-import ConfirmModal from './confirm-modal';
+import ConfirmModal from './modals/confirm-modal';
+import EditFeedModal from './modals/edit-feed-modal';
 
 type UserFeed = { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
 
@@ -66,6 +67,7 @@ const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ fee
 
 const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   const [feedsToDelete, setFeedsToDelete] = useState<UserFeed[]>([]);
+  const [editingFeed, setEditingFeed] = useState<UserFeed | null>(null);
   const [deleteError, setDeleteError] = useState('');
   const [deleteMyFeeds, { loading }] = useDeleteMyFeedsMutation();
 
@@ -104,7 +106,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                 <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
                   <TrashIcon className="w-4 h-4 mr-1" />
                 </button>
-                <button type="button" className="icon-btn">
+                <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
                   <EditIcon className="w-4 h-4" />
                 </button>
               </Cell>
@@ -124,6 +126,11 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
         disableButtons={loading}
         error={deleteError}
         message={<ConfirmDeleteMsg feeds={feedsToDelete} />}
+      />
+      <EditFeedModal
+        feed={editingFeed}
+        isOpen={!!editingFeed}
+        closeModal={() => setEditingFeed(null)}
       />
     </div>
   );
