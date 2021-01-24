@@ -1,5 +1,5 @@
 export enum DigestSchedule {
-  //   realtime = 'realtime',
+  // realtime = 'realtime',
   everyhour = 'everyhour',
   every2hours = 'every2hours',
   every3hours = 'every3hours',
@@ -15,11 +15,13 @@ export enum ShareId {
   trello = 'trello',
 }
 
-export const periodNames: Record<DigestSchedule, string> = {
+export const periodNames: Record<DigestSchedule | 'realtime' | 'disable', string> = {
+  realtime: 'realtime',
   everyhour: 'hourly',
   every2hours: '2-hourly',
   every3hours: '3-hourly',
   every6hours: '6-hourly',
   every12hours: '12-hourly',
   daily: 'daily',
+  disable: 'disabled',
 };

@@ -72,7 +72,7 @@ const ConfirmModal: React.FC<AddFeedModalProps> = ({
           </button>
           <button
             type="submit"
-            className="btn bg-primary"
+            className="btn bg-error"
             onClick={onConfirm}
             disabled={disableButtons}
           >
