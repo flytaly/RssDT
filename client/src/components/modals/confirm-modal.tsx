@@ -15,7 +15,13 @@ interface AddFeedModalProps {
 }
 
 const customStyles: Modal.Styles = {
-  // overlay: {},
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: '0.375rem',
+  },
   content: {
     position: 'absolute',
     top: '50%',
@@ -48,7 +54,8 @@ const ConfirmModal: React.FC<AddFeedModalProps> = ({
   });
   return (
     <Modal
-      appElement={isServer() ? undefined : document.querySelector('main') || document.body}
+      appElement={isServer() ? undefined : document.querySelector('#card-root') || document.body}
+      parentSelector={() => document.querySelector('#card-root') as HTMLElement}
       isOpen={isOpen}
       closeTimeoutMS={closingDuration + 10}
       onRequestClose={closeModal}

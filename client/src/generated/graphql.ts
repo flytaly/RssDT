@@ -582,6 +582,17 @@ export type MyFeedsQuery = (
   )>> }
 );
 
+export type MyOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyOptionsQuery = (
+  { __typename?: 'Query' }
+  & { myOptions: (
+    { __typename?: 'Options' }
+    & OptionsFieldsFragment
+  ) }
+);
+
 export const FeedFieldsFragmentDoc = gql`
     fragment FeedFields on Feed {
   id
@@ -1124,3 +1135,35 @@ export function useMyFeedsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<My
 export type MyFeedsQueryHookResult = ReturnType<typeof useMyFeedsQuery>;
 export type MyFeedsLazyQueryHookResult = ReturnType<typeof useMyFeedsLazyQuery>;
 export type MyFeedsQueryResult = Apollo.QueryResult<MyFeedsQuery, MyFeedsQueryVariables>;
+export const MyOptionsDocument = gql`
+    query myOptions {
+  myOptions {
+    ...OptionsFields
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
+
+/**
+ * __useMyOptionsQuery__
+ *
+ * To run a query within a React component, call `useMyOptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyOptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyOptionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyOptionsQuery(baseOptions?: Apollo.QueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>) {
+        return Apollo.useQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
+      }
+export function useMyOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>) {
+          return Apollo.useLazyQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
+        }
+export type MyOptionsQueryHookResult = ReturnType<typeof useMyOptionsQuery>;
+export type MyOptionsLazyQueryHookResult = ReturnType<typeof useMyOptionsLazyQuery>;
+export type MyOptionsQueryResult = Apollo.QueryResult<MyOptionsQuery, MyOptionsQueryVariables>;

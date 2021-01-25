@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import EditIcon from '../../public/static/edit.svg';
 import TrashIcon from '../../public/static/trash.svg';
-import {
-  FeedFieldsFragment,
-  useDeleteMyFeedsMutation,
-  UserFeedFieldsFragment,
-} from '../generated/graphql';
+import { useDeleteMyFeedsMutation, UserFeed } from '../generated/graphql';
 import { periodNames } from '../types';
 import { updateAfterDelete as update } from '../utils/update-after-delete';
 import ConfirmModal from './modals/confirm-modal';
 import EditFeedModal from './modals/edit-feed-modal';
-
-type UserFeed = { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
 
 type FeedTableProps = {
   feeds: Array<UserFeed>;
@@ -103,11 +97,11 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
               <Cell name="Digest Schedule">{periodNames[uf.schedule]}</Cell>
               <Cell name="Actions">
-                <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
-                  <TrashIcon className="w-4 h-4 mr-1" />
-                </button>
                 <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
                   <EditIcon className="w-4 h-4" />
+                </button>
+                <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
+                  <TrashIcon className="w-4 h-4 mr-1" />
                 </button>
               </Cell>
             </Row>

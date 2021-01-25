@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
@@ -13,6 +13,7 @@ import { DigestDisable, DigestSchedule, periodNames } from '../../types';
 import { isServer } from '../../utils/is-server';
 import { updateAfterAdding as update } from '../../utils/update-after-adding';
 import InputUnderline from '../forms/input-underline';
+import SelectUnderline from '../forms/select-underline';
 
 interface AddFeedModalProps {
   isOpen: boolean;
@@ -20,7 +21,13 @@ interface AddFeedModalProps {
 }
 
 const customStyles: Modal.Styles = {
-  // overlay: {},
+  overlay: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: '0.375rem',
+  },
   content: {
     position: 'absolute',
     top: '50%',
@@ -49,9 +56,13 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
     transform: isOpen ? 'scale3d(1,1,1)' : 'scale3d(0,0,0)',
     config: { tension: 300, friction: 22, duration: isOpen ? undefined : closingDuration },
   });
+  useEffect(() => {
+    if (isOpen) setErrorMsg('');
+  }, [isOpen]);
   return (
     <Modal
-      appElement={isServer() ? undefined : document.querySelector('main') || document.body}
+      appElement={isServer() ? undefined : document.querySelector('#card-root') || document.body}
+      parentSelector={() => document.querySelector('#card-root') as HTMLElement}
       isOpen={isOpen}
       closeTimeoutMS={closingDuration + 10}
       onRequestClose={closeModal}
@@ -93,14 +104,13 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
                 disabled={isSubmitting}
                 required
               />
-              <div className="text-error mb-4 text-sm">
+              <div className="text-error mb-6 text-sm">
                 {touched.url && errors.url ? errors.url : ''}
               </div>
-              <label htmlFor="digest" className="">
+              <label htmlFor="digest" className="mb-1">
                 Email digest:
               </label>
-              <select
-                className="select border-b-2 border-gray-500 mb-3 focus:border-primary"
+              <SelectUnderline
                 id="digest"
                 defaultValue={DigestDisable}
                 onChange={handleChange}
@@ -113,13 +123,13 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
                 <option key="disable" value="disable">
                   disabled
                 </option>
-              </select>
+              </SelectUnderline>
               {errorMsg ? (
                 <div className="mb-3 p-1 text-sm text-error border-2 border-error">{errorMsg}</div>
               ) : null}
               <button
                 type="submit"
-                className="btn bg-secondary w-32 self-center"
+                className="btn bg-secondary w-32 self-center mt-3"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Adding...' : 'Add'}
