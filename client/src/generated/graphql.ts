@@ -528,6 +528,26 @@ export type ResetPasswordMutation = (
   ) }
 );
 
+export type SetFeedOptionsMutationVariables = Exact<{
+  id: Scalars['Float'];
+  opts: UserFeedOptionsInput;
+}>;
+
+
+export type SetFeedOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setFeedOptions: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type UnsubscribeByTokenMutationVariables = Exact<{
   id: Scalars['String'];
   token: Scalars['String'];
@@ -999,6 +1019,44 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const SetFeedOptionsDocument = gql`
+    mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
+  setFeedOptions(id: $id, opts: $opts) {
+    userFeed {
+      ...UserFeedFields
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export type SetFeedOptionsMutationFn = Apollo.MutationFunction<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
+
+/**
+ * __useSetFeedOptionsMutation__
+ *
+ * To run a mutation, you first call `useSetFeedOptionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetFeedOptionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setFeedOptionsMutation, { data, loading, error }] = useSetFeedOptionsMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      opts: // value for 'opts'
+ *   },
+ * });
+ */
+export function useSetFeedOptionsMutation(baseOptions?: Apollo.MutationHookOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>) {
+        return Apollo.useMutation<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>(SetFeedOptionsDocument, baseOptions);
+      }
+export type SetFeedOptionsMutationHookResult = ReturnType<typeof useSetFeedOptionsMutation>;
+export type SetFeedOptionsMutationResult = Apollo.MutationResult<SetFeedOptionsMutation>;
+export type SetFeedOptionsMutationOptions = Apollo.BaseMutationOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
 export const UnsubscribeByTokenDocument = gql`
     mutation unsubscribeByToken($id: String!, $token: String!) {
   unsubscribeByToken(id: $id, token: $token)

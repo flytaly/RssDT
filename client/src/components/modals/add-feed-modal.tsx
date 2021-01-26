@@ -4,11 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
-import {
-  MyFeedsDocument,
-  MyFeedsQuery,
-  useAddFeedToCurrentUserMutation,
-} from '../../generated/graphql';
+import { useAddFeedToCurrentUserMutation } from '../../generated/graphql';
 import { DigestDisable, DigestSchedule, periodNames } from '../../types';
 import { isServer } from '../../utils/is-server';
 import { updateAfterAdding as update } from '../../utils/update-after-adding';

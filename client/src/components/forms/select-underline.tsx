@@ -1,11 +1,15 @@
 import React from 'react';
 
-const SelectUnderline: React.FC<
-  React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>
-> = ({ className, ...props }) => {
+export type SelectProps = React.DetailedHTMLProps<
+  React.SelectHTMLAttributes<HTMLSelectElement>,
+  HTMLSelectElement
+>;
+
+const SelectUnderline: React.FC<SelectProps> = ({ className, ...props }) => {
   return (
     <select
-      className={`select w-full border-b-2 border-gray-500 focus:border-primary bg-gray-100 rounded-sm ${className}`}
+      className={`select w-full border-b-2 border-gray-500 focus:border-primary
+      bg-transparent focus:bg-gray-100 hover:bg-gray-100 rounded-sm ${className}`}
       {...props}
     />
   );
