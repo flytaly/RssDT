@@ -27,6 +27,7 @@ module.exports = {
     // next.js automatically adds anchors in Link components
     'jsx-a11y/anchor-is-valid': 'off',
 
+    'jsx-a11y/label-has-associated-control': 'off',
     radix: 'off',
   },
 };

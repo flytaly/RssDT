@@ -1,11 +1,12 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
+import CheckBox from '../components/forms/checkbox';
 import SelectUnderline from '../components/forms/select-underline';
 import Layout from '../components/layout/layout';
 import MainCard from '../components/main-card/main-card';
 import SettingsNavBar from '../components/main-card/settings-nav-bar';
 import Spinner from '../components/spinner';
-import { OptionsInput, useMeQuery, useMyOptionsQuery } from '../generated/graphql';
+import { OptionsInput, Theme, useMeQuery, useMyOptionsQuery } from '../generated/graphql';
 import { useSetPartialOptionsMutation } from '../utils/use-set-option-mutation';
 
 const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean }> = ({
@@ -14,7 +15,7 @@ const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean 
   error,
   saving,
 }) => (
-  <article className="relative by-2 py-2 border-b border-gray-300">
+  <article className="relative my-2 py-2 border-b border-gray-300">
     <h3 className="font-semibold mb-1">{title}</h3>
     <div className="font-light text-sm">{children}</div>
     {error ? <div className="font-light text-sm mb-1 text-error">{error}</div> : null}
@@ -39,10 +40,9 @@ const SettingsPage: NextPage = () => {
   const { email, timeZone, locale } = meData.data.me;
   const opts = data?.myOptions;
 
-  const onChange = async ({ target }: React.ChangeEvent<HTMLSelectElement>) => {
-    const name = target.name as keyof OptionsInput;
+  const save = async (name: keyof OptionsInput, value: string | number | boolean) => {
     setItemSaving({ [name]: true });
-    const { error } = await saveOptions(name, target.value, opts!);
+    const { error } = await saveOptions(name, value, opts!);
     if (error) setItemError({ [name]: error });
     else setItemError({});
     setItemSaving({});
@@ -78,7 +78,7 @@ const SettingsPage: NextPage = () => {
                   <div className="w-24">
                     <SelectUnderline
                       name="dailyDigestHour"
-                      onChange={onChange}
+                      onChange={(e) => save('dailyDigestHour', parseInt(e.target.value))}
                       value={opts?.dailyDigestHour}
                       className="text-xs mt-2"
                       disabled={itemSaving.dailyDigestHour}
@@ -87,6 +87,76 @@ const SettingsPage: NextPage = () => {
                         <option key={hour} value={hour}>{`${hour}:00`}</option>
                       ))}
                     </SelectUnderline>
+                  </div>
+                </Item>
+                <Item
+                  title="Default theme"
+                  error={itemError.themeDefault}
+                  saving={itemSaving.themeDefault}
+                >
+                  <div>Select default email digest theme:</div>
+                  <div className="w-24">
+                    <SelectUnderline
+                      name="themeDefault"
+                      onChange={(e) => save('themeDefault', e.target.value)}
+                      value={opts?.themeDefault}
+                      className="text-xs mt-2"
+                      disabled={itemSaving.themeDefault}
+                    >
+                      <option value={Theme.Default}>Default</option>
+                      <option value={Theme.Text}>Text</option>
+                    </SelectUnderline>
+                  </div>
+                </Item>
+                <Item
+                  title="Table of Content"
+                  error={itemError.withContentTableDefault}
+                  saving={itemSaving.withContentTableDefault}
+                >
+                  <div className="flex items-center">
+                    <CheckBox
+                      id="withContentTableDefault"
+                      checked={opts?.withContentTableDefault}
+                      onChange={(e) => save('withContentTableDefault', e.target.checked)}
+                      disabled={itemSaving.withContentTableDefault}
+                    />
+                    <label htmlFor="withContentTableDefault" className="ml-1">
+                      Include table of content
+                    </label>
+                  </div>
+                </Item>
+                <Item
+                  title="Feed items content"
+                  error={itemError.itemBodyDefault}
+                  saving={itemSaving.itemBodyDefault}
+                >
+                  <div className="flex items-center">
+                    <CheckBox
+                      id="itemBodyDefault"
+                      checked={opts?.itemBodyDefault}
+                      onChange={(e) => save('itemBodyDefault', e.target.checked)}
+                      disabled={itemSaving.itemBodyDefault}
+                    />
+                    <label htmlFor="itemBodyDefault" className="ml-1">
+                      Show items content
+                    </label>
+                  </div>
+                </Item>
+                <Item
+                  title="Attachments"
+                  error={itemError.attachmentsDefault}
+                  saving={itemSaving.attachmentsDefault}
+                >
+                  <div className="flex items-center">
+                    <CheckBox
+                      id="attachmentsDefault"
+                      checked={!!opts?.attachmentsDefault}
+                      onChange={(e) => save('attachmentsDefault', e.target.checked)}
+                      disabled={itemSaving.attachmentsDefault}
+                    />
+                    <label htmlFor="itemBodyDefault" className="ml-1">
+                      Include links to attachments (RSS enclosures)
+                    </label>
                   </div>
                 </Item>
               </section>

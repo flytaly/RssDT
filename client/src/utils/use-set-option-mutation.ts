@@ -10,24 +10,24 @@ import {
 
 type OptionsKey = keyof OptionsInput;
 
-const keys = ['dailyDigestHour'] as Array<OptionsKey>;
-
-const convertValue = (key: OptionsKey, value: string) => {
-  if (key === 'dailyDigestHour') return parseInt(value);
-  return value;
-};
+const keys = [
+  'dailyDigestHour',
+  'withContentTableDefault',
+  'itemBodyDefault',
+  'attachmentsDefault',
+  'themeDefault',
+] as Array<OptionsKey>;
 
 export function useSetPartialOptionsMutation() {
   const [setOptions, mutationOptions] = useSetOptionsMutation();
 
   const setOptionMutation = async (
     key: OptionsKey,
-    value: string,
+    value: string | number | boolean,
     prevOptions: OptionsFieldsFragment,
   ): Promise<{ error?: string; data?: SetOptionsMutation | null }> => {
-    const valueToSave = convertValue(key, value);
     if (!keys.includes(key)) return { error: 'unexpected key' };
-    const newOption = { [key]: valueToSave };
+    const newOption = { [key]: value };
     try {
       const { data } = await setOptions({
         variables: { opts: newOption },
@@ -35,6 +35,7 @@ export function useSetPartialOptionsMutation() {
           __typename: 'Mutation',
           setOptions: {
             __typename: 'OptionsResponse',
+            errors: null,
             options: {
               __typename: 'Options',
               ...prevOptions,
