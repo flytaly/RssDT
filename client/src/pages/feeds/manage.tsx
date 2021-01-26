@@ -2,16 +2,15 @@ import { NextPage } from 'next';
 import React, { useState } from 'react';
 import AddFeedModal from '../../components/modals/add-feed-modal';
 import FeedTable from '../../components/feed-table';
-import CardNavBar from '../../components/main-card/card-nav-bar';
 import Layout from '../../components/layout/layout';
 import MainCard from '../../components/main-card/main-card';
-import { useMyFeedsQuery } from '../../generated/graphql';
+import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
 import FeedNavBar from '../../components/main-card/feed-nav-bar';
 
 const FeedManager: NextPage = () => {
   const { data, loading } = useMyFeedsQuery({ skip: isServer() });
-  const myFeeds = data?.myFeeds || [];
+  const myFeeds = (data?.myFeeds || []) as UserFeed[];
   const empty = <div className="text-center">{loading ? 'Loading...' : 'You have no feeds'}</div>;
   const [modalOpen, setModalOpen] = useState(false);
   return (

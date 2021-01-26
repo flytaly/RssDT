@@ -32,7 +32,7 @@ interface RowProps {
 const Row: React.FC<RowProps> = ({ children, isOdd = true }) => (
   <tr
     className={`grid feed-table-template gap-2 py-4 sm:py-1 hover:bg-primary-2 ${
-      isOdd ? '' : 'bg-gray-1'
+      isOdd ? '' : 'bg-gray-200'
     }`}
   >
     {children}

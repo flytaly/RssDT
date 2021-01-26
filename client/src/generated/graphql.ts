@@ -548,6 +548,25 @@ export type SetFeedOptionsMutation = (
   ) }
 );
 
+export type SetOptionsMutationVariables = Exact<{
+  opts: OptionsInput;
+}>;
+
+
+export type SetOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setOptions: (
+    { __typename?: 'OptionsResponse' }
+    & { options?: Maybe<(
+      { __typename?: 'Options' }
+      & OptionsFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  ) }
+);
+
 export type UnsubscribeByTokenMutationVariables = Exact<{
   id: Scalars['String'];
   token: Scalars['String'];
@@ -1057,6 +1076,44 @@ export function useSetFeedOptionsMutation(baseOptions?: Apollo.MutationHookOptio
 export type SetFeedOptionsMutationHookResult = ReturnType<typeof useSetFeedOptionsMutation>;
 export type SetFeedOptionsMutationResult = Apollo.MutationResult<SetFeedOptionsMutation>;
 export type SetFeedOptionsMutationOptions = Apollo.BaseMutationOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
+export const SetOptionsDocument = gql`
+    mutation setOptions($opts: OptionsInput!) {
+  setOptions(opts: $opts) {
+    options {
+      ...OptionsFields
+    }
+    errors {
+      message
+      argument
+    }
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
+export type SetOptionsMutationFn = Apollo.MutationFunction<SetOptionsMutation, SetOptionsMutationVariables>;
+
+/**
+ * __useSetOptionsMutation__
+ *
+ * To run a mutation, you first call `useSetOptionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetOptionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setOptionsMutation, { data, loading, error }] = useSetOptionsMutation({
+ *   variables: {
+ *      opts: // value for 'opts'
+ *   },
+ * });
+ */
+export function useSetOptionsMutation(baseOptions?: Apollo.MutationHookOptions<SetOptionsMutation, SetOptionsMutationVariables>) {
+        return Apollo.useMutation<SetOptionsMutation, SetOptionsMutationVariables>(SetOptionsDocument, baseOptions);
+      }
+export type SetOptionsMutationHookResult = ReturnType<typeof useSetOptionsMutation>;
+export type SetOptionsMutationResult = Apollo.MutationResult<SetOptionsMutation>;
+export type SetOptionsMutationOptions = Apollo.BaseMutationOptions<SetOptionsMutation, SetOptionsMutationVariables>;
 export const UnsubscribeByTokenDocument = gql`
     mutation unsubscribeByToken($id: String!, $token: String!) {
   unsubscribeByToken(id: $id, token: $token)

@@ -9,7 +9,7 @@ const SelectUnderline: React.FC<SelectProps> = ({ className, ...props }) => {
   return (
     <select
       className={`select w-full border-b-2 border-gray-500 focus:border-primary
-      bg-transparent focus:bg-gray-100 hover:bg-gray-100 rounded-sm ${className}`}
+      bg-transparent focus:bg-white hover:bg-white rounded-sm ${className}`}
       {...props}
     />
   );

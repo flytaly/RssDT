@@ -208,6 +208,7 @@ export class UserResolver {
   @UseMiddleware(auth())
   @Mutation(() => OptionsResponse)
   async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     return updateUserOptions(req.session.userId, opts);
   }
 }
