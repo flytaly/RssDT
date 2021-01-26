@@ -5,9 +5,10 @@
 @import './hover-underline-link.css';
 
 html {
-  --primary: rgb(172, 36, 125);
+  --primary: rgba(172, 36, 125, 1);
   --primary-1: rgb(172, 36, 125, 0.05);
   --primary-2: rgb(172, 36, 125, 0.1);
+  --primary-light: rgb(219, 176, 207);
   --primary-dark: rgb(94, 19, 68);
   --secondary: rgb(0, 115, 209);
   --secondary-focus: rgba(0, 115, 209, 0.6);
@@ -103,11 +104,11 @@ a:focus-visible {
     transform: scale(1.06);
   }
   .icon-btn:active {
-    transform: scale(0.94);
+    transform: scale(0.97);
   }
 
   .submit-btn {
-    @apply text-white uppercase rounded-xl bg-primary py-0.5 px-4 transition-transform ease-in-out;
+    @apply text-white uppercase rounded-xl bg-primary py-0.5 px-4 transition-transform ease-in-out bg-opacity-100;
   }
 
   .submit-btn:disabled {

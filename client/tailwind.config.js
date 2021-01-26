@@ -10,10 +10,11 @@ module.exports = {
       },
       colors: {
         primary: {
-          DEFAULT: 'var(--primary)',
+          DEFAULT: 'rgba(172, 36, 125, var(--tw-bg-opacity))',
           1: 'var(--primary-1)',
           2: 'var(--primary-2)',
           dark: 'var(--primary-dark)',
+          light: 'var(--primary-light)',
         },
         secondary: {
           DEFAULT: 'var(--secondary)',
@@ -53,7 +54,9 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      display: ['group-hover'],
+    },
   },
   plugins: [],
 };
