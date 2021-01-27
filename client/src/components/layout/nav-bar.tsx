@@ -40,7 +40,7 @@ const NavBar = () => {
             <button type="button" className="icon-btn ">
               <ProfileIcon className="h-5" />
             </button>
-            <ul className="hidden group-hover:block absolute top-full right-0 bg-primary-light bg-opacity-80 z-10 rounded-sm shadow-message hover:shadow-message-darker">
+            <ul className="hidden group-hover:block absolute top-full right-0 bg-primary-light bg-opacity-80 z-40 rounded-sm shadow-message hover:shadow-message-darker">
               <SubNavLink className="block sm:hidden" href="/settings" title="Settings" />
               <SubNavLink href="/logout" title="Logout" />
             </ul>
