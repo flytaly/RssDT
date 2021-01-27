@@ -21,6 +21,7 @@ import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args
 import { MyContext, ReqWithSession, Role } from '../types';
 import { ArgumentError } from './common/ArgumentError';
 import { resetPasswordEmail, verificationEmail } from './common/confirmationMail';
+import { activateAllUserFeeds } from './common/feedDBQueries';
 import { getUserFeeds } from './common/getUserFeeds';
 import {
   EmailPasswordInput,
@@ -149,7 +150,7 @@ export class UserResolver {
 
     await redis.del(key);
     setSession(req, user.id, user.role);
-
+    await activateAllUserFeeds(user.id);
     return { user };
   }
 
@@ -165,9 +166,8 @@ export class UserResolver {
       return { errors: [new ArgumentError('token', 'wrong or expired token')] };
     }
     await redis.del(key);
-    // TODO: ACTIVATE ALL FEEDS
     const userIdInt = parseInt(userId);
-
+    await activateAllUserFeeds(userIdInt);
     return updateUser(userIdInt, { emailVerified: true });
   }
 
