@@ -1,11 +1,12 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 import { LabeledCheckbox } from '../components/forms/checkbox';
+import EditEmailSubject from '../components/forms/edit-email-subject';
 import SelectUnderline from '../components/forms/select-underline';
 import Layout from '../components/layout/layout';
 import MainCard from '../components/main-card/main-card';
 import SettingsNavBar from '../components/main-card/settings-nav-bar';
-import Spinner from '../components/spinner';
+import Item from '../components/settings-item';
 import {
   Options,
   OptionsInput,
@@ -17,24 +18,6 @@ import {
 import shareProviders from '../share-providers';
 // import { ShareId } from '../types';
 import { useSetPartialOptionsMutation } from '../utils/use-set-option-mutation';
-
-const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean }> = ({
-  children,
-  title,
-  error,
-  saving,
-}) => (
-  <article className="relative my-2 py-2 border-b border-gray-300">
-    <h3 className="font-semibold mb-1">{title}</h3>
-    <div className="font-light text-sm">{children}</div>
-    {error ? <div className="font-light text-sm mb-1 text-error">{error}</div> : null}
-    {saving ? (
-      <div className="absolute right-1 top-2">
-        <Spinner />
-      </div>
-    ) : null}
-  </article>
-);
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);
 
@@ -218,6 +201,17 @@ const SettingsPage: NextPage = () => {
                       );
                     })}
                   </div>
+                </Item>
+                <Item
+                  title="Edit email subject"
+                  error={itemError.customSubject}
+                  saving={itemSaving.customSubject}
+                >
+                  <EditEmailSubject
+                    value={opts?.customSubject}
+                    loading={itemSaving.customSubject}
+                    onSave={(value) => save('customSubject', value)}
+                  />
                 </Item>
               </section>
             )}

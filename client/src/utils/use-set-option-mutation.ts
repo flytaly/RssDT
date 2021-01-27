@@ -11,13 +11,14 @@ import {
 type OptionsKey = keyof OptionsInput;
 
 const keys = [
-  'dailyDigestHour',
-  'withContentTableDefault',
-  'itemBodyDefault',
   'attachmentsDefault',
-  'themeDefault',
+  'customSubject',
+  'dailyDigestHour',
+  'itemBodyDefault',
   'shareEnable',
   'shareList',
+  'themeDefault',
+  'withContentTableDefault',
 ] as Array<OptionsKey>;
 
 export function useSetPartialOptionsMutation() {

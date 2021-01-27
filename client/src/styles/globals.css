@@ -86,12 +86,17 @@ a:focus-visible {
   .btn {
     @apply text-white text-sm py-1 px-2 rounded-md;
   }
+
+  .btn-hover:hover:not(:disabled),
   .btn:hover:not(:disabled) {
     background-image: linear-gradient(rgba(0, 0, 0, 0.4) 0 0);
   }
+
+  .btn-hover:active:not(:disabled),
   .btn:active:not(:disabled) {
     background-image: linear-gradient(rgba(255, 255, 255, 0.4) 0 0);
   }
+
   .btn:disabled {
     @apply bg-gray-400;
   }
