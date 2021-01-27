@@ -9,12 +9,6 @@ export enum DigestSchedule {
 }
 export const DigestDisable = 'disable';
 
-export enum ShareId {
-  pocket = 'pocket',
-  evernote = 'evernote',
-  trello = 'trello',
-}
-
 export const periodNames: Record<DigestSchedule | 'realtime' | 'disable', string> = {
   realtime: 'realtime',
   everyhour: 'hourly',

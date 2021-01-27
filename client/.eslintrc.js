@@ -29,5 +29,17 @@ module.exports = {
 
     'jsx-a11y/label-has-associated-control': 'off',
     radix: 'off',
+    'react/jsx-wrap-multilines': [
+      1,
+      {
+        declaration: 'parens',
+        assignment: 'parens',
+        return: 'parens',
+        arrow: 'parens',
+        condition: 'parens',
+        logical: 'ignore',
+        prop: 'ignore',
+      },
+    ],
   },
 };

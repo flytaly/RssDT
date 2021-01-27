@@ -1,11 +1,11 @@
 import { Options } from 'graphql/utilities/extendSchema';
 import {
-  useSetOptionsMutation,
-  OptionsInput,
-  MyOptionsQuery,
   MyOptionsDocument,
-  SetOptionsMutation,
+  MyOptionsQuery,
   OptionsFieldsFragment,
+  OptionsInput,
+  SetOptionsMutation,
+  useSetOptionsMutation,
 } from '../generated/graphql';
 
 type OptionsKey = keyof OptionsInput;
@@ -16,6 +16,8 @@ const keys = [
   'itemBodyDefault',
   'attachmentsDefault',
   'themeDefault',
+  'shareEnable',
+  'shareList',
 ] as Array<OptionsKey>;
 
 export function useSetPartialOptionsMutation() {
@@ -23,7 +25,7 @@ export function useSetPartialOptionsMutation() {
 
   const setOptionMutation = async (
     key: OptionsKey,
-    value: string | number | boolean,
+    value: any,
     prevOptions: OptionsFieldsFragment,
   ): Promise<{ error?: string; data?: SetOptionsMutation | null }> => {
     if (!keys.includes(key)) return { error: 'unexpected key' };

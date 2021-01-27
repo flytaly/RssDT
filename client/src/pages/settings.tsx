@@ -1,12 +1,21 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
-import CheckBox from '../components/forms/checkbox';
+import { LabeledCheckbox } from '../components/forms/checkbox';
 import SelectUnderline from '../components/forms/select-underline';
 import Layout from '../components/layout/layout';
 import MainCard from '../components/main-card/main-card';
 import SettingsNavBar from '../components/main-card/settings-nav-bar';
 import Spinner from '../components/spinner';
-import { OptionsInput, Theme, useMeQuery, useMyOptionsQuery } from '../generated/graphql';
+import {
+  Options,
+  OptionsInput,
+  Theme,
+  useMeQuery,
+  useMyOptionsQuery,
+  ShareId,
+} from '../generated/graphql';
+import shareProviders from '../share-providers';
+// import { ShareId } from '../types';
 import { useSetPartialOptionsMutation } from '../utils/use-set-option-mutation';
 
 const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean }> = ({
@@ -29,6 +38,16 @@ const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean 
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);
 
+const isShareChecked = ({ shareEnable, shareList }: Options, current: ShareId) => {
+  if (!shareEnable) return false;
+  if (shareList?.length) {
+    return shareList.includes(current);
+  }
+  return true;
+};
+
+const shareIdsList = shareProviders.map(({ id }) => id);
+
 const SettingsPage: NextPage = () => {
   const meData = useMeQuery();
   const { data, loading } = useMyOptionsQuery();
@@ -40,12 +59,27 @@ const SettingsPage: NextPage = () => {
   const { email, timeZone, locale } = meData.data.me;
   const opts = data?.myOptions;
 
-  const save = async (name: keyof OptionsInput, value: string | number | boolean) => {
+  const save = async (name: keyof OptionsInput, value: any) => {
     setItemSaving({ [name]: true });
     const { error } = await saveOptions(name, value, opts!);
     if (error) setItemError({ [name]: error });
     else setItemError({});
     setItemSaving({});
+  };
+
+  const saveShare = async (shareId: ShareId, checked: boolean) => {
+    let nextShare: ShareId[];
+    if (!opts?.shareList?.length && !checked) {
+      nextShare = shareIdsList.filter((s) => s !== shareId);
+    } else {
+      const prevShare = [...(opts?.shareList || [])];
+      if (checked) {
+        nextShare = !prevShare.includes(shareId) ? [...prevShare, shareId] : prevShare;
+      } else {
+        nextShare = prevShare.filter((s) => s !== shareId);
+      }
+    }
+    await save('shareList', nextShare);
   };
 
   return (
@@ -113,50 +147,76 @@ const SettingsPage: NextPage = () => {
                   error={itemError.withContentTableDefault}
                   saving={itemSaving.withContentTableDefault}
                 >
-                  <div className="flex items-center">
-                    <CheckBox
-                      id="withContentTableDefault"
-                      checked={opts?.withContentTableDefault}
-                      onChange={(e) => save('withContentTableDefault', e.target.checked)}
-                      disabled={itemSaving.withContentTableDefault}
-                    />
-                    <label htmlFor="withContentTableDefault" className="ml-1">
-                      Include table of content
-                    </label>
-                  </div>
+                  <LabeledCheckbox
+                    id="withContentTableDefault"
+                    checked={opts?.withContentTableDefault}
+                    onChange={(e) => save('withContentTableDefault', e.target.checked)}
+                    disabled={itemSaving.withContentTableDefault}
+                    labelContent="Include table of content"
+                  />
                 </Item>
                 <Item
                   title="Feed items content"
                   error={itemError.itemBodyDefault}
                   saving={itemSaving.itemBodyDefault}
                 >
-                  <div className="flex items-center">
-                    <CheckBox
-                      id="itemBodyDefault"
-                      checked={opts?.itemBodyDefault}
-                      onChange={(e) => save('itemBodyDefault', e.target.checked)}
-                      disabled={itemSaving.itemBodyDefault}
-                    />
-                    <label htmlFor="itemBodyDefault" className="ml-1">
-                      Show items content
-                    </label>
-                  </div>
+                  <LabeledCheckbox
+                    id="itemBodyDefault"
+                    checked={opts?.itemBodyDefault}
+                    onChange={(e) => save('itemBodyDefault', e.target.checked)}
+                    disabled={itemSaving.itemBodyDefault}
+                    labelContent="Show items content"
+                  />
                 </Item>
                 <Item
                   title="Attachments"
                   error={itemError.attachmentsDefault}
                   saving={itemSaving.attachmentsDefault}
                 >
-                  <div className="flex items-center">
-                    <CheckBox
-                      id="attachmentsDefault"
-                      checked={!!opts?.attachmentsDefault}
-                      onChange={(e) => save('attachmentsDefault', e.target.checked)}
-                      disabled={itemSaving.attachmentsDefault}
-                    />
-                    <label htmlFor="itemBodyDefault" className="ml-1">
-                      Include links to attachments (RSS enclosures)
-                    </label>
+                  <LabeledCheckbox
+                    id="attachmentsDefault"
+                    checked={!!opts?.attachmentsDefault}
+                    onChange={(e) => save('attachmentsDefault', e.target.checked)}
+                    labelContent="Include links to attachments (RSS enclosures)"
+                    disabled={itemSaving.attachmentsDefault}
+                  />
+                </Item>
+                <Item
+                  title="Links to online services"
+                  error={itemError.shareList || itemError.shareEnable}
+                  saving={itemSaving.shareList || itemSaving.shareEnable}
+                >
+                  <LabeledCheckbox
+                    id="shareEnable"
+                    labelContent="Include share providers in the digest:"
+                    checked={opts?.shareEnable}
+                    onChange={(e) => save('shareEnable', e.target.checked)}
+                    disabled={itemSaving.shareEnable || itemSaving.shareList}
+                  />
+                  <div className="ml-5">
+                    {shareProviders.map((share) => {
+                      return (
+                        <LabeledCheckbox
+                          key={share.id}
+                          id={share.id}
+                          checked={isShareChecked(opts!, share.id)}
+                          onChange={(e) => saveShare(share.id, e.target.checked)}
+                          disabled={
+                            !opts?.shareEnable || itemSaving.shareEnable || itemSaving.shareList
+                          }
+                          labelContent={
+                            <div className="flex items-center">
+                              <img
+                                className="h-4 w-auto m-1"
+                                src={share.iconUrl}
+                                alt="share provider"
+                              />
+                              <span>{share.title}</span>
+                            </div>
+                          }
+                        />
+                      );
+                    })}
                   </div>
                 </Item>
               </section>

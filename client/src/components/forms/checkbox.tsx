@@ -5,7 +5,14 @@ interface CheckBoxProps
   id: string;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({ id, className, title, checked, ...props }) => {
+const CheckBox: React.FC<CheckBoxProps> = ({
+  id,
+  className,
+  title,
+  checked,
+  disabled,
+  ...props
+}) => {
   return (
     <div className="flex items-center">
       <input
@@ -18,7 +25,9 @@ const CheckBox: React.FC<CheckBoxProps> = ({ id, className, title, checked, ...p
       <label
         htmlFor={id}
         title={title}
-        className="block p-px w-4 h-4 border border-primary rounded"
+        className={`block p-px w-4 h-4 border border-primary rounded ${
+          disabled ? 'opacity-30' : ''
+        }`}
       >
         {checked ? (
           <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24">
@@ -30,4 +39,21 @@ const CheckBox: React.FC<CheckBoxProps> = ({ id, className, title, checked, ...p
   );
 };
 
+interface LabeledCheckboxProps extends CheckBoxProps {
+  labelContent: React.ReactNode;
+}
+
+export const LabeledCheckbox: React.FC<LabeledCheckboxProps> = ({
+  id,
+  labelContent,
+  disabled,
+  ...props
+}) => (
+  <div className="flex items-center">
+    <CheckBox id={id} disabled={disabled} {...props} />
+    <label htmlFor={id} className={`ml-1 ${disabled ? 'opacity-50' : ''}`}>
+      {labelContent}
+    </label>
+  </div>
+);
 export default CheckBox;

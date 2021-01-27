@@ -1,8 +1,7 @@
 import Link from 'next/link';
-import { useSpring } from 'react-spring';
+import ProfileIcon from '../../../public/static/user-circle-solid.svg';
 import { useMeQuery } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
-import ProfileIcon from '../../../public/static/user-circle-solid.svg';
 
 interface NavLinkProps {
   href: string;
