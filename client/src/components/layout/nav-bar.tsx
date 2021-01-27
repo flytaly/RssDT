@@ -50,11 +50,18 @@ const NavBar = () => {
     );
   } else {
     content = (
-      <li>
-        <Link href="/login">
-          <a className="hover-underline-link">Log in</a>
-        </Link>
-      </li>
+      <>
+        <li>
+          <Link href="/login">
+            <a className="hover-underline-link">Log in</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/register">
+            <a className="hover-underline-link">Register</a>
+          </Link>
+        </li>
+      </>
     );
   }
   return (
