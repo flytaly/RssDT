@@ -67,7 +67,7 @@ const SettingsPage: NextPage = () => {
 
   return (
     <Layout>
-      <MainCard big>
+      <MainCard big onlyWithVerifiedEmail>
         <div className="w-full pb-4">
           <SettingsNavBar />
           <div className="mx-auto w-160 max-w-full">
@@ -182,7 +182,7 @@ const SettingsPage: NextPage = () => {
                         <LabeledCheckbox
                           key={share.id}
                           id={share.id}
-                          checked={isShareChecked(opts!, share.id)}
+                          checked={opts && isShareChecked(opts, share.id)}
                           onChange={(e) => saveShare(share.id, e.target.checked)}
                           disabled={
                             !opts?.shareEnable || itemSaving.shareEnable || itemSaving.shareList

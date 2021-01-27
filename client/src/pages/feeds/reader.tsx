@@ -7,7 +7,7 @@ import MainCard from '../../components/main-card/main-card';
 const FeedReader: NextPage = () => {
   return (
     <Layout>
-      <MainCard big>
+      <MainCard big onlyWithVerifiedEmail>
         <div className="w-full">
           <FeedNavBar />
           <div className="flex flex-col w-full p-4">

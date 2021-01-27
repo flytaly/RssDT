@@ -1,16 +1,10 @@
 import { Formik } from 'formik';
 import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
 import React from 'react';
 import * as Yup from 'yup';
 import MailIcon from '../../../public/static/envelope.svg';
 import PasswordIcon from '../../../public/static/key.svg';
-import {
-  MeDocument,
-  MeQuery,
-  useLoginMutation,
-  useRegisterMutation,
-} from '../../generated/graphql';
+import { MeDocument, MeQuery, useRegisterMutation } from '../../generated/graphql';
 import GraphQLError from '../graphql-error';
 import { MessageItem } from '../main-card/animated-message';
 import InputWithIcon from './input-with-icon';
