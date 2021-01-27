@@ -82,7 +82,14 @@ export class UserResolver {
   @UseMiddleware(auth())
   @Query(() => Options)
   async myOptions(@Ctx() { req }: MyContext) {
-    return Options.findOne({ where: { userId: req.session.userId } });
+    const { userId } = req.session;
+    const result = await Options.findOne({ where: { userId } });
+    if (!result) {
+      const options = Options.create({ userId });
+      options.save();
+      return options;
+    }
+    return result;
   }
 
   @NormalizeAndValidateArgs([EmailPasswordInput, 'input'], [UserInfoInput, 'userInfo'])
@@ -94,7 +101,12 @@ export class UserResolver {
   ) {
     const { password: plainPassword, email } = input;
     const password = await argon2.hash(plainPassword);
-    const { error, user } = await createUser({ ...(userInfo || {}), password, email });
+    const { error, user } = await createUser({
+      ...(userInfo || {}),
+      password,
+      email,
+      options: Options.create(),
+    });
     if (error) return { errors: [error] };
     if (!user) return null;
     setSession(req, user.id, user.role);
@@ -153,7 +165,10 @@ export class UserResolver {
       return { errors: [new ArgumentError('token', 'wrong or expired token')] };
     }
     await redis.del(key);
-    return updateUser(parseInt(userId), { emailVerified: true });
+    // TODO: ACTIVATE ALL FEEDS
+    const userIdInt = parseInt(userId);
+
+    return updateUser(userIdInt, { emailVerified: true });
   }
 
   @NormalizeAndValidateArgs([EmailPasswordInput, 'input'])

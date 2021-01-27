@@ -1,14 +1,14 @@
 /* eslint-disable import/no-cycle */
 import { ObjectType, Field } from 'type-graphql';
 import {
-    Entity,
-    Column,
-    BaseEntity,
-    PrimaryGeneratedColumn,
-    CreateDateColumn,
-    UpdateDateColumn,
-    OneToMany,
-    OneToOne,
+  Entity,
+  Column,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { UserFeed } from './UserFeed';
 import { Role } from '../types';
@@ -18,48 +18,48 @@ import { defaultLocale, defaultTimeZone } from '../constants';
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
-    @Field()
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @Field()
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Field()
-    @Column({ unique: true })
-    email!: string;
+  @Field()
+  @Column({ unique: true })
+  email!: string;
 
-    @Field()
-    @Column({ default: false })
-    emailVerified!: boolean;
+  @Field()
+  @Column({ default: false })
+  emailVerified!: boolean;
 
-    @Field()
-    @Column({ default: Role.USER })
-    role: Role;
+  @Field()
+  @Column({ default: Role.USER })
+  role: Role;
 
-    @Field()
-    @Column({ default: defaultLocale })
-    locale: string;
+  @Field()
+  @Column({ default: defaultLocale })
+  locale: string;
 
-    @Field()
-    @Column({ default: defaultTimeZone })
-    timeZone: string;
+  @Field()
+  @Column({ default: defaultTimeZone })
+  timeZone: string;
 
-    @Field(() => [UserFeed], { nullable: true })
-    @OneToMany(() => UserFeed, (userFeed) => userFeed.user, { nullable: true })
-    userFeeds: UserFeed[];
+  @Field(() => [UserFeed], { nullable: true })
+  @OneToMany(() => UserFeed, (userFeed) => userFeed.user, { nullable: true })
+  userFeeds: UserFeed[];
 
-    @Field(() => Options)
-    @OneToOne(() => Options, (opts) => opts.user, { cascade: true, eager: true })
-    options: Options;
+  @Field(() => Options)
+  @OneToOne(() => Options, (opts) => opts.user, { cascade: true, eager: true })
+  options: Options;
 
-    @Field(() => Date)
-    @CreateDateColumn()
-    createdAt: Date;
+  @Field(() => Date)
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @Field(() => Date)
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @Field(() => Date)
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-    // === DB ONLY FIELDS ===
+  // === DB ONLY FIELDS ===
 
-    @Column({ nullable: true, default: null })
-    password?: string;
+  @Column({ nullable: true, default: null })
+  password?: string;
 }
