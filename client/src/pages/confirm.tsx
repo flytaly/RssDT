@@ -45,7 +45,7 @@ const ConfirmFeed: NextPage<ConfirmFeedProps> = ({ id, token }) => {
     if (token && id) {
       activateFeed({ variables: { token, userFeedId: id } });
     }
-  }, [id, token]);
+  }, [activateFeed, id, token]);
 
   return (
     <Layout>

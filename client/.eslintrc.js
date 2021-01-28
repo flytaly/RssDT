@@ -3,12 +3,15 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['jest'],
+  plugins: ['jest', 'react-hooks'],
   env: {
     'jest/globals': true,
   },
   ignorePatterns: ['**/generated/graphql.ts'],
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+
     'arrow-body-style': 'off',
     'class-methods-use-this': 'off',
     'import/no-extraneous-dependencies': 'off',

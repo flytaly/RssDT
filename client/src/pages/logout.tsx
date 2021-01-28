@@ -22,7 +22,7 @@ const Logout: NextPage = () => {
     } else {
       router.push('/');
     }
-  }, []);
+  }, [client.cache, data?.me, logout, router]);
 
   return (
     <Layout>

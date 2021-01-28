@@ -65,7 +65,7 @@ const ConfirmRegister: NextPage<ConfirmRegisterProps> = ({ id, token }) => {
         },
       });
     }
-  }, [id, token]);
+  }, [id, token, verifyEmail]);
 
   useEffect(() => {
     let tmId: number;
@@ -75,7 +75,7 @@ const ConfirmRegister: NextPage<ConfirmRegisterProps> = ({ id, token }) => {
       }, 1500);
     }
     return () => clearTimeout(tmId);
-  }, [data?.verifyEmail.user]);
+  }, [data?.verifyEmail.user, router]);
 
   return (
     <Layout>

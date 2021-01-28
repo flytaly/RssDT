@@ -14,9 +14,9 @@ const MainCard: React.FC<MainCardProps> = ({
   big = false,
   onlyWithVerifiedEmail = false,
 }) => {
-  const { data } = useMeQuery({ skip: isServer() });
+  const { data, loading } = useMeQuery({ skip: isServer() });
   const size = big ? 'big-card-w' : 'small-card-w';
-  const showWarning = onlyWithVerifiedEmail && !data?.me?.emailVerified;
+  const showWarning = !isServer && !loading && onlyWithVerifiedEmail && data?.me?.emailVerified;
   return (
     <article
       id="card-root"
