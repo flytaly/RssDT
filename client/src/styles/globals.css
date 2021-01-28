@@ -44,7 +44,17 @@ a:focus-visible {
   outline-offset: 1px;
 }
 
-@layer utilities {
+@layer base {
+  input::placeholder {
+    @apply text-gray-400;
+  }
+
+  input[disabled] {
+    @apply text-gray-500;
+  }
+}
+
+@layer components {
   .small-card-w {
     width: 30rem;
     max-width: calc(100vw - 2rem);
@@ -74,14 +84,6 @@ a:focus-visible {
   .feed-table-column::before {
     content: attr(data-name);
     @apply sm:hidden capitalize font-bold w-1/3 pr-2;
-  }
-
-  input::placeholder {
-    @apply text-gray-400;
-  }
-
-  input[disabled] {
-    @apply text-gray-500;
   }
   .btn {
     @apply text-white text-sm py-1 px-2 rounded-md;
@@ -138,4 +140,15 @@ a:focus-visible {
     background-repeat: no-repeat;
     background-size: 1.2em;
   }
+
+  @responsive {
+    .reader-layout {
+      display: grid;
+      grid-template-columns: minmax(11rem, 1fr) 3fr;
+      grid-template-rows: min-content auto;
+    }
+  }
+}
+
+@layer utilities {
 }

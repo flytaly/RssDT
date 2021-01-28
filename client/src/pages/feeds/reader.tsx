@@ -1,22 +1,21 @@
 import { NextPage } from 'next';
 import React from 'react';
+import FeedReader from '../../components/feed-reader/feed-reader';
 import Layout from '../../components/layout/layout';
 import FeedNavBar from '../../components/main-card/feed-nav-bar';
 import MainCard from '../../components/main-card/main-card';
 
-const FeedReader: NextPage = () => {
+const FeedReaderPage: NextPage = () => {
   return (
     <Layout>
       <MainCard big onlyWithVerifiedEmail>
-        <div className="w-full">
+        <div className="flex flex-col w-full h-full">
           <FeedNavBar />
-          <div className="flex flex-col w-full p-4">
-            <h2 className="font-bold text-base">Reader</h2>
-          </div>
+          <FeedReader />
         </div>
       </MainCard>
     </Layout>
   );
 };
 
-export default FeedReader;
+export default FeedReaderPage;
