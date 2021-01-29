@@ -13,6 +13,7 @@ html {
   --secondary: rgb(0, 115, 209);
   --secondary-focus: rgba(0, 115, 209, 0.6);
   --tertiary: rgb(0, 165, 144);
+  --sidebar-bg-color: #37386e;
   --gray: #777d8c;
   --gray-1: #dfe0e5;
   --success: rgb(0, 140, 0);

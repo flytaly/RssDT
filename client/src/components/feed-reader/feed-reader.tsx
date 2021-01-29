@@ -6,14 +6,14 @@ import ModalSidebar from '../modals/modal-sidebar';
 const FeedReader: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   return (
-    <section className="block sm:reader-layout flex-grow bg-gray-200">
-      <aside className="hidden sm:block row-span-2">
+    <section className="block md:reader-layout flex-grow bg-gray-200">
+      <aside className="hidden md:block row-span-2">
         <FeedSidebar />
       </aside>
       <div className="px-4 py-1 flex items-center">
         <button
           type="button"
-          className="sm:hidden icon-btn w-4 h-4 mr-4"
+          className="md:hidden icon-btn w-4 h-4 mr-4"
           title="Open list of the feeds"
           onClick={() => setModalOpen((prev) => !prev)}
         >
