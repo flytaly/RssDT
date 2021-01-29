@@ -34,7 +34,9 @@ export type QueryGetFeedInfoByTokenArgs = {
 
 
 export type QueryMyFeedItemsArgs = {
-  input: ItemsInput;
+  feedId: Scalars['Float'];
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
 };
 
 export type User = {
@@ -130,6 +132,7 @@ export type PaginatedItemsResponse = {
   __typename?: 'PaginatedItemsResponse';
   items: Array<Item>;
   count: Scalars['Float'];
+  hasMore: Scalars['Boolean'];
 };
 
 export type Item = {
@@ -152,12 +155,6 @@ export type Enclosure = {
   url: Scalars['String'];
   length?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
-};
-
-export type ItemsInput = {
-  feedId: Scalars['Float'];
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
 };
 
 export type Mutation = {
@@ -691,7 +688,7 @@ export type MyFeedItemsQuery = (
   { __typename?: 'Query' }
   & { myFeedItems: (
     { __typename?: 'PaginatedItemsResponse' }
-    & Pick<PaginatedItemsResponse, 'count'>
+    & Pick<PaginatedItemsResponse, 'count' | 'hasMore'>
     & { items: Array<(
       { __typename?: 'Item' }
       & ItemFieldsFragment
@@ -1014,11 +1011,12 @@ export const MeWithOptionsDocument = gql`
 ${OptionsFieldsFragmentDoc}`;
 export const MyFeedItemsDocument = gql`
     query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
-  myFeedItems(input: {skip: $skip, take: $take, feedId: $feedId}) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId) {
     items {
       ...ItemFields
     }
     count
+    hasMore
   }
 }
     ${ItemFieldsFragmentDoc}`;

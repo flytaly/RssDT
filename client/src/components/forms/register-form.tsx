@@ -41,7 +41,7 @@ const RegisterForm: React.FC<LoginProps> = ({ setMessages }) => {
             },
           });
           if (data?.register?.user) {
-            router.push('/feeds/manage');
+            router.push('/manage');
           } else {
             setMessages?.([
               { type: 'error', key: 'error', text: data?.register.errors?.[0].message },

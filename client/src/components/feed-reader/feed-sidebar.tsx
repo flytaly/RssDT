@@ -1,21 +1,28 @@
 import React from 'react';
+import Link from 'next/link';
+import { FeedFieldsFragment, UserFeedFieldsFragment } from '../../generated/graphql';
 
-interface FeedSidebarProps {}
+interface FeedSidebarProps {
+  feeds?: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
+  loading?: boolean;
+}
 
-const FeedSidebar: React.FC<FeedSidebarProps> = () => {
+const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
+  const list = (
+    <ul>
+      {feeds?.map((uf) => (
+        <li key={uf.id} className="whitespace-nowrap overflow-ellipsis overflow-hidden">
+          <Link href={`/feed/${uf.id}`}>
+            <a>{uf.feed.title || uf.feed.url}</a>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+  const content = loading ? <div>Loading...</div> : list;
   return (
-    <nav className="w-full h-full bg-sidebar text-gray-50 py-2 pl-4 pr-1 overflow-hidden">
-      <ul>
-        <li className="whitespace-nowrap overflow-ellipsis overflow-hidden">
-          <a href="/">Feed 1</a>
-        </li>
-        <li className="whitespace-nowrap overflow-ellipsis overflow-hidden">
-          <a href="/">Feed 2</a>
-        </li>
-        <li className="whitespace-nowrap overflow-ellipsis overflow-hidden">
-          <a href="/">Very very very looooooong name</a>
-        </li>
-      </ul>
+    <nav className="w-full h-full bg-sidebar text-sm text-gray-50 py-2 pl-4 pr-1 overflow-hidden">
+      {content}
     </nav>
   );
 };

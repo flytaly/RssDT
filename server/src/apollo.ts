@@ -8,21 +8,21 @@ import { UserFeedResolver } from './resolvers/userFeed';
 import { FeedResolver } from './resolvers/feed';
 
 export const initApolloServer = async (app: Express, redis: Redis) => {
-    const schema = await buildSchema({
-        resolvers: [UserResolver, UserFeedResolver, FeedResolver],
-        validate: false,
-    });
+  const schema = await buildSchema({
+    resolvers: [UserResolver, UserFeedResolver, FeedResolver],
+    validate: false,
+  });
 
-    const apolloServer = new ApolloServer({
-        schema,
-        context: ({ req, res }): MyContext => ({
-            req: req as ReqWithSession,
-            res,
-            redis,
-        }),
-    });
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req, res }): MyContext => ({
+      req: req as ReqWithSession,
+      res,
+      redis,
+    }),
+  });
 
-    apolloServer.applyMiddleware({ app, cors: { origin: process.env.FRONTEND_URL } });
+  apolloServer.applyMiddleware({ app, cors: { origin: process.env.FRONTEND_URL } });
 
-    return apolloServer;
+  return apolloServer;
 };

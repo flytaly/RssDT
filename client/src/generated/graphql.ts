@@ -33,7 +33,9 @@ export type QueryGetFeedInfoByTokenArgs = {
 
 
 export type QueryMyFeedItemsArgs = {
-  input: ItemsInput;
+  feedId: Scalars['Float'];
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
 };
 
 export type User = {
@@ -129,6 +131,7 @@ export type PaginatedItemsResponse = {
   __typename?: 'PaginatedItemsResponse';
   items: Array<Item>;
   count: Scalars['Float'];
+  hasMore: Scalars['Boolean'];
 };
 
 export type Item = {
@@ -151,12 +154,6 @@ export type Enclosure = {
   url: Scalars['String'];
   length?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
-};
-
-export type ItemsInput = {
-  feedId: Scalars['Float'];
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
 };
 
 export type Mutation = {
@@ -626,6 +623,25 @@ export type MeQuery = (
     { __typename?: 'User' }
     & UserFieldsFragment
   )> }
+);
+
+export type MyFeedItemsQueryVariables = Exact<{
+  skip?: Maybe<Scalars['Float']>;
+  take?: Maybe<Scalars['Float']>;
+  feedId: Scalars['Float'];
+}>;
+
+
+export type MyFeedItemsQuery = (
+  { __typename?: 'Query' }
+  & { myFeedItems: (
+    { __typename?: 'PaginatedItemsResponse' }
+    & Pick<PaginatedItemsResponse, 'count' | 'hasMore'>
+    & { items: Array<(
+      { __typename?: 'Item' }
+      & ItemFieldsFragment
+    )> }
+  ) }
 );
 
 export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1298,6 +1314,45 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MyFeedItemsDocument = gql`
+    query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId) {
+    items {
+      ...ItemFields
+    }
+    count
+    hasMore
+  }
+}
+    ${ItemFieldsFragmentDoc}`;
+
+/**
+ * __useMyFeedItemsQuery__
+ *
+ * To run a query within a React component, call `useMyFeedItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedItemsQuery({
+ *   variables: {
+ *      skip: // value for 'skip'
+ *      take: // value for 'take'
+ *      feedId: // value for 'feedId'
+ *   },
+ * });
+ */
+export function useMyFeedItemsQuery(baseOptions: Apollo.QueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>) {
+        return Apollo.useQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(MyFeedItemsDocument, baseOptions);
+      }
+export function useMyFeedItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>) {
+          return Apollo.useLazyQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(MyFeedItemsDocument, baseOptions);
+        }
+export type MyFeedItemsQueryHookResult = ReturnType<typeof useMyFeedItemsQuery>;
+export type MyFeedItemsLazyQueryHookResult = ReturnType<typeof useMyFeedItemsLazyQuery>;
+export type MyFeedItemsQueryResult = Apollo.QueryResult<MyFeedItemsQuery, MyFeedItemsQueryVariables>;
 export const MyFeedsDocument = gql`
     query myFeeds {
   myFeeds {

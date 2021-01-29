@@ -71,7 +71,7 @@ const ConfirmRegister: NextPage<ConfirmRegisterProps> = ({ id, token }) => {
     let tmId: number;
     if (data?.verifyEmail.user) {
       tmId = window.setTimeout(() => {
-        router.push('/feeds/manage');
+        router.push('/manage');
       }, 1500);
     }
     return () => clearTimeout(tmId);

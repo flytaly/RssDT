@@ -39,7 +39,7 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
             },
           });
           if (data?.login?.user) {
-            router.push('/feeds/manage');
+            router.push('/manage');
           } else {
             setMessages?.([{ type: 'error', key: 'error', text: data?.login.errors?.[0].message }]);
           }

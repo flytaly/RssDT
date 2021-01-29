@@ -1,12 +1,14 @@
 import {
-    Arg,
-    Ctx,
-    Field,
-    InputType,
-    ObjectType,
-    Query,
-    Resolver,
-    UseMiddleware,
+  Arg,
+  Args,
+  ArgsType,
+  Ctx,
+  Field,
+  InputType,
+  ObjectType,
+  Query,
+  Resolver,
+  UseMiddleware,
 } from 'type-graphql';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
@@ -16,45 +18,49 @@ import { MyContext } from '../types';
 
 @ObjectType()
 export class PaginatedItemsResponse {
-    @Field(() => [Item])
-    items: Item[];
+  @Field(() => [Item])
+  items: Item[];
 
-    @Field()
-    count: number;
+  @Field()
+  count: number;
+
+  @Field()
+  hasMore: boolean;
 }
 
-@InputType()
-export class ItemsInput {
-    @Field()
-    feedId: number;
+@ArgsType()
+export class ItemsArgs {
+  @Field()
+  feedId: number;
 
-    @Field({ nullable: true, defaultValue: 0 })
-    skip?: number;
+  @Field({ nullable: true, defaultValue: 0 })
+  skip?: number;
 
-    @Field({ nullable: true, defaultValue: 10 })
-    take: number;
+  @Field({ nullable: true, defaultValue: 10 })
+  take: number;
 }
 
 @Resolver(Feed)
 export class FeedResolver {
-    @UseMiddleware(auth())
-    @Query(() => PaginatedItemsResponse)
-    async myFeedItems(
-        @Arg('input') { skip, take, feedId }: ItemsInput, //
-        @Ctx() { req }: MyContext,
-    ) {
-        const uf = await UserFeed.findOne({
-            where: { feedId, userId: req.session.userId },
-        });
+  @UseMiddleware(auth())
+  @Query(() => PaginatedItemsResponse)
+  async myFeedItems(
+    @Args() { skip = 0, take, feedId }: ItemsArgs, //
+    @Ctx() { req }: MyContext,
+  ) {
+    const uf = await UserFeed.findOne({
+      where: { feedId, userId: req.session.userId },
+    });
 
-        if (!uf) throw new Error("couldn't find feed");
+    if (!uf) throw new Error("couldn't find feed");
 
-        const [items, count] = await Item.findAndCount({
-            skip,
-            take: Math.min(40, Math.max(1, take)),
-            where: { feedId },
-            order: { pubdate: 'DESC' },
-        });
-        return { items, count };
-    }
+    const [items, count] = await Item.findAndCount({
+      skip,
+      take: Math.min(40, Math.max(1, take)),
+      where: { feedId },
+      order: { pubdate: 'DESC' },
+    });
+    const hasMore = count > skip + take;
+    return { items, count, hasMore };
+  }
 }

@@ -2,12 +2,17 @@
 
 /* From example: https://github.com/vercel/next.js/tree/canary/examples/with-apollo */
 
-import { useMemo } from 'react';
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCache } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, NormalizedCache, Reference } from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
+import { useMemo } from 'react';
+import { PaginatedItemsResponse } from '../generated/graphql';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
+
+interface PaginatedItemsRef extends Omit<PaginatedItemsResponse, 'items'> {
+  items: Array<Reference>;
+}
 
 let apolloClient: ApolloClient<NormalizedCache>;
 
@@ -18,7 +23,26 @@ function createApolloClient() {
       uri: 'http://localhost:4000/graphql', // Server URL (must be absolute)
       credentials: 'include', // Additional fetch() options like `credentials` or `headers`
     }),
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            myFeedItems: {
+              keyArgs: ['feedId'],
+              merge(
+                existing: PaginatedItemsRef | undefined,
+                incoming: PaginatedItemsRef,
+              ): PaginatedItemsRef {
+                const existingItems = existing?.items || [];
+                const refs = new Set(existingItems.map((i) => i.__ref));
+                const incomingItems = incoming.items.filter((i) => !refs.has(i.__ref));
+                return { ...incoming, items: [...existingItems, ...incomingItems] };
+              },
+            },
+          },
+        },
+      },
+    }),
   });
 }
 

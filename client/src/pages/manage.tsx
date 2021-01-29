@@ -1,12 +1,12 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
-import FeedTable from '../../components/feed-table';
-import Layout from '../../components/layout/layout';
-import FeedNavBar from '../../components/main-card/feed-nav-bar';
-import MainCard from '../../components/main-card/main-card';
-import AddFeedModal from '../../components/modals/add-feed-modal';
-import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
-import { isServer } from '../../utils/is-server';
+import FeedTable from '../components/feed-table';
+import Layout from '../components/layout/layout';
+import FeedNavBar from '../components/main-card/feed-nav-bar';
+import MainCard from '../components/main-card/main-card';
+import AddFeedModal from '../components/modals/add-feed-modal';
+import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
+import { isServer } from '../utils/is-server';
 
 const FeedManager: NextPage = () => {
   const { data, loading } = useMyFeedsQuery({ skip: isServer() });

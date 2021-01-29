@@ -32,8 +32,8 @@ const NavBar = () => {
   else if (data?.me) {
     content = (
       <>
-        <NavLink href="/feeds/reader" title="Reader" />
-        <NavLink href="/feeds/manage" title="Manage" />
+        <NavLink href="/feed" title="Reader" />
+        <NavLink href="/manage" title="Manage" />
         <NavLink className="hidden sm:block" href="/settings" title="Settings" />
         <li>
           <div className="group relative flex">

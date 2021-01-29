@@ -5,11 +5,11 @@ import CardNavBar, { CardRoute } from './card-nav-bar';
 const routes: CardRoute[] = [
   {
     name: 'View',
-    path: '/feeds/reader',
+    path: '/feed',
   },
   {
     name: 'Manage digests',
-    path: '/feeds/manage',
+    path: '/manage',
   },
 ];
 
