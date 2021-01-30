@@ -21,7 +21,7 @@ function getItemHTML(item: Pick<Item, 'description' | 'summary'>) {
 const take = 10;
 
 const FeedItems: React.FC<FeedItemsProps> = ({ feed }) => {
-  const { ref, inView } = useInView({ threshold: 0, initialInView: false });
+  const { ref, inView } = useInView({ threshold: 0 });
   const { data, loading, fetchMore, error } = useMyFeedItemsQuery({
     notifyOnNetworkStatusChange: true,
     variables: { feedId: feed.feed.id, skip: 0, take },
