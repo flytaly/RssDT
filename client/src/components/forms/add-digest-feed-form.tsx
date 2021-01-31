@@ -10,20 +10,13 @@ import { periodNames as names, DigestSchedule } from '../../types';
 import { useAddFeedWithEmailMutation } from '../../generated/graphql';
 import { MessageItem } from '../main-card/animated-message';
 import GraphQLError from '../graphql-error';
+import { getUserLocaleInfo } from '../../utils/user-locale';
 
 // VALIDATION
 const AddFeedSchema = Yup.object().shape({
   url: Yup.string().url('Invalid feed address').required('The field is required'),
   email: Yup.string().email('Invalid email address').required('The field is required'),
 });
-
-const getUserInfo = () => {
-  if (Intl && Intl.DateTimeFormat) {
-    const { timeZone, locale } = Intl.DateTimeFormat().resolvedOptions();
-    return { timeZone, locale };
-  }
-  return null;
-};
 
 interface AddDigestFeedFormProps {
   email?: string;
@@ -58,7 +51,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
           const { data } = await addFeed({
             variables: {
               input: { email: formVariables.email, feedUrl: formVariables.url },
-              userInfo: getUserInfo(),
+              userInfo: getUserLocaleInfo(),
               feedOpts: { schedule: formVariables.digest },
             },
           });

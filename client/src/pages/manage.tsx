@@ -7,8 +7,10 @@ import MainCard from '../components/main-card/main-card';
 import AddFeedModal from '../components/modals/add-feed-modal';
 import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
+import useRedirectUnauthorized from '../utils/use-auth-route';
 
 const FeedManager: NextPage = () => {
+  useRedirectUnauthorized();
   const { data, loading } = useMyFeedsQuery({ skip: isServer() });
   const myFeeds = (data?.myFeeds || []) as UserFeed[];
   const empty = <div className="text-center">{loading ? 'Loading...' : 'You have no feeds'}</div>;

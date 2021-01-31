@@ -100,7 +100,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
                 disabled={isSubmitting}
                 required
               />
-              <div className="text-error mb-6 text-sm">
+              <div className="text-error mt-2 mb-6 text-sm">
                 {touched.url && errors.url ? errors.url : ''}
               </div>
               <label htmlFor="digest" className="mb-1">
@@ -121,7 +121,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
                 </option>
               </SelectUnderline>
               {errorMsg ? (
-                <div className="mb-3 p-1 text-sm text-error border-2 border-error">{errorMsg}</div>
+                <div className="my-3 p-1 text-sm text-error border-2 border-error">{errorMsg}</div>
               ) : null}
               <button
                 type="submit"

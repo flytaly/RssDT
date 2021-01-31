@@ -10,12 +10,13 @@ import Item from '../components/settings-item';
 import {
   Options,
   OptionsInput,
+  ShareId,
   Theme,
   useMeQuery,
   useMyOptionsQuery,
-  ShareId,
 } from '../generated/graphql';
 import shareProviders from '../share-providers';
+import useAuthRoute from '../utils/use-auth-route';
 // import { ShareId } from '../types';
 import { useSetPartialOptionsMutation } from '../utils/use-set-option-mutation';
 
@@ -32,6 +33,7 @@ const isShareChecked = ({ shareEnable, shareList }: Options, current: ShareId) =
 const shareIdsList = shareProviders.map(({ id }) => id);
 
 const SettingsPage: NextPage = () => {
+  useAuthRoute();
   const meData = useMeQuery();
   const { data, loading } = useMyOptionsQuery();
   const [itemSaving, setItemSaving] = useState<Partial<Record<keyof OptionsInput, boolean>>>({});

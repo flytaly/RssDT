@@ -583,6 +583,19 @@ export type UnsubscribeByTokenMutation = (
   & Pick<Mutation, 'unsubscribeByToken'>
 );
 
+export type UpdateUserInfoMutationVariables = Exact<{
+  userInfo: UserInfoInput;
+}>;
+
+
+export type UpdateUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserInfo: (
+    { __typename?: 'User' }
+    & Pick<User, 'timeZone' | 'locale'>
+  ) }
+);
+
 export type VerifyEmailMutationVariables = Exact<{
   userId: Scalars['String'];
   token: Scalars['String'];
@@ -1212,6 +1225,39 @@ export function useUnsubscribeByTokenMutation(baseOptions?: Apollo.MutationHookO
 export type UnsubscribeByTokenMutationHookResult = ReturnType<typeof useUnsubscribeByTokenMutation>;
 export type UnsubscribeByTokenMutationResult = Apollo.MutationResult<UnsubscribeByTokenMutation>;
 export type UnsubscribeByTokenMutationOptions = Apollo.BaseMutationOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
+export const UpdateUserInfoDocument = gql`
+    mutation updateUserInfo($userInfo: UserInfoInput!) {
+  updateUserInfo(userInfo: $userInfo) {
+    timeZone
+    locale
+  }
+}
+    `;
+export type UpdateUserInfoMutationFn = Apollo.MutationFunction<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
+
+/**
+ * __useUpdateUserInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserInfoMutation, { data, loading, error }] = useUpdateUserInfoMutation({
+ *   variables: {
+ *      userInfo: // value for 'userInfo'
+ *   },
+ * });
+ */
+export function useUpdateUserInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>) {
+        return Apollo.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(UpdateUserInfoDocument, baseOptions);
+      }
+export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
+export type UpdateUserInfoMutationResult = Apollo.MutationResult<UpdateUserInfoMutation>;
+export type UpdateUserInfoMutationOptions = Apollo.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
 export const VerifyEmailDocument = gql`
     mutation verifyEmail($userId: String!, $token: String!) {
   verifyEmail(userId: $userId, token: $token) {
