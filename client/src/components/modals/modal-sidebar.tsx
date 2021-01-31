@@ -14,8 +14,8 @@ const customStyles = (right: boolean): Modal.Styles => ({
   content: {
     position: 'absolute',
     top: '0',
-    left: right ? 'auto' : 0,
-    right: right ? '0' : 'auto',
+    left: right ? '100%' : 'auto',
+    right: right ? 'auto' : '100%',
     bottom: '0',
     height: '100%',
     width: '24rem',
@@ -43,9 +43,9 @@ const ModalSidebar: React.FC<ModalSidebarProps> = ({
   right = true,
 }) => {
   const closingDuration = 100;
+  const translate = right ? 'translate3d(-100%, 0, 0)' : 'translate3d(100%, 0, 0)';
   const springProps = useSpring({
-    transformOrigin: `${right ? 'right' : 'left'} center`,
-    transform: isOpen ? 'scale3d(1,1,1)' : 'scale3d(0,1,0)',
+    transform: isOpen ? translate : 'translate3d(0%, 0, 0)',
     config: { tension: 340, friction: 30, duration: isOpen ? undefined : closingDuration },
   });
 
