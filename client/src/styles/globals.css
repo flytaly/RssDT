@@ -109,7 +109,7 @@ a:focus-visible {
   }
 
   .icon-btn:hover {
-    transform: scale(1.06);
+    transform: scale(1.1);
   }
   .icon-btn:active {
     transform: scale(0.97);

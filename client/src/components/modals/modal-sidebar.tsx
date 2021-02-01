@@ -10,6 +10,7 @@ const customStyles = (right: boolean): Modal.Styles => ({
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     borderRadius: '0.375rem',
+    overflow: 'hidden',
   },
   content: {
     position: 'absolute',
