@@ -8,14 +8,16 @@ import {
 } from '../../generated/graphql';
 import Spinner from '../spinner';
 import FeedItem from './feed-item';
+import { ReaderOptions } from './reader-options';
 
 interface FeedItemsProps {
   feed: { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
+  readerOpts: ReaderOptions;
 }
 
 const take = 10;
 
-const FeedItems: React.FC<FeedItemsProps> = ({ feed }) => {
+const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts }) => {
   const { ref, inView } = useInView({ threshold: 0 });
   const { data, loading, fetchMore, error } = useMyFeedItemsQuery({
     notifyOnNetworkStatusChange: true,
@@ -33,7 +35,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed }) => {
   return (
     <main className="min-h-full flex flex-col flex-grow space-y-4 p-3">
       {items.map((item) => (
-        <FeedItem key={item.id} item={item} />
+        <FeedItem key={item.id} item={item} readerOpts={readerOpts} />
       ))}
       {error ? (
         <div className="border-2 border-error shadow-message-err self-center p-3 mt-3">

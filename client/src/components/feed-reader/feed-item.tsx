@@ -3,10 +3,13 @@ import PaperClipIcon from '../../../public/static/paperclip.svg';
 import ShareIcon from '../../../public/static/share-2.svg';
 import { Item, ItemFieldsFragment } from '../../generated/graphql';
 import shareProviders from '../../share-providers';
+import { clamp } from '../../utils/clamp';
 import usePopup from '../../utils/use-popup';
+import { ReaderOptions } from './reader-options';
 
 interface FeedItemProps {
   item: ItemFieldsFragment;
+  readerOpts: ReaderOptions;
 }
 
 function getItemHTML(item: Pick<Item, 'description' | 'summary'>) {
@@ -41,7 +44,7 @@ const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
         <span>{text}</span>
       </button>
       {isOpen && children ? (
-        <div className="absolute bg-white top-full right-0 shadow-message text-xs z-10 min-w-min rounded-sm">
+        <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min rounded-sm">
           {children}
         </div>
       ) : null}
@@ -49,14 +52,18 @@ const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
   );
 };
 
-const FeedItem: React.FC<FeedItemProps> = ({ item }) => {
+const fontSizes = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
+
+const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts }) => {
   return (
     <article
       key={item.id}
-      className="relative px-3 pt-2 pb-1 shadow-message bg-white rounded-sm text-sm"
+      className={`relative px-3 pt-2 pb-1 shadow-message bg-white rounded-sm ${
+        fontSizes[readerOpts.fontSize]
+      }`}
     >
       <h4 className="font-bold">{item.title}</h4>
-      <div className="text-xs mb-3">
+      <div className="text-sm mb-3">
         {new Date(item.pubdate || item.createdAt).toLocaleString()}
       </div>
       {/* eslint-disable-next-line react/no-danger */}
