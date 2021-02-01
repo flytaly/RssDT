@@ -20,7 +20,7 @@ const MainCard: React.FC<MainCardProps> = ({
   return (
     <article
       id="card-root"
-      className={`relative flex flex-col md:flex-row ${size} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto`}
+      className={`relative flex flex-col md:flex-row ${size} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto overflow-y-hidden`}
     >
       {showWarning ? <EmailVerificationWarning /> : null}
       {children}

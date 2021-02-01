@@ -1,21 +1,16 @@
-/* eslint-disable react/no-danger */
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
 import {
   FeedFieldsFragment,
-  Item,
   ItemFieldsFragment,
   useMyFeedItemsQuery,
   UserFeedFieldsFragment,
 } from '../../generated/graphql';
 import Spinner from '../spinner';
+import FeedItem from './feed-item';
 
 interface FeedItemsProps {
   feed: { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
-}
-
-function getItemHTML(item: Pick<Item, 'description' | 'summary'>) {
-  return { __html: item.summary || item.description || '' };
 }
 
 const take = 10;
@@ -38,13 +33,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed }) => {
   return (
     <main className="min-h-full flex flex-col flex-grow space-y-4 p-3">
       {items.map((item) => (
-        <article key={item.id} className="p-3 shadow-message bg-white rounded-sm text-sm">
-          <h4 className="font-bold">{item.title}</h4>
-          <div className="text-xs mb-3">
-            {new Date(item.pubdate || item.createdAt).toLocaleString()}
-          </div>
-          <div dangerouslySetInnerHTML={getItemHTML(item)} />
-        </article>
+        <FeedItem key={item.id} item={item} />
       ))}
       {error ? (
         <div className="border-2 border-error shadow-message-err self-center p-3 mt-3">
