@@ -1,23 +1,51 @@
 import React, { RefObject, useCallback, useState } from 'react';
 import MailIcon from '../../../public/static/envelope.svg';
-import GearIcon from '../../../public/static/settings.svg';
+import ItemBigIcon from '../../../public/static/item-big.svg';
+import ItemMediumIcon from '../../../public/static/item-middle.svg';
+import ItemSmallIcon from '../../../public/static/item-small.svg';
 import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '../../generated/graphql';
+import { clamp } from '../../utils/clamp';
 import usePopup from '../../utils/use-popup';
 import EditFeedModal from '../modals/edit-feed-modal';
+import { ItemViewId, ItemViews, ReaderOptions } from './reader-options';
+
+const ViewIcon: React.FC<{ viewId: ItemViewId; className?: string }> = ({ viewId, className }) => {
+  if (viewId === 'collapsed') return <ItemSmallIcon className={className} />;
+  if (viewId === 'medium') return <ItemMediumIcon className={className} />;
+  return <ItemBigIcon className={className} />;
+};
 
 interface FeedHeaderProps {
   userFeed?: ({ feed: FeedFieldsFragment } & UserFeedFieldsFragment) | null;
-  changeFontSize: (amount: number) => void;
+  readerOpts: ReaderOptions;
+  setReaderOpts: React.Dispatch<React.SetStateAction<ReaderOptions>>;
 }
 
-const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, changeFontSize }) => {
+const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReaderOpts }) => {
   const [editFeedModal, setEditFeedModal] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
-  const { anchorRef } = usePopup(
+  const [isViewOptsOpen, setIsViewOptsOpen] = useState(false);
+  const { anchorRef: fontAnchorRef } = usePopup(
     isOptionsOpen,
     useCallback(() => setIsOptionsOpen(false), [setIsOptionsOpen]),
   );
+  const { anchorRef: viewAnchorRef } = usePopup(
+    isViewOptsOpen,
+    useCallback(() => setIsViewOptsOpen(false), [setIsViewOptsOpen]),
+  );
+
+  const changeFontSize = (to: number) =>
+    setReaderOpts((prev) => ({
+      ...prev,
+      fontSize: clamp(prev.fontSize + to, 0, 4) as 0 | 1 | 2 | 3 | 4,
+    }));
+
+  const onViewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setReaderOpts((p) => ({ ...p, itemView: e.target.value as ItemViewId }));
+  };
+
   const isDigestDisable = userFeed?.schedule === 'disable';
+
   return (
     <>
       {userFeed && (
@@ -35,22 +63,60 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, changeFontSize }) => 
             onClick={() => setEditFeedModal(true)}
           >
             <MailIcon
-              className={`w-auto h-4 ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
+              className={`w-auto h-4 ${
+                isDigestDisable ? 'text-gray-400' : 'text-gray-800'
+              } hover:text-primary`}
             />
           </button>
-          <div ref={anchorRef as RefObject<HTMLDivElement>} className="h-4 ml-auto relative">
+          <div ref={viewAnchorRef as RefObject<HTMLDivElement>} className="relative ml-auto mr-2">
             <button
               type="button"
-              className="h-4 w-4 icon-btn"
+              className="h-4 icon-btn hover:text-primary"
+              title="Feed items display style"
+              onClick={() => setIsViewOptsOpen((s) => !s)}
+            >
+              <ViewIcon viewId={readerOpts.itemView} className="w-auto h-4" />
+            </button>
+            {!isViewOptsOpen ? null : (
+              <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min   rounded-sm border border-opacity-40">
+                {Object.keys(ItemViews).map((id) => (
+                  <label
+                    key={id}
+                    className={`flex items-center hover:text-primary hover:bg-gray-100 whitespace-nowrap px-2 ${
+                      id === readerOpts.itemView ? 'text-secondary' : ''
+                    }`}
+                  >
+                    <ViewIcon viewId={id as ItemViewId} className="w-auto h-4 mr-2 my-1" />
+                    <span>{ItemViews[id as ItemViewId]}</span>
+                    <input
+                      name="items-view"
+                      id={id}
+                      value={id}
+                      type="radio"
+                      className="hidden"
+                      onChange={onViewChange}
+                    />
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+          <div ref={fontAnchorRef as RefObject<HTMLDivElement>} className="relative">
+            <button
+              type="button"
+              className="flex items-center icon-btn hover:text-primary"
               title="Feed reader options"
               onClick={() => setIsOptionsOpen((s) => !s)}
             >
-              <GearIcon className="w-auto h-4" />
+              <div>
+                <span className="text-sm leading-5">A</span>
+                <span className="text-lg leading-5">A</span>
+              </div>
             </button>
             {!isOptionsOpen ? null : (
               <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min   p-2 rounded-sm border border-opacity-40 border-black">
                 <b>Font size</b>
-                <div className="flex w-24 mt-1 mb-2 ">
+                <div className="flex w-24 mt-1 mb-2">
                   <button
                     type="button"
                     className="px-1 border border-opacity-40 border-black inline-block

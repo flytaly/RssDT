@@ -1,9 +1,9 @@
+/* eslint-disable react/no-danger */
 import React, { RefObject, useCallback, useState } from 'react';
 import PaperClipIcon from '../../../public/static/paperclip.svg';
 import ShareIcon from '../../../public/static/share-2.svg';
 import { Item, ItemFieldsFragment } from '../../generated/graphql';
 import shareProviders from '../../share-providers';
-import { clamp } from '../../utils/clamp';
 import usePopup from '../../utils/use-popup';
 import { ReaderOptions } from './reader-options';
 
@@ -36,11 +36,7 @@ const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
         onClick={() => setIsOpen((s) => !s)}
         className="flex items-center font-semibold rounded p-1 hover:bg-gray-200"
       >
-        <Icon
-          className="flex items-center font-semibold rounded
-        p-1 hover:bg-gray-200
-        "
-        />
+        <Icon className="flex items-center font-semibold rounded hover:bg-gray-200 h-4 w-4 mr-1" />
         <span>{text}</span>
       </button>
       {isOpen && children ? (
@@ -55,6 +51,8 @@ const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
 const fontSizes = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
 
 const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts }) => {
+  const isCollapsed = readerOpts.itemView === 'collapsed';
+  const isMedium = readerOpts.itemView === 'medium';
   return (
     <article
       key={item.id}
@@ -63,12 +61,16 @@ const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts }) => {
       }`}
     >
       <h4 className="font-bold">{item.title}</h4>
-      <div className="text-sm mb-3">
+      <div className={`text-xs ${!isCollapsed ? 'mb-3' : ''}`}>
         {new Date(item.pubdate || item.createdAt).toLocaleString()}
       </div>
-      {/* eslint-disable-next-line react/no-danger */}
-      <main dangerouslySetInnerHTML={getItemHTML(item)} />
-      <footer className="flex justify-end mt-1 space-x-1">
+      {isCollapsed ? null : (
+        <main
+          className={`overflow-hidden ${isMedium ? 'max-h-36' : ''}`}
+          dangerouslySetInnerHTML={getItemHTML(item)}
+        />
+      )}
+      <footer className="flex justify-end mt-1 space-x-1 text-xs">
         <FooterBtnList Icon={PaperClipIcon} text={`enclosures: ${item.enclosures?.length}`}>
           {item.enclosures?.map((enc) => (
             <div key={enc.url}>

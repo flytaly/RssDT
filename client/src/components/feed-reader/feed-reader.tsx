@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import BarsIcon from '../../../public/static/bars.svg';
 import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
-import { clamp } from '../../utils/clamp';
 import { isServer } from '../../utils/is-server';
 import ModalSidebar from '../modals/modal-sidebar';
 import FeedHeader from './feed-header';
@@ -14,12 +13,6 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
   const { data, loading } = useMyFeedsQuery({ skip: isServer() });
   const [readerOpts, setReaderOpts] = useLocalState();
 
-  const changeFontSize = (to: number) =>
-    setReaderOpts((prev) => ({
-      ...prev,
-      fontSize: clamp(prev.fontSize + to, 0, 4) as 0 | 1 | 2 | 3 | 4,
-    }));
-
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const feedList = <FeedSidebar feeds={myFeeds} loading={loading} />;
 
@@ -28,7 +21,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200">
       <aside className="hidden md:block row-span-2">{feedList}</aside>
-      <div className="flex items-center px-4 py-1 my-1 hover:bg-primary-1">
+      <div className="flex items-center px-4 py-1 my-1 ">
         <button
           type="button"
           className="md:hidden icon-btn w-4 h-4 mr-4"
@@ -37,7 +30,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
         >
           <BarsIcon />
         </button>
-        <FeedHeader userFeed={userFeed} changeFontSize={changeFontSize} />
+        <FeedHeader userFeed={userFeed} readerOpts={readerOpts} setReaderOpts={setReaderOpts} />
       </div>
       {userFeed ? <FeedItems feed={userFeed} readerOpts={readerOpts} /> : <div />}
       <ModalSidebar
