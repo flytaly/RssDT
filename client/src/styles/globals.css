@@ -22,6 +22,7 @@ html {
   --error: rgb(200, 0, 0);
   --error-shadow: rgba(200, 0, 0, 0.25);
   --error-shadow-hover: rgb(200, 0, 0, 0.4);
+  --external-link-col: #17b;
 }
 
 html,
@@ -155,6 +156,10 @@ a:focus-visible {
   }
   .transparent-gradient {
     background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .feed-item-body a {
+    @apply underline text-link;
   }
 }
 

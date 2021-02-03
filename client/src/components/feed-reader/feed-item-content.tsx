@@ -86,7 +86,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
           <div className="relative mt-3">
             <main
               ref={bodyRef}
-              className={`${bodyClassName}`}
+              className={`feed-item-body ${bodyClassName}`}
               dangerouslySetInnerHTML={getItemHTML(item)}
             />
             {bottomGradient && (

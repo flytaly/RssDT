@@ -47,12 +47,12 @@ const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed 
             Feed Info
           </h4>
           <InfoRow title="Site Link">
-            <a className="underline" href={feed.feed.link || feed.feed.url}>
+            <a className="underline text-link" href={feed.feed.link || feed.feed.url}>
               {feed.feed.link || feed.feed.url}
             </a>
           </InfoRow>
           <InfoRow title="Feed URL">
-            <a className="underline" href={feed.feed.url}>
+            <a className="underline text-link" href={feed.feed.url}>
               {feed.feed.url}
             </a>
           </InfoRow>
