@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import EditIcon from '../../public/static/edit.svg';
 import TrashIcon from '../../public/static/trash.svg';
@@ -89,9 +90,9 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
           {feeds.map((uf, idx) => (
             <Row isOdd={!(idx % 2)} key={uf.id}>
               <Cell name="Feed">
-                <a className="underline" href={uf.feed.link || uf.feed.url}>
-                  {uf.feed.title}
-                </a>
+                <Link href={`/feed/${uf.id}`}>
+                  <a className="underline">{uf.feed.title}</a>
+                </Link>
               </Cell>
               <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
               <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
