@@ -25,20 +25,17 @@ const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
   );
 
   return (
-    <div ref={anchorRef as RefObject<HTMLDivElement>} className="relative">
+    <div ref={anchorRef as RefObject<HTMLDivElement>} className="relative" data-click-skip="true">
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen((s) => !s);
-        }}
+        onClick={() => setIsOpen((s) => !s)}
         className="flex items-center font-semibold rounded p-1 hover:bg-gray-200"
       >
         <Icon className="flex items-center font-semibold rounded hover:bg-gray-200 h-4 w-4 mr-1" />
         <span>{text}</span>
       </button>
       {isOpen && children ? (
-        <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min rounded-sm">
+        <div className="absolute bg-white right-0 shadow-popup text-xs z-10 min-w-min rounded-sm border border-gray-300 arrow-tr">
           {children}
         </div>
       ) : null}
@@ -70,7 +67,13 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
       bodyClickHandler?.(item.id);
     }
   };
-  const onClick = () => bodyClickHandler?.(item.id);
+  const onClick = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName !== 'A' && !target.closest('[data-click-skip]')) {
+      bodyClickHandler?.(item.id);
+    }
+  };
+
   return (
     <article
       className={`relative px-3 pt-2 pb-1 shadow-message bg-white rounded-sm ${containerClassName} focus:shadow-message-darker`}
@@ -113,12 +116,11 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
           {item.enclosures?.map((enc) => (
             <div key={enc.url}>
               <a
-                className="flex hover:underline hover:bg-gray-200 whitespace-nowrap p-1"
+                className="flex hover:underline hover:bg-gray-200 whitespace-nowrap p-1 z-30"
                 href={enc.url}
                 title={enc.url}
                 target="_blank"
                 rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
               >
                 <div style={{ maxWidth: '10rem' }} className="overflow-hidden overflow-ellipsis">
                   {enc.url}
@@ -137,7 +139,6 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
                   href={getUrl(item.link!, item.title || item.guid || '')}
                   target="_blank"
                   rel="noreferrer"
-                  onClick={(e) => e.stopPropagation()}
                 >
                   <span className="w-4 mr-1">
                     <img src={iconUrl} alt={title} className="w-4 h-4" />

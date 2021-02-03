@@ -161,6 +161,19 @@ a:focus-visible {
   .feed-item-body a {
     @apply underline text-link;
   }
+
+  .arrow-tr {
+    top: calc(100% + 0.5rem);
+  }
+  .arrow-tr::before {
+    /* Top right arrow */
+    content: '';
+    position: absolute;
+    background-color: #fff;
+    transform: translate(-50%, -55%) rotate(45deg);
+    z-index: -1;
+    @apply absolute right-1 top-0 border-l border-t border-gray-300 h-3 w-3 bg-white;
+  }
 }
 
 @layer utilities {

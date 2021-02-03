@@ -46,14 +46,13 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
   };
 
   const isDigestDisable = userFeed?.schedule === 'disable';
-  const feedlink = userFeed.feed.link || userFeed.feed.url;
   return (
     <>
       {userFeed && (
         <span className="flex items-center w-full">
           <h3 className="font-bold text-lg max-w-sm">{userFeed.feed.title || userFeed.feed.url}</h3>
           <a
-            href={feedlink}
+            href={userFeed?.feed.link || userFeed?.feed.url}
             target="_blank"
             rel="noreferrer"
             title="open the feed's site"
@@ -88,7 +87,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
               <ViewIcon viewId={readerOpts.itemView} className="w-auto h-4" />
             </button>
             {!isViewOptsOpen ? null : (
-              <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min   rounded-sm border border-opacity-40">
+              <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min rounded-sm border border-gray-300 arrow-tr">
                 {Object.keys(ItemViews).map((id) => (
                   <label
                     key={id}
@@ -124,7 +123,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
               </div>
             </button>
             {!isOptionsOpen ? null : (
-              <div className="absolute bg-white top-full right-0 shadow-popup text-xs z-10 min-w-min   p-2 rounded-sm border border-opacity-40 border-black">
+              <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min   p-2 rounded-sm border border-gray-300 arrow-tr">
                 <b>Font size</b>
                 <div className="flex w-24 mt-1 mb-2">
                   <button
