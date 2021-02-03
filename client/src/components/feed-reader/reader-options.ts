@@ -37,5 +37,5 @@ export const useLocalState = () => {
     window.localStorage.setItem(storageKey, JSON.stringify(state));
   }, [state]);
 
-  return [state, setState];
+  return [state, setState] as const;
 };

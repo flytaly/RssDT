@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import { isServer } from '../../utils/is-server';
 
-interface AddFeedModalProps {
+interface ConfirmModalProps {
   isOpen: boolean;
   closeModal: () => void;
   contentLabel?: string;
@@ -16,7 +16,7 @@ interface AddFeedModalProps {
 
 const customStyles: Modal.Styles = {
   overlay: {
-    position: 'absolute',
+    position: 'fixed',
     width: '100%',
     height: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
@@ -38,7 +38,7 @@ const customStyles: Modal.Styles = {
   },
 };
 
-const ConfirmModal: React.FC<AddFeedModalProps> = ({
+const ConfirmModal: React.FC<ConfirmModalProps> = ({
   isOpen,
   closeModal,
   contentLabel,
