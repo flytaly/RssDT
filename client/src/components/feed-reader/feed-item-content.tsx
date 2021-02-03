@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/no-danger */
 import React, { RefObject, useCallback, useState } from 'react';
+import PaperClipIcon from '../../../public/static/paperclip.svg';
+import ShareIcon from '../../../public/static/share-2.svg';
 import { Item, ItemFieldsFragment } from '../../generated/graphql';
 import shareProviders from '../../share-providers';
 import usePopup from '../../utils/use-popup';
-import PaperClipIcon from '../../../public/static/paperclip.svg';
-import ShareIcon from '../../../public/static/share-2.svg';
 
 function getItemHTML(item: Pick<Item, 'description' | 'summary'>) {
   return { __html: item.summary || item.description || '' };
@@ -80,7 +80,20 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
       onClick={bodyClickHandler && onClick}
     >
       <div className={`${bodyClickHandler ? 'cursor-pointer' : ''}`}>
-        <h4 className="font-bold">{item.title}</h4>
+        <h4 className="font-bold">
+          {item.link ? (
+            <a
+              href={item.link}
+              className="hover:underline hover:text-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {item.title}
+            </a>
+          ) : (
+            item.title
+          )}
+        </h4>
         <div className="text-xs">{new Date(item.pubdate || item.createdAt).toLocaleString()}</div>
         {showBody && (
           <div className="relative mt-3">

@@ -3,6 +3,7 @@ import MailIcon from '../../../public/static/envelope.svg';
 import ItemBigIcon from '../../../public/static/item-big.svg';
 import ItemMediumIcon from '../../../public/static/item-middle.svg';
 import ItemSmallIcon from '../../../public/static/item-small.svg';
+import ExtLinkIcon from '../../../public/static/external-link.svg';
 import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '../../generated/graphql';
 import { clamp } from '../../utils/clamp';
 import usePopup from '../../utils/use-popup';
@@ -45,12 +46,21 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
   };
 
   const isDigestDisable = userFeed?.schedule === 'disable';
-
+  const feedlink = userFeed.feed.link || userFeed.feed.url;
   return (
     <>
       {userFeed && (
         <span className="flex items-center w-full">
           <h3 className="font-bold text-lg max-w-sm">{userFeed.feed.title || userFeed.feed.url}</h3>
+          <a
+            href={feedlink}
+            target="_blank"
+            rel="noreferrer"
+            title="open the feed's site"
+            className="hover:text-link"
+          >
+            <ExtLinkIcon className="icon-btn w-4 h-4 mx-1" />
+          </a>
           <button
             type="button"
             title={
@@ -58,7 +68,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
                 ? 'Email digest of this feed is disabled'
                 : 'You are receiving email digests of this feed'
             }
-            className="icon-btn h-4 w-4 mx-2"
+            className="icon-btn h-4 w-4 ml-1 mr-2"
             style={{ lineHeight: '1rem' }}
             onClick={() => setEditFeedModal(true)}
           >
