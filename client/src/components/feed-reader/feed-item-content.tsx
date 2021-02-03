@@ -105,6 +105,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
                 title={enc.url}
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) => e.stopPropagation()}
               >
                 <div style={{ maxWidth: '10rem' }} className="overflow-hidden overflow-ellipsis">
                   {enc.url}
@@ -123,6 +124,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
                   href={getUrl(item.link!, item.title || item.guid || '')}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <span className="w-4 mr-1">
                     <img src={iconUrl} alt={title} className="w-4 h-4" />
