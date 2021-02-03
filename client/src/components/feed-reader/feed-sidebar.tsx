@@ -11,9 +11,9 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
   const list = (
     <ul>
       {feeds?.map((uf) => (
-        <li key={uf.id} className="whitespace-nowrap overflow-ellipsis overflow-hidden">
+        <li key={uf.id}>
           <Link href={`/feed/${uf.id}`}>
-            <a className="block pl-3 hover:underline focus:bg-secondary">
+            <a className="block pl-3 hover:underline focus:bg-secondary whitespace-nowrap overflow-ellipsis overflow-hidden">
               {uf.feed.title || uf.feed.url}
             </a>
           </Link>
