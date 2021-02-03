@@ -82,7 +82,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
                 {Object.keys(ItemViews).map((id) => (
                   <label
                     key={id}
-                    className={`flex items-center hover:text-primary hover:bg-gray-100 whitespace-nowrap px-2 ${
+                    className={`flex items-center hover:text-primary hover:bg-gray-100 focus-within:text-primary focus-within:bg-gray-100 whitespace-nowrap px-2 ${
                       id === readerOpts.itemView ? 'text-secondary' : ''
                     }`}
                   >
@@ -93,7 +93,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
                       id={id}
                       value={id}
                       type="radio"
-                      className="hidden"
+                      className="w-0 h-0 opacity-0"
                       onChange={onViewChange}
                     />
                   </label>
