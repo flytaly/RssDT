@@ -18,9 +18,14 @@ const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick }) =>
 
   const isCollapsed = readerOpts.itemView === 'collapsed';
   const isMedium = readerOpts.itemView === 'medium';
+  const isFullHeight = readerOpts.itemView === 'full';
   const limitHeight = isMedium ? 'max-h-36' : '';
 
   useEffect(() => {
+    if (isFullHeight && isOverflown) {
+      setIsOverflown(false);
+      return;
+    }
     if (!isMedium) return;
     const el = ref.current;
     if (!el || isOverflown) return;
@@ -35,7 +40,7 @@ const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick }) =>
         img.onload = () => checkOverflow();
       }
     });
-  }, [isMedium, isOverflown]);
+  }, [isFullHeight, isMedium, isOverflown]);
 
   return (
     <FeedItemContent
