@@ -260,7 +260,7 @@ export type MutationUnsubscribeByTokenArgs = {
 
 
 export type MutationSetLastViewedItemDateArgs = {
-  date: Scalars['DateTime'];
+  itemId: Scalars['Float'];
   userFeedId: Scalars['Float'];
 };
 
@@ -562,7 +562,7 @@ export type SetFeedOptionsMutation = (
 );
 
 export type SetLastViewedItemDateMutationVariables = Exact<{
-  date: Scalars['DateTime'];
+  itemId: Scalars['Float'];
   userFeedId: Scalars['Float'];
 }>;
 
@@ -953,8 +953,8 @@ export const SetFeedOptionsDocument = gql`
 }
     ${UserFeedFieldsFragmentDoc}`;
 export const SetLastViewedItemDateDocument = gql`
-    mutation setLastViewedItemDate($date: DateTime!, $userFeedId: Float!) {
-  setLastViewedItemDate(date: $date, userFeedId: $userFeedId) {
+    mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
+  setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
     id
     lastViewedItemDate
     newItemsCount

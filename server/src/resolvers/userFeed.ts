@@ -12,9 +12,10 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
+import { getConnection, getManager } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
+import { Item } from '../entities/Item';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
@@ -32,6 +33,7 @@ import {
   UserFeedOptionsInput,
   UserInfoInput,
 } from './common/inputs';
+import { setLastViewedItemDate } from './common/setLastViewedItemDate';
 
 @ObjectType()
 class UserFeedResponse {
@@ -213,22 +215,14 @@ export class UserFeedResolver {
   }
 
   @UseMiddleware(auth())
-  @Mutation(() => UserFeed)
+  @Mutation(() => UserFeed, { nullable: true })
   async setLastViewedItemDate(
     @Arg('userFeedId') userFeedId: number,
-    @Arg('date') date: Date,
+    @Arg('itemId') itemId: number,
     @Ctx() { req }: MyContext,
   ) {
     const { userId } = req.session;
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(UserFeed)
-      .set({ lastViewedItemDate: date })
-      .where('id = :id AND userId = :userId', { id: userFeedId, userId })
-      .returning('*')
-      .execute();
-
-    return result.raw[0] as UserFeed;
+    return setLastViewedItemDate({ itemId, userFeedId, userId });
   }
 
   @FieldResolver(() => Number)

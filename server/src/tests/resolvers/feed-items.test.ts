@@ -80,11 +80,10 @@ describe('Feed items resolvers', () => {
 
   describe('Unread items', () => {
     test('should set lastViewedItemDate field', async () => {
-      const date = new Date(Date.now() - 6000 * 1000);
-      const res = await sdk.setLastViewedItemDate({ userFeedId: userFeed.id, date });
+      const res = await sdk.setLastViewedItemDate({ userFeedId: userFeed.id, itemId: items[0].id });
       expect(res.setLastViewedItemDate.lastViewedItemDate).not.toBeNull();
       const savedDate = new Date(res.setLastViewedItemDate.lastViewedItemDate);
-      expect(savedDate.getTime()).toBe(date.getTime());
+      expect(savedDate.getTime()).toBe(new Date(items[0].createdAt).getTime());
     });
     test('should return total number of items if lastDigestSentAt is null', async () => {
       userFeed.lastViewedItemDate = null;
