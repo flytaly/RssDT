@@ -183,7 +183,9 @@ export const createUserFeed = async ({
       feed.activated = true;
       await qR.manager.save(feed);
     }
-    userFeed.lastDigestSentAt = new Date();
+    const ts = new Date();
+    userFeed.lastDigestSentAt = ts;
+    userFeed.lastViewedItemDate = ts;
     if (!userFeed.unsubscribeToken) userFeed.unsubscribeToken = uuidv4();
     userFeed.feed = feed;
     if (feedOpts) qR.manager.getRepository(UserFeed).merge(userFeed, feedOpts);

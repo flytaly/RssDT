@@ -14,33 +14,33 @@ import { DigestSchedule } from '../types/enums';
  * and since 14:40 < 15:00 this userFeed is "ready".
  */
 export const isFeedReady = (userFeed: UserFeed) => {
-    const { lastDigestSentAt, schedule, user } = userFeed;
-    if (schedule === DigestSchedule.disable) return false;
-    if (schedule === DigestSchedule.realtime) return true;
+  const { lastDigestSentAt, schedule, user } = userFeed;
+  if (schedule === DigestSchedule.disable) return false;
+  if (schedule === DigestSchedule.realtime) return true;
 
-    const zone = user.timeZone || 'GMT';
+  const zone = user.timeZone || 'GMT';
 
-    const now = DateTime.local().setZone(zone);
-    const lastDigestTime = DateTime.fromJSDate(lastDigestSentAt, { zone });
-    const prevSuitableHour = now.hour - (now.hour % scheduleHours[schedule]);
-    let prevSuitableTime = now //
-        .set({ hour: prevSuitableHour, minute: 0, second: 0, millisecond: 0 });
+  const now = DateTime.local().setZone(zone);
+  const lastDigestTime = DateTime.fromJSDate(lastDigestSentAt || new Date(0), { zone });
+  const prevSuitableHour = now.hour - (now.hour % scheduleHours[schedule]);
+  let prevSuitableTime = now //
+    .set({ hour: prevSuitableHour, minute: 0, second: 0, millisecond: 0 });
 
-    if (schedule === DigestSchedule.daily) {
-        prevSuitableTime = prevSuitableTime.set({ hour: user.options.dailyDigestHour });
-        const windowStart = prevSuitableTime;
-        const windowEnd = windowStart.plus({ hours: windowDuration });
-        if (now < windowStart || now > windowEnd) {
-            return false;
-        }
-        if (prevSuitableTime > now) {
-            prevSuitableTime = prevSuitableTime.minus({ days: 1 });
-        }
+  if (schedule === DigestSchedule.daily) {
+    prevSuitableTime = prevSuitableTime.set({ hour: user.options.dailyDigestHour });
+    const windowStart = prevSuitableTime;
+    const windowEnd = windowStart.plus({ hours: windowDuration });
+    if (now < windowStart || now > windowEnd) {
+      return false;
     }
-
-    if (lastDigestTime < prevSuitableTime) {
-        return true;
+    if (prevSuitableTime > now) {
+      prevSuitableTime = prevSuitableTime.minus({ days: 1 });
     }
+  }
 
-    return false;
+  if (lastDigestTime < prevSuitableTime) {
+    return true;
+  }
+
+  return false;
 };

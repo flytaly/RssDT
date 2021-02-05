@@ -6,6 +6,7 @@ import { UserResolver } from './resolvers/user';
 import { MyContext, ReqWithSession } from './types';
 import { UserFeedResolver } from './resolvers/userFeed';
 import { FeedResolver } from './resolvers/feed';
+import { createItemCountLoader } from './utils/createItemCountLoader';
 
 export const initApolloServer = async (app: Express, redis: Redis) => {
   const schema = await buildSchema({
@@ -19,6 +20,7 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
       req: req as ReqWithSession,
       res,
       redis,
+      itemCountLoader: createItemCountLoader(),
     }),
   });
 

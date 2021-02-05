@@ -4,10 +4,12 @@ import {
   ArgsType,
   Ctx,
   Field,
+  FieldResolver,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
@@ -208,5 +210,29 @@ export class UserFeedResolver {
       .execute();
     if (result?.affected) return true;
     return false;
+  }
+
+  @UseMiddleware(auth())
+  @Mutation(() => UserFeed)
+  async setLastViewedItemDate(
+    @Arg('userFeedId') userFeedId: number,
+    @Arg('date') date: Date,
+    @Ctx() { req }: MyContext,
+  ) {
+    const { userId } = req.session;
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(UserFeed)
+      .set({ lastViewedItemDate: date })
+      .where('id = :id AND userId = :userId', { id: userFeedId, userId })
+      .returning('*')
+      .execute();
+
+    return result.raw[0] as UserFeed;
+  }
+
+  @FieldResolver(() => Number)
+  async newItemsCount(@Root() root: UserFeed, @Ctx() { itemCountLoader }: MyContext) {
+    return itemCountLoader.load(root.id);
   }
 }

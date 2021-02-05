@@ -65,9 +65,11 @@ export type UserFeed = {
   itemBody: TernaryState;
   attachments: TernaryState;
   theme: Theme;
-  lastDigestSentAt: Scalars['DateTime'];
+  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
+  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  newItemsCount: Scalars['Float'];
 };
 
 export type Feed = {
@@ -175,6 +177,7 @@ export type Mutation = {
   deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
   unsubscribeByToken: Scalars['Boolean'];
+  setLastViewedItemDate: UserFeed;
 };
 
 
@@ -253,6 +256,12 @@ export type MutationSetFeedOptionsArgs = {
 export type MutationUnsubscribeByTokenArgs = {
   id: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationSetLastViewedItemDateArgs = {
+  date: Scalars['DateTime'];
+  userFeedId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -355,7 +364,7 @@ export type OptionsFieldsFragment = (
 
 export type UserFeedFieldsFragment = (
   { __typename?: 'UserFeed' }
-  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'updatedAt'>
+  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'lastViewedItemDate' | 'lastDigestSentAt' | 'newItemsCount' | 'createdAt' | 'updatedAt'>
 );
 
 export type UserFieldsFragment = (
@@ -549,6 +558,20 @@ export type SetFeedOptionsMutation = (
       { __typename?: 'ArgumentError' }
       & Pick<ArgumentError, 'message'>
     )>> }
+  ) }
+);
+
+export type SetLastViewedItemDateMutationVariables = Exact<{
+  date: Scalars['DateTime'];
+  userFeedId: Scalars['Float'];
+}>;
+
+
+export type SetLastViewedItemDateMutation = (
+  { __typename?: 'Mutation' }
+  & { setLastViewedItemDate: (
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
   ) }
 );
 
@@ -788,6 +811,9 @@ export const UserFeedFieldsFragmentDoc = gql`
   itemBody
   attachments
   theme
+  lastViewedItemDate
+  lastDigestSentAt
+  newItemsCount
   createdAt
   updatedAt
 }
@@ -926,6 +952,15 @@ export const SetFeedOptionsDocument = gql`
   }
 }
     ${UserFeedFieldsFragmentDoc}`;
+export const SetLastViewedItemDateDocument = gql`
+    mutation setLastViewedItemDate($date: DateTime!, $userFeedId: Float!) {
+  setLastViewedItemDate(date: $date, userFeedId: $userFeedId) {
+    id
+    lastViewedItemDate
+    newItemsCount
+  }
+}
+    `;
 export const SetOptionsDocument = gql`
     mutation setOptions($opts: OptionsInput!) {
   setOptions(opts: $opts) {
@@ -1081,6 +1116,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     setFeedOptions(variables: SetFeedOptionsMutationVariables, requestHeaders?: Headers): Promise<SetFeedOptionsMutation> {
       return withWrapper(() => client.request<SetFeedOptionsMutation>(print(SetFeedOptionsDocument), variables, requestHeaders));
+    },
+    setLastViewedItemDate(variables: SetLastViewedItemDateMutationVariables, requestHeaders?: Headers): Promise<SetLastViewedItemDateMutation> {
+      return withWrapper(() => client.request<SetLastViewedItemDateMutation>(print(SetLastViewedItemDateDocument), variables, requestHeaders));
     },
     setOptions(variables: SetOptionsMutationVariables, requestHeaders?: Headers): Promise<SetOptionsMutation> {
       return withWrapper(() => client.request<SetOptionsMutation>(print(SetOptionsDocument), variables, requestHeaders));

@@ -1,11 +1,14 @@
 fragment UserFeedFields on UserFeed {
-    id
-    activated
-    schedule
-    withContentTable
-    itemBody
-    attachments
-    theme
-    createdAt
-    updatedAt
+  id
+  activated
+  schedule
+  withContentTable
+  itemBody
+  attachments
+  theme
+  lastViewedItemDate
+  lastDigestSentAt
+  newItemsCount
+  createdAt
+  updatedAt
 }

@@ -1,10 +1,8 @@
 import {
-  Arg,
   Args,
   ArgsType,
   Ctx,
   Field,
-  InputType,
   ObjectType,
   Query,
   Resolver,
@@ -58,7 +56,7 @@ export class FeedResolver {
       skip,
       take: Math.min(40, Math.max(1, take)),
       where: { feedId },
-      order: { pubdate: 'DESC' },
+      order: { createdAt: 'DESC', pubdate: 'DESC' },
     });
     const hasMore = count > skip + take;
     return { items, count, hasMore };

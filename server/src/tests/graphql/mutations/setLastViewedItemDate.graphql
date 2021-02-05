@@ -1,0 +1,7 @@
+mutation setLastViewedItemDate($date: DateTime!, $userFeedId: Float!) {
+  setLastViewedItemDate(date: $date, userFeedId: $userFeedId) {
+    id
+    lastViewedItemDate
+    newItemsCount
+  }
+}
