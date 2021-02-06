@@ -8,4 +8,6 @@ fragment UserFeedFields on UserFeed {
   theme
   createdAt
   lastDigestSentAt
+  newItemsCount
+  lastViewedItemDate
 }

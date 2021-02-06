@@ -51,6 +51,7 @@ interface FeedItemContentProps {
   bodyRef?: React.RefObject<HTMLElement> | null;
   bottomGradient?: boolean;
   bodyClickHandler?: (id: number) => void;
+  isNew?: boolean;
 }
 
 const FeedItemContent: React.FC<FeedItemContentProps> = ({
@@ -61,6 +62,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
   bodyRef = null,
   bottomGradient = false,
   bodyClickHandler,
+  isNew = false,
 }) => {
   const onKeyPress = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -74,16 +76,28 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
     }
   };
 
+  const isNewLabel = isNew && (
+    <div
+      className="absolute top-0 right-0 px-1 bg-gray-200
+ text-xs text-gray-500 rounded-bl-md"
+    >
+      new
+    </div>
+  );
+
   return (
     <article
-      className={`relative px-3 pt-2 pb-1 shadow-message bg-white rounded-sm ${containerClassName} focus:shadow-message-darker`}
+      className={`relative px-3 ${
+        isNew ? 'pt-3' : 'pt-2'
+      } pb-1 shadow-message bg-white rounded-sm ${containerClassName} focus:shadow-message-darker`}
       role={bodyClickHandler ? 'button' : 'article'}
       tabIndex={bodyClickHandler ? 0 : -1}
       onKeyPress={bodyClickHandler && onKeyPress}
       onClick={bodyClickHandler && onClick}
     >
+      {isNewLabel}
       <div className={`${bodyClickHandler ? 'cursor-pointer' : ''}`}>
-        <h4 className="font-bold">
+        <h4 className="font-bold relative">
           {item.link ? (
             <a
               href={item.link}

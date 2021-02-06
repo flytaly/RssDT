@@ -64,9 +64,11 @@ export type UserFeed = {
   itemBody: TernaryState;
   attachments: TernaryState;
   theme: Theme;
-  lastDigestSentAt: Scalars['DateTime'];
+  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
+  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  newItemsCount: Scalars['Float'];
 };
 
 export type Feed = {
@@ -174,6 +176,7 @@ export type Mutation = {
   deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
   unsubscribeByToken: Scalars['Boolean'];
+  setLastViewedItemDate: UserFeed;
 };
 
 
@@ -252,6 +255,12 @@ export type MutationSetFeedOptionsArgs = {
 export type MutationUnsubscribeByTokenArgs = {
   id: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationSetLastViewedItemDateArgs = {
+  itemId: Scalars['Float'];
+  userFeedId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -354,7 +363,7 @@ export type OptionsFieldsFragment = (
 
 export type UserFeedFieldsFragment = (
   { __typename?: 'UserFeed' }
-  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'lastDigestSentAt'>
+  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'lastDigestSentAt' | 'newItemsCount' | 'lastViewedItemDate'>
 );
 
 export type UserFieldsFragment = (
@@ -553,6 +562,20 @@ export type SetFeedOptionsMutation = (
   ) }
 );
 
+export type SetLastViewedItemDateMutationVariables = Exact<{
+  itemId: Scalars['Float'];
+  userFeedId: Scalars['Float'];
+}>;
+
+
+export type SetLastViewedItemDateMutation = (
+  { __typename?: 'Mutation' }
+  & { setLastViewedItemDate: (
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
+  ) }
+);
+
 export type SetOptionsMutationVariables = Exact<{
   opts: OptionsInput;
 }>;
@@ -740,6 +763,8 @@ export const UserFeedFieldsFragmentDoc = gql`
   theme
   createdAt
   lastDigestSentAt
+  newItemsCount
+  lastViewedItemDate
 }
     `;
 export const UserFieldsFragmentDoc = gql`
@@ -1156,6 +1181,41 @@ export function useSetFeedOptionsMutation(baseOptions?: Apollo.MutationHookOptio
 export type SetFeedOptionsMutationHookResult = ReturnType<typeof useSetFeedOptionsMutation>;
 export type SetFeedOptionsMutationResult = Apollo.MutationResult<SetFeedOptionsMutation>;
 export type SetFeedOptionsMutationOptions = Apollo.BaseMutationOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
+export const SetLastViewedItemDateDocument = gql`
+    mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
+  setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
+    id
+    lastViewedItemDate
+    newItemsCount
+  }
+}
+    `;
+export type SetLastViewedItemDateMutationFn = Apollo.MutationFunction<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>;
+
+/**
+ * __useSetLastViewedItemDateMutation__
+ *
+ * To run a mutation, you first call `useSetLastViewedItemDateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetLastViewedItemDateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setLastViewedItemDateMutation, { data, loading, error }] = useSetLastViewedItemDateMutation({
+ *   variables: {
+ *      itemId: // value for 'itemId'
+ *      userFeedId: // value for 'userFeedId'
+ *   },
+ * });
+ */
+export function useSetLastViewedItemDateMutation(baseOptions?: Apollo.MutationHookOptions<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>) {
+        return Apollo.useMutation<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>(SetLastViewedItemDateDocument, baseOptions);
+      }
+export type SetLastViewedItemDateMutationHookResult = ReturnType<typeof useSetLastViewedItemDateMutation>;
+export type SetLastViewedItemDateMutationResult = Apollo.MutationResult<SetLastViewedItemDateMutation>;
+export type SetLastViewedItemDateMutationOptions = Apollo.BaseMutationOptions<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>;
 export const SetOptionsDocument = gql`
     mutation setOptions($opts: OptionsInput!) {
   setOptions(opts: $opts) {

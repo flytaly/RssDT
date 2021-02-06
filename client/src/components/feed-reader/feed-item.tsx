@@ -8,11 +8,12 @@ interface FeedItemProps {
   item: ItemFieldsFragment;
   readerOpts: ReaderOptions;
   onItemClick?: (id: number) => void;
+  isNew?: boolean;
 }
 
 export const fontSizes = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
 
-const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick }) => {
+const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick, isNew }) => {
   const [isOverflown, setIsOverflown] = useState(false);
   const ref = useRef<HTMLElement>(null);
 
@@ -51,6 +52,7 @@ const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick }) =>
       bodyRef={ref}
       bottomGradient={isOverflown}
       bodyClickHandler={isOverflown || isCollapsed ? onItemClick : undefined}
+      isNew={isNew}
     />
   );
 };
