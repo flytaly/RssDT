@@ -23,6 +23,7 @@ const customStyles: Modal.Styles = {
     // outline: '2px dashed black',
     padding: 0,
     overflow: 'visible',
+    margin: 'auto',
   },
 };
 
