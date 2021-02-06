@@ -29,7 +29,7 @@ const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed 
       {feed && (
         <div className="flex flex-col p-4 bg-gray-200 w-full h-full text-sm overflow-scroll">
           <div className="flex items-start justify-between h-9">
-            <button type="button" className="icon-btn">
+            <button type="button" className="icon-btn" onClick={closeModal}>
               <ArrowLeftIcon className="w-4" />
             </button>
             {feed.feed.imageUrl ? (

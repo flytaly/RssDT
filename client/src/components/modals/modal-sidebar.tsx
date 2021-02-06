@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import { isServer } from '../../utils/is-server';
@@ -50,6 +50,10 @@ const ModalSidebar: React.FC<ModalSidebarProps> = ({
     config: { tension: 340, friction: 30, duration: isOpen ? undefined : closingDuration },
   });
 
+  useEffect(() => {
+    if (isOpen) window.scrollTo(0, 0);
+  }, [isOpen]);
+
   return (
     <Modal
       appElement={isServer() ? undefined : document.querySelector('#card-root') || document.body}
@@ -59,6 +63,7 @@ const ModalSidebar: React.FC<ModalSidebarProps> = ({
       onRequestClose={closeModal}
       style={customStyles(right)}
       contentLabel={contentLabel}
+      shouldReturnFocusAfterClose
     >
       <animated.div
         style={springProps}

@@ -36,6 +36,8 @@ const ViewItemModal: React.FC<ViewItemModalProps> = ({ isOpen, onRequestClose, c
     <Modal
       appElement={isServer() ? undefined : document.body}
       isOpen={isOpen}
+      onAfterOpen={() => document.body.classList.add('overflow-hidden')}
+      onAfterClose={() => document.body.classList.remove('overflow-hidden')}
       onRequestClose={onRequestClose}
       style={customStyles}
       role="article"

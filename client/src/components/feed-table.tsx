@@ -98,7 +98,13 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
               <Cell name="Digest Schedule">{periodNames[uf.schedule]}</Cell>
               <Cell name="Actions">
-                <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
+                <button
+                  onClick={(e) => {
+                    setEditingFeed(uf);
+                  }}
+                  type="button"
+                  className="icon-btn"
+                >
                   <EditIcon className="w-4 h-4" />
                 </button>
                 <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
