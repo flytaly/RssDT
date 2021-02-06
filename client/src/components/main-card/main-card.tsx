@@ -20,11 +20,12 @@ const MainCard: React.FC<MainCardProps> = ({
 
   const baseWidth = big ? 'big-card-w' : 'small-card-w';
   const width = big && fullWidth ? 'w-screen' : '';
+  const grow = big ? 'flex-1' : '';
   const showWarning = !isServer && !loading && onlyWithVerifiedEmail && data?.me?.emailVerified;
   return (
     <article
       id="card-root"
-      className={`relative flex flex-col md:flex-row ${baseWidth} ${width} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto overflow-y-hidden`}
+      className={`relative flex flex-col md:flex-row ${baseWidth} ${width} ${grow} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto overflow-y-hidden`}
     >
       {showWarning ? <EmailVerificationWarning /> : null}
       {children}

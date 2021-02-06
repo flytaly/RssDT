@@ -62,7 +62,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts }) => {
   }, [feed.id, feed.lastViewedItemDate, newestItem, setItemDate, setItemDateStatus.loading]);
 
   return (
-    <main className="min-h-full flex flex-col flex-grow space-y-4 p-3">
+    <main className="flex flex-col flex-grow space-y-4 p-3">
       {items.map((item) => (
         <FeedItem
           key={item.id}
