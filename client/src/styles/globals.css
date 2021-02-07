@@ -56,6 +56,10 @@ a:focus-visible {
   }
 }
 
+pre {
+  @apply font-mono;
+}
+
 @layer components {
   .small-card-w {
     width: 30rem;
