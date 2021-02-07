@@ -12,14 +12,14 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection, getManager } from 'typeorm';
+import { getConnection } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
-import { Item } from '../entities/Item';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { rateLimit } from '../middlewares/rate-limit';
 import { MyContext } from '../types';
 import { DigestSchedule } from '../types/enums';
 import { ArgumentError } from './common/ArgumentError';
@@ -69,6 +69,7 @@ export class UserFeedResolver {
 
   /* Add feed digest to user with given email. If user doesn't exist
     this mutation creates new account without password. */
+  @UseMiddleware(rateLimit(20, 60 * 10))
   @NormalizeAndValidateArgs([AddFeedEmailInput, 'input'], [UserInfoInput, 'userInfo'])
   @Mutation(() => UserFeedResponse, { nullable: true })
   async addFeedWithEmail(
@@ -92,7 +93,7 @@ export class UserFeedResolver {
   }
 
   /* Add feed to current user account */
-  @UseMiddleware(auth())
+  @UseMiddleware(auth(), rateLimit(60, 60))
   @NormalizeAndValidateArgs([AddFeedInput, 'input'])
   @Mutation(() => UserFeedResponse)
   async addFeedToCurrentUser(

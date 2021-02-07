@@ -18,6 +18,7 @@ import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
+import { rateLimit } from '../middlewares/rate-limit';
 import { MyContext, ReqWithSession, Role } from '../types';
 import { ArgumentError } from './common/ArgumentError';
 import { resetPasswordEmail, verificationEmail } from './common/confirmationMail';
@@ -93,6 +94,7 @@ export class UserResolver {
     return result;
   }
 
+  @UseMiddleware(rateLimit(10, 60 * 60))
   @NormalizeAndValidateArgs([EmailPasswordInput, 'input'], [UserInfoInput, 'userInfo'])
   @Mutation(() => UserResponse)
   async register(
@@ -116,7 +118,7 @@ export class UserResolver {
     return { user };
   }
 
-  @UseMiddleware(auth())
+  @UseMiddleware(auth(), rateLimit(3, 60))
   @Mutation(() => Boolean)
   async requestEmailVerification(@Ctx() { redis, req }: MyContext) {
     const user = await User.findOne(req.session.userId);
@@ -125,6 +127,7 @@ export class UserResolver {
     return true;
   }
 
+  @UseMiddleware(rateLimit(3, 60))
   @Mutation(() => MessageResponse)
   async requestPasswordReset(@Arg('email') email: string, @Ctx() { redis }: MyContext) {
     const user = await User.findOne({ where: { email } });
@@ -133,6 +136,7 @@ export class UserResolver {
     return { message: 'OK' };
   }
 
+  @UseMiddleware(rateLimit(3, 60))
   @NormalizeAndValidateArgs([PasswordResetInput, 'input'])
   @Mutation(() => UserResponse)
   async resetPassword(
@@ -171,6 +175,7 @@ export class UserResolver {
     return updateUser(userIdInt, { emailVerified: true });
   }
 
+  @UseMiddleware(rateLimit(3, 2))
   @NormalizeAndValidateArgs([EmailPasswordInput, 'input'])
   @Mutation(() => UserResponse)
   async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
@@ -219,8 +224,8 @@ export class UserResolver {
     return user.save();
   }
 
-  @NormalizeAndValidateArgs([OptionsInput, 'opts'])
   @UseMiddleware(auth())
+  @NormalizeAndValidateArgs([OptionsInput, 'opts'])
   @Mutation(() => OptionsResponse)
   async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
     return updateUserOptions(req.session.userId, opts);
