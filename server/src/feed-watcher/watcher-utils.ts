@@ -1,12 +1,13 @@
-import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
 import moment from 'moment';
-import { IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
+import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
+import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
 import { Enclosure } from '../entities/Enclosure';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
 import { getNewItems } from '../feed-parser';
 import { createSanitizedItem } from '../feed-parser/filter-item';
 import { logger } from '../logger';
+import { redis } from '../redis';
 
 export type PartialFeed = {
   id: number;
@@ -110,15 +111,23 @@ export const updateFeedData = async (url: string, skipRecent = false) => {
   let newItemsNum = 0;
   let deletedItemsNum = 0;
   let status: Status = Status.Fail;
-  // TODO: Lock feed
+
+  const lockKey = FEED_LOCK_URL_PREFIX + url;
+  if ((await redis.get(lockKey)) === 'lock') {
+    logger.info({ url }, 'feed is locked. skip');
+    return [newItemsNum, deletedItemsNum] as const;
+  }
+  await redis.set(lockKey, 'lock', 'EX', 60 * 4);
+
   const feed = await Feed.findOne({
     where: {
       url,
       ...(skipRecent ? { lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * 4)) } : {}),
     },
   });
-  const ts = new Date();
+
   if (feed) {
+    const ts = new Date();
     feed.lastUpdAttempt = ts;
     try {
       const prevItems = await getItemsWithPubDate(feed.id);
@@ -144,5 +153,7 @@ export const updateFeedData = async (url: string, skipRecent = false) => {
       await feed.save();
     }
   }
-  return [status, newItemsNum];
+
+  await redis.del(lockKey);
+  return [status, newItemsNum] as const;
 };

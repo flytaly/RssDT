@@ -8,6 +8,7 @@ export const COOKIE_NAME = 'qid';
 export const EMAIL_CONFIRM_PREFIX = 'email-confirm:';
 export const PASSWORD_RESET_PREFIX = 'password-reset:';
 export const SUBSCRIPTION_CONFIRM_PREFIX = 'subscription-confirm:';
+export const FEED_LOCK_URL_PREFIX = 'lock:';
 
 export const defaultLocale = 'en-US';
 export const defaultTimeZone = 'UTC';
@@ -20,12 +21,12 @@ export const maxOldItemsInFeed = 30; // maximum number of items that was created
 
 export const windowDuration = 3; // hours - duration of the window in which Daily digest could be sent
 export const scheduleHours: Record<DigestSchedule, number> = {
-    realtime: 0,
-    everyhour: 1,
-    every2hours: 2,
-    every3hours: 3,
-    every6hours: 6,
-    every12hours: 12,
-    daily: 24,
-    disable: 0,
+  realtime: 0,
+  everyhour: 1,
+  every2hours: 2,
+  every3hours: 3,
+  every6hours: 6,
+  every12hours: 12,
+  daily: 24,
+  disable: 0,
 };
