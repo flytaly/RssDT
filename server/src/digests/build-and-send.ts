@@ -1,5 +1,5 @@
 import PQueue from 'p-queue';
-import { IS_TEST, maxItemsInDigest } from '../constants';
+import { IS_TEST, maxItemsInDigest, scheduleHours } from '../constants';
 import { Feed } from '../entities/Feed';
 import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
@@ -14,7 +14,10 @@ const digestQueue = new PQueue(queueOpts);
 
 const hour = 1000 * 60 * 60;
 const getPeriod = (uf: UserFeed) => {
-  return new Date(Math.max(uf.lastDigestSentAt?.getTime() || 0, Date.now() - hour * 48));
+  const now = Date.now();
+  let timeMS = uf.lastDigestSentAt?.getTime() || uf.lastViewedItemDate?.getTime() || 0;
+  if (!timeMS) timeMS = now - (scheduleHours[uf.schedule] + 1) * hour;
+  return new Date(Math.max(timeMS, now - hour * 48));
 };
 
 export const buildAndSendDigests = async (feedId: number) => {
@@ -26,7 +29,10 @@ export const buildAndSendDigests = async (feedId: number) => {
     readyUFs.map((uf) => async () => {
       try {
         const timestamp = new Date();
-        const items = await getItemsNewerThan(feedId, getPeriod(uf), maxItemsInDigest);
+        const items = await getItemsNewerThan(feedId, getPeriod(uf), {
+          limit: maxItemsInDigest,
+          usePubDate: !uf.lastDigestSentAt,
+        });
         if (!items.length) return;
         const { text, html, errors } = composeDigest(uf, feed, items);
         if (!errors?.length) {

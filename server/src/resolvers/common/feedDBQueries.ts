@@ -12,7 +12,7 @@ export const activateUserFeed = async (userFeedId: number, userId?: number) => {
   // Update UserFeed
   const updResult = await qb
     .update(UserFeed)
-    .set({ activated: true, lastDigestSentAt: new Date() })
+    .set({ activated: true })
     .where({ id: userFeedId, ...(userId ? { userId } : {}) })
     .returning('*')
     .execute();
@@ -33,14 +33,8 @@ export const activateUserFeed = async (userFeedId: number, userId?: number) => {
   // Update User
   await qb.update(User).set({ emailVerified: true }).where({ id: userFeed.userId }).execute();
 
-  (async () => {
-    await updateFeedData(feed.url, true);
-    await qb
-      .update(UserFeed)
-      .set({ lastDigestSentAt: new Date() })
-      .where({ id: userFeedId, ...(userId ? { userId } : {}) })
-      .execute();
-  })();
+  // don't await intentionally
+  updateFeedData(feed.url, true);
 
   return { userFeed };
 };
@@ -52,7 +46,7 @@ export const activateAllUserFeeds = async (userId: number) => {
     // Update UserFeed
     const updResult = await qb
       .update(UserFeed)
-      .set({ activated: true, lastDigestSentAt: new Date() })
+      .set({ activated: true })
       .where({ userId, activated: false })
       .returning('*')
       .execute();
@@ -75,17 +69,7 @@ export const activateAllUserFeeds = async (userId: number) => {
       userFeed: userFeeds.find((uf) => uf.feedId === id),
     }));
 
-    Promise.all(
-      feedsToUpdate.map(async ({ userFeed, url }) => {
-        await updateFeedData(url);
-        if (!userFeed) return;
-        await qb
-          .update(UserFeed)
-          .set({ lastDigestSentAt: new Date() })
-          .where({ id: userFeed.id })
-          .execute();
-      }),
-    ).catch((e) => logger.error(e));
+    Promise.all(feedsToUpdate.map(({ url }) => updateFeedData(url))).catch((e) => logger.error(e));
 
     return feedUpdResult;
   } catch (error) {

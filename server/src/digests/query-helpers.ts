@@ -4,17 +4,30 @@ import { UserFeed } from '../entities/UserFeed';
 import { DigestSchedule } from '../types/enums';
 
 export async function userFeedsWithDigests(feedId: number) {
-    return UserFeed.find({
-        where: { feedId, activated: true, schedule: Not(DigestSchedule.disable) },
-        loadEagerRelations: true,
-        relations: ['user'],
-    });
+  return UserFeed.find({
+    where: { feedId, activated: true, schedule: Not(DigestSchedule.disable) },
+    loadEagerRelations: true,
+    relations: ['user'],
+  });
 }
 
-export async function getItemsNewerThan(feedId: number, time: Date | string, limit?: number) {
-    return Item.find({
-        where: { feedId, createdAt: MoreThan(time) },
-        order: { pubdate: 'DESC' },
-        take: limit,
-    });
+type GetItemsOptions = {
+  limit?: number;
+  usePubDate?: boolean;
+};
+
+export async function getItemsNewerThan(
+  feedId: number,
+  time: Date | string,
+  { limit, usePubDate = false }: GetItemsOptions,
+) {
+  return Item.find({
+    where: {
+      feedId,
+      createdAt: MoreThan(time),
+      ...(usePubDate ? { pubdate: MoreThan(time) } : {}),
+    },
+    order: { pubdate: 'DESC' },
+    take: limit,
+  });
 }

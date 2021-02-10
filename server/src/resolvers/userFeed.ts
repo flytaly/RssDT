@@ -179,15 +179,15 @@ export class UserFeedResolver {
     @Arg('id') id: number,
     @Arg('opts') opts: UserFeedOptionsInput,
   ) {
-    const updateDigestTime = opts.schedule && opts.schedule !== DigestSchedule.disable;
-    const valuesToSet: QueryDeepPartialEntity<UserFeed> = updateDigestTime
-      ? { ...opts, lastDigestSentAt: new Date() }
-      : opts;
+    // const updateDigestTime = opts.schedule && opts.schedule !== DigestSchedule.disable;
+    // const valuesToSet: QueryDeepPartialEntity<UserFeed> = updateDigestTime
+    //   ? { ...opts, lastDigestSentAt: new Date() }
+    //   : opts;
 
     const result = await getConnection()
       .createQueryBuilder()
       .update(UserFeed)
-      .set(valuesToSet)
+      .set(opts)
       .where('id = :id', { id })
       .andWhere('userId = :userId', { userId: req.session.userId })
       .returning('*')
