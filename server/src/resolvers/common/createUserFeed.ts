@@ -138,13 +138,7 @@ interface CreateUserFeedArgs {
  * If userId passed it means that user already exists and logged in.
  * If user is logged in and his email verified then automatically activate feed
  */
-export const createUserFeed = async ({
-  url: $url,
-  email,
-  userId,
-  userInfo,
-  feedOpts,
-}: CreateUserFeedArgs) => {
+export const createUserFeed = async ({ url: $url, email, userId, userInfo, feedOpts }: CreateUserFeedArgs) => {
   if (!email && !userId) throw new Error('Not enough arguments to create new user feed');
   const isUserLoggedIn = !!userId;
   // eslint-disable-next-line prefer-const

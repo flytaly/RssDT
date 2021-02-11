@@ -6,86 +6,86 @@ import { buildAndSendDigests } from '../digests/build-and-send';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
 type WatcherProps = {
-    /** Cron Time */
-    cron?: string | Date | moment.Moment;
-    /** Number of concurrent connections */
-    concurrency?: number;
+  /** Cron Time */
+  cron?: string | Date | moment.Moment;
+  /** Number of concurrent connections */
+  concurrency?: number;
 };
 
 export default class Watcher {
-    isUpdating: boolean = false;
+  isUpdating: boolean = false;
 
-    cron: string | Date | moment.Moment = '*/5 * * * *';
+  cron: string | Date | moment.Moment = '*/5 * * * *';
 
-    job: CronJob;
+  job: CronJob;
 
-    queue: PQueue;
+  queue: PQueue;
 
-    updating = false;
+  updating = false;
 
-    constructor({ cron = '*/5 * * * *', concurrency = 10 }: WatcherProps = {}) {
-        this.cron = cron;
-        this.initJob();
-        this.queue = new PQueue({ concurrency });
-    }
+  constructor({ cron = '*/5 * * * *', concurrency = 10 }: WatcherProps = {}) {
+    this.cron = cron;
+    this.initJob();
+    this.queue = new PQueue({ concurrency });
+  }
 
-    async update() {
-        if (this.updating) return;
-        this.updating = true;
-        logger.info('Start updating...');
+  async update() {
+    if (this.updating) return;
+    this.updating = true;
+    logger.info('Start updating...');
 
-        const feeds = await getFeedsToUpdate();
-        const now = Date.now();
-        let [totalFeeds, totalItems] = [0, 0];
-        await this.queue.addAll(
-            feeds.map(({ id, url, throttled, lastUpdAttempt }) => async () => {
-                if (now > throttleMultiplier * throttled + lastUpdAttempt.getTime()) {
-                    const [isSuccessful, itemsNum] = await updateFeedData(url);
-                    if (isSuccessful) {
-                        totalFeeds += 1;
-                        totalItems += itemsNum;
-                    }
-                }
+    const feeds = await getFeedsToUpdate();
+    const now = Date.now();
+    let [totalFeeds, totalItems] = [0, 0];
+    await this.queue.addAll(
+      feeds.map(({ id, url, throttled, lastUpdAttempt }) => async () => {
+        if (now > throttleMultiplier * throttled + lastUpdAttempt.getTime()) {
+          const [isSuccessful, itemsNum] = await updateFeedData(url);
+          if (isSuccessful) {
+            totalFeeds += 1;
+            totalItems += itemsNum;
+          }
+        }
 
-                buildAndSendDigests(id);
-            }),
-        );
-        logger.info({ totalFeeds, totalItems }, 'End updating');
-        this.updating = false;
-    }
+        buildAndSendDigests(id);
+      }),
+    );
+    logger.info({ totalFeeds, totalItems }, 'End updating');
+    this.updating = false;
+  }
 
-    initJob() {
-        const jobCallBack = async () => {
-            if (this.isUpdating) return;
-            this.isUpdating = true;
-            try {
-                await this.update();
-            } catch (e) {
-                logger.error({ message: e.message }, 'Error during updating');
-            }
-            this.isUpdating = false;
-        };
+  initJob() {
+    const jobCallBack = async () => {
+      if (this.isUpdating) return;
+      this.isUpdating = true;
+      try {
+        await this.update();
+      } catch (e) {
+        logger.error({ message: e.message }, 'Error during updating');
+      }
+      this.isUpdating = false;
+    };
 
-        this.job = new CronJob(this.cron, jobCallBack, null, false, 'UTC');
-    }
+    this.job = new CronJob(this.cron, jobCallBack, null, false, 'UTC');
+  }
 
-    start() {
-        this.job.start();
-        logger.info('Watcher is started');
-    }
+  start() {
+    this.job.start();
+    logger.info('Watcher is started');
+  }
 
-    cancel() {
-        this.job.stop();
-        logger.info('Watcher stopped');
-    }
+  cancel() {
+    this.job.stop();
+    logger.info('Watcher stopped');
+  }
 
-    reschedule(time: CronTime) {
-        this.job.setTime(time);
-    }
+  reschedule(time: CronTime) {
+    this.job.setTime(time);
+  }
 
-    getNextUpdateTime() {
-        return this.job.running ? this.job.nextDates() : null;
-    }
+  getNextUpdateTime() {
+    return this.job.running ? this.job.nextDates() : null;
+  }
 }
 
 module.exports = Watcher;

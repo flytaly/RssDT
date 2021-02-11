@@ -4,9 +4,9 @@ import { initDbConnection } from '../../dbConnection';
 let db: Connection;
 
 beforeAll(async () => {
-    db = await initDbConnection();
+  db = await initDbConnection();
 });
 
 afterAll(() => {
-    return db.close();
+  return db.close();
 });

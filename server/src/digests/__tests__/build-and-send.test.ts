@@ -3,14 +3,13 @@ import { Feed } from '../../entities/Feed';
 import { Item } from '../../entities/Item';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
+import { transport } from '../../mail/transport';
 import '../../tests/test-utils/connection';
 import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed';
-import { transport } from '../../mail/transport';
 import { buildAndSendDigests } from '../build-and-send';
 import { composeDigest } from '../compose-mail';
 import { composeEmailSubject } from '../compose-subject';
 import { isFeedReady } from '../is-feed-ready';
-import { DigestSchedule } from '../../types/enums';
 
 jest.mock('../is-feed-ready', () => ({
   isFeedReady: jest.fn((uf: UserFeed) => {

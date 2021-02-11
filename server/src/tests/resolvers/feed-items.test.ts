@@ -20,12 +20,7 @@ const updateItemsCreationDate = async (items: Item[]) => {
   const qb = getConnection().createQueryBuilder();
   const result = await Promise.all(
     items.map((item) =>
-      qb
-        .update(Item)
-        .set({ createdAt: item.pubdate })
-        .where('id = :id', { id: item.id })
-        .returning(`*`)
-        .execute(),
+      qb.update(Item).set({ createdAt: item.pubdate }).where('id = :id', { id: item.id }).returning(`*`).execute(),
     ),
   );
   return result.map((r) => r.raw[0]) as Item[];
@@ -41,9 +36,7 @@ describe('Feed items resolvers', () => {
 
   beforeAll(async () => {
     ({ sdk, user } = await generateUserAndGetSdk());
-    feed = await getRepository(Feed)
-      .merge(new Feed(), generateMeta(), { url: faker.internet.url() })
-      .save();
+    feed = await getRepository(Feed).merge(new Feed(), generateMeta(), { url: faker.internet.url() }).save();
     userFeed = new UserFeed();
     userFeed.userId = user.id;
     userFeed.feedId = feed.id;

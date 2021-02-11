@@ -6,21 +6,21 @@ import { Item } from './Item';
 @ObjectType()
 @Entity()
 export class Enclosure extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Field()
-    @Column()
-    url: string;
+  @Field()
+  @Column()
+  url: string;
 
-    @Field({ nullable: true })
-    @Column({ nullable: true })
-    length: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  length: string;
 
-    @Field({ nullable: true })
-    @Column({ nullable: true })
-    type?: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  type?: string;
 
-    @ManyToOne(() => Item, (item) => item.enclosures, { onDelete: 'CASCADE' })
-    item: Item;
+  @ManyToOne(() => Item, (item) => item.enclosures, { onDelete: 'CASCADE' })
+  item: Item;
 }

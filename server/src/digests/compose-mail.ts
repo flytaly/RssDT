@@ -21,15 +21,7 @@ function ternaryToBool(value: TernaryState, defaultValue: boolean): boolean {
   return value === TernaryState.enable;
 }
 
-const imagesTypes = [
-  'image/gif',
-  'image/jpg',
-  'image/jpeg',
-  'image/png',
-  'image/svg+xml',
-  'image/tiff',
-  'image/webp',
-];
+const imagesTypes = ['image/gif', 'image/jpg', 'image/jpeg', 'image/png', 'image/svg+xml', 'image/tiff', 'image/webp'];
 
 /** Enclosures url could be too long. This function reduces them to filename and saves them as 'title' property. */
 const addTitlesToEnclosures = (enclosures: Enclosure[]) =>
@@ -67,9 +59,7 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
       .setZone(user.timeZone)
       .setLocale(user.locale)
       .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
-    const enclosures: EnclosureWithTitle[] = withAttachments
-      ? addTitlesToEnclosures(item_.enclosures)
-      : [];
+    const enclosures: EnclosureWithTitle[] = withAttachments ? addTitlesToEnclosures(item_.enclosures) : [];
     const share: Share[] = options.shareEnable
       ? shareProviders
           .filter((s) => !options.shareList?.length || options.shareList.includes(s.id))

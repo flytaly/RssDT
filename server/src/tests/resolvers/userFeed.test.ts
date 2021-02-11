@@ -75,9 +75,7 @@ describe('My Feeds', () => {
 
   describe('Get my feeds', () => {
     test('should response with feeds', async () => {
-      const responses = feeds.map(({ feedUrl }) =>
-        sdk.addFeedToCurrentUser({ input: { feedUrl } }),
-      );
+      const responses = feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ input: { feedUrl } }));
       await Promise.all(responses);
       const { myFeeds } = await sdk.myFeeds();
       expect(myFeeds).toHaveLength(feeds.length);
@@ -87,9 +85,7 @@ describe('My Feeds', () => {
     test('should remove feeds', async () => {
       const idsToDelete = idsList.slice(0, 2);
       const { deleteMyFeeds } = await sdk.deleteMyFeeds({ ids: idsToDelete });
-      expect(deleteMyFeeds.ids).toEqual(
-        expect.arrayContaining(idsToDelete.map((id) => String(id))),
-      );
+      expect(deleteMyFeeds.ids).toEqual(expect.arrayContaining(idsToDelete.map((id) => String(id))));
     });
   });
 });
@@ -167,9 +163,7 @@ describe('Unsubscribe', () => {
     sdk = await getSdkWithLoggedInUser(email, password);
   });
 
-  afterAll(() =>
-    Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl), deleteEmails()]),
-  );
+  afterAll(() => Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl), deleteEmails()]));
   describe('unsubscribeToken', () => {
     let uf: UserFeed | undefined;
     let id: number;

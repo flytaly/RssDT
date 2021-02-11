@@ -13,7 +13,6 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';

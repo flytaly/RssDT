@@ -54,9 +54,7 @@ const getItemsWithPubDate = (feedId: number) =>
   >;
 
 export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) => {
-  const qB = queryRunner
-    ? queryRunner.manager.createQueryBuilder()
-    : getConnection().createQueryBuilder();
+  const qB = queryRunner ? queryRunner.manager.createQueryBuilder() : getConnection().createQueryBuilder();
   const result = await qB.insert().into(Item).values(items).execute();
   const encs: Enclosure[] = [];
   items.forEach(({ enclosures }) => {
@@ -72,11 +70,7 @@ export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) =
  * Delete items that exceeded limits
  * @param limitWeekOld - limit items that was created > one week ago
  * */
-export const deleteOldItems = async (
-  feedId: number,
-  limitTotal = maxItemsInFeed,
-  limitWeekOld = maxOldItemsInFeed,
-) => {
+export const deleteOldItems = async (feedId: number, limitTotal = maxItemsInFeed, limitWeekOld = maxOldItemsInFeed) => {
   if (feedId) {
     const [, deletedNum] = await getManager().query(`
         DELETE FROM item

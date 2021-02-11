@@ -1,13 +1,4 @@
-import {
-  Args,
-  ArgsType,
-  Ctx,
-  Field,
-  ObjectType,
-  Query,
-  Resolver,
-  UseMiddleware,
-} from 'type-graphql';
+import { Args, ArgsType, Ctx, Field, ObjectType, Query, Resolver, UseMiddleware } from 'type-graphql';
 import { Feed } from '../entities/Feed';
 import { Item } from '../entities/Item';
 import { UserFeed } from '../entities/UserFeed';

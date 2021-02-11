@@ -99,12 +99,7 @@ export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): 
         });
       } catch (error) {
         return {
-          errors: [
-            new ArgumentError(
-              error.message.startsWith('Invalid URL') ? 'feedUrl' : '',
-              error.message,
-            ),
-          ],
+          errors: [new ArgumentError(error.message.startsWith('Invalid URL') ? 'feedUrl' : '', error.message)],
         };
       }
 
