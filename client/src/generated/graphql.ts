@@ -36,6 +36,7 @@ export type QueryMyFeedItemsArgs = {
   feedId: Scalars['Float'];
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
+  filter?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -64,6 +65,7 @@ export type UserFeed = {
   itemBody: TernaryState;
   attachments: TernaryState;
   theme: Theme;
+  filter?: Maybe<Scalars['String']>;
   lastDigestSentAt?: Maybe<Scalars['DateTime']>;
   lastViewedItemDate?: Maybe<Scalars['DateTime']>;
   createdAt: Scalars['DateTime'];
@@ -132,7 +134,6 @@ export enum ShareId {
 export type PaginatedItemsResponse = {
   __typename?: 'PaginatedItemsResponse';
   items: Array<Item>;
-  count: Scalars['Float'];
   hasMore: Scalars['Boolean'];
 };
 
@@ -176,7 +177,7 @@ export type Mutation = {
   deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
   unsubscribeByToken: Scalars['Boolean'];
-  setLastViewedItemDate: UserFeed;
+  setLastViewedItemDate?: Maybe<UserFeed>;
 };
 
 
@@ -325,6 +326,7 @@ export type UserFeedOptionsInput = {
   itemBody?: Maybe<Scalars['String']>;
   attachments?: Maybe<Scalars['String']>;
   theme?: Maybe<Scalars['String']>;
+  filter?: Maybe<Scalars['String']>;
 };
 
 export type AddFeedEmailInput = {
@@ -570,10 +572,10 @@ export type SetLastViewedItemDateMutationVariables = Exact<{
 
 export type SetLastViewedItemDateMutation = (
   { __typename?: 'Mutation' }
-  & { setLastViewedItemDate: (
+  & { setLastViewedItemDate?: Maybe<(
     { __typename?: 'UserFeed' }
     & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
-  ) }
+  )> }
 );
 
 export type SetOptionsMutationVariables = Exact<{
@@ -665,6 +667,7 @@ export type MyFeedItemsQueryVariables = Exact<{
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
   feedId: Scalars['Float'];
+  filter?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -672,7 +675,7 @@ export type MyFeedItemsQuery = (
   { __typename?: 'Query' }
   & { myFeedItems: (
     { __typename?: 'PaginatedItemsResponse' }
-    & Pick<PaginatedItemsResponse, 'count' | 'hasMore'>
+    & Pick<PaginatedItemsResponse, 'hasMore'>
     & { items: Array<(
       { __typename?: 'Item' }
       & ItemFieldsFragment
@@ -1421,12 +1424,11 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const MyFeedItemsDocument = gql`
-    query myFeedItems($skip: Float, $take: Float, $feedId: Float!) {
-  myFeedItems(skip: $skip, take: $take, feedId: $feedId) {
+    query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
     items {
       ...ItemFields
     }
-    count
     hasMore
   }
 }
@@ -1447,6 +1449,7 @@ export const MyFeedItemsDocument = gql`
  *      skip: // value for 'skip'
  *      take: // value for 'take'
  *      feedId: // value for 'feedId'
+ *      filter: // value for 'filter'
  *   },
  * });
  */

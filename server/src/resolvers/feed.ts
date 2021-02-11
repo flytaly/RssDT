@@ -73,7 +73,7 @@ export class FeedResolver {
 
     if (filter) {
       dbQuery = dbQuery.andWhere('to_tsvector(item.title) @@ to_tsquery(:query)', {
-        query: pgTsquery(filter || ''),
+        query: pgTsquery(filter),
       });
     }
     const items = await dbQuery.getMany();

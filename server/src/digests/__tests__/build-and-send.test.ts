@@ -35,6 +35,7 @@ jest.mock('../compose-mail', () => ({
 let user: User;
 let feed: Feed;
 let userFeed: UserFeed;
+const composeDigestMock = composeDigest as jest.Mock;
 
 beforeAll(async () => {
   ({ user, feed, userFeed } = await generateUserWithFeed());
@@ -63,11 +64,12 @@ describe('Build and Send Digests', () => {
     newItems.push(await item(lastDigestTime + hour * 2));
     newItems.push(await item(lastDigestTime + hour * 3));
   });
+  afterEach(() => composeDigestMock.mockClear());
   test('should get new items and send digest mail', async () => {
     await buildAndSendDigests(feed.id);
     expect(isFeedReady).toHaveBeenCalled();
     expect(composeDigest).toHaveBeenCalled();
-    const call = (composeDigest as jest.Mock).mock.calls[0];
+    const call = composeDigestMock.mock.calls[0];
     const itemsPassed = call[2] as Item[];
     expect(itemsPassed).toHaveLength(newItems.length);
     const ids = new Set(newItems.map((i) => i.id));
@@ -82,20 +84,33 @@ describe('Build and Send Digests', () => {
     });
   });
 
-  test('should not send too old items even if they were created after last digest', async () => {
-    (composeDigest as jest.Mock).mockClear();
+  test('should not send too old items even if they were created after the last digest', async () => {
     userFeed.lastDigestSentAt = new Date(0);
     userFeed.lastViewedItemDate = new Date(0);
     await userFeed.save();
     // save very old item
     await generateItemEntity(feed.id, new Date(Date.now() - hour * 48));
     await buildAndSendDigests(feed.id);
-    const call = (composeDigest as jest.Mock).mock.calls[0];
+    const call = composeDigestMock.mock.calls[0];
     const itemsPassed = call[2] as Item[];
 
     expect(itemsPassed.length).toBe(newItems.length);
 
     const ids = new Set(newItems.map((i) => i.id));
+    itemsPassed.forEach((item) => expect(ids.has(item.id)).toBeTruthy());
+  });
+  test('should filter items', async () => {
+    newItems[0].title = 'Wrong title ';
+    newItems[1].title = 'Correct title ';
+    newItems[2].title = 'Another correct title ';
+    await Promise.all(newItems.map((i) => i.save()));
+    userFeed.lastDigestSentAt = new Date(0);
+    userFeed.filter = 'correct title';
+    await userFeed.save();
+    await buildAndSendDigests(feed.id);
+    const itemsPassed = composeDigestMock.mock.calls[0][2] as Item[];
+    expect(itemsPassed.length).toBe(2);
+    const ids = new Set(newItems.map((i) => i.id).slice(1));
     itemsPassed.forEach((item) => expect(ids.has(item.id)).toBeTruthy());
   });
 });

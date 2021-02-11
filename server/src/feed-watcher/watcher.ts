@@ -47,7 +47,7 @@ export default class Watcher {
           }
         }
 
-        buildAndSendDigests(id);
+        return buildAndSendDigests(id);
       }),
     );
     logger.info({ totalFeeds, totalItems }, 'End updating');

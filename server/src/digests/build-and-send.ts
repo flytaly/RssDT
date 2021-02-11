@@ -32,6 +32,7 @@ export const buildAndSendDigests = async (feedId: number) => {
         const items = await getItemsNewerThan(feedId, getPeriod(uf), {
           limit: maxItemsInDigest,
           usePubDate: !uf.lastDigestSentAt,
+          filter: uf.filter,
         });
         if (!items.length) return;
         const { text, html, errors } = composeDigest(uf, feed, items);
