@@ -97,4 +97,7 @@ export class UserFeedOptionsInput {
 
   @Field({ nullable: true })
   theme?: Theme;
+
+  @Field({ nullable: true })
+  filter?: string;
 }

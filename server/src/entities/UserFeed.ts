@@ -52,6 +52,10 @@ export class UserFeed extends BaseEntity {
   @Column({ type: 'enum', enum: Theme, default: Theme.default })
   theme: Theme;
 
+  @Field({ nullable: true })
+  @Column({ length: 250, nullable: true })
+  filter?: string;
+
   @Field(() => Date, { nullable: true })
   @Column({ type: 'timestamp', nullable: true })
   lastDigestSentAt?: Date;

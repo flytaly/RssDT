@@ -1,6 +1,14 @@
 /* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Enclosure } from './Enclosure';
 import { Feed } from './Feed';
 
