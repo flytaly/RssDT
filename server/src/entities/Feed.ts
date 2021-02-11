@@ -27,11 +27,11 @@ export class Feed extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column({ unique: true })
+  @Column({ length: 2000, unique: true })
   url!: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ length: 2000, nullable: true })
   link: string;
 
   @Field({ nullable: true })

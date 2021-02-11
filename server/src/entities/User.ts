@@ -23,7 +23,7 @@ export class User extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column({ unique: true })
+  @Column({ length: 255, unique: true })
   email!: string;
 
   @Field()
@@ -35,11 +35,11 @@ export class User extends BaseEntity {
   role: Role;
 
   @Field()
-  @Column({ default: defaultLocale })
+  @Column({ length: 200, default: defaultLocale })
   locale: string;
 
   @Field()
-  @Column({ default: defaultTimeZone })
+  @Column({ length: 100, default: defaultTimeZone })
   timeZone: string;
 
   @Field(() => [UserFeed], { nullable: true })

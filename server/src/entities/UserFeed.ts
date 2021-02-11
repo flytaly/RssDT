@@ -73,6 +73,9 @@ export class UserFeed extends BaseEntity {
   newItemsCount?: number;
 
   // === DB ONLY FIELDS ===
+  @Column({ type: 'timestamp', nullable: true })
+  wasFilteredAt?: Date;
+
   @Column()
   userId: number;
 
