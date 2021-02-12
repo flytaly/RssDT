@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import debounce from 'lodash.debounce';
 import BarsIcon from '../../../public/static/bars.svg';
 import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
@@ -12,8 +13,14 @@ import { useLocalState } from './reader-options';
 const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const { data, loading } = useMyFeedsQuery({ skip: isServer() });
   const [readerOpts, setReaderOpts] = useLocalState();
+  const [searchFilter, setSearchFilter] = useState('');
+  useEffect(() => {
+    setShowSearch(false);
+    setSearchFilter('');
+  }, [id]);
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const feedList = (
@@ -31,21 +38,49 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
 
   const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === parseInt(id)) : null;
 
+  const toggleSearch = () => setShowSearch((s) => !s);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchFilter(event.target.value);
+
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200">
       <aside className="hidden md:block row-span-2">{feedList}</aside>
-      <div className="flex items-center px-4 py-1 my-1 ">
-        <button
-          type="button"
-          className="md:hidden icon-btn w-4 h-4 mr-4"
-          title="Open list of the feeds"
-          onClick={() => setSidebarModalOpen((prev) => !prev)}
-        >
-          <BarsIcon />
-        </button>
-        <FeedHeader userFeed={userFeed} readerOpts={readerOpts} setReaderOpts={setReaderOpts} />
+      <div className="px-4 py-1 my-1">
+        <div className="flex items-center ">
+          <button
+            type="button"
+            className="md:hidden icon-btn w-4 h-4 mr-4"
+            title="Open list of the feeds"
+            onClick={() => setSidebarModalOpen((prev) => !prev)}
+          >
+            <BarsIcon />
+          </button>
+          <FeedHeader
+            userFeed={userFeed}
+            readerOpts={readerOpts}
+            setReaderOpts={setReaderOpts}
+            toggleSearch={toggleSearch}
+          />
+        </div>
+        {showSearch ? (
+          <div className="mt-2">
+            <input
+              type="text"
+              maxLength={250}
+              placeholder="filter feed items by words in their titles"
+              className="text-sm shadow-message hover:shadow-message-darker w-full py-1 px-2 rounded-sm
+              "
+              onChange={debounce(handleSearch, 800)}
+            />
+          </div>
+        ) : null}
       </div>
-      {userFeed ? <FeedItems feed={userFeed} readerOpts={readerOpts} /> : <div />}
+      {userFeed ? (
+        <FeedItems feed={userFeed} readerOpts={readerOpts} filter={searchFilter} />
+      ) : (
+        <div />
+      )}
       <ModalSidebar
         isOpen={sidebarModalOpen}
         closeModal={() => setSidebarModalOpen(false)}

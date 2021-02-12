@@ -53,6 +53,8 @@ export class FeedResolver {
     @Args() { skip = 0, take = 10, feedId, filter }: ItemsArgs, //
     @Ctx() { req }: MyContext,
   ) {
+    if (filter && filter.length > 250) throw new Error('too long');
+
     const uf = await UserFeed.findOne({
       where: { feedId, userId: req.session.userId },
     });

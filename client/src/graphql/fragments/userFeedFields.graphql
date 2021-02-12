@@ -6,6 +6,7 @@ fragment UserFeedFields on UserFeed {
   itemBody
   attachments
   theme
+  filter
   createdAt
   lastDigestSentAt
   newItemsCount

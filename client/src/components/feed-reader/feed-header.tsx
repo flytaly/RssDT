@@ -1,9 +1,11 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import React, { RefObject, useCallback, useState } from 'react';
 import MailIcon from '../../../public/static/envelope.svg';
 import ItemBigIcon from '../../../public/static/item-big.svg';
 import ItemMediumIcon from '../../../public/static/item-middle.svg';
 import ItemSmallIcon from '../../../public/static/item-small.svg';
 import ExtLinkIcon from '../../../public/static/external-link.svg';
+import SearchIcon from '../../../public/static/search.svg';
 import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '../../generated/graphql';
 import { clamp } from '../../utils/clamp';
 import usePopup from '../../utils/use-popup';
@@ -20,9 +22,15 @@ interface FeedHeaderProps {
   userFeed?: ({ feed: FeedFieldsFragment } & UserFeedFieldsFragment) | null;
   readerOpts: ReaderOptions;
   setReaderOpts: React.Dispatch<React.SetStateAction<ReaderOptions>>;
+  toggleSearch?: () => void;
 }
 
-const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReaderOpts }) => {
+const FeedHeader: React.FC<FeedHeaderProps> = ({
+  userFeed,
+  readerOpts,
+  setReaderOpts,
+  toggleSearch,
+}) => {
   const [editFeedModal, setEditFeedModal] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [isViewOptsOpen, setIsViewOptsOpen] = useState(false);
@@ -77,7 +85,20 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ userFeed, readerOpts, setReader
               } hover:text-primary`}
             />
           </button>
-          <div ref={viewAnchorRef as RefObject<HTMLDivElement>} className="relative ml-auto mr-2">
+          <div className="ml-auto" />
+          {toggleSearch ? (
+            <div className="mr-2">
+              <button
+                type="button"
+                className="h-4 icon-btn hover:text-primary"
+                title="Filter items"
+                onClick={() => toggleSearch()}
+              >
+                <SearchIcon className="w-auto h-4" />
+              </button>
+            </div>
+          ) : null}
+          <div ref={viewAnchorRef as RefObject<HTMLDivElement>} className="relative mr-2">
             <button
               type="button"
               className="h-4 icon-btn hover:text-primary"

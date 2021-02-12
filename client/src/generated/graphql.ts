@@ -365,7 +365,7 @@ export type OptionsFieldsFragment = (
 
 export type UserFeedFieldsFragment = (
   { __typename?: 'UserFeed' }
-  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'createdAt' | 'lastDigestSentAt' | 'newItemsCount' | 'lastViewedItemDate'>
+  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'filter' | 'createdAt' | 'lastDigestSentAt' | 'newItemsCount' | 'lastViewedItemDate'>
 );
 
 export type UserFieldsFragment = (
@@ -764,6 +764,7 @@ export const UserFeedFieldsFragmentDoc = gql`
   itemBody
   attachments
   theme
+  filter
   createdAt
   lastDigestSentAt
   newItemsCount

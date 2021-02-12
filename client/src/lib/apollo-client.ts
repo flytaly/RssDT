@@ -28,7 +28,7 @@ function createApolloClient() {
         Query: {
           fields: {
             myFeedItems: {
-              keyArgs: ['feedId'],
+              keyArgs: ['feedId', 'filter'],
               merge(
                 existing: PaginatedItemsRef | undefined,
                 incoming: PaginatedItemsRef,

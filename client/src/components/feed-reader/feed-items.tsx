@@ -16,16 +16,17 @@ import { ReaderOptions } from './reader-options';
 interface FeedItemsProps {
   feed: { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
   readerOpts: ReaderOptions;
+  filter?: string | null;
 }
 
 const take = 10;
 
-const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts }) => {
+const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
   const [showItemInModal, setShowItemInModal] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 0 });
   const { data, loading, fetchMore, error } = useMyFeedItemsQuery({
     notifyOnNetworkStatusChange: true,
-    variables: { feedId: feed.feed.id, skip: 0, take },
+    variables: { feedId: feed.feed.id, skip: 0, take, filter },
   });
   const [setItemDate, setItemDateStatus] = useSetLastViewedItemDateMutation();
 
@@ -63,6 +64,11 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts }) => {
 
   return (
     <main className="flex flex-col flex-grow space-y-4 p-3">
+      {!items.length && (
+        <div className="self-center font-bold">
+          {!filter ? "The feed doesn't have items" : "Couldn't find posts that match your query"}
+        </div>
+      )}
       {items.map((item) => (
         <FeedItem
           key={item.id}

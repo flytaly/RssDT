@@ -98,45 +98,43 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
       onClick={bodyClickHandler && onClick}
     >
       {isNewLabel}
-      <div className={`flex ${bodyClickHandler ? 'cursor-pointer' : ''}`}>
-        <div className="flex-1">
-          <h4 className="font-bold relative">
-            {item.link ? (
-              <a
-                href={item.link}
-                className="hover:underline hover:text-link"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {item.title}
-              </a>
-            ) : (
-              item.title
-            )}
-          </h4>
-          <div className="text-xs">{new Date(item.pubdate || item.createdAt).toLocaleString()}</div>
-          {showBody && (
-            <div className="relative mt-3">
-              <main
-                ref={bodyRef}
-                className={`feed-item-body ${bodyClassName}`}
-                dangerouslySetInnerHTML={getItemHTML(item)}
-              />
-              {bottomGradient && (
-                <div className="absolute w-full h-6 bottom-0 transparent-gradient" />
-              )}
-            </div>
-          )}
-        </div>
+      <div className={`${bodyClickHandler ? 'cursor-pointer' : ''}`}>
         {showBody && itemImg ? (
-          <div className="w-24 h-24 flex items-center justify-end">
+          <div className="float-right w-24 h-24">
             <img
-              className="block ml-2 w-auto h-auto max-h-full max-w-full rounded-sm object-cover"
+              className="block ml-2 w-auto h-auto max-h-full max-w-full rounded-sm object-cover "
               src={itemImg}
               alt={item.title || 'item'}
             />
           </div>
         ) : null}
+        <h4 className="font-bold relative">
+          {item.link ? (
+            <a
+              href={item.link}
+              className="hover:underline hover:text-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {item.title}
+            </a>
+          ) : (
+            item.title
+          )}
+        </h4>
+        <div className="text-xs">{new Date(item.pubdate || item.createdAt).toLocaleString()}</div>
+        {showBody && (
+          <div className="relative mt-3">
+            <main
+              ref={bodyRef}
+              className={`feed-item-body ${bodyClassName}`}
+              dangerouslySetInnerHTML={getItemHTML(item)}
+            />
+            {bottomGradient && (
+              <div className="absolute w-full h-6 bottom-0 transparent-gradient" />
+            )}
+          </div>
+        )}
       </div>
       <footer className="flex justify-end mt-1 space-x-1 text-xs">
         <FooterBtnList Icon={PaperClipIcon} text={`enclosures: ${item.enclosures?.length}`}>
