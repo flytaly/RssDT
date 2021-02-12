@@ -10,6 +10,7 @@ import {
 } from '../../generated/graphql';
 import { DigestSchedule, periodNames } from '../../types';
 import GraphQLError from '../graphql-error';
+import InputUnderline from './input-underline';
 import SelectUnderline, { SelectProps } from './select-underline';
 
 interface FeedOptionsFormProps {
@@ -44,10 +45,10 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
   };
 
   if (!feed) return null;
-  const { id, attachments, itemBody, schedule, theme, withContentTable } = feed;
+  const { id, attachments, itemBody, schedule, theme, withContentTable, filter } = feed;
   return (
     <Formik
-      initialValues={{ attachments, itemBody, schedule, theme, withContentTable }}
+      initialValues={{ attachments, itemBody, schedule, theme, withContentTable, filter }}
       onSubmit={async (opts) => {
         setOptions({ variables: { id, opts } })
           .then((result) => setErrorMsg(result.data?.setFeedOptions.errors?.[0].message || ''))
@@ -117,6 +118,22 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <option value={TernaryState.Disable}>Disable</option>
             <option value={TernaryState.Enable}>Enable</option>
           </LabeledSelect>
+
+          <div className="mb-3">
+            <div>
+              <b>Filter items. </b>
+              <span>List of words and phrases separated by commas</span>
+            </div>
+            <InputUnderline
+              name="filter"
+              title="Filter items"
+              className="w-full px-2 font-medium"
+              value={values.filter || ''}
+              onChange={handleChange}
+              maxLength={250}
+              disabled={isSubmitting}
+            />
+          </div>
 
           {errorMsg ? (
             <div className="text-error my-2">
