@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Formik } from 'formik';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import {
   TernaryState,
@@ -122,7 +123,13 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
           <div className="mb-3">
             <div>
               <b>Filter items. </b>
-              <span>List of words and phrases separated by commas</span>
+              <span className="text-xs">
+                Words and phrases separated by commas that should be contained in the titles of the
+                items.
+                <Link href="/help#filter">
+                  <a className="underline ml-1">More info</a>
+                </Link>
+              </span>
             </div>
             <InputUnderline
               name="filter"

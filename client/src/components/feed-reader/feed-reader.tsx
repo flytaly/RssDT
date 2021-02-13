@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
+import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';
 import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
 import { isServer } from '../../utils/is-server';
@@ -73,6 +74,11 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
               "
               onChange={debounce(handleSearch, 800)}
             />
+            <div>
+              <Link href="/help#filter">
+                <a className="underline text-xs">search syntax</a>
+              </Link>
+            </div>
           </div>
         ) : null}
       </div>

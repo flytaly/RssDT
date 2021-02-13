@@ -50,7 +50,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
   const closingDuration = 100;
   const springProps = useSpring({
     transform: isOpen ? 'scale3d(1,1,1)' : 'scale3d(0,0,0)',
-    config: { tension: 300, friction: 22, duration: isOpen ? undefined : closingDuration },
+    config: { tension: 400, friction: 30, duration: isOpen ? undefined : closingDuration },
   });
   useEffect(() => {
     if (isOpen) setErrorMsg('');
