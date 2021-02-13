@@ -179,6 +179,7 @@ export type Mutation = {
   setFeedOptions: UserFeedResponse;
   unsubscribeByToken: Scalars['Boolean'];
   setLastViewedItemDate?: Maybe<UserFeed>;
+  feedback?: Maybe<FeedbackResponse>;
 };
 
 
@@ -265,6 +266,11 @@ export type MutationSetLastViewedItemDateArgs = {
   userFeedId: Scalars['Float'];
 };
 
+
+export type MutationFeedbackArgs = {
+  input: FeedbackInput;
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<ArgumentError>>;
@@ -343,6 +349,17 @@ export type DeletedFeedResponse = {
   __typename?: 'DeletedFeedResponse';
   errors?: Maybe<Array<ArgumentError>>;
   ids?: Maybe<Array<Scalars['String']>>;
+};
+
+export type FeedbackResponse = {
+  __typename?: 'FeedbackResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type FeedbackInput = {
+  email: Scalars['String'];
+  text: Scalars['String'];
 };
 
 export type FeedFieldsFragment = (
@@ -473,6 +490,23 @@ export type DeleteMyFeedsMutation = (
       & Pick<ArgumentError, 'message'>
     )>> }
   ) }
+);
+
+export type SendFeedbackMutationVariables = Exact<{
+  input: FeedbackInput;
+}>;
+
+
+export type SendFeedbackMutation = (
+  { __typename?: 'Mutation' }
+  & { feedback?: Maybe<(
+    { __typename?: 'FeedbackResponse' }
+    & Pick<FeedbackResponse, 'success'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  )> }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -906,6 +940,16 @@ export const DeleteMyFeedsDocument = gql`
   }
 }
     `;
+export const SendFeedbackDocument = gql`
+    mutation sendFeedback($input: FeedbackInput!) {
+  feedback(input: $input) {
+    success
+    errors {
+      message
+    }
+  }
+}
+    `;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(input: {email: $email, password: $password}) {
@@ -1101,6 +1145,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     deleteMyFeeds(variables: DeleteMyFeedsMutationVariables, requestHeaders?: Headers): Promise<DeleteMyFeedsMutation> {
       return withWrapper(() => client.request<DeleteMyFeedsMutation>(print(DeleteMyFeedsDocument), variables, requestHeaders));
+    },
+    sendFeedback(variables: SendFeedbackMutationVariables, requestHeaders?: Headers): Promise<SendFeedbackMutation> {
+      return withWrapper(() => client.request<SendFeedbackMutation>(print(SendFeedbackDocument), variables, requestHeaders));
     },
     login(variables: LoginMutationVariables, requestHeaders?: Headers): Promise<LoginMutation> {
       return withWrapper(() => client.request<LoginMutation>(print(LoginDocument), variables, requestHeaders));

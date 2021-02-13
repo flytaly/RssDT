@@ -1,0 +1,8 @@
+mutation sendFeedback($input: FeedbackInput!) {
+  feedback(input: $input) {
+    success
+    errors {
+      message
+    }
+  }
+}

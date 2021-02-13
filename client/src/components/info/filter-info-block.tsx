@@ -56,7 +56,7 @@ const FilterInfoBlock: React.FC = () => {
         </li>
         <li>
           <span className="font-mono bg-gray-300 px-1">cat !dog, bird</span>
-          <span> &apos;cat but not dog&apos; or &apos;bird&apos;</span>
+          <span> &apos;cat without dog&apos; or &apos;bird&apos;</span>
         </li>
       </ul>
     </div>

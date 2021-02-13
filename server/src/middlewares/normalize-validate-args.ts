@@ -10,7 +10,9 @@ const VAL_METADATA_KEY = Symbol('validate_meta');
 
 type UserFields = 'email' | 'password' | 'feedUrl' | 'locale' | 'timeZone';
 type OptionsFields = 'shareList' | 'customSubject' | 'dailyDigestHour';
-type InputType = UserFields | OptionsFields;
+type FeedbackFields = 'feedbackText';
+
+type InputType = UserFields | OptionsFields | FeedbackFields;
 
 const validates: Record<InputType, AnySchema> = {
   email: Joi.string().email().required(),
@@ -25,12 +27,14 @@ const validates: Record<InputType, AnySchema> = {
   shareList: Joi.array().items(Joi.string()),
   customSubject: Joi.string().max(50),
   dailyDigestHour: Joi.number().integer().max(23).min(0),
+  feedbackText: Joi.string().required().max(10000),
 };
 
 const pass = (arg: any) => arg;
 const normalizes: Record<InputType, Function> = {
   email: (arg: string) => arg?.trim().toLowerCase(),
   password: (arg: string) => arg?.trim(),
+  feedbackText: (arg: string) => arg?.trim(),
   feedUrl: (arg: string) =>
     normalizeUrl(arg, {
       defaultProtocol: 'https://',
@@ -99,7 +103,12 @@ export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): 
         });
       } catch (error) {
         return {
-          errors: [new ArgumentError(error.message.startsWith('Invalid URL') ? 'feedUrl' : '', error.message)],
+          errors: [
+            new ArgumentError(
+              error.message.startsWith('Invalid URL') ? 'feedUrl' : '',
+              error.message,
+            ),
+          ],
         };
       }
 

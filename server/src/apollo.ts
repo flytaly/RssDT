@@ -7,10 +7,11 @@ import { MyContext, ReqWithSession } from './types';
 import { UserFeedResolver } from './resolvers/userFeed';
 import { FeedResolver } from './resolvers/feed';
 import { createItemCountLoader } from './utils/createItemCountLoader';
+import { MailResolver } from './resolvers/mail';
 
 export const initApolloServer = async (app: Express, redis: Redis) => {
   const schema = await buildSchema({
-    resolvers: [UserResolver, UserFeedResolver, FeedResolver],
+    resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
     validate: false,
   });
 

@@ -51,10 +51,18 @@ export interface ConfirmFeedProps {
 }
 
 /** Send an email to confirm subscription */
-export const sendConfirmSubscription = ({ email, token, userFeedId, title, digestType }: ConfirmFeedProps) =>
+export const sendConfirmSubscription = ({
+  email,
+  token,
+  userFeedId,
+  title,
+  digestType,
+}: ConfirmFeedProps) =>
   emailQueue.add(async () => {
     const digestString =
-      digestType && digestType !== DigestSchedule.disable ? `(${digestNames[digestType]} digest)` : '';
+      digestType && digestType !== DigestSchedule.disable
+        ? `(${digestNames[digestType]} digest)`
+        : '';
     const url = `${process.env.FRONTEND_URL}/confirm?token=${token}&id=${userFeedId}`;
     const result = await transport.sendMail({
       from: process.env.MAIL_FROM,
@@ -69,4 +77,17 @@ export const sendConfirmSubscription = ({ email, token, userFeedId, title, diges
         Ignore this message if you didn't subscribe`,
     });
     logger.info(result, 'feed confirmation email has been sent');
+  });
+
+export const sendFeedback = async (email: string, text: string) =>
+  emailQueue.add(async () => {
+    const result = await transport.sendMail({
+      from: process.env.MAIL_FROM,
+      to: process.env.MAIL_FEEDBACK_TO,
+      subject: `Feedback from ${email}`,
+      text: `${email} send feedback.
+      Text:
+      ${text}`,
+    });
+    logger.info(result, 'feedback email has been sent');
   });
