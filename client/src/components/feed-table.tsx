@@ -71,7 +71,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
     setFeedsToDelete([]);
   };
 
-  const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '');
+  const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '-');
   const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
 
   return (
@@ -96,7 +96,13 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               </Cell>
               <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
               <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
-              <Cell name="Digest Schedule">{periodNames[uf.schedule]}</Cell>
+              <Cell name="Digest Schedule">
+                {periodNames[uf.schedule] !== periodNames.disable ? (
+                  <span className="font-medium">{periodNames[uf.schedule]}</span>
+                ) : (
+                  <span className="text-gray-500">disabled</span>
+                )}
+              </Cell>
               <Cell name="Actions">
                 <button
                   onClick={(e) => {
