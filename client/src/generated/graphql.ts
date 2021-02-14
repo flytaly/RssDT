@@ -178,6 +178,7 @@ export type Mutation = {
   setFeedOptions: UserFeedResponse;
   unsubscribeByToken: Scalars['Boolean'];
   setLastViewedItemDate?: Maybe<UserFeed>;
+  feedback?: Maybe<FeedbackResponse>;
 };
 
 
@@ -264,6 +265,11 @@ export type MutationSetLastViewedItemDateArgs = {
   userFeedId: Scalars['Float'];
 };
 
+
+export type MutationFeedbackArgs = {
+  input: FeedbackInput;
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<ArgumentError>>;
@@ -342,6 +348,17 @@ export type DeletedFeedResponse = {
   __typename?: 'DeletedFeedResponse';
   errors?: Maybe<Array<ArgumentError>>;
   ids?: Maybe<Array<Scalars['String']>>;
+};
+
+export type FeedbackResponse = {
+  __typename?: 'FeedbackResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type FeedbackInput = {
+  email: Scalars['String'];
+  text: Scalars['String'];
 };
 
 export type FeedFieldsFragment = (
@@ -542,6 +559,23 @@ export type ResetPasswordMutation = (
     { __typename?: 'UserResponse' }
     & UsualUserResponseFragment
   ) }
+);
+
+export type SendFeedbackMutationVariables = Exact<{
+  input: FeedbackInput;
+}>;
+
+
+export type SendFeedbackMutation = (
+  { __typename?: 'Mutation' }
+  & { feedback?: Maybe<(
+    { __typename?: 'FeedbackResponse' }
+    & Pick<FeedbackResponse, 'success'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'argument' | 'message'>
+    )>> }
+  )> }
 );
 
 export type SetFeedOptionsMutationVariables = Exact<{
@@ -1147,6 +1181,42 @@ export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOption
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
 export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
+export const SendFeedbackDocument = gql`
+    mutation sendFeedback($input: FeedbackInput!) {
+  feedback(input: $input) {
+    success
+    errors {
+      argument
+      message
+    }
+  }
+}
+    `;
+export type SendFeedbackMutationFn = Apollo.MutationFunction<SendFeedbackMutation, SendFeedbackMutationVariables>;
+
+/**
+ * __useSendFeedbackMutation__
+ *
+ * To run a mutation, you first call `useSendFeedbackMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendFeedbackMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendFeedbackMutation, { data, loading, error }] = useSendFeedbackMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSendFeedbackMutation(baseOptions?: Apollo.MutationHookOptions<SendFeedbackMutation, SendFeedbackMutationVariables>) {
+        return Apollo.useMutation<SendFeedbackMutation, SendFeedbackMutationVariables>(SendFeedbackDocument, baseOptions);
+      }
+export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
+export type SendFeedbackMutationResult = Apollo.MutationResult<SendFeedbackMutation>;
+export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<SendFeedbackMutation, SendFeedbackMutationVariables>;
 export const SetFeedOptionsDocument = gql`
     mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
   setFeedOptions(id: $id, opts: $opts) {

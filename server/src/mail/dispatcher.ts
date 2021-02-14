@@ -85,7 +85,7 @@ export const sendFeedback = async (email: string, text: string) =>
       from: process.env.MAIL_FROM,
       to: process.env.MAIL_FEEDBACK_TO,
       subject: `Feedback from ${email}`,
-      text: `${email} send feedback.
+      text: `${email} sent feedback.
       Text:
       ${text}`,
     });

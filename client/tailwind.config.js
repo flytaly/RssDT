@@ -45,6 +45,7 @@ module.exports = {
         'modal-left': '10px 0px 30px 0px rgba(0, 0, 0, 0.5)',
         'input-primary': '0px 0px 0px 2px var(--primary)',
         'input-gray': '0px 0px 0px 2px #777d8c',
+        'input-error': '0px 0px 0px 2px var(--error)',
         popup: '0rem 7px 10px 0px #c0c0c0',
         message: '0rem 5px 10px 0px #c0c0c0',
         'message-darker': '0rem 5px 10px 0px #909090',

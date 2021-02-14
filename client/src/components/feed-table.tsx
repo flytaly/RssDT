@@ -104,13 +104,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                 )}
               </Cell>
               <Cell name="Actions">
-                <button
-                  onClick={(e) => {
-                    setEditingFeed(uf);
-                  }}
-                  type="button"
-                  className="icon-btn"
-                >
+                <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
                   <EditIcon className="w-4 h-4" />
                 </button>
                 <button onClick={() => setFeedsToDelete([uf])} type="button" className="icon-btn">
