@@ -9,7 +9,7 @@ const routes: CardRoute[] = [
 
 const InfoNavBar = () => {
   const route = useRouter();
-  return <CardNavBar title="Feeds" routes={routes} activePath={route.pathname} />;
+  return <CardNavBar title="Information" routes={routes} activePath={route.pathname} />;
 };
 
 export default InfoNavBar;
