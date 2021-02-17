@@ -10,7 +10,7 @@ import { redis } from './redis';
 
 const entry = async () => {
   const app = express();
-  app.set('proxy', 1);
+  app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
   initSession(app, redis);
