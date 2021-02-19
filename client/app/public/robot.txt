@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://feedmailu.com/sitemap.xml

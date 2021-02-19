@@ -1,0 +1,5 @@
+mutation verifyEmail($userId: String!, $token: String!) {
+  verifyEmail(userId: $userId, token: $token) {
+    ...UsualUserResponse
+  }
+}

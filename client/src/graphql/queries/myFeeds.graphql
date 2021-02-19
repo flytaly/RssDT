@@ -1,0 +1,8 @@
+query myFeeds {
+  myFeeds {
+    ...UserFeedFields
+    feed {
+      ...FeedFields
+    }
+  }
+}

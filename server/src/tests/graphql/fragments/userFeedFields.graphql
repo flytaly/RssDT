@@ -1,0 +1,15 @@
+fragment UserFeedFields on UserFeed {
+  id
+  activated
+  schedule
+  withContentTable
+  itemBody
+  attachments
+  theme
+  filter
+  lastViewedItemDate
+  lastDigestSentAt
+  newItemsCount
+  createdAt
+  updatedAt
+}

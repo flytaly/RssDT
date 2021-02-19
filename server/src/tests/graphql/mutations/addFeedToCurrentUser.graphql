@@ -1,0 +1,16 @@
+mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
+    addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
+        userFeed {
+            id
+            activated
+            feed {
+                id
+                url
+            }
+        }
+        errors {
+            message
+            argument
+        }
+    }
+}

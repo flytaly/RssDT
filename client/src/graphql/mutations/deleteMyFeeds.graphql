@@ -1,0 +1,8 @@
+mutation deleteMyFeeds($ids: [Float!]!) {
+    deleteMyFeeds(ids: $ids) {
+        ids
+        errors {
+            message
+        }
+    }
+}

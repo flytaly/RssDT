@@ -1,0 +1,8 @@
+query getFeedInfoByToken($id: String!, $token: String!) {
+  getFeedInfoByToken(id: $id, token: $token) {
+    feed {
+      title
+      url
+    }
+  }
+}

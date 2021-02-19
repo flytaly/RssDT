@@ -3,7 +3,9 @@ node_modules/
 *.log
 *.env
 *.env.dev
+*.env.production
 .vscode
 coverage/
 .next/
 .build/
+dist/

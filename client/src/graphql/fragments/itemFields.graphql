@@ -1,0 +1,16 @@
+fragment ItemFields on Item {
+    id
+    guid
+    pubdate
+    link
+    title
+    description
+    summary
+    imageUrl
+    enclosures {
+        url
+        length
+        type
+    }
+    createdAt
+}

@@ -1,0 +1,3 @@
+mutation unsubscribeByToken($token: String!, $id: String!) {
+    unsubscribeByToken(token: $token, id: $id)
+}

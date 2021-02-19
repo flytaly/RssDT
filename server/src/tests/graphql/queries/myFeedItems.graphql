@@ -1,0 +1,8 @@
+query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
+    items {
+      ...ItemFields
+    }
+    hasMore
+  }
+}

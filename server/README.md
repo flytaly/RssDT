@@ -1,11 +1,10 @@
-# Feed Digester backend
+# FeedMailu backend
 
--   Yoga
--   GraphQL
--   Prisma
+## To start the server
 
-# Usage (development)
-
--   `npm run prisma-up`
--   `npm run deploy:dev`
+-   launch Redis and Postgres
+-   edit .env
+-   `npm run start:watch`
+    -   compile TS into /dist
 -   `npm run dev`
+    -   start server in development mode

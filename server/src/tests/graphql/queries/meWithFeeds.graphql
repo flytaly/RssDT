@@ -1,0 +1,12 @@
+query meWithFeeds {
+    me {
+        ...UserFields
+        feeds {
+            activated
+            createdAt
+            feed {
+                ...FeedFields
+            }
+        }
+    }
+}
