@@ -24,8 +24,7 @@ export const initDbConnection = async () => {
     synchronize: !IS_PROD,
     entities: [User, Feed, UserFeed, Item, Enclosure, Options],
   });
-
-  await dbConnection.runMigrations();
+  if (!IS_DEV) await dbConnection.runMigrations();
 
   return dbConnection;
 };
