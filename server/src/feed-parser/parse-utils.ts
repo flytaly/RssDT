@@ -15,8 +15,8 @@ const defaultAxiosOptions: AxiosRequestConfig = {
   headers: {
     Accept: '*/*',
     'User-Agent':
-      'Mozilla/5.0 (Windows NT 6.1; WOW64) ' +
-      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+      'Mozilla/5.0 (X11; Linux x86_64) ' +
+      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36',
   },
 };
 const axiosInstance = axios.create(defaultAxiosOptions);
@@ -34,7 +34,8 @@ type ItemWithPubdate = {
 const findFeedUrl = (html: string, baseUrl: string, normalize = true) => {
   const dom = new jsdom.JSDOM(html);
 
-  const normUrl = (url: string) => (normalize ? normalizeUrl(url, { defaultProtocol: 'https://' }) : url);
+  const normUrl = (url: string) =>
+    normalize ? normalizeUrl(url, { defaultProtocol: 'https://' }) : url;
 
   const rss = dom.window.document.querySelector('link[type="application/rss+xml"]');
   const atom = dom.window.document.querySelector('link[type="application/atom+xml"]');
@@ -177,7 +178,9 @@ export async function getNewItems(url: string, existingItems?: ItemWithPubdate[]
 }
 
 /** Check if given stream is correct feed stream and return its meta */
-export async function checkFeedInfo(stream: Readable): Promise<{ isFeed: boolean; error?: Error; meta?: Meta }> {
+export async function checkFeedInfo(
+  stream: Readable,
+): Promise<{ isFeed: boolean; error?: Error; meta?: Meta }> {
   try {
     let feedMeta: Meta | undefined;
     const feedParser = new FeedParser({});
