@@ -1,0 +1,5 @@
+# syntax = edrevo/dockerfile-plus
+
+INCLUDE+ docker/Dockerfile.common
+
+CMD ["pm2-runtime", "pm2.config.js", "--only", "watcher"]
