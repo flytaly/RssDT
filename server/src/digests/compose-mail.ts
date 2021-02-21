@@ -78,6 +78,7 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
           .map((s) => ({ ...s, url: s.getUrl(link, title) }))
       : [];
     const content = withItemBody ? item_.summary || item_.description : '';
+
     return (
       acc +
       theme.item({

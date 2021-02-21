@@ -21,8 +21,16 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
   const imgSchemes = ['https', 'http'];
   const cleanHtml = (dirty: string) =>
     sanitizeHtml(dirty, {
-      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']),
+      allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'iframe']),
+      allowedAttributes: {
+        img: ['src', 'width', 'height'],
+        iframe: ['src', 'width', 'height'],
+      },
+      allowIframeRelativeUrls: false,
+
       allowedSchemesByTag: { img: imgSchemes },
+      // allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com'],
+      allowProtocolRelative: false,
       // Only allow imgs with absolute paths
       exclusiveFilter(frame) {
         if (frame.tag === 'img') {

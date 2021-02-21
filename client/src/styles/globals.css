@@ -177,4 +177,8 @@ pre {
 }
 
 @layer utilities {
+  .limit-width img,
+  .limit-width iframe {
+    max-width: 100% !important;
+  }
 }

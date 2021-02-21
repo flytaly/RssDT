@@ -55,7 +55,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
     setSearchFilter(event.target.value);
 
   return (
-    <section className="block md:reader-layout flex-grow bg-gray-200">
+    <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">
       <aside className="hidden md:block row-span-2">{feedList}</aside>
       <div className="px-4 py-1 my-1">
         <div className="flex items-center ">
