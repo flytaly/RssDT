@@ -9,10 +9,17 @@ const logPath = `${cwd}/log`;
 // eslint-disable-next-line import/no-mutable-exports
 export let logger: bunyan;
 
-export const initLogFiles = ({ prefix = '', suffix = '', name = '' }) => {
+if (IS_TEST) {
+  logger = bunyan.createLogger({
+    name: 'test',
+    // Create stream to void for tests
+    stream: IS_TEST ? new Stream.Writable({ write: () => {} }) : undefined,
+  });
+}
+
+export const initLogFiles = ({ prefix = '', suffix = '', name = '' } = {}) => {
   logger = bunyan.createLogger({
     name: name || 'app',
-    // Create stream to void for tests
     stream: IS_TEST ? new Stream.Writable({ write: () => {} }) : undefined,
   });
 
