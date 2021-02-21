@@ -57,7 +57,7 @@ a:focus-visible {
 }
 
 pre {
-  @apply font-mono;
+  @apply font-mono whitespace-pre-wrap;
 }
 
 @layer components {
