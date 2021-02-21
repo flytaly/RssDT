@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FeedFieldsFragment, UserFeedFieldsFragment } from '../../generated/graphql';
@@ -11,10 +11,15 @@ interface FeedSidebarProps {
 const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
   const router = useRouter();
   const id = router.query.id ? parseInt(router.query.id as string) : null;
+  const feedsSorted = useMemo(() => {
+    const unread = feeds?.filter((f) => f.newItemsCount) || [];
+    const read = feeds?.filter((f) => !f.newItemsCount) || [];
+    return unread.concat(read);
+  }, [feeds]);
 
   const list = (
     <ul>
-      {feeds?.map((uf) => {
+      {feedsSorted?.map((uf) => {
         const hasNew = uf.newItemsCount > 0;
         const font = hasNew ? 'font-semibold text-white' : 'font-light text-gray-200';
         const bg = uf.id === id ? `bg-secondary` : '';
