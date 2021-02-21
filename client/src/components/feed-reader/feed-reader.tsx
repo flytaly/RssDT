@@ -34,6 +34,16 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
       >
         Add new feed
       </button>
+      <button
+        type="button"
+        className="block w-3 h-full mx-auto mt-2"
+        onClick={() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        title="scroll to the top"
+      >
+        <div className="w-px h-full mx-auto bg-gray-100 bg-opacity-60" />
+      </button>
     </div>
   );
 
