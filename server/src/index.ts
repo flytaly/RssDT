@@ -16,7 +16,7 @@ const entry = async () => {
   initSession(app, redis);
   await initDbConnection();
   await initApolloServer(app, redis);
-  initLogFiles('server_');
+  initLogFiles({ prefix: 'api_', name: 'api' });
 
   app.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);

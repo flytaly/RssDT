@@ -1,4 +1,4 @@
-import { getConnection, MoreThan, Not } from 'typeorm';
+import { getConnection, Not } from 'typeorm';
 import PgTsquery from 'pg-tsquery';
 import { Item } from '../entities/Item';
 import { UserFeed } from '../entities/UserFeed';

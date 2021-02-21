@@ -6,16 +6,15 @@ import { IS_DEV } from '../constants';
 import { initDbConnection } from '../dbConnection';
 
 async function start() {
-  const child = initLogFiles('watcher_');
+  initLogFiles({ prefix: 'watcher_', name: 'watcher' });
   const db = await initDbConnection();
   const feedWatcher = new Watcher({});
   feedWatcher.start();
   await feedWatcher.update();
+
   if (IS_DEV) {
-    // await feedWatcher.update();
     await feedWatcher.cancel();
     await db.close();
-    child?.kill();
   }
 }
 
