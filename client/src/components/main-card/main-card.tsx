@@ -21,7 +21,8 @@ const MainCard: React.FC<MainCardProps> = ({
   const baseWidth = big ? 'big-card-w' : 'small-card-w';
   const width = big && fullWidth ? 'w-screen' : '';
   const grow = big ? 'flex-1' : '';
-  const showWarning = !isServer && !loading && onlyWithVerifiedEmail && data?.me?.emailVerified;
+  const showWarning = !isServer() && !loading && onlyWithVerifiedEmail && !data?.me?.emailVerified;
+
   return (
     <article
       id="card-root"
