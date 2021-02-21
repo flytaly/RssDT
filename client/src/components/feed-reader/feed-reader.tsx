@@ -36,13 +36,13 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
       </button>
       <button
         type="button"
-        className="block w-3 h-full mx-auto mt-2"
+        className="block w-3 h-full mx-auto mt-2 group"
         onClick={() => {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         title="scroll to the top"
       >
-        <div className="w-px h-full mx-auto bg-gray-100 bg-opacity-60" />
+        <div className="w-px h-full mx-auto bg-gray-100 bg-opacity-60 group-hover:bg-white" />
       </button>
     </div>
   );
