@@ -63,11 +63,15 @@ const findFeedUrl = (html: string, baseUrl: string, normalize = true) => {
  * The function was taken from github.com/szwacz/sputnik:
  * https://github.com/szwacz/sputnik/blob/5a68359a920aa3c1be4684c1f12b0d0d64e5745d/app/core/helpers/feed_parser.js#L42
  */
-const normalizeEncoding = (bodyBuf: ArrayBuffer, bodyStr: string) => {
+const normalizeEncoding = (
+  bodyBuf: ArrayBuffer,
+  bodyStr: string,
+  xmlDeclaration?: RegExpMatchArray | null,
+) => {
   let body = bodyStr || bodyBuf.toString();
   let encoding;
 
-  const xmlDeclaration = body.match(/^<\?xml .*\?>/);
+  xmlDeclaration = xmlDeclaration || body.match(/^<\?xml .*\?>/);
   if (xmlDeclaration) {
     const encodingDeclaration = xmlDeclaration[0].match(/encoding=("|').*?("|')/);
     if (encodingDeclaration) {
@@ -97,14 +101,16 @@ export async function getFeedStream(
   const body = bufData.toString();
 
   let feedUrl;
-  if (tryFindFeedUrl) {
+
+  const xmlDeclaration = body.match(/^<\?xml .*\?>/);
+
+  // Don't find url if it's an xml page
+  if (!xmlDeclaration && tryFindFeedUrl) {
     feedUrl = findFeedUrl(body, url);
-    if (feedUrl) {
-      return getFeedStream(feedUrl, options, false);
-    }
+    if (feedUrl) return getFeedStream(feedUrl, options, false);
   }
 
-  const data = normalizeEncoding(bufData, body);
+  const data = normalizeEncoding(bufData, body, xmlDeclaration);
 
   const feedStream = new Readable();
   feedStream.push(data);
