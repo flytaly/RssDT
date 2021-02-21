@@ -25,7 +25,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const feedList = (
-    <div className="bg-sidebar h-full py-2">
+    <div className="bg-sidebar h-full py-2 overflow-y-scroll">
       <FeedSidebar feeds={myFeeds} loading={loading} />
       <button
         type="button"
@@ -33,16 +33,6 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
         onClick={() => setAddFeedModalOpen(true)}
       >
         Add new feed
-      </button>
-      <button
-        type="button"
-        className="block w-3 h-full mx-auto mt-2 group"
-        onClick={() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        title="scroll to the top"
-      >
-        <div className="w-px h-full mx-auto bg-gray-100 bg-opacity-60 group-hover:bg-white" />
       </button>
     </div>
   );
@@ -56,7 +46,17 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
 
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">
-      <aside className="hidden md:block row-span-2">{feedList}</aside>
+      <aside className="hidden md:flex flex-col row-span-2 bg-sidebar">
+        <div className="flex-shrink-0">{feedList}</div>
+        <button
+          type="button"
+          className="flex-1 py-2 px-2 mx-auto group"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          title="scroll to the top"
+        >
+          <div className="w-px h-full bg-gray-100 bg-opacity-50 group-hover:bg-opacity-100" />
+        </button>
+      </aside>
       <div className="px-4 py-1 my-1">
         <div className="flex items-center ">
           <button
