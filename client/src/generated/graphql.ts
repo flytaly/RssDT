@@ -87,6 +87,7 @@ export type Feed = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   lastSuccessfulUpd: Scalars['DateTime'];
+  lastPubdate?: Maybe<Scalars['DateTime']>;
   userFeeds?: Maybe<Array<UserFeed>>;
 };
 
@@ -363,7 +364,7 @@ export type FeedbackInput = {
 
 export type FeedFieldsFragment = (
   { __typename?: 'Feed' }
-  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'createdAt' | 'updatedAt'>
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'lastPubdate' | 'createdAt' | 'updatedAt'>
 );
 
 export type ItemFieldsFragment = (
@@ -755,6 +756,7 @@ export const FeedFieldsFragmentDoc = gql`
   imageUrl
   imageTitle
   lastSuccessfulUpd
+  lastPubdate
   createdAt
   updatedAt
 }

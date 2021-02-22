@@ -16,12 +16,13 @@ interface CellProps {
   children: React.ReactNode;
   name?: string;
   header?: boolean;
+  className?: string;
 }
 
-const Cell: React.FC<CellProps> = ({ children, name = '', header = false }) => {
+const Cell: React.FC<CellProps> = ({ children, className = '', name = '', header = false }) => {
   return React.createElement(
     header ? 'th' : 'td',
-    { className: 'feed-table-column', 'data-name': name },
+    { className: `feed-table-column ${className}`, 'data-name': name },
     children,
   );
 };
@@ -82,6 +83,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
             <Cell name="Feed">Feed</Cell>
             <Cell name="Added">Added</Cell>
             <Cell name="Last digest date">Last digest date</Cell>
+            <Cell name="Last item pubdate">Last item pubdate</Cell>
             <Cell name="Digest Schedule">Digest Schedule</Cell>
             <Cell name="Actions">Actions</Cell>
           </HeaderRow>
@@ -94,8 +96,15 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                   <a className="underline">{uf.feed.title}</a>
                 </Link>
               </Cell>
-              <Cell name="Added">{formatCreatedDate(uf.createdAt)}</Cell>
-              <Cell name="Last digest date">{formatDigestDate(uf.lastDigestSentAt)}</Cell>
+              <Cell className="text-xs" name="Added">
+                {formatCreatedDate(uf.createdAt)}
+              </Cell>
+              <Cell className="text-xs" name="Last digest date">
+                {formatDigestDate(uf.lastDigestSentAt)}
+              </Cell>
+              <Cell className="text-xs" name="Last item pubdate">
+                {formatDigestDate(uf.feed.lastPubdate)}
+              </Cell>
               <Cell name="Digest Schedule">
                 {periodNames[uf.schedule] !== periodNames.disable ? (
                   <span className="font-medium">{periodNames[uf.schedule]}</span>

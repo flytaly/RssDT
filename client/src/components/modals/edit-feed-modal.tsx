@@ -57,8 +57,11 @@ const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed 
             </a>
           </InfoRow>
           <InfoRow title="Date Added">{new Date(feed.createdAt).toLocaleString()}</InfoRow>
+          <InfoRow title="Newest post date">
+            {feed.feed.lastPubdate ? new Date(feed.feed.lastPubdate).toLocaleString() : '-'}
+          </InfoRow>
           <InfoRow title="Date of the last digest">
-            {new Date(feed.lastDigestSentAt).toLocaleString()}
+            {feed.lastDigestSentAt ? new Date(feed.lastDigestSentAt).toLocaleString() : '-'}
           </InfoRow>
           <div className="py-4" />
         </div>
