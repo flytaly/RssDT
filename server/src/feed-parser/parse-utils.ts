@@ -11,7 +11,7 @@ const defaultAxiosOptions: AxiosRequestConfig = {
   method: 'get',
   responseType: 'arraybuffer',
   maxContentLength: 10000000,
-  timeout: 25000,
+  timeout: 20000,
   headers: {
     Accept: '*/*',
     'User-Agent':
@@ -19,7 +19,9 @@ const defaultAxiosOptions: AxiosRequestConfig = {
       'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36',
   },
 };
+
 const axiosInstance = axios.create(defaultAxiosOptions);
+axiosInstance.defaults.timeout = 20000;
 
 type ItemWithPubdate = {
   pubdate: Date | null;
