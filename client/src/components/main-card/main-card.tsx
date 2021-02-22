@@ -26,7 +26,7 @@ const MainCard: React.FC<MainCardProps> = ({
   return (
     <article
       id="card-root"
-      className={`relative flex flex-col md:flex-row ${baseWidth} ${width} ${grow} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto overflow-y-hidden`}
+      className={`relative flex flex-col md:flex-row ${baseWidth} ${width} ${grow} min-h-100 bg-gray-100 rounded-md shadow-modal mx-auto `}
     >
       {showWarning ? <EmailVerificationWarning /> : null}
       {children}
