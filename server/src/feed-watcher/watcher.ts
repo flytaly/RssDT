@@ -26,7 +26,7 @@ export default class Watcher {
   constructor({ cron = '*/5 * * * *', concurrency = 10 }: WatcherProps = {}) {
     this.cron = cron;
     this.initJob();
-    this.queue = new PQueue({ concurrency });
+    this.queue = new PQueue({ concurrency, timeout: 1000 * 60 });
   }
 
   async update() {
