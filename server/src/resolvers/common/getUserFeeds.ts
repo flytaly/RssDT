@@ -7,4 +7,5 @@ export const getUserFeeds = (userId: number) =>
     .createQueryBuilder('uf')
     .where({ userId })
     .innerJoinAndSelect('uf.feed', 'f', 'f.id = uf.feedId')
+    .orderBy('f.lastPubdate', 'DESC')
     .getMany();
