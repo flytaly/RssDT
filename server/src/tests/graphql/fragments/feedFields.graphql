@@ -1,14 +1,15 @@
 fragment FeedFields on Feed {
-    id
-    url
-    link
-    title
-    description
-    language
-    favicon
-    imageUrl
-    imageTitle
-    lastSuccessfulUpd
-    createdAt
-    updatedAt
+  id
+  url
+  link
+  title
+  description
+  language
+  favicon
+  imageUrl
+  imageTitle
+  lastSuccessfulUpd
+  lastPubdate
+  createdAt
+  updatedAt
 }

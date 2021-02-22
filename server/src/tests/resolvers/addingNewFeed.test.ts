@@ -8,14 +8,22 @@ import { Feed } from '../../entities/Feed';
 import { Item } from '../../entities/Item';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
-import { AddFeedEmailInput, UserFeedOptionsInput, UserInfoInput } from '../../resolvers/common/inputs';
+import {
+  AddFeedEmailInput,
+  UserFeedOptionsInput,
+  UserInfoInput,
+} from '../../resolvers/common/inputs';
 import { DigestSchedule } from '../../types/enums';
 import { getSdk } from '../graphql/generated';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
 import { generateFeed } from '../test-utils/generate-feed';
 import getTestClient from '../test-utils/getClient';
 import { getSdkWithLoggedInUser } from '../test-utils/login';
-import { deleteEmails, getEmailByAddress, getSubscriptionConfirmData } from '../test-utils/test-emails';
+import {
+  deleteEmails,
+  getEmailByAddress,
+  getSubscriptionConfirmData,
+} from '../test-utils/test-emails';
 
 let dbConnection: Connection;
 
@@ -57,7 +65,11 @@ describe('Add user feed without authentication', () => {
   afterEach(() => deleteEmails());
 
   afterAll(() =>
-    Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed1.feedUrl), deleteFeedWithUrl(feed2.feedUrl)]),
+    Promise.all([
+      deleteUserWithEmail(email),
+      deleteFeedWithUrl(feed1.feedUrl),
+      deleteFeedWithUrl(feed2.feedUrl),
+    ]),
   );
 
   async function testValuesInDb(userFeedId: number, activated: boolean) {
@@ -202,6 +214,13 @@ describe('Add user feed after authentication', () => {
     expect(uf?.user).toHaveProperty('emailVerified', true);
     expect(uf).toMatchObject({ ...feedOpts, activated: true });
     expect(uf?.feed).toHaveProperty('activated', true);
+  });
+
+  test('feed should have lastPubdate timestamp', async () => {
+    const feedInDb = await Feed.findOne({ where: { url: feed2.feedUrl } });
+    const items = await Item.find({ where: { feedId: feedInDb?.id } });
+    const pubdate = Math.max(...items.map((i) => i.pubdate.getTime()));
+    expect(feedInDb?.lastPubdate?.getTime()).toBe(pubdate);
   });
 
   test('should return user feeds', async () => {

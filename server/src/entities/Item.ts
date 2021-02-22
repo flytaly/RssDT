@@ -47,7 +47,7 @@ export class Item extends BaseEntity {
   @Column({ default: '', nullable: true })
   imageUrl: string;
 
-  @Column({ nullable: true })
+  @Column()
   feedId: number;
 
   @Field(() => Feed)

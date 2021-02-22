@@ -108,6 +108,7 @@ const saveActivatedFeed = async (
   feed.activated = true;
   feed.lastUpdAttempt = ts;
   feed.lastSuccessfulUpd = ts;
+  feed.updateLastPubdate(feedItems);
   await queryRunner.manager.save(feed);
   if (feedItems?.length) {
     const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));

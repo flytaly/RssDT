@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
+import * as Dom from 'graphql-request/dist/types.dom';
 import { print } from 'graphql';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
@@ -88,6 +89,7 @@ export type Feed = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   lastSuccessfulUpd: Scalars['DateTime'];
+  lastPubdate?: Maybe<Scalars['DateTime']>;
   userFeeds?: Maybe<Array<UserFeed>>;
 };
 
@@ -364,7 +366,7 @@ export type FeedbackInput = {
 
 export type FeedFieldsFragment = (
   { __typename?: 'Feed' }
-  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'createdAt' | 'updatedAt'>
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'lastPubdate' | 'createdAt' | 'updatedAt'>
 );
 
 export type ItemFieldsFragment = (
@@ -805,6 +807,7 @@ export const FeedFieldsFragmentDoc = gql`
   imageUrl
   imageTitle
   lastSuccessfulUpd
+  lastPubdate
   createdAt
   updatedAt
 }
@@ -1134,76 +1137,76 @@ export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    activateFeed(variables: ActivateFeedMutationVariables, requestHeaders?: Headers): Promise<ActivateFeedMutation> {
+    activateFeed(variables: ActivateFeedMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ActivateFeedMutation> {
       return withWrapper(() => client.request<ActivateFeedMutation>(print(ActivateFeedDocument), variables, requestHeaders));
     },
-    addFeedToCurrentUser(variables: AddFeedToCurrentUserMutationVariables, requestHeaders?: Headers): Promise<AddFeedToCurrentUserMutation> {
+    addFeedToCurrentUser(variables: AddFeedToCurrentUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddFeedToCurrentUserMutation> {
       return withWrapper(() => client.request<AddFeedToCurrentUserMutation>(print(AddFeedToCurrentUserDocument), variables, requestHeaders));
     },
-    addFeedWithEmail(variables: AddFeedWithEmailMutationVariables, requestHeaders?: Headers): Promise<AddFeedWithEmailMutation> {
+    addFeedWithEmail(variables: AddFeedWithEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddFeedWithEmailMutation> {
       return withWrapper(() => client.request<AddFeedWithEmailMutation>(print(AddFeedWithEmailDocument), variables, requestHeaders));
     },
-    deleteMyFeeds(variables: DeleteMyFeedsMutationVariables, requestHeaders?: Headers): Promise<DeleteMyFeedsMutation> {
+    deleteMyFeeds(variables: DeleteMyFeedsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteMyFeedsMutation> {
       return withWrapper(() => client.request<DeleteMyFeedsMutation>(print(DeleteMyFeedsDocument), variables, requestHeaders));
     },
-    sendFeedback(variables: SendFeedbackMutationVariables, requestHeaders?: Headers): Promise<SendFeedbackMutation> {
+    sendFeedback(variables: SendFeedbackMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SendFeedbackMutation> {
       return withWrapper(() => client.request<SendFeedbackMutation>(print(SendFeedbackDocument), variables, requestHeaders));
     },
-    login(variables: LoginMutationVariables, requestHeaders?: Headers): Promise<LoginMutation> {
+    login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
       return withWrapper(() => client.request<LoginMutation>(print(LoginDocument), variables, requestHeaders));
     },
-    register(variables: RegisterMutationVariables, requestHeaders?: Headers): Promise<RegisterMutation> {
+    register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
       return withWrapper(() => client.request<RegisterMutation>(print(RegisterDocument), variables, requestHeaders));
     },
-    requestEmailVerification(variables?: RequestEmailVerificationMutationVariables, requestHeaders?: Headers): Promise<RequestEmailVerificationMutation> {
+    requestEmailVerification(variables?: RequestEmailVerificationMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RequestEmailVerificationMutation> {
       return withWrapper(() => client.request<RequestEmailVerificationMutation>(print(RequestEmailVerificationDocument), variables, requestHeaders));
     },
-    requestPasswordReset(variables: RequestPasswordResetMutationVariables, requestHeaders?: Headers): Promise<RequestPasswordResetMutation> {
+    requestPasswordReset(variables: RequestPasswordResetMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RequestPasswordResetMutation> {
       return withWrapper(() => client.request<RequestPasswordResetMutation>(print(RequestPasswordResetDocument), variables, requestHeaders));
     },
-    resetPassword(variables: ResetPasswordMutationVariables, requestHeaders?: Headers): Promise<ResetPasswordMutation> {
+    resetPassword(variables: ResetPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ResetPasswordMutation> {
       return withWrapper(() => client.request<ResetPasswordMutation>(print(ResetPasswordDocument), variables, requestHeaders));
     },
-    setFeedOptions(variables: SetFeedOptionsMutationVariables, requestHeaders?: Headers): Promise<SetFeedOptionsMutation> {
+    setFeedOptions(variables: SetFeedOptionsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetFeedOptionsMutation> {
       return withWrapper(() => client.request<SetFeedOptionsMutation>(print(SetFeedOptionsDocument), variables, requestHeaders));
     },
-    setLastViewedItemDate(variables: SetLastViewedItemDateMutationVariables, requestHeaders?: Headers): Promise<SetLastViewedItemDateMutation> {
+    setLastViewedItemDate(variables: SetLastViewedItemDateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetLastViewedItemDateMutation> {
       return withWrapper(() => client.request<SetLastViewedItemDateMutation>(print(SetLastViewedItemDateDocument), variables, requestHeaders));
     },
-    setOptions(variables: SetOptionsMutationVariables, requestHeaders?: Headers): Promise<SetOptionsMutation> {
+    setOptions(variables: SetOptionsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetOptionsMutation> {
       return withWrapper(() => client.request<SetOptionsMutation>(print(SetOptionsDocument), variables, requestHeaders));
     },
-    unsubscribeByToken(variables: UnsubscribeByTokenMutationVariables, requestHeaders?: Headers): Promise<UnsubscribeByTokenMutation> {
+    unsubscribeByToken(variables: UnsubscribeByTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UnsubscribeByTokenMutation> {
       return withWrapper(() => client.request<UnsubscribeByTokenMutation>(print(UnsubscribeByTokenDocument), variables, requestHeaders));
     },
-    updateUserInfo(variables: UpdateUserInfoMutationVariables, requestHeaders?: Headers): Promise<UpdateUserInfoMutation> {
+    updateUserInfo(variables: UpdateUserInfoMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateUserInfoMutation> {
       return withWrapper(() => client.request<UpdateUserInfoMutation>(print(UpdateUserInfoDocument), variables, requestHeaders));
     },
-    verifyEmail(variables: VerifyEmailMutationVariables, requestHeaders?: Headers): Promise<VerifyEmailMutation> {
+    verifyEmail(variables: VerifyEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyEmailMutation> {
       return withWrapper(() => client.request<VerifyEmailMutation>(print(VerifyEmailDocument), variables, requestHeaders));
     },
-    getFeedInfoByToken(variables: GetFeedInfoByTokenQueryVariables, requestHeaders?: Headers): Promise<GetFeedInfoByTokenQuery> {
+    getFeedInfoByToken(variables: GetFeedInfoByTokenQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetFeedInfoByTokenQuery> {
       return withWrapper(() => client.request<GetFeedInfoByTokenQuery>(print(GetFeedInfoByTokenDocument), variables, requestHeaders));
     },
-    me(variables?: MeQueryVariables, requestHeaders?: Headers): Promise<MeQuery> {
+    me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
       return withWrapper(() => client.request<MeQuery>(print(MeDocument), variables, requestHeaders));
     },
-    meWithFeeds(variables?: MeWithFeedsQueryVariables, requestHeaders?: Headers): Promise<MeWithFeedsQuery> {
+    meWithFeeds(variables?: MeWithFeedsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeWithFeedsQuery> {
       return withWrapper(() => client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables, requestHeaders));
     },
-    meWithOptions(variables?: MeWithOptionsQueryVariables, requestHeaders?: Headers): Promise<MeWithOptionsQuery> {
+    meWithOptions(variables?: MeWithOptionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeWithOptionsQuery> {
       return withWrapper(() => client.request<MeWithOptionsQuery>(print(MeWithOptionsDocument), variables, requestHeaders));
     },
-    myFeedItems(variables: MyFeedItemsQueryVariables, requestHeaders?: Headers): Promise<MyFeedItemsQuery> {
+    myFeedItems(variables: MyFeedItemsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyFeedItemsQuery> {
       return withWrapper(() => client.request<MyFeedItemsQuery>(print(MyFeedItemsDocument), variables, requestHeaders));
     },
-    myFeeds(variables?: MyFeedsQueryVariables, requestHeaders?: Headers): Promise<MyFeedsQuery> {
+    myFeeds(variables?: MyFeedsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyFeedsQuery> {
       return withWrapper(() => client.request<MyFeedsQuery>(print(MyFeedsDocument), variables, requestHeaders));
     },
-    myOptions(variables?: MyOptionsQueryVariables, requestHeaders?: Headers): Promise<MyOptionsQuery> {
+    myOptions(variables?: MyOptionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyOptionsQuery> {
       return withWrapper(() => client.request<MyOptionsQuery>(print(MyOptionsDocument), variables, requestHeaders));
     },
-    users(variables?: UsersQueryVariables, requestHeaders?: Headers): Promise<UsersQuery> {
+    users(variables?: UsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UsersQuery> {
       return withWrapper(() => client.request<UsersQuery>(print(UsersDocument), variables, requestHeaders));
     }
   };

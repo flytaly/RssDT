@@ -21,6 +21,7 @@ const defaultAxiosOptions: AxiosRequestConfig = {
 };
 
 const axiosInstance = axios.create(defaultAxiosOptions);
+// https://github.com/axios/axios/issues/1503
 axiosInstance.defaults.timeout = 20000;
 
 type ItemWithPubdate = {

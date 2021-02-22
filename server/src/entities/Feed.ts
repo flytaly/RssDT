@@ -11,8 +11,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { filterMeta } from '../feed-parser/filter-item';
-import { UserFeed } from './UserFeed';
 import { Item } from './Item';
+import { UserFeed } from './UserFeed';
 
 @ObjectType()
 @Entity()
@@ -20,6 +20,14 @@ export class Feed extends BaseEntity {
   addMeta(meta?: FeedParser.Meta) {
     const metaFiltered = filterMeta(meta);
     Object.assign(this, metaFiltered);
+  }
+
+  updateLastPubdate(items: Array<{ pubdate?: Date | null }>) {
+    const lastPubdate = items.reduce<Date | null>((prevDate, { pubdate }) => {
+      if (!pubdate) return prevDate;
+      return !prevDate || pubdate > prevDate ? pubdate : prevDate;
+    }, null);
+    if (lastPubdate) this.lastPubdate = lastPubdate;
   }
 
   @Field()
@@ -69,6 +77,10 @@ export class Feed extends BaseEntity {
   @Field(() => Date)
   @Column({ default: new Date(0) })
   lastSuccessfulUpd: Date;
+
+  @Field(() => Date, { nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
+  lastPubdate?: Date;
 
   // TODO: should be protected
   @Field(() => [UserFeed], { nullable: true })

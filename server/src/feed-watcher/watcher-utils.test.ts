@@ -38,7 +38,10 @@ describe('updateFeedData', () => {
   afterAll(() => Promise.all([deleteFeedWithUrl(feedUrl)]));
 
   test("should update feed's data", async () => {
-    const newItems = [generateItem(new Date(Date.now() - 1000)), generateItem(new Date(Date.now()))];
+    const newItems = [
+      generateItem(new Date(Date.now() - 1000)),
+      generateItem(new Date(Date.now())),
+    ];
     const newMeta = {
       title: 'new Title',
       description: 'new description',
@@ -61,5 +64,12 @@ describe('updateFeedData', () => {
     newItems.forEach(({ guid }) => {
       expect(feedUpd.items.find((i) => guid === i.guid)).toBeTruthy();
     });
+  });
+
+  test('feed should have correct lastPubdate timestamp', async () => {
+    const feedInDb = await Feed.findOne({ where: { url: feedUrl } });
+    const items = await Item.find({ where: { feedId: feedInDb?.id } });
+    const pubdate = Math.max(...items.map((i) => i.pubdate.getTime()));
+    expect(feedInDb?.lastPubdate?.getTime()).toBe(pubdate);
   });
 });

@@ -45,8 +45,15 @@ export const generateFeed = ({
   meta?: Partial<FeedMeta>;
   items?: Partial<FeedItem>[];
 } = {}) => {
+  const now = Date.now();
+  const day = 1000 * 60 * 60 * 24;
   if (!meta) meta = generateMeta();
-  if (!items) items = [generateItem()];
+  if (!items)
+    items = [
+      generateItem(new Date(now - 2 * day)),
+      generateItem(new Date(now - day)),
+      generateItem(new Date(now)),
+    ];
   if (!feedUrl) feedUrl = faker.internet.url();
   let text = `<?xml version="1.0" encoding="utf-8"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
