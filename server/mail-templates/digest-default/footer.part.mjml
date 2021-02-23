@@ -12,7 +12,7 @@
                     </div>
                     <div>
                         <a href="{{unsubscribeUrl}}">Unsubscribe</a> or
-                        <a href="https://feedmailu.com/feeds/manage">manage feeds</a>
+                        <a href="https://feedmailu.com/manage">manage feeds</a>
                     </div>
                 </mj-text>
             </mj-column>
