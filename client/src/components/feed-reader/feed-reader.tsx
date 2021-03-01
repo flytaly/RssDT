@@ -25,7 +25,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const feedList = (
-    <div className="bg-sidebar h-full py-2 overflow-y-scroll">
+    <div className="bg-sidebar h-full py-2">
       <FeedSidebar feeds={myFeeds} loading={loading} />
       <button
         type="button"
