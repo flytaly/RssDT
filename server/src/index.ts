@@ -14,7 +14,6 @@ const entry = async () => {
   app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
-
   initSession(app, redis);
   await initDbConnection();
   await initApolloServer(app, redis);

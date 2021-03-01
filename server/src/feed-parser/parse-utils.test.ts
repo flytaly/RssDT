@@ -39,7 +39,9 @@ describe('Test feed stream', () => {
 
 describe('Find feed url in html <head>', () => {
   beforeAll(() => {
-    Object.values(pages).map((page) => nock(page.url.origin).persist().get(page.url.pathname).reply(200, page.body));
+    Object.values(pages).map((page) =>
+      nock(page.url.origin).persist().get(page.url.pathname).reply(200, page.body),
+    );
   });
 
   afterAll(() => {
@@ -98,7 +100,12 @@ describe('Find feed url in html <head>', () => {
 describe('Test feed parser', () => {
   beforeEach(() => {
     feeds.forEach(({ url, mock, updateMock }) => {
-      nock(url.origin).get(url.pathname).reply(200, mock).get(url.pathname).once().reply(200, updateMock);
+      nock(url.origin)
+        .get(url.pathname)
+        .reply(200, mock)
+        .get(url.pathname)
+        .once()
+        .reply(200, updateMock);
     });
   });
 
@@ -122,7 +129,9 @@ describe('Test feed parser', () => {
     it(`should return only new items after update ${url.hostname}`, async () => {
       const { feedItems: items } = await getNewItems(url.href);
       const { feedItems: itemsUpd } = await getNewItems(url.href, items);
-      const intersect = itemsUpd.filter(({ pubdate }) => items[items.length - 1].pubdate! > pubdate!);
+      const intersect = itemsUpd.filter(
+        ({ pubdate }) => items[items.length - 1].pubdate! > pubdate!,
+      );
       expect(items.length).toBe(itemsNum);
       expect(itemsUpd.length).toBe(itemsNumUpdated);
       expect(intersect.length).toBe(0);

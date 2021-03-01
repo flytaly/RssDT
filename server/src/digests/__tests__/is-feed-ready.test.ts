@@ -24,7 +24,12 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-function feedReadyTest(now: string, prevDigestTime: string, isReady: boolean, userFeed_ = userFeed) {
+function feedReadyTest(
+  now: string,
+  prevDigestTime: string,
+  isReady: boolean,
+  userFeed_ = userFeed,
+) {
   mockDate(now);
   userFeed_.lastDigestSentAt = new Date(prevDigestTime);
   expect(isFeedReady(userFeed_)).toBe(isReady);

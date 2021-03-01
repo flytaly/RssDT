@@ -1,7 +1,16 @@
 import { Redis } from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
-import { EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX, SUBSCRIPTION_CONFIRM_PREFIX } from '../../constants';
-import { sendConfirmEmail, sendConfirmSubscription, sendPasswordReset, ConfirmFeedProps } from '../../mail/dispatcher';
+import {
+  EMAIL_CONFIRM_PREFIX,
+  PASSWORD_RESET_PREFIX,
+  SUBSCRIPTION_CONFIRM_PREFIX,
+} from '../../constants';
+import {
+  sendConfirmEmail,
+  sendConfirmSubscription,
+  sendPasswordReset,
+  ConfirmFeedProps,
+} from '../../mail/dispatcher';
 
 export async function verificationEmail(redis: Redis, userId: number, email: string) {
   const token = uuidv4();

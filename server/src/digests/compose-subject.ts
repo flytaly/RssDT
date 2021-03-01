@@ -7,7 +7,11 @@ export const tokens = {
 };
 const defaultTemplate = `${tokens.title}: ${tokens.digestName} digest`;
 
-export const composeEmailSubject = (feedTitle: string, digestType: DigestSchedule, template?: string | null) => {
+export const composeEmailSubject = (
+  feedTitle: string,
+  digestType: DigestSchedule,
+  template?: string | null,
+) => {
   const digestName = digestNames[digestType];
 
   if (!template) template = defaultTemplate;

@@ -17,14 +17,18 @@ const shareProviders: DigestShare[] = [
   {
     id: ShareId.evernote,
     getUrl: (url, title) =>
-      `http://www.evernote.com/clip.action?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`,
+      `http://www.evernote.com/clip.action?url=${encodeURIComponent(
+        url,
+      )}&title=${encodeURIComponent(title)}`,
     iconUrl: `${process.env.FRONTEND_URL}/static/share/evernote_32.png`,
     title: 'Evernote',
   },
   {
     id: ShareId.trello,
     getUrl: (url, title) =>
-      `https://trello.com/en/add-card?url=${encodeURIComponent(url)}&name=${encodeURIComponent(title)}`,
+      `https://trello.com/en/add-card?url=${encodeURIComponent(url)}&name=${encodeURIComponent(
+        title,
+      )}`,
     iconUrl: `${process.env.FRONTEND_URL}/static/share/trello_32.png`,
     title: 'Trello',
   },

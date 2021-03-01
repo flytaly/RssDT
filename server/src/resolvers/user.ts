@@ -24,7 +24,12 @@ import { ArgumentError } from './common/ArgumentError';
 import { resetPasswordEmail, verificationEmail } from './common/confirmationMail';
 import { activateAllUserFeeds } from './common/feedDBQueries';
 import { getUserFeeds } from './common/getUserFeeds';
-import { EmailPasswordInput, OptionsInput, PasswordResetInput, UserInfoInput } from './common/inputs';
+import {
+  EmailPasswordInput,
+  OptionsInput,
+  PasswordResetInput,
+  UserInfoInput,
+} from './common/inputs';
 import { createUser, updateUser, updateUserOptions } from './common/userDBQueries';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
@@ -154,7 +159,11 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  async verifyEmail(@Ctx() { redis }: MyContext, @Arg('token') token: string, @Arg('userId') userId: string) {
+  async verifyEmail(
+    @Ctx() { redis }: MyContext,
+    @Arg('token') token: string,
+    @Arg('userId') userId: string,
+  ) {
     const key = EMAIL_CONFIRM_PREFIX + token;
     const id = await redis.get(key);
     if (!id || id !== userId) {
@@ -204,7 +213,10 @@ export class UserResolver {
   @UseMiddleware(auth())
   @NormalizeAndValidateArgs([UserInfoInput, 'userInfo'])
   @Mutation(() => User)
-  async updateUserInfo(@Ctx() { req }: MyContext, @Arg('userInfo') { locale, timeZone }: UserInfoInput) {
+  async updateUserInfo(
+    @Ctx() { req }: MyContext,
+    @Arg('userInfo') { locale, timeZone }: UserInfoInput,
+  ) {
     const user = await User.findOne(req.session.userId);
     if (!req.session.userId || !user) return null;
     if (locale) user.locale = locale;

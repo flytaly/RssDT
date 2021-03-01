@@ -1,13 +1,9 @@
-import 'reflect-metadata';
-import '../../dotenv';
-import { Connection } from 'typeorm';
 import fs from 'fs';
+import 'reflect-metadata';
+import { Connection } from 'typeorm';
 import { initDbConnection } from '../../dbConnection';
+import '../../dotenv';
 import { Feed } from '../../entities/Feed';
-import { UserFeed } from '../../entities/UserFeed';
-import { User } from '../../entities/User';
-import { Options } from '../../entities/Options';
-import { DigestSchedule, TernaryState, Theme } from '../../types/enums';
 import { composeDigest } from '../compose-mail';
 import { createDefaultUserFeed } from './utils';
 

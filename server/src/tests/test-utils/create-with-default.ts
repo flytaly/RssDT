@@ -1,7 +1,10 @@
 import { DeepPartial, getRepository } from 'typeorm';
 
 // https://github.com/typeorm/typeorm/issues/5152#issuecomment-666601851
-export default function createWithDefaults<T>(entityClass: new () => T, entityLike: DeepPartial<T> = {}): T {
+export default function createWithDefaults<T>(
+  entityClass: new () => T,
+  entityLike: DeepPartial<T> = {},
+): T {
   const repository = getRepository(entityClass);
   const entity = repository.create(entityLike);
   const colsWithDefaults = repository.metadata.columns.filter((x) => {

@@ -8,7 +8,10 @@ const getTestClient = () => {
   // const originalRequest = client.request.bind(client);
   // use rawRequest to get access to cookies
   const lastHeaders: Headers[] = [];
-  client.request = async <T = any, V = Variables>(document: RequestDocument, variables?: V): Promise<T> => {
+  client.request = async <T = any, V = Variables>(
+    document: RequestDocument,
+    variables?: V,
+  ): Promise<T> => {
     const response = await client.rawRequest(document.toString(), variables);
     lastHeaders.push(response.headers);
     return response.data;
