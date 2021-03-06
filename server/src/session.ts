@@ -18,8 +18,8 @@ export const initSession = (app: Express, redis: Redis.Redis) => {
       saveUninitialized: false,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 5, // 5 years
-        httpOnly: true,
-        sameSite: 'lax', // csrf
+        httpOnly: IS_PROD,
+        sameSite: IS_PROD ? 'lax' : 'none', // csrf
         secure: IS_PROD,
       },
     }),
