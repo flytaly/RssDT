@@ -164,7 +164,7 @@ pre {
   }
 
   .feed-item-body a {
-    @apply underline text-link;
+    @apply underline text-link break-all;
   }
 
   .arrow-tr {
