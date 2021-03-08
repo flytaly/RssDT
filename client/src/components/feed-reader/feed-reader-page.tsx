@@ -9,7 +9,7 @@ const FeedReaderPage: NextPage<{ id?: string }> = ({ id }) => {
   return (
     <Layout>
       <MainCard big onlyWithVerifiedEmail>
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full overflow-hidden">
           <FeedNavBar />
           <FeedReader id={id} />
         </div>

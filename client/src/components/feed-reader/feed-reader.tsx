@@ -25,7 +25,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const feedList = (
-    <div className="bg-sidebar h-full py-2">
+    <div className="bg-sidebar h-full py-2 overflow-hidden">
       <FeedSidebar feeds={myFeeds} loading={loading} />
       <button
         type="button"
@@ -50,7 +50,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
         <div className="flex-shrink-0">{feedList}</div>
         <button
           type="button"
-          className="flex-1 py-2 px-2 mx-auto group"
+          className="flex flex-col flex-1 py-2 px-2 mx-auto group"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           title="scroll to the top"
         >

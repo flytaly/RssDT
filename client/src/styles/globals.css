@@ -46,6 +46,7 @@ a:focus-visible {
   outline-offset: 1px;
 }
 
+button,
 textarea,
 input {
   -webkit-appearance: none;
