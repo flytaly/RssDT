@@ -46,6 +46,11 @@ a:focus-visible {
   outline-offset: 1px;
 }
 
+textarea,
+input {
+  -webkit-appearance: none;
+}
+
 @layer base {
   input::placeholder {
     @apply text-gray-400;
