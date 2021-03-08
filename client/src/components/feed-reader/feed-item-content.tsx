@@ -136,25 +136,27 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
           </div>
         )}
       </div>
-      <footer className="flex justify-end mt-1 space-x-1 text-xs">
-        <FooterBtnList Icon={PaperClipIcon} text={`enclosures: ${item.enclosures?.length}`}>
-          {item.enclosures?.map((enc) => (
-            <div key={enc.url}>
-              <a
-                className="flex hover:underline hover:bg-gray-200 whitespace-nowrap p-1 z-30"
-                href={enc.url}
-                title={enc.url}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div style={{ maxWidth: '10rem' }} className="overflow-hidden overflow-ellipsis">
-                  {enc.url}
-                </div>
-                {enc.type ? <span>{` (${enc.type})`}</span> : null}
-              </a>
-            </div>
-          ))}
-        </FooterBtnList>
+      <footer className="flex justify-end mt-1 space-x-1 text-xs w-full">
+        {item.enclosures?.length ? (
+          <FooterBtnList Icon={PaperClipIcon} text={`enclosures: ${item.enclosures?.length}`}>
+            {item.enclosures?.map((enc) => (
+              <div key={enc.url}>
+                <a
+                  className="flex hover:underline hover:bg-gray-200 whitespace-nowrap p-1 z-30"
+                  href={enc.url}
+                  title={enc.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div style={{ maxWidth: '10rem' }} className="overflow-hidden overflow-ellipsis">
+                    {enc.url}
+                  </div>
+                  {enc.type ? <span>{` (${enc.type})`}</span> : null}
+                </a>
+              </div>
+            ))}
+          </FooterBtnList>
+        ) : null}
         {item.link ? (
           <FooterBtnList Icon={ShareIcon} text="share">
             {shareProviders.map(({ id, getUrl, iconUrl, title }) => (
