@@ -23,6 +23,7 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
     sanitizeHtml(dirty, {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'iframe']),
       allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
         img: ['src', 'width', 'height'],
         iframe: ['src', 'width', 'height'],
       },
