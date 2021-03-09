@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import React, { RefObject, useCallback, useState } from 'react';
 import MailIcon from '../../../public/static/envelope.svg';
+import EditIcon from '../../../public/static/edit.svg';
 import ItemBigIcon from '../../../public/static/item-big.svg';
 import ItemMediumIcon from '../../../public/static/item-middle.svg';
 import ItemSmallIcon from '../../../public/static/item-small.svg';
@@ -66,10 +67,18 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
             target="_blank"
             rel="noreferrer"
             title="open the feed's site"
-            className="hover:text-link"
+            className="hover:text-link mx-1"
           >
-            <ExtLinkIcon className="icon-btn w-4 h-4 mx-1" />
+            <ExtLinkIcon className="w-4 h-4" />
           </a>
+          <button
+            type="button"
+            title="Edit feed"
+            className="icon-btn h-4 w-4"
+            onClick={() => setEditFeedModal(true)}
+          >
+            <EditIcon />
+          </button>
           <button
             type="button"
             title={
@@ -77,15 +86,12 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
                 ? 'Email digest of this feed is disabled'
                 : 'You are receiving email digests of this feed'
             }
-            className="icon-btn h-4 w-4 ml-1 mr-2"
-            style={{ lineHeight: '1rem' }}
+            className={`icon-btn h-4 w-4 ml-1 mr-2 ${
+              isDigestDisable ? 'text-gray-400' : 'text-gray-800'
+            }`}
             onClick={() => setEditFeedModal(true)}
           >
-            <MailIcon
-              className={`w-auto h-4 ${
-                isDigestDisable ? 'text-gray-400' : 'text-gray-800'
-              } hover:text-primary`}
-            />
+            <MailIcon />
           </button>
           <div className="ml-auto" />
           {toggleSearch ? (
