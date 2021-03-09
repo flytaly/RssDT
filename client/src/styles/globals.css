@@ -116,15 +116,16 @@ pre {
   }
 
   .icon-btn {
-    transition: transform 100ms ease;
+    /* transition: transform 100ms ease; */
   }
 
   .icon-btn:hover {
-    transform: scale(1.1);
+    @apply text-primary;
   }
-  .icon-btn:active {
+
+  /* .icon-btn:active {
     transform: scale(0.97);
-  }
+  } */
 
   .submit-btn {
     @apply text-white uppercase rounded-xl bg-primary py-0.5 px-4 transition-transform ease-in-out bg-opacity-100;
