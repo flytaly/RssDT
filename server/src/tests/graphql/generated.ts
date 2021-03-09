@@ -62,6 +62,7 @@ export type UserFeed = {
   user: User;
   feed: Feed;
   activated: Scalars['Boolean'];
+  title?: Maybe<Scalars['String']>;
   schedule: DigestSchedule;
   withContentTable: TernaryState;
   itemBody: TernaryState;
@@ -330,6 +331,7 @@ export type UserFeedResponse = {
 };
 
 export type UserFeedOptionsInput = {
+  title?: Maybe<Scalars['String']>;
   schedule?: Maybe<Scalars['String']>;
   withContentTable?: Maybe<Scalars['String']>;
   itemBody?: Maybe<Scalars['String']>;
@@ -385,7 +387,7 @@ export type OptionsFieldsFragment = (
 
 export type UserFeedFieldsFragment = (
   { __typename?: 'UserFeed' }
-  & Pick<UserFeed, 'id' | 'activated' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'filter' | 'lastViewedItemDate' | 'lastDigestSentAt' | 'newItemsCount' | 'createdAt' | 'updatedAt'>
+  & Pick<UserFeed, 'id' | 'activated' | 'title' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'filter' | 'lastViewedItemDate' | 'lastDigestSentAt' | 'newItemsCount' | 'createdAt' | 'updatedAt'>
 );
 
 export type UserFieldsFragment = (
@@ -846,6 +848,7 @@ export const UserFeedFieldsFragmentDoc = gql`
     fragment UserFeedFields on UserFeed {
   id
   activated
+  title
   schedule
   withContentTable
   itemBody

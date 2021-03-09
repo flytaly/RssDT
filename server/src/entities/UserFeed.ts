@@ -32,6 +32,10 @@ export class UserFeed extends BaseEntity {
   @Column({ default: false })
   activated: boolean;
 
+  @Field({ nullable: true })
+  @Column({ length: 50, nullable: true })
+  title?: string;
+
   @Field(() => DigestSchedule)
   @Column({ type: 'enum', enum: DigestSchedule, default: DigestSchedule.disable })
   schedule: DigestSchedule;

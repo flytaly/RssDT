@@ -117,6 +117,7 @@ describe('UserFeed options', () => {
     const { myFeeds } = await sdk.myFeeds();
     expect(myFeeds?.[0]).toMatchObject({
       activated: false,
+      title: null,
       schedule: DigestSchedule.disable,
       withContentTable: TernaryState.default,
       itemBody: TernaryState.default,
@@ -127,6 +128,7 @@ describe('UserFeed options', () => {
   });
   test('should update user feed options', async () => {
     const opts: UserFeedOptionsInput = {
+      title: 'test title',
       schedule: DigestSchedule.every6hours,
       withContentTable: TernaryState.disable,
       itemBody: TernaryState.enable,

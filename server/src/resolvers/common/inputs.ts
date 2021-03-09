@@ -83,6 +83,10 @@ export class OptionsInput {
 
 @InputType()
 export class UserFeedOptionsInput {
+  @InputMetadata('userFeedTitle')
+  @Field({ nullable: true })
+  title?: string;
+
   @Field({ nullable: true })
   schedule?: DigestSchedule;
 

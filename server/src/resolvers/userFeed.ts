@@ -172,6 +172,7 @@ export class UserFeedResolver {
   }
 
   @UseMiddleware(auth())
+  @NormalizeAndValidateArgs([UserFeedOptionsInput, 'opts'])
   @Mutation(() => UserFeedResponse)
   async setFeedOptions(
     @Ctx() { req }: MyContext,

@@ -41,7 +41,7 @@ export const buildAndSendDigests = async (feedId: number) => {
           const result = await transport.sendMail({
             from: process.env.MAIL_FROM,
             to: uf.user.email,
-            subject: composeEmailSubject(feed.title, uf.schedule, customSubject),
+            subject: composeEmailSubject(uf.title || feed.title, uf.schedule, customSubject),
             text,
             html,
           });

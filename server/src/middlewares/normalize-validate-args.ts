@@ -11,8 +11,9 @@ const VAL_METADATA_KEY = Symbol('validate_meta');
 type UserFields = 'email' | 'password' | 'feedUrl' | 'locale' | 'timeZone';
 type OptionsFields = 'shareList' | 'customSubject' | 'dailyDigestHour';
 type FeedbackFields = 'feedbackText';
+type UserFeedFields = 'userFeedTitle';
 
-type InputType = UserFields | OptionsFields | FeedbackFields;
+type InputType = UserFields | OptionsFields | FeedbackFields | UserFeedFields;
 
 const validates: Record<InputType, AnySchema> = {
   email: Joi.string().email().required(),
@@ -28,6 +29,7 @@ const validates: Record<InputType, AnySchema> = {
   customSubject: Joi.string().max(50),
   dailyDigestHour: Joi.number().integer().max(23).min(0),
   feedbackText: Joi.string().required().max(10000),
+  userFeedTitle: Joi.string().max(50),
 };
 
 const pass = (arg: any) => arg;
@@ -56,6 +58,7 @@ const normalizes: Record<InputType, Function> = {
   shareList: (arg: Array<string>) => (arg === null ? [] : arg),
   customSubject: pass,
   dailyDigestHour: pass,
+  userFeedTitle: (arg: string) => arg?.trim(),
 };
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {

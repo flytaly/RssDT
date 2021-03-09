@@ -1,6 +1,7 @@
 fragment UserFeedFields on UserFeed {
   id
   activated
+  title
   schedule
   withContentTable
   itemBody

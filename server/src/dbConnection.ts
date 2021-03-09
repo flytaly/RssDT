@@ -9,22 +9,16 @@ import { Enclosure } from './entities/Enclosure';
 import { Options } from './entities/Options';
 
 export const initDbConnection = async () => {
-  const migrationPath = path.join(
-    __dirname,
-    './migrations/',
-    IS_PROD ? 'production/*' : 'development/*',
-  );
-
   const dbConnection = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: IS_DEV,
-    migrations: IS_TEST ? undefined : [migrationPath],
+    migrations: IS_TEST ? undefined : [path.join(__dirname, './migrations/*')],
     dropSchema: IS_TEST,
-    synchronize: !IS_PROD,
+    synchronize: IS_TEST,
     entities: [User, Feed, UserFeed, Item, Enclosure, Options],
   });
-  if (!IS_DEV) await dbConnection.runMigrations();
+  if (!IS_TEST) await dbConnection.runMigrations();
 
   return dbConnection;
 };
