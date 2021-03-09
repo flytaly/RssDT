@@ -29,7 +29,7 @@ const validates: Record<InputType, AnySchema> = {
   customSubject: Joi.string().max(50),
   dailyDigestHour: Joi.number().integer().max(23).min(0),
   feedbackText: Joi.string().required().max(10000),
-  userFeedTitle: Joi.string().max(50),
+  userFeedTitle: Joi.string().max(50).optional().allow(null),
 };
 
 const pass = (arg: any) => arg;
@@ -58,7 +58,7 @@ const normalizes: Record<InputType, Function> = {
   shareList: (arg: Array<string>) => (arg === null ? [] : arg),
   customSubject: pass,
   dailyDigestHour: pass,
-  userFeedTitle: (arg: string) => arg?.trim(),
+  userFeedTitle: (arg: string) => arg?.trim() || null,
 };
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {

@@ -30,7 +30,7 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
                 className={`group flex pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
               >
                 <span className="overflow-ellipsis overflow-hidden group-hover:underline">
-                  {uf.feed.title || uf.feed.url}
+                  {uf.title || uf.feed.title || uf.feed.url}
                 </span>
                 {hasNew ? (
                   <>

@@ -11,8 +11,9 @@ import {
 } from '../../generated/graphql';
 import { DigestSchedule, periodNames } from '../../types';
 import GraphQLError from '../graphql-error';
-import InputUnderline from './input-underline';
+import InputUnderline, { InputUnderlineProps } from './input-underline';
 import SelectUnderline, { SelectProps } from './select-underline';
+import EmailIcon from '../../../public/static/envelope.svg';
 
 interface FeedOptionsFormProps {
   feed: UserFeed | null;
@@ -33,6 +34,23 @@ const LabeledSelect: React.FC<{ title: string } | SelectProps> = ({
   </label>
 );
 
+const LabeledInput: React.FC<{ title: string } | InputUnderlineProps> = ({
+  title,
+  children,
+  ...props
+}) => (
+  <label className="flex mb-3">
+    <b className="font-medium" style={{ minWidth: '30%' }}>
+      {title}
+    </b>
+    <span className="ml-2 flex-1">
+      <InputUnderline {...props} className="w-full">
+        {children}
+      </InputUnderline>
+    </span>
+  </label>
+);
+
 const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
   const { data } = useMyOptionsQuery();
   const { withContentTableDefault, attachmentsDefault, itemBodyDefault } = data?.myOptions || {};
@@ -46,18 +64,39 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
   };
 
   if (!feed) return null;
-  const { id, attachments, itemBody, schedule, theme, withContentTable, filter } = feed;
+  const { id, attachments, itemBody, schedule, theme, withContentTable, filter, title } = feed;
   return (
     <Formik
-      initialValues={{ attachments, itemBody, schedule, theme, withContentTable, filter }}
-      onSubmit={async (opts) => {
-        setOptions({ variables: { id, opts } })
-          .then((result) => setErrorMsg(result.data?.setFeedOptions.errors?.[0].message || ''))
-          .catch((error) => setErrorMsg(error.message));
+      initialValues={{ attachments, itemBody, schedule, theme, withContentTable, filter, title }}
+      onSubmit={async (opts, { setSubmitting }) => {
+        setSubmitting(true);
+        try {
+          const res = await setOptions({ variables: { id, opts } });
+          setErrorMsg(res.data?.setFeedOptions.errors?.[0].message || '');
+        } catch (error) {
+          setErrorMsg(error.message);
+        }
+        setSubmitting(false);
       }}
     >
       {({ values, handleChange, handleSubmit, isSubmitting }) => (
         <form className="flex flex-col" method="post" onSubmit={handleSubmit}>
+          <h4 className="flex items-center font-semibold pl-2 mb-3 text-base bg-primary-2">
+            Feed settings
+          </h4>
+          <LabeledInput
+            name="title"
+            title="Title"
+            placeholder={feed.feed.title || ''}
+            value={values.title || ''}
+            onChange={handleChange}
+            maxLength={50}
+          />
+
+          <h4 className="flex items-center font-semibold pl-2 mb-3 text-base bg-primary-2">
+            <EmailIcon className="h-4 mr-1" />
+            Email digest settings
+          </h4>
           <LabeledSelect
             name="schedule"
             title="Email Digest"
@@ -72,7 +111,6 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
               disabled
             </option>
           </LabeledSelect>
-
           <LabeledSelect
             name="theme"
             title="Theme"
@@ -83,7 +121,6 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <option value={Theme.Default}>Default</option>
             <option value={Theme.Text}>Text</option>
           </LabeledSelect>
-
           <LabeledSelect
             name="withContentTable"
             title="Table of Content"
@@ -95,7 +132,6 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <option value={TernaryState.Disable}>Disable</option>
             <option value={TernaryState.Enable}>Enable</option>
           </LabeledSelect>
-
           <LabeledSelect
             name="attachments"
             title="Attachments"
@@ -107,7 +143,6 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <option value={TernaryState.Disable}>Disable</option>
             <option value={TernaryState.Enable}>Enable</option>
           </LabeledSelect>
-
           <LabeledSelect
             name="itemBody"
             title="Feed items content"
@@ -119,7 +154,6 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <option value={TernaryState.Disable}>Disable</option>
             <option value={TernaryState.Enable}>Enable</option>
           </LabeledSelect>
-
           <div className="mb-3">
             <div>
               <b>Filter items. </b>
@@ -134,20 +168,18 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
             <InputUnderline
               name="filter"
               title="Filter items"
-              className="w-full px-2 font-medium"
+              className="w-full px-2 font-medium bg-gray-50"
               value={values.filter || ''}
               onChange={handleChange}
               maxLength={250}
               disabled={isSubmitting}
             />
           </div>
-
           {errorMsg ? (
             <div className="text-error my-2">
               <GraphQLError error={errorMsg} />
             </div>
           ) : null}
-
           <button type="submit" className="btn bg-primary w-36" disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update'}
           </button>

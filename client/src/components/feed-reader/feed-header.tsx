@@ -58,7 +58,9 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
     <>
       {userFeed && (
         <span className="flex items-center w-full">
-          <h3 className="font-bold text-lg max-w-sm">{userFeed.feed.title || userFeed.feed.url}</h3>
+          <h3 className="font-bold text-lg max-w-sm">
+            {userFeed.title || userFeed.feed.title || userFeed.feed.url}
+          </h3>
           <a
             href={userFeed?.feed.link || userFeed?.feed.url}
             target="_blank"

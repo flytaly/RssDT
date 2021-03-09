@@ -53,7 +53,7 @@ const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ fee
     <ul>
       {feeds.map((uf) => (
         <li key={uf.id}>
-          <b>{uf.feed.title}</b>
+          <b>{uf.title || uf.feed.title}</b>
         </li>
       ))}
     </ul>
@@ -93,7 +93,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
             <Row isOdd={!(idx % 2)} key={uf.id}>
               <Cell name="Feed">
                 <Link href={`/feed/${uf.id}`}>
-                  <a className="underline">{uf.feed.title}</a>
+                  <a className="underline">{uf.title || uf.feed.title}</a>
                 </Link>
               </Cell>
               <Cell className="text-xs" name="Added">
