@@ -64,7 +64,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
 
   return (
     <main className="flex flex-col flex-grow space-y-4 p-3">
-      {!items.length && (
+      {!items.length && !loading && (
         <div className="self-center font-bold">
           {!filter ? "The feed doesn't have items" : "Couldn't find posts that match your query"}
         </div>
