@@ -8,7 +8,7 @@ import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
 
 const Logout: NextPage = () => {
-  const { data } = useMeQuery({ skip: isServer() });
+  const { data } = useMeQuery({ ssr: false });
   const [logout] = useLogoutMutation();
   const router = useRouter();
   const client = useApolloClient();

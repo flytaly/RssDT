@@ -15,7 +15,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
-  const { data, loading } = useMyFeedsQuery({ skip: isServer() });
+  const { data, loading } = useMyFeedsQuery({ ssr: false });
   const [readerOpts, setReaderOpts] = useLocalState();
   const [searchFilter, setSearchFilter] = useState('');
   useEffect(() => {

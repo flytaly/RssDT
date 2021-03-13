@@ -42,7 +42,7 @@ const ifLogoutMsg: MessageItem[] = [
 ];
 
 const Home: NextPage = () => {
-  const { data, loading } = useMeQuery({ skip: isServer() });
+  const { data, loading } = useMeQuery({ ssr: false });
   const [messages, setMessages] = useState<MessageItem[]>([]);
 
   const items = [...infoMessages, ...(!loading && !data?.me ? ifLogoutMsg : []), ...messages];

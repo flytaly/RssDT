@@ -16,7 +16,7 @@ const MainCard: React.FC<MainCardProps> = ({
   onlyWithVerifiedEmail = false,
 }) => {
   const { fullWidth } = useContext(AppStateCtx);
-  const { data, loading } = useMeQuery({ skip: isServer() });
+  const { data, loading } = useMeQuery({ ssr: false });
 
   const baseWidth = big ? 'big-card-w' : 'small-card-w';
   const width = big && fullWidth ? 'w-screen' : '';

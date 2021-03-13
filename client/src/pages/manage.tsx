@@ -5,15 +5,25 @@ import Layout from '../components/layout/layout';
 import FeedNavBar from '../components/main-card/feed-nav-bar';
 import MainCard from '../components/main-card/main-card';
 import AddFeedModal from '../components/modals/add-feed-modal';
+import Spinner from '../components/spinner';
 import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
-import { isServer } from '../utils/is-server';
 import useRedirectUnauthorized from '../utils/use-auth-route';
 
 const FeedManager: NextPage = () => {
   useRedirectUnauthorized();
-  const { data, loading } = useMyFeedsQuery({ skip: isServer() });
+  const { data, loading } = useMyFeedsQuery({ ssr: false });
   const myFeeds = (data?.myFeeds || []) as UserFeed[];
-  const empty = <div className="text-center">{loading ? 'Loading...' : 'You have no feeds'}</div>;
+  let content: JSX.Element | null = null;
+  if (loading)
+    content = (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    );
+  else if (!myFeeds.length) {
+    content = <div className="text-center">You have no feeds</div>;
+  } else content = <FeedTable feeds={myFeeds} />;
+
   const [modalOpen, setModalOpen] = useState(false);
   return (
     <Layout>
@@ -22,7 +32,7 @@ const FeedManager: NextPage = () => {
           <FeedNavBar />
           <div className="flex flex-col w-full p-4">
             <h2 className="font-bold text-base">Edit feed digests</h2>
-            {myFeeds.length ? <FeedTable feeds={myFeeds} /> : empty}
+            {content}
             <div className="mt-6">
               <button type="button" className="btn bg-secondary" onClick={() => setModalOpen(true)}>
                 Add new feed
