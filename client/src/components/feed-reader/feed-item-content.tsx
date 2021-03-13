@@ -122,7 +122,6 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
             item.title
           )}
         </h4>
-        <div className="text-xs">{new Date(item.pubdate || item.createdAt).toLocaleString()}</div>
         {showBody && (
           <div className="relative mt-3">
             <main
@@ -136,7 +135,10 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
           </div>
         )}
       </div>
-      <footer className="flex justify-end mt-1 space-x-1 text-xs w-full">
+      <footer className="flex items-center mt-1 space-x-1 text-xs w-full">
+        <div className="text-xs mr-auto">
+          {new Date(item.pubdate || item.createdAt).toLocaleString()}
+        </div>
         {item.enclosures?.length ? (
           <FooterBtnList Icon={PaperClipIcon} text={`enclosures: ${item.enclosures?.length}`}>
             {item.enclosures?.map((enc) => (
