@@ -30,7 +30,9 @@ body {
   min-height: 100vh;
 }
 
-*:focus {
+*,
+*:focus,
+*:hover {
   outline: none;
 }
 
@@ -50,6 +52,7 @@ button,
 textarea,
 input {
   -webkit-appearance: none;
+  @apply focus:outline-none; /* fix black outline in chrome */
 }
 
 @layer base {

@@ -69,7 +69,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
             title="open the feed's site"
             className="hover:text-link mx-1"
           >
-            <ExtLinkIcon className="w-auto h-4" />
+            <ExtLinkIcon className="w-4 h-4" />
           </a>
           <button
             type="button"
@@ -78,7 +78,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
                 ? 'Email digest of this feed is disabled'
                 : 'You are receiving email digests of this feed'
             }
-            className={`icon-btn h-4 w-auto ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
+            className={`icon-btn h-4 w-4 ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
             onClick={() => setEditFeedModal(true)}
           >
             <MailIcon />
@@ -86,7 +86,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
           <button
             type="button"
             title="Edit feed"
-            className="icon-btn h-4 w-auto"
+            className="icon-btn h-4 w-4"
             onClick={() => setEditFeedModal(true)}
           >
             <EditIcon />
@@ -99,7 +99,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
               title="Filter items"
               onClick={() => toggleSearch()}
             >
-              <SearchIcon className="w-auto h-4" />
+              <SearchIcon className="w-4 h-4" />
             </button>
           ) : null}
           <div ref={viewAnchorRef as RefObject<HTMLDivElement>} className="relative mr-2">
@@ -109,7 +109,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
               title="Feed items display style"
               onClick={() => setIsViewOptsOpen((s) => !s)}
             >
-              <ViewIcon viewId={readerOpts.itemView} className="w-auto h-4" />
+              <ViewIcon viewId={readerOpts.itemView} className="w-4 h-4" />
             </button>
             {!isViewOptsOpen ? null : (
               <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min rounded-sm border border-gray-300 arrow-tr">
@@ -120,7 +120,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
                       id === readerOpts.itemView ? 'text-secondary' : ''
                     }`}
                   >
-                    <ViewIcon viewId={id as ItemViewId} className="w-auto h-4 mr-2 my-1" />
+                    <ViewIcon viewId={id as ItemViewId} className="w-4 h-4 mr-2 my-1" />
                     <span>{ItemViews[id as ItemViewId]}</span>
                     <input
                       name="items-view"
