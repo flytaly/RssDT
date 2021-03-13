@@ -58,7 +58,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
   return (
     <>
       {userFeed && (
-        <span className="flex items-center w-full">
+        <div className="flex items-center w-full space-x-1">
           <h3 className="font-bold text-lg max-w-sm">
             {userFeed.title || userFeed.feed.title || userFeed.feed.url}
           </h3>
@@ -69,16 +69,8 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
             title="open the feed's site"
             className="hover:text-link mx-1"
           >
-            <ExtLinkIcon className="w-4 h-4" />
+            <ExtLinkIcon className="w-auto h-4" />
           </a>
-          <button
-            type="button"
-            title="Edit feed"
-            className="icon-btn h-4 w-4"
-            onClick={() => setEditFeedModal(true)}
-          >
-            <EditIcon />
-          </button>
           <button
             type="button"
             title={
@@ -86,25 +78,29 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
                 ? 'Email digest of this feed is disabled'
                 : 'You are receiving email digests of this feed'
             }
-            className={`icon-btn h-4 w-4 ml-1 mr-2 ${
-              isDigestDisable ? 'text-gray-400' : 'text-gray-800'
-            }`}
+            className={`icon-btn h-4 w-auto ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
             onClick={() => setEditFeedModal(true)}
           >
             <MailIcon />
           </button>
-          <div className="ml-auto" />
+          <button
+            type="button"
+            title="Edit feed"
+            className="icon-btn h-4 w-auto"
+            onClick={() => setEditFeedModal(true)}
+          >
+            <EditIcon />
+          </button>
+          <div className="flex-1" />
           {toggleSearch ? (
-            <div className="mr-2">
-              <button
-                type="button"
-                className="h-4 icon-btn hover:text-primary"
-                title="Filter items"
-                onClick={() => toggleSearch()}
-              >
-                <SearchIcon className="w-auto h-4" />
-              </button>
-            </div>
+            <button
+              type="button"
+              className="h-4 icon-btn hover:text-primary"
+              title="Filter items"
+              onClick={() => toggleSearch()}
+            >
+              <SearchIcon className="w-auto h-4" />
+            </button>
           ) : null}
           <div ref={viewAnchorRef as RefObject<HTMLDivElement>} className="relative mr-2">
             <button
@@ -152,7 +148,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
               </div>
             </button>
             {!isOptionsOpen ? null : (
-              <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min   p-2 rounded-sm border border-gray-300 arrow-tr">
+              <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min p-2 rounded-sm border border-gray-300 arrow-tr">
                 <b>Font size</b>
                 <div className="flex w-24 mt-1 mb-2">
                   <button
@@ -177,7 +173,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
               </div>
             )}
           </div>
-        </span>
+        </div>
       )}
       <EditFeedModal
         feed={userFeed as UserFeed}
