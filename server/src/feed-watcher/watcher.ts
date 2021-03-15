@@ -1,8 +1,11 @@
 import { CronJob, CronTime } from 'cron';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import PQueue from 'p-queue';
 import { throttleMultiplier } from '../constants';
 import { buildAndSendDigests } from '../digests/build-and-send';
 import { logger } from '../logger';
+import { createRedis } from '../redis';
+import { NewItemsPayload, PubSubTopics } from '../resolvers/common/pubSubTopics';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
 type WatcherProps = {
@@ -23,16 +26,21 @@ export default class Watcher {
 
   updating = false;
 
+  pubSub: RedisPubSub;
+
   constructor({ cron = '*/5 * * * *', concurrency = 10 }: WatcherProps = {}) {
     this.cron = cron;
     this.initJob();
     this.queue = new PQueue({ concurrency, timeout: 1000 * 60 });
+    this.pubSub = new RedisPubSub({ publisher: createRedis() });
   }
 
   async update() {
     if (this.updating) return;
     this.updating = true;
     logger.info('Start updating...');
+
+    const newItemsPayload: NewItemsPayload = {};
 
     const feeds = await getFeedsToUpdate();
     const now = Date.now();
@@ -44,6 +52,7 @@ export default class Watcher {
           if (isSuccessful) {
             totalFeeds += 1;
             totalItems += itemsNum;
+            if (itemsNum) newItemsPayload[id] = { count: itemsNum };
           }
         }
 
@@ -51,6 +60,11 @@ export default class Watcher {
       }),
     );
     logger.info({ totalFeeds, totalItems }, 'End updating');
+
+    if (totalItems) {
+      await this.pubSub.publish(PubSubTopics.newItems, newItemsPayload);
+    }
+
     this.updating = false;
   }
 
@@ -74,8 +88,9 @@ export default class Watcher {
     logger.info('Watcher is started');
   }
 
-  cancel() {
+  async cancel() {
     this.job.stop();
+    await this.pubSub.close();
     logger.info('Watcher stopped');
   }
 

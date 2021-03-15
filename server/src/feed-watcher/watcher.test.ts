@@ -28,12 +28,12 @@ afterAll(() => {
 });
 
 describe('Feed watcher schedule', () => {
-  test("should create watcher's instance that has managing methods", () => {
+  test("should create watcher's instance that has managing methods", async () => {
     const feedWatcher = new Watcher();
     feedWatcher.start();
     expect(moment.isMoment(feedWatcher.getNextUpdateTime())).toBeTruthy();
 
-    feedWatcher.cancel();
+    await feedWatcher.cancel();
     expect(feedWatcher.getNextUpdateTime()).toBeNull();
   });
 
@@ -68,7 +68,7 @@ describe('Watcher Update', () => {
   feeds[1].throttled = 2;
   feeds[2].throttled = 3;
   getFeedsToUpdate.mockImplementation(async () => feeds);
-
+  afterAll(async () => feedWatcher.cancel());
   test('should call updateFeedData on not throttled feed', async () => {
     await feedWatcher.update();
     expect(getFeedsToUpdate).toHaveBeenCalled();
