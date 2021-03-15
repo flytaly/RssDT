@@ -1,8 +1,8 @@
 import { CronJob, CronTime } from 'cron';
 import PQueue from 'p-queue';
 import { throttleMultiplier } from '../constants';
-import { logger } from '../logger';
 import { buildAndSendDigests } from '../digests/build-and-send';
+import { logger } from '../logger';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
 type WatcherProps = {

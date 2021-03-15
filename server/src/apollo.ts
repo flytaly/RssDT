@@ -1,14 +1,14 @@
 import { ApolloServer, PubSub } from 'apollo-server-express';
 import { Express } from 'express';
+import session from 'express-session';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
-import session from 'express-session';
-import { UserResolver } from './resolvers/user';
-import { MyContext, ReqWithSession } from './types';
-import { UserFeedResolver } from './resolvers/userFeed';
 import { FeedResolver } from './resolvers/feed';
-import { createItemCountLoader } from './utils/createItemCountLoader';
 import { MailResolver } from './resolvers/mail';
+import { UserResolver } from './resolvers/user';
+import { UserFeedResolver } from './resolvers/userFeed';
+import { MyContext, ReqWithSession } from './types';
+import { createItemCountLoader } from './utils/createItemCountLoader';
 
 export const initApolloServer = async (
   app: Express,

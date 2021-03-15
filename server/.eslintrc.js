@@ -19,6 +19,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'max-classes-per-file': 'off',
     'arrow-body-style': 'off',
+    'import/no-cycle': 'off',
     radix: 'off',
   },
 };

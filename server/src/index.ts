@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import './dotenv';
 import express from 'express';
 import cors from 'cors';
-import { PubSub } from 'apollo-server-express';
 import { initDbConnection } from './dbConnection';
 import { initApolloServer } from './apollo';
 import { initSession } from './session';

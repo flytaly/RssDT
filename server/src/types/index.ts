@@ -1,7 +1,7 @@
-import Session from 'express-session';
 import { Request, Response } from 'express';
-import { Redis } from 'ioredis';
+import Session from 'express-session';
 import { PubSub } from 'graphql-subscriptions';
+import { Redis } from 'ioredis';
 import { createItemCountLoader } from '../utils/createItemCountLoader';
 
 export enum Role {
