@@ -31,9 +31,9 @@ module.exports = async () => {
   const app = express();
   const dbcon = await initDbConnection();
 
-  initSession(app, redis);
+  const session = initSession(app, redis);
   // Connection.da
-  await initApolloServer(app, redis);
+  await initApolloServer(app, redis, session);
   const server = app.listen(PORT, () => {
     console.log(`🚀 start server on port:${PORT} for testing`);
   });

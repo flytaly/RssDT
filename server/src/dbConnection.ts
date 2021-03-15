@@ -12,7 +12,7 @@ export const initDbConnection = async () => {
   const dbConnection = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    logging: IS_DEV,
+    // logging: IS_DEV,
     migrations: IS_TEST ? undefined : [path.join(__dirname, './migrations/*')],
     dropSchema: IS_TEST,
     synchronize: IS_TEST,

@@ -2,11 +2,14 @@ import 'reflect-metadata';
 import './dotenv';
 import express from 'express';
 import cors from 'cors';
+import { PubSub } from 'apollo-server-express';
 import { initDbConnection } from './dbConnection';
 import { initApolloServer } from './apollo';
 import { initSession } from './session';
 import { logger, initLogFiles } from './logger';
 import { redis } from './redis';
+
+const http = require('http');
 
 const entry = async () => {
   const app = express();
@@ -14,12 +17,15 @@ const entry = async () => {
   app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
-  initSession(app, redis);
+  const sessionMiddleware = initSession(app, redis);
   await initDbConnection();
-  await initApolloServer(app, redis);
+  const apolloServer = await initApolloServer(app, redis, sessionMiddleware);
   initLogFiles({ prefix: 'api_', name: 'api' });
 
-  app.listen(process.env.PORT, () => {
+  const httpServer = http.createServer(app);
+  apolloServer.installSubscriptionHandlers(httpServer);
+
+  httpServer.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
   });
 };

@@ -109,7 +109,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                 {periodNames[uf.schedule] !== periodNames.disable ? (
                   <span className="font-medium">{periodNames[uf.schedule]}</span>
                 ) : (
-                  <span className="text-gray-500">disabled</span>
+                  <span className="text-gray-400">disabled</span>
                 )}
               </Cell>
               <Cell name="Actions">

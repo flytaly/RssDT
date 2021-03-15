@@ -7,13 +7,17 @@ import {
   FieldResolver,
   Mutation,
   ObjectType,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
   Root,
+  Subscription,
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
+import { Feed } from '../entities/Feed';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
@@ -32,6 +36,7 @@ import {
   UserFeedOptionsInput,
   UserInfoInput,
 } from './common/inputs';
+import { NewItemsPayload, PubSubTopics } from './common/pubSubTopics';
 import { setLastViewedItemDate } from './common/setLastViewedItemDate';
 
 @ObjectType()
@@ -56,6 +61,15 @@ class DeletedFeedResponse {
 
   @Field(() => [String], { nullable: true })
   ids?: string[];
+}
+
+@ObjectType()
+export class UserFeedNewItemsCountResponse {
+  @Field(() => Number)
+  feedId: number;
+
+  @Field(() => Number)
+  count: number;
 }
 
 @Resolver(UserFeed)
@@ -229,5 +243,45 @@ export class UserFeedResolver {
   @FieldResolver(() => Number)
   async newItemsCount(@Root() root: UserFeed, @Ctx() { itemCountLoader }: MyContext) {
     return itemCountLoader.load(root.id);
+  }
+
+  @Subscription(() => [UserFeedNewItemsCountResponse], { topics: PubSubTopics.newItems })
+  async itemsCountUpdated(@Ctx() ctx: MyContext, @Root() payload: NewItemsPayload) {
+    type UserFeedIdInfo = { feedId: number; userId: number; userFeedId: number };
+
+    // TODO: Move to loader
+    const res = (await getConnection()
+      .createQueryBuilder()
+      .select('f."id"', 'feedId')
+      .addSelect('uf."userId"', 'userId')
+      .addSelect('uf."id"', 'userFeedId')
+      .from('feed', 'f')
+      .innerJoin('user_feed', 'uf', `uf."feedId" = f."id"`)
+      .whereInIds(payload.map((p) => p.feedId))
+      .andWhere(`uf."userId" in (${ctx.req.session.userId})`)
+      .execute()) as Array<UserFeedIdInfo>;
+
+    const countNormalized: Record<number, number> = {};
+    payload.forEach((p) => {
+      countNormalized[p.feedId] = p.count;
+    });
+
+    const normByUserId: Record<number, UserFeedNewItemsCountResponse[]> = {};
+    res.forEach((r) => {
+      const list = normByUserId[r.userId] || [];
+      list.push({ ...r, count: countNormalized[r.feedId] });
+      normByUserId[r.userId] = list;
+    });
+
+    return normByUserId[ctx.req.session.userId];
+  }
+
+  @Mutation(() => Boolean)
+  async testFeedUpdate(@Ctx() ctx: MyContext, @PubSub() pubSub: PubSubEngine) {
+    await pubSub.publish(PubSubTopics.newItems, [
+      { feedId: 1, count: 2 },
+      { feedId: 2, count: 3 },
+    ]);
+    return true;
   }
 }

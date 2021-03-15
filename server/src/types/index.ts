@@ -1,6 +1,7 @@
 import Session from 'express-session';
 import { Request, Response } from 'express';
 import { Redis } from 'ioredis';
+import { PubSub } from 'graphql-subscriptions';
 import { createItemCountLoader } from '../utils/createItemCountLoader';
 
 export enum Role {
@@ -19,6 +20,7 @@ export type MyContext = {
   res: Response;
   redis: Redis;
   itemCountLoader: ReturnType<typeof createItemCountLoader>;
+  pubsub: PubSub;
 };
 
 export type FeedMeta = {
