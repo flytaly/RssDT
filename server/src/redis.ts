@@ -8,4 +8,5 @@ if (IS_TEST) {
   Redis = require('ioredis-mock');
 }
 
-export const redis = new Redis(process.env.REDIS_URL);
+export const createRedis = () => new Redis(process.env.REDIS_URL);
+export const redis = createRedis();

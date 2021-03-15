@@ -1,8 +1,10 @@
-import { ApolloServer, PubSub } from 'apollo-server-express';
+import { ApolloServer } from 'apollo-server-express';
 import { Express } from 'express';
 import session from 'express-session';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
+import { createRedis } from './redis';
 import { FeedResolver } from './resolvers/feed';
 import { MailResolver } from './resolvers/mail';
 import { UserResolver } from './resolvers/user';
@@ -15,7 +17,10 @@ export const initApolloServer = async (
   redis: Redis,
   sessionMiddleware: ReturnType<typeof session>,
 ) => {
-  const pubsub = new PubSub();
+  const pubsub = new RedisPubSub({
+    publisher: createRedis(),
+    subscriber: createRedis(),
+  });
   const schema = await buildSchema({
     resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
     validate: false,
