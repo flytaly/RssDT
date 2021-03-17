@@ -1,0 +1,6 @@
+subscription itemsCountUpdated {
+  itemsCountUpdated {
+    feedId
+    count
+  }
+}

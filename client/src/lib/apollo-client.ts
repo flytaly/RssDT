@@ -2,11 +2,23 @@
 
 /* From example: https://github.com/vercel/next.js/tree/canary/examples/with-apollo */
 
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCache, Reference } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  HttpLink,
+  InMemoryCache,
+  NormalizedCache,
+  Reference,
+  split,
+} from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { useMemo } from 'react';
+import { WebSocketLink } from '@apollo/client/link/ws';
+
+import { getMainDefinition } from '@apollo/client/utilities';
 import { PaginatedItemsResponse } from '../generated/graphql';
+import { isServer } from '../utils/is-server';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -17,12 +29,37 @@ interface PaginatedItemsRef extends Omit<PaginatedItemsResponse, 'items'> {
 let apolloClient: ApolloClient<NormalizedCache>;
 
 function createApolloClient() {
+  let link: ApolloLink;
+  const httpLink = new HttpLink({
+    uri: process.env.NEXT_PUBLIC_API_URL,
+    credentials: 'include',
+  });
+
+  if (!isServer()) {
+    const wsLink = new WebSocketLink({
+      uri: 'ws://localhost:4000/graphql',
+      options: { reconnect: true },
+    });
+
+    const splitLink = split(
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+      },
+      wsLink,
+      httpLink,
+    );
+    link = splitLink;
+  } else {
+    link = httpLink;
+  }
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: process.env.NEXT_PUBLIC_API_URL, // Server URL (must be absolute)
-      credentials: 'include', // Additional fetch() options like `credentials` or `headers`
-    }),
+    link,
+    // link: new HttpLink({
+    //   uri: process.env.NEXT_PUBLIC_API_URL, // Server URL (must be absolute)
+    //   credentials: 'include', // Additional fetch() options like `credentials` or `headers`
+    // }),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
