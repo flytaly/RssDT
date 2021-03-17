@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 import Layout from '../components/layout/layout';
 import MainCard from '../components/main-card/main-card';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
-import { isServer } from '../utils/is-server';
 
 const Logout: NextPage = () => {
   const { data } = useMeQuery({ ssr: false });

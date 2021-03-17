@@ -24,7 +24,7 @@ const take = 10;
 const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
   const [showItemInModal, setShowItemInModal] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 0 });
-  const { data, loading, fetchMore, error } = useMyFeedItemsQuery({
+  const { data, loading, fetchMore, error, refetch } = useMyFeedItemsQuery({
     notifyOnNetworkStatusChange: true,
     variables: { feedId: feed.feed.id, skip: 0, take, filter },
   });
@@ -64,6 +64,23 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
 
   return (
     <main className="flex flex-col flex-grow space-y-4 p-3">
+      {!error && feed.newItemsCount ? (
+        <div className="self-center">
+          <button
+            className="btn bg-white text-black"
+            type="button"
+            onClick={() => refetch()}
+            disabled={loading}
+          >
+            {loading ? <Spinner /> : <span className="mx-1">Load new items</span>}
+          </button>
+        </div>
+      ) : null}
+      {error ? (
+        <div className="border-2 border-error shadow-message-err self-center p-3 mt-3">
+          {error.message}
+        </div>
+      ) : null}
       {!items.length && !loading && (
         <div className="self-center font-bold">
           {!filter ? "The feed doesn't have items" : "Couldn't find posts that match your query"}
@@ -78,11 +95,6 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
           isNew={newItemDate && new Date(item.createdAt) > new Date(newItemDate)}
         />
       ))}
-      {error ? (
-        <div className="border-2 border-error shadow-message-err self-center p-3 mt-3">
-          {error.message}
-        </div>
-      ) : null}
 
       {hasMore ? <div ref={ref} className="h-0" /> : null}
 

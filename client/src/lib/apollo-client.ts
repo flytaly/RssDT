@@ -22,7 +22,7 @@ import { isServer } from '../utils/is-server';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-interface PaginatedItemsRef extends Omit<PaginatedItemsResponse, 'items'> {
+export interface PaginatedItemsRef extends Omit<PaginatedItemsResponse, 'items'> {
   items: Array<Reference>;
 }
 
@@ -56,10 +56,6 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link,
-    // link: new HttpLink({
-    //   uri: process.env.NEXT_PUBLIC_API_URL, // Server URL (must be absolute)
-    //   credentials: 'include', // Additional fetch() options like `credentials` or `headers`
-    // }),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
@@ -69,7 +65,10 @@ function createApolloClient() {
               merge(
                 existing: PaginatedItemsRef | undefined,
                 incoming: PaginatedItemsRef,
+                { args },
               ): PaginatedItemsRef {
+                if (!args?.skip) return incoming;
+
                 const existingItems = existing?.items || [];
                 const refs = new Set(existingItems.map((i) => i.__ref));
                 const incomingItems = incoming.items.filter((i) => !refs.has(i.__ref));

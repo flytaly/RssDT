@@ -10,7 +10,7 @@ import FeedItems from './feed-items';
 import FeedSidebar from './feed-sidebar';
 import { useLocalState } from './reader-options';
 
-const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
+const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -37,7 +37,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
     </div>
   );
 
-  const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === parseInt(id)) : null;
+  const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === id) : null;
 
   const toggleSearch = () => setShowSearch((s) => !s);
 

@@ -11,7 +11,7 @@ const FeedPage: NextPage<{ pathHistory: PathHistory }> = ({ pathHistory }) => {
   useUpdateCountsOnPathChange(pathHistory.prevPath);
   const router = useRouter();
   const { id } = router.query;
-  return <FeedReaderPage id={id as string} />;
+  return <FeedReaderPage id={parseInt(id as string)} />;
 };
 
 export default FeedPage;

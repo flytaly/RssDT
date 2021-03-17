@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import React from 'react';
 import { useItemsCountUpdatedSubscription } from '../../generated/graphql';
-import { updateUnreadCount } from '../../utils/update-unread-count';
+import { createUpdateOnNewItems } from '../../utils/update-unread-count';
 import Layout from '../layout/layout';
 import FeedNavBar from '../main-card/feed-nav-bar';
 import MainCard from '../main-card/main-card';
 import FeedReader from './feed-reader';
 
-const FeedReaderPage: NextPage<{ id?: string }> = ({ id }) => {
-  useItemsCountUpdatedSubscription({ onSubscriptionData: updateUnreadCount });
+const FeedReaderPage: NextPage<{ id?: number }> = ({ id }) => {
+  useItemsCountUpdatedSubscription({ onSubscriptionData: createUpdateOnNewItems(id) });
 
   return (
     <Layout>
