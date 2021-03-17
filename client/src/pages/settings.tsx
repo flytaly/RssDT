@@ -16,9 +16,9 @@ import {
   useMyOptionsQuery,
 } from '../generated/graphql';
 import shareProviders from '../share-providers';
-import useAuthRoute from '../utils/use-auth-route';
+import useAuthRoute from '../hooks/use-auth-route';
 // import { ShareId } from '../types';
-import { useSetPartialOptionsMutation } from '../utils/use-set-option-mutation';
+import { useSetPartialOptionsMutation } from '../hooks/use-set-option-mutation';
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);
 

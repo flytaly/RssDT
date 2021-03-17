@@ -19,3 +19,5 @@ export const periodNames: Record<DigestSchedule | 'realtime' | 'disable', string
   daily: 'daily',
   disable: 'disabled',
 };
+
+export type PathHistory = { currentPath: string; prevPath: string };

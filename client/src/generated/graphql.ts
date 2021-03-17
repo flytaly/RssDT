@@ -25,12 +25,14 @@ export type Query = {
   getFeedInfoByToken?: Maybe<UserFeed>;
 };
 
+
 export type QueryMyFeedItemsArgs = {
   feedId: Scalars['Float'];
   skip?: Maybe<Scalars['Float']>;
   take?: Maybe<Scalars['Float']>;
   filter?: Maybe<Scalars['String']>;
 };
+
 
 export type QueryGetFeedInfoByTokenArgs = {
   id: Scalars['String'];
@@ -57,6 +59,7 @@ export type Item = {
   enclosures?: Maybe<Array<Enclosure>>;
   createdAt: Scalars['DateTime'];
 };
+
 
 export type Feed = {
   __typename?: 'Feed';
@@ -125,13 +128,13 @@ export type Options = {
 
 export enum Theme {
   Default = 'default',
-  Text = 'text',
+  Text = 'text'
 }
 
 export enum ShareId {
   Pocket = 'pocket',
   Evernote = 'evernote',
-  Trello = 'trello',
+  Trello = 'trello'
 }
 
 export enum DigestSchedule {
@@ -142,13 +145,13 @@ export enum DigestSchedule {
   Every6hours = 'every6hours',
   Every12hours = 'every12hours',
   Daily = 'daily',
-  Disable = 'disable',
+  Disable = 'disable'
 }
 
 export enum TernaryState {
   Enable = 'enable',
   Disable = 'disable',
-  Default = 'default',
+  Default = 'default'
 }
 
 export type Enclosure = {
@@ -181,39 +184,48 @@ export type Mutation = {
   testFeedUpdate: Scalars['Boolean'];
 };
 
+
 export type MutationFeedbackArgs = {
   input: FeedbackInput;
 };
+
 
 export type MutationRegisterArgs = {
   userInfo?: Maybe<UserInfoInput>;
   input: EmailPasswordInput;
 };
 
+
 export type MutationRequestPasswordResetArgs = {
   email: Scalars['String'];
 };
 
+
 export type MutationResetPasswordArgs = {
   input: PasswordResetInput;
 };
+
 
 export type MutationVerifyEmailArgs = {
   userId: Scalars['String'];
   token: Scalars['String'];
 };
 
+
 export type MutationLoginArgs = {
   input: EmailPasswordInput;
 };
+
 
 export type MutationUpdateUserInfoArgs = {
   userInfo: UserInfoInput;
 };
 
+
 export type MutationSetOptionsArgs = {
   opts: OptionsInput;
 };
+
 
 export type MutationAddFeedWithEmailArgs = {
   feedOpts?: Maybe<UserFeedOptionsInput>;
@@ -221,33 +233,40 @@ export type MutationAddFeedWithEmailArgs = {
   input: AddFeedEmailInput;
 };
 
+
 export type MutationAddFeedToCurrentUserArgs = {
   feedOpts?: Maybe<UserFeedOptionsInput>;
   input: AddFeedInput;
 };
+
 
 export type MutationActivateFeedArgs = {
   userFeedId: Scalars['String'];
   token: Scalars['String'];
 };
 
+
 export type MutationSetFeedActivatedArgs = {
   userFeedId: Scalars['Float'];
 };
 
+
 export type MutationDeleteMyFeedsArgs = {
   ids: Array<Scalars['Float']>;
 };
+
 
 export type MutationSetFeedOptionsArgs = {
   opts: UserFeedOptionsInput;
   id: Scalars['Float'];
 };
 
+
 export type MutationUnsubscribeByTokenArgs = {
   id: Scalars['String'];
   token: Scalars['String'];
 };
+
 
 export type MutationSetLastViewedItemDateArgs = {
   itemId: Scalars['Float'];
@@ -357,116 +376,93 @@ export type UserFeedNewItemsCountResponse = {
   count: Scalars['Float'];
 };
 
-export type FeedFieldsFragment = { __typename?: 'Feed' } & Pick<
-  Feed,
-  | 'id'
-  | 'url'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'language'
-  | 'favicon'
-  | 'imageUrl'
-  | 'imageTitle'
-  | 'lastSuccessfulUpd'
-  | 'lastPubdate'
-  | 'createdAt'
-  | 'updatedAt'
->;
+export type FeedFieldsFragment = (
+  { __typename?: 'Feed' }
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'lastPubdate' | 'createdAt' | 'updatedAt'>
+);
 
-export type ItemFieldsFragment = { __typename?: 'Item' } & Pick<
-  Item,
-  | 'id'
-  | 'guid'
-  | 'pubdate'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'summary'
-  | 'imageUrl'
-  | 'createdAt'
-> & {
-    enclosures?: Maybe<
-      Array<{ __typename?: 'Enclosure' } & Pick<Enclosure, 'url' | 'length' | 'type'>>
-    >;
-  };
+export type ItemFieldsFragment = (
+  { __typename?: 'Item' }
+  & Pick<Item, 'id' | 'guid' | 'pubdate' | 'link' | 'title' | 'description' | 'summary' | 'imageUrl' | 'createdAt'>
+  & { enclosures?: Maybe<Array<(
+    { __typename?: 'Enclosure' }
+    & Pick<Enclosure, 'url' | 'length' | 'type'>
+  )>> }
+);
 
-export type OptionsFieldsFragment = { __typename?: 'Options' } & Pick<
-  Options,
-  | 'dailyDigestHour'
-  | 'withContentTableDefault'
-  | 'itemBodyDefault'
-  | 'attachmentsDefault'
-  | 'themeDefault'
-  | 'customSubject'
-  | 'shareEnable'
-  | 'shareList'
->;
+export type OptionsFieldsFragment = (
+  { __typename?: 'Options' }
+  & Pick<Options, 'dailyDigestHour' | 'withContentTableDefault' | 'itemBodyDefault' | 'attachmentsDefault' | 'themeDefault' | 'customSubject' | 'shareEnable' | 'shareList'>
+);
 
-export type UserFeedFieldsFragment = { __typename?: 'UserFeed' } & Pick<
-  UserFeed,
-  | 'id'
-  | 'activated'
-  | 'title'
-  | 'schedule'
-  | 'withContentTable'
-  | 'itemBody'
-  | 'attachments'
-  | 'theme'
-  | 'filter'
-  | 'createdAt'
-  | 'lastDigestSentAt'
-  | 'newItemsCount'
-  | 'lastViewedItemDate'
->;
+export type UserFeedFieldsFragment = (
+  { __typename?: 'UserFeed' }
+  & Pick<UserFeed, 'id' | 'activated' | 'title' | 'schedule' | 'withContentTable' | 'itemBody' | 'attachments' | 'theme' | 'filter' | 'createdAt' | 'lastDigestSentAt' | 'newItemsCount' | 'lastViewedItemDate'>
+);
 
-export type UserFieldsFragment = { __typename?: 'User' } & Pick<
-  User,
-  'id' | 'role' | 'email' | 'emailVerified' | 'locale' | 'timeZone'
->;
+export type UserFieldsFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'role' | 'email' | 'emailVerified' | 'locale' | 'timeZone'>
+);
 
-export type UsualUserResponseFragment = { __typename?: 'UserResponse' } & {
-  user?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-  errors?: Maybe<
-    Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-  >;
-};
+export type UsualUserResponseFragment = (
+  { __typename?: 'UserResponse' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )>, errors?: Maybe<Array<(
+    { __typename?: 'ArgumentError' }
+    & Pick<ArgumentError, 'message' | 'argument'>
+  )>> }
+);
 
 export type ActivateFeedMutationVariables = Exact<{
   token: Scalars['String'];
   userFeedId: Scalars['String'];
 }>;
 
-export type ActivateFeedMutation = { __typename?: 'Mutation' } & {
-  activateFeed: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-      } & UserFeedFieldsFragment
-    >;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
-  };
-};
+
+export type ActivateFeedMutation = (
+  { __typename?: 'Mutation' }
+  & { activateFeed: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & { feed: (
+        { __typename?: 'Feed' }
+        & Pick<Feed, 'id' | 'url' | 'title'>
+      ) }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  ) }
+);
 
 export type AddFeedToCurrentUserMutationVariables = Exact<{
   feedOpts?: Maybe<UserFeedOptionsInput>;
   input: AddFeedInput;
 }>;
 
-export type AddFeedToCurrentUserMutation = { __typename?: 'Mutation' } & {
-  addFeedToCurrentUser: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-      } & UserFeedFieldsFragment
-    >;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
-  };
-};
+
+export type AddFeedToCurrentUserMutation = (
+  { __typename?: 'Mutation' }
+  & { addFeedToCurrentUser: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & { feed: (
+        { __typename?: 'Feed' }
+        & FeedFieldsFragment
+      ) }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  ) }
+);
 
 export type AddFeedWithEmailMutationVariables = Exact<{
   feedOpts?: Maybe<UserFeedOptionsInput>;
@@ -474,169 +470,247 @@ export type AddFeedWithEmailMutationVariables = Exact<{
   input: AddFeedEmailInput;
 }>;
 
-export type AddFeedWithEmailMutation = { __typename?: 'Mutation' } & {
-  addFeedWithEmail?: Maybe<
-    { __typename?: 'UserFeedResponse' } & {
-      userFeed?: Maybe<
-        { __typename?: 'UserFeed' } & {
-          feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-        } & UserFeedFieldsFragment
-      >;
-      errors?: Maybe<
-        Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-      >;
-    }
-  >;
-};
+
+export type AddFeedWithEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { addFeedWithEmail?: Maybe<(
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & { feed: (
+        { __typename?: 'Feed' }
+        & Pick<Feed, 'id' | 'url' | 'title'>
+      ) }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  )> }
+);
 
 export type DeleteMyFeedsMutationVariables = Exact<{
   ids: Array<Scalars['Float']> | Scalars['Float'];
 }>;
 
-export type DeleteMyFeedsMutation = { __typename?: 'Mutation' } & {
-  deleteMyFeeds: { __typename?: 'DeletedFeedResponse' } & Pick<DeletedFeedResponse, 'ids'> & {
-      errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-    };
-};
+
+export type DeleteMyFeedsMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteMyFeeds: (
+    { __typename?: 'DeletedFeedResponse' }
+    & Pick<DeletedFeedResponse, 'ids'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
 
-export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & UsualUserResponseFragment
+  ) }
+);
 
-export type LogoutMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'logout'>;
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
 
-export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never }>;
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & UsualUserResponseFragment
+  ) }
+);
 
-export type RequestEmailVerificationMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'requestEmailVerification'
->;
+export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RequestEmailVerificationMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'requestEmailVerification'>
+);
 
 export type RequestPasswordResetMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
-export type RequestPasswordResetMutation = { __typename?: 'Mutation' } & {
-  requestPasswordReset: { __typename?: 'MessageResponse' } & Pick<MessageResponse, 'message'>;
-};
+
+export type RequestPasswordResetMutation = (
+  { __typename?: 'Mutation' }
+  & { requestPasswordReset: (
+    { __typename?: 'MessageResponse' }
+    & Pick<MessageResponse, 'message'>
+  ) }
+);
 
 export type ResetPasswordMutationVariables = Exact<{
   input: PasswordResetInput;
 }>;
 
-export type ResetPasswordMutation = { __typename?: 'Mutation' } & {
-  resetPassword: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
+
+export type ResetPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { resetPassword: (
+    { __typename?: 'UserResponse' }
+    & UsualUserResponseFragment
+  ) }
+);
 
 export type SendFeedbackMutationVariables = Exact<{
   input: FeedbackInput;
 }>;
 
-export type SendFeedbackMutation = { __typename?: 'Mutation' } & {
-  feedback?: Maybe<
-    { __typename?: 'FeedbackResponse' } & Pick<FeedbackResponse, 'success'> & {
-        errors?: Maybe<
-          Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'argument' | 'message'>>
-        >;
-      }
-  >;
-};
+
+export type SendFeedbackMutation = (
+  { __typename?: 'Mutation' }
+  & { feedback?: Maybe<(
+    { __typename?: 'FeedbackResponse' }
+    & Pick<FeedbackResponse, 'success'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'argument' | 'message'>
+    )>> }
+  )> }
+);
 
 export type SetFeedOptionsMutationVariables = Exact<{
   id: Scalars['Float'];
   opts: UserFeedOptionsInput;
 }>;
 
-export type SetFeedOptionsMutation = { __typename?: 'Mutation' } & {
-  setFeedOptions: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<{ __typename?: 'UserFeed' } & UserFeedFieldsFragment>;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-  };
-};
+
+export type SetFeedOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setFeedOptions: (
+    { __typename?: 'UserFeedResponse' }
+    & { userFeed?: Maybe<(
+      { __typename?: 'UserFeed' }
+      & UserFeedFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
 
 export type SetLastViewedItemDateMutationVariables = Exact<{
   itemId: Scalars['Float'];
   userFeedId: Scalars['Float'];
 }>;
 
-export type SetLastViewedItemDateMutation = { __typename?: 'Mutation' } & {
-  setLastViewedItemDate?: Maybe<
-    { __typename?: 'UserFeed' } & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
-  >;
-};
+
+export type SetLastViewedItemDateMutation = (
+  { __typename?: 'Mutation' }
+  & { setLastViewedItemDate?: Maybe<(
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
+  )> }
+);
 
 export type SetOptionsMutationVariables = Exact<{
   opts: OptionsInput;
 }>;
 
-export type SetOptionsMutation = { __typename?: 'Mutation' } & {
-  setOptions: { __typename?: 'OptionsResponse' } & {
-    options?: Maybe<{ __typename?: 'Options' } & OptionsFieldsFragment>;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
-  };
-};
+
+export type SetOptionsMutation = (
+  { __typename?: 'Mutation' }
+  & { setOptions: (
+    { __typename?: 'OptionsResponse' }
+    & { options?: Maybe<(
+      { __typename?: 'Options' }
+      & OptionsFieldsFragment
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message' | 'argument'>
+    )>> }
+  ) }
+);
 
 export type UnsubscribeByTokenMutationVariables = Exact<{
   id: Scalars['String'];
   token: Scalars['String'];
 }>;
 
-export type UnsubscribeByTokenMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'unsubscribeByToken'
->;
+
+export type UnsubscribeByTokenMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'unsubscribeByToken'>
+);
 
 export type UpdateUserInfoMutationVariables = Exact<{
   userInfo: UserInfoInput;
 }>;
 
-export type UpdateUserInfoMutation = { __typename?: 'Mutation' } & {
-  updateUserInfo: { __typename?: 'User' } & Pick<User, 'timeZone' | 'locale'>;
-};
+
+export type UpdateUserInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserInfo: (
+    { __typename?: 'User' }
+    & Pick<User, 'timeZone' | 'locale'>
+  ) }
+);
 
 export type VerifyEmailMutationVariables = Exact<{
   userId: Scalars['String'];
   token: Scalars['String'];
 }>;
 
-export type VerifyEmailMutation = { __typename?: 'Mutation' } & {
-  verifyEmail: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
+
+export type VerifyEmailMutation = (
+  { __typename?: 'Mutation' }
+  & { verifyEmail: (
+    { __typename?: 'UserResponse' }
+    & UsualUserResponseFragment
+  ) }
+);
 
 export type GetFeedInfoByTokenQueryVariables = Exact<{
   id: Scalars['String'];
   token: Scalars['String'];
 }>;
 
-export type GetFeedInfoByTokenQuery = { __typename?: 'Query' } & {
-  getFeedInfoByToken?: Maybe<
-    { __typename?: 'UserFeed' } & { feed: { __typename?: 'Feed' } & Pick<Feed, 'title' | 'url'> }
-  >;
-};
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
+export type GetFeedInfoByTokenQuery = (
+  { __typename?: 'Query' }
+  & { getFeedInfoByToken?: Maybe<(
+    { __typename?: 'UserFeed' }
+    & { feed: (
+      { __typename?: 'Feed' }
+      & Pick<Feed, 'title' | 'url'>
+    ) }
+  )> }
+);
 
-export type MeQuery = { __typename?: 'Query' } & {
-  me?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-};
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & UserFieldsFragment
+  )> }
+);
 
 export type MyFeedItemsQueryVariables = Exact<{
   skip?: Maybe<Scalars['Float']>;
@@ -645,151 +719,171 @@ export type MyFeedItemsQueryVariables = Exact<{
   filter?: Maybe<Scalars['String']>;
 }>;
 
-export type MyFeedItemsQuery = { __typename?: 'Query' } & {
-  myFeedItems: { __typename?: 'PaginatedItemsResponse' } & Pick<
-    PaginatedItemsResponse,
-    'hasMore'
-  > & { items: Array<{ __typename?: 'Item' } & ItemFieldsFragment> };
-};
 
-export type MyFeedsQueryVariables = Exact<{ [key: string]: never }>;
+export type MyFeedItemsQuery = (
+  { __typename?: 'Query' }
+  & { myFeedItems: (
+    { __typename?: 'PaginatedItemsResponse' }
+    & Pick<PaginatedItemsResponse, 'hasMore'>
+    & { items: Array<(
+      { __typename?: 'Item' }
+      & ItemFieldsFragment
+    )> }
+  ) }
+);
 
-export type MyFeedsQuery = { __typename?: 'Query' } & {
-  myFeeds?: Maybe<
-    Array<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-      } & UserFeedFieldsFragment
-    >
-  >;
-};
+export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type MyOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyOptionsQuery = { __typename?: 'Query' } & {
-  myOptions: { __typename?: 'Options' } & OptionsFieldsFragment;
-};
+export type MyFeedsQuery = (
+  { __typename?: 'Query' }
+  & { myFeeds?: Maybe<Array<(
+    { __typename?: 'UserFeed' }
+    & { feed: (
+      { __typename?: 'Feed' }
+      & FeedFieldsFragment
+    ) }
+    & UserFeedFieldsFragment
+  )>> }
+);
 
-export type ItemsCountUpdatedSubscriptionVariables = Exact<{ [key: string]: never }>;
+export type MyFeedsCountQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type ItemsCountUpdatedSubscription = { __typename?: 'Subscription' } & {
-  itemsCountUpdated: Array<
-    { __typename?: 'UserFeedNewItemsCountResponse' } & Pick<
-      UserFeedNewItemsCountResponse,
-      'feedId' | 'count'
-    >
-  >;
-};
+
+export type MyFeedsCountQuery = (
+  { __typename?: 'Query' }
+  & { myFeeds?: Maybe<Array<(
+    { __typename?: 'UserFeed' }
+    & Pick<UserFeed, 'newItemsCount'>
+  )>> }
+);
+
+export type MyOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyOptionsQuery = (
+  { __typename?: 'Query' }
+  & { myOptions: (
+    { __typename?: 'Options' }
+    & OptionsFieldsFragment
+  ) }
+);
+
+export type ItemsCountUpdatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ItemsCountUpdatedSubscription = (
+  { __typename?: 'Subscription' }
+  & { itemsCountUpdated: Array<(
+    { __typename?: 'UserFeedNewItemsCountResponse' }
+    & Pick<UserFeedNewItemsCountResponse, 'feedId' | 'count'>
+  )> }
+);
 
 export const FeedFieldsFragmentDoc = gql`
-  fragment FeedFields on Feed {
-    id
-    url
-    link
-    title
-    description
-    language
-    favicon
-    imageUrl
-    imageTitle
-    lastSuccessfulUpd
-    lastPubdate
-    createdAt
-    updatedAt
-  }
-`;
+    fragment FeedFields on Feed {
+  id
+  url
+  link
+  title
+  description
+  language
+  favicon
+  imageUrl
+  imageTitle
+  lastSuccessfulUpd
+  lastPubdate
+  createdAt
+  updatedAt
+}
+    `;
 export const ItemFieldsFragmentDoc = gql`
-  fragment ItemFields on Item {
-    id
-    guid
-    pubdate
-    link
-    title
-    description
-    summary
-    imageUrl
-    enclosures {
-      url
-      length
-      type
-    }
-    createdAt
+    fragment ItemFields on Item {
+  id
+  guid
+  pubdate
+  link
+  title
+  description
+  summary
+  imageUrl
+  enclosures {
+    url
+    length
+    type
   }
-`;
+  createdAt
+}
+    `;
 export const OptionsFieldsFragmentDoc = gql`
-  fragment OptionsFields on Options {
-    dailyDigestHour
-    withContentTableDefault
-    itemBodyDefault
-    attachmentsDefault
-    themeDefault
-    customSubject
-    shareEnable
-    shareList
-  }
-`;
+    fragment OptionsFields on Options {
+  dailyDigestHour
+  withContentTableDefault
+  itemBodyDefault
+  attachmentsDefault
+  themeDefault
+  customSubject
+  shareEnable
+  shareList
+}
+    `;
 export const UserFeedFieldsFragmentDoc = gql`
-  fragment UserFeedFields on UserFeed {
-    id
-    activated
-    title
-    schedule
-    withContentTable
-    itemBody
-    attachments
-    theme
-    filter
-    createdAt
-    lastDigestSentAt
-    newItemsCount
-    lastViewedItemDate
-  }
-`;
+    fragment UserFeedFields on UserFeed {
+  id
+  activated
+  title
+  schedule
+  withContentTable
+  itemBody
+  attachments
+  theme
+  filter
+  createdAt
+  lastDigestSentAt
+  newItemsCount
+  lastViewedItemDate
+}
+    `;
 export const UserFieldsFragmentDoc = gql`
-  fragment UserFields on User {
-    id
-    role
-    email
-    emailVerified
-    locale
-    timeZone
-  }
-`;
+    fragment UserFields on User {
+  id
+  role
+  email
+  emailVerified
+  locale
+  timeZone
+}
+    `;
 export const UsualUserResponseFragmentDoc = gql`
-  fragment UsualUserResponse on UserResponse {
-    user {
-      ...UserFields
+    fragment UsualUserResponse on UserResponse {
+  user {
+    ...UserFields
+  }
+  errors {
+    message
+    argument
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+export const ActivateFeedDocument = gql`
+    mutation activateFeed($token: String!, $userFeedId: String!) {
+  activateFeed(token: $token, userFeedId: $userFeedId) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
     }
     errors {
       message
       argument
     }
   }
-  ${UserFieldsFragmentDoc}
-`;
-export const ActivateFeedDocument = gql`
-  mutation activateFeed($token: String!, $userFeedId: String!) {
-    activateFeed(token: $token, userFeedId: $userFeedId) {
-      userFeed {
-        ...UserFeedFields
-        feed {
-          id
-          url
-          title
-        }
-      }
-      errors {
-        message
-        argument
-      }
-    }
-  }
-  ${UserFeedFieldsFragmentDoc}
-`;
-export type ActivateFeedMutationFn = Apollo.MutationFunction<
-  ActivateFeedMutation,
-  ActivateFeedMutationVariables
->;
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export type ActivateFeedMutationFn = Apollo.MutationFunction<ActivateFeedMutation, ActivateFeedMutationVariables>;
 
 /**
  * __useActivateFeedMutation__
@@ -809,42 +903,30 @@ export type ActivateFeedMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useActivateFeedMutation(
-  baseOptions?: Apollo.MutationHookOptions<ActivateFeedMutation, ActivateFeedMutationVariables>,
-) {
-  return Apollo.useMutation<ActivateFeedMutation, ActivateFeedMutationVariables>(
-    ActivateFeedDocument,
-    baseOptions,
-  );
-}
+export function useActivateFeedMutation(baseOptions?: Apollo.MutationHookOptions<ActivateFeedMutation, ActivateFeedMutationVariables>) {
+        return Apollo.useMutation<ActivateFeedMutation, ActivateFeedMutationVariables>(ActivateFeedDocument, baseOptions);
+      }
 export type ActivateFeedMutationHookResult = ReturnType<typeof useActivateFeedMutation>;
 export type ActivateFeedMutationResult = Apollo.MutationResult<ActivateFeedMutation>;
-export type ActivateFeedMutationOptions = Apollo.BaseMutationOptions<
-  ActivateFeedMutation,
-  ActivateFeedMutationVariables
->;
+export type ActivateFeedMutationOptions = Apollo.BaseMutationOptions<ActivateFeedMutation, ActivateFeedMutationVariables>;
 export const AddFeedToCurrentUserDocument = gql`
-  mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
-    addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
-      userFeed {
-        ...UserFeedFields
-        feed {
-          ...FeedFields
-        }
-      }
-      errors {
-        message
-        argument
+    mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
+  addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        ...FeedFields
       }
     }
+    errors {
+      message
+      argument
+    }
   }
-  ${UserFeedFieldsFragmentDoc}
-  ${FeedFieldsFragmentDoc}
-`;
-export type AddFeedToCurrentUserMutationFn = Apollo.MutationFunction<
-  AddFeedToCurrentUserMutation,
-  AddFeedToCurrentUserMutationVariables
->;
+}
+    ${UserFeedFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
+export type AddFeedToCurrentUserMutationFn = Apollo.MutationFunction<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>;
 
 /**
  * __useAddFeedToCurrentUserMutation__
@@ -864,52 +946,31 @@ export type AddFeedToCurrentUserMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddFeedToCurrentUserMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddFeedToCurrentUserMutation,
-    AddFeedToCurrentUserMutationVariables
-  >,
-) {
-  return Apollo.useMutation<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>(
-    AddFeedToCurrentUserDocument,
-    baseOptions,
-  );
-}
-export type AddFeedToCurrentUserMutationHookResult = ReturnType<
-  typeof useAddFeedToCurrentUserMutation
->;
-export type AddFeedToCurrentUserMutationResult = Apollo.MutationResult<AddFeedToCurrentUserMutation>;
-export type AddFeedToCurrentUserMutationOptions = Apollo.BaseMutationOptions<
-  AddFeedToCurrentUserMutation,
-  AddFeedToCurrentUserMutationVariables
->;
-export const AddFeedWithEmailDocument = gql`
-  mutation addFeedWithEmail(
-    $feedOpts: UserFeedOptionsInput
-    $userInfo: UserInfoInput
-    $input: AddFeedEmailInput!
-  ) {
-    addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
-      userFeed {
-        ...UserFeedFields
-        feed {
-          id
-          url
-          title
-        }
+export function useAddFeedToCurrentUserMutation(baseOptions?: Apollo.MutationHookOptions<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>) {
+        return Apollo.useMutation<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>(AddFeedToCurrentUserDocument, baseOptions);
       }
-      errors {
-        message
-        argument
+export type AddFeedToCurrentUserMutationHookResult = ReturnType<typeof useAddFeedToCurrentUserMutation>;
+export type AddFeedToCurrentUserMutationResult = Apollo.MutationResult<AddFeedToCurrentUserMutation>;
+export type AddFeedToCurrentUserMutationOptions = Apollo.BaseMutationOptions<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>;
+export const AddFeedWithEmailDocument = gql`
+    mutation addFeedWithEmail($feedOpts: UserFeedOptionsInput, $userInfo: UserInfoInput, $input: AddFeedEmailInput!) {
+  addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
       }
     }
+    errors {
+      message
+      argument
+    }
   }
-  ${UserFeedFieldsFragmentDoc}
-`;
-export type AddFeedWithEmailMutationFn = Apollo.MutationFunction<
-  AddFeedWithEmailMutation,
-  AddFeedWithEmailMutationVariables
->;
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export type AddFeedWithEmailMutationFn = Apollo.MutationFunction<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>;
 
 /**
  * __useAddFeedWithEmailMutation__
@@ -930,37 +991,23 @@ export type AddFeedWithEmailMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddFeedWithEmailMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddFeedWithEmailMutation,
-    AddFeedWithEmailMutationVariables
-  >,
-) {
-  return Apollo.useMutation<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>(
-    AddFeedWithEmailDocument,
-    baseOptions,
-  );
-}
+export function useAddFeedWithEmailMutation(baseOptions?: Apollo.MutationHookOptions<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>) {
+        return Apollo.useMutation<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>(AddFeedWithEmailDocument, baseOptions);
+      }
 export type AddFeedWithEmailMutationHookResult = ReturnType<typeof useAddFeedWithEmailMutation>;
 export type AddFeedWithEmailMutationResult = Apollo.MutationResult<AddFeedWithEmailMutation>;
-export type AddFeedWithEmailMutationOptions = Apollo.BaseMutationOptions<
-  AddFeedWithEmailMutation,
-  AddFeedWithEmailMutationVariables
->;
+export type AddFeedWithEmailMutationOptions = Apollo.BaseMutationOptions<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>;
 export const DeleteMyFeedsDocument = gql`
-  mutation deleteMyFeeds($ids: [Float!]!) {
-    deleteMyFeeds(ids: $ids) {
-      ids
-      errors {
-        message
-      }
+    mutation deleteMyFeeds($ids: [Float!]!) {
+  deleteMyFeeds(ids: $ids) {
+    ids
+    errors {
+      message
     }
   }
-`;
-export type DeleteMyFeedsMutationFn = Apollo.MutationFunction<
-  DeleteMyFeedsMutation,
-  DeleteMyFeedsMutationVariables
->;
+}
+    `;
+export type DeleteMyFeedsMutationFn = Apollo.MutationFunction<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>;
 
 /**
  * __useDeleteMyFeedsMutation__
@@ -979,28 +1026,19 @@ export type DeleteMyFeedsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteMyFeedsMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>,
-) {
-  return Apollo.useMutation<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>(
-    DeleteMyFeedsDocument,
-    baseOptions,
-  );
-}
+export function useDeleteMyFeedsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>) {
+        return Apollo.useMutation<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>(DeleteMyFeedsDocument, baseOptions);
+      }
 export type DeleteMyFeedsMutationHookResult = ReturnType<typeof useDeleteMyFeedsMutation>;
 export type DeleteMyFeedsMutationResult = Apollo.MutationResult<DeleteMyFeedsMutation>;
-export type DeleteMyFeedsMutationOptions = Apollo.BaseMutationOptions<
-  DeleteMyFeedsMutation,
-  DeleteMyFeedsMutationVariables
->;
+export type DeleteMyFeedsMutationOptions = Apollo.BaseMutationOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>;
 export const LoginDocument = gql`
-  mutation login($email: String!, $password: String!) {
-    login(input: { email: $email, password: $password }) {
-      ...UsualUserResponse
-    }
+    mutation login($email: String!, $password: String!) {
+  login(input: {email: $email, password: $password}) {
+    ...UsualUserResponse
   }
-  ${UsualUserResponseFragmentDoc}
-`;
+}
+    ${UsualUserResponseFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -1021,22 +1059,17 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
  *   },
  * });
  */
-export function useLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>,
-) {
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
-}
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<
-  LoginMutation,
-  LoginMutationVariables
->;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = gql`
-  mutation logout {
-    logout
-  }
-`;
+    mutation logout {
+  logout
+}
+    `;
 export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
 
 /**
@@ -1055,29 +1088,20 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
  *   },
  * });
  */
-export function useLogoutMutation(
-  baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>,
-) {
-  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
-}
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+      }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = Apollo.BaseMutationOptions<
-  LogoutMutation,
-  LogoutMutationVariables
->;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
-  mutation register($email: String!, $password: String!) {
-    register(input: { email: $email, password: $password }) {
-      ...UsualUserResponse
-    }
+    mutation register($email: String!, $password: String!) {
+  register(input: {email: $email, password: $password}) {
+    ...UsualUserResponse
   }
-  ${UsualUserResponseFragmentDoc}
-`;
-export type RegisterMutationFn = Apollo.MutationFunction<
-  RegisterMutation,
-  RegisterMutationVariables
->;
+}
+    ${UsualUserResponseFragmentDoc}`;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
  * __useRegisterMutation__
@@ -1097,29 +1121,18 @@ export type RegisterMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRegisterMutation(
-  baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>,
-) {
-  return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
-    RegisterDocument,
-    baseOptions,
-  );
-}
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+      }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = Apollo.BaseMutationOptions<
-  RegisterMutation,
-  RegisterMutationVariables
->;
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const RequestEmailVerificationDocument = gql`
-  mutation requestEmailVerification {
-    requestEmailVerification
-  }
-`;
-export type RequestEmailVerificationMutationFn = Apollo.MutationFunction<
-  RequestEmailVerificationMutation,
-  RequestEmailVerificationMutationVariables
->;
+    mutation requestEmailVerification {
+  requestEmailVerification
+}
+    `;
+export type RequestEmailVerificationMutationFn = Apollo.MutationFunction<RequestEmailVerificationMutation, RequestEmailVerificationMutationVariables>;
 
 /**
  * __useRequestEmailVerificationMutation__
@@ -1137,36 +1150,20 @@ export type RequestEmailVerificationMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRequestEmailVerificationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RequestEmailVerificationMutation,
-    RequestEmailVerificationMutationVariables
-  >,
-) {
-  return Apollo.useMutation<
-    RequestEmailVerificationMutation,
-    RequestEmailVerificationMutationVariables
-  >(RequestEmailVerificationDocument, baseOptions);
-}
-export type RequestEmailVerificationMutationHookResult = ReturnType<
-  typeof useRequestEmailVerificationMutation
->;
+export function useRequestEmailVerificationMutation(baseOptions?: Apollo.MutationHookOptions<RequestEmailVerificationMutation, RequestEmailVerificationMutationVariables>) {
+        return Apollo.useMutation<RequestEmailVerificationMutation, RequestEmailVerificationMutationVariables>(RequestEmailVerificationDocument, baseOptions);
+      }
+export type RequestEmailVerificationMutationHookResult = ReturnType<typeof useRequestEmailVerificationMutation>;
 export type RequestEmailVerificationMutationResult = Apollo.MutationResult<RequestEmailVerificationMutation>;
-export type RequestEmailVerificationMutationOptions = Apollo.BaseMutationOptions<
-  RequestEmailVerificationMutation,
-  RequestEmailVerificationMutationVariables
->;
+export type RequestEmailVerificationMutationOptions = Apollo.BaseMutationOptions<RequestEmailVerificationMutation, RequestEmailVerificationMutationVariables>;
 export const RequestPasswordResetDocument = gql`
-  mutation RequestPasswordReset($email: String!) {
-    requestPasswordReset(email: $email) {
-      message
-    }
+    mutation RequestPasswordReset($email: String!) {
+  requestPasswordReset(email: $email) {
+    message
   }
-`;
-export type RequestPasswordResetMutationFn = Apollo.MutationFunction<
-  RequestPasswordResetMutation,
-  RequestPasswordResetMutationVariables
->;
+}
+    `;
+export type RequestPasswordResetMutationFn = Apollo.MutationFunction<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>;
 
 /**
  * __useRequestPasswordResetMutation__
@@ -1185,37 +1182,20 @@ export type RequestPasswordResetMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRequestPasswordResetMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RequestPasswordResetMutation,
-    RequestPasswordResetMutationVariables
-  >,
-) {
-  return Apollo.useMutation<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>(
-    RequestPasswordResetDocument,
-    baseOptions,
-  );
-}
-export type RequestPasswordResetMutationHookResult = ReturnType<
-  typeof useRequestPasswordResetMutation
->;
+export function useRequestPasswordResetMutation(baseOptions?: Apollo.MutationHookOptions<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>) {
+        return Apollo.useMutation<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>(RequestPasswordResetDocument, baseOptions);
+      }
+export type RequestPasswordResetMutationHookResult = ReturnType<typeof useRequestPasswordResetMutation>;
 export type RequestPasswordResetMutationResult = Apollo.MutationResult<RequestPasswordResetMutation>;
-export type RequestPasswordResetMutationOptions = Apollo.BaseMutationOptions<
-  RequestPasswordResetMutation,
-  RequestPasswordResetMutationVariables
->;
+export type RequestPasswordResetMutationOptions = Apollo.BaseMutationOptions<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>;
 export const ResetPasswordDocument = gql`
-  mutation resetPassword($input: PasswordResetInput!) {
-    resetPassword(input: $input) {
-      ...UsualUserResponse
-    }
+    mutation resetPassword($input: PasswordResetInput!) {
+  resetPassword(input: $input) {
+    ...UsualUserResponse
   }
-  ${UsualUserResponseFragmentDoc}
-`;
-export type ResetPasswordMutationFn = Apollo.MutationFunction<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
->;
+}
+    ${UsualUserResponseFragmentDoc}`;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<ResetPasswordMutation, ResetPasswordMutationVariables>;
 
 /**
  * __useResetPasswordMutation__
@@ -1234,35 +1214,24 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useResetPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>,
-) {
-  return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(
-    ResetPasswordDocument,
-    baseOptions,
-  );
-}
+export function useResetPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>) {
+        return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(ResetPasswordDocument, baseOptions);
+      }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
 export type ResetPasswordMutationResult = Apollo.MutationResult<ResetPasswordMutation>;
-export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
-  ResetPasswordMutation,
-  ResetPasswordMutationVariables
->;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<ResetPasswordMutation, ResetPasswordMutationVariables>;
 export const SendFeedbackDocument = gql`
-  mutation sendFeedback($input: FeedbackInput!) {
-    feedback(input: $input) {
-      success
-      errors {
-        argument
-        message
-      }
+    mutation sendFeedback($input: FeedbackInput!) {
+  feedback(input: $input) {
+    success
+    errors {
+      argument
+      message
     }
   }
-`;
-export type SendFeedbackMutationFn = Apollo.MutationFunction<
-  SendFeedbackMutation,
-  SendFeedbackMutationVariables
->;
+}
+    `;
+export type SendFeedbackMutationFn = Apollo.MutationFunction<SendFeedbackMutation, SendFeedbackMutationVariables>;
 
 /**
  * __useSendFeedbackMutation__
@@ -1281,37 +1250,25 @@ export type SendFeedbackMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSendFeedbackMutation(
-  baseOptions?: Apollo.MutationHookOptions<SendFeedbackMutation, SendFeedbackMutationVariables>,
-) {
-  return Apollo.useMutation<SendFeedbackMutation, SendFeedbackMutationVariables>(
-    SendFeedbackDocument,
-    baseOptions,
-  );
-}
+export function useSendFeedbackMutation(baseOptions?: Apollo.MutationHookOptions<SendFeedbackMutation, SendFeedbackMutationVariables>) {
+        return Apollo.useMutation<SendFeedbackMutation, SendFeedbackMutationVariables>(SendFeedbackDocument, baseOptions);
+      }
 export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
 export type SendFeedbackMutationResult = Apollo.MutationResult<SendFeedbackMutation>;
-export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<
-  SendFeedbackMutation,
-  SendFeedbackMutationVariables
->;
+export type SendFeedbackMutationOptions = Apollo.BaseMutationOptions<SendFeedbackMutation, SendFeedbackMutationVariables>;
 export const SetFeedOptionsDocument = gql`
-  mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
-    setFeedOptions(id: $id, opts: $opts) {
-      userFeed {
-        ...UserFeedFields
-      }
-      errors {
-        message
-      }
+    mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
+  setFeedOptions(id: $id, opts: $opts) {
+    userFeed {
+      ...UserFeedFields
+    }
+    errors {
+      message
     }
   }
-  ${UserFeedFieldsFragmentDoc}
-`;
-export type SetFeedOptionsMutationFn = Apollo.MutationFunction<
-  SetFeedOptionsMutation,
-  SetFeedOptionsMutationVariables
->;
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export type SetFeedOptionsMutationFn = Apollo.MutationFunction<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
 
 /**
  * __useSetFeedOptionsMutation__
@@ -1331,33 +1288,22 @@ export type SetFeedOptionsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSetFeedOptionsMutation(
-  baseOptions?: Apollo.MutationHookOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>,
-) {
-  return Apollo.useMutation<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>(
-    SetFeedOptionsDocument,
-    baseOptions,
-  );
-}
+export function useSetFeedOptionsMutation(baseOptions?: Apollo.MutationHookOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>) {
+        return Apollo.useMutation<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>(SetFeedOptionsDocument, baseOptions);
+      }
 export type SetFeedOptionsMutationHookResult = ReturnType<typeof useSetFeedOptionsMutation>;
 export type SetFeedOptionsMutationResult = Apollo.MutationResult<SetFeedOptionsMutation>;
-export type SetFeedOptionsMutationOptions = Apollo.BaseMutationOptions<
-  SetFeedOptionsMutation,
-  SetFeedOptionsMutationVariables
->;
+export type SetFeedOptionsMutationOptions = Apollo.BaseMutationOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>;
 export const SetLastViewedItemDateDocument = gql`
-  mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
-    setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
-      id
-      lastViewedItemDate
-      newItemsCount
-    }
+    mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
+  setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
+    id
+    lastViewedItemDate
+    newItemsCount
   }
-`;
-export type SetLastViewedItemDateMutationFn = Apollo.MutationFunction<
-  SetLastViewedItemDateMutation,
-  SetLastViewedItemDateMutationVariables
->;
+}
+    `;
+export type SetLastViewedItemDateMutationFn = Apollo.MutationFunction<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>;
 
 /**
  * __useSetLastViewedItemDateMutation__
@@ -1377,43 +1323,26 @@ export type SetLastViewedItemDateMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSetLastViewedItemDateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    SetLastViewedItemDateMutation,
-    SetLastViewedItemDateMutationVariables
-  >,
-) {
-  return Apollo.useMutation<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>(
-    SetLastViewedItemDateDocument,
-    baseOptions,
-  );
-}
-export type SetLastViewedItemDateMutationHookResult = ReturnType<
-  typeof useSetLastViewedItemDateMutation
->;
+export function useSetLastViewedItemDateMutation(baseOptions?: Apollo.MutationHookOptions<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>) {
+        return Apollo.useMutation<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>(SetLastViewedItemDateDocument, baseOptions);
+      }
+export type SetLastViewedItemDateMutationHookResult = ReturnType<typeof useSetLastViewedItemDateMutation>;
 export type SetLastViewedItemDateMutationResult = Apollo.MutationResult<SetLastViewedItemDateMutation>;
-export type SetLastViewedItemDateMutationOptions = Apollo.BaseMutationOptions<
-  SetLastViewedItemDateMutation,
-  SetLastViewedItemDateMutationVariables
->;
+export type SetLastViewedItemDateMutationOptions = Apollo.BaseMutationOptions<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>;
 export const SetOptionsDocument = gql`
-  mutation setOptions($opts: OptionsInput!) {
-    setOptions(opts: $opts) {
-      options {
-        ...OptionsFields
-      }
-      errors {
-        message
-        argument
-      }
+    mutation setOptions($opts: OptionsInput!) {
+  setOptions(opts: $opts) {
+    options {
+      ...OptionsFields
+    }
+    errors {
+      message
+      argument
     }
   }
-  ${OptionsFieldsFragmentDoc}
-`;
-export type SetOptionsMutationFn = Apollo.MutationFunction<
-  SetOptionsMutation,
-  SetOptionsMutationVariables
->;
+}
+    ${OptionsFieldsFragmentDoc}`;
+export type SetOptionsMutationFn = Apollo.MutationFunction<SetOptionsMutation, SetOptionsMutationVariables>;
 
 /**
  * __useSetOptionsMutation__
@@ -1432,29 +1361,18 @@ export type SetOptionsMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useSetOptionsMutation(
-  baseOptions?: Apollo.MutationHookOptions<SetOptionsMutation, SetOptionsMutationVariables>,
-) {
-  return Apollo.useMutation<SetOptionsMutation, SetOptionsMutationVariables>(
-    SetOptionsDocument,
-    baseOptions,
-  );
-}
+export function useSetOptionsMutation(baseOptions?: Apollo.MutationHookOptions<SetOptionsMutation, SetOptionsMutationVariables>) {
+        return Apollo.useMutation<SetOptionsMutation, SetOptionsMutationVariables>(SetOptionsDocument, baseOptions);
+      }
 export type SetOptionsMutationHookResult = ReturnType<typeof useSetOptionsMutation>;
 export type SetOptionsMutationResult = Apollo.MutationResult<SetOptionsMutation>;
-export type SetOptionsMutationOptions = Apollo.BaseMutationOptions<
-  SetOptionsMutation,
-  SetOptionsMutationVariables
->;
+export type SetOptionsMutationOptions = Apollo.BaseMutationOptions<SetOptionsMutation, SetOptionsMutationVariables>;
 export const UnsubscribeByTokenDocument = gql`
-  mutation unsubscribeByToken($id: String!, $token: String!) {
-    unsubscribeByToken(id: $id, token: $token)
-  }
-`;
-export type UnsubscribeByTokenMutationFn = Apollo.MutationFunction<
-  UnsubscribeByTokenMutation,
-  UnsubscribeByTokenMutationVariables
->;
+    mutation unsubscribeByToken($id: String!, $token: String!) {
+  unsubscribeByToken(id: $id, token: $token)
+}
+    `;
+export type UnsubscribeByTokenMutationFn = Apollo.MutationFunction<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
 
 /**
  * __useUnsubscribeByTokenMutation__
@@ -1474,35 +1392,21 @@ export type UnsubscribeByTokenMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUnsubscribeByTokenMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UnsubscribeByTokenMutation,
-    UnsubscribeByTokenMutationVariables
-  >,
-) {
-  return Apollo.useMutation<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>(
-    UnsubscribeByTokenDocument,
-    baseOptions,
-  );
-}
+export function useUnsubscribeByTokenMutation(baseOptions?: Apollo.MutationHookOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>) {
+        return Apollo.useMutation<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>(UnsubscribeByTokenDocument, baseOptions);
+      }
 export type UnsubscribeByTokenMutationHookResult = ReturnType<typeof useUnsubscribeByTokenMutation>;
 export type UnsubscribeByTokenMutationResult = Apollo.MutationResult<UnsubscribeByTokenMutation>;
-export type UnsubscribeByTokenMutationOptions = Apollo.BaseMutationOptions<
-  UnsubscribeByTokenMutation,
-  UnsubscribeByTokenMutationVariables
->;
+export type UnsubscribeByTokenMutationOptions = Apollo.BaseMutationOptions<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>;
 export const UpdateUserInfoDocument = gql`
-  mutation updateUserInfo($userInfo: UserInfoInput!) {
-    updateUserInfo(userInfo: $userInfo) {
-      timeZone
-      locale
-    }
+    mutation updateUserInfo($userInfo: UserInfoInput!) {
+  updateUserInfo(userInfo: $userInfo) {
+    timeZone
+    locale
   }
-`;
-export type UpdateUserInfoMutationFn = Apollo.MutationFunction<
-  UpdateUserInfoMutation,
-  UpdateUserInfoMutationVariables
->;
+}
+    `;
+export type UpdateUserInfoMutationFn = Apollo.MutationFunction<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
 
 /**
  * __useUpdateUserInfoMutation__
@@ -1521,32 +1425,20 @@ export type UpdateUserInfoMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateUserInfoMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>,
-) {
-  return Apollo.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(
-    UpdateUserInfoDocument,
-    baseOptions,
-  );
-}
+export function useUpdateUserInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>) {
+        return Apollo.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(UpdateUserInfoDocument, baseOptions);
+      }
 export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
 export type UpdateUserInfoMutationResult = Apollo.MutationResult<UpdateUserInfoMutation>;
-export type UpdateUserInfoMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUserInfoMutation,
-  UpdateUserInfoMutationVariables
->;
+export type UpdateUserInfoMutationOptions = Apollo.BaseMutationOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>;
 export const VerifyEmailDocument = gql`
-  mutation verifyEmail($userId: String!, $token: String!) {
-    verifyEmail(userId: $userId, token: $token) {
-      ...UsualUserResponse
-    }
+    mutation verifyEmail($userId: String!, $token: String!) {
+  verifyEmail(userId: $userId, token: $token) {
+    ...UsualUserResponse
   }
-  ${UsualUserResponseFragmentDoc}
-`;
-export type VerifyEmailMutationFn = Apollo.MutationFunction<
-  VerifyEmailMutation,
-  VerifyEmailMutationVariables
->;
+}
+    ${UsualUserResponseFragmentDoc}`;
+export type VerifyEmailMutationFn = Apollo.MutationFunction<VerifyEmailMutation, VerifyEmailMutationVariables>;
 
 /**
  * __useVerifyEmailMutation__
@@ -1566,30 +1458,22 @@ export type VerifyEmailMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useVerifyEmailMutation(
-  baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>,
-) {
-  return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(
-    VerifyEmailDocument,
-    baseOptions,
-  );
-}
+export function useVerifyEmailMutation(baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>) {
+        return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(VerifyEmailDocument, baseOptions);
+      }
 export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
 export type VerifyEmailMutationResult = Apollo.MutationResult<VerifyEmailMutation>;
-export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<
-  VerifyEmailMutation,
-  VerifyEmailMutationVariables
->;
+export type VerifyEmailMutationOptions = Apollo.BaseMutationOptions<VerifyEmailMutation, VerifyEmailMutationVariables>;
 export const GetFeedInfoByTokenDocument = gql`
-  query getFeedInfoByToken($id: String!, $token: String!) {
-    getFeedInfoByToken(id: $id, token: $token) {
-      feed {
-        title
-        url
-      }
+    query getFeedInfoByToken($id: String!, $token: String!) {
+  getFeedInfoByToken(id: $id, token: $token) {
+    feed {
+      title
+      url
     }
   }
-`;
+}
+    `;
 
 /**
  * __useGetFeedInfoByTokenQuery__
@@ -1608,41 +1492,22 @@ export const GetFeedInfoByTokenDocument = gql`
  *   },
  * });
  */
-export function useGetFeedInfoByTokenQuery(
-  baseOptions: Apollo.QueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>,
-) {
-  return Apollo.useQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(
-    GetFeedInfoByTokenDocument,
-    baseOptions,
-  );
-}
-export function useGetFeedInfoByTokenLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetFeedInfoByTokenQuery,
-    GetFeedInfoByTokenQueryVariables
-  >,
-) {
-  return Apollo.useLazyQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(
-    GetFeedInfoByTokenDocument,
-    baseOptions,
-  );
-}
+export function useGetFeedInfoByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>) {
+        return Apollo.useQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(GetFeedInfoByTokenDocument, baseOptions);
+      }
+export function useGetFeedInfoByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>) {
+          return Apollo.useLazyQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(GetFeedInfoByTokenDocument, baseOptions);
+        }
 export type GetFeedInfoByTokenQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenQuery>;
-export type GetFeedInfoByTokenLazyQueryHookResult = ReturnType<
-  typeof useGetFeedInfoByTokenLazyQuery
->;
-export type GetFeedInfoByTokenQueryResult = Apollo.QueryResult<
-  GetFeedInfoByTokenQuery,
-  GetFeedInfoByTokenQueryVariables
->;
+export type GetFeedInfoByTokenLazyQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenLazyQuery>;
+export type GetFeedInfoByTokenQueryResult = Apollo.QueryResult<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>;
 export const MeDocument = gql`
-  query me {
-    me {
-      ...UserFields
-    }
+    query me {
+  me {
+    ...UserFields
   }
-  ${UserFieldsFragmentDoc}
-`;
+}
+    ${UserFieldsFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -1660,27 +1525,24 @@ export const MeDocument = gql`
  * });
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
-}
-export function useMeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>,
-) {
-  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
-}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const MyFeedItemsDocument = gql`
-  query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
-    myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
-      items {
-        ...ItemFields
-      }
-      hasMore
+    query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
+    items {
+      ...ItemFields
     }
+    hasMore
   }
-  ${ItemFieldsFragmentDoc}
-`;
+}
+    ${ItemFieldsFragmentDoc}`;
 
 /**
  * __useMyFeedItemsQuery__
@@ -1701,40 +1563,26 @@ export const MyFeedItemsDocument = gql`
  *   },
  * });
  */
-export function useMyFeedItemsQuery(
-  baseOptions: Apollo.QueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>,
-) {
-  return Apollo.useQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(
-    MyFeedItemsDocument,
-    baseOptions,
-  );
-}
-export function useMyFeedItemsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>,
-) {
-  return Apollo.useLazyQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(
-    MyFeedItemsDocument,
-    baseOptions,
-  );
-}
+export function useMyFeedItemsQuery(baseOptions: Apollo.QueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>) {
+        return Apollo.useQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(MyFeedItemsDocument, baseOptions);
+      }
+export function useMyFeedItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>) {
+          return Apollo.useLazyQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(MyFeedItemsDocument, baseOptions);
+        }
 export type MyFeedItemsQueryHookResult = ReturnType<typeof useMyFeedItemsQuery>;
 export type MyFeedItemsLazyQueryHookResult = ReturnType<typeof useMyFeedItemsLazyQuery>;
-export type MyFeedItemsQueryResult = Apollo.QueryResult<
-  MyFeedItemsQuery,
-  MyFeedItemsQueryVariables
->;
+export type MyFeedItemsQueryResult = Apollo.QueryResult<MyFeedItemsQuery, MyFeedItemsQueryVariables>;
 export const MyFeedsDocument = gql`
-  query myFeeds {
-    myFeeds {
-      ...UserFeedFields
-      feed {
-        ...FeedFields
-      }
+    query myFeeds {
+  myFeeds {
+    ...UserFeedFields
+    feed {
+      ...FeedFields
     }
   }
-  ${UserFeedFieldsFragmentDoc}
-  ${FeedFieldsFragmentDoc}
-`;
+}
+    ${UserFeedFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
 
 /**
  * __useMyFeedsQuery__
@@ -1751,27 +1599,54 @@ export const MyFeedsDocument = gql`
  *   },
  * });
  */
-export function useMyFeedsQuery(
-  baseOptions?: Apollo.QueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>,
-) {
-  return Apollo.useQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
-}
-export function useMyFeedsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>,
-) {
-  return Apollo.useLazyQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
-}
+export function useMyFeedsQuery(baseOptions?: Apollo.QueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>) {
+        return Apollo.useQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+      }
+export function useMyFeedsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>) {
+          return Apollo.useLazyQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+        }
 export type MyFeedsQueryHookResult = ReturnType<typeof useMyFeedsQuery>;
 export type MyFeedsLazyQueryHookResult = ReturnType<typeof useMyFeedsLazyQuery>;
 export type MyFeedsQueryResult = Apollo.QueryResult<MyFeedsQuery, MyFeedsQueryVariables>;
-export const MyOptionsDocument = gql`
-  query myOptions {
-    myOptions {
-      ...OptionsFields
-    }
+export const MyFeedsCountDocument = gql`
+    query myFeedsCount {
+  myFeeds {
+    newItemsCount
   }
-  ${OptionsFieldsFragmentDoc}
-`;
+}
+    `;
+
+/**
+ * __useMyFeedsCountQuery__
+ *
+ * To run a query within a React component, call `useMyFeedsCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyFeedsCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyFeedsCountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyFeedsCountQuery(baseOptions?: Apollo.QueryHookOptions<MyFeedsCountQuery, MyFeedsCountQueryVariables>) {
+        return Apollo.useQuery<MyFeedsCountQuery, MyFeedsCountQueryVariables>(MyFeedsCountDocument, baseOptions);
+      }
+export function useMyFeedsCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsCountQuery, MyFeedsCountQueryVariables>) {
+          return Apollo.useLazyQuery<MyFeedsCountQuery, MyFeedsCountQueryVariables>(MyFeedsCountDocument, baseOptions);
+        }
+export type MyFeedsCountQueryHookResult = ReturnType<typeof useMyFeedsCountQuery>;
+export type MyFeedsCountLazyQueryHookResult = ReturnType<typeof useMyFeedsCountLazyQuery>;
+export type MyFeedsCountQueryResult = Apollo.QueryResult<MyFeedsCountQuery, MyFeedsCountQueryVariables>;
+export const MyOptionsDocument = gql`
+    query myOptions {
+  myOptions {
+    ...OptionsFields
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
 
 /**
  * __useMyOptionsQuery__
@@ -1788,30 +1663,23 @@ export const MyOptionsDocument = gql`
  *   },
  * });
  */
-export function useMyOptionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>,
-) {
-  return Apollo.useQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
-}
-export function useMyOptionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>,
-) {
-  return Apollo.useLazyQuery<MyOptionsQuery, MyOptionsQueryVariables>(
-    MyOptionsDocument,
-    baseOptions,
-  );
-}
+export function useMyOptionsQuery(baseOptions?: Apollo.QueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>) {
+        return Apollo.useQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
+      }
+export function useMyOptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>) {
+          return Apollo.useLazyQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
+        }
 export type MyOptionsQueryHookResult = ReturnType<typeof useMyOptionsQuery>;
 export type MyOptionsLazyQueryHookResult = ReturnType<typeof useMyOptionsLazyQuery>;
 export type MyOptionsQueryResult = Apollo.QueryResult<MyOptionsQuery, MyOptionsQueryVariables>;
 export const ItemsCountUpdatedDocument = gql`
-  subscription itemsCountUpdated {
-    itemsCountUpdated {
-      feedId
-      count
-    }
+    subscription itemsCountUpdated {
+  itemsCountUpdated {
+    feedId
+    count
   }
-`;
+}
+    `;
 
 /**
  * __useItemsCountUpdatedSubscription__
@@ -1828,18 +1696,8 @@ export const ItemsCountUpdatedDocument = gql`
  *   },
  * });
  */
-export function useItemsCountUpdatedSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
-    ItemsCountUpdatedSubscription,
-    ItemsCountUpdatedSubscriptionVariables
-  >,
-) {
-  return Apollo.useSubscription<
-    ItemsCountUpdatedSubscription,
-    ItemsCountUpdatedSubscriptionVariables
-  >(ItemsCountUpdatedDocument, baseOptions);
-}
-export type ItemsCountUpdatedSubscriptionHookResult = ReturnType<
-  typeof useItemsCountUpdatedSubscription
->;
+export function useItemsCountUpdatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<ItemsCountUpdatedSubscription, ItemsCountUpdatedSubscriptionVariables>) {
+        return Apollo.useSubscription<ItemsCountUpdatedSubscription, ItemsCountUpdatedSubscriptionVariables>(ItemsCountUpdatedDocument, baseOptions);
+      }
+export type ItemsCountUpdatedSubscriptionHookResult = ReturnType<typeof useItemsCountUpdatedSubscription>;
 export type ItemsCountUpdatedSubscriptionResult = Apollo.SubscriptionResult<ItemsCountUpdatedSubscription>;

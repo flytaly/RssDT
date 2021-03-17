@@ -5,7 +5,7 @@ import PaperClipIcon from '../../../public/static/paperclip.svg';
 import ShareIcon from '../../../public/static/share-2.svg';
 import { Item, ItemFieldsFragment } from '../../generated/graphql';
 import shareProviders from '../../share-providers';
-import usePopup from '../../utils/use-popup';
+import usePopup from '../../hooks/use-popup';
 
 function getItemHTML(item: Pick<Item, 'description' | 'summary'>) {
   return { __html: item.summary || item.description || '' };

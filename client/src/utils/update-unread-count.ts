@@ -1,5 +1,10 @@
 import { OnSubscriptionDataOptions } from '@apollo/client';
-import { ItemsCountUpdatedSubscription, MyFeedsDocument, MyFeedsQuery } from '../generated/graphql';
+import {
+  ItemsCountUpdatedSubscription,
+  MyFeedItemsDocument,
+  MyFeedsDocument,
+  MyFeedsQuery,
+} from '../generated/graphql';
 
 export const updateUnreadCount = (
   options: OnSubscriptionDataOptions<ItemsCountUpdatedSubscription>,

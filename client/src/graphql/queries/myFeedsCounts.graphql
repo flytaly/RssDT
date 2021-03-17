@@ -1,0 +1,5 @@
+query myFeedsCount {
+  myFeeds {
+    newItemsCount
+  }
+}

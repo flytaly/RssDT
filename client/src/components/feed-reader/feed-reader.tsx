@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';
 import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
-import { isServer } from '../../utils/is-server';
 import AddFeedModal from '../modals/add-feed-modal';
 import ModalSidebar from '../modals/modal-sidebar';
 import FeedHeader from './feed-header';
@@ -18,6 +17,7 @@ const FeedReader: React.FC<{ id?: string }> = ({ id }) => {
   const { data, loading } = useMyFeedsQuery({ ssr: false });
   const [readerOpts, setReaderOpts] = useLocalState();
   const [searchFilter, setSearchFilter] = useState('');
+
   useEffect(() => {
     setShowSearch(false);
     setSearchFilter('');

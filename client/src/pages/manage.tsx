@@ -7,7 +7,7 @@ import MainCard from '../components/main-card/main-card';
 import AddFeedModal from '../components/modals/add-feed-modal';
 import Spinner from '../components/spinner';
 import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
-import useRedirectUnauthorized from '../utils/use-auth-route';
+import useRedirectUnauthorized from '../hooks/use-auth-route';
 
 const FeedManager: NextPage = () => {
   useRedirectUnauthorized();

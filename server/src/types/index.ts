@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Session from 'express-session';
-import { PubSub, PubSubEngine } from 'graphql-subscriptions';
+import { PubSubEngine } from 'graphql-subscriptions';
 import { Redis } from 'ioredis';
 import { createItemCountLoader } from '../utils/createItemCountLoader';
 

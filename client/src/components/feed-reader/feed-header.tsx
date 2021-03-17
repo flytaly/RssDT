@@ -9,7 +9,7 @@ import ExtLinkIcon from '../../../public/static/external-link.svg';
 import SearchIcon from '../../../public/static/search.svg';
 import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '../../generated/graphql';
 import { clamp } from '../../utils/clamp';
-import usePopup from '../../utils/use-popup';
+import usePopup from '../../hooks/use-popup';
 import EditFeedModal from '../modals/edit-feed-modal';
 import { ItemViewId, ItemViews, ReaderOptions } from './reader-options';
 
