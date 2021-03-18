@@ -4,7 +4,7 @@ import PQueue from 'p-queue';
 import { throttleMultiplier } from '../constants';
 import { buildAndSendDigests } from '../digests/build-and-send';
 import { logger } from '../logger';
-import { createRedis } from '../redis';
+import { createRedis, redisOptions } from '../redis';
 import { NewItemsPayload, PubSubTopics } from '../resolvers/common/pubSubTopics';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
@@ -32,7 +32,7 @@ export default class Watcher {
     this.cron = cron;
     this.initJob();
     this.queue = new PQueue({ concurrency, timeout: 1000 * 60 });
-    this.pubSub = new RedisPubSub({ publisher: createRedis() });
+    this.pubSub = new RedisPubSub({ publisher: createRedis(), connection: redisOptions });
   }
 
   async update() {

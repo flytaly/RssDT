@@ -4,7 +4,7 @@ import session from 'express-session';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
-import { createRedis } from './redis';
+import { createRedis, redisOptions } from './redis';
 import { FeedResolver } from './resolvers/feed';
 import { MailResolver } from './resolvers/mail';
 import { UserResolver } from './resolvers/user';
@@ -20,6 +20,7 @@ export const initApolloServer = async (
   const pubsub = new RedisPubSub({
     publisher: createRedis(),
     subscriber: createRedis(),
+    connection: redisOptions,
   });
   const schema = await buildSchema({
     resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
