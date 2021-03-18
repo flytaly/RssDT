@@ -37,7 +37,7 @@ function createApolloClient() {
 
   if (!isServer()) {
     const wsLink = new WebSocketLink({
-      uri: 'ws://localhost:4000/graphql',
+      uri: process.env.NEXT_PUBLIC_WS_API_URL!,
       options: { reconnect: true },
     });
 
