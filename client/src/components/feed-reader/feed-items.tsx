@@ -64,7 +64,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
 
   return (
     <main className="flex flex-col flex-grow space-y-4 p-3">
-      {!error && feed.newItemsCount ? (
+      {!error && feed.newItemsCount && items.length ? (
         <div className="self-center">
           <button
             className="btn bg-white text-black"

@@ -7,7 +7,7 @@ import {
 } from '../generated/graphql';
 import { PaginatedItemsRef } from '../lib/apollo-client';
 
-export const createUpdateOnNewItems = (currentFeedId?: number) => (
+export const createUpdateOnNewItems = (currentUserFeedId?: number) => (
   options: OnSubscriptionDataOptions<ItemsCountUpdatedSubscription>,
 ) => {
   const { client, subscriptionData } = options;
@@ -36,16 +36,22 @@ export const createUpdateOnNewItems = (currentFeedId?: number) => (
         }
       }
     `,
-    variables: { feedId: currentFeedId, filter: '' },
+    variables: { feedId: currentUserFeedId, filter: '' },
   });
   const items = myItems?.myFeedItems.items;
   const filterIds = new Set(items?.map((i) => i.id));
   cache.modify({
     fields: {
-      myFeedItems: (existing: PaginatedItemsRef, { readField }) => ({
-        ...existing,
-        items: existing?.items?.filter((ref) => filterIds.has(readField('id', ref)!)),
-      }),
+      myFeedItems: (existing: PaginatedItemsRef, { readField, DELETE }) => {
+        const saveItems = existing?.items?.filter((ref) => filterIds.has(readField('id', ref)!));
+        if (saveItems?.length) {
+          return {
+            ...existing,
+            items: saveItems,
+          };
+        }
+        return DELETE;
+      },
     },
   });
 };

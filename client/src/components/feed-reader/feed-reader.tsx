@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import debounce from 'lodash.debounce';
 import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';
-import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
+import {
+  useItemsCountUpdatedSubscription,
+  useMyFeedsQuery,
+  UserFeed,
+} from '../../generated/graphql';
 import AddFeedModal from '../modals/add-feed-modal';
 import ModalSidebar from '../modals/modal-sidebar';
 import FeedHeader from './feed-header';
 import FeedItems from './feed-items';
 import FeedSidebar from './feed-sidebar';
 import { useLocalState } from './reader-options';
+import { createUpdateOnNewItems } from '../../utils/update-unread-count';
 
 const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
@@ -24,6 +29,12 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   }, [id]);
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
+  const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === id) : null;
+
+  useItemsCountUpdatedSubscription({
+    onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id),
+  });
+
   const feedList = (
     <div className="bg-sidebar h-full py-2 overflow-hidden">
       <FeedSidebar feeds={myFeeds} loading={loading} />
@@ -36,8 +47,6 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
       </button>
     </div>
   );
-
-  const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === id) : null;
 
   const toggleSearch = () => setShowSearch((s) => !s);
 
