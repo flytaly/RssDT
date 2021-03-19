@@ -35,19 +35,6 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
     onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id),
   });
 
-  const feedList = (
-    <div className="bg-sidebar h-full py-2 overflow-hidden">
-      <FeedSidebar feeds={myFeeds} loading={loading} />
-      <button
-        type="button"
-        className="btn border border-gray-400 block mx-auto mt-8 hover:bg-secondary"
-        onClick={() => setAddFeedModalOpen(true)}
-      >
-        Add new feed
-      </button>
-    </div>
-  );
-
   const toggleSearch = () => setShowSearch((s) => !s);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) =>
@@ -56,7 +43,14 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">
       <aside className="hidden md:flex flex-col row-span-2 bg-sidebar">
-        <div className="flex-shrink-0">{feedList}</div>
+        <div className="flex-shrink-0">
+          <FeedSidebar
+            feeds={myFeeds}
+            loading={loading}
+            onAddFeedClick={() => setAddFeedModalOpen(true)}
+          />
+          ;
+        </div>
         <button
           type="button"
           className="flex flex-col flex-1 py-2 px-2 mx-auto group"
@@ -112,7 +106,13 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
         contentLabel="List of the feeds"
         right={false}
       >
-        {feedList}
+        <FeedSidebar
+          feeds={myFeeds}
+          loading={loading}
+          onAddFeedClick={() => setAddFeedModalOpen(true)}
+          onSidebarClose={() => setSidebarModalOpen(false)}
+        />
+        ;
       </ModalSidebar>
       <AddFeedModal isOpen={addFeedModalOpen} closeModal={() => setAddFeedModalOpen(false)} />
     </section>

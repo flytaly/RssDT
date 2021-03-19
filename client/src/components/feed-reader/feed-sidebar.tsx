@@ -1,14 +1,24 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FeedFieldsFragment, UserFeedFieldsFragment } from '../../generated/graphql';
+import Spinner from '../spinner';
+import XIcon from '../../../public/static/x.svg';
 
 interface FeedSidebarProps {
   feeds?: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
   loading?: boolean;
+  onAddFeedClick?: () => void;
+  onSidebarClose?: () => void;
 }
 
-const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
+const FeedSidebar: React.FC<FeedSidebarProps> = ({
+  feeds,
+  loading,
+  onAddFeedClick,
+  onSidebarClose,
+}) => {
   const router = useRouter();
   const id = router.query.id ? parseInt(router.query.id as string) : null;
   const feedsSorted = useMemo(() => {
@@ -28,6 +38,7 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
             <Link href={`/feed/${uf.id}`}>
               <a
                 className={`group flex pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
+                onClick={() => onSidebarClose?.()}
               >
                 <span className="overflow-ellipsis overflow-hidden group-hover:underline">
                   {uf.title || uf.feed.title || uf.feed.url}
@@ -50,8 +61,28 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({ feeds, loading }) => {
       })}
     </ul>
   );
-  const content = loading ? <div>Loading...</div> : list;
-  return <nav className="w-full text-sm text-gray-50  pr-1 overflow-hidden">{content}</nav>;
+  const content = loading ? <Spinner className="flex justify-center pt-3" /> : list;
+  return (
+    <div className="bg-sidebar h-full py-2 overflow-hidden">
+      {onSidebarClose && (
+        <div className="flex justify-end">
+          <button type="button" className="btn mr-3" onClick={() => onSidebarClose()}>
+            <XIcon className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+      <nav className="w-full text-sm text-gray-50 pr-1 overflow-hidden">{content}</nav>;
+      {onAddFeedClick && (
+        <button
+          type="button"
+          className="btn border border-gray-400 block mx-auto mt-8 hover:bg-secondary"
+          onClick={() => onAddFeedClick()}
+        >
+          Add new feed
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default FeedSidebar;

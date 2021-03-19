@@ -1,10 +1,10 @@
 import SpinnerIcon from '../../public/static/spinner.svg';
 
-const Spinner: React.FC = () => {
+const Spinner: React.FC<{ className?: string }> = ({ className = '' }) => {
   return (
-    <div className="animate-spin" title="loading animation">
-      <SpinnerIcon className="w-4 h-4" />
-    </div>
+    <span className={className} title="loading">
+      <SpinnerIcon className="animate-spin w-4 h-4" />
+    </span>
   );
 };
 
