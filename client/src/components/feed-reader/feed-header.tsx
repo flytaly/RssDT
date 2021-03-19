@@ -58,8 +58,8 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
   return (
     <>
       {userFeed && (
-        <div className="flex items-center w-full space-x-1">
-          <h3 className="font-bold text-lg max-w-sm">
+        <div className="flex items-baseline flex-1 space-x-1 overflow-hidden">
+          <h3 className="font-bold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis">
             {userFeed.title || userFeed.feed.title || userFeed.feed.url}
           </h3>
           <a
@@ -78,18 +78,18 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
                 ? 'Email digest of this feed is disabled'
                 : 'You are receiving email digests of this feed'
             }
-            className={`icon-btn h-4 w-4 ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
+            className={`icon-btn ${isDigestDisable ? 'text-gray-400' : 'text-gray-800'}`}
             onClick={() => setEditFeedModal(true)}
           >
-            <MailIcon />
+            <MailIcon className="h-4 w-4" />
           </button>
           <button
             type="button"
             title="Edit feed"
-            className="icon-btn h-4 w-4"
+            className="icon-btn"
             onClick={() => setEditFeedModal(true)}
           >
-            <EditIcon />
+            <EditIcon className="h-4 w-4" />
           </button>
           <div className="flex-1" />
           {toggleSearch ? (
@@ -138,14 +138,12 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
           <div ref={fontAnchorRef as RefObject<HTMLDivElement>} className="relative">
             <button
               type="button"
-              className="flex items-center icon-btn hover:text-primary"
+              className="icon-btn hover:text-primary"
               title="Feed reader options"
               onClick={() => setIsOptionsOpen((s) => !s)}
             >
-              <div>
-                <span className="text-sm leading-5">A</span>
-                <span className="text-lg leading-5">A</span>
-              </div>
+              <span className="text-sm leading-5">A</span>
+              <span className="text-lg leading-5">A</span>
             </button>
             {!isOptionsOpen ? null : (
               <div className="absolute bg-white top-full -right-2 shadow-popup text-xs z-10 min-w-min p-2 rounded-sm border border-gray-300 arrow-tr">

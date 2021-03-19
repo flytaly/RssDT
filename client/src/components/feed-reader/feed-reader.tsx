@@ -70,11 +70,11 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
         <div className="flex items-center ">
           <button
             type="button"
-            className="md:hidden icon-btn w-4 h-4 mr-4"
+            className="md:hidden icon-btn mr-4"
             title="Open list of the feeds"
             onClick={() => setSidebarModalOpen((prev) => !prev)}
           >
-            <BarsIcon />
+            <BarsIcon className="h-4 w-4" />
           </button>
           <FeedHeader
             userFeed={userFeed}
