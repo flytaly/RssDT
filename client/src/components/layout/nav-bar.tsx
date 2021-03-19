@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import MailIcon from '../../../public/static/mail.svg';
 import HelpCircle from '../../../public/static/help-circle.svg';
 import SettingsIcon from '../../../public/static/settings.svg';
 import ProfileIcon from '../../../public/static/user-circle-solid.svg';
@@ -53,7 +54,7 @@ const NavBar = () => {
       content = (
         <>
           <NavLink href="/feed" title="Reader" />
-          <NavLink href="/manage" title="Manage" />
+          <NavLink href="/manage" title="Manage" icon={<MailIcon className="h-5" />} />
           {/* <NavLink className="hidden sm:block" href="/settings" title="Settings" /> */}
           <NavLink href="/settings" title="Settings" icon={<SettingsIcon className="h-5" />} />
           <NavLink href="/help" title="Help" icon={help} />

@@ -31,7 +31,7 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
   const id = router.query.id ? parseInt(router.query.id as string) : null;
   const feedsSorted = useMemo(() => {
     const $feeds = hideEmailFeeds
-      ? feeds?.filter((f) => f.schedule !== DigestSchedule.Disable)
+      ? feeds?.filter((f) => !f.schedule || f.schedule === DigestSchedule.Disable)
       : feeds;
     const unread = $feeds?.filter((f) => f.newItemsCount) || [];
     const read = $feeds?.filter((f) => !f.newItemsCount) || [];
