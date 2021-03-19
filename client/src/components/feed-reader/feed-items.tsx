@@ -98,11 +98,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
 
       {hasMore ? <div ref={ref} className="h-0" /> : null}
 
-      {loading ? (
-        <div className="h-6 self-center">
-          <Spinner />
-        </div>
-      ) : null}
+      {loading ? <Spinner className="h-6 self-center" /> : null}
       <ViewItemModal isOpen={!!modalItem} onRequestClose={() => setShowItemInModal(null)}>
         {modalItem ? (
           <FeedItemContent

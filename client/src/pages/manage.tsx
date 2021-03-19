@@ -14,12 +14,7 @@ const FeedManager: NextPage = () => {
   const { data, loading } = useMyFeedsQuery({ ssr: false });
   const myFeeds = (data?.myFeeds || []) as UserFeed[];
   let content: JSX.Element | null = null;
-  if (loading)
-    content = (
-      <div className="flex justify-center">
-        <Spinner />
-      </div>
-    );
+  if (loading) content = <Spinner className="flex justify-center" />;
   else if (!myFeeds.length) {
     content = <div className="text-center">You have no feeds</div>;
   } else content = <FeedTable feeds={myFeeds} />;
