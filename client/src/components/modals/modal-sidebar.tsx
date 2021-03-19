@@ -24,6 +24,7 @@ const customStyles = (right: boolean): Modal.Styles => ({
     border: 'none',
     padding: 0,
     overflow: 'visible',
+    maxWidth: '100%',
   },
 });
 

@@ -37,6 +37,7 @@ const customStyles: Modal.Styles = {
     // boxShadow: '0px 20px 30px 0px rgba(0, 0, 0, 0.7)',
     padding: 0,
     overflow: 'visible',
+    maxWidth: '100%',
   },
 };
 
