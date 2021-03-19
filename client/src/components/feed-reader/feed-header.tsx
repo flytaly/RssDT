@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 import React, { RefObject, useCallback, useState } from 'react';
-import MailIcon from '../../../public/static/envelope.svg';
+import MailIcon from '../../../public/static/mail.svg';
 import EditIcon from '../../../public/static/edit.svg';
 import ItemBigIcon from '../../../public/static/item-big.svg';
 import ItemMediumIcon from '../../../public/static/item-middle.svg';
@@ -62,16 +62,24 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
           <h3 className="font-bold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-w-full">
             {userFeed.title || userFeed.feed.title || userFeed.feed.url}
           </h3>
-          <div className="flex flex-1 items-baseline space-x-1">
+          <div className="flex flex-1 items-baseline space-x-2">
             <a
               href={userFeed?.feed.link || userFeed?.feed.url}
               target="_blank"
               rel="noreferrer"
               title="open the feed's site"
-              className="hover:text-link mx-1"
+              className="hover:text-link "
             >
               <ExtLinkIcon className="w-4 h-4" />
             </a>
+            <button
+              type="button"
+              title="Edit feed"
+              className="icon-btn"
+              onClick={() => setEditFeedModal(true)}
+            >
+              <EditIcon className="h-4 w-4" />
+            </button>
             <button
               type="button"
               title={
@@ -83,14 +91,6 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
               onClick={() => setEditFeedModal(true)}
             >
               <MailIcon className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              title="Edit feed"
-              className="icon-btn"
-              onClick={() => setEditFeedModal(true)}
-            >
-              <EditIcon className="h-4 w-4" />
             </button>
             <div className="flex-1" />
             {toggleSearch ? (
