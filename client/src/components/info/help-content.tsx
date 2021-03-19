@@ -37,7 +37,7 @@ const helpArticles: HelpSection[] = [
 const HelpContent: React.FC = () => {
   return (
     <div className="flex flex-col sm:flex-row mb-4">
-      <aside className="sticky top-0 self-start text-sm px-3 py-3 m-2 w-full sm:w-72">
+      <aside className="sm:sticky top-0 self-start text-sm px-3 py-3 m-2 w-full sm:w-72">
         <nav>
           <ul className="space-y-2 list-disc ml-2 sm:list-none sm:ml-0">
             {helpArticles.map((item) => (
