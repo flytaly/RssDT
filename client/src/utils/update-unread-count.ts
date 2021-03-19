@@ -7,7 +7,7 @@ import {
 } from '../generated/graphql';
 import { PaginatedItemsRef } from '../lib/apollo-client';
 
-export const createUpdateOnNewItems = (currentUserFeedId?: number) => (
+export const createUpdateOnNewItems = (currentUserFeedId?: number, onNewItems?: () => void) => (
   options: OnSubscriptionDataOptions<ItemsCountUpdatedSubscription>,
 ) => {
   const { client, subscriptionData } = options;
@@ -54,4 +54,5 @@ export const createUpdateOnNewItems = (currentUserFeedId?: number) => (
       },
     },
   });
+  if (filterIds.size) onNewItems?.();
 };

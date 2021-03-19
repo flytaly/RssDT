@@ -22,17 +22,19 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   const { data, loading } = useMyFeedsQuery({ ssr: false });
   const [readerOpts, setReaderOpts] = useLocalState();
   const [searchFilter, setSearchFilter] = useState('');
+  const [hasNewItems, setHasNewItems] = useState(false);
 
   useEffect(() => {
     setShowSearch(false);
     setSearchFilter('');
+    setHasNewItems(false);
   }, [id]);
 
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === id) : null;
 
   useItemsCountUpdatedSubscription({
-    onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id),
+    onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id, () => setHasNewItems(true)),
   });
 
   const toggleSearch = () => setShowSearch((s) => !s);
@@ -96,7 +98,13 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
         ) : null}
       </div>
       {userFeed ? (
-        <FeedItems feed={userFeed} readerOpts={readerOpts} filter={searchFilter} />
+        <FeedItems
+          feed={userFeed}
+          readerOpts={readerOpts}
+          filter={searchFilter}
+          showRefetchBtn={hasNewItems}
+          onRefetchEnd={() => setHasNewItems(false)}
+        />
       ) : (
         <div />
       )}

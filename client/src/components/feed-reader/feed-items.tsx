@@ -17,11 +17,19 @@ interface FeedItemsProps {
   feed: { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
   readerOpts: ReaderOptions;
   filter?: string | null;
+  showRefetchBtn?: boolean;
+  onRefetchEnd?: () => void;
 }
 
 const take = 10;
 
-const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
+const FeedItems: React.FC<FeedItemsProps> = ({
+  feed,
+  readerOpts,
+  filter,
+  showRefetchBtn,
+  onRefetchEnd,
+}) => {
   const [showItemInModal, setShowItemInModal] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 0 });
   const { data, loading, fetchMore, error, refetch } = useMyFeedItemsQuery({
@@ -58,18 +66,28 @@ const FeedItems: React.FC<FeedItemsProps> = ({ feed, readerOpts, filter }) => {
     if (prevDate < lastDate) {
       setItemDate({
         variables: { itemId: newestItem.id, userFeedId: feed.id },
+        optimisticResponse: {
+          setLastViewedItemDate: {
+            lastViewedItemDate: newestItem.createdAt,
+            id: feed.id,
+            newItemsCount: 0,
+          },
+        },
       }).catch((e) => console.error("Couldn't update lastViewedItemDate", e));
     }
   }, [feed.id, feed.lastViewedItemDate, newestItem, setItemDate, setItemDateStatus.loading]);
 
   return (
     <main className="flex flex-col flex-grow space-y-4 p-3">
-      {!error && feed.newItemsCount && items.length ? (
+      {!error && feed.newItemsCount && showRefetchBtn ? (
         <div className="self-center">
           <button
             className="btn bg-white text-black"
             type="button"
-            onClick={() => refetch()}
+            onClick={async () => {
+              await refetch();
+              onRefetchEnd?.();
+            }}
             disabled={loading}
           >
             {loading ? <Spinner /> : <span className="mx-1">Load new items</span>}
