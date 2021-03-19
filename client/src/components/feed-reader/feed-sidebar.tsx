@@ -71,7 +71,7 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
           </button>
         </div>
       )}
-      <nav className="w-full text-sm text-gray-50 pr-1 overflow-hidden">{content}</nav>;
+      <nav className="max-w-full text-sm text-gray-50 pr-1 overflow-hidden">{content}</nav>;
       {onAddFeedClick && (
         <button
           type="button"

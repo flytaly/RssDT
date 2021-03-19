@@ -61,7 +61,7 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
         </button>
       </aside>
       <div className="px-4 py-1 my-1">
-        <div className="flex items-center ">
+        <div className="flex items-center flex-wrap">
           <button
             type="button"
             className="md:hidden icon-btn mr-4"
