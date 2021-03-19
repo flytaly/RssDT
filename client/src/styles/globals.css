@@ -36,6 +36,10 @@ body {
   outline: none;
 }
 
+button:focus {
+  outline: none;
+}
+
 button:-moz-focusring,
 a:-moz-focusring {
   outline: 2px solid var(--secondary-focus);
@@ -52,7 +56,6 @@ button,
 textarea,
 input {
   -webkit-appearance: none;
-  @apply focus:outline-none; /* fix black outline in chrome */
 }
 
 @layer base {

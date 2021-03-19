@@ -1,10 +1,16 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
-import React, { useMemo } from 'react';
+import React, { RefObject, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FeedFieldsFragment, UserFeedFieldsFragment } from '../../generated/graphql';
+import {
+  DigestSchedule,
+  FeedFieldsFragment,
+  UserFeedFieldsFragment,
+} from '../../generated/graphql';
 import Spinner from '../spinner';
 import XIcon from '../../../public/static/x.svg';
+import MoreIcon from '../../../public/static/more-horizontal.svg';
+import usePopup from '../../hooks/use-popup';
 
 interface FeedSidebarProps {
   feeds?: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
@@ -20,12 +26,19 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
   onSidebarClose,
 }) => {
   const router = useRouter();
+  const [showOptions, setShowOptions] = useState(false);
+  const [hideEmailFeeds, setHideEmailFeeds] = useState(false);
   const id = router.query.id ? parseInt(router.query.id as string) : null;
   const feedsSorted = useMemo(() => {
-    const unread = feeds?.filter((f) => f.newItemsCount) || [];
-    const read = feeds?.filter((f) => !f.newItemsCount) || [];
+    const $feeds = hideEmailFeeds
+      ? feeds?.filter((f) => f.schedule !== DigestSchedule.Disable)
+      : feeds;
+    const unread = $feeds?.filter((f) => f.newItemsCount) || [];
+    const read = $feeds?.filter((f) => !f.newItemsCount) || [];
     return unread.concat(read);
-  }, [feeds]);
+  }, [feeds, hideEmailFeeds]);
+
+  const { anchorRef } = usePopup(showOptions, () => setShowOptions(false));
 
   const list = (
     <ul>
@@ -63,15 +76,31 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
   );
   const content = loading ? <Spinner className="flex justify-center pt-3" /> : list;
   return (
-    <div className="bg-sidebar h-full py-2 overflow-hidden">
-      {onSidebarClose && (
-        <div className="flex justify-end">
-          <button type="button" className="btn mr-3" onClick={() => onSidebarClose()}>
+    <div className="bg-sidebar h-full py-2 text-gray-50">
+      <div className="flex mx-3">
+        {onSidebarClose && (
+          <button type="button" className="icon-btn" onClick={() => onSidebarClose()}>
             <XIcon className="w-4 h-4" />
           </button>
+        )}
+        <div className="relative ml-auto" ref={anchorRef as RefObject<HTMLDivElement>}>
+          <button type="button" className="icon-btn" onClick={() => setShowOptions((s) => !s)}>
+            <MoreIcon className="w-5" />
+          </button>
+          {showOptions && (
+            <div className="absolute top-3/4 right-0 py-1 bg-white text-black text-xs md:translate-x-1/2 md:transform-gpu z-10 min-w-min rounded-sm border border-gray-600">
+              <button
+                type="button"
+                className="whitespace-nowrap p-1 hover:bg-gray-300"
+                onClick={() => setHideEmailFeeds((s) => !s)}
+              >
+                {hideEmailFeeds ? 'Show feeds with email digests' : 'Hide feeds with email digests'}
+              </button>
+            </div>
+          )}
         </div>
-      )}
-      <nav className="max-w-full text-sm text-gray-50 pr-1 overflow-hidden">{content}</nav>;
+      </div>
+      <nav className="max-w-full text-sm pr-1 overflow-hidden">{content}</nav>
       {onAddFeedClick && (
         <button
           type="button"
