@@ -54,5 +54,5 @@ export const initApolloServer = async (
   });
   apolloServer.applyMiddleware({ app, cors: { origin: process.env.FRONTEND_URL } });
 
-  return apolloServer;
+  return { apolloServer, pubsub };
 };

@@ -17,8 +17,8 @@ const entry = async () => {
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
   const sessionMiddleware = initSession(app, redis);
-  await initDbConnection();
-  const apolloServer = await initApolloServer(app, redis, sessionMiddleware);
+  const dbConnection = await initDbConnection();
+  const { apolloServer, pubsub } = await initApolloServer(app, redis, sessionMiddleware);
   initLogFiles({ prefix: 'api_', name: 'api' });
 
   const httpServer = http.createServer(app);
@@ -27,6 +27,19 @@ const entry = async () => {
   httpServer.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
   });
+
+  const exit = async () => {
+    await dbConnection.close();
+    await pubsub.close();
+    await apolloServer.stop();
+    process.exit();
+  };
+
+  // catches ctrl+c event
+  process.on('SIGINT', exit);
+  // catches "kill pid" (for example: nodemon restart)
+  process.on('SIGUSR1', exit);
+  process.on('SIGUSR2', exit);
 };
 
 entry().catch((err) => console.error(err));
