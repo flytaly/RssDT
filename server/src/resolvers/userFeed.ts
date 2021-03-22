@@ -2,6 +2,7 @@ import {
   Arg,
   Args,
   ArgsType,
+  Authorized,
   Ctx,
   Field,
   FieldResolver,
@@ -22,7 +23,7 @@ import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { rateLimit } from '../middlewares/rate-limit';
-import { MyContext } from '../types';
+import { MyContext, Role } from '../types';
 import { DigestSchedule } from '../types/enums';
 import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader';
 import { ArgumentError } from './common/ArgumentError';
@@ -72,10 +73,9 @@ export class UserFeedNewItemsCountResponse {
   count: number;
 }
 
+const updatedFeedLoader = createUpdatedFeedLoader();
 @Resolver(UserFeed)
 export class UserFeedResolver {
-  updatedFeedLoader: ReturnType<typeof createUpdatedFeedLoader> = createUpdatedFeedLoader();
-
   @UseMiddleware(auth())
   @Query(() => [UserFeed], { nullable: true })
   async myFeeds(@Ctx() { req }: MyContext) {
@@ -247,19 +247,35 @@ export class UserFeedResolver {
     return itemCountLoader.load(root.id);
   }
 
-  @Subscription(() => [UserFeedNewItemsCountResponse], { topics: PubSubTopics.newItems })
-  async itemsCountUpdated(@Ctx() ctx: MyContext, @Root() payload: NewItemsPayload) {
-    return this.updatedFeedLoader.load({
-      userId: ctx.req.session.userId,
-      mapFeedToCount: payload,
-    });
+  @Subscription(() => [UserFeedNewItemsCountResponse], {
+    // Get user feed ids to skip users without updates and pass ids inside context.
+    // This way there would be only one db query.
+    filter: async ({ payload, context }) => {
+      const resp = await updatedFeedLoader.load({
+        userId: context.req.session.userId,
+        mapFeedToCount: payload,
+      });
+      if (resp) {
+        (context as any).itemsCountUpdate = resp;
+        return true;
+      }
+      return false;
+    },
+    topics: PubSubTopics.newItems,
+  })
+  async itemsCountUpdated(@Ctx() ctx: MyContext) {
+    return (ctx as any).itemsCountUpdate;
   }
 
+  @UseMiddleware(auth(Role.ADMIN))
   @Mutation(() => Boolean)
-  async testFeedUpdate(@Ctx() ctx: MyContext, @PubSub() pubSub: PubSubEngine) {
+  async testFeedUpdate(
+    @Arg('feedId') feedId: number,
+    @Arg('count') count: Number,
+    @PubSub() pubSub: PubSubEngine,
+  ) {
     await pubSub.publish(PubSubTopics.newItems, {
-      1: { count: 2 },
-      2: { count: 3 },
+      [feedId]: { count },
     } as NewItemsPayload);
     return true;
   }
