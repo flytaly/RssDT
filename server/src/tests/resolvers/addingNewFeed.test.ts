@@ -12,7 +12,7 @@ import {
   AddFeedEmailInput,
   UserFeedOptionsInput,
   UserInfoInput,
-} from '../../resolvers/common/inputs';
+} from '../../resolvers/resolver-types/inputs';
 import { DigestSchedule } from '../../types/enums';
 import { getSdk } from '../graphql/generated';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';

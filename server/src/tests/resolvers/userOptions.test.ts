@@ -5,7 +5,7 @@ import { User } from '../../entities/User';
 import { getSdk, SetOptionsMutation } from '../graphql/generated';
 import { generateUserAndGetSdk } from '../test-utils/login';
 import { defaultLocale, defaultTimeZone } from '../../constants';
-import { OptionsInput } from '../../resolvers/common/inputs';
+import { OptionsInput } from '../../resolvers/resolver-types/inputs';
 import { Theme } from '../../types/enums';
 import getTestClient from '../test-utils/getClient';
 

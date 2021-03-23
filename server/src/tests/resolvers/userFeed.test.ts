@@ -6,7 +6,7 @@ import * as uuid from 'uuid';
 import { initDbConnection } from '../../dbConnection';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
-import { UserFeedOptionsInput } from '../../resolvers/common/inputs';
+import { UserFeedOptionsInput } from '../../resolvers/resolver-types/inputs';
 import { DigestSchedule, TernaryState, Theme } from '../../types/enums';
 import { getSdk } from '../graphql/generated';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';

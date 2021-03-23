@@ -10,8 +10,8 @@ import { getFeedStream, parseFeed } from '../../feed-parser';
 import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { insertNewItems } from '../../feed-watcher/watcher-utils';
 import { logger } from '../../logger';
-import { ArgumentError } from './ArgumentError';
-import { UserFeedOptionsInput } from './inputs';
+import { ArgumentError } from '../resolver-types/errors';
+import { UserFeedOptionsInput } from '../resolver-types/inputs';
 
 type UserInfo = {
   locale?: string;

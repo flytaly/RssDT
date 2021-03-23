@@ -20,17 +20,19 @@ import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { rateLimit } from '../middlewares/rate-limit';
 import { MyContext, ReqWithSession, Role } from '../types';
-import { ArgumentError } from './common/ArgumentError';
-import { resetPasswordEmail, verificationEmail } from './common/confirmationMail';
-import { activateAllUserFeeds } from './common/feedDBQueries';
-import { getUserFeeds } from './common/getUserFeeds';
+import { activateAllUserFeeds } from './queries/activateAllUserFeeds';
+import { createUser } from './queries/createUser';
+import { getUserFeeds } from './queries/getUserFeeds';
+import { updateUser } from './queries/updateUser';
+import { updateUserOptions } from './queries/updateUserOptions';
+import { ArgumentError } from './resolver-types/errors';
+import { resetPasswordEmail, verificationEmail } from './resolver-types/confirmationMail';
 import {
   EmailPasswordInput,
   OptionsInput,
   PasswordResetInput,
   UserInfoInput,
-} from './common/inputs';
-import { createUser, updateUser, updateUserOptions } from './common/userDBQueries';
+} from './resolver-types/inputs';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
   req.session.userId = userId;

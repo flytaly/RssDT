@@ -2,7 +2,7 @@ import normalizeUrl from 'normalize-url';
 import Joi, { AnySchema } from 'joi';
 import { createMethodDecorator } from 'type-graphql';
 import { DateTime } from 'luxon';
-import { ArgumentError } from '../resolvers/common/ArgumentError';
+import { ArgumentError } from '../resolvers/resolver-types/errors';
 import { defaultLocale, defaultTimeZone } from '../constants';
 
 const NORM_METADATA_KEY = Symbol('normalize_meta');

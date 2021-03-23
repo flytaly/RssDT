@@ -4,7 +4,7 @@ import moment from 'moment';
 import { throttleMultiplier } from '../constants';
 import { buildAndSendDigests } from '../digests/build-and-send';
 import { createRedis } from '../redis';
-import { NewItemsPayload, PubSubTopics } from '../resolvers/common/pubSubTopics';
+import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics';
 import Watcher from './watcher';
 import * as watcherUtils from './watcher-utils';
 

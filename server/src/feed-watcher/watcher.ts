@@ -5,7 +5,7 @@ import { throttleMultiplier } from '../constants';
 import { buildAndSendDigests } from '../digests/build-and-send';
 import { logger } from '../logger';
 import { createRedis, redisOptions } from '../redis';
-import { NewItemsPayload, PubSubTopics } from '../resolvers/common/pubSubTopics';
+import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
 
 type WatcherProps = {

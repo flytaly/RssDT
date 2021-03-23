@@ -2,7 +2,7 @@ import { Arg, Field, InputType, Mutation, ObjectType, Resolver, UseMiddleware } 
 import { sendFeedback } from '../mail/dispatcher';
 import { InputMetadata, NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { rateLimit } from '../middlewares/rate-limit';
-import { ArgumentError } from './common/ArgumentError';
+import { ArgumentError } from './resolver-types/errors';
 
 @InputType()
 export class FeedbackInput {

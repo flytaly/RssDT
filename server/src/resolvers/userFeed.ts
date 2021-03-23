@@ -1,13 +1,9 @@
 import {
   Arg,
   Args,
-  ArgsType,
-  Authorized,
   Ctx,
-  Field,
   FieldResolver,
   Mutation,
-  ObjectType,
   PubSub,
   PubSubEngine,
   Query,
@@ -17,7 +13,7 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
-import { SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
+import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
 import { User } from '../entities/User';
 import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
@@ -26,54 +22,31 @@ import { rateLimit } from '../middlewares/rate-limit';
 import { MyContext, Role } from '../types';
 import { DigestSchedule } from '../types/enums';
 import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader';
-import { ArgumentError } from './common/ArgumentError';
-import { subscriptionVerifyEmail } from './common/confirmationMail';
-import { createUserFeed } from './common/createUserFeed';
-import { activateUserFeed } from './common/feedDBQueries';
-import { getUserFeeds } from './common/getUserFeeds';
+import { activateUserFeed } from './queries/activateUserFeed';
+import { getUserFeeds } from './queries/getUserFeeds';
+import { setLastViewedItemDate } from './queries/setLastViewedItemDate';
+import { ArgumentError } from './resolver-types/errors';
+import { subscriptionVerifyEmail } from './resolver-types/confirmationMail';
 import {
   AddFeedEmailInput,
   AddFeedInput,
   UserFeedOptionsInput,
   UserInfoInput,
-} from './common/inputs';
-import { NewItemsPayload, PubSubTopics } from './common/pubSubTopics';
-import { setLastViewedItemDate } from './common/setLastViewedItemDate';
-
-@ObjectType()
-class UserFeedResponse {
-  @Field(() => [ArgumentError], { nullable: true })
-  errors?: ArgumentError[];
-
-  @Field(() => UserFeed, { nullable: true })
-  userFeed?: UserFeed;
-}
-
-@ArgsType()
-export class DeleteFeedArgs {
-  @Field(() => [Number])
-  ids: number[];
-}
-
-@ObjectType()
-class DeletedFeedResponse {
-  @Field(() => [ArgumentError], { nullable: true })
-  errors?: ArgumentError[];
-
-  @Field(() => [String], { nullable: true })
-  ids?: string[];
-}
-
-@ObjectType()
-export class UserFeedNewItemsCountResponse {
-  @Field(() => Number)
-  feedId: number;
-
-  @Field(() => Number)
-  count: number;
-}
+} from './resolver-types/inputs';
+import { NewItemsPayload, PubSubTopics } from './resolver-types/pubSubTopics';
+import {
+  DeletedFeedResponse,
+  DeleteFeedArgs,
+  ImportFeedsArgs,
+  ImportFeedsResponse,
+  UserFeedNewItemsCountResponse,
+  UserFeedResponse,
+} from './resolver-types/userFeedTypes';
+import { createUserFeed } from './userFeed-utils/createUserFeed';
+import { importFeeds } from './userFeed-utils/importFeeds';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
+
 @Resolver(UserFeed)
 export class UserFeedResolver {
   @UseMiddleware(auth())
@@ -278,5 +251,15 @@ export class UserFeedResolver {
       [feedId]: { count },
     } as NewItemsPayload);
     return true;
+  }
+
+  @UseMiddleware(auth())
+  @Mutation(() => ImportFeedsResponse)
+  async importFeeds(@Args() { feeds }: ImportFeedsArgs) {
+    if (!feeds.length) return { errors: new ArgumentError('feeds', 'No feeds provided') };
+    if (feeds.length > maxItemsPerUser)
+      return { errors: [new ArgumentError('feeds', 'Too many feeds')] };
+    importFeeds();
+    return { status: true };
   }
 }
