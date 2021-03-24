@@ -15,7 +15,7 @@ type UserFeedFields = 'userFeedTitle';
 
 type InputType = UserFields | OptionsFields | FeedbackFields | UserFeedFields;
 
-const validates: Record<InputType, AnySchema> = {
+export const validates: Record<InputType, AnySchema> = {
   email: Joi.string().email().required(),
   password: Joi.string().min(8).max(100).required(),
   feedUrl: Joi.string().uri({
@@ -33,7 +33,7 @@ const validates: Record<InputType, AnySchema> = {
 };
 
 const pass = (arg: any) => arg;
-const normalizes: Record<InputType, Function> = {
+export const normalizes: Record<InputType, Function> = {
   email: (arg: string) => arg?.trim().toLowerCase(),
   password: (arg: string) => arg?.trim(),
   feedbackText: (arg: string) => arg?.trim(),

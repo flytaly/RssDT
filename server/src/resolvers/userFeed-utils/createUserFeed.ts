@@ -1,102 +1,23 @@
 import FeedParser from 'feedparser';
-import { Connection, EntityManager, getConnection, QueryRunner } from 'typeorm';
+import { getConnection, QueryRunner } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { defaultLocale, defaultTimeZone } from '../../constants';
 import { Feed } from '../../entities/Feed';
-import { Options } from '../../entities/Options';
 import { User } from '../../entities/User';
 import { UserFeed } from '../../entities/UserFeed';
-import { getFeedStream, parseFeed } from '../../feed-parser';
 import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { insertNewItems } from '../../feed-watcher/watcher-utils';
-import { logger } from '../../logger';
 import { ArgumentError } from '../resolver-types/errors';
 import { UserFeedOptionsInput } from '../resolver-types/inputs';
+import { processFeed } from './processFeed';
+import { upsertUserAndReturn } from './upsertUser';
 
-type UserInfo = {
+export type UserInfo = {
   locale?: string;
   timeZone?: string;
 };
 
-const upsertUser = async (
-  conn: Connection | EntityManager | QueryRunner,
-  email: string,
-  userInfo?: UserInfo | null,
-) => {
-  const { locale = defaultLocale, timeZone = defaultTimeZone } = userInfo || {};
-  const result = await conn.query(
-    `
-        WITH new_user AS (
-                INSERT INTO "user" ("email", "locale", "timeZone")
-                       VALUES ($1, $2, $3)
-                ON CONFLICT("email") DO NOTHING
-                RETURNING *
-            )
-            SELECT * FROM new_user
-        UNION
-            SELECT * FROM "user" WHERE email=$1
-                `,
-    [email, locale, timeZone],
-  );
-  return result[0] as User;
-};
-
-const upsertUserAndReturn = async (
-  queryRunner: QueryRunner,
-  userId?: number | null,
-  email?: string | null,
-  userInfo?: UserInfo | null,
-) => {
-  let user: User;
-  if (!userId) {
-    user = await upsertUser(queryRunner, email!, userInfo);
-    if (!user.id) throw new Error("Couldn't fetch user");
-    userId = user.id;
-    const options = Options.create({ userId });
-    await queryRunner.manager.save(options);
-  } else {
-    user = await User.findOneOrFail(userId);
-  }
-  return user;
-};
-
-const getFeedVariations = (url: string) => {
-  const urlsArray = [{ url }];
-  const httpsUrl = url.replace(/^http:\/\//, 'https://');
-  if (httpsUrl !== url) {
-    urlsArray.push({ url: httpsUrl });
-  }
-  return urlsArray;
-};
-
-const processFeed = async (url: string) => {
-  let feed = await Feed.findOne({ where: getFeedVariations(url) });
-  if (feed) return { feed };
-  let feedMeta: FeedParser.Meta;
-  let feedItems: FeedParser.Item[];
-  let newUrl: string = url;
-  try {
-    const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
-    newUrl = feedUrl;
-    ({ feedMeta, feedItems } = await parseFeed(feedStream));
-    if (!feedMeta) throw new Error('Not a feed');
-  } catch (e) {
-    if (e.message === 'Not a feed') {
-      return { errors: [new ArgumentError('url', e.message)] };
-    }
-    logger.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
-    return { errors: [new ArgumentError('url', `Couldn't get access to feed`)] };
-  }
-  // actual url of the feed
-  if (newUrl !== url) {
-    url = newUrl;
-    feed = await Feed.findOne({ where: getFeedVariations(url) });
-  }
-  return { feedMeta, feedItems, url, feed };
-};
-
 // creates activated feed with items
-const saveActivatedFeed = async (
+export const saveActivatedFeed = async (
   url: string,
   feedMeta: FeedParser.Meta,
   feedItems: FeedParser.Item[],
@@ -117,8 +38,12 @@ const saveActivatedFeed = async (
   return feed;
 };
 
-// creates activated feed with items
-const saveNotActivatedFeed = async (url: string, feedMeta: FeedParser.Meta, qR: QueryRunner) => {
+// creates not activated feed with items
+export const saveNotActivatedFeed = async (
+  url: string,
+  feedMeta: FeedParser.Meta,
+  qR: QueryRunner,
+) => {
   const feed = Feed.create({ url });
   feed.addMeta(feedMeta);
   feed.activated = false;
@@ -129,58 +54,57 @@ const saveNotActivatedFeed = async (url: string, feedMeta: FeedParser.Meta, qR: 
 interface CreateUserFeedArgs {
   url: string;
   email?: string | null;
-  userId?: number | null;
+  user?: User | null;
   userInfo?: UserInfo | null;
   feedOpts?: UserFeedOptionsInput;
 }
 
 /**
  * Creates userFeed record and upsert feed and user records based on url and email respectively.
- * If userId passed it means that user already exists and logged in.
- * If user is logged in and his email verified then automatically activate feed
  */
 export const createUserFeed = async ({
   url: $url,
   email,
-  userId,
+  user,
   userInfo,
   feedOpts,
 }: CreateUserFeedArgs) => {
-  if (!email && !userId) throw new Error('Not enough arguments to create new user feed');
-  const isUserLoggedIn = !!userId;
+  if (!email && !user) throw new Error('Not enough arguments to create new user feed');
   // eslint-disable-next-line prefer-const
   let { feed, errors, url, feedMeta, feedItems } = await processFeed($url);
   if (errors) return { errors };
 
   let userFeed: UserFeed | undefined;
-  let user: User | undefined;
+
   const qR = getConnection().createQueryRunner();
   await qR.connect();
   await qR.startTransaction();
   try {
-    user = await upsertUserAndReturn(qR, userId, email, userInfo);
-    userId = user.id;
-    const shouldActivate = isUserLoggedIn && user.emailVerified;
-    if (!feed) {
-      feed = shouldActivate
-        ? await saveActivatedFeed(url!, feedMeta!, feedItems!, qR)
-        : await saveNotActivatedFeed(url!, feedMeta!, qR);
-    } else {
+    user = user || (await upsertUserAndReturn(qR, email!, userInfo));
+    const userId = user.id;
+    const activate = user.emailVerified;
+
+    if (feed) {
       userFeed = await qR.manager.findOne(UserFeed, {
         where: { userId, feedId: feed.id },
       });
+      if (userFeed?.activated) throw new Error('feed was already added');
     }
-    if (userFeed && userFeed.activated) throw new Error('feed was already added');
+    if (!feed) {
+      feed = activate
+        ? await saveActivatedFeed(url!, feedMeta!, feedItems!, qR)
+        : await saveNotActivatedFeed(url!, feedMeta!, qR);
+    }
 
     userFeed =
       userFeed ||
       UserFeed.create({
-        feed,
-        userId,
+        feed: feed!,
+        userId: userId!,
         feedId: feed.id,
       });
-    userFeed.activated = userFeed.activated || shouldActivate;
-    if (shouldActivate && !feed.activated) {
+    userFeed.activated = userFeed.activated || activate;
+    if (activate && !feed.activated) {
       feed.activated = true;
       await qR.manager.save(feed);
     }

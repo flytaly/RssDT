@@ -60,5 +60,5 @@ export class ImportFeedsResponse {
   errors?: ArgumentError[];
 
   @Field(() => Boolean, { nullable: true })
-  status?: boolean;
+  success?: boolean;
 }

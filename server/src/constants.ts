@@ -9,6 +9,7 @@ export const EMAIL_CONFIRM_PREFIX = 'email-confirm:';
 export const PASSWORD_RESET_PREFIX = 'password-reset:';
 export const SUBSCRIPTION_CONFIRM_PREFIX = 'subscription-confirm:';
 export const FEED_LOCK_URL_PREFIX = 'lock:';
+export const IMPORT_STATUS_PREFIX = 'import:';
 
 export const defaultLocale = 'en-US';
 export const defaultTimeZone = 'UTC';

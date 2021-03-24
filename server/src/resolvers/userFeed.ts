@@ -23,10 +23,11 @@ import { MyContext, Role } from '../types';
 import { DigestSchedule } from '../types/enums';
 import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader';
 import { activateUserFeed } from './queries/activateUserFeed';
+import { getUserAndCountFeeds } from './queries/countUserFeeds';
 import { getUserFeeds } from './queries/getUserFeeds';
 import { setLastViewedItemDate } from './queries/setLastViewedItemDate';
-import { ArgumentError } from './resolver-types/errors';
 import { subscriptionVerifyEmail } from './resolver-types/confirmationMail';
+import { ArgumentError } from './resolver-types/errors';
 import {
   AddFeedEmailInput,
   AddFeedInput,
@@ -43,7 +44,8 @@ import {
   UserFeedResponse,
 } from './resolver-types/userFeedTypes';
 import { createUserFeed } from './userFeed-utils/createUserFeed';
-import { importFeeds } from './userFeed-utils/importFeeds';
+import { launchFeedsImport } from './userFeed-utils/importFeeds';
+import { ImportStatus, ImportStatusObject } from './userFeed-utils/ImportStatus';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
 
@@ -70,7 +72,12 @@ export class UserFeedResolver {
     if (!feedOpts.schedule || feedOpts.schedule === DigestSchedule.disable) {
       feedOpts.schedule = DigestSchedule.daily;
     }
-    const results = await createUserFeed({ url, email, userId: null, userInfo, feedOpts });
+    const userWithCount = await getUserAndCountFeeds({ email });
+    if (userWithCount && userWithCount.countFeeds >= maxItemsPerUser) {
+      return { errors: [new ArgumentError('feeds', 'Too many feeds')] };
+    }
+
+    const results = await createUserFeed({ url, email, user: userWithCount, userInfo, feedOpts });
     if (results.errors) return { errors: results.errors };
 
     const { title } = results.feed!;
@@ -89,10 +96,12 @@ export class UserFeedResolver {
     @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
     @Ctx() { req, redis }: MyContext,
   ) {
+    const { userId } = req.session;
+    const userWithCount = await getUserAndCountFeeds({ userId });
     const { errors, userFeed, feed, user } = await createUserFeed({
       url,
       email: null,
-      userId: req.session.userId,
+      user: userWithCount,
       feedOpts,
     });
     if (errors) return { errors };
@@ -255,11 +264,14 @@ export class UserFeedResolver {
 
   @UseMiddleware(auth())
   @Mutation(() => ImportFeedsResponse)
-  async importFeeds(@Args() { feeds }: ImportFeedsArgs) {
-    if (!feeds.length) return { errors: new ArgumentError('feeds', 'No feeds provided') };
-    if (feeds.length > maxItemsPerUser)
-      return { errors: [new ArgumentError('feeds', 'Too many feeds')] };
-    importFeeds();
-    return { status: true };
+  async importFeeds(@Args() { feeds }: ImportFeedsArgs, @Ctx() { req }: MyContext) {
+    return launchFeedsImport(feeds, req.session.userId);
+  }
+
+  @UseMiddleware(auth())
+  @Query(() => ImportStatusObject, { nullable: true })
+  async importStatus(@Ctx() { req }: MyContext) {
+    const status = new ImportStatus(req.session.userId);
+    return status.getCurrent();
   }
 }
