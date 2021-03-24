@@ -43,9 +43,9 @@ import {
   UserFeedNewItemsCountResponse,
   UserFeedResponse,
 } from './resolver-types/userFeedTypes';
-import { createUserFeed } from './userFeed-utils/createUserFeed';
-import { launchFeedsImport } from './userFeed-utils/importFeeds';
-import { ImportStatus, ImportStatusObject } from './userFeed-utils/ImportStatus';
+import { createUserFeed } from './userfeed-utils/createUserFeed';
+import { launchFeedsImport } from './userfeed-utils/importFeeds';
+import { ImportStatus, ImportStatusObject } from './userfeed-utils/ImportStatus';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
 
