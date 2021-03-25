@@ -23,6 +23,7 @@ export type Query = {
   myOptions: Options;
   myFeeds?: Maybe<Array<UserFeed>>;
   getFeedInfoByToken?: Maybe<UserFeed>;
+  importStatus?: Maybe<ImportStatusObject>;
 };
 
 
@@ -161,6 +162,14 @@ export type Enclosure = {
   type?: Maybe<Scalars['String']>;
 };
 
+export type ImportStatusObject = {
+  __typename?: 'ImportStatusObject';
+  state?: Maybe<Scalars['String']>;
+  progress?: Maybe<Scalars['Float']>;
+  total?: Maybe<Scalars['Float']>;
+  result?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   feedback?: Maybe<FeedbackResponse>;
@@ -182,6 +191,7 @@ export type Mutation = {
   unsubscribeByToken: Scalars['Boolean'];
   setLastViewedItemDate?: Maybe<UserFeed>;
   testFeedUpdate: Scalars['Boolean'];
+  importFeeds: ImportFeedsResponse;
 };
 
 
@@ -271,6 +281,17 @@ export type MutationUnsubscribeByTokenArgs = {
 export type MutationSetLastViewedItemDateArgs = {
   itemId: Scalars['Float'];
   userFeedId: Scalars['Float'];
+};
+
+
+export type MutationTestFeedUpdateArgs = {
+  count: Scalars['Float'];
+  feedId: Scalars['Float'];
+};
+
+
+export type MutationImportFeedsArgs = {
+  feeds: Array<FeedImport>;
 };
 
 export type FeedbackResponse = {
@@ -363,6 +384,18 @@ export type DeletedFeedResponse = {
   __typename?: 'DeletedFeedResponse';
   errors?: Maybe<Array<ArgumentError>>;
   ids?: Maybe<Array<Scalars['String']>>;
+};
+
+export type ImportFeedsResponse = {
+  __typename?: 'ImportFeedsResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type FeedImport = {
+  url: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
+  schedule?: Maybe<DigestSchedule>;
 };
 
 export type Subscription = {

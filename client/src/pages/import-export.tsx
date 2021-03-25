@@ -5,13 +5,15 @@ import Layout from '../components/layout/layout';
 import FeedNavBar from '../components/main-card/feed-nav-bar';
 import MainCard from '../components/main-card/main-card';
 import Spinner from '../components/spinner';
-import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
+import { DigestSchedule, useMyFeedsQuery, UserFeed } from '../generated/graphql';
 import useRedirectUnauthorized from '../hooks/use-auth-route';
+import { ImportForm } from '../components/import-form';
+import { Outline } from '../@types/opml-generator';
 
-function downloadText(text: string, filename = 'file.txt') {
+function downloadText(text: string, filename = 'file.txt', type = 'plain') {
   const element = document.createElement('a');
   const file = new Blob([text], {
-    type: 'text/plain;charset=utf-8',
+    type: `text/${type};charset=utf-8`,
   });
   element.href = URL.createObjectURL(file);
   element.download = filename;
@@ -37,12 +39,16 @@ const ImportExport: NextPage = () => {
   const exportOPML = () => {
     const generated = opml(
       { title: 'Subscriptions' },
-      myFeeds.map((f) => ({
-        xmlUrl: f.feed.url,
-        title: f.title || f.feed.title || undefined,
-      })),
+      myFeeds.map((f) => {
+        const digest = f.schedule && f.schedule !== DigestSchedule.Disable;
+        return {
+          xmlUrl: f.feed.url,
+          title: f.title || f.feed.title || undefined,
+          ...(digest ? { digest_schedule: f.schedule } : {}),
+        };
+      }),
     );
-    downloadText(generated, 'feeds.opml');
+    downloadText(generated, 'feeds.xml', 'xml');
   };
 
   return (
@@ -51,13 +57,11 @@ const ImportExport: NextPage = () => {
         <div className="w-full ">
           <FeedNavBar />
           <div className="flex flex-col sm:flex-row w-full max-w-5xl p-4 mx-auto">
-            {/* <div className="flex-1"> */}
-            {/* <h2 className="font-bold text-base text-center">Import</h2> */}
-            {/* <button type="submit" className="btn bg-secondary">
-                Import Feeds
-              </button> */}
-            {/* </div> */}
-            <div className="flex-1 min-w-min">
+            <div className="flex-1 p-3">
+              <h2 className="font-bold text-base text-center">Import</h2>
+              <ImportForm />
+            </div>
+            <div className="flex-1 p-3">
               <h2 className="font-bold text-base text-center">Export</h2>
               <ul className="py-4">
                 <li>

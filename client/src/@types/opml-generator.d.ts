@@ -9,6 +9,7 @@ type Outline = {
   type?: 'rss' | 'atom';
   xmlUrl?: string;
   htmlUrl?: string;
+  digest_schedule?: string;
 };
 
 declare module 'opml-generator' {
