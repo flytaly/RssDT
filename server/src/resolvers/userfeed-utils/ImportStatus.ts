@@ -10,7 +10,7 @@ registerEnumType(ImportState, { name: 'ImportState' });
 
 @ObjectType()
 export class ImportStatusObject {
-  @Field({ nullable: true })
+  @Field(() => ImportState, { nullable: true })
   state: ImportState;
 
   @Field({ nullable: true })

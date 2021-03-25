@@ -112,7 +112,11 @@ export const createUserFeed = async ({
     userFeed.lastViewedItemDate = ts;
     if (!userFeed.unsubscribeToken) userFeed.unsubscribeToken = uuidv4();
     userFeed.feed = feed;
-    if (feedOpts) qR.manager.getRepository(UserFeed).merge(userFeed, feedOpts);
+    if (feedOpts) {
+      if (feedOpts.title && feedOpts.title === feed.title) delete feedOpts.title;
+      if (feedOpts.title) feedOpts.title = feedOpts.title.slice(0, 50);
+      qR.manager.getRepository(UserFeed).merge(userFeed, { ...feedOpts });
+    }
     await qR.manager.save(userFeed);
     await qR.commitTransaction();
   } catch (err) {
