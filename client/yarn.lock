@@ -5210,6 +5210,13 @@
   dependencies:
     "mimic-fn" "^2.1.0"
 
+"opml-generator@^1.1.1":
+  "integrity" "sha1-1mzUFtAr6GB9FeuTGH2GwspZG84="
+  "resolved" "https://registry.npmjs.org/opml-generator/-/opml-generator-1.1.1.tgz"
+  "version" "1.1.1"
+  dependencies:
+    "xml" "^1.0.0"
+
 "optimism@^0.14.0":
   "integrity" "sha512-ygbNt8n4DOCVpkwiLF+IrKKeNHOjtr9aXLWGP9HNJGoblSGsnVbJLstcH6/nE9Xy5ZQtlkSioFQNnthmENW6FQ=="
   "resolved" "https://registry.npmjs.org/optimism/-/optimism-0.14.0.tgz"
@@ -7557,6 +7564,11 @@
   "integrity" "sha512-pTsP8UAfhy3sk1lSk/O/s4tjD0CRwvMnzvwr4OKGX7ZvqZtUyx4KIJB5JWbkykPoc55tixMGgTNoh3k4FkNGFQ=="
   "resolved" "https://registry.npmjs.org/ws/-/ws-7.4.1.tgz"
   "version" "7.4.1"
+
+"xml@^1.0.0":
+  "integrity" "sha1-eLpyAgApxbyHuKgaPPzXS0ovweU="
+  "resolved" "https://registry.npmjs.org/xml/-/xml-1.0.1.tgz"
+  "version" "1.0.1"
 
 "xml2js@0.4.17":
   "integrity" "sha1-F76T6q4/O3eTWceVtBlwWogX6Gg="

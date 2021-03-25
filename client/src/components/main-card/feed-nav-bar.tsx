@@ -11,6 +11,10 @@ const routes: CardRoute[] = [
     name: 'Manage digests',
     path: '/manage',
   },
+  {
+    name: 'Import/Export',
+    path: '/import-export',
+  },
 ];
 
 const FeedNavBar = () => {
