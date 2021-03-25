@@ -1,4 +1,3 @@
-import { NetworkStatus } from '@apollo/client';
 import React, { useCallback, useState } from 'react';
 import {
   ImportState,

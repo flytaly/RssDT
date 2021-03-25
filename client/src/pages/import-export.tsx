@@ -1,14 +1,13 @@
 import { NextPage } from 'next';
-import React from 'react';
 import opml from 'opml-generator';
+import React from 'react';
+import { ImportForm } from '../components/import-form';
 import Layout from '../components/layout/layout';
 import FeedNavBar from '../components/main-card/feed-nav-bar';
 import MainCard from '../components/main-card/main-card';
 import Spinner from '../components/spinner';
 import { DigestSchedule, useMyFeedsQuery, UserFeed } from '../generated/graphql';
 import useRedirectUnauthorized from '../hooks/use-auth-route';
-import { ImportForm } from '../components/import-form';
-import { Outline } from '../@types/opml-generator';
 
 function downloadText(text: string, filename = 'file.txt', type = 'plain') {
   const element = document.createElement('a');
