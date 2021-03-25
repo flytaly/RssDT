@@ -16,7 +16,8 @@ export const getFeedsFromOpml = async (opml: string) => {
     items.forEach(({ xmlurl, title, digest_schedule: ds, children }) => {
       if (children && children.length) getFeeds(children);
       if (!xmlurl) return;
-      const feed: FeedImport = { url: xmlurl, title };
+      const feed: FeedImport = { url: xmlurl };
+      if (title) feed.title = title;
       if (ds && Object.values(DigestSchedule).includes(ds as DigestSchedule)) {
         feed.schedule = ds as DigestSchedule;
       }

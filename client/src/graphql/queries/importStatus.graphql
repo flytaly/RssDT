@@ -1,0 +1,8 @@
+query importStatus {
+  importStatus {
+    state
+    progress
+    total
+    result
+  }
+}

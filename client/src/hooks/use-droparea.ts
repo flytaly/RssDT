@@ -1,12 +1,18 @@
 /* eslint-disable consistent-return */
 import { useRef, useState, useEffect } from 'react';
 
-export function useDropArea(onFilesDrop: (fl?: FileList) => any) {
+export function useDropArea({
+  onFilesDrop,
+  disable = false,
+}: {
+  onFilesDrop: (fl?: FileList) => any;
+  disable?: boolean;
+}) {
   const dropAreaRef = useRef<HTMLElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   useEffect(() => {
     const elem = dropAreaRef.current;
-    if (!elem) return;
+    if (disable || !elem) return;
     const handleDrag = (ev: DragEvent) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -24,7 +30,7 @@ export function useDropArea(onFilesDrop: (fl?: FileList) => any) {
       elem?.removeEventListener('dragover', handleDrag, false);
       elem?.removeEventListener('drop', handleDrag, false);
     };
-  }, []);
+  }, [disable, onFilesDrop]);
 
   return { isHovered, dropAreaRef };
 }

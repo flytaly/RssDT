@@ -164,11 +164,16 @@ export type Enclosure = {
 
 export type ImportStatusObject = {
   __typename?: 'ImportStatusObject';
-  state?: Maybe<Scalars['String']>;
+  state?: Maybe<ImportState>;
   progress?: Maybe<Scalars['Float']>;
   total?: Maybe<Scalars['Float']>;
   result?: Maybe<Scalars['String']>;
 };
+
+export enum ImportState {
+  Importing = 'importing',
+  Done = 'done'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -539,6 +544,23 @@ export type DeleteMyFeedsMutation = (
   ) }
 );
 
+export type ImportFeedsMutationVariables = Exact<{
+  feedImport: Array<FeedImport> | FeedImport;
+}>;
+
+
+export type ImportFeedsMutation = (
+  { __typename?: 'Mutation' }
+  & { importFeeds: (
+    { __typename?: 'ImportFeedsResponse' }
+    & Pick<ImportFeedsResponse, 'success'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'ArgumentError' }
+      & Pick<ArgumentError, 'message'>
+    )>> }
+  ) }
+);
+
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -731,6 +753,17 @@ export type GetFeedInfoByTokenQuery = (
       { __typename?: 'Feed' }
       & Pick<Feed, 'title' | 'url'>
     ) }
+  )> }
+);
+
+export type ImportStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ImportStatusQuery = (
+  { __typename?: 'Query' }
+  & { importStatus?: Maybe<(
+    { __typename?: 'ImportStatusObject' }
+    & Pick<ImportStatusObject, 'state' | 'progress' | 'total' | 'result'>
   )> }
 );
 
@@ -1065,6 +1098,41 @@ export function useDeleteMyFeedsMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteMyFeedsMutationHookResult = ReturnType<typeof useDeleteMyFeedsMutation>;
 export type DeleteMyFeedsMutationResult = Apollo.MutationResult<DeleteMyFeedsMutation>;
 export type DeleteMyFeedsMutationOptions = Apollo.BaseMutationOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>;
+export const ImportFeedsDocument = gql`
+    mutation importFeeds($feedImport: [FeedImport!]!) {
+  importFeeds(feeds: $feedImport) {
+    errors {
+      message
+    }
+    success
+  }
+}
+    `;
+export type ImportFeedsMutationFn = Apollo.MutationFunction<ImportFeedsMutation, ImportFeedsMutationVariables>;
+
+/**
+ * __useImportFeedsMutation__
+ *
+ * To run a mutation, you first call `useImportFeedsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useImportFeedsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [importFeedsMutation, { data, loading, error }] = useImportFeedsMutation({
+ *   variables: {
+ *      feedImport: // value for 'feedImport'
+ *   },
+ * });
+ */
+export function useImportFeedsMutation(baseOptions?: Apollo.MutationHookOptions<ImportFeedsMutation, ImportFeedsMutationVariables>) {
+        return Apollo.useMutation<ImportFeedsMutation, ImportFeedsMutationVariables>(ImportFeedsDocument, baseOptions);
+      }
+export type ImportFeedsMutationHookResult = ReturnType<typeof useImportFeedsMutation>;
+export type ImportFeedsMutationResult = Apollo.MutationResult<ImportFeedsMutation>;
+export type ImportFeedsMutationOptions = Apollo.BaseMutationOptions<ImportFeedsMutation, ImportFeedsMutationVariables>;
 export const LoginDocument = gql`
     mutation login($email: String!, $password: String!) {
   login(input: {email: $email, password: $password}) {
@@ -1534,6 +1602,41 @@ export function useGetFeedInfoByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetFeedInfoByTokenQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenQuery>;
 export type GetFeedInfoByTokenLazyQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenLazyQuery>;
 export type GetFeedInfoByTokenQueryResult = Apollo.QueryResult<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>;
+export const ImportStatusDocument = gql`
+    query importStatus {
+  importStatus {
+    state
+    progress
+    total
+    result
+  }
+}
+    `;
+
+/**
+ * __useImportStatusQuery__
+ *
+ * To run a query within a React component, call `useImportStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImportStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImportStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useImportStatusQuery(baseOptions?: Apollo.QueryHookOptions<ImportStatusQuery, ImportStatusQueryVariables>) {
+        return Apollo.useQuery<ImportStatusQuery, ImportStatusQueryVariables>(ImportStatusDocument, baseOptions);
+      }
+export function useImportStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImportStatusQuery, ImportStatusQueryVariables>) {
+          return Apollo.useLazyQuery<ImportStatusQuery, ImportStatusQueryVariables>(ImportStatusDocument, baseOptions);
+        }
+export type ImportStatusQueryHookResult = ReturnType<typeof useImportStatusQuery>;
+export type ImportStatusLazyQueryHookResult = ReturnType<typeof useImportStatusLazyQuery>;
+export type ImportStatusQueryResult = Apollo.QueryResult<ImportStatusQuery, ImportStatusQueryVariables>;
 export const MeDocument = gql`
     query me {
   me {

@@ -1,0 +1,8 @@
+mutation importFeeds($feedImport: [FeedImport!]!) {
+  importFeeds(feeds: $feedImport) {
+    errors {
+      message
+    }
+    success
+  }
+}

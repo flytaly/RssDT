@@ -73,7 +73,7 @@ const ImportExport: NextPage = () => {
                 </li>
               </ul>
               {loading ? (
-                <Spinner className="h-5 w-5" />
+                <Spinner />
               ) : (
                 <div>
                   <button type="button" className="btn bg-secondary mr-4" onClick={exportText}>
