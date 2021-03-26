@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import EditIcon from '../../public/static/edit.svg';
 import TrashIcon from '../../public/static/trash.svg';
 import { useDeleteMyFeedsMutation, UserFeed } from '../generated/graphql';
+import { SortableColumn, useSortableState } from '../hooks/use-sortableState';
 import { periodNames } from '../types';
 import { updateAfterDelete as update } from '../utils/update-after-delete';
 import ConfirmModal from './modals/confirm-modal';
@@ -61,35 +62,56 @@ const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ fee
   </div>
 );
 
+const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '-');
+const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
+
 const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   const [feedsToDelete, setFeedsToDelete] = useState<UserFeed[]>([]);
   const [editingFeed, setEditingFeed] = useState<UserFeed | null>(null);
   const [deleteError, setDeleteError] = useState('');
   const [deleteMyFeeds, { loading }] = useDeleteMyFeedsMutation();
+  const { getSortIcon, incSort, sortState, sortUserFeeds } = useSortableState();
+
+  const getHeaderButton = (col: SortableColumn, name: string) => (
+    <button
+      type="button"
+      className="flex items-center font-bold w-full group"
+      onClick={() => incSort(col)}
+    >
+      <span>{name}</span>
+      {getSortIcon(col)}
+    </button>
+  );
 
   const closeModal = () => {
     setDeleteError('');
     setFeedsToDelete([]);
   };
 
-  const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '-');
-  const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
+  const sortedFeeds = useMemo(() => {
+    if (!sortState.col || !sortState.dir) return feeds;
+    return sortUserFeeds(feeds, sortState.col, sortState.dir);
+  }, [feeds, sortState.col, sortState.dir, sortUserFeeds]);
 
   return (
     <div>
       <table className="w-full text-sm">
         <thead>
           <HeaderRow>
-            <Cell name="Feed">Feed</Cell>
-            <Cell name="Added">Added</Cell>
-            <Cell name="Last digest date">Last digest date</Cell>
-            <Cell name="Last item pubdate">Last item pubdate</Cell>
+            <Cell name="Feed">{getHeaderButton('title', 'Feed')}</Cell>
+            <Cell name="Added">{getHeaderButton('added', 'Added')}</Cell>
+            <Cell name="Latest digest date">
+              {getHeaderButton('digest_date', 'Latest digest date')}
+            </Cell>
+            <Cell name="Latest item pubdate">
+              {getHeaderButton('item_pubdate', 'Latest item pubdate')}
+            </Cell>
             <Cell name="Digest Schedule">Digest Schedule</Cell>
             <Cell name="Actions">Actions</Cell>
           </HeaderRow>
         </thead>
         <tbody>
-          {feeds.map((uf, idx) => (
+          {sortedFeeds.map((uf, idx) => (
             <Row isOdd={!(idx % 2)} key={uf.id}>
               <Cell name="Feed">
                 <Link href={`/feed/${uf.id}`}>
@@ -99,10 +121,10 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               <Cell className="text-xs" name="Added">
                 {formatCreatedDate(uf.createdAt)}
               </Cell>
-              <Cell className="text-xs" name="Last digest date">
+              <Cell className="text-xs" name="Latest digest date">
                 {formatDigestDate(uf.lastDigestSentAt)}
               </Cell>
-              <Cell className="text-xs" name="Last item pubdate">
+              <Cell className="text-xs" name="Latest item pubdate">
                 {formatDigestDate(uf.feed.lastPubdate)}
               </Cell>
               <Cell name="Digest Schedule">
