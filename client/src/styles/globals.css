@@ -91,7 +91,7 @@ pre {
 
   @screen sm {
     .feed-table-template {
-      grid-template-columns: 6fr 2fr 4fr 4fr 3fr 1fr;
+      grid-template-columns: 1.3rem 6fr 2fr 4fr 4fr 3fr 1fr;
     }
   }
 

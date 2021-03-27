@@ -32,7 +32,6 @@ const customStyles: Modal.Styles = {
     transform: 'translate(-50%, -50%)',
     background: 'none',
     border: 'none',
-    // boxShadow: '0px 20px 30px 0px rgba(0, 0, 0, 0.7)',
     padding: 0,
     overflow: 'visible',
     maxWidth: '100%',
@@ -65,7 +64,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     >
       <animated.div
         style={springProps}
-        className="bg-gray-100 p-6 border border-gray rounded-md w-96 max-w-full text-center shadow-modal "
+        className="bg-gray-100 p-6 border border-gray rounded-md w-96 max-w-full text-center shadow-modal max-h-screen overflow-auto"
       >
         {message}
         <div className="mt-4 text-error">{error}</div>

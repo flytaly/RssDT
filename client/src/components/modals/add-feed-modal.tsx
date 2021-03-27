@@ -68,7 +68,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
     >
       <animated.div
         style={springProps}
-        className="bg-gray-100 p-6 border border-gray rounded-md w-80 max-w-full shadow-modal"
+        className="bg-gray-100 p-6 border border-gray rounded-md w-80 max-w-full shadow-modal max-h-screen overflow-auto"
       >
         <h2 className="text-lg font-bold text-center pb-2">Add new feed</h2>
         <Formik

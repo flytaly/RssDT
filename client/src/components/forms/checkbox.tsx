@@ -15,17 +15,11 @@ const CheckBox: React.FC<CheckBoxProps> = ({
 }) => {
   return (
     <div className="flex items-center">
-      <input
-        className={`absolute opacity-0 ${className}`}
-        id={id}
-        type="checkbox"
-        checked={checked}
-        {...props}
-      />
+      <input className="absolute opacity-0" id={id} type="checkbox" checked={checked} {...props} />
       <label
         htmlFor={id}
         title={title}
-        className={`block p-px w-4 h-4 border border-primary rounded ${
+        className={`block p-px w-4 h-4 border rounded ${className || 'border-primary'} ${
           disabled ? 'opacity-30' : ''
         }`}
       >

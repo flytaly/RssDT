@@ -6,6 +6,8 @@ import { useDeleteMyFeedsMutation, UserFeed } from '../generated/graphql';
 import { SortableColumn, useSortableState } from '../hooks/use-sortableState';
 import { periodNames } from '../types';
 import { updateAfterDelete as update } from '../utils/update-after-delete';
+import CheckBox from './forms/checkbox';
+import AddFeedModal from './modals/add-feed-modal';
 import ConfirmModal from './modals/confirm-modal';
 import EditFeedModal from './modals/edit-feed-modal';
 
@@ -51,7 +53,7 @@ const HeaderRow: React.FC = ({ children }) => (
 const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ feeds, error }) => (
   <div>
     Are you sure you want to delete the feeds:{' '}
-    <ul>
+    <ul className="max-h-32 overflow-auto text-sm">
       {feeds.map((uf) => (
         <li key={uf.id}>
           <b>{uf.title || uf.feed.title}</b>
@@ -71,6 +73,8 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   const [deleteError, setDeleteError] = useState('');
   const [deleteMyFeeds, { loading }] = useDeleteMyFeedsMutation();
   const { getSortIcon, incSort, sortState, sortUserFeeds } = useSortableState();
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
 
   const getHeaderButton = (col: SortableColumn, name: string) => (
     <button
@@ -86,6 +90,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
   const closeModal = () => {
     setDeleteError('');
     setFeedsToDelete([]);
+    setSelectedIds([]);
   };
 
   const sortedFeeds = useMemo(() => {
@@ -93,63 +98,124 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
     return sortUserFeeds(feeds, sortState.col, sortState.dir);
   }, [feeds, sortState.col, sortState.dir, sortUserFeeds]);
 
+  const onSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = parseInt(e.target.id);
+    return e.target.checked
+      ? setSelectedIds((prevIds) => [...prevIds, id])
+      : setSelectedIds((prevIds) => prevIds.filter(($id) => $id === id));
+  };
+  const toggleAll = () =>
+    setSelectedIds((prev) => {
+      if (prev.length) return [];
+      return sortedFeeds.map((f) => f.id);
+    });
+  const removeMultipleFeeds = () => {
+    const ids = new Set(selectedIds);
+    setFeedsToDelete(sortedFeeds.filter((f) => ids.has(f.id)));
+  };
+
   return (
     <div>
-      <table className="w-full text-sm">
-        <thead>
-          <HeaderRow>
-            <Cell name="Feed">{getHeaderButton('title', 'Feed')}</Cell>
-            <Cell name="Added">{getHeaderButton('added', 'Added')}</Cell>
-            <Cell name="Latest digest date">
-              {getHeaderButton('digest_date', 'Latest digest date')}
-            </Cell>
-            <Cell name="Latest item pubdate">
-              {getHeaderButton('item_pubdate', 'Latest item pubdate')}
-            </Cell>
-            <Cell name="Digest Schedule">Digest Schedule</Cell>
-            <Cell name="Actions">Actions</Cell>
-          </HeaderRow>
-        </thead>
-        <tbody>
-          {sortedFeeds.map((uf, idx) => (
-            <Row isOdd={!(idx % 2)} key={uf.id}>
-              <Cell name="Feed">
-                <Link href={`/feed/${uf.id}`}>
-                  <a className="underline">{uf.title || uf.feed.title}</a>
-                </Link>
+      <div className="flex justify-between items-end mb-2">
+        {selectedIds.length ? (
+          <span>
+            <span>{`${selectedIds.length} selected feeds: `}</span>
+            <button
+              type="button"
+              className="icon-btn inline-flex items-baseline px-1"
+              onClick={removeMultipleFeeds}
+            >
+              <TrashIcon className="h-3 mr-1" />
+              Remove
+            </button>
+          </span>
+        ) : (
+          <span />
+        )}
+
+        <button
+          type="button"
+          className="btn bg-secondary ml-auto"
+          onClick={() => setAddFeedModalOpen(true)}
+        >
+          Add new feed
+        </button>
+      </div>
+      {!sortedFeeds.length ? (
+        <div className="text-center">You have no feeds</div>
+      ) : (
+        <table className="w-full text-sm">
+          <thead>
+            <HeaderRow>
+              <Cell>
+                <CheckBox
+                  id="selectAll"
+                  className="border-gray-400 hover:border-gray-600"
+                  checked={selectedIds.length >= sortedFeeds.length}
+                  onChange={toggleAll}
+                />
               </Cell>
-              <Cell className="text-xs" name="Added">
-                {formatCreatedDate(uf.createdAt)}
+              <Cell name="Feed">{getHeaderButton('title', 'Feed')}</Cell>
+              <Cell name="Added">{getHeaderButton('added', 'Added')}</Cell>
+              <Cell name="Latest digest date">
+                {getHeaderButton('digest_date', 'Latest digest date')}
               </Cell>
-              <Cell className="text-xs" name="Latest digest date">
-                {formatDigestDate(uf.lastDigestSentAt)}
+              <Cell name="Latest item pubdate">
+                {getHeaderButton('item_pubdate', 'Latest item pubdate')}
               </Cell>
-              <Cell className="text-xs" name="Latest item pubdate">
-                {formatDigestDate(uf.feed.lastPubdate)}
-              </Cell>
-              <Cell name="Digest Schedule">
-                {periodNames[uf.schedule] !== periodNames.disable ? (
-                  <span className="font-medium">{periodNames[uf.schedule]}</span>
-                ) : (
-                  <span className="text-gray-400">disabled</span>
-                )}
-              </Cell>
-              <Cell name="Actions">
-                <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
-                  <EditIcon className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setFeedsToDelete([uf])}
-                  type="button"
-                  className="icon-btn text-red-800"
-                >
-                  <TrashIcon className="w-4 h-4 mr-1 " />
-                </button>
-              </Cell>
-            </Row>
-          ))}
-        </tbody>
-      </table>
+              <Cell name="Digest Schedule">Digest Schedule</Cell>
+              <Cell name="Actions">Actions</Cell>
+            </HeaderRow>
+          </thead>
+          <tbody>
+            {sortedFeeds.map((uf, idx) => (
+              <Row isOdd={!(idx % 2)} key={uf.id}>
+                <Cell className="hidden sm:flex">
+                  <CheckBox
+                    id={`${uf.id}`}
+                    className="border-gray-400 hover:border-gray-600"
+                    checked={!!selectedIds.find((id) => id === uf.id)}
+                    onChange={onSelectChange}
+                  />
+                </Cell>
+                <Cell name="Feed">
+                  <Link href={`/feed/${uf.id}`}>
+                    <a className="underline">{uf.title || uf.feed.title}</a>
+                  </Link>
+                </Cell>
+                <Cell className="text-xs" name="Added">
+                  {formatCreatedDate(uf.createdAt)}
+                </Cell>
+                <Cell className="text-xs" name="Latest digest date">
+                  {formatDigestDate(uf.lastDigestSentAt)}
+                </Cell>
+                <Cell className="text-xs" name="Latest item pubdate">
+                  {formatDigestDate(uf.feed.lastPubdate)}
+                </Cell>
+                <Cell name="Digest Schedule">
+                  {periodNames[uf.schedule] !== periodNames.disable ? (
+                    <span className="font-medium">{periodNames[uf.schedule]}</span>
+                  ) : (
+                    <span className="text-gray-400">disabled</span>
+                  )}
+                </Cell>
+                <Cell name="Actions">
+                  <button onClick={() => setEditingFeed(uf)} type="button" className="icon-btn">
+                    <EditIcon className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setFeedsToDelete([uf])}
+                    type="button"
+                    className="icon-btn text-red-800"
+                  >
+                    <TrashIcon className="w-4 h-4 mr-1 " />
+                  </button>
+                </Cell>
+              </Row>
+            ))}
+          </tbody>
+        </table>
+      )}
       <ConfirmModal
         isOpen={!!feedsToDelete.length}
         closeModal={closeModal}
@@ -168,6 +234,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
         isOpen={!!editingFeed}
         closeModal={() => setEditingFeed(null)}
       />
+      <AddFeedModal isOpen={addFeedModalOpen} closeModal={() => setAddFeedModalOpen(false)} />
     </div>
   );
 };
