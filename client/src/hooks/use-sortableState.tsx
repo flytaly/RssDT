@@ -20,6 +20,7 @@ const compareFn = (a: any, b: any, dirCoeff: 1 | -1 = 1) => {
   if (a > b) return 1 * dirCoeff;
   return 0;
 };
+const getTs = (a: string) => (a ? new Date(a).getTime() : 0);
 
 const sortUserFeeds = (feeds: UserFeed[], col: SortableColumn, dir: SortDirection) => {
   const feedCopy = [...feeds];
@@ -33,9 +34,13 @@ const sortUserFeeds = (feeds: UserFeed[], col: SortableColumn, dir: SortDirectio
 
   if (col === 'added') feedCopy.sort((a, b) => compareFn(a.createdAt, b.createdAt, dirCoeff));
   if (col === 'digest_date')
-    feedCopy.sort((a, b) => compareFn(a.lastDigestSentAt || 0, b.lastDigestSentAt || 0, dirCoeff));
+    feedCopy.sort((a, b) =>
+      compareFn(getTs(a.lastDigestSentAt), getTs(b.lastDigestSentAt), dirCoeff),
+    );
   if (col === 'item_pubdate')
-    feedCopy.sort((a, b) => compareFn(a.feed.lastPubdate || 0, b.feed.lastPubdate || 0, dirCoeff));
+    feedCopy.sort((a, b) =>
+      compareFn(getTs(a.feed.lastPubdate), getTs(b.feed.lastPubdate), dirCoeff),
+    );
   return feedCopy;
 };
 
