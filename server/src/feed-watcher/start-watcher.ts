@@ -10,7 +10,7 @@ async function start() {
   const db = await initDbConnection();
   const feedWatcher = new Watcher({});
   feedWatcher.start();
-  await feedWatcher.update();
+  await feedWatcher.update(IS_DEV ? 0 : 4);
 
   if (IS_DEV) {
     await feedWatcher.cancel();

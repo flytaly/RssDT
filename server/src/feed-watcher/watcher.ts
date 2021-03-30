@@ -35,14 +35,14 @@ export default class Watcher {
     this.pubSub = new RedisPubSub({ publisher: createRedis(), connection: redisOptions });
   }
 
-  async update() {
+  async update(minAfterPrevUpdate = 4) {
     if (this.updating) return;
     this.updating = true;
     logger.info('Start updating...');
 
     const newItemsPayload: NewItemsPayload = {};
 
-    const feeds = await getFeedsToUpdate();
+    const feeds = await getFeedsToUpdate(minAfterPrevUpdate);
     const now = Date.now();
     let [totalFeeds, totalItems] = [0, 0];
     await this.queue.addAll(
