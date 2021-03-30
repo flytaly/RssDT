@@ -4,6 +4,7 @@ import AddFeedModal from '../modals/add-feed-modal';
 import ModalSidebar from '../modals/modal-sidebar';
 import FeedSidebar from './feed-sidebar';
 import FeedContent from './feed-content';
+import Overview from './overview';
 
 const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
@@ -35,6 +36,7 @@ const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
       {userFeed ? (
         <FeedContent userFeed={userFeed as UserFeed} setSidebarModalOpen={setSidebarModalOpen} />
       ) : null}
+      {!id && <Overview setSidebarModalOpen={setSidebarModalOpen} feeds={myFeeds as UserFeed[]} />}
       <ModalSidebar
         isOpen={sidebarModalOpen}
         closeModal={() => setSidebarModalOpen(false)}

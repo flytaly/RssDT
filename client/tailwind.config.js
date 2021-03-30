@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'feed-overview': 'repeat(auto-fill, minmax(225px,1fr))',
+      },
       width: {
         160: '40rem',
       },
