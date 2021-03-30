@@ -176,7 +176,7 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                   <CheckBox
                     id={`${uf.id}`}
                     className="border-gray-400 hover:border-gray-600"
-                    checked={!!selectedIds.find((id) => id === uf.id)}
+                    checked={selectedIds.includes(uf.id)}
                     onChange={onSelectChange}
                   />
                 </Cell>
