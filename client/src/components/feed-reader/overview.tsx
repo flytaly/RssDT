@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';
-import { UserFeed } from '../../generated/graphql';
+import { useItemsCountUpdatedSubscription, UserFeed } from '../../generated/graphql';
+import { createUpdateOnNewItems } from '../../utils/update-unread-count';
 
 interface OverviewProps {
   feeds: UserFeed[];
@@ -8,6 +10,14 @@ interface OverviewProps {
 }
 
 const Overview: React.FC<OverviewProps> = ({ feeds, setSidebarModalOpen }) => {
+  useItemsCountUpdatedSubscription({ onSubscriptionData: createUpdateOnNewItems() });
+
+  const feedsSorted = useMemo(() => {
+    const unread = feeds?.filter((f) => f.newItemsCount) || [];
+    const read = feeds?.filter((f) => !f.newItemsCount) || [];
+    return unread.concat(read);
+  }, [feeds]);
+
   return (
     <div className="px-4 py-1 my-1">
       <div className="flex items-center flex-wrap mb-4">
@@ -22,12 +32,24 @@ const Overview: React.FC<OverviewProps> = ({ feeds, setSidebarModalOpen }) => {
       </div>
       <div>
         <ul className="text-sm grid grid-cols-feed-overview  gap-4">
-          {feeds.map((f) => (
+          {feedsSorted.map((f) => (
             <li
               key={f.id}
-              className="p-2 bg-white shadow-sm hover:shadow-message-darker  overflow-hidden max-h-full"
+              className={`relative p-2 bg-white shadow-message hover:shadow-message-darker overflow-hidden max-h-full ${
+                f.newItemsCount ? 'pt-4' : ''
+              }`}
             >
-              <b>{f.title || f.feed.title}</b>
+              {f.newItemsCount ? (
+                <div
+                  className="absolute top-0 right-0 px-1 bg-gray-200
+ text-xs text-gray-500 rounded-bl-md"
+                >
+                  {`${f.newItemsCount} new items`}
+                </div>
+              ) : null}
+              <Link href={`/feed/${f.id}`}>
+                <a className="font-bold hover:underline">{f.title || f.feed.title}</a>
+              </Link>
               <div className="text-xs">{f.feed.description}</div>
             </li>
           ))}
