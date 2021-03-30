@@ -163,7 +163,9 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
               <Cell name="Latest item pubdate">
                 {getHeaderButton('item_pubdate', 'Latest item pubdate')}
               </Cell>
-              <Cell name="Digest Schedule">Digest Schedule</Cell>
+              <Cell name="Digest Schedule">
+                {getHeaderButton('digest_schedule', 'Digest Schedule')}
+              </Cell>
               <Cell name="Actions">Actions</Cell>
             </HeaderRow>
           </thead>

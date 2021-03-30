@@ -3,12 +3,19 @@ import SortUpIcon from '../../public/static/sort-up.svg';
 import SortDownIcon from '../../public/static/sort-down.svg';
 import SortIcon from '../../public/static/sort.svg';
 import { UserFeed } from '../generated/graphql';
+import { periodToNum } from '../types';
 
-export type SortableColumn = 'title' | 'added' | 'digest_date' | 'item_pubdate' | null;
+export type SortableColumn =
+  | 'title'
+  | 'added'
+  | 'digest_date'
+  | 'item_pubdate'
+  | 'digest_schedule'
+  | null;
 export enum SortDirection {
   'Default' = 0,
-  'Asc' = 1,
-  'Desc' = 2,
+  'Desc' = 1,
+  'Asc' = 2,
 }
 export type SortState = {
   col?: SortableColumn;
@@ -41,6 +48,9 @@ const sortUserFeeds = (feeds: UserFeed[], col: SortableColumn, dir: SortDirectio
     feedCopy.sort((a, b) =>
       compareFn(getTs(a.feed.lastPubdate), getTs(b.feed.lastPubdate), dirCoeff),
     );
+  if (col === 'digest_schedule') {
+    feedCopy.sort((a, b) => compareFn(periodToNum[a.schedule], periodToNum[b.schedule], dirCoeff));
+  }
   return feedCopy;
 };
 
@@ -52,7 +62,7 @@ export const useSortableState = () => {
       if (current.col === col) {
         return { col, dir: (current.dir + 1) % 3 };
       }
-      return { col, dir: SortDirection.Asc } as SortState;
+      return { col, dir: SortDirection.Desc } as SortState;
     });
 
   const getSortIcon = (col: SortableColumn) => {

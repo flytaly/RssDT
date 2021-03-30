@@ -21,3 +21,14 @@ export const periodNames: Record<DigestSchedule | 'realtime' | 'disable', string
 };
 
 export type PathHistory = { currentPath: string; prevPath: string };
+
+export const periodToNum: Record<DigestSchedule | 'disable' | 'realtime', number> = {
+  realtime: 0,
+  everyhour: 1,
+  every2hours: 2,
+  every3hours: 3,
+  every6hours: 6,
+  every12hours: 12,
+  daily: 24,
+  disable: Infinity,
+};
