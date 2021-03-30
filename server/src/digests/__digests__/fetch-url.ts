@@ -7,6 +7,7 @@ import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { composeDigest } from '../compose-mail';
 import { createDefaultUserFeed } from './utils';
 import { initDbConnection } from '../../dbConnection';
+import { transport } from '../../mail/transport';
 
 const outputDir = `${__dirname}/output`;
 
@@ -18,6 +19,7 @@ async function fetchAndSave() {
   if (!url) {
     console.error('No url provided. Pass url as the first argument`');
   }
+  const email = args[1] || null;
 
   const { feedStream, feedUrl } = await getFeedStream(url, { timeout: 6000 }, true);
   console.log(`actual feed url ${feedUrl}`);
@@ -43,6 +45,16 @@ async function fetchAndSave() {
   if (text) {
     fs.writeFileSync(`${outputDir}/${filename}.txt`, text);
     console.log(`saved: ${filename}.txt. Items: ${feed.items.length}`);
+  }
+
+  if (email) {
+    await transport.sendMail({
+      from: process.env.MAIL_FROM,
+      to: email,
+      subject: 'test',
+      text,
+      html,
+    });
   }
   return db.close();
 }
