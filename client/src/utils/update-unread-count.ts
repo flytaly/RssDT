@@ -23,9 +23,12 @@ export const createUpdateOnNewItems = (currentUserFeedId?: number, onNewItems?: 
   });
   const myFeeds = myFeedsPrev.map((f) => ({
     ...f,
-    newItemsCount: (f.newItemsCount || 0) + dataNorm[f.id],
+    newItemsCount: (f.newItemsCount || 0) + (dataNorm[f.feed.id] || 0),
   }));
   cache.writeQuery<MyFeedsQuery>({ query, data: { __typename: 'Query', myFeeds } as MyFeedsQuery });
+
+  if (!currentUserFeedId) return;
+
   const myItems = cache.readQuery<MyFeedItemsQuery>({
     query: gql`
       query myFeedItems($feedId: Float!, $filter: String) {
