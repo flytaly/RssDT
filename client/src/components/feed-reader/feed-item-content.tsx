@@ -116,7 +116,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
               target="_blank"
               rel="noreferrer"
             >
-              {item.title}
+              {item.title || item.link}
             </a>
           ) : (
             item.title

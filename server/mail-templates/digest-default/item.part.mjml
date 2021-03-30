@@ -5,7 +5,9 @@
     <mj-column width="100%" vertical-align="middle">
   {{/if}}
   <mj-text padding-bottom="0px" padding-top="0px">
-    <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">{{title}}</a></h3>
+    <h3 style="font-weight: bold; margin-top: 0; margin-bottom: 0" id="{{id}}"> <a href="{{link}}" style="color: #3498DB; text-decoration: none;">
+    {{#if title}}{{title}}{{else}}{{link}}{{/if}}
+    </a></h3>
   </mj-text>
   <mj-text padding-bottom="0px" padding-top="0px" font-size="11px" color="#505050">{{date}}</mj-text>
   <mj-text>
