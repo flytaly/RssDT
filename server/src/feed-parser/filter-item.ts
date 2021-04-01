@@ -28,7 +28,9 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
         iframe: ['src', 'width', 'height'],
       },
       allowIframeRelativeUrls: false,
-
+      transformTags: {
+        img: (tagName, att) => ({ tagName, attribs: { ...att, style: 'max-width:100%' } }),
+      },
       allowedSchemesByTag: { img: imgSchemes },
       // allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com'],
       allowProtocolRelative: false,
