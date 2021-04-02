@@ -8,7 +8,7 @@ export const fetchImageSize = async (iconUrl: string) => {
   const axiosInstance = axios.create({ headers: { 'User-Agent': UserAgent }, timeout: 20000 });
   axiosInstance.defaults.timeout = 20000;
   try {
-    const res: [number, number] | null = await new Promise((resolve, reject) => {
+    return await new Promise<ISizeCalculationResult | undefined>((resolve, reject) => {
       let buffer = Buffer.from([]);
       let size: ISizeCalculationResult | undefined;
       const resp = axiosInstance.get(iconUrl, { responseType: 'stream' });
@@ -29,11 +29,10 @@ export const fetchImageSize = async (iconUrl: string) => {
         dataStream.on('error', (err) => reject(err));
         dataStream.on('end', () => {
           if (!size || !size.width || !size.height) reject(new Error("Couldn't fetch sizes"));
-          resolve([size!.width!, size!.height!]);
+          resolve(size);
         });
       });
     });
-    return res;
   } catch (error) {
     console.log(error);
   }

@@ -1,13 +1,11 @@
 import axios from 'axios';
 import jsdom from 'jsdom';
 import { URL } from 'url';
-import { UserAgent } from '../constants';
+import { FAVICON_PREF_SIZE, ICON_MIN_SIZE, ICON_PREF_SIZE, UserAgent } from '../constants';
+import { fetchImageSize } from '../utils/fetchImageSize';
 
-const axiosInstance = axios.create({ headers: { 'User-Agetn': UserAgent }, timeout: 20000 });
+const axiosInstance = axios.create({ headers: { 'User-Agent': UserAgent }, timeout: 20000 });
 axiosInstance.defaults.timeout = 20000;
-
-const favSize = 32;
-const bigIconSize = 180;
 
 type ImageInfo = {
   sizes?: [number, number] | null;
@@ -22,7 +20,7 @@ function getImageInfo(el: Element) {
   return { sizes: sizes?.split('x').map((s) => +s) || null, href } as ImageInfo;
 }
 
-export async function getIconsFromMeta(html: string) {
+export async function metaIcons(html: string) {
   const dom = new jsdom.JSDOM(html);
 
   const icons = Array.from(
@@ -59,28 +57,40 @@ function choseIcon(icons: ImageInfo[], width: number) {
   return resultIcon;
 }
 
-function makeUrlAbsolute(icon?: ImageInfo | null, base?: string) {
-  if (icon && icon.href) {
-    const url = new URL(icon.href, base);
-    icon.href = url.href;
-  }
-  return icon;
+function makeUrlAbsolute(icons: (ImageInfo | null)[], base?: string) {
+  icons.forEach((icon) => {
+    if (icon?.href) {
+      const url = new URL(icon.href, base);
+      icon.href = url.href;
+    }
+  });
 }
 
-export async function getIcons(siteUrl: string) {
+export async function fetchPageContent(siteUrl: string) {
   const response = await axiosInstance.get(siteUrl);
-  const { icons, appleIcons } = await getIconsFromMeta(response.data);
+  return response.data;
+}
+
+export async function getIconsFromPage(siteUrl: string, html: string) {
+  const { icons, appleIcons } = await metaIcons(html);
   const svg = icons.find((i) => i.href.endsWith('svg')) || null;
-  const favicon = choseIcon(icons, favSize);
-  let icon = choseIcon(icons, bigIconSize);
-  const appleIcon = choseIcon(appleIcons, bigIconSize);
+  const favicon = choseIcon(icons, FAVICON_PREF_SIZE);
+  let icon = choseIcon(icons, ICON_PREF_SIZE);
+  const appleIcon = choseIcon(appleIcons, ICON_PREF_SIZE);
   if (appleIcon) {
-    icon = !icon?.sizes?.[0] || icon.sizes[0] < bigIconSize ? appleIcon : icon;
+    icon = !icon?.sizes?.[0] || icon.sizes[0] < ICON_PREF_SIZE ? appleIcon : icon;
+  }
+  makeUrlAbsolute([svg, favicon, icon], siteUrl);
+  if (svg) {
+    return { favicon: svg, icon: svg };
+  }
+  if (icon) {
+    if (!icon.sizes) {
+      const s = await fetchImageSize(icon!.href);
+      icon!.sizes = s && ([s.width || 0, s.height || 0] as [number, number]);
+    }
+    if (!icon.sizes || icon!.sizes![0] < ICON_MIN_SIZE) icon = null;
   }
 
-  return {
-    svg: makeUrlAbsolute(svg, siteUrl),
-    favicon: makeUrlAbsolute(favicon, siteUrl),
-    icon: makeUrlAbsolute(icon, siteUrl),
-  };
+  return { favicon, icon };
 }
