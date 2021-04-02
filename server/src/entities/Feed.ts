@@ -54,9 +54,20 @@ export class Feed extends BaseEntity {
   @Column({ nullable: true })
   language: string;
 
+  // A link to the favicon from feed (provided by Atom feeds)
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ length: 1000, nullable: true })
   favicon: string;
+
+  // A link to the favicon of the website
+  @Field({ nullable: true })
+  @Column({ length: 1000, nullable: true })
+  siteFavicon: string;
+
+  // A link to the website icon (should be >= 100x100px)
+  @Field({ nullable: true })
+  @Column({ length: 1000, nullable: true })
+  siteIcon: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
