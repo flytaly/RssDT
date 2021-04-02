@@ -8,11 +8,11 @@ import { Options } from './entities/Options';
 import { User } from './entities/User';
 import { UserFeed } from './entities/UserFeed';
 
-export const initDbConnection = async () => {
+export const initDbConnection = async (logging?: boolean) => {
   const dbConnection = await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    logging: IS_DEV,
+    logging: logging === undefined ? IS_DEV : logging,
     migrations: IS_TEST ? undefined : [path.join(__dirname, './migrations/*')],
     dropSchema: IS_TEST,
     synchronize: IS_TEST,
