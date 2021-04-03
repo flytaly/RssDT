@@ -1,8 +1,8 @@
 import argon2 from 'argon2';
 import faker from 'faker';
 import { Connection } from 'typeorm';
+import { User } from '#entities';
 import { initDbConnection } from '../dbConnection';
-import { User } from '../entities/User';
 import { getSdk } from './graphql/generated';
 import { deleteUserWithEmail } from './test-utils/dbQueries';
 import getTestClient from './test-utils/getClient';

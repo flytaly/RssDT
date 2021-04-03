@@ -9,9 +9,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Feed, User } from '#entities';
 import { DigestSchedule, TernaryState, Theme } from '../types/enums';
-import { Feed } from './Feed';
-import { User } from './User';
 
 @ObjectType()
 @Entity()

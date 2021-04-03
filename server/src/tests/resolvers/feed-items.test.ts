@@ -1,9 +1,7 @@
 import faker from 'faker';
 import { getConnection, getRepository } from 'typeorm';
-import { Feed } from '../../entities/Feed';
-import { Item } from '../../entities/Item';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Feed, Item, User, UserFeed } from '#entities';
+
 import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { insertNewItems } from '../../feed-watcher/watcher-utils';
 import { getSdk } from '../graphql/generated';

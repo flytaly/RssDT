@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm';
 import faker from 'faker';
+import { User } from '#entities';
 import { initDbConnection } from '../../dbConnection';
-import { User } from '../../entities/User';
 import { getSdk, SetOptionsMutation } from '../graphql/generated';
 import { generateUserAndGetSdk } from '../test-utils/login';
 import { defaultLocale, defaultTimeZone } from '../../constants';

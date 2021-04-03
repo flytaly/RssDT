@@ -1,7 +1,5 @@
 import { DeepPartial } from 'typeorm/common/DeepPartial';
-import { Options } from '../../entities/Options';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Options, User, UserFeed } from '#entities';
 import { Theme, DigestSchedule, TernaryState } from '../../types/enums';
 
 export function createDefaultUserFeed(ufOptions: DeepPartial<UserFeed> = {}) {

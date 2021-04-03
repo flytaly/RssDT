@@ -21,7 +21,10 @@
     "skipLibCheck": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "es6"
+    "target": "ES2020",
+    "paths": {
+      "#entities": ["./src/entities/index.ts"]
+    }
   },
   "exclude": ["node_modules", "**/__mocks__/*"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]

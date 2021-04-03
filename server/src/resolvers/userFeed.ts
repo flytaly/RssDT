@@ -13,9 +13,9 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+import { User, UserFeed } from '#entities';
+
 import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
-import { User } from '../entities/User';
-import { UserFeed } from '../entities/UserFeed';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
 import { rateLimit } from '../middlewares/rate-limit';

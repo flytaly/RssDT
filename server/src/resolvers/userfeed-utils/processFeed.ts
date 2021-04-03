@@ -1,5 +1,5 @@
 import FeedParser from 'feedparser';
-import { Feed } from '../../entities/Feed';
+import { Feed } from '#entities';
 import { getFeedStream, parseFeed } from '../../feed-parser';
 import { logger } from '../../logger';
 import { ArgumentError } from '../resolver-types/errors';

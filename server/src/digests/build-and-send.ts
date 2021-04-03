@@ -1,7 +1,6 @@
 import PQueue from 'p-queue';
+import { Feed, UserFeed } from '#entities';
 import { IS_TEST, maxItemsInDigest, scheduleHours } from '../constants';
-import { Feed } from '../entities/Feed';
-import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
 import { composeDigest } from './compose-mail';
 import { composeEmailSubject } from './compose-subject';

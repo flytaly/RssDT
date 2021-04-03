@@ -9,8 +9,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Enclosure } from './Enclosure';
-import { Feed } from './Feed';
+import { Enclosure, Feed } from '#entities';
 
 @ObjectType()
 @Entity()

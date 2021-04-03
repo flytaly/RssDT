@@ -1,5 +1,5 @@
 import { DeepPartial, getConnection } from 'typeorm';
-import { User } from '../../entities/User';
+import { User } from '#entities';
 import { ArgumentError } from '../resolver-types/errors';
 
 export async function createUser(values: DeepPartial<User>) {

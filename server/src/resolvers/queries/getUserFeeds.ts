@@ -1,5 +1,5 @@
 import { getConnection } from 'typeorm';
-import { UserFeed } from '../../entities/UserFeed';
+import { UserFeed } from '#entities';
 
 export function getUserFeeds(userId: number) {
   return getConnection()

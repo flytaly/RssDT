@@ -1,5 +1,5 @@
 import { ObjectType, Field, ArgsType, InputType } from 'type-graphql';
-import { UserFeed } from '../../entities/UserFeed';
+import { UserFeed } from '#entities';
 import { DigestSchedule } from '../../types/enums';
 import { ArgumentError } from './errors';
 

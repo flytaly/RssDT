@@ -1,6 +1,6 @@
 import { getConnection } from 'typeorm';
-import { Feed } from '../../entities/Feed';
-import { UserFeed } from '../../entities/UserFeed';
+import { Feed, UserFeed } from '#entities';
+
 import { updateFeedData } from '../../feed-watcher/watcher-utils';
 import { logger } from '../../logger';
 

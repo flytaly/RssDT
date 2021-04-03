@@ -2,15 +2,14 @@
 
 import faker from 'faker';
 import { Connection, getRepository } from 'typeorm';
+import { Feed, Item } from '#entities';
 import { initDbConnection } from '../dbConnection';
-import { Feed } from '../entities/Feed';
-import { Item } from '../entities/Item';
 import { getNewItems } from '../feed-parser/parse-utils';
 import { deleteFeedWithUrl } from '../tests/test-utils/dbQueries';
 import { generateItem, generateMeta } from '../tests/test-utils/generate-feed';
 import { updateFeedData } from './watcher-utils';
 
-jest.mock('../feed-parser/parse-utils.ts', () => ({
+jest.mock('../feed-parser/parse-utils', () => ({
   getNewItems: jest.fn(async () => {}),
 }));
 

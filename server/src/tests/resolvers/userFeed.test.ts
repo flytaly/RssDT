@@ -3,9 +3,9 @@ import nock from 'nock';
 import { Connection } from 'typeorm';
 import argon2 from 'argon2';
 import * as uuid from 'uuid';
+import { User, UserFeed } from '#entities';
+
 import { initDbConnection } from '../../dbConnection';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
 import { UserFeedOptionsInput } from '../../resolvers/resolver-types/inputs';
 import { DigestSchedule, TernaryState, Theme } from '../../types/enums';
 import { getSdk } from '../graphql/generated';

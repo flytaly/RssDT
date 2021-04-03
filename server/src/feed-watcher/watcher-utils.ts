@@ -1,9 +1,7 @@
 import moment from 'moment';
 import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
+import { Enclosure, Feed, Item } from '#entities';
 import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
-import { Enclosure } from '../entities/Enclosure';
-import { Feed } from '../entities/Feed';
-import { Item } from '../entities/Item';
 import { getNewItems } from '../feed-parser';
 import { createSanitizedItem } from '../feed-parser/filter-item';
 import { logger } from '../logger';

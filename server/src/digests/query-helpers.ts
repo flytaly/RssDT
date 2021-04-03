@@ -1,7 +1,6 @@
 import { getConnection, Not } from 'typeorm';
 import PgTsquery from 'pg-tsquery';
-import { Item } from '../entities/Item';
-import { UserFeed } from '../entities/UserFeed';
+import { Item, UserFeed } from '#entities';
 import { DigestSchedule } from '../types/enums';
 
 const pgTsquery = PgTsquery();

@@ -1,5 +1,5 @@
 import { getManager } from 'typeorm';
-import { UserFeed } from '../../entities/UserFeed';
+import { UserFeed } from '#entities';
 
 export const setLastViewedItemDate = async ({
   itemId,

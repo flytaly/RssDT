@@ -1,7 +1,6 @@
 import { getConnection } from 'typeorm';
-import { Feed } from '../../entities/Feed';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Feed, User, UserFeed } from '#entities';
+
 import { updateFeedData } from '../../feed-watcher/watcher-utils';
 
 export async function activateUserFeed(userFeedId: number, userId?: number) {

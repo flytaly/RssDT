@@ -1,9 +1,8 @@
 import FeedParser from 'feedparser';
 import { getConnection, QueryRunner } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { Feed } from '../../entities/Feed';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Feed, User, UserFeed } from '#entities';
+
 import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { insertNewItems } from '../../feed-watcher/watcher-utils';
 import { ArgumentError } from '../resolver-types/errors';

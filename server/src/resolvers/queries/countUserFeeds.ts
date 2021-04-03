@@ -1,4 +1,4 @@
-import { User } from '../../entities/User';
+import { User } from '#entities';
 
 class UserWithFeedCount extends User {
   countFeeds: number;

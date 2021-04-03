@@ -11,7 +11,7 @@ export const initSession = (app: Express, redis: Redis.Redis) => {
       client: redis,
       disableTouch: true,
     }),
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET!,
     resave: false,
     name: COOKIE_NAME,
     saveUninitialized: false,

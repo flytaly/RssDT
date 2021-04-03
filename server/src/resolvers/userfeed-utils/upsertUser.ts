@@ -1,7 +1,7 @@
 import { Connection, EntityManager, QueryRunner } from 'typeorm';
+import { Options, User } from '#entities';
+
 import { defaultLocale, defaultTimeZone } from '../../constants';
-import { Options } from '../../entities/Options';
-import { User } from '../../entities/User';
 import { UserInfo } from './createUserFeed';
 
 export async function upsertUser(

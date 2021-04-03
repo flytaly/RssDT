@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import '../../dotenv';
 import fs from 'fs';
-import { Feed } from '../../entities/Feed';
+import { Feed } from '#entities';
 import { getFeedStream, parseFeed } from '../../feed-parser';
 import { createSanitizedItem } from '../../feed-parser/filter-item';
 import { composeDigest } from '../compose-mail';

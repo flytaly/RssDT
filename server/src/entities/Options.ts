@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
+import { User } from '#entities';
 import { ShareId, Theme } from '../types/enums';
-import { User } from './User';
 
 @ObjectType()
 @Entity('options')

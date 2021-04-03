@@ -1,9 +1,8 @@
 import faker from 'faker';
 import argon2 from 'argon2';
+import { User, Options } from '#entities';
 import { getSdk } from '../graphql/generated';
 import getTestClient from './getClient';
-import { User } from '../../entities/User';
-import { Options } from '../../entities/Options';
 
 export const getSdkWithLoggedInUser = async (email: string, password: string) => {
   const { client, lastHeaders } = getTestClient();

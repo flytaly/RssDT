@@ -1,5 +1,5 @@
 import { DeepPartial, getConnection } from 'typeorm';
-import { Options } from '../../entities/Options';
+import { Options } from '#entities';
 
 export async function updateUserOptions(userId: number, values: DeepPartial<Options>) {
   const result = await getConnection()

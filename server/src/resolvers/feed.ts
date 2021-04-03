@@ -10,9 +10,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import PgTsquery from 'pg-tsquery';
-import { Feed } from '../entities/Feed';
-import { Item } from '../entities/Item';
-import { UserFeed } from '../entities/UserFeed';
+import { Feed, Item, UserFeed } from '#entities';
 import { auth } from '../middlewares/auth';
 import { MyContext } from '../types';
 

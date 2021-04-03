@@ -18,9 +18,9 @@ export type MockFeedName = 'habrahabr' | 'dzone' | 'nytimes';
 type FeedMocks = {
   [key in MockFeedName]: string;
 };
-
-export const mocks = readXMLFilesInDir('feeds') as FeedMocks;
-export const updatedFeeds = readXMLFilesInDir('updated') as FeedMocks;
+const basePath = '../../../static/mock-feeds';
+export const mocks = readXMLFilesInDir(`${basePath}/feeds`) as FeedMocks;
+export const updatedFeeds = readXMLFilesInDir(`${basePath}/updated`) as FeedMocks;
 
 export const feeds = [
   {

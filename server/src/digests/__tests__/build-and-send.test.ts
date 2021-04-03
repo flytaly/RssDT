@@ -1,8 +1,5 @@
 import 'reflect-metadata';
-import { Feed } from '../../entities/Feed';
-import { Item } from '../../entities/Item';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Feed, Item, User, UserFeed } from '#entities';
 import { transport } from '../../mail/transport';
 import '../../tests/test-utils/connection';
 import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed';

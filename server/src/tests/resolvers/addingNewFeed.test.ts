@@ -3,11 +3,9 @@ import faker from 'faker';
 import nock from 'nock';
 import { Connection } from 'typeorm';
 import * as uuid from 'uuid';
+import { Feed, Item, User, UserFeed } from '#entities';
+
 import { initDbConnection } from '../../dbConnection';
-import { Feed } from '../../entities/Feed';
-import { Item } from '../../entities/Item';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
 import {
   AddFeedEmailInput,
   UserFeedOptionsInput,

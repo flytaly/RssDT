@@ -1,9 +1,9 @@
-import fs from 'fs';
 import 'reflect-metadata';
-import { Connection } from 'typeorm';
-import { initDbConnection } from '../../dbConnection';
 import '../../dotenv';
-import { Feed } from '../../entities/Feed';
+import fs from 'fs';
+import { Connection } from 'typeorm';
+import { Feed } from '#entities';
+import { initDbConnection } from '../../dbConnection';
 import { composeDigest } from '../compose-mail';
 import { createDefaultUserFeed } from './utils';
 

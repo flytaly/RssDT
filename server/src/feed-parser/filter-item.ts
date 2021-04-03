@@ -2,9 +2,8 @@
 import { Meta, Item } from 'feedparser';
 import sanitizeHtml from 'sanitize-html';
 import pick from 'lodash.pick';
+import { Item as FeedItem, Enclosure } from '#entities';
 import { FeedMeta } from '../types';
-import { Item as FeedItem } from '../entities/Item';
-import { Enclosure } from '../entities/Enclosure';
 
 export function filterMeta(feedMeta?: Meta): FeedMeta {
   if (!feedMeta) return {} as FeedMeta;

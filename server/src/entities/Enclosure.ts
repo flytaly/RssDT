@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Item } from './Item';
+import { Item } from '#entities';
 
 @ObjectType()
 @Entity()

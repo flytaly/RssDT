@@ -11,11 +11,11 @@ import * as watcherUtils from './watcher-utils';
 const updateFeedData = watcherUtils.updateFeedData as jest.Mock;
 const getFeedsToUpdate = watcherUtils.getFeedsToUpdate as jest.Mock;
 
-jest.mock('./watcher-utils.ts', () => ({
+jest.mock('./watcher-utils', () => ({
   updateFeedData: jest.fn(async () => []),
   getFeedsToUpdate: jest.fn(async () => []),
 }));
-jest.mock('../digests/build-and-send.ts', () => ({
+jest.mock('../digests/build-and-send', () => ({
   buildAndSendDigests: jest.fn(async () => {}),
 }));
 

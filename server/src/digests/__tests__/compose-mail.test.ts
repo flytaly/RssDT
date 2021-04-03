@@ -1,12 +1,7 @@
 import cheerio from 'cheerio';
 import { DateTime } from 'luxon';
 import 'reflect-metadata';
-import { Enclosure } from '../../entities/Enclosure';
-import { Feed } from '../../entities/Feed';
-import { Item } from '../../entities/Item';
-import { Options } from '../../entities/Options';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
 import '../../tests/test-utils/connection';
 import createWithDefaults from '../../tests/test-utils/create-with-default';
 import { DigestSchedule, TernaryState } from '../../types/enums';

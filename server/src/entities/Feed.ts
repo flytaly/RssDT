@@ -10,9 +10,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Item, UserFeed } from '#entities';
 import { filterMeta } from '../feed-parser/filter-item';
-import { Item } from './Item';
-import { UserFeed } from './UserFeed';
 
 @ObjectType()
 @Entity()

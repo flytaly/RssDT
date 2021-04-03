@@ -1,12 +1,8 @@
 import faker from 'faker';
 import nock from 'nock';
 import { DeepPartial } from 'typeorm';
-import { Enclosure } from '../../entities/Enclosure';
-import { Feed } from '../../entities/Feed';
-import { Item } from '../../entities/Item';
-import { Options } from '../../entities/Options';
-import { User } from '../../entities/User';
-import { UserFeed } from '../../entities/UserFeed';
+import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
+
 import { FeedItem, FeedMeta } from '../../types';
 import { DigestSchedule } from '../../types/enums';
 

@@ -1,6 +1,6 @@
 import PQueue from 'p-queue';
+import { User } from '#entities';
 import { maxItemsPerUser } from '../../constants';
-import { User } from '../../entities/User';
 import { logger } from '../../logger';
 import { normalizes, validates } from '../../middlewares/normalize-validate-args';
 import { getUserAndCountFeeds } from '../queries/countUserFeeds';

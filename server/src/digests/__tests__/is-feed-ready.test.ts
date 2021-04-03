@@ -1,9 +1,7 @@
 import 'reflect-metadata';
-import { isFeedReady } from '../is-feed-ready';
-import { UserFeed } from '../../entities/UserFeed';
+import { UserFeed, User, Options } from '#entities';
 import { DigestSchedule } from '../../types/enums';
-import { User } from '../../entities/User';
-import { Options } from '../../entities/Options';
+import { isFeedReady } from '../is-feed-ready';
 import '../../tests/test-utils/connection';
 
 const dailyDigestHourDefault = 18;

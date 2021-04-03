@@ -11,10 +11,9 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
+import { Options, User, UserFeed } from '#entities';
+
 import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants';
-import { Options } from '../entities/Options';
-import { User } from '../entities/User';
-import { UserFeed } from '../entities/UserFeed';
 import { logger } from '../logger';
 import { auth } from '../middlewares/auth';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';

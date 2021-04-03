@@ -10,9 +10,8 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { UserFeed } from './UserFeed';
+import { UserFeed, Options } from '#entities';
 import { Role } from '../types';
-import { Options } from './Options';
 import { defaultLocale, defaultTimeZone } from '../constants';
 
 @ObjectType()

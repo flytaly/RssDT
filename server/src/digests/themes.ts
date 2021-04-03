@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import Handlebars from 'handlebars';
-import { Item } from '../entities/Item';
+import { Item } from '#entities';
 import { EnclosureWithTitle, Share } from '../types';
 import { Theme } from '../types/enums';
 
 const themeFolders = {
-  default: path.resolve(`${__dirname}/../../mail-templates/digest-default`),
+  default: path.resolve(`${__dirname}/../../static/mail-templates/digest-default`),
 };
 
 const compileHbsPart = (pathStr: string, part: string) =>

@@ -1,12 +1,7 @@
 import path from 'path';
 import { createConnection } from 'typeorm';
+import { Feed, Item, Options, User, UserFeed, Enclosure } from '#entities';
 import { IS_DEV, IS_TEST } from './constants';
-import { Enclosure } from './entities/Enclosure';
-import { Feed } from './entities/Feed';
-import { Item } from './entities/Item';
-import { Options } from './entities/Options';
-import { User } from './entities/User';
-import { UserFeed } from './entities/UserFeed';
 
 export const initDbConnection = async (logging?: boolean) => {
   const dbConnection = await createConnection({

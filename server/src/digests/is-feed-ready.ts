@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
+import { UserFeed } from '#entities';
 import { scheduleHours, windowDuration } from '../constants';
-import { UserFeed } from '../entities/UserFeed';
 import { DigestSchedule } from '../types/enums';
 
 /**
