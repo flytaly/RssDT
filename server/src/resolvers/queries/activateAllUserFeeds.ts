@@ -1,8 +1,9 @@
 import { getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, UserFeed } from '#entities';
 
-import { updateFeedData } from '../../feed-watcher/watcher-utils';
-import { logger } from '../../logger';
+import { updateFeedData } from '../../feed-watcher/watcher-utils.js';
+import { logger } from '../../logger.js';
 
 export async function activateAllUserFeeds(userId: number) {
   try {

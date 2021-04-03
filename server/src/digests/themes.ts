@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import Handlebars from 'handlebars';
+// eslint-disable-next-line import/extensions
 import { Item } from '#entities';
-import { EnclosureWithTitle, Share } from '../types';
-import { Theme } from '../types/enums';
+import { EnclosureWithTitle, Share } from '../types/index.js';
+import { Theme } from '../types/enums.js';
 
 const themeFolders = {
   default: path.resolve(`${__dirname}/../../static/mail-templates/digest-default`),

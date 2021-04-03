@@ -1,7 +1,8 @@
 import path from 'path';
 import { createConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, Item, Options, User, UserFeed, Enclosure } from '#entities';
-import { IS_DEV, IS_TEST } from './constants';
+import { IS_DEV, IS_TEST } from './constants.js';
 
 export const initDbConnection = async (logging?: boolean) => {
   const dbConnection = await createConnection({

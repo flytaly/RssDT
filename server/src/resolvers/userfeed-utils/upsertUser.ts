@@ -1,8 +1,9 @@
 import { Connection, EntityManager, QueryRunner } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Options, User } from '#entities';
 
-import { defaultLocale, defaultTimeZone } from '../../constants';
-import { UserInfo } from './createUserFeed';
+import { defaultLocale, defaultTimeZone } from '../../constants.js';
+import { UserInfo } from './createUserFeed.js';
 
 export async function upsertUser(
   conn: Connection | EntityManager | QueryRunner,

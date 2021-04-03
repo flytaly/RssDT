@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import DataLoader from 'dataloader';
 import { getConnection } from 'typeorm';
-import { NewItemsPayload } from '../resolvers/resolver-types/pubSubTopics';
-import { UserFeedNewItemsCountResponse } from '../resolvers/resolver-types/userFeedTypes';
+import { NewItemsPayload } from '../resolvers/resolver-types/pubSubTopics.js';
+import { UserFeedNewItemsCountResponse } from '../resolvers/resolver-types/userFeedTypes.js';
 
 export const createUpdatedFeedLoader = () =>
   new DataLoader<

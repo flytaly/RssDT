@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
+// eslint-disable-next-line import/extensions
 import { UserFeed } from '#entities';
-import { scheduleHours, windowDuration } from '../constants';
-import { DigestSchedule } from '../types/enums';
+import { scheduleHours, windowDuration } from '../constants.js';
+import { DigestSchedule } from '../types/enums.js';
 
 /**
  * Checks if the current userFeed is ready to be sent as a digest.

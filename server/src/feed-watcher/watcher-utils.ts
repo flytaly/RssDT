@@ -1,11 +1,12 @@
 import moment from 'moment';
 import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item } from '#entities';
-import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants';
-import { getNewItems } from '../feed-parser';
-import { createSanitizedItem } from '../feed-parser/filter-item';
-import { logger } from '../logger';
-import { redis } from '../redis';
+import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants.js';
+import { getNewItems } from '../feed-parser/index.js';
+import { createSanitizedItem } from '../feed-parser/filter-item.js';
+import { logger } from '../logger.js';
+import { redis } from '../redis.js';
 
 export type PartialFeed = {
   id: number;

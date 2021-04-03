@@ -1,8 +1,8 @@
 import axios from 'axios';
 import jsdom from 'jsdom';
 import { URL } from 'url';
-import { FAVICON_PREF_SIZE, ICON_MIN_SIZE, ICON_PREF_SIZE, UserAgent } from '../constants';
-import { fetchImageSize } from '../utils/fetchImageSize';
+import { FAVICON_PREF_SIZE, ICON_MIN_SIZE, ICON_PREF_SIZE, UserAgent } from '../constants.js';
+import { fetchImageSize } from '../utils/fetchImageSize.js';
 
 const axiosInstance = axios.create({ headers: { 'User-Agent': UserAgent }, timeout: 20000 });
 axiosInstance.defaults.timeout = 20000;

@@ -3,25 +3,26 @@ import faker from 'faker';
 import nock from 'nock';
 import { Connection } from 'typeorm';
 import * as uuid from 'uuid';
+// eslint-disable-next-line import/extensions
 import { Feed, Item, User, UserFeed } from '#entities';
 
-import { initDbConnection } from '../../dbConnection';
+import { initDbConnection } from '../../dbConnection.js';
 import {
   AddFeedEmailInput,
   UserFeedOptionsInput,
   UserInfoInput,
-} from '../../resolvers/resolver-types/inputs';
-import { DigestSchedule } from '../../types/enums';
-import { getSdk } from '../graphql/generated';
-import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
-import { generateFeed } from '../test-utils/generate-feed';
-import getTestClient from '../test-utils/getClient';
-import { getSdkWithLoggedInUser } from '../test-utils/login';
+} from '../../resolvers/resolver-types/inputs.js';
+import { DigestSchedule } from '../../types/enums.js';
+import { getSdk } from '../graphql/generated.js';
+import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries.js';
+import { generateFeed } from '../test-utils/generate-feed.js';
+import getTestClient from '../test-utils/getClient.js';
+import { getSdkWithLoggedInUser } from '../test-utils/login.js';
 import {
   deleteEmails,
   getEmailByAddress,
   getSubscriptionConfirmData,
-} from '../test-utils/test-emails';
+} from '../test-utils/test-emails.js';
 
 let dbConnection: Connection;
 

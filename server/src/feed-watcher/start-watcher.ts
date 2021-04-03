@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import '../dotenv';
-import Watcher from './watcher';
-import { initLogFiles } from '../logger';
-import { IS_DEV } from '../constants';
-import { initDbConnection } from '../dbConnection';
+import '../dotenv.js';
+import Watcher from './watcher.js';
+import { initLogFiles } from '../logger.js';
+import { IS_DEV } from '../constants.js';
+import { initDbConnection } from '../dbConnection.js';
 
 async function start() {
   initLogFiles({ prefix: 'watcher_', name: 'watcher' });

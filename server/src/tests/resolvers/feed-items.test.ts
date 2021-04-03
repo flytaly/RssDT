@@ -1,13 +1,14 @@
 import faker from 'faker';
 import { getConnection, getRepository } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, Item, User, UserFeed } from '#entities';
 
-import { createSanitizedItem } from '../../feed-parser/filter-item';
-import { insertNewItems } from '../../feed-watcher/watcher-utils';
-import { getSdk } from '../graphql/generated';
-import '../test-utils/connection';
-import { generateItem, generateMeta } from '../test-utils/generate-feed';
-import { generateUserAndGetSdk } from '../test-utils/login';
+import { createSanitizedItem } from '../../feed-parser/filter-item.js';
+import { insertNewItems } from '../../feed-watcher/watcher-utils.js';
+import { getSdk } from '../graphql/generated.js';
+import '../test-utils/connection.js';
+import { generateItem, generateMeta } from '../test-utils/generate-feed.js';
+import { generateUserAndGetSdk } from '../test-utils/login.js';
 
 // Generate items with different pubdates
 const generateItems = (num: number) =>

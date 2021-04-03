@@ -1,5 +1,5 @@
 import ioRedis from 'ioredis';
-import { IS_TEST } from './constants';
+import { IS_TEST } from './constants.js';
 
 let Redis = ioRedis;
 

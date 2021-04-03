@@ -1,7 +1,8 @@
 import { getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, User, UserFeed } from '#entities';
 
-import { updateFeedData } from '../../feed-watcher/watcher-utils';
+import { updateFeedData } from '../../feed-watcher/watcher-utils.js';
 
 export async function activateUserFeed(userFeedId: number, userId?: number) {
   const qb = getConnection().createQueryBuilder();

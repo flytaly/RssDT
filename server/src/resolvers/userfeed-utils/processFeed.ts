@@ -1,8 +1,9 @@
 import FeedParser from 'feedparser';
+// eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
-import { getFeedStream, parseFeed } from '../../feed-parser';
-import { logger } from '../../logger';
-import { ArgumentError } from '../resolver-types/errors';
+import { getFeedStream, parseFeed } from '../../feed-parser/index.js';
+import { logger } from '../../logger.js';
+import { ArgumentError } from '../resolver-types/errors.js';
 
 export const getFeedVariations = (url: string) => {
   const urlsArray = [{ url }];

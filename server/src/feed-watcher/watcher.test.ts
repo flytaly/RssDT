@@ -1,12 +1,12 @@
 import faker from 'faker';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import moment from 'moment';
-import { throttleMultiplier } from '../constants';
-import { buildAndSendDigests } from '../digests/build-and-send';
-import { createRedis } from '../redis';
-import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics';
-import Watcher from './watcher';
-import * as watcherUtils from './watcher-utils';
+import { throttleMultiplier } from '../constants.js';
+import { buildAndSendDigests } from '../digests/build-and-send.js';
+import { createRedis } from '../redis.js';
+import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics.js';
+import Watcher from './watcher.js';
+import * as watcherUtils from './watcher-utils.js';
 
 const updateFeedData = watcherUtils.updateFeedData as jest.Mock;
 const getFeedsToUpdate = watcherUtils.getFeedsToUpdate as jest.Mock;

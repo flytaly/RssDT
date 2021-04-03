@@ -1,11 +1,12 @@
 import 'reflect-metadata';
-import '../../dotenv';
+import '../../dotenv.js';
 import fs from 'fs';
 import { Connection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
-import { initDbConnection } from '../../dbConnection';
-import { composeDigest } from '../compose-mail';
-import { createDefaultUserFeed } from './utils';
+import { initDbConnection } from '../../dbConnection.js';
+import { composeDigest } from '../compose-mail.js';
+import { createDefaultUserFeed } from './utils.js';
 
 const outputDir = `${__dirname}/output`;
 

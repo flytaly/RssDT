@@ -1,4 +1,4 @@
-import { DigestSchedule } from './types/enums';
+import { DigestSchedule } from './types/enums.js';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
 export const IS_TEST = process.env.NODE_ENV === 'test';

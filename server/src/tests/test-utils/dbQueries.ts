@@ -1,5 +1,6 @@
 import normalizeUrl from 'normalize-url';
 import { getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, User } from '#entities';
 
 export const deleteUserWithEmail = (email: string) =>

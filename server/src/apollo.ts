@@ -4,13 +4,13 @@ import session from 'express-session';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
-import { createRedis, redisOptions } from './redis';
-import { FeedResolver } from './resolvers/feed';
-import { MailResolver } from './resolvers/mail';
-import { UserResolver } from './resolvers/user';
-import { UserFeedResolver } from './resolvers/userFeed';
-import { MyContext, ReqWithSession } from './types';
-import { createItemCountLoader } from './utils/createItemCountLoader';
+import { createRedis, redisOptions } from './redis.js';
+import { FeedResolver } from './resolvers/feed.js';
+import { MailResolver } from './resolvers/mail.js';
+import { UserResolver } from './resolvers/user.js';
+import { UserFeedResolver } from './resolvers/userFeed.js';
+import { MyContext, ReqWithSession } from './types/index.js';
+import { createItemCountLoader } from './utils/createItemCountLoader.js';
 
 export const initApolloServer = async (
   app: Express,

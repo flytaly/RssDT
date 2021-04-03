@@ -1,10 +1,11 @@
 import faker from 'faker';
 import nock from 'nock';
 import { DeepPartial } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
 
-import { FeedItem, FeedMeta } from '../../types';
-import { DigestSchedule } from '../../types/enums';
+import { FeedItem, FeedMeta } from '../../types/index.js';
+import { DigestSchedule } from '../../types/enums.js';
 
 export const generateMeta = (): FeedMeta => ({
   title: faker.commerce.productName(),

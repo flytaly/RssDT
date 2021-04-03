@@ -1,7 +1,8 @@
 import { getConnection, Not } from 'typeorm';
 import PgTsquery from 'pg-tsquery';
+// eslint-disable-next-line import/extensions
 import { Item, UserFeed } from '#entities';
-import { DigestSchedule } from '../types/enums';
+import { DigestSchedule } from '../types/enums.js';
 
 const pgTsquery = PgTsquery();
 

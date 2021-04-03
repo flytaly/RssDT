@@ -1,6 +1,7 @@
 import { DeepPartial, getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { ArgumentError } from '../resolver-types/errors';
+import { ArgumentError } from '../resolver-types/errors.js';
 
 export async function createUser(values: DeepPartial<User>) {
   try {

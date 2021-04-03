@@ -1,12 +1,12 @@
 import { CronJob, CronTime } from 'cron';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import PQueue from 'p-queue';
-import { throttleMultiplier } from '../constants';
-import { buildAndSendDigests } from '../digests/build-and-send';
-import { logger } from '../logger';
-import { createRedis, redisOptions } from '../redis';
-import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics';
-import { getFeedsToUpdate, updateFeedData } from './watcher-utils';
+import { throttleMultiplier } from '../constants.js';
+import { buildAndSendDigests } from '../digests/build-and-send.js';
+import { logger } from '../logger.js';
+import { createRedis, redisOptions } from '../redis.js';
+import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics.js';
+import { getFeedsToUpdate, updateFeedData } from './watcher-utils.js';
 
 type WatcherProps = {
   /** Cron Time */

@@ -1,7 +1,7 @@
 import bunyan from 'bunyan';
 import { Stream } from 'stream';
 import path from 'path';
-import { IS_TEST } from './constants';
+import { IS_TEST } from './constants.js';
 
 const cwd = path.join(__dirname, '..');
 const logPath = `${cwd}/log`;

@@ -1,13 +1,14 @@
 import 'reflect-metadata';
-import '../../dotenv';
+import '../../dotenv.js';
 import fs from 'fs';
+// eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
-import { getFeedStream, parseFeed } from '../../feed-parser';
-import { createSanitizedItem } from '../../feed-parser/filter-item';
-import { composeDigest } from '../compose-mail';
-import { createDefaultUserFeed } from './utils';
-import { initDbConnection } from '../../dbConnection';
-import { transport } from '../../mail/transport';
+import { getFeedStream, parseFeed } from '../../feed-parser/index.js';
+import { createSanitizedItem } from '../../feed-parser/filter-item.js';
+import { composeDigest } from '../compose-mail.js';
+import { createDefaultUserFeed } from './utils.js';
+import { initDbConnection } from '../../dbConnection.js';
+import { transport } from '../../mail/transport.js';
 
 const outputDir = `${__dirname}/output`;
 

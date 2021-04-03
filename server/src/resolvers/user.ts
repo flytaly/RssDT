@@ -11,27 +11,28 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
+// eslint-disable-next-line import/extensions
 import { Options, User, UserFeed } from '#entities';
 
-import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants';
-import { logger } from '../logger';
-import { auth } from '../middlewares/auth';
-import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
-import { rateLimit } from '../middlewares/rate-limit';
-import { MyContext, ReqWithSession, Role } from '../types';
-import { activateAllUserFeeds } from './queries/activateAllUserFeeds';
-import { createUser } from './queries/createUser';
-import { getUserFeeds } from './queries/getUserFeeds';
-import { updateUser } from './queries/updateUser';
-import { updateUserOptions } from './queries/updateUserOptions';
-import { ArgumentError } from './resolver-types/errors';
-import { resetPasswordEmail, verificationEmail } from './resolver-types/confirmationMail';
+import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants.js';
+import { logger } from '../logger.js';
+import { auth } from '../middlewares/auth.js';
+import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
+import { rateLimit } from '../middlewares/rate-limit.js';
+import { MyContext, ReqWithSession, Role } from '../types/index.js';
+import { activateAllUserFeeds } from './queries/activateAllUserFeeds.js';
+import { createUser } from './queries/createUser.js';
+import { getUserFeeds } from './queries/getUserFeeds.js';
+import { updateUser } from './queries/updateUser.js';
+import { updateUserOptions } from './queries/updateUserOptions.js';
+import { ArgumentError } from './resolver-types/errors.js';
+import { resetPasswordEmail, verificationEmail } from './resolver-types/confirmationMail.js';
 import {
   EmailPasswordInput,
   OptionsInput,
   PasswordResetInput,
   UserInfoInput,
-} from './resolver-types/inputs';
+} from './resolver-types/inputs.js';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
   req.session.userId = userId;

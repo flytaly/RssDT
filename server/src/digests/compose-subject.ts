@@ -1,5 +1,5 @@
-import { DigestSchedule } from '../types/enums';
-import { digestNames } from './digest-names';
+import { DigestSchedule } from '../types/enums.js';
+import { digestNames } from './digest-names.js';
 
 export const tokens = {
   title: '{{title}}',

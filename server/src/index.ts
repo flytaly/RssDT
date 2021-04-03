@@ -1,12 +1,12 @@
 import 'reflect-metadata';
-import './dotenv';
+import './dotenv.js';
 import express from 'express';
 import cors from 'cors';
-import { initDbConnection } from './dbConnection';
-import { initApolloServer } from './apollo';
-import { initSession } from './session';
-import { logger, initLogFiles } from './logger';
-import { redis } from './redis';
+import { initDbConnection } from './dbConnection.js';
+import { initApolloServer } from './apollo.js';
+import { initSession } from './session.js';
+import { logger, initLogFiles } from './logger.js';
+import { redis } from './redis.js';
 
 const http = require('http');
 

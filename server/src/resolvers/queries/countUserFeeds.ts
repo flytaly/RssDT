@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/extensions
 import { User } from '#entities';
 
 class UserWithFeedCount extends User {

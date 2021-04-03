@@ -1,8 +1,9 @@
 import faker from 'faker';
 import argon2 from 'argon2';
+// eslint-disable-next-line import/extensions
 import { User, Options } from '#entities';
-import { getSdk } from '../graphql/generated';
-import getTestClient from './getClient';
+import { getSdk } from '../graphql/generated.js';
+import getTestClient from './getClient.js';
 
 export const getSdkWithLoggedInUser = async (email: string, password: string) => {
   const { client, lastHeaders } = getTestClient();

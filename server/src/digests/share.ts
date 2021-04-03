@@ -1,4 +1,4 @@
-import { ShareId } from '../types/enums';
+import { ShareId } from '../types/enums.js';
 
 type DigestShare = {
   id: ShareId;

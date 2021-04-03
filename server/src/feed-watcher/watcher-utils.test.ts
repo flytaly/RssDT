@@ -2,12 +2,13 @@
 
 import faker from 'faker';
 import { Connection, getRepository } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, Item } from '#entities';
-import { initDbConnection } from '../dbConnection';
-import { getNewItems } from '../feed-parser/parse-utils';
-import { deleteFeedWithUrl } from '../tests/test-utils/dbQueries';
-import { generateItem, generateMeta } from '../tests/test-utils/generate-feed';
-import { updateFeedData } from './watcher-utils';
+import { initDbConnection } from '../dbConnection.js';
+import { getNewItems } from '../feed-parser/parse-utils.js';
+import { deleteFeedWithUrl } from '../tests/test-utils/dbQueries.js';
+import { generateItem, generateMeta } from '../tests/test-utils/generate-feed.js';
+import { updateFeedData } from './watcher-utils.js';
 
 jest.mock('../feed-parser/parse-utils', () => ({
   getNewItems: jest.fn(async () => {}),

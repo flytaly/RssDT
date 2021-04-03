@@ -1,12 +1,13 @@
 import PQueue from 'p-queue';
+// eslint-disable-next-line import/extensions
 import { Feed, UserFeed } from '#entities';
-import { IS_TEST, maxItemsInDigest, scheduleHours } from '../constants';
-import { logger } from '../logger';
-import { composeDigest } from './compose-mail';
-import { composeEmailSubject } from './compose-subject';
-import { isFeedReady } from './is-feed-ready';
-import { getItemsNewerThan, userFeedsWithDigests } from './query-helpers';
-import { transport } from '../mail/transport';
+import { IS_TEST, maxItemsInDigest, scheduleHours } from '../constants.js';
+import { logger } from '../logger.js';
+import { composeDigest } from './compose-mail.js';
+import { composeEmailSubject } from './compose-subject.js';
+import { isFeedReady } from './is-feed-ready.js';
+import { getItemsNewerThan, userFeedsWithDigests } from './query-helpers.js';
+import { transport } from '../mail/transport.js';
 
 const queueOpts = IS_TEST ? {} : { concurrency: 5, interval: 1000, intervalCap: 10 };
 const digestQueue = new PQueue(queueOpts);

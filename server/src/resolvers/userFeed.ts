@@ -13,28 +13,29 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { User, UserFeed } from '#entities';
 
-import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants';
-import { auth } from '../middlewares/auth';
-import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
-import { rateLimit } from '../middlewares/rate-limit';
-import { MyContext, Role } from '../types';
-import { DigestSchedule } from '../types/enums';
-import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader';
-import { activateUserFeed } from './queries/activateUserFeed';
-import { getUserAndCountFeeds } from './queries/countUserFeeds';
-import { getUserFeeds } from './queries/getUserFeeds';
-import { setLastViewedItemDate } from './queries/setLastViewedItemDate';
-import { subscriptionVerifyEmail } from './resolver-types/confirmationMail';
-import { ArgumentError } from './resolver-types/errors';
+import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants.js';
+import { auth } from '../middlewares/auth.js';
+import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
+import { rateLimit } from '../middlewares/rate-limit.js';
+import { MyContext, Role } from '../types/index.js';
+import { DigestSchedule } from '../types/enums.js';
+import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader.js';
+import { activateUserFeed } from './queries/activateUserFeed.js';
+import { getUserAndCountFeeds } from './queries/countUserFeeds.js';
+import { getUserFeeds } from './queries/getUserFeeds.js';
+import { setLastViewedItemDate } from './queries/setLastViewedItemDate.js';
+import { subscriptionVerifyEmail } from './resolver-types/confirmationMail.js';
+import { ArgumentError } from './resolver-types/errors.js';
 import {
   AddFeedEmailInput,
   AddFeedInput,
   UserFeedOptionsInput,
   UserInfoInput,
-} from './resolver-types/inputs';
-import { NewItemsPayload, PubSubTopics } from './resolver-types/pubSubTopics';
+} from './resolver-types/inputs.js';
+import { NewItemsPayload, PubSubTopics } from './resolver-types/pubSubTopics.js';
 import {
   DeletedFeedResponse,
   DeleteFeedArgs,
@@ -42,10 +43,10 @@ import {
   ImportFeedsResponse,
   UserFeedNewItemsCountResponse,
   UserFeedResponse,
-} from './resolver-types/userFeedTypes';
-import { createUserFeed } from './userfeed-utils/createUserFeed';
-import { launchFeedsImport } from './userfeed-utils/importFeeds';
-import { ImportStatus, ImportStatusObject } from './userfeed-utils/ImportStatus';
+} from './resolver-types/userFeedTypes.js';
+import { createUserFeed } from './userfeed-utils/createUserFeed.js';
+import { launchFeedsImport } from './userfeed-utils/importFeeds.js';
+import { ImportStatus, ImportStatusObject } from './userfeed-utils/ImportStatus.js';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
 

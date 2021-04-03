@@ -1,8 +1,8 @@
-import 'reflect-metadata';
 import cases from 'jest-in-case';
-import { DigestSchedule } from '../../types/enums';
-import { composeEmailSubject, tokens } from '../compose-subject';
-import { digestNames } from '../digest-names';
+import 'reflect-metadata';
+import { DigestSchedule } from '../../types/enums.js';
+import { composeEmailSubject, tokens } from '../compose-subject.js';
+import { digestNames } from '../digest-names.js';
 
 cases(
   'Make custom email subject',

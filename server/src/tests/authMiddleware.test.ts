@@ -1,12 +1,13 @@
 import argon2 from 'argon2';
 import faker from 'faker';
 import { Connection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { initDbConnection } from '../dbConnection';
-import { getSdk } from './graphql/generated';
-import { deleteUserWithEmail } from './test-utils/dbQueries';
-import getTestClient from './test-utils/getClient';
-import { getSdkWithLoggedInUser } from './test-utils/login';
+import { initDbConnection } from '../dbConnection.js';
+import { getSdk } from './graphql/generated.js';
+import { deleteUserWithEmail } from './test-utils/dbQueries.js';
+import getTestClient from './test-utils/getClient.js';
+import { getSdkWithLoggedInUser } from './test-utils/login.js';
 
 let dbConnection: Connection;
 

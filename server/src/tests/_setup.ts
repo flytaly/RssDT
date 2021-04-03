@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import '../dotenv';
+import '../dotenv.js';
 import express from 'express';
 import { Connection } from 'typeorm';
 import { Server } from 'http';
 import MailDev from 'maildev';
-import { initApolloServer } from '../apollo';
-import { initDbConnection } from '../dbConnection';
-import { initSession } from '../session';
-import { redis } from '../redis';
+import { initApolloServer } from '../apollo.js';
+import { initDbConnection } from '../dbConnection.js';
+import { initSession } from '../session.js';
+import { redis } from '../redis.js';
 
 export type MyGlobal = typeof global & {
   __dbConnection: Connection;

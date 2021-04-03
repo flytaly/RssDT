@@ -2,12 +2,13 @@ import { DateTime } from 'luxon';
 import mjml2html from 'mjml';
 import url from 'url';
 import sanitizeHtml from 'sanitize-html';
+// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item, UserFeed } from '#entities';
-import { EnclosureWithTitle, Share } from '../types';
-import { TernaryState } from '../types/enums';
-import { digestNames } from './digest-names';
-import shareProviders from './share';
-import themes, { HTMLMailTheme } from './themes';
+import { EnclosureWithTitle, Share } from '../types/index.js';
+import { TernaryState } from '../types/enums.js';
+import { digestNames } from './digest-names.js';
+import shareProviders from './share.js';
+import themes, { HTMLMailTheme } from './themes.js';
 
 function getUnsubscribeUrl(unsubscribeToken: string, id: string | number) {
   return `${process.env.FRONTEND_URL}/unsubscribe?token=${unsubscribeToken}&id=${id}`;

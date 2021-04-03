@@ -10,9 +10,10 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { UserFeed, Options } from '#entities';
-import { Role } from '../types';
-import { defaultLocale, defaultTimeZone } from '../constants';
+import { Role } from '../types/index.js';
+import { defaultLocale, defaultTimeZone } from '../constants.js';
 
 @ObjectType()
 @Entity()

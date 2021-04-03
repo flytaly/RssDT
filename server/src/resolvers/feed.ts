@@ -10,9 +10,10 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import PgTsquery from 'pg-tsquery';
+// eslint-disable-next-line import/extensions
 import { Feed, Item, UserFeed } from '#entities';
-import { auth } from '../middlewares/auth';
-import { MyContext } from '../types';
+import { auth } from '../middlewares/auth.js';
+import { MyContext } from '../types/index.js';
 
 const pgTsquery = PgTsquery();
 

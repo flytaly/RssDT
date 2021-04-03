@@ -9,8 +9,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Feed, User } from '#entities';
-import { DigestSchedule, TernaryState, Theme } from '../types/enums';
+import { DigestSchedule, TernaryState, Theme } from '../types/enums.js';
 
 @ObjectType()
 @Entity()

@@ -2,7 +2,7 @@ import axios from 'axios';
 import imageSize from 'image-size';
 import { ISizeCalculationResult } from 'image-size/dist/types/interface';
 import stream from 'stream';
-import { UserAgent } from '../constants';
+import { UserAgent } from '../constants.js';
 
 export const fetchImageSize = async (iconUrl: string) => {
   const axiosInstance = axios.create({ headers: { 'User-Agent': UserAgent }, timeout: 20000 });

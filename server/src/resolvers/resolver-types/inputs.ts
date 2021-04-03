@@ -1,6 +1,6 @@
 import { Field, InputType } from 'type-graphql';
-import { InputMetadata } from '../../middlewares/normalize-validate-args';
-import { Theme, DigestSchedule, TernaryState } from '../../types/enums';
+import { InputMetadata } from '../../middlewares/normalize-validate-args.js';
+import { Theme, DigestSchedule, TernaryState } from '../../types/enums.js';
 
 @InputType()
 export class EmailPasswordInput {

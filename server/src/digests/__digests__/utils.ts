@@ -1,6 +1,7 @@
 import { DeepPartial } from 'typeorm/common/DeepPartial';
+// eslint-disable-next-line import/extensions
 import { Options, User, UserFeed } from '#entities';
-import { Theme, DigestSchedule, TernaryState } from '../../types/enums';
+import { Theme, DigestSchedule, TernaryState } from '../../types/enums.js';
 
 export function createDefaultUserFeed(ufOptions: DeepPartial<UserFeed> = {}) {
   const uf = UserFeed.create({

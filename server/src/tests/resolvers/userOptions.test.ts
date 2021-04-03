@@ -1,13 +1,14 @@
 import { Connection } from 'typeorm';
 import faker from 'faker';
+// eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { initDbConnection } from '../../dbConnection';
-import { getSdk, SetOptionsMutation } from '../graphql/generated';
-import { generateUserAndGetSdk } from '../test-utils/login';
-import { defaultLocale, defaultTimeZone } from '../../constants';
-import { OptionsInput } from '../../resolvers/resolver-types/inputs';
-import { Theme } from '../../types/enums';
-import getTestClient from '../test-utils/getClient';
+import { initDbConnection } from '../../dbConnection.js';
+import { getSdk, SetOptionsMutation } from '../graphql/generated.js';
+import { generateUserAndGetSdk } from '../test-utils/login.js';
+import { defaultLocale, defaultTimeZone } from '../../constants.js';
+import { OptionsInput } from '../../resolvers/resolver-types/inputs.js';
+import { Theme } from '../../types/enums.js';
+import getTestClient from '../test-utils/getClient.js';
 
 let dbConnection: Connection;
 

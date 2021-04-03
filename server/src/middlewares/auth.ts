@@ -1,6 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express';
 import { MiddlewareFn } from 'type-graphql';
-import { Role, MyContext } from '../types';
+import { Role, MyContext } from '../types/index.js';
 
 export const auth = (role = Role.USER): MiddlewareFn<MyContext> => ({ context }, next) => {
   if (!context.req.session.userId) {

@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { initDbConnection } from '../../dbConnection';
+import { initDbConnection } from '../../dbConnection.js';
 
 let db: Connection;
 

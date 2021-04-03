@@ -1,7 +1,7 @@
 import faker from 'faker';
-import { getSdk } from '../graphql/generated';
-import getTestClient from '../test-utils/getClient';
-import { deleteEmails, getEmailByAddress } from '../test-utils/test-emails';
+import { getSdk } from '../graphql/generated.js';
+import getTestClient from '../test-utils/getClient.js';
+import { deleteEmails, getEmailByAddress } from '../test-utils/test-emails.js';
 
 describe('Feedback mail', () => {
   let sdk: ReturnType<typeof getSdk>;

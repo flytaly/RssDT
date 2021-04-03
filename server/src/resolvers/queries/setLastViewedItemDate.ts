@@ -1,4 +1,5 @@
 import { getManager } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { UserFeed } from '#entities';
 
 export const setLastViewedItemDate = async ({

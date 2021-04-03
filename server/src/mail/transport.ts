@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { IS_TEST } from '../constants';
+import { IS_TEST } from '../constants.js';
 
 export const transport = nodemailer.createTransport({
   port: +process.env.MAIL_PORT!,

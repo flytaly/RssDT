@@ -4,7 +4,7 @@ import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
 import { Readable } from 'stream';
 import normalizeUrl from 'normalize-url';
-import { maxItemsInFeed } from '../constants';
+import { maxItemsInFeed } from '../constants.js';
 
 const MAX_ITEMS = maxItemsInFeed;
 const defaultAxiosOptions: AxiosRequestConfig = {

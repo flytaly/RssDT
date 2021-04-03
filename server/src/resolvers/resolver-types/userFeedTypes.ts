@@ -1,7 +1,8 @@
 import { ObjectType, Field, ArgsType, InputType } from 'type-graphql';
+// eslint-disable-next-line import/extensions
 import { UserFeed } from '#entities';
-import { DigestSchedule } from '../../types/enums';
-import { ArgumentError } from './errors';
+import { DigestSchedule } from '../../types/enums.js';
+import { ArgumentError } from './errors.js';
 
 @ObjectType()
 export class UserFeedResponse {

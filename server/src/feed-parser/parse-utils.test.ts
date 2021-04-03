@@ -1,9 +1,9 @@
 // import axios from 'axios';
 import { Readable } from 'stream';
 import nock from 'nock';
-import { feeds } from './mocks/feeds';
-import { pages } from './mocks/pages-with-feed';
-import { getFeedStream, checkFeedInfo, getNewItems, parseFeed } from './parse-utils';
+import { feeds } from './mocks/feeds.js';
+import { pages } from './mocks/pages-with-feed.js';
+import { getFeedStream, checkFeedInfo, getNewItems, parseFeed } from './parse-utils.js';
 
 describe('Test feed stream', () => {
   beforeAll(() => {

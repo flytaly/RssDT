@@ -1,11 +1,12 @@
 import cheerio from 'cheerio';
 import { DateTime } from 'luxon';
 import 'reflect-metadata';
+// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
-import '../../tests/test-utils/connection';
-import createWithDefaults from '../../tests/test-utils/create-with-default';
-import { DigestSchedule, TernaryState } from '../../types/enums';
-import { composeDigest } from '../compose-mail';
+import '../../tests/test-utils/connection.js';
+import createWithDefaults from '../../tests/test-utils/create-with-default.js';
+import { DigestSchedule, TernaryState } from '../../types/enums.js';
+import { composeDigest } from '../compose-mail.js';
 
 const encImgUrl = 'http://somesite.com/path/enc-img.jpg';
 const pubdate = new Date();

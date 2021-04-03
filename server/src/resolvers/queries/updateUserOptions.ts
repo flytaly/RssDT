@@ -1,4 +1,5 @@
 import { DeepPartial, getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Options } from '#entities';
 
 export async function updateUserOptions(userId: number, values: DeepPartial<Options>) {

@@ -1,6 +1,6 @@
 import { MiddlewareFn } from 'type-graphql';
-import { IS_TEST } from '../constants';
-import { MyContext } from '../types/index';
+import { IS_TEST } from '../constants.js';
+import { MyContext } from '../types/index.js';
 
 const ONE_DAY = 60 * 60 * 24;
 

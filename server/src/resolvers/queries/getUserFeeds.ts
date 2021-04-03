@@ -1,4 +1,5 @@
 import { getConnection } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { UserFeed } from '#entities';
 
 export function getUserFeeds(userId: number) {

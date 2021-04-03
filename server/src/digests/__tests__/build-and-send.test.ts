@@ -1,12 +1,13 @@
 import 'reflect-metadata';
+// eslint-disable-next-line import/extensions
 import { Feed, Item, User, UserFeed } from '#entities';
-import { transport } from '../../mail/transport';
-import '../../tests/test-utils/connection';
-import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed';
-import { buildAndSendDigests } from '../build-and-send';
-import { composeDigest } from '../compose-mail';
-import { composeEmailSubject } from '../compose-subject';
-import { isFeedReady } from '../is-feed-ready';
+import { transport } from '../../mail/transport.js';
+import '../../tests/test-utils/connection.js';
+import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed.js';
+import { buildAndSendDigests } from '../build-and-send.js';
+import { composeDigest } from '../compose-mail.js';
+import { composeEmailSubject } from '../compose-subject.js';
+import { isFeedReady } from '../is-feed-ready.js';
 
 jest.mock('../is-feed-ready', () => ({
   isFeedReady: jest.fn((uf: UserFeed) => {

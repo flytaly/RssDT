@@ -1,4 +1,4 @@
-import { DigestSchedule } from '../types/enums';
+import { DigestSchedule } from '../types/enums.js';
 
 export const digestNames: Record<DigestSchedule, string> = {
   everyhour: 'Hourly',

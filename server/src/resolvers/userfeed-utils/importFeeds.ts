@@ -1,13 +1,14 @@
 import PQueue from 'p-queue';
+// eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { maxItemsPerUser } from '../../constants';
-import { logger } from '../../logger';
-import { normalizes, validates } from '../../middlewares/normalize-validate-args';
-import { getUserAndCountFeeds } from '../queries/countUserFeeds';
-import { ArgumentError } from '../resolver-types/errors';
-import { FeedImport, ImportFeedsResponse } from '../resolver-types/userFeedTypes';
-import { createUserFeed } from './createUserFeed';
-import { ImportStatus } from './ImportStatus';
+import { maxItemsPerUser } from '../../constants.js';
+import { logger } from '../../logger.js';
+import { normalizes, validates } from '../../middlewares/normalize-validate-args.js';
+import { getUserAndCountFeeds } from '../queries/countUserFeeds.js';
+import { ArgumentError } from '../resolver-types/errors.js';
+import { FeedImport, ImportFeedsResponse } from '../resolver-types/userFeedTypes.js';
+import { createUserFeed } from './createUserFeed.js';
+import { ImportStatus } from './ImportStatus.js';
 
 const updateQueue = new PQueue({ concurrency: 3, timeout: 60000 });
 

@@ -1,9 +1,9 @@
 import PQueue from 'p-queue';
-import { IS_TEST } from '../constants';
-import { logger } from '../logger';
-import { DigestSchedule } from '../types/enums';
-import { digestNames } from '../digests/digest-names';
-import { transport } from './transport';
+import { IS_TEST } from '../constants.js';
+import { logger } from '../logger.js';
+import { DigestSchedule } from '../types/enums.js';
+import { digestNames } from '../digests/digest-names.js';
+import { transport } from './transport.js';
 
 const queueOpts = IS_TEST ? {} : { concurrency: 5, interval: 1000, intervalCap: 10 };
 const emailQueue = new PQueue(queueOpts);

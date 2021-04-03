@@ -1,6 +1,6 @@
 import { Field, ObjectType, registerEnumType } from 'type-graphql';
-import { IMPORT_STATUS_PREFIX } from '../../constants';
-import { redis } from '../../redis';
+import { IMPORT_STATUS_PREFIX } from '../../constants.js';
+import { redis } from '../../redis.js';
 
 export enum ImportState {
   importing = '0',

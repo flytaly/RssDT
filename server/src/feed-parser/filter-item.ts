@@ -2,8 +2,9 @@
 import { Meta, Item } from 'feedparser';
 import sanitizeHtml from 'sanitize-html';
 import pick from 'lodash.pick';
+// eslint-disable-next-line import/extensions
 import { Item as FeedItem, Enclosure } from '#entities';
-import { FeedMeta } from '../types';
+import { FeedMeta } from '../types/index.js';
 
 export function filterMeta(feedMeta?: Meta): FeedMeta {
   if (!feedMeta) return {} as FeedMeta;

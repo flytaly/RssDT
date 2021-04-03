@@ -4,13 +4,13 @@ import {
   EMAIL_CONFIRM_PREFIX,
   PASSWORD_RESET_PREFIX,
   SUBSCRIPTION_CONFIRM_PREFIX,
-} from '../../constants';
+} from '../../constants.js';
 import {
   sendConfirmEmail,
   sendConfirmSubscription,
   sendPasswordReset,
   ConfirmFeedProps,
-} from '../../mail/dispatcher';
+} from '../../mail/dispatcher.js';
 
 export async function verificationEmail(redis: Redis, userId: number, email: string) {
   const token = uuidv4();

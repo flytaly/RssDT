@@ -1,8 +1,9 @@
 import 'reflect-metadata';
+// eslint-disable-next-line import/extensions
 import { UserFeed, User, Options } from '#entities';
-import { DigestSchedule } from '../../types/enums';
-import { isFeedReady } from '../is-feed-ready';
-import '../../tests/test-utils/connection';
+import { DigestSchedule } from '../../types/enums.js';
+import { isFeedReady } from '../is-feed-ready.js';
+import '../../tests/test-utils/connection.js';
 
 const dailyDigestHourDefault = 18;
 const userFeed = new UserFeed();

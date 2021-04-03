@@ -10,8 +10,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Item, UserFeed } from '#entities';
-import { filterMeta } from '../feed-parser/filter-item';
+import { filterMeta } from '../feed-parser/filter-item.js';
 
 @ObjectType()
 @Entity()

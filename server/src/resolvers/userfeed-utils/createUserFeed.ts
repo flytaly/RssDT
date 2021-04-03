@@ -1,14 +1,15 @@
 import FeedParser from 'feedparser';
 import { getConnection, QueryRunner } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+// eslint-disable-next-line import/extensions
 import { Feed, User, UserFeed } from '#entities';
 
-import { createSanitizedItem } from '../../feed-parser/filter-item';
-import { insertNewItems } from '../../feed-watcher/watcher-utils';
-import { ArgumentError } from '../resolver-types/errors';
-import { UserFeedOptionsInput } from '../resolver-types/inputs';
-import { processFeed } from './processFeed';
-import { upsertUserAndReturn } from './upsertUser';
+import { createSanitizedItem } from '../../feed-parser/filter-item.js';
+import { insertNewItems } from '../../feed-watcher/watcher-utils.js';
+import { ArgumentError } from '../resolver-types/errors.js';
+import { UserFeedOptionsInput } from '../resolver-types/inputs.js';
+import { processFeed } from './processFeed.js';
+import { upsertUserAndReturn } from './upsertUser.js';
 
 export type UserInfo = {
   locale?: string;

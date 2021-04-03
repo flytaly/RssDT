@@ -1,8 +1,8 @@
 import { Arg, Field, InputType, Mutation, ObjectType, Resolver, UseMiddleware } from 'type-graphql';
-import { sendFeedback } from '../mail/dispatcher';
-import { InputMetadata, NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args';
-import { rateLimit } from '../middlewares/rate-limit';
-import { ArgumentError } from './resolver-types/errors';
+import { sendFeedback } from '../mail/dispatcher.js';
+import { InputMetadata, NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
+import { rateLimit } from '../middlewares/rate-limit.js';
+import { ArgumentError } from './resolver-types/errors.js';
 
 @InputType()
 export class FeedbackInput {

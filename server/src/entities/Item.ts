@@ -9,6 +9,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+// eslint-disable-next-line import/extensions
 import { Enclosure, Feed } from '#entities';
 
 @ObjectType()

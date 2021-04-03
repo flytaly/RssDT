@@ -3,17 +3,18 @@ import nock from 'nock';
 import { Connection } from 'typeorm';
 import argon2 from 'argon2';
 import * as uuid from 'uuid';
+// eslint-disable-next-line import/extensions
 import { User, UserFeed } from '#entities';
 
-import { initDbConnection } from '../../dbConnection';
-import { UserFeedOptionsInput } from '../../resolvers/resolver-types/inputs';
-import { DigestSchedule, TernaryState, Theme } from '../../types/enums';
-import { getSdk } from '../graphql/generated';
-import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
-import { generateFeed } from '../test-utils/generate-feed';
-import getTestClient from '../test-utils/getClient';
-import { generateUserAndGetSdk, getSdkWithLoggedInUser } from '../test-utils/login';
-import { deleteEmails } from '../test-utils/test-emails';
+import { initDbConnection } from '../../dbConnection.js';
+import { UserFeedOptionsInput } from '../../resolvers/resolver-types/inputs.js';
+import { DigestSchedule, TernaryState, Theme } from '../../types/enums.js';
+import { getSdk } from '../graphql/generated.js';
+import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries.js';
+import { generateFeed } from '../test-utils/generate-feed.js';
+import getTestClient from '../test-utils/getClient.js';
+import { generateUserAndGetSdk, getSdkWithLoggedInUser } from '../test-utils/login.js';
+import { deleteEmails } from '../test-utils/test-emails.js';
 
 let dbConnection: Connection;
 
