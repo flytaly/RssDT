@@ -1,19 +1,18 @@
-/* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { User } from '#entities';
+import { IUser, IOptions } from '#entities';
 import { ShareId, Theme } from '../types/enums.js';
 
 @ObjectType()
 @Entity('options')
-export class Options extends BaseEntity {
+export class Options extends BaseEntity implements IOptions {
+  @OneToOne('User', 'options', { onDelete: 'CASCADE' })
+  @JoinColumn()
+  user: IUser;
+
   @PrimaryColumn()
   userId: number;
-
-  @OneToOne(() => User, (user) => user.options, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  user: User;
 
   @Field()
   @Column({ default: 18 })

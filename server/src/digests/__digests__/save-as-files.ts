@@ -2,12 +2,16 @@ import 'reflect-metadata';
 import '../../dotenv.js';
 import fs from 'fs';
 import { Connection } from 'typeorm';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
 import { initDbConnection } from '../../dbConnection.js';
 import { composeDigest } from '../compose-mail.js';
 import { createDefaultUserFeed } from './utils.js';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 
 let db: Connection;
@@ -21,7 +25,7 @@ async function generateDigestsAndSave() {
     feedsWithItems.forEach((feed, idx) => {
       const uf = createDefaultUserFeed();
 
-      const { html, text, errors } = composeDigest(uf, feed, feed.items);
+      const { html, text, errors } = composeDigest(uf, feed, feed.items!);
       if (errors?.length) {
         console.log('errors:', errors);
         return;
@@ -33,11 +37,11 @@ async function generateDigestsAndSave() {
       const filename = `${idx}-${new URL(feed.url).hostname}`;
       if (html) {
         fs.writeFileSync(`${outputDir}/${filename}.html`, html);
-        console.log(`saved: ${filename}.html. Items: ${feed.items.length} `);
+        console.log(`saved: ${filename}.html. Items: ${feed.items?.length} `);
       }
       if (text) {
         fs.writeFileSync(`${outputDir}/${filename}.txt`, text);
-        console.log(`saved: ${filename}.txt. Items: ${feed.items.length}`);
+        console.log(`saved: ${filename}.txt. Items: ${feed.items?.length}`);
       }
     });
   } catch (error) {

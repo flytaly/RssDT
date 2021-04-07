@@ -1,7 +1,6 @@
-import path from 'path';
 import { createConnection } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { Feed, Item, Options, User, UserFeed, Enclosure } from '#entities';
+import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
 import { IS_DEV, IS_TEST } from './constants.js';
 
 export const initDbConnection = async (logging?: boolean) => {
@@ -9,7 +8,7 @@ export const initDbConnection = async (logging?: boolean) => {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: logging === undefined ? IS_DEV : logging,
-    migrations: IS_TEST ? undefined : [path.join(__dirname, './migrations/*')],
+    migrations: IS_TEST ? undefined : ['./migrations/*'],
     dropSchema: IS_TEST,
     synchronize: IS_TEST,
     entities: [User, Feed, UserFeed, Item, Enclosure, Options],

@@ -46,7 +46,7 @@ export interface ConfirmFeedProps {
   email: string;
   token: string;
   userFeedId: number;
-  title: string;
+  title?: string;
   digestType: DigestSchedule;
 }
 

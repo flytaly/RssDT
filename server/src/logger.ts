@@ -1,10 +1,8 @@
 import bunyan from 'bunyan';
 import { Stream } from 'stream';
-import path from 'path';
 import { IS_TEST } from './constants.js';
 
-const cwd = path.join(__dirname, '..');
-const logPath = `${cwd}/log`;
+const logPath = `./log`;
 
 // eslint-disable-next-line import/no-mutable-exports
 export let logger: bunyan;

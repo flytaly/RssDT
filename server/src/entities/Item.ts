@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -10,53 +9,53 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { Enclosure, Feed } from '#entities';
+import { Enclosure, Feed, IEnclosure, IFeed, IItem } from '#entities';
 
 @ObjectType()
 @Entity()
-export class Item extends BaseEntity {
+export class Item extends BaseEntity implements IItem {
   @Field()
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  guid: string;
+  guid?: string;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  pubdate: Date;
+  pubdate?: Date;
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  link: string;
+  link?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'text', default: '', nullable: true })
-  title: string;
+  title?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'text', default: '', nullable: true })
-  description: string;
+  description?: string;
 
   @Field({ nullable: true })
   @Column({ type: 'text', default: '', nullable: true })
-  summary: string;
+  summary?: string;
 
   @Field({ nullable: true })
   @Column({ default: '', nullable: true })
-  imageUrl: string;
+  imageUrl?: string;
 
   @Column()
   feedId: number;
 
   @Field(() => Feed)
-  @ManyToOne(() => Feed, (feed) => feed.items, { onDelete: 'CASCADE' })
-  feed: Feed;
+  @ManyToOne('Feed', 'items', { onDelete: 'CASCADE' })
+  feed: IFeed;
 
   @Field(() => [Enclosure], { nullable: true })
-  @OneToMany(() => Enclosure, (enc) => enc.item, { nullable: true, eager: true, cascade: true })
-  enclosures: Enclosure[];
+  @OneToMany('Enclosure', 'item', { nullable: true, eager: true, cascade: true })
+  enclosures?: IEnclosure[];
 
   @Field(() => Date)
   @CreateDateColumn()

@@ -1,3 +1,4 @@
+export * from './interfaces/index.js';
 export * from './Feed.js';
 export * from './Item.js';
 export * from './User.js';

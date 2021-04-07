@@ -1,5 +1,9 @@
 import fs from 'fs';
-import path from 'path';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function readXMLFilesInDir(dir: string) {
   const files = fs.readdirSync(path.join(__dirname, dir));
@@ -18,7 +22,7 @@ export type MockFeedName = 'habrahabr' | 'dzone' | 'nytimes';
 type FeedMocks = {
   [key in MockFeedName]: string;
 };
-const basePath = '../../../static/mock-feeds';
+const basePath = '../../../../static/mock-feeds';
 export const mocks = readXMLFilesInDir(`${basePath}/feeds`) as FeedMocks;
 export const updatedFeeds = readXMLFilesInDir(`${basePath}/updated`) as FeedMocks;
 

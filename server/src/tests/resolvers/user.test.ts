@@ -1,10 +1,10 @@
 import argon2 from 'argon2';
+import test from 'ava';
 import faker from 'faker';
-import { Connection } from 'typeorm';
 // eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { initDbConnection } from '../../dbConnection.js';
-import { getSdk, LoginMutation, RegisterMutation } from '../graphql/generated.js';
+import { getSdk } from '../graphql/generated.js';
+import { startTestServer, stopTestServer } from '../test-server.js';
 import { deleteUserWithEmail } from '../test-utils/dbQueries.js';
 import getTestClient from '../test-utils/getClient.js';
 import { getSdkWithLoggedInUser } from '../test-utils/login.js';
@@ -15,213 +15,169 @@ import {
   getPasswordResetData,
 } from '../test-utils/test-emails.js';
 
-let dbConnection: Connection;
+test.before(() => startTestServer());
 
-beforeAll(async () => {
-  dbConnection = await initDbConnection();
+test.afterEach(async () => {
+  await deleteEmails();
+});
+test.after(() => stopTestServer());
+
+const email = faker.internet.email().toLowerCase();
+const password = faker.internet.password(8);
+const sdkAnonym = getSdk(getTestClient().client);
+
+const registerUser = async () => {
+  await deleteUserWithEmail(email);
+  return sdkAnonym.register({ email, password });
+};
+
+test.serial('register: create user and return cookie', async (t) => {
+  const { client, lastHeaders } = getTestClient();
+  const sdk = getSdk(client);
+  const { register } = await sdk.register({ email, password });
+  t.is(register.user?.email, email, 'registered');
+
+  const cookie = lastHeaders.pop()?.get('set-cookie');
+  client.setHeader('cookie', cookie!);
+  const { me } = await sdk.me();
+  t.is(me?.email, email);
+  t.false(me?.emailVerified);
 });
 
-afterAll(() => dbConnection.close());
-
-describe('User creation', () => {
-  let email: string;
-  let password: string;
-
-  beforeAll(async () => {
-    email = faker.internet.email().toLowerCase();
-    password = faker.internet.password(8);
-    await deleteUserWithEmail(email);
-  });
-
-  afterAll(() => deleteUserWithEmail(email));
-
-  test('should create user and return cookie', async () => {
-    const { client, lastHeaders } = getTestClient();
-    const sdk = getSdk(client);
-    const { register } = await sdk.register({ email, password });
-    expect(register.user?.email).toBe(email);
-
-    const cookie = lastHeaders.pop()?.get('set-cookie');
-    client.setHeader('cookie', cookie!);
-    const { me } = await sdk.me();
-    expect(me?.email).toBe(email);
-    expect(me?.emailVerified).toBe(false);
-  });
-
-  test('should not be logged in without cookie', async () => {
-    const sdk = getSdk(getTestClient().client);
-    expect(sdk.me()).rejects.toThrowError(/not authenticated/);
-  });
-
-  test('should hash password', async () => {
-    const user = await User.findOne({ where: { email } });
-    expect(user).not.toBeUndefined();
-    expect(await argon2.verify(user!.password!, password)).toBeTruthy();
-  });
-
-  test('should return error message if user already exist', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const { register } = await sdk.register({ email, password });
-    expect(register.errors![0]).toMatchObject({
-      message: 'User already exists',
-      argument: 'email',
-    });
-  });
-
-  describe('Email confirmation', () => {
-    const sdkAnonym = getSdk(getTestClient().client);
-    afterEach(() => deleteEmails());
-
-    async function expectToGetTokenAndActivate() {
-      const mail = await getEmailByAddress(email);
-      expect(mail).not.toBeUndefined();
-      expect(mail).toHaveProperty('subject', 'Confirm registration');
-      const { verifyEmail } = await sdkAnonym.verifyEmail(getConfirmRegisterData(mail!));
-      expect(verifyEmail.user).toMatchObject({ email, emailVerified: true });
-    }
-    test('should send confirmation email and activate with token', async () => {
-      await expectToGetTokenAndActivate();
-    });
-
-    test('requestEmailVerification: should send confirmation email', async () => {
-      expect(sdkAnonym.requestEmailVerification()).rejects.toThrowError(/not authenticated/);
-      const sdk = await getSdkWithLoggedInUser(email, password);
-      const response = await sdk.requestEmailVerification();
-      expect(response.requestEmailVerification).toBe(true);
-      await expectToGetTokenAndActivate();
-    });
-  });
-
-  describe('Password reset', () => {
-    const sdk = getSdk(getTestClient().client);
-    const newPassword = faker.internet.password(10);
-    afterEach(() => deleteEmails());
-    test('should reset password', async () => {
-      const { requestPasswordReset } = await sdk.requestPasswordReset({ email });
-      expect(requestPasswordReset).toMatchObject({ message: 'OK' });
-      const mail = await getEmailByAddress(email);
-      expect(mail).not.toBeUndefined();
-      const tokenAndId = getPasswordResetData(mail!);
-      const { resetPassword } = await sdk.resetPassword({
-        input: { ...tokenAndId, password: newPassword },
-      });
-      expect(resetPassword.user).toHaveProperty('email', email);
-      const userRecord = await User.findOne(tokenAndId.userId);
-      expect(await argon2.verify(userRecord!.password!, newPassword)).toBeTruthy();
-    });
-  });
+test.serial('register: should hash password', async (t) => {
+  const user = await User.findOne({ where: { email } });
+  t.truthy(await argon2.verify(user!.password!, password));
 });
 
-describe('Logging-in', () => {
-  let email: string;
-  let password: string;
+test.serial('me: throw without cookie', async (t) => {
+  const error = await t.throwsAsync(sdkAnonym.me());
+  t.regex(error.message, /not authenticated/);
+});
 
-  beforeAll(async () => {
-    email = faker.internet.email().toLowerCase();
-    password = faker.internet.password(8);
-    await deleteUserWithEmail(email);
-  });
+test.serial('register: user already exist error', async (t) => {
+  await registerUser();
+  const { register } = await sdkAnonym.register({ email, password });
+  t.like(register.errors![0], { message: 'User already exists', argument: 'email' });
+});
 
-  afterAll(() => deleteUserWithEmail(email));
+test.serial('verifyEmail: send confirmation email and activate with token', async (t) => {
+  await registerUser();
+  const mail = await getEmailByAddress(email);
+  t.like(mail, { subject: 'Confirm registration' });
+  const { verifyEmail } = await sdkAnonym.verifyEmail(getConfirmRegisterData(mail!));
+  t.like(verifyEmail.user, { email, emailVerified: true });
+});
 
-  test('should register', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const { register } = await sdk.register({ email, password });
-    expect(register.user?.email).toBe(email);
-  });
+test.serial('requestEmailVerification: send confirmation email', async (t) => {
+  await registerUser();
+  await deleteEmails();
 
-  test('should log in and set cookie with correct password', async () => {
-    const { client, lastHeaders } = getTestClient();
-    const sdk = getSdk(client);
-    const { login } = await sdk.login({ email, password });
-    expect(login.user?.email).toBe(email);
+  await t.throwsAsync(sdkAnonym.requestEmailVerification());
+  const sdk = await getSdkWithLoggedInUser(email, password);
+  const response = await sdk.requestEmailVerification();
+  t.true(response.requestEmailVerification);
 
-    const cookie = lastHeaders.pop()?.get('set-cookie');
-    client.setHeader('cookie', cookie!);
-    const { me } = await sdk.me();
-    expect(me?.email).toBe(email);
-  });
+  const mail = await getEmailByAddress(email);
+  t.like(mail, { subject: 'Confirm registration' });
+  const { verifyEmail } = await sdkAnonym.verifyEmail(getConfirmRegisterData(mail!));
+  t.like(verifyEmail.user, { email, emailVerified: true });
+});
 
-  test('should return error with incorrect email', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const { login } = await sdk.login({ email: 'wrongemail@something.com', password });
-    expect(login.user).toBeNull();
-    expect(login.errors![0]).toMatchObject({
-      message: "User with such email doesn't exist",
-      argument: 'email',
-    });
-  });
+test.serial('requestPasswordReset: reset password flow', async (t) => {
+  await registerUser();
+  await deleteEmails();
 
-  test('should return error with incorrect password', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const { login: login1 } = await sdk.login({ email, password: 'password1234' });
-    expect(login1.user).toBeNull();
-    expect(login1.errors![0]).toMatchObject({
-      message: 'Wrong password',
-      argument: 'password',
-    });
+  const newPass = faker.internet.password(10);
 
-    const { login: login2 } = await sdk.login({ email, password: '' });
-    expect(login2.user).toBeNull();
-    expect(login2.errors![0]).toMatchObject({
-      message: '"password" is not allowed to be empty',
-      argument: 'password',
-    });
+  const sdk = await getSdkWithLoggedInUser(email, password);
+  const { requestPasswordReset } = await sdk.requestPasswordReset({ email });
+  t.like(requestPasswordReset, { message: 'OK' });
+  const mail = await getEmailByAddress(email);
+  t.truthy(mail);
+
+  const tokenAndId = getPasswordResetData(mail!);
+  const r = await sdk.resetPassword({ input: { ...tokenAndId, password: newPass } });
+  t.like(r.resetPassword.user, { email });
+
+  const userRecord = await User.findOne(tokenAndId.userId);
+  t.true(await argon2.verify(userRecord!.password!, newPass));
+});
+
+test.serial('login: log in and set cookie', async (t) => {
+  await registerUser();
+  const { client, lastHeaders } = getTestClient();
+  const sdk = getSdk(client);
+  const { login } = await sdk.login({ email, password });
+  t.like(login.user, { email });
+
+  const cookie = lastHeaders.pop()?.get('set-cookie');
+  client.setHeader('cookie', cookie!);
+  const { me } = await sdk.me();
+  t.like(me, { email });
+});
+
+test.serial('login error: incorrect email', async (t) => {
+  const sdk = getSdk(getTestClient().client);
+  const { login } = await sdk.login({ email: 'wrongemail@something.com', password });
+  t.falsy(login.user);
+  t.like(login.errors![0], {
+    message: "User with such email doesn't exist",
+    argument: 'email',
   });
 });
 
-describe('Normalization', () => {
-  let email: string;
-  let password: string;
-
-  beforeAll(async () => {
-    email = ` ${faker.internet.email().toUpperCase()} `;
-    password = ' password  ';
-    await deleteUserWithEmail(email);
+test.serial('login error: incorrect or empty password ', async (t) => {
+  const sdk = getSdk(getTestClient().client);
+  const l1 = await sdk.login({ email, password: 'password1234' });
+  t.falsy(l1.login.user);
+  t.like(l1.login.errors![0], {
+    message: 'Wrong password',
+    argument: 'password',
   });
-
-  afterAll(() => deleteUserWithEmail(email));
-  test('should normalize inputs', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const normEmail = email.trim().toLowerCase();
-    const normPassword = password.trim().toLowerCase();
-    const { register } = await sdk.register({
-      email: normEmail,
-      password: normPassword,
-    });
-    expect(register.user?.email).toBe(normEmail);
-
-    const { login } = await sdk.login({
-      email: normEmail,
-      password: normPassword,
-    });
-    expect(login?.user?.email).toBe(normEmail);
+  const l2 = await sdk.login({ email, password: '' });
+  t.falsy(l2.login.user);
+  t.like(l2.login.errors![0], {
+    message: '"password" is not allowed to be empty',
+    argument: 'password',
   });
 });
 
-describe('Validation', () => {
-  const email = 'This is definitely not an email';
-  const password = 'short';
+test.serial('input normalization', async (t) => {
+  const sdk = getSdk(getTestClient().client);
 
-  test('should response with errors on register', async () => {
-    const sdk = getSdk(getTestClient().client);
-    const wrongArgument = (resp: RegisterMutation, argument: string) => {
-      expect(resp.register?.errors?.[0].argument).toBe(argument);
-    };
+  const emailInput = ` ${faker.internet.email().toUpperCase()} `;
+  const passwordInput = ' password  ';
+  const normEmail = emailInput.trim().toLowerCase();
+  const normPassword = passwordInput.trim().toLowerCase();
+  const { register } = await sdk.register({ email: emailInput, password: passwordInput });
+  t.is(register.user?.email, normEmail);
 
-    wrongArgument(await sdk.register({ email: '', password: '32742374892374' }), 'email');
-    wrongArgument(await sdk.register({ email: faker.internet.email(), password: '' }), 'password');
-    wrongArgument(await sdk.register({ email, password: '32742374892374' }), 'email');
-    wrongArgument(await sdk.register({ email: faker.internet.email(), password }), 'password');
-  });
-  test('should response with errors on login', async () => {
-    const wrongArgument = (resp: LoginMutation, argument: string) => {
-      expect(resp.login?.errors?.[0].argument).toBe(argument);
-    };
-    const sdk = getSdk(getTestClient().client);
-    wrongArgument(await sdk.login({ email: '', password: '32742374892374' }), 'email');
-    wrongArgument(await sdk.login({ email: faker.internet.email(), password: '' }), 'password');
-    wrongArgument(await sdk.login({ email, password: '32742374892374' }), 'email');
-    wrongArgument(await sdk.login({ email: faker.internet.email(), password }), 'password');
-  });
+  const l1 = await sdk.login({ email: normEmail, password: normPassword });
+  const l2 = await sdk.login({ email: emailInput, password: passwordInput });
+  t.is(l1.login?.user?.email, normEmail);
+  t.is(l2.login?.user?.email, normEmail);
+});
+
+test.serial('input validation: register', async (t) => {
+  const sdk = getSdk(getTestClient().client);
+  const argErrorTest = async (args: { email: string; password: string }, argument: string) => {
+    const resp = await sdk.register(args);
+    t.is(resp.register?.errors?.[0].argument, argument);
+  };
+  await argErrorTest({ email: '', password: '32742374892374' }, 'email');
+  await argErrorTest({ email: faker.internet.email(), password: '' }, 'password');
+  await argErrorTest({ email: 'not an email', password: '32742374892374' }, 'email');
+  await argErrorTest({ email: faker.internet.email(), password: 'short' }, 'password');
+});
+
+test.serial('input validation: login', async (t) => {
+  const sdk = getSdk(getTestClient().client);
+  const argErrorTest = async (args: { email: string; password: string }, argument: string) => {
+    const resp = await sdk.register(args);
+    t.is(resp.register?.errors?.[0].argument, argument);
+  };
+  await argErrorTest({ email: '', password: '32742374892374' }, 'email');
+  await argErrorTest({ email: faker.internet.email(), password: '' }, 'password');
+  await argErrorTest({ email: 'not an email', password: '32742374892374' }, 'email');
+  await argErrorTest({ email: faker.internet.email(), password: 'short' }, 'password');
 });

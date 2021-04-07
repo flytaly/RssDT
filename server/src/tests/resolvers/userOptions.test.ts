@@ -1,103 +1,83 @@
-import { Connection } from 'typeorm';
+import 'reflect-metadata';
+import test from 'ava';
 import faker from 'faker';
 // eslint-disable-next-line import/extensions
 import { User } from '#entities';
-import { initDbConnection } from '../../dbConnection.js';
-import { getSdk, SetOptionsMutation } from '../graphql/generated.js';
-import { generateUserAndGetSdk } from '../test-utils/login.js';
 import { defaultLocale, defaultTimeZone } from '../../constants.js';
 import { OptionsInput } from '../../resolvers/resolver-types/inputs.js';
 import { Theme } from '../../types/enums.js';
+import { getSdk } from '../graphql/generated.js';
+import { startTestServer, stopTestServer } from '../test-server.js';
 import getTestClient from '../test-utils/getClient.js';
-
-let dbConnection: Connection;
+import { generateUserAndGetSdk } from '../test-utils/login.js';
 
 let user: User;
 let sdk: ReturnType<typeof getSdk>;
 let sdkAnon: ReturnType<typeof getSdk>;
 
-beforeAll(async () => {
-  dbConnection = await initDbConnection();
+test.before(async () => {
+  await startTestServer();
   ({ user, sdk } = await generateUserAndGetSdk());
   sdkAnon = getSdk(getTestClient().client);
 });
 
-afterAll(async () => {
-  await user.remove();
-  await dbConnection.close();
+test.after(() => stopTestServer());
+
+test.serial('me query: get user info', async (t) => {
+  const { me } = await sdk.me();
+  t.like(me, { timeZone: defaultTimeZone, locale: defaultLocale });
 });
 
-describe('User Info', () => {
-  test('should response with user info', async () => {
-    const { me } = await sdk.me();
-    expect(me?.timeZone).toBe(defaultTimeZone);
-    expect(me?.locale).toBe(defaultLocale);
-  });
-  test('should update user info', async () => {
-    const userInfo = { locale: 'ru', timeZone: 'Europe/Moscow' };
-    const { updateUserInfo } = await sdk.updateUserInfo({ userInfo });
-    expect(updateUserInfo).toMatchObject(userInfo);
-  });
-
-  test('should not save incorrect data', async () => {
-    const { updateUserInfo } = await sdk.updateUserInfo({
-      userInfo: { locale: 'WRONG', timeZone: 'WRONG' },
-    });
-    expect(updateUserInfo).toMatchObject({ locale: 'en-US', timeZone: defaultTimeZone });
-  });
-
-  test('should throw error if user is not authenticated', async () => {
-    let errMsg: string | undefined;
-    try {
-      await sdkAnon.updateUserInfo({ userInfo: { locale: 'en-GB', timeZone: 'tz' } });
-    } catch (error) {
-      errMsg = error.message;
-    }
-    expect(errMsg?.startsWith('not authenticated')).toBeTruthy();
-  });
+test.serial('updateUserInfo mutation', async (t) => {
+  const userInfo = { locale: 'ru', timeZone: 'Europe/Moscow' };
+  const { updateUserInfo } = await sdk.updateUserInfo({ userInfo });
+  t.like(updateUserInfo, userInfo);
 });
 
-describe('User Options', () => {
-  test('should response with options', async () => {
-    const { me } = await sdk.meWithOptions();
-    const { myOptions } = await sdk.myOptions();
-    expect(me?.options).toMatchObject(myOptions);
-    expect(me?.options.attachmentsDefault).toBeTruthy();
-    expect(me?.options.dailyDigestHour).toBe(user.options.dailyDigestHour);
+test.serial('updateUserInfo: should not save incorrect data', async (t) => {
+  const { updateUserInfo } = await sdk.updateUserInfo({
+    userInfo: { locale: 'WRONG', timeZone: 'WRONG' },
   });
+  t.like(updateUserInfo, { locale: 'en-US', timeZone: defaultTimeZone });
+});
 
-  test('should update options', async () => {
-    const opts: OptionsInput = {
-      shareEnable: true,
-      attachmentsDefault: false,
-      themeDefault: Theme.text,
-      dailyDigestHour: 12,
-    };
-    const { setOptions } = await sdk.setOptions({ opts });
-    expect(setOptions.options).toMatchObject(opts);
-  });
+test.serial('updateUserInfo: not authenticated', async (t) => {
+  const userInfo = { locale: 'en-GB', timeZone: 'tz' };
+  const error = await t.throwsAsync(sdkAnon.updateUserInfo({ userInfo }));
+  t.true(error.message.startsWith('not authenticated'));
+});
 
-  test('should throw error if user is not authenticated', async () => {
-    let errMsg: string | undefined;
-    try {
-      await sdkAnon.setOptions({ opts: {} });
-    } catch (error) {
-      errMsg = error.message;
-    }
-    expect(errMsg?.startsWith('not authenticated')).toBeTruthy();
-  });
+test.serial('meWithOptions and myOptions queries', async (t) => {
+  const { me } = await sdk.meWithOptions();
+  const { myOptions } = await sdk.myOptions();
+  t.like(me?.options, myOptions);
+  t.truthy(me?.options.attachmentsDefault);
+  t.is(me?.options.dailyDigestHour, user.options.dailyDigestHour);
+});
 
-  test('should validate', async () => {
-    const expectError = ({ setOptions }: SetOptionsMutation, msg: string) =>
-      expect(setOptions?.errors?.[0].message).toBe(msg);
+test.serial('setOptions mutation', async (t) => {
+  const opts: OptionsInput = {
+    shareEnable: true,
+    attachmentsDefault: false,
+    themeDefault: Theme.text,
+    dailyDigestHour: 12,
+  };
+  const { setOptions } = await sdk.setOptions({ opts });
+  t.like(setOptions.options, opts);
+});
 
-    expectError(
-      await sdk.setOptions({ opts: { customSubject: faker.random.alpha({ count: 51 }) } }),
-      '"customSubject" length must be less than or equal to 50 characters long',
-    );
-    expectError(
-      await sdk.setOptions({ opts: { dailyDigestHour: 26 } }),
-      '"dailyDigestHour" must be less than or equal to 23',
-    );
-  });
+test('setOptions: not authenticated', async (t) => {
+  const error = await t.throwsAsync(sdkAnon.setOptions({ opts: {} }));
+  t.true(error.message.startsWith('not authenticated'));
+});
+
+test('validation', async (t) => {
+  const r1 = await sdk.setOptions({ opts: { customSubject: faker.random.alpha({ count: 51 }) } });
+  t.is(
+    r1.setOptions.errors?.[0].message,
+    '"customSubject" length must be less than or equal to 50 characters long',
+  );
+
+  const r2 = await sdk.setOptions({ opts: { dailyDigestHour: 26 } });
+  t.is(r2.setOptions.errors?.[0].message, '"dailyDigestHour" must be less than or equal to 23');
 });

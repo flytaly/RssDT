@@ -24,7 +24,7 @@ const axiosInstance = axios.create(defaultAxiosOptions);
 // https://github.com/axios/axios/issues/1503
 axiosInstance.defaults.timeout = 20000;
 
-type ItemWithPubdate = {
+export type ItemWithPubdate = {
   pubdate: Date | null;
   guid: string;
 };
@@ -96,10 +96,10 @@ const normalizeEncoding = (
 /** Generate readable stream with content on given url */
 export async function getFeedStream(
   url: string,
-  options: AxiosRequestConfig = {},
+  options: AxiosRequestConfig | null = {},
   tryFindFeedUrl: boolean = false, // indicates that given url could be an HTML page and url of the feed could be contained in <link> tag of the HTML page
 ): Promise<{ feedStream: Readable; feedUrl: string }> {
-  const { data: bufData } = await axiosInstance({ ...options, url });
+  const { data: bufData } = await axiosInstance({ ...(options || {}), url });
 
   const body = bufData.toString();
 
@@ -180,11 +180,15 @@ export function parseFeed(
 }
 
 /** Parse feed on given url and return new items if existing items are provided */
-export async function getNewItems(url: string, existingItems?: ItemWithPubdate[]) {
+export let getNewItems = async (url: string, existingItems?: ItemWithPubdate[]) => {
   const { feedStream } = await getFeedStream(url);
   const feed = await parseFeed(feedStream, existingItems);
   return feed;
-}
+};
+
+export const getNewItemsMock = (mock: typeof getNewItems) => {
+  getNewItems = mock;
+};
 
 /** Check if given stream is correct feed stream and return its meta */
 export async function checkFeedInfo(

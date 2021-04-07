@@ -9,9 +9,8 @@ export const getSdkWithLoggedInUser = async (email: string, password: string) =>
   const { client, lastHeaders } = getTestClient();
   const sdk = getSdk(client);
   const { login } = await sdk.login({ email, password });
-  expect(login.errors).toBeNull();
-  expect(login.user?.email).toBe(email);
 
+  if (login.errors) throw new Error(login.errors[0].message);
   const cookie = lastHeaders.pop()?.get('set-cookie');
   client.setHeader('cookie', cookie!);
   return sdk;

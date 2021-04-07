@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
@@ -10,23 +9,23 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { Feed, User } from '#entities';
+import { Feed, User, IUser, IFeed, IUserFeed } from '#entities';
 import { DigestSchedule, TernaryState, Theme } from '../types/enums.js';
 
 @ObjectType()
 @Entity()
-export class UserFeed extends BaseEntity {
+export class UserFeed extends BaseEntity implements IUserFeed {
   @Field()
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.userFeeds, { onDelete: 'CASCADE' })
-  user: User;
+  @ManyToOne('User', 'userFeeds', { onDelete: 'CASCADE' })
+  user: IUser;
 
   @Field(() => Feed)
-  @ManyToOne(() => Feed, (feed) => feed.userFeeds, { onDelete: 'CASCADE' })
-  feed: Feed;
+  @ManyToOne('Feed', 'userFeeds', { onDelete: 'CASCADE' })
+  feed: IFeed;
 
   @Field()
   @Column({ default: false })

@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
+import nodemailer, { Transporter } from 'nodemailer';
 import { IS_TEST } from '../constants.js';
 
-export const transport = nodemailer.createTransport({
+export let transport = nodemailer.createTransport({
   port: +process.env.MAIL_PORT!,
   host: process.env.MAIL_SMTP,
   auth: {
@@ -10,3 +10,7 @@ export const transport = nodemailer.createTransport({
   },
   ignoreTLS: IS_TEST,
 });
+
+export const transportMock = (mock: Partial<Transporter>) => {
+  transport = mock as Transporter;
+};

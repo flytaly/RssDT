@@ -14,7 +14,8 @@ import { DigestSchedule } from '../types/enums.js';
  * and lastDigestSentAt=14:40 then the previous suitable hour is 15
  * and since 14:40 < 15:00 this userFeed is "ready".
  */
-export const isFeedReady = (userFeed: UserFeed) => {
+
+export let isFeedReady = (userFeed: UserFeed) => {
   const { lastDigestSentAt, schedule, user } = userFeed;
   if (schedule === DigestSchedule.disable) return false;
   if (schedule === DigestSchedule.realtime) return true;
@@ -45,3 +46,7 @@ export const isFeedReady = (userFeed: UserFeed) => {
 
   return false;
 };
+
+export function isFeedReadyMock(mock: typeof isFeedReady) {
+  isFeedReady = mock;
+}

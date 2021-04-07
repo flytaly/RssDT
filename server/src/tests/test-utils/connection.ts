@@ -1,12 +1,13 @@
 import { Connection } from 'typeorm';
 import { initDbConnection } from '../../dbConnection.js';
 
-let db: Connection;
+// eslint-disable-next-line import/no-mutable-exports
+export let db: Connection;
 
-beforeAll(async () => {
+export const runTestConnection = async () => {
   db = await initDbConnection();
-});
+};
 
-afterAll(() => {
-  return db.close();
-});
+export const closeTestConnection = async () => {
+  db.close();
+};

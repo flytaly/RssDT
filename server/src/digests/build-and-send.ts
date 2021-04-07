@@ -20,7 +20,7 @@ const getPeriod = (uf: UserFeed) => {
   return new Date(Math.max(timeMS, now - hour * 48));
 };
 
-export const buildAndSendDigests = async (feedId: number) => {
+export let buildAndSendDigests = async (feedId: number) => {
   const userFeeds = await userFeedsWithDigests(feedId);
   const readyUFs = userFeeds.filter(isFeedReady);
   if (!readyUFs.length) return;
@@ -41,7 +41,11 @@ export const buildAndSendDigests = async (feedId: number) => {
           const result = await transport.sendMail({
             from: process.env.MAIL_FROM,
             to: uf.user.email,
-            subject: composeEmailSubject(uf.title || feed.title, uf.schedule, customSubject),
+            subject: composeEmailSubject(
+              uf.title || feed.title || feed.link || feed.url,
+              uf.schedule,
+              customSubject,
+            ),
             text,
             html,
           });
@@ -56,4 +60,8 @@ export const buildAndSendDigests = async (feedId: number) => {
       }
     }),
   );
+};
+
+export const buildAndSendDigestsMock = (mock: typeof buildAndSendDigests) => {
+  buildAndSendDigests = mock;
 };

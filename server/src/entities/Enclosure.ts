@@ -1,14 +1,13 @@
-/* eslint-disable import/no-cycle */
 import { Field, ObjectType } from 'type-graphql';
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { Item } from '#entities';
+import { Item, IEnclosure } from '#entities';
 
 @ObjectType()
 @Entity()
-export class Enclosure extends BaseEntity {
+export class Enclosure extends BaseEntity implements IEnclosure {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Field()
   @Column()
@@ -22,6 +21,6 @@ export class Enclosure extends BaseEntity {
   @Column({ nullable: true })
   type?: string;
 
-  @ManyToOne(() => Item, (item) => item.enclosures, { onDelete: 'CASCADE' })
+  @ManyToOne('Item', 'enclosures', { onDelete: 'CASCADE' })
   item: Item;
 }

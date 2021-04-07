@@ -3,7 +3,7 @@ import mjml2html from 'mjml';
 import url from 'url';
 import sanitizeHtml from 'sanitize-html';
 // eslint-disable-next-line import/extensions
-import { Enclosure, Feed, Item, UserFeed } from '#entities';
+import { Feed, UserFeed, IEnclosure, IItem } from '#entities';
 import { EnclosureWithTitle, Share } from '../types/index.js';
 import { TernaryState } from '../types/enums.js';
 import { digestNames } from './digest-names.js';
@@ -30,7 +30,7 @@ const imagesTypes = [
 ];
 
 /** Enclosures url could be too long. This function reduces them to filename and saves them as 'title' property. */
-const addTitlesToEnclosures = (enclosures?: Enclosure[]) =>
+const addTitlesToEnclosures = (enclosures?: IEnclosure[]) =>
   enclosures
     ? enclosures.reduce((acc, enc) => {
         const noSlashUrl = enc.url?.endsWith('/') ? enc.url.slice(0, enc.url.length - 1) : enc.url;
@@ -42,13 +42,13 @@ const addTitlesToEnclosures = (enclosures?: Enclosure[]) =>
       }, [] as EnclosureWithTitle[])
     : [];
 
-const getImageFromEnclosures = (enclosures?: Enclosure[]) => {
+const getImageFromEnclosures = (enclosures?: IEnclosure[]) => {
   const enc = enclosures?.find(({ type }) => imagesTypes.includes(type || ''));
   if (enc) return enc.url;
   return '';
 };
 
-export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
+export const composeHTML = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
   const { user } = userFeed;
   const { options } = userFeed.user;
   const withToC = ternaryToBool(userFeed.withContentTable, options.withContentTableDefault);
@@ -56,25 +56,29 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
   const withAttachments = ternaryToBool(userFeed.attachments, options.attachmentsDefault);
   const theme = themes[userFeed.theme as HTMLMailTheme];
   let resultStr = '<mjml>';
-  resultStr += theme.header({ title: feed.title, digestName: digestNames[userFeed.schedule] });
+  resultStr += theme.header({
+    title: feed.title || '',
+    digestName: digestNames[userFeed.schedule],
+  });
   if (withToC) {
     resultStr += theme.contentTable({ items });
   }
   resultStr += items.reduce((acc, item_) => {
     const { id, title, link } = item_;
     const imageUrl = item_.imageUrl || getImageFromEnclosures(item_.enclosures);
-    const date = DateTime.fromJSDate(item_.pubdate)
+    const date = DateTime.fromJSDate(item_.pubdate || new Date())
       .setZone(user.timeZone)
       .setLocale(user.locale)
       .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
     const enclosures: EnclosureWithTitle[] = withAttachments
       ? addTitlesToEnclosures(item_.enclosures)
       : [];
-    const share: Share[] = options.shareEnable
-      ? shareProviders
-          .filter((s) => !options.shareList?.length || options.shareList.includes(s.id))
-          .map((s) => ({ ...s, url: s.getUrl(link, title) }))
-      : [];
+    const share: Share[] =
+      options.shareEnable && link
+        ? shareProviders
+            .filter((s) => !options.shareList?.length || options.shareList.includes(s.id))
+            .map((s) => ({ ...s, url: s.getUrl(link, title || link) }))
+        : [];
     const content = withItemBody ? item_.summary || item_.description : '';
 
     return (
@@ -99,7 +103,7 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
   return mjml2html(resultStr);
 };
 
-export const composeText = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
+export const composeText = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
   const { user } = userFeed;
   const { options } = userFeed.user;
   // const withToC = ternaryToBool(userFeed.withContentTable, options.withContentTableDefault);
@@ -113,11 +117,11 @@ export const composeText = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
 
   // items
   result += items.reduce((acc, item_) => {
-    const date = DateTime.fromJSDate(item_.pubdate)
+    const date = DateTime.fromJSDate(item_.pubdate!)
       .setZone(user.timeZone)
       .setLocale(user.locale)
       .toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS);
-    const contentHtml = withItemBody ? item_.summary || item_.description : '';
+    const contentHtml = withItemBody ? item_.summary || item_.description || '' : '';
     const contentText = sanitizeHtml(contentHtml, { allowedTags: [] });
     return `${acc}\n\n${item_.title}\n${date}\n${item_.link}\n\n${contentText}\n`;
   }, '');
@@ -130,15 +134,19 @@ You are receiving this digest because you subscribed to it on FeedMailu.com
   return result;
 };
 
-export const composeDigest = (userFeed: UserFeed, feed: Feed, items: Item[]) => {
+export let composeDigest = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
   if (!userFeed?.user?.options) {
     return { errors: [{ message: 'userFeed should have user and user.options objects' }] };
   }
   let html: string = '';
   let errors: Array<{ message: string }> | null = null;
   if (userFeed.theme === 'default') {
-    ({ html, errors } = composeHTML(userFeed, feed, items));
+    ({ html, errors } = composeHTML(userFeed, feed, items!));
   }
   const text = composeText(userFeed, feed, items);
   return { text, html, errors };
+};
+
+export const composeDigestMock = (mock: typeof composeDigest) => {
+  composeDigest = mock;
 };

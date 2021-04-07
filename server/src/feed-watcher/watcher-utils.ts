@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { Enclosure, Feed, Item } from '#entities';
+import { Enclosure, Feed, Item, IEnclosure } from '#entities';
 import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants.js';
 import { getNewItems } from '../feed-parser/index.js';
 import { createSanitizedItem } from '../feed-parser/filter-item.js';
@@ -16,7 +16,7 @@ export type PartialFeed = {
   lastSuccessfulUpd: Date;
 };
 
-export const getFeedsToUpdate = (minutes = 4) =>
+export let getFeedsToUpdate = (minutes = 4) =>
   getConnection()
     .getRepository(Feed)
     .find({
@@ -57,7 +57,7 @@ export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) =
     ? queryRunner.manager.createQueryBuilder()
     : getConnection().createQueryBuilder();
   const result = await qB.insert().into(Item).values(items).execute();
-  const encs: Enclosure[] = [];
+  const encs: IEnclosure[] = [];
   items.forEach(({ enclosures }) => {
     if (enclosures?.length) {
       encs.push(...enclosures);
@@ -106,7 +106,7 @@ export const deleteOldItems = async (
   return 0;
 };
 
-export const updateFeedData = async (url: string, skipRecent = false) => {
+export let updateFeedData = async (url: string, skipRecent = false) => {
   let newItemsNum = 0;
   let deletedItemsNum = 0;
   let status: Status = Status.Fail;
@@ -156,4 +156,15 @@ export const updateFeedData = async (url: string, skipRecent = false) => {
 
   await redis.del(lockKey);
   return [status, newItemsNum] as const;
+};
+
+export const mockWatcherUtils = ({
+  getFeedsToUpdateMock,
+  updateFeedDataMock,
+}: {
+  getFeedsToUpdateMock?: typeof getFeedsToUpdate;
+  updateFeedDataMock?: typeof updateFeedData;
+}) => {
+  if (getFeedsToUpdateMock) getFeedsToUpdate = getFeedsToUpdateMock;
+  if (updateFeedDataMock) updateFeedData = updateFeedDataMock;
 };

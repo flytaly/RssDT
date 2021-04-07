@@ -6,7 +6,8 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
-    "module": "commonjs",
+    "module": "ES2020",
+    "target": "ES2020",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
@@ -21,7 +22,6 @@
     "skipLibCheck": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "ES2020",
     "paths": {
       "#entities": ["./src/entities/index.ts"]
     }

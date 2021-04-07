@@ -1,34 +1,33 @@
-/* eslint-disable import/no-cycle */
 import { ObjectType, Field } from 'type-graphql';
 import {
   Entity,
   Column,
-  BaseEntity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
   OneToOne,
+  BaseEntity,
 } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { UserFeed, Options } from '#entities';
+import { UserFeed, Options, IOptions, IUser, IUserFeed } from '#entities';
 import { Role } from '../types/index.js';
 import { defaultLocale, defaultTimeZone } from '../constants.js';
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseEntity implements IUser {
   @Field()
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Field()
   @Column({ length: 255, unique: true })
-  email!: string;
+  email: string;
 
   @Field()
   @Column({ default: false })
-  emailVerified!: boolean;
+  emailVerified: boolean;
 
   @Field()
   @Column({ default: Role.USER })
@@ -43,12 +42,12 @@ export class User extends BaseEntity {
   timeZone: string;
 
   @Field(() => [UserFeed], { nullable: true })
-  @OneToMany(() => UserFeed, (userFeed) => userFeed.user, { nullable: true })
-  userFeeds: UserFeed[];
+  @OneToMany('UserFeed', 'user', { nullable: true })
+  userFeeds?: IUserFeed[];
 
   @Field(() => Options)
-  @OneToOne(() => Options, (opts) => opts.user, { cascade: true, eager: true })
-  options: Options;
+  @OneToOne('Options', 'user', { cascade: true, eager: true })
+  options: IOptions;
 
   @Field(() => Date)
   @CreateDateColumn()

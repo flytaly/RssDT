@@ -3,10 +3,6 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ['jest'],
-  env: {
-    'jest/globals': true,
-  },
   ignorePatterns: ['**/graphql/generated.ts', 'src/migrations/**/*.ts'],
 
   rules: {
@@ -14,6 +10,7 @@ module.exports = {
     'no-plusplus': 'off',
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'import/no-mutable-exports': 'off',
     'import/extensions': ['error', 'ignorePackages'],
     'class-methods-use-this': 'off',
     'no-underscore-dangle': 'off',

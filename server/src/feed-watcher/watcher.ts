@@ -102,5 +102,3 @@ export default class Watcher {
     return this.job.running ? this.job.nextDates() : null;
   }
 }
-
-module.exports = Watcher;

@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import Handlebars from 'handlebars';
-// eslint-disable-next-line import/extensions
-import { Item } from '#entities';
 import { EnclosureWithTitle, Share } from '../types/index.js';
 import { Theme } from '../types/enums.js';
+// eslint-disable-next-line import/extensions
+import { IItem } from '#entities';
 
 const themeFolders = {
-  default: path.resolve(`${__dirname}/../../static/mail-templates/digest-default`),
+  default: path.resolve(`./static/mail-templates/digest-default`),
 };
 
 const compileHbsPart = (pathStr: string, part: string) =>
@@ -15,15 +15,15 @@ const compileHbsPart = (pathStr: string, part: string) =>
 
 type HTMLMailThemeTmp = {
   header: HandlebarsTemplateDelegate<{ title: string; digestName: string }>;
-  contentTable: HandlebarsTemplateDelegate<{ items: Item[] }>;
+  contentTable: HandlebarsTemplateDelegate<{ items: IItem[] }>;
   item: HandlebarsTemplateDelegate<{
     id: string | number;
-    title: string;
-    link: string;
+    title?: string;
+    link?: string;
     imageUrl: string;
     date: string;
     enclosures: EnclosureWithTitle[];
-    content: string;
+    content?: string;
     share: Share[];
   }>;
   footer: HandlebarsTemplateDelegate<{ unsubscribeUrl: string }>;

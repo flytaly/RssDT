@@ -70,6 +70,7 @@ export const createUserFeed = async ({
   feedOpts,
 }: CreateUserFeedArgs) => {
   if (!email && !user) throw new Error('Not enough arguments to create new user feed');
+  const isLoggedIn = Boolean(!email && user);
   // eslint-disable-next-line prefer-const
   let { feed, errors, url, feedMeta, feedItems } = await processFeed($url);
   if (errors) return { errors };
@@ -82,7 +83,7 @@ export const createUserFeed = async ({
   try {
     user = user || (await upsertUserAndReturn(qR, email!, userInfo));
     const userId = user.id;
-    const activate = user.emailVerified;
+    const activate = user.emailVerified && isLoggedIn;
 
     if (feed) {
       userFeed = await qR.manager.findOne(UserFeed, {

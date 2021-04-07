@@ -98,7 +98,7 @@ export const generateItemEntity = async (feedId: number, pubdate?: Date) => {
   const item = Item.create(generateItem(pubdate));
   if (pubdate) item.createdAt = pubdate;
   item.feedId = feedId;
-  item.enclosures = item.enclosures.map((enc) => Enclosure.create({ ...enc }));
+  item.enclosures = item.enclosures?.map((enc) => Enclosure.create({ ...enc }));
   return item.save();
 };
 

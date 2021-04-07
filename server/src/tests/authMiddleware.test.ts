@@ -1,55 +1,25 @@
-import argon2 from 'argon2';
-import faker from 'faker';
-import { Connection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { User } from '#entities';
-import { initDbConnection } from '../dbConnection.js';
+import test from 'ava';
 import { getSdk } from './graphql/generated.js';
-import { deleteUserWithEmail } from './test-utils/dbQueries.js';
+import { startTestServer, stopTestServer } from './test-server.js';
 import getTestClient from './test-utils/getClient.js';
-import { getSdkWithLoggedInUser } from './test-utils/login.js';
+import { generateUserAndGetSdk } from './test-utils/login.js';
 
-let dbConnection: Connection;
+test.before(() => startTestServer());
+test.after(() => stopTestServer());
 
-beforeAll(async () => {
-  dbConnection = await initDbConnection();
+test.serial('Authentication Error', async (t) => {
+  const sdk = getSdk(getTestClient().client);
+  const expectAuthError = async (query: Promise<any>) => {
+    const err = await t.throwsAsync(query);
+    t.regex(err.message, /not authenticated/);
+  };
+  await expectAuthError(sdk.me());
+  await expectAuthError(sdk.addFeedToCurrentUser({ input: { feedUrl: 'http://feed.com' } }));
+  await expectAuthError(sdk.users());
 });
 
-afterAll(() => dbConnection.close());
-
-const expectAuthError = async (query: () => Promise<any>) => {
-  await expect(query).rejects.toThrow(/not authenticated/);
-};
-const expectForbiddenError = async (query: () => Promise<any>) => {
-  await expect(query).rejects.toThrow(/forbidden/);
-};
-
-describe('protected queries', () => {
-  let email: string;
-  let sdkNoUser: ReturnType<typeof getSdk>;
-  let sdkUser: ReturnType<typeof getSdk>;
-
-  beforeAll(async () => {
-    sdkNoUser = getSdk(getTestClient().client);
-
-    email = faker.internet.email().toLowerCase();
-    const password = faker.internet.password(10);
-    await deleteUserWithEmail(email);
-    await User.create({ email, password: await argon2.hash(password) }).save();
-    sdkUser = await getSdkWithLoggedInUser(email, password);
-  });
-  afterAll(async () => {
-    await deleteUserWithEmail(email);
-  });
-
-  test('should throw Authentication Error', async () => {
-    const feedUrl = 'http://feed.com';
-    await expectAuthError(() => sdkNoUser.me());
-    await expectAuthError(() => sdkNoUser.addFeedToCurrentUser({ input: { feedUrl } }));
-    await expectAuthError(() => sdkNoUser.users());
-  });
-
-  test('should throw Forbidden Error', async () => {
-    await expectForbiddenError(() => sdkUser.users());
-  });
+test.serial('Forbidden Error', async (t) => {
+  const { sdk } = await generateUserAndGetSdk();
+  const err = await t.throwsAsync(sdk.users());
+  t.regex(err.message, /forbidden/);
 });

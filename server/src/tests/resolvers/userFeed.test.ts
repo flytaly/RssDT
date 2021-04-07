@@ -1,216 +1,115 @@
-import faker from 'faker';
+import test from 'ava';
 import nock from 'nock';
-import { Connection } from 'typeorm';
-import argon2 from 'argon2';
-import * as uuid from 'uuid';
 // eslint-disable-next-line import/extensions
 import { User, UserFeed } from '#entities';
-
-import { initDbConnection } from '../../dbConnection.js';
 import { UserFeedOptionsInput } from '../../resolvers/resolver-types/inputs.js';
 import { DigestSchedule, TernaryState, Theme } from '../../types/enums.js';
 import { getSdk } from '../graphql/generated.js';
-import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries.js';
+import { startTestServer, stopTestServer } from '../test-server.js';
 import { generateFeed } from '../test-utils/generate-feed.js';
 import getTestClient from '../test-utils/getClient.js';
-import { generateUserAndGetSdk, getSdkWithLoggedInUser } from '../test-utils/login.js';
-import { deleteEmails } from '../test-utils/test-emails.js';
+import { generateUserAndGetSdk } from '../test-utils/login.js';
 
-let dbConnection: Connection;
+let testData: {
+  feeds: ReturnType<typeof generateFeed>[];
+  user: User;
+};
+let sdk: ReturnType<typeof getSdk>;
 
-beforeAll(async () => {
-  dbConnection = await initDbConnection();
-});
-
-afterAll(() => {
-  nock.cleanAll();
-  return dbConnection.close();
-});
-
-describe('Normalize', () => {
-  const inputUrl = ' domain.com ';
-  const correctUrl = `https://${inputUrl.trim()}`;
-  const feed = generateFeed({ feedUrl: correctUrl });
-  const email = faker.internet.email().toLowerCase();
-  let sdk: ReturnType<typeof getSdk>;
-  beforeAll(async () => {
-    feed.mockRequests();
-    sdk = getSdk(getTestClient().client);
-    await deleteUserWithEmail(email);
-  });
-  afterAll(() => Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl)]));
-  test('should normalize url', async () => {
-    const { addFeedWithEmail } = await sdk.addFeedWithEmail({
-      input: { email, feedUrl: inputUrl },
-    });
-    expect(addFeedWithEmail?.userFeed?.feed.url).toBe(correctUrl);
-  });
-  test('should validate url', async () => {
-    const wrongUrls = ['', 'https:', 'https://', 'ftp://asdf.com', 'juststring'];
-    await Promise.all(
-      wrongUrls.map(async (url) => {
-        const { addFeedWithEmail } = await sdk.addFeedWithEmail({
-          input: { email, feedUrl: url },
-        });
-        expect(addFeedWithEmail?.errors?.[0].argument).toBe('feedUrl');
-      }),
-    );
-  });
-});
-
-describe('My Feeds', () => {
+test.before(async () => {
+  await startTestServer();
   const feeds = [generateFeed(), generateFeed(), generateFeed()];
-  let sdk: ReturnType<typeof getSdk>;
-  let user: User;
-  const idsList: number[] = [];
-
-  beforeAll(async () => {
-    feeds.forEach((f) => f.mockRequests());
-    ({ user, sdk } = await generateUserAndGetSdk('testmyfeeds@test.com'));
-  });
-
-  afterAll(async () => {
-    await user.remove();
-    return Promise.all(feeds.map((f) => deleteFeedWithUrl(f.feedUrl)));
-  });
-
-  describe('Get my feeds', () => {
-    test('should response with feeds', async () => {
-      const responses = feeds.map(({ feedUrl }) =>
-        sdk.addFeedToCurrentUser({ input: { feedUrl } }),
-      );
-      await Promise.all(responses);
-      const { myFeeds } = await sdk.myFeeds();
-      expect(myFeeds).toHaveLength(feeds.length);
-    });
-  });
-  describe('Remove my feeds', () => {
-    test('should remove feeds', async () => {
-      const idsToDelete = idsList.slice(0, 2);
-      const { deleteMyFeeds } = await sdk.deleteMyFeeds({ ids: idsToDelete });
-      expect(deleteMyFeeds.ids).toEqual(
-        expect.arrayContaining(idsToDelete.map((id) => String(id))),
-      );
-    });
-  });
+  feeds.forEach((f) => f.mockRequests());
+  const { user, sdk: $sdk } = await generateUserAndGetSdk('testmyfeeds@test.com');
+  sdk = $sdk;
+  testData = { user, feeds };
 });
 
-describe('UserFeed options', () => {
-  const feed = generateFeed();
-  let sdk: ReturnType<typeof getSdk>;
-  let user: User;
-  let userFeedId: number | undefined;
-
-  beforeAll(async () => {
-    feed.mockRequests();
-    ({ user, sdk } = await generateUserAndGetSdk('testmyfeeds2@test.com'));
-    const response = await sdk.addFeedToCurrentUser({ input: { feedUrl: feed.feedUrl } });
-
-    userFeedId = response.addFeedToCurrentUser.userFeed?.id;
-  });
-
-  afterAll(async () => {
-    await user.remove();
-    deleteFeedWithUrl(feed.feedUrl);
-  });
-
-  test('should contain user feed options', async () => {
-    const { myFeeds } = await sdk.myFeeds();
-    expect(myFeeds?.[0]).toMatchObject({
-      activated: false,
-      title: null,
-      schedule: DigestSchedule.disable,
-      withContentTable: TernaryState.default,
-      itemBody: TernaryState.default,
-      attachments: TernaryState.default,
-      theme: Theme.default,
-      filter: null,
-    });
-  });
-  test('should update user feed options', async () => {
-    const opts: UserFeedOptionsInput = {
-      title: 'test title',
-      schedule: DigestSchedule.every6hours,
-      withContentTable: TernaryState.disable,
-      itemBody: TernaryState.enable,
-      attachments: TernaryState.enable,
-      theme: Theme.text,
-      filter: 'cat or dog',
-    };
-    const { setFeedOptions } = await sdk.setFeedOptions({ id: userFeedId!, opts });
-    expect(setFeedOptions.userFeed).toMatchObject(opts);
-  });
-
-  test("should forbid updating of someone else's feed", async () => {
-    const anotherUser = await generateUserAndGetSdk('someoneelse@test.com');
-    const opts = { attachments: TernaryState.disable };
-    const ufBefore = await UserFeed.findOne(userFeedId);
-    ufBefore!.attachments = TernaryState.enable;
-    await ufBefore!.save();
-    const { setFeedOptions } = await anotherUser.sdk.setFeedOptions({ id: userFeedId!, opts });
-    expect(setFeedOptions.userFeed).toBeNull();
-    const ufAfter = await UserFeed.findOne(userFeedId);
-    expect(ufAfter?.attachments).toBe(TernaryState.enable);
-    await anotherUser.user.remove();
-  });
+test.after(async () => {
+  nock.cleanAll();
+  await stopTestServer();
 });
 
-describe('Unsubscribe', () => {
-  const password = faker.internet.password(8);
-  const feed = generateFeed();
-  const email = faker.internet.email().toLowerCase();
-  let sdk: ReturnType<typeof getSdk>;
+test.serial('myFeeds query', async (t) => {
+  const r = testData.feeds.map(({ feedUrl }) => sdk.addFeedToCurrentUser({ input: { feedUrl } }));
+  await Promise.all(r);
+  const { myFeeds } = await sdk.myFeeds();
+  t.is(myFeeds?.length, testData.feeds.length);
+  const urls = new Set(testData.feeds.map((f) => f.feedUrl));
+  t.true(myFeeds?.every((f) => urls.has(f.feed.url)));
+});
 
-  beforeAll(async () => {
-    feed.mockRequests();
-    await deleteUserWithEmail(email);
-    await User.create({
-      email,
-      password: await argon2.hash(password),
-      emailVerified: true,
-    }).save();
-    sdk = await getSdkWithLoggedInUser(email, password);
-  });
-
-  afterAll(() =>
-    Promise.all([deleteUserWithEmail(email), deleteFeedWithUrl(feed.feedUrl), deleteEmails()]),
+test.serial('deleteMyFeeds mutation: delete 2 feeds', async (t) => {
+  const feeds = await UserFeed.find({ where: { userId: testData.user.id } });
+  t.is(feeds.length, testData.feeds.length);
+  const idsToDelete = feeds.map((f) => f.id).slice(0, 2);
+  const { deleteMyFeeds } = await sdk.deleteMyFeeds({ ids: idsToDelete });
+  t.deepEqual(
+    deleteMyFeeds.ids,
+    idsToDelete.map((id) => `${id}`),
   );
-  describe('unsubscribeToken', () => {
-    let uf: UserFeed | undefined;
-    let id: number;
-    test('should add feed with unsubscribeToken', async () => {
-      const { addFeedToCurrentUser } = await sdk.addFeedToCurrentUser({
-        input: { feedUrl: feed.feedUrl },
-      });
-      const { userFeed, errors } = addFeedToCurrentUser!;
-      expect(errors).toBeNull();
-      expect(userFeed).not.toBeNull();
-      ({ id } = userFeed!);
-      uf = await UserFeed.findOne(id);
-      expect(uf?.unsubscribeToken).not.toBeNull();
-      expect(uuid.validate(uf!.unsubscribeToken)).toBe(true);
-    });
+});
 
-    test("should fetch feed's info", async () => {
-      const { getFeedInfoByToken } = await sdk.getFeedInfoByToken({
-        id: String(id),
-        token: uf?.unsubscribeToken || '',
-      });
-      expect(getFeedInfoByToken?.feed.title).toBe(feed.meta.title);
-      expect(getFeedInfoByToken?.feed.url).toBe(feed.feedUrl);
-    });
-
-    test('should unsubscribe from digests', async () => {
-      const { unsubscribeByToken } = await sdk.unsubscribeByToken({
-        id: String(id),
-        token: uf!.unsubscribeToken,
-      });
-      expect(unsubscribeByToken).toBe(true);
-      const afterUnsubscribe = await UserFeed.findOne(id);
-      expect(afterUnsubscribe).toMatchObject({
-        id,
-        schedule: DigestSchedule.disable,
-      });
-    });
+test.serial('feeds options: return default options', async (t) => {
+  const { myFeeds } = await sdk.myFeeds();
+  t.like(myFeeds?.[0], {
+    activated: false,
+    title: null,
+    schedule: DigestSchedule.disable,
+    withContentTable: TernaryState.default,
+    itemBody: TernaryState.default,
+    attachments: TernaryState.default,
+    theme: Theme.default,
+    filter: null,
   });
+});
+
+test.serial('feed options: update', async (t) => {
+  const opts: UserFeedOptionsInput = {
+    title: 'test title',
+    schedule: DigestSchedule.every6hours,
+    withContentTable: TernaryState.disable,
+    itemBody: TernaryState.enable,
+    attachments: TernaryState.enable,
+    theme: Theme.text,
+    filter: 'cat or dog',
+  };
+  const feeds = await UserFeed.find({ where: { userId: testData.user.id } });
+  const { setFeedOptions } = await sdk.setFeedOptions({ id: feeds[0].id, opts });
+  t.like(setFeedOptions.userFeed, opts);
+});
+
+test.serial("feed options: forbid updating someone else's feed", async (t) => {
+  const anotherUser = await generateUserAndGetSdk('someoneelse@test.com');
+  const userFeed = (await UserFeed.findOne({ where: { userId: testData.user.id } })) as UserFeed;
+  t.truthy(userFeed);
+  userFeed.attachments = TernaryState.enable;
+  await userFeed.save();
+  const { setFeedOptions } = await anotherUser.sdk.setFeedOptions({
+    id: userFeed.id,
+    opts: { attachments: TernaryState.disable },
+  });
+  t.falsy(setFeedOptions.userFeed);
+  await userFeed.reload();
+  t.is(userFeed.attachments, TernaryState.enable);
+  await anotherUser.user.remove();
+});
+
+test.serial("unsubscribe flow: fetch feed's info and unsubscribe", async (t) => {
+  const anonSdk = getSdk(getTestClient().client);
+  const uF = await UserFeed.findOne({ where: { userId: testData.user.id }, relations: ['feed'] });
+  t.truthy(uF);
+  uF!.schedule = DigestSchedule.daily;
+  await uF?.save();
+
+  const { feed, id, unsubscribeToken } = uF!;
+
+  const info = await anonSdk.getFeedInfoByToken({ id: `${id}`, token: unsubscribeToken });
+  t.is(info.getFeedInfoByToken?.feed.title, feed.title);
+  t.is(info.getFeedInfoByToken?.feed.url, feed.url);
+
+  const unsub = await sdk.unsubscribeByToken({ id: `${id}`, token: unsubscribeToken });
+  t.true(unsub.unsubscribeByToken);
+  await uF!.reload();
+  t.like(uF, { id, schedule: DigestSchedule.disable });
 });
