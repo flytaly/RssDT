@@ -6,6 +6,8 @@ fragment FeedFields on Feed {
   description
   language
   favicon
+  siteIcon
+  siteFavicon
   imageUrl
   imageTitle
   lastSuccessfulUpd

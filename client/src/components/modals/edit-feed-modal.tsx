@@ -19,6 +19,7 @@ const InfoRow: React.FC<{ title: string }> = ({ title, children }) => (
 );
 
 const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed }) => {
+  const imageUrl = feed?.feed.imageUrl || feed?.feed.siteIcon;
   return (
     <ModalSidebar
       isOpen={isOpen}
@@ -31,9 +32,7 @@ const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed 
             <button type="button" className="icon-btn" onClick={closeModal}>
               <ArrowLeftIcon className="w-4" />
             </button>
-            {feed.feed.imageUrl ? (
-              <img src={feed.feed.imageUrl} alt="feed icon" className="w-auto h-full " />
-            ) : null}
+            {imageUrl ? <img src={imageUrl} alt="feed icon" className="w-auto h-full " /> : null}
           </div>
           <h3 className="font-bold mb-3 text-base">{feed.feed.title}</h3>
           <FeedOptionsForm feed={feed} />

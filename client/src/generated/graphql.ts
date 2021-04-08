@@ -71,6 +71,8 @@ export type Feed = {
   description?: Maybe<Scalars['String']>;
   language?: Maybe<Scalars['String']>;
   favicon?: Maybe<Scalars['String']>;
+  siteFavicon?: Maybe<Scalars['String']>;
+  siteIcon?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   imageTitle?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -416,7 +418,7 @@ export type UserFeedNewItemsCountResponse = {
 
 export type FeedFieldsFragment = (
   { __typename?: 'Feed' }
-  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'lastPubdate' | 'createdAt' | 'updatedAt'>
+  & Pick<Feed, 'id' | 'url' | 'link' | 'title' | 'description' | 'language' | 'favicon' | 'siteIcon' | 'siteFavicon' | 'imageUrl' | 'imageTitle' | 'lastSuccessfulUpd' | 'lastPubdate' | 'createdAt' | 'updatedAt'>
 );
 
 export type ItemFieldsFragment = (
@@ -855,6 +857,8 @@ export const FeedFieldsFragmentDoc = gql`
   description
   language
   favicon
+  siteIcon
+  siteFavicon
   imageUrl
   imageTitle
   lastSuccessfulUpd

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { RefObject, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -50,9 +51,15 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
           <li key={uf.id} title={`${uf.newItemsCount || 0} new items`}>
             <Link href={`/feed/${uf.id}`}>
               <a
-                className={`group flex pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
+                className={`group flex items-center pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
                 onClick={() => onSidebarClose?.()}
               >
+                {uf.feed.siteFavicon ? (
+                  <img className="h-4 w-4 mr-1" src={uf.feed.siteFavicon} />
+                ) : (
+                  <span className="h-4 w-4 mr-1 flex-shrink-0" />
+                )}
+
                 <span className="overflow-ellipsis overflow-hidden group-hover:underline">
                   {uf.title || uf.feed.title || uf.feed.url}
                 </span>
@@ -80,7 +87,7 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
       <div className="flex mx-3">
         {onSidebarClose && (
           <button type="button" className="icon-btn" onClick={() => onSidebarClose()}>
-            <XIcon className="w-4 h-4" />
+            <XIcon className="w-4 max-h-full" />
           </button>
         )}
         <div className="relative ml-auto" ref={anchorRef as RefObject<HTMLDivElement>}>

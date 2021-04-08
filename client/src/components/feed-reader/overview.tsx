@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';
@@ -32,27 +33,40 @@ const Overview: React.FC<OverviewProps> = ({ feeds, setSidebarModalOpen }) => {
       </div>
       <div>
         <ul className="text-sm grid grid-cols-feed-overview  gap-4">
-          {feedsSorted.map((f) => (
-            <li
-              key={f.id}
-              className={`relative p-2 bg-white shadow-message hover:shadow-message-darker overflow-hidden max-h-full ${
-                f.newItemsCount ? 'pt-4' : ''
-              }`}
-            >
-              {f.newItemsCount ? (
-                <div
-                  className="absolute top-0 right-0 px-1 bg-gray-200
+          {feedsSorted.map((f) => {
+            const { siteFavicon, siteIcon } = f.feed;
+            const title = f.title || f.feed.title || f.feed.link || f.feed.url;
+            const displayTitle = !siteFavicon && !siteIcon ? title.slice(1) : title;
+            return (
+              <li
+                key={f.id}
+                className={` items-center p-2 relative bg-white shadow-message hover:shadow-message-darker overflow-hidden max-h-full ${
+                  f.newItemsCount ? 'pt-4' : ''
+                }`}
+              >
+                {f.newItemsCount ? (
+                  <div
+                    className="absolute top-0 right-0 px-1 bg-gray-200
  text-xs text-gray-500 rounded-bl-md"
-                >
-                  {`${f.newItemsCount} new items`}
-                </div>
-              ) : null}
-              <Link href={`/feed/${f.id}`}>
-                <a className="font-bold hover:underline">{f.title || f.feed.title}</a>
-              </Link>
-              <div className="text-xs">{f.feed.description}</div>
-            </li>
-          ))}
+                  >
+                    {`${f.newItemsCount} new items`}
+                  </div>
+                ) : null}
+                {f.feed.siteIcon && <img className="inline mr-1 w-9 h-9" src={f.feed.siteIcon} />}
+                {!siteIcon && !siteFavicon && (
+                  <span className="text-3xl font-bold">{title[0]}</span>
+                )}
+                {!siteIcon && siteFavicon && (
+                  <img className="inline mr-1 w-6 h-6" src={siteFavicon} />
+                )}
+
+                <Link href={`/feed/${f.id}`}>
+                  <a className="inline font-bold hover:underline">{displayTitle}</a>
+                </Link>
+                <div className="text-xs">{f.feed.description?.slice(0, 100)}</div>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>
