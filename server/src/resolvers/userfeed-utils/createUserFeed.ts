@@ -10,13 +10,15 @@ import { ArgumentError } from '../resolver-types/errors.js';
 import { UserFeedOptionsInput } from '../resolver-types/inputs.js';
 import { processFeed } from './processFeed.js';
 import { upsertUserAndReturn } from './upsertUser.js';
+import { updateFeedIcons } from '../../utils/updateFeedIcons.js';
+import { IS_TEST } from '../../constants.js';
 
 export type UserInfo = {
   locale?: string;
   timeZone?: string;
 };
 
-// creates activated feed with items
+// creates activated feed with items and site icons
 export const saveActivatedFeed = async (
   url: string,
   feedMeta: FeedParser.Meta,
@@ -30,6 +32,7 @@ export const saveActivatedFeed = async (
   feed.lastUpdAttempt = ts;
   feed.lastSuccessfulUpd = ts;
   feed.updateLastPubdate(feedItems);
+  if (!IS_TEST) await updateFeedIcons(feed, false);
   await queryRunner.manager.save(feed);
   if (feedItems?.length) {
     const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
@@ -38,7 +41,7 @@ export const saveActivatedFeed = async (
   return feed;
 };
 
-// creates not activated feed with items
+// creates not activated feed without items and site icons
 export const saveNotActivatedFeed = async (
   url: string,
   feedMeta: FeedParser.Meta,
@@ -120,6 +123,7 @@ export const createUserFeed = async ({
     }
     await qR.manager.save(userFeed);
     await qR.commitTransaction();
+    if (!activate && !IS_TEST) updateFeedIcons(feed, true); // update asynchronously without waiting
   } catch (err) {
     const field = err.message === 'feed was already added' ? 'url' : '';
     errors = [new ArgumentError(field, err.message)];

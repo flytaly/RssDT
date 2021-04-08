@@ -4,7 +4,10 @@ import { URL } from 'url';
 import { FAVICON_PREF_SIZE, ICON_MIN_SIZE, ICON_PREF_SIZE, UserAgent } from '../constants.js';
 import { fetchImageSize } from '../utils/fetchImageSize.js';
 
-const axiosInstance = axios.create({ headers: { 'User-Agent': UserAgent }, timeout: 20000 });
+const axiosInstance = axios.create({
+  headers: { 'User-Agent': UserAgent },
+  timeout: 20000,
+});
 axiosInstance.defaults.timeout = 20000;
 
 type ImageInfo = {
@@ -20,7 +23,7 @@ function getImageInfo(el: Element) {
   return { sizes: sizes?.split('x').map((s) => +s) || null, href } as ImageInfo;
 }
 
-export async function metaIcons(html: string) {
+export function metaIcons(html: string) {
   const dom = new jsdom.JSDOM(html);
 
   const icons = Array.from(
@@ -72,7 +75,7 @@ export async function fetchPageContent(siteUrl: string) {
 }
 
 export async function getIconsFromPage(siteUrl: string, html: string) {
-  const { icons, appleIcons } = await metaIcons(html);
+  const { icons, appleIcons } = metaIcons(html);
   const svg = icons.find((i) => i.href.endsWith('svg')) || null;
   const favicon = choseIcon(icons, FAVICON_PREF_SIZE);
   let icon = choseIcon(icons, ICON_PREF_SIZE);
