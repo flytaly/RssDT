@@ -24,12 +24,16 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
       allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'iframe']),
       allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
-        img: ['src', 'width', 'height'],
+        img: ['src', 'width', 'height', 'style'],
         iframe: ['src', 'width', 'height'],
       },
       allowIframeRelativeUrls: false,
+      allowedStyles: { img: { 'max-width': [/.*/] } },
       transformTags: {
-        img: (tagName, att) => ({ tagName, attribs: { ...att, style: 'max-width:100%' } }),
+        img: (tagName, att) => ({
+          tagName,
+          attribs: { ...att, style: 'max-width:100%' },
+        }),
       },
       allowedSchemesByTag: { img: imgSchemes },
       // allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com'],
