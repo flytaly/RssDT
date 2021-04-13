@@ -32,4 +32,15 @@ async function updateIcons() {
   await conn.close();
 }
 
-updateIcons();
+async function updateOneIcon(id: number) {
+  const conn = await initDbConnection(false);
+  const f = await Feed.findOne(id);
+  console.log(`update ${id}: ${f?.link}`);
+  await updateFeedIcons(f, true);
+  conn.close();
+}
+
+const id = process.argv.slice(2)[0];
+
+if (id) updateOneIcon(+id);
+else updateIcons();

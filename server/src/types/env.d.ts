@@ -7,6 +7,7 @@ declare namespace NodeJS {
     REDIS_PASSWORD: string;
     COOKIE_SECRET: string;
     FRONTEND_URL: string;
+    BESTICON_URL: string;
     MAIL_SMTP: string;
     MAIL_PORT: string;
     MAIL_FROM: string;
