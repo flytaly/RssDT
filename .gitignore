@@ -2,7 +2,7 @@ node_modules/
 .DS_Store
 *.log
 *.env
-*.env.dev
+*.env.development
 *.env.production
 *.env.testing
 .vscode
