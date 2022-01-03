@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
-    "module": "commonjs",
+    "module": "node12",
     "target": "ES2020",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,

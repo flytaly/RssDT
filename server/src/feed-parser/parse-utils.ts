@@ -2,8 +2,8 @@ import axios, { AxiosRequestConfig } from 'axios';
 import FeedParser, { Item, Meta } from 'feedparser';
 import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
+import { importNormalizer, normalizeUrl } from '../utils/normalizer.js';
 import { Readable } from 'stream';
-import normalizeUrl from 'normalize-url';
 import { maxItemsInFeed } from '../constants.js';
 
 const MAX_ITEMS = maxItemsInFeed;
@@ -34,11 +34,8 @@ export type ItemWithPubdate = {
  * see: https://www.petefreitag.com/item/384.cfm
  * @param html - HTML page
  */
-const findFeedUrl = (html: string, baseUrl: string, normalize = true) => {
+const findFeedUrl = (html: string, baseUrl: string, urlNormalizer?: (url: string) => string) => {
   const dom = new jsdom.JSDOM(html);
-
-  const normUrl = (url: string) =>
-    normalize ? normalizeUrl(url, { defaultProtocol: 'https://' }) : url;
 
   const rss = dom.window.document.querySelector('link[type="application/rss+xml"]');
   const atom = dom.window.document.querySelector('link[type="application/atom+xml"]');
@@ -46,14 +43,14 @@ const findFeedUrl = (html: string, baseUrl: string, normalize = true) => {
     const href = rss.getAttribute('href');
     if (href) {
       const url = new URL(href, baseUrl).href;
-      if (url) return normUrl(url);
+      if (url && urlNormalizer) return urlNormalizer(url);
     }
   }
   if (atom) {
     const href = atom.getAttribute('href');
     if (href) {
       const url = new URL(href, baseUrl).href;
-      if (url) return normUrl(url);
+      if (url && urlNormalizer) return urlNormalizer(url);
     }
   }
   return null;
@@ -109,7 +106,9 @@ export async function getFeedStream(
 
   // Don't find url if it's an xml page
   if (!xmlDeclaration && tryFindFeedUrl) {
-    feedUrl = findFeedUrl(body, url);
+    await importNormalizer();
+    const normUrl = (url: string) => normalizeUrl(url, { defaultProtocol: 'https://' });
+    feedUrl = findFeedUrl(body, url, normUrl);
     if (feedUrl) return getFeedStream(feedUrl, options, false);
   }
 

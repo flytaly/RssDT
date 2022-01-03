@@ -1,7 +1,6 @@
-import normalizeUrl from 'normalize-url';
 import { getConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
 import { Feed, User } from '#entities';
+import { importNormalizer, normalizeUrl } from '../../utils/normalizer';
 
 export const deleteUserWithEmail = (email: string) =>
   getConnection()
@@ -11,10 +10,12 @@ export const deleteUserWithEmail = (email: string) =>
     .where('email = :email', { email })
     .execute();
 
-export const deleteFeedWithUrl = (url: string) =>
-  getConnection()
+export const deleteFeedWithUrl = async (url: string) => {
+  await importNormalizer();
+  return getConnection()
     .createQueryBuilder()
     .delete()
     .from(Feed)
     .where('url = :url', { url: normalizeUrl(url) }) //
     .execute();
+};

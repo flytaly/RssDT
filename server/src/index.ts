@@ -8,6 +8,7 @@ import { initApolloServer } from './apollo.js';
 import { initSession } from './session.js';
 import { logger, initLogFiles } from './logger.js';
 import { redis } from './redis.js';
+import { importNormalizer } from './utils/normalizer.js';
 
 const entry = async () => {
   const app = express();
@@ -15,6 +16,7 @@ const entry = async () => {
   app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
+  await importNormalizer();
   const sessionMiddleware = initSession(app, redis);
   const dbConnection = await initDbConnection();
   const { apolloServer, pubsub } = await initApolloServer(app, redis, sessionMiddleware);

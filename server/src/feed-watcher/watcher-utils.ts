@@ -1,6 +1,5 @@
 import moment from 'moment';
 import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
-// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item, IEnclosure } from '#entities';
 import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants.js';
 import { getNewItems } from '../feed-parser/index.js';

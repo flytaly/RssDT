@@ -3,7 +3,6 @@ import faker from 'faker';
 import sinon from 'sinon';
 import { getRepository } from 'typeorm';
 import '../../dotenv.js';
-// eslint-disable-next-line import/extensions
 import { Feed, Item } from '#entities';
 import { getNewItemsMock, ItemWithPubdate } from '../../feed-parser/parse-utils.js';
 import { closeTestConnection, runTestConnection } from '../../tests/test-utils/connection.js';
@@ -26,9 +25,10 @@ test.before(async () => {
 });
 
 test.after(async () => {
-  deleteFeedWithUrl(feedUrl);
+  await deleteFeedWithUrl(feedUrl);
   await closeTestConnection();
 });
+
 test.serial("update feed's data", async (t) => {
   const newItems = [
     generateItem(new Date(Date.now() - 1000)), //

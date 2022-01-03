@@ -6,6 +6,7 @@ import { initApolloServer } from '../apollo.js';
 import { initDbConnection } from '../dbConnection.js';
 import { redis } from '../redis.js';
 import { initSession } from '../session.js';
+import { importNormalizer } from '../utils/normalizer';
 
 const startMail = (debug = false) => {
   const maildev = new MailDev({
@@ -26,6 +27,7 @@ export async function startTestServer({ debug }: { debug?: boolean } = {}) {
 
   const app = express();
 
+  await importNormalizer()
   const sessionMiddleware = initSession(app, redis);
   const dbConnection = await initDbConnection(debug);
   const { apolloServer, pubsub } = await initApolloServer(app, redis, sessionMiddleware);

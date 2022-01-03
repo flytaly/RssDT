@@ -15,7 +15,7 @@ export const getFeedVariations = (url: string) => {
 };
 
 export async function processFeed(url: string) {
-  let feed = await Feed.findOne({ where: getFeedVariations(url) });
+  let feed = await Feed.findOne<Feed>({ where: getFeedVariations(url) });
   if (feed) return { feed };
   let feedMeta: FeedParser.Meta;
   let feedItems: FeedParser.Item[];
@@ -35,7 +35,7 @@ export async function processFeed(url: string) {
   // actual url of the feed
   if (newUrl !== url) {
     url = newUrl;
-    feed = await Feed.findOne({ where: getFeedVariations(url) });
+    feed = await Feed.findOne<Feed>({ where: getFeedVariations(url) });
   }
   return { feedMeta, feedItems, url, feed };
 }

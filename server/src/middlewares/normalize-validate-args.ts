@@ -1,9 +1,9 @@
-import normalizeUrl from 'normalize-url';
 import Joi, { AnySchema } from 'joi';
 import { createMethodDecorator } from 'type-graphql';
 import { DateTime } from 'luxon';
 import { ArgumentError } from '../resolvers/resolver-types/errors.js';
 import { defaultLocale, defaultTimeZone } from '../constants.js';
+import { normalizeUrl } from '../utils/normalizer.js';
 
 const NORM_METADATA_KEY = Symbol('normalize_meta');
 const VAL_METADATA_KEY = Symbol('validate_meta');
@@ -37,15 +37,17 @@ export const normalizes: Record<InputType, Function> = {
   email: (arg: string) => arg?.trim().toLowerCase(),
   password: (arg: string) => arg?.trim(),
   feedbackText: (arg: string) => arg?.trim(),
-  feedUrl: (arg: string) =>
-    normalizeUrl(arg, {
+  feedUrl: (arg: string) => {
+    return normalizeUrl(arg, {
       defaultProtocol: 'https://',
-    }),
+    });
+  },
   locale: (locale: string) => {
     if (!locale) return locale;
     let result: string | undefined;
     try {
-      result = DateTime.fromObject({ locale }).resolvedLocaleOpts().locale;
+      const dt = DateTime.fromObject({}, { locale });
+      result = dt.resolvedLocaleOptions().locale;
     } catch (error) {
       //
     }
