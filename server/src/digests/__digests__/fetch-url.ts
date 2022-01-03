@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import '../../dotenv.js';
 import fs from 'fs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
 import { getFeedStream, parseFeed } from '../../feed-parser/index.js';
@@ -13,7 +13,7 @@ import { initDbConnection } from '../../dbConnection.js';
 import { transport } from '../../mail/transport.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 
 async function fetchAndSave() {

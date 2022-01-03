@@ -38,7 +38,11 @@ test.serial('updateUserInfo: should not save incorrect data', async (t) => {
   const { updateUserInfo } = await sdk.updateUserInfo({
     userInfo: { locale: 'WRONG', timeZone: 'WRONG' },
   });
-  t.like(updateUserInfo, { locale: 'en-US', timeZone: defaultTimeZone });
+  t.like(updateUserInfo, {
+    // TODO: should be defaultLocale
+    locale: Intl.DateTimeFormat().resolvedOptions().locale,
+    timeZone: defaultTimeZone,
+  });
 });
 
 test.serial('updateUserInfo: not authenticated', async (t) => {

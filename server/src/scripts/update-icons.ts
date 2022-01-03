@@ -24,7 +24,9 @@ async function updateIcons() {
         return updateFeedIcons(f, true);
       }),
     );
-    await queue.onSizeLessThan(3);
+    // TODO:
+    // await queue.onSizeLessThan(3);
+    await queue.onIdle()
     skip += take;
     feedsBatch = await Feed.find({ skip, take });
   }

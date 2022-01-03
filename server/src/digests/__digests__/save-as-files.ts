@@ -2,8 +2,8 @@ import 'reflect-metadata';
 import '../../dotenv.js';
 import fs from 'fs';
 import { Connection } from 'typeorm';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
 // eslint-disable-next-line import/extensions
 import { Feed } from '#entities';
 import { initDbConnection } from '../../dbConnection.js';
@@ -11,7 +11,7 @@ import { composeDigest } from '../compose-mail.js';
 import { createDefaultUserFeed } from './utils.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 
 let db: Connection;

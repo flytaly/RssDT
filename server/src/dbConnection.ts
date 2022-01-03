@@ -8,7 +8,7 @@ export const initDbConnection = async (logging?: boolean) => {
     type: 'postgres',
     url: process.env.DATABASE_URL,
     logging: logging === undefined ? IS_DEV : logging,
-    migrations: IS_TEST ? undefined : ['./migrations/*'],
+    migrations: IS_TEST ? undefined : ['./dist/migrations/*'],
     dropSchema: IS_TEST,
     synchronize: IS_TEST,
     entities: [User, Feed, UserFeed, Item, Enclosure, Options],

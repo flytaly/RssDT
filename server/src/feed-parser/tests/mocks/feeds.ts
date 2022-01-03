@@ -1,9 +1,9 @@
 import fs from 'fs';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import path /* { dirname } */ from 'path';
+// import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function readXMLFilesInDir(dir: string) {
   const files = fs.readdirSync(path.join(__dirname, dir));
