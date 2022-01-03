@@ -74,7 +74,7 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
           const res = await setOptions({ variables: { id, opts } });
           setErrorMsg(res.data?.setFeedOptions.errors?.[0].message || '');
         } catch (error) {
-          setErrorMsg(error.message);
+          setErrorMsg((error as { message: string }).message);
         }
         setSubmitting(false);
       }}

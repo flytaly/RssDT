@@ -57,7 +57,7 @@ const Contacts: React.FC = () => {
             }
           } catch (error) {
             console.log('error:', error);
-            actions.setErrors({ text: error.message });
+            actions.setErrors({ text: (error as { message: string })?.message });
           }
           actions.setSubmitting(false);
           actions.setStatus({ success: true });

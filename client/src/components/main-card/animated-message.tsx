@@ -11,7 +11,8 @@ export type MessageItem = {
 };
 
 export const useEmergeTransition = (items: MessageItem[]) =>
-  useTransition(items, (item) => item.key, {
+  useTransition(items, {
+    keys: (item) => item.key,
     config: { mass: 1, friction: 12 },
     from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
     enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
@@ -20,7 +21,7 @@ export const useEmergeTransition = (items: MessageItem[]) =>
 
 interface AnimatedMessageProps {
   children: React.ReactNode;
-  style?: React.CSSProperties;
+  style?: any;
   text?: string;
   withline?: boolean;
   type?: MessageType;

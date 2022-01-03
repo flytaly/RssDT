@@ -160,13 +160,12 @@ pre {
     background-size: 1.2em;
   }
 
-  @responsive {
-    .reader-layout {
-      display: grid;
-      grid-template-columns: minmax(11rem, 0.8fr) 3.2fr;
-      grid-template-rows: min-content 1fr;
-    }
+  .reader-layout {
+    display: grid;
+    grid-template-columns: minmax(11rem, 0.8fr) 3.2fr;
+    grid-template-rows: min-content 1fr;
   }
+
   .transparent-gradient {
     background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
   }

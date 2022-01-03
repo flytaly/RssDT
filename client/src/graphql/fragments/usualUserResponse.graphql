@@ -1,9 +1,9 @@
 fragment UsualUserResponse on UserResponse {
-    user {
-        ...UserFields
-    }
-    errors {
-        message
-        argument
-    }
+  user {
+    ...UserFields
+  }
+  errors {
+    message
+    argument
+  }
 }

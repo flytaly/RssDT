@@ -64,7 +64,7 @@ export function useSetPartialOptionsMutation() {
       if (data?.setOptions.errors) return { error: data?.setOptions.errors[0].message };
       return { data };
     } catch (error) {
-      return { error: error.message };
+      return { error: (error as { message: string }).message };
     }
   };
 

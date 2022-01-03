@@ -11,13 +11,11 @@ import { useMeQuery } from '../generated/graphql';
 
 const infoMessages: MessageItem[] = [
   {
-    text:
-      'FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
+    text: 'FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
     key: 'intro-message',
   },
   {
-    text:
-      'To start receiving digests just enter an address of the desired feed, email, and digest period',
+    text: 'To start receiving digests just enter an address of the desired feed, email, and digest period',
     key: 'digest-message',
   },
 ];

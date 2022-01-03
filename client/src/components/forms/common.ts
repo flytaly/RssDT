@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export type FocusEvent = React.FocusEvent<HTMLInputElement | HTMLSelectElement>;
+// export type FocusEvent = React.FocusEvent<HTMLInputElement | HTMLSelectElement>;
 
 export interface CommonProps {
   error?: string;

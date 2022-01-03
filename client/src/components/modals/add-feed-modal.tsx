@@ -84,7 +84,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
                 setErrorMsg(data?.addFeedToCurrentUser.errors[0].message);
               else closeModal();
             } catch (error) {
-              setErrorMsg(error.message);
+              setErrorMsg((error as { message: string }).message);
             }
           }}
         >

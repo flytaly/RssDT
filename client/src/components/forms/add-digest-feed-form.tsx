@@ -29,7 +29,7 @@ function makeSuccessMessage(email: string, title: string, schedule: DigestSchedu
       <div>
         <b>{title}</b>
         <span> [</span>
-        <b>{`${names[(schedule as unknown) as DigestSchedule]} digest`}</b>
+        <b>{`${names[schedule as unknown as DigestSchedule]} digest`}</b>
         <span>] </span>
       </div>
       <div>{`Activation link has been sent to ${email}.`}</div>
@@ -61,7 +61,7 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
               makeSuccessMessage(
                 formVariables.email,
                 userFeed.feed.title || '',
-                (userFeed.schedule as unknown) as DigestSchedule,
+                userFeed.schedule as unknown as DigestSchedule,
               ),
             ]);
             resetForm();
@@ -76,7 +76,8 @@ const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMe
             setMessages?.(errMessages || []);
           }
         } catch (err) {
-          setMessages?.([{ key: 'error', content: <GraphQLError error={err.message} /> }]);
+          const message = (err as { message: string })?.message || '';
+          setMessages?.([{ key: 'error', content: <GraphQLError error={message} /> }]);
         }
         setSubmitting(false);
       }}

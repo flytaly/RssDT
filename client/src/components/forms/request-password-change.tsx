@@ -35,7 +35,12 @@ const RequestPasswordChangeForm: React.FC<RequestPassProps> = ({ setMessages }) 
             setMessages?.([{ type: 'error', key: 'error', text: message }]);
           }
         } catch (err) {
-          setMessages?.([{ key: 'error', content: <GraphQLError error={err.message} /> }]);
+          setMessages?.([
+            {
+              key: 'error',
+              content: <GraphQLError error={(err as { message: string }).message} />,
+            },
+          ]);
         }
         setSubmitting(false);
       }}

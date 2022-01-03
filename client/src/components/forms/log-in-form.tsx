@@ -44,7 +44,12 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
             setMessages?.([{ type: 'error', key: 'error', text: data?.login.errors?.[0].message }]);
           }
         } catch (err) {
-          setMessages?.([{ key: 'error', content: <GraphQLError error={err.message} /> }]);
+          setMessages?.([
+            {
+              key: 'error',
+              content: <GraphQLError error={(err as { message: string }).message} />,
+            },
+          ]);
         }
         setSubmitting(false);
       }}

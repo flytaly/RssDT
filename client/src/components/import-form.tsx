@@ -53,7 +53,11 @@ export const ImportForm = () => {
   const [importFeeds, { error, data, loading: l1 }] = useImportFeedsMutation();
   const errorMessage = error?.message || data?.importFeeds.errors?.[0].message;
 
-  const { data: status, stopPolling, loading: l2 } = useImportStatusQuery({
+  const {
+    data: status,
+    stopPolling,
+    loading: l2,
+  } = useImportStatusQuery({
     ssr: false,
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
