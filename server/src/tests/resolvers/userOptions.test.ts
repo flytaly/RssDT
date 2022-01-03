@@ -48,7 +48,7 @@ test.serial('updateUserInfo: should not save incorrect data', async (t) => {
 test.serial('updateUserInfo: not authenticated', async (t) => {
   const userInfo = { locale: 'en-GB', timeZone: 'tz' };
   const error = await t.throwsAsync(sdkAnon.updateUserInfo({ userInfo }));
-  t.true(error.message.startsWith('not authenticated'));
+  t.true(error?.message.startsWith('not authenticated'));
 });
 
 test.serial('meWithOptions and myOptions queries', async (t) => {
@@ -72,7 +72,7 @@ test.serial('setOptions mutation', async (t) => {
 
 test('setOptions: not authenticated', async (t) => {
   const error = await t.throwsAsync(sdkAnon.setOptions({ opts: {} }));
-  t.true(error.message.startsWith('not authenticated'));
+  t.true(error?.message.startsWith('not authenticated'));
 });
 
 test('validation', async (t) => {

@@ -71,7 +71,7 @@ test('compose mail: items with body and attachments', async (t) => {
 
   const enc = $(`a[href="${encImgUrl}"]`);
   t.true(enc.length === 3);
-  t.is(enc.first().text(), encImgUrl.split('/').pop());
+  t.is(enc.first().text(), encImgUrl.split('/').pop() || '');
   const dateStr = DateTime.fromJSDate(pubdate)
     .setZone(timeZone)
     .setLocale(locale)

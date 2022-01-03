@@ -11,7 +11,7 @@ test.serial('Authentication Error', async (t) => {
   const sdk = getSdk(getTestClient().client);
   const expectAuthError = async (query: Promise<any>) => {
     const err = await t.throwsAsync(query);
-    t.regex(err.message, /not authenticated/);
+    t.regex(err?.message || '', /not authenticated/);
   };
   await expectAuthError(sdk.me());
   await expectAuthError(sdk.addFeedToCurrentUser({ input: { feedUrl: 'http://feed.com' } }));
@@ -21,5 +21,5 @@ test.serial('Authentication Error', async (t) => {
 test.serial('Forbidden Error', async (t) => {
   const { sdk } = await generateUserAndGetSdk();
   const err = await t.throwsAsync(sdk.users());
-  t.regex(err.message, /forbidden/);
+  t.regex(err?.message || '', /forbidden/);
 });
