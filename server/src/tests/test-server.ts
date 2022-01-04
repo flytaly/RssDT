@@ -15,7 +15,7 @@ const startMail = (debug = false) => {
     silent: !debug,
   });
   maildev.listen(() => {});
-  return (maildev as unknown) as typeof maildev & {
+  return maildev as unknown as typeof maildev & {
     close: Function;
   };
 };
@@ -27,10 +27,10 @@ export async function startTestServer({ debug }: { debug?: boolean } = {}) {
 
   const app = express();
 
-  await importNormalizer()
+  await importNormalizer();
   const sessionMiddleware = initSession(app, redis);
   const dbConnection = await initDbConnection(debug);
-  const { apolloServer, pubsub } = await initApolloServer(app, redis, sessionMiddleware);
+  const { apolloServer, pubsub } = await initApolloServer(app, redis);
   const server = app.listen(PORT, () => {
     if (debug) console.log(`🚀 start server on port: ${PORT} for testing`);
   });

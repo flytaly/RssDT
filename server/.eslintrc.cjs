@@ -3,7 +3,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugins: ["modules"],
+  plugin: ["modules"],
   ignorePatterns: ['**/graphql/generated.ts', 'src/migrations/**/*.ts'],
 
   rules: {

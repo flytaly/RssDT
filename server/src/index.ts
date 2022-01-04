@@ -1,14 +1,16 @@
+// ! __reflect-metadata__ and __dotenv__ imports have to stay at the top 
 import 'reflect-metadata';
 import './dotenv.js';
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 import http from 'http';
-import { initDbConnection } from './dbConnection.js';
 import { initApolloServer } from './apollo.js';
-import { initSession } from './session.js';
-import { logger, initLogFiles } from './logger.js';
+import { initDbConnection } from './dbConnection.js';
+import { initLogFiles, logger } from './logger.js';
 import { redis } from './redis.js';
+import { initSession } from './session.js';
 import { importNormalizer } from './utils/normalizer.js';
+import { initWSServer } from './ws-server.js';
 
 const entry = async () => {
   const app = express();
@@ -17,17 +19,19 @@ const entry = async () => {
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
   await importNormalizer();
-  const sessionMiddleware = initSession(app, redis);
-  const dbConnection = await initDbConnection();
-  const { apolloServer, pubsub } = await initApolloServer(app, redis, sessionMiddleware);
   initLogFiles({ prefix: 'api_', name: 'api' });
 
-  const httpServer = http.createServer(app);
-  apolloServer.installSubscriptionHandlers(httpServer);
+  const sessionMiddleware = initSession(app, redis);
+  const dbConnection = await initDbConnection();
+  const { apolloServer, pubsub, schema } = await initApolloServer(app, redis);
 
-  httpServer.listen(process.env.PORT, () => {
+  const server = http.createServer(app);
+
+  server.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
   });
+
+  initWSServer({ schema, sessionMiddleware, server });
 
   const exit = async () => {
     await dbConnection.close();

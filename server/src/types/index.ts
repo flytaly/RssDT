@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import Session from 'express-session';
-import { PubSubEngine } from 'graphql-subscriptions';
-import { Redis } from 'ioredis';
-import { createItemCountLoader } from '../utils/createItemCountLoader.js';
+import type Session from 'express-session';
+import type { PubSubEngine } from 'graphql-subscriptions';
+import type { Redis } from 'ioredis';
+import type { createItemCountLoader } from '../utils/createItemCountLoader.js';
 
 export enum Role {
   USER = 'USER',
@@ -22,6 +22,8 @@ export type MyContext = {
   itemCountLoader: ReturnType<typeof createItemCountLoader>;
   pubsub: PubSubEngine;
 };
+
+export type WSContext = Pick<MyContext, "req">
 
 export type FeedMeta = {
   title: string;

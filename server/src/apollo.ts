@@ -1,6 +1,6 @@
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { Express } from 'express';
-import session from 'express-session';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
@@ -12,16 +12,13 @@ import { UserFeedResolver } from './resolvers/userFeed.js';
 import { MyContext, ReqWithSession } from './types/index.js';
 import { createItemCountLoader } from './utils/createItemCountLoader.js';
 
-export const initApolloServer = async (
-  app: Express,
-  redis: Redis,
-  sessionMiddleware: ReturnType<typeof session>,
-) => {
+export const initApolloServer = async (app: Express, redis: Redis) => {
   const pubsub = new RedisPubSub({
     publisher: createRedis(),
     subscriber: createRedis(),
     connection: redisOptions,
   });
+
   const schema = await buildSchema({
     resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
     validate: false,
@@ -30,21 +27,10 @@ export const initApolloServer = async (
 
   const apolloServer = new ApolloServer({
     schema,
-    subscriptions: {
-      onConnect: (_, ws) => {
-        const req = (ws as any).upgradeReq as ReqWithSession;
-        sessionMiddleware(req as any, {} as any, () => {
-          if (!req?.session?.userId) {
-            throw new Error('Not authenticated');
-          }
-        });
-        return { req }; // pass req in the connection's context
-      },
-    },
-    context: ({ req, res, connection }): MyContext => {
-      const wsRequest = connection?.context.req;
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    context: ({ req, res }): MyContext => {
       return {
-        req: (req || wsRequest) as ReqWithSession,
+        req: req as ReqWithSession,
         res,
         redis,
         itemCountLoader: createItemCountLoader(),
@@ -52,7 +38,13 @@ export const initApolloServer = async (
       };
     },
   });
-  apolloServer.applyMiddleware({ app, cors: { origin: process.env.FRONTEND_URL } });
 
-  return { apolloServer, pubsub };
+  await apolloServer.start();
+
+  apolloServer.applyMiddleware({
+    app,
+    cors: { origin: process.env.FRONTEND_URL, credentials: true },
+  });
+
+  return { apolloServer, pubsub, schema };
 };

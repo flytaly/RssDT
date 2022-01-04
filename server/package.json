@@ -21,7 +21,8 @@
     "feed-watcher:dev": "nodemon dist/feed-watcher/start-watcher.js | bunyan -o short"
   },
   "dependencies": {
-    "apollo-server-express": "^2.22.2",
+    "@graphql-tools/schema": "^8.3.1",
+    "apollo-server-express": "^3.6.1",
     "argon2": "^0.28.3",
     "axios": "^0.24.0",
     "bunyan": "^1.8.15",
@@ -35,7 +36,8 @@
     "express-session": "^1.17.1",
     "feedparser": "^2.2.10",
     "graphql-redis-subscriptions": "^2.3.1",
-    "graphql-subscriptions": "^1.2.1",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-ws": "^5.5.5",
     "handlebars": "^4.7.7",
     "iconv-lite": "^0.6.2",
     "image-size": "^1.0.0",
@@ -57,7 +59,8 @@
     "ts-node": "^10.4.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.32",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "ws": "^8.4.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.3.1",
@@ -73,7 +76,7 @@
     "@types/faker": "^5.5.0",
     "@types/feedparser": "^2.2.3",
     "@types/graphql": "^14.5.0",
-    "@types/ioredis": "^4.22.2",
+    "@types/ioredis": "^4.28.7",
     "@types/jsdom": "^16.2.10",
     "@types/lodash.pick": "^4.4.6",
     "@types/luxon": "^2.0.8",
@@ -83,14 +86,17 @@
     "@types/sanitize-html": "^2.6.1",
     "@types/sinon": "^10.0.6",
     "@types/uuid": "^8.3.0",
+    "@types/ws": "^8.2.2",
     "@types/yup": "^0.29.11",
-    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
     "ava": "^4.0.0",
     "class-validator": "^0.13.1",
     "eslint": "^8.6.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-modules": "^1.1.1",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
     "faker": "^5.5.2",
     "graphql-request": "^3.4.0",
     "ioredis-mock": "^5.4.1",
@@ -101,7 +107,7 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "prettier-eslint": "^13.0.0",
-    "typescript": "^4.6.0-dev.20220103"
+    "typescript": "^4.5.4"
   },
   "keywords": [],
   "author": "",
