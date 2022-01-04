@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 /* From example: https://github.com/vercel/next.js/tree/canary/examples/with-apollo */
-
 import {
   ApolloClient,
   ApolloLink,
@@ -11,14 +10,13 @@ import {
   Reference,
   split,
 } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { useMemo } from 'react';
-import { WebSocketLink } from '@apollo/client/link/ws';
-
-import { getMainDefinition } from '@apollo/client/utilities';
 import { PaginatedItemsResponse } from '../generated/graphql';
 import { isServer } from '../utils/is-server';
+import { createWsLink } from './websocket-link';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -36,17 +34,12 @@ function createApolloClient() {
   });
 
   if (!isServer()) {
-    const wsLink = new WebSocketLink({
-      uri: process.env.NEXT_PUBLIC_WS_API_URL!,
-      options: { reconnect: true },
-    });
-
     const splitLink = split(
       ({ query }) => {
         const definition = getMainDefinition(query);
         return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
       },
-      wsLink,
+      createWsLink(),
       httpLink,
     );
     link = splitLink;
