@@ -1,6 +1,6 @@
 mutation updateUserInfo($userInfo: UserInfoInput!) {
-    updateUserInfo(userInfo: $userInfo) {
-        timeZone
-        locale
-    }
+  updateUserInfo(userInfo: $userInfo) {
+    timeZone
+    locale
+  }
 }

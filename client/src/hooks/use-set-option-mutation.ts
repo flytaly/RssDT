@@ -1,4 +1,3 @@
-import { Options } from 'graphql/utilities/extendSchema';
 import {
   MyOptionsDocument,
   MyOptionsQuery,
@@ -50,7 +49,7 @@ export function useSetPartialOptionsMutation() {
           const $opts = result.data?.setOptions.options;
           if ($opts) {
             const prevQuery = cache.readQuery<MyOptionsQuery>({ query: MyOptionsDocument });
-            const prevOpts = prevQuery?.myOptions as Options;
+            const prevOpts = prevQuery?.myOptions;
             cache.writeQuery<MyOptionsQuery>({
               query: MyOptionsDocument,
               data: {

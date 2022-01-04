@@ -1,3 +1,3 @@
 mutation requestEmailVerification {
-    requestEmailVerification
+  requestEmailVerification
 }

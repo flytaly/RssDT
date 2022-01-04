@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { isServer } from '../../utils/is-server';
+import { getAppElement } from '../../utils/get-app-element';
 
 const customStyles: Modal.Styles = {
   overlay: {
@@ -35,7 +35,7 @@ interface ViewItemModalProps {
 const ViewItemModal: React.FC<ViewItemModalProps> = ({ isOpen, onRequestClose, children }) => {
   return (
     <Modal
-      appElement={isServer() ? undefined : document.body}
+      appElement={getAppElement(false)}
       isOpen={isOpen}
       onAfterOpen={() => document.body.classList.add('overflow-hidden')}
       onAfterClose={() => document.body.classList.remove('overflow-hidden')}

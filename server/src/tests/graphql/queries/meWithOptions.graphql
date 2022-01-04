@@ -1,8 +1,8 @@
 query meWithOptions {
-    me {
-        ...UserFields
-        options {
-            ...OptionsFields
-        }
+  me {
+    ...UserFields
+    options {
+      ...OptionsFields
     }
+  }
 }

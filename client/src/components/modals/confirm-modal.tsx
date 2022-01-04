@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
-import { isServer } from '../../utils/is-server';
+import { getAppElement } from '../../utils/get-app-element.js';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -54,7 +53,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   });
   return (
     <Modal
-      appElement={isServer() ? undefined : document.querySelector('#card-root') || document.body}
+      appElement={getAppElement()}
       parentSelector={() => document.querySelector('#card-root') as HTMLElement}
       isOpen={isOpen}
       closeTimeoutMS={closingDuration + 10}

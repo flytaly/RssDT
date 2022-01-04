@@ -36,6 +36,7 @@ export function initWSServer({ schema, sessionMiddleware, server }: WSServerArgs
         if (!req?.session?.userId) {
           throw new Error('Not authenticated');
         }
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         return allowOnlySub(schema, msg);
       },
     },
@@ -84,4 +85,3 @@ function allowOnlySub(schema: GraphQLSchema, msg: SubscribeMessage) {
   // ready execution arguments
   return args;
 }
-

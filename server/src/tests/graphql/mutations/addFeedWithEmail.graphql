@@ -1,20 +1,20 @@
 mutation addFeedWithEmail(
-    $feedOpts: UserFeedOptionsInput
-    $userInfo: UserInfoInput
-    $input: AddFeedEmailInput!
+  $feedOpts: UserFeedOptionsInput
+  $userInfo: UserInfoInput
+  $input: AddFeedEmailInput!
 ) {
-    addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
-        userFeed {
-            ...UserFeedFields
-            feed {
-                id
-                url
-                title
-            }
-        }
-        errors {
-            message
-            argument
-        }
+  addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
     }
+    errors {
+      message
+      argument
+    }
+  }
 }

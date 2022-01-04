@@ -1,4 +1,4 @@
-// ! __reflect-metadata__ and __dotenv__ imports have to stay at the top 
+// ! __reflect-metadata__ and __dotenv__ imports have to stay at the top
 import 'reflect-metadata';
 import './dotenv.js';
 import cors from 'cors';

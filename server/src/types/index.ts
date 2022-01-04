@@ -23,7 +23,7 @@ export type MyContext = {
   pubsub: PubSubEngine;
 };
 
-export type WSContext = Pick<MyContext, "req">
+export type WSContext = Pick<MyContext, 'req'>;
 
 export type FeedMeta = {
   title: string;

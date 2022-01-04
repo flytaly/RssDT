@@ -1,11 +1,13 @@
 module.exports = {
   extends: ['airbnb-typescript/base', 'prettier'],
+  env: {
+    node: true,
+  },
   parserOptions: {
     project: './tsconfig.json',
   },
-  plugin: ["modules"],
+  plugins: ['import', 'modules'],
   ignorePatterns: ['**/graphql/generated.ts', 'src/migrations/**/*.ts'],
-
   rules: {
     'no-console': 'off',
     'no-plusplus': 'off',

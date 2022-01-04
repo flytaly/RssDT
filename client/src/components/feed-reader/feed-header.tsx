@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-autofocus */
 import React, { RefObject, useCallback, useState } from 'react';
 import MailIcon from '../../../public/static/mail.svg';
 import EditIcon from '../../../public/static/edit.svg';
@@ -61,7 +60,6 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({
         <div className="flex items-baseline flex-1 space-x-1 flex-wrap max-w-full">
           <h3 className="flex items-center font-bold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-w-full">
             {userFeed.feed.siteFavicon && (
-              /* eslint-disable-next-line jsx-a11y/alt-text */
               <img className="h-4 w-4 mr-2" src={userFeed.feed.siteFavicon} />
             )}
             {userFeed.title || userFeed.feed.title || userFeed.feed.url}

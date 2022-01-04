@@ -1,4 +1,3 @@
-/* eslint-disable react/no-danger */
 import React, { useEffect, useRef, useState } from 'react';
 import { ItemFieldsFragment } from '../../generated/graphql';
 import FeedItemContent from './feed-item-content';

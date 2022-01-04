@@ -6,9 +6,9 @@ export interface CommonProps {
   error?: string;
   IconSVG?: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
   id?: string;
-  onBlur?: (event: FocusEvent) => void;
+  onBlur?: (event: FocusEvent | React.FocusEvent<Element>) => void;
   onChange: (event: React.ChangeEvent) => void;
-  onFocus?: (event: FocusEvent) => void;
+  onFocus?: (event: FocusEvent | React.FocusEvent<Element>) => void;
   title?: string;
   touched?: boolean;
   disabled?: boolean;

@@ -1,6 +1,6 @@
 import { getConnection } from 'typeorm';
 import { Feed, User } from '#entities';
-import { importNormalizer, normalizeUrl } from '../../utils/normalizer';
+import { importNormalizer, normalizeUrl } from '../../utils/normalizer.js';
 
 export const deleteUserWithEmail = (email: string) =>
   getConnection()

@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import BarsIcon from '../../../public/static/bars.svg';

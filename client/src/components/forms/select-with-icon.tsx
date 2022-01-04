@@ -1,8 +1,3 @@
-/* eslint-disable
-  jsx-a11y/control-has-associated-label,
-  jsx-a11y/no-noninteractive-element-interactions,
-  jsx-a11y/click-events-have-key-events,
-*/
 import React, { useRef } from 'react';
 import { CommonProps, useInputClasses } from './common';
 

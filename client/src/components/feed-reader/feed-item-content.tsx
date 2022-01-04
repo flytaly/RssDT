@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-tabindex, jsx-a11y/no-noninteractive-element-interactions */
-/* eslint-disable react/no-danger */
 import React, { RefObject, useCallback, useState } from 'react';
 import PaperClipIcon from '../../../public/static/paperclip.svg';
 import ShareIcon from '../../../public/static/share-2.svg';

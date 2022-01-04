@@ -27,5 +27,5 @@ export const getUserAndCountFeeds = async ({ userId, email }: UserIdArgs) => {
   if (email) {
     qb.where('u.email = :email', { email });
   }
-  return (qb.getOne() as any) as UserWithFeedCount | undefined;
+  return qb.getOne() as any as UserWithFeedCount | undefined;
 };

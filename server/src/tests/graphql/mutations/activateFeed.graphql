@@ -1,15 +1,15 @@
 mutation activateFeed($token: String!, $userFeedId: String!) {
-    activateFeed(token: $token, userFeedId: $userFeedId) {
-        userFeed {
-            ...UserFeedFields
-            feed {
-                id
-                url
-                title
-            }
-        }
-        errors {
-            message
-        }
+  activateFeed(token: $token, userFeedId: $userFeedId) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
     }
+    errors {
+      message
+    }
+  }
 }

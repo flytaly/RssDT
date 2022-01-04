@@ -40,7 +40,7 @@ export class ImportStatus {
   }
 
   async getCurrent() {
-    return ((await redis.hgetall(this.key)) as unknown) as ImportStatusObject | undefined;
+    return (await redis.hgetall(this.key)) as unknown as ImportStatusObject | undefined;
   }
 
   async isImporting() {

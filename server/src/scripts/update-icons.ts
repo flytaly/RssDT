@@ -26,7 +26,7 @@ async function updateIcons() {
     );
     // TODO:
     // await queue.onSizeLessThan(3);
-    await queue.onIdle()
+    await queue.onIdle();
     skip += take;
     feedsBatch = await Feed.find({ skip, take });
   }

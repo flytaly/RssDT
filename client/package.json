@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./src",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "prettier:check": "prettier --check ./src",
+    "prettier:write": "prettier --write ./src"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { RefObject, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';

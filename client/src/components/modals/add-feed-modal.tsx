@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import { Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
@@ -6,7 +5,7 @@ import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
 import { useAddFeedToCurrentUserMutation } from '../../generated/graphql';
 import { DigestDisable, DigestSchedule, periodNames } from '../../types';
-import { isServer } from '../../utils/is-server';
+import { getAppElement } from '../../utils/get-app-element';
 import { updateAfterAdding as update } from '../../utils/update-after-adding';
 import InputUnderline from '../forms/input-underline';
 import SelectUnderline from '../forms/select-underline';
@@ -58,7 +57,7 @@ const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
   }, [isOpen]);
   return (
     <Modal
-      appElement={isServer() ? undefined : document.querySelector('#card-root') || document.body}
+      appElement={getAppElement()}
       parentSelector={() => document.querySelector('#card-root') as HTMLElement}
       isOpen={isOpen}
       closeTimeoutMS={closingDuration + 10}
