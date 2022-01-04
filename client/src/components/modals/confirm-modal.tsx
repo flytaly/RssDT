@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
-import { getAppElement } from '../../utils/get-app-element.js';
+import { getAppElement } from '../../utils/get-app-element';
 
 interface ConfirmModalProps {
   isOpen: boolean;
