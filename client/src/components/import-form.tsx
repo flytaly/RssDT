@@ -134,7 +134,7 @@ export const ImportForm = () => {
       {impResult.errors?.length ? (
         <>
           <div>Errors:</div>
-          <ul className="text-sm pl-4 list-disc">
+          <ul className="text-sm pl-4 list-disc overflow-hidden break-words break-all">
             {impResult.errors?.map((err) => (
               <li key={err.url}>
                 <p>{err.url}</p>

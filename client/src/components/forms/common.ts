@@ -17,12 +17,12 @@ export interface CommonProps {
 
 export function useInputClasses() {
   const [isFocused, setIsFocused] = useState(false);
-  const borderCol = isFocused ? 'border-primary' : '';
+  const ringCol = isFocused ? 'ring-primary' : '';
   const iconCol = isFocused ? 'text-primary' : 'text-gray';
   const shadowColor = isFocused ? 'shadow-input-primary' : 'hover:shadow-input-gray';
 
   const classes = {
-    label: `flex items-center w-full p-2 rounded-3xl border hover:border-2 border-gray  ${borderCol} ${shadowColor}`,
+    label: `flex items-center w-full p-2 rounded-3xl ring-1 hover:ring-2 ring-gray ${ringCol} ${shadowColor}`,
     iconContainer: `h-5 w-5 ${iconCol}`,
     icon: 'fill-current w-full h-full',
     input: 'outline-none bg-transparent ml-2 w-full',
