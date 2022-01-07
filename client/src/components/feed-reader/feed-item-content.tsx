@@ -89,7 +89,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
     <article
       className={`relative px-3 ${
         isNew ? 'pt-3' : 'pt-2'
-      } pb-1 shadow-message bg-white rounded-sm ${containerClassName} focus:shadow-message-darker`}
+      } pb-1 shadow-message bg-white rounded-sm ${containerClassName} focus:shadow-message-darker max-w-full`}
       role={bodyClickHandler ? 'button' : 'article'}
       tabIndex={bodyClickHandler ? 0 : -1}
       onKeyPress={bodyClickHandler && onKeyPress}

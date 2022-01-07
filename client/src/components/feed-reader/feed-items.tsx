@@ -78,7 +78,7 @@ const FeedItems: React.FC<FeedItemsProps> = ({
   }, [feed.id, feed.lastViewedItemDate, newestItem, setItemDate, setItemDateStatus.loading]);
 
   return (
-    <main className="flex flex-col flex-grow space-y-4 p-3">
+    <main className="flex flex-col flex-grow space-y-4 p-3 break-all justify-self-center max-w-[100ch]">
       {!error && feed.newItemsCount && showRefetchBtn ? (
         <div className="self-center">
           <button
