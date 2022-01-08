@@ -81,7 +81,9 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     if (!req.session.userId) return null;
-    return User.findOne(req.session.userId);
+    const user = await User.findOne(req.session.userId);
+    if (user?.deleted) return null;
+    return user;
   }
 
   @UseMiddleware(auth())
@@ -153,7 +155,11 @@ export class UserResolver {
     }
 
     const password = await argon2.hash(plainPassword);
-    const { user } = await updateUser(parseInt(userId), { password, emailVerified: true });
+    const { user } = await updateUser(parseInt(userId), {
+      password,
+      emailVerified: true,
+      deleted: false,
+    });
 
     await redis.del(key);
     setSession(req, user.id, user.role);
@@ -184,7 +190,7 @@ export class UserResolver {
   async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
     const { password: plainPassword, email } = input;
     const user = await User.findOne({ where: { email } });
-    if (!user) {
+    if (!user || user.deleted) {
       return { errors: [new ArgumentError('email', "User with such email doesn't exist")] };
     }
     const isMatch =
@@ -236,8 +242,13 @@ export class UserResolver {
 
   @UseMiddleware(auth())
   @Mutation(() => MessageResponse)
-  async deleteUser(@Ctx() { req }: MyContext) {
+  async deleteUser(@Ctx() { req, res }: MyContext) {
     const msg = await setUserDeleted({ userId: req.session.userId });
+
+    await new Promise((resolve) =>
+      req.session.destroy(() => resolve(res.clearCookie(COOKIE_NAME))),
+    );
+
     return { message: msg || 'OK' };
   }
 }

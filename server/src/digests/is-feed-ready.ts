@@ -17,6 +17,7 @@ import { DigestSchedule } from '../types/enums.js';
 
 export let isFeedReady = (userFeed: UserFeed) => {
   const { lastDigestSentAt, schedule, user } = userFeed;
+  if (user.deleted) return false
   if (schedule === DigestSchedule.disable) return false;
   if (schedule === DigestSchedule.realtime) return true;
 

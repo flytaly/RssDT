@@ -14,4 +14,5 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   password?: string;
+  deleted?: boolean;
 }
