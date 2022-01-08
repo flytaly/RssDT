@@ -102,13 +102,15 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
     const id = parseInt(e.target.id);
     return e.target.checked
       ? setSelectedIds((prevIds) => [...prevIds, id])
-      : setSelectedIds((prevIds) => prevIds.filter(($id) => $id === id));
+      : setSelectedIds((prevIds) => prevIds.filter(($id) => $id !== id));
   };
+
   const toggleAll = () =>
     setSelectedIds((prev) => {
-      if (prev.length) return [];
+      if (prev.length >= sortedFeeds.length) return [];
       return sortedFeeds.map((f) => f.id);
     });
+
   const removeMultipleFeeds = () => {
     const ids = new Set(selectedIds);
     setFeedsToDelete(sortedFeeds.filter((f) => ids.has(f.id)));
