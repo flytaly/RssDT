@@ -33,6 +33,7 @@ import {
   PasswordResetInput,
   UserInfoInput,
 } from './resolver-types/inputs.js';
+import { setUserDeleted } from './queries/setUserDeleted.js';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
   req.session.userId = userId;
@@ -231,5 +232,12 @@ export class UserResolver {
   @Mutation(() => OptionsResponse)
   async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
     return updateUserOptions(req.session.userId, opts);
+  }
+
+  @UseMiddleware(auth())
+  @Mutation(() => MessageResponse)
+  async deleteUser(@Ctx() { req }: MyContext) {
+    const msg = await setUserDeleted({ userId: req.session.userId });
+    return { message: msg || 'OK' };
   }
 }

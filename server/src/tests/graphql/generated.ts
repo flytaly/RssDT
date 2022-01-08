@@ -1,8 +1,8 @@
 import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
-import { print } from 'graphql';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -17,248 +17,13 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  users?: Maybe<Array<User>>;
-  me?: Maybe<User>;
-  myOptions: Options;
-  myFeeds?: Maybe<Array<UserFeed>>;
-  getFeedInfoByToken?: Maybe<UserFeed>;
-  myFeedItems: PaginatedItemsResponse;
-};
-
-export type QueryGetFeedInfoByTokenArgs = {
-  id: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type QueryMyFeedItemsArgs = {
-  feedId: Scalars['Float'];
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  filter?: Maybe<Scalars['String']>;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
+export type AddFeedEmailInput = {
   email: Scalars['String'];
-  emailVerified: Scalars['Boolean'];
-  role: Scalars['String'];
-  locale: Scalars['String'];
-  timeZone: Scalars['String'];
-  userFeeds?: Maybe<Array<UserFeed>>;
-  options: Options;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  feeds: Array<UserFeed>;
+  feedUrl: Scalars['String'];
 };
 
-export type UserFeed = {
-  __typename?: 'UserFeed';
-  id: Scalars['Float'];
-  user: User;
-  feed: Feed;
-  activated: Scalars['Boolean'];
-  title?: Maybe<Scalars['String']>;
-  schedule: DigestSchedule;
-  withContentTable: TernaryState;
-  itemBody: TernaryState;
-  attachments: TernaryState;
-  theme: Theme;
-  filter?: Maybe<Scalars['String']>;
-  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
-  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  newItemsCount: Scalars['Float'];
-};
-
-export type Feed = {
-  __typename?: 'Feed';
-  id: Scalars['Float'];
-  url: Scalars['String'];
-  link?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  language?: Maybe<Scalars['String']>;
-  favicon?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  imageTitle?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  lastSuccessfulUpd: Scalars['DateTime'];
-  lastPubdate?: Maybe<Scalars['DateTime']>;
-  userFeeds?: Maybe<Array<UserFeed>>;
-};
-
-export enum DigestSchedule {
-  Realtime = 'realtime',
-  Everyhour = 'everyhour',
-  Every2hours = 'every2hours',
-  Every3hours = 'every3hours',
-  Every6hours = 'every6hours',
-  Every12hours = 'every12hours',
-  Daily = 'daily',
-  Disable = 'disable',
-}
-
-export enum TernaryState {
-  Enable = 'enable',
-  Disable = 'disable',
-  Default = 'default',
-}
-
-export enum Theme {
-  Default = 'default',
-  Text = 'text',
-}
-
-export type Options = {
-  __typename?: 'Options';
-  dailyDigestHour: Scalars['Float'];
-  withContentTableDefault: Scalars['Boolean'];
-  itemBodyDefault: Scalars['Boolean'];
-  attachmentsDefault?: Maybe<Scalars['Boolean']>;
-  themeDefault: Theme;
-  customSubject?: Maybe<Scalars['String']>;
-  shareEnable: Scalars['Boolean'];
-  shareList?: Maybe<Array<ShareId>>;
-};
-
-export enum ShareId {
-  Pocket = 'pocket',
-  Evernote = 'evernote',
-  Trello = 'trello',
-}
-
-export type PaginatedItemsResponse = {
-  __typename?: 'PaginatedItemsResponse';
-  items: Array<Item>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type Item = {
-  __typename?: 'Item';
-  id: Scalars['Float'];
-  guid?: Maybe<Scalars['String']>;
-  pubdate?: Maybe<Scalars['DateTime']>;
-  link?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  summary?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  feed: Feed;
-  enclosures?: Maybe<Array<Enclosure>>;
-  createdAt: Scalars['DateTime'];
-};
-
-export type Enclosure = {
-  __typename?: 'Enclosure';
-  url: Scalars['String'];
-  length?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  register: UserResponse;
-  requestEmailVerification: Scalars['Boolean'];
-  requestPasswordReset: MessageResponse;
-  resetPassword: UserResponse;
-  verifyEmail: UserResponse;
-  login: UserResponse;
-  logout: Scalars['Boolean'];
-  updateUserInfo: User;
-  setOptions: OptionsResponse;
-  addFeedWithEmail?: Maybe<UserFeedResponse>;
-  addFeedToCurrentUser: UserFeedResponse;
-  activateFeed: UserFeedResponse;
-  setFeedActivated: UserFeedResponse;
-  deleteMyFeeds: DeletedFeedResponse;
-  setFeedOptions: UserFeedResponse;
-  unsubscribeByToken: Scalars['Boolean'];
-  setLastViewedItemDate?: Maybe<UserFeed>;
-  feedback?: Maybe<FeedbackResponse>;
-};
-
-export type MutationRegisterArgs = {
-  userInfo?: Maybe<UserInfoInput>;
-  input: EmailPasswordInput;
-};
-
-export type MutationRequestPasswordResetArgs = {
-  email: Scalars['String'];
-};
-
-export type MutationResetPasswordArgs = {
-  input: PasswordResetInput;
-};
-
-export type MutationVerifyEmailArgs = {
-  userId: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type MutationLoginArgs = {
-  input: EmailPasswordInput;
-};
-
-export type MutationUpdateUserInfoArgs = {
-  userInfo: UserInfoInput;
-};
-
-export type MutationSetOptionsArgs = {
-  opts: OptionsInput;
-};
-
-export type MutationAddFeedWithEmailArgs = {
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  userInfo?: Maybe<UserInfoInput>;
-  input: AddFeedEmailInput;
-};
-
-export type MutationAddFeedToCurrentUserArgs = {
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  input: AddFeedInput;
-};
-
-export type MutationActivateFeedArgs = {
-  userFeedId: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type MutationSetFeedActivatedArgs = {
-  userFeedId: Scalars['Float'];
-};
-
-export type MutationDeleteMyFeedsArgs = {
-  ids: Array<Scalars['Float']>;
-};
-
-export type MutationSetFeedOptionsArgs = {
-  opts: UserFeedOptionsInput;
-  id: Scalars['Float'];
-};
-
-export type MutationUnsubscribeByTokenArgs = {
-  id: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type MutationSetLastViewedItemDateArgs = {
-  itemId: Scalars['Float'];
-  userFeedId: Scalars['Float'];
-};
-
-export type MutationFeedbackArgs = {
-  input: FeedbackInput;
-};
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  user?: Maybe<User>;
+export type AddFeedInput = {
+  feedUrl: Scalars['String'];
 };
 
 export type ArgumentError = {
@@ -267,73 +32,64 @@ export type ArgumentError = {
   message: Scalars['String'];
 };
 
-export type UserInfoInput = {
-  locale?: Maybe<Scalars['String']>;
-  timeZone?: Maybe<Scalars['String']>;
+export type DeletedFeedResponse = {
+  __typename?: 'DeletedFeedResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  ids?: Maybe<Array<Scalars['String']>>;
 };
+
+export enum DigestSchedule {
+  Daily = 'daily',
+  Disable = 'disable',
+  Every2hours = 'every2hours',
+  Every3hours = 'every3hours',
+  Every6hours = 'every6hours',
+  Every12hours = 'every12hours',
+  Everyhour = 'everyhour',
+  Realtime = 'realtime'
+}
 
 export type EmailPasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
 
-export type MessageResponse = {
-  __typename?: 'MessageResponse';
-  message: Scalars['String'];
+export type Enclosure = {
+  __typename?: 'Enclosure';
+  length?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
 };
 
-export type PasswordResetInput = {
-  password: Scalars['String'];
-  token: Scalars['String'];
-  userId: Scalars['String'];
-};
-
-export type OptionsResponse = {
-  __typename?: 'OptionsResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  options?: Maybe<Options>;
-};
-
-export type OptionsInput = {
-  dailyDigestHour?: Maybe<Scalars['Float']>;
-  customSubject?: Maybe<Scalars['String']>;
-  shareList?: Maybe<Array<Scalars['String']>>;
-  shareEnable?: Maybe<Scalars['Boolean']>;
-  withContentTableDefault?: Maybe<Scalars['Boolean']>;
-  itemBodyDefault?: Maybe<Scalars['Boolean']>;
-  attachmentsDefault?: Maybe<Scalars['Boolean']>;
-  themeDefault?: Maybe<Scalars['String']>;
-};
-
-export type UserFeedResponse = {
-  __typename?: 'UserFeedResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  userFeed?: Maybe<UserFeed>;
-};
-
-export type UserFeedOptionsInput = {
+export type Feed = {
+  __typename?: 'Feed';
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  favicon?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  imageTitle?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
+  lastPubdate?: Maybe<Scalars['DateTime']>;
+  lastSuccessfulUpd: Scalars['DateTime'];
+  link?: Maybe<Scalars['String']>;
+  siteFavicon?: Maybe<Scalars['String']>;
+  siteIcon?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
-  schedule?: Maybe<Scalars['String']>;
-  withContentTable?: Maybe<Scalars['String']>;
-  itemBody?: Maybe<Scalars['String']>;
-  attachments?: Maybe<Scalars['String']>;
-  theme?: Maybe<Scalars['String']>;
-  filter?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
+  userFeeds?: Maybe<Array<UserFeed>>;
 };
 
-export type AddFeedEmailInput = {
-  feedUrl: Scalars['String'];
+export type FeedImport = {
+  schedule?: InputMaybe<DigestSchedule>;
+  title?: InputMaybe<Scalars['String']>;
+  url: Scalars['String'];
+};
+
+export type FeedbackInput = {
   email: Scalars['String'];
-};
-
-export type AddFeedInput = {
-  feedUrl: Scalars['String'];
-};
-
-export type DeletedFeedResponse = {
-  __typename?: 'DeletedFeedResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  ids?: Maybe<Array<Scalars['String']>>;
+  text: Scalars['String'];
 };
 
 export type FeedbackResponse = {
@@ -342,958 +98,937 @@ export type FeedbackResponse = {
   success?: Maybe<Scalars['Boolean']>;
 };
 
-export type FeedbackInput = {
+export type ImportFeedsResponse = {
+  __typename?: 'ImportFeedsResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export enum ImportState {
+  Done = 'done',
+  Importing = 'importing'
+}
+
+export type ImportStatusObject = {
+  __typename?: 'ImportStatusObject';
+  progress?: Maybe<Scalars['Float']>;
+  result?: Maybe<Scalars['String']>;
+  state?: Maybe<ImportState>;
+  total?: Maybe<Scalars['Float']>;
+};
+
+export type Item = {
+  __typename?: 'Item';
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  enclosures?: Maybe<Array<Enclosure>>;
+  feed: Feed;
+  guid?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  imageUrl?: Maybe<Scalars['String']>;
+  link?: Maybe<Scalars['String']>;
+  pubdate?: Maybe<Scalars['DateTime']>;
+  summary?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type MessageResponse = {
+  __typename?: 'MessageResponse';
+  message: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  activateFeed: UserFeedResponse;
+  addFeedToCurrentUser: UserFeedResponse;
+  addFeedWithEmail?: Maybe<UserFeedResponse>;
+  deleteMyFeeds: DeletedFeedResponse;
+  deleteUser: MessageResponse;
+  feedback?: Maybe<FeedbackResponse>;
+  importFeeds: ImportFeedsResponse;
+  login: UserResponse;
+  logout: Scalars['Boolean'];
+  register: UserResponse;
+  requestEmailVerification: Scalars['Boolean'];
+  requestPasswordReset: MessageResponse;
+  resetPassword: UserResponse;
+  setFeedActivated: UserFeedResponse;
+  setFeedOptions: UserFeedResponse;
+  setLastViewedItemDate?: Maybe<UserFeed>;
+  setOptions: OptionsResponse;
+  testFeedUpdate: Scalars['Boolean'];
+  unsubscribeByToken: Scalars['Boolean'];
+  updateUserInfo: User;
+  verifyEmail: UserResponse;
+};
+
+
+export type MutationActivateFeedArgs = {
+  token: Scalars['String'];
+  userFeedId: Scalars['String'];
+};
+
+
+export type MutationAddFeedToCurrentUserArgs = {
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  input: AddFeedInput;
+};
+
+
+export type MutationAddFeedWithEmailArgs = {
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  input: AddFeedEmailInput;
+  userInfo?: InputMaybe<UserInfoInput>;
+};
+
+
+export type MutationDeleteMyFeedsArgs = {
+  ids: Array<Scalars['Float']>;
+};
+
+
+export type MutationFeedbackArgs = {
+  input: FeedbackInput;
+};
+
+
+export type MutationImportFeedsArgs = {
+  feeds: Array<FeedImport>;
+};
+
+
+export type MutationLoginArgs = {
+  input: EmailPasswordInput;
+};
+
+
+export type MutationRegisterArgs = {
+  input: EmailPasswordInput;
+  userInfo?: InputMaybe<UserInfoInput>;
+};
+
+
+export type MutationRequestPasswordResetArgs = {
   email: Scalars['String'];
-  text: Scalars['String'];
 };
 
-export type FeedFieldsFragment = { __typename?: 'Feed' } & Pick<
-  Feed,
-  | 'id'
-  | 'url'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'language'
-  | 'favicon'
-  | 'imageUrl'
-  | 'imageTitle'
-  | 'lastSuccessfulUpd'
-  | 'lastPubdate'
-  | 'createdAt'
-  | 'updatedAt'
->;
 
-export type ItemFieldsFragment = { __typename?: 'Item' } & Pick<
-  Item,
-  | 'id'
-  | 'guid'
-  | 'pubdate'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'summary'
-  | 'imageUrl'
-  | 'createdAt'
-> & {
-    enclosures?: Maybe<
-      Array<{ __typename?: 'Enclosure' } & Pick<Enclosure, 'url' | 'length' | 'type'>>
-    >;
-  };
-
-export type OptionsFieldsFragment = { __typename?: 'Options' } & Pick<
-  Options,
-  | 'dailyDigestHour'
-  | 'withContentTableDefault'
-  | 'itemBodyDefault'
-  | 'attachmentsDefault'
-  | 'themeDefault'
-  | 'customSubject'
-  | 'shareEnable'
-  | 'shareList'
->;
-
-export type UserFeedFieldsFragment = { __typename?: 'UserFeed' } & Pick<
-  UserFeed,
-  | 'id'
-  | 'activated'
-  | 'title'
-  | 'schedule'
-  | 'withContentTable'
-  | 'itemBody'
-  | 'attachments'
-  | 'theme'
-  | 'filter'
-  | 'lastViewedItemDate'
-  | 'lastDigestSentAt'
-  | 'newItemsCount'
-  | 'createdAt'
-  | 'updatedAt'
->;
-
-export type UserFieldsFragment = { __typename?: 'User' } & Pick<
-  User,
-  'id' | 'role' | 'email' | 'emailVerified' | 'locale' | 'timeZone'
->;
-
-export type UsualUserResponseFragment = { __typename?: 'UserResponse' } & {
-  user?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-  errors?: Maybe<
-    Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-  >;
+export type MutationResetPasswordArgs = {
+  input: PasswordResetInput;
 };
+
+
+export type MutationSetFeedActivatedArgs = {
+  userFeedId: Scalars['Float'];
+};
+
+
+export type MutationSetFeedOptionsArgs = {
+  id: Scalars['Float'];
+  opts: UserFeedOptionsInput;
+};
+
+
+export type MutationSetLastViewedItemDateArgs = {
+  itemId: Scalars['Float'];
+  userFeedId: Scalars['Float'];
+};
+
+
+export type MutationSetOptionsArgs = {
+  opts: OptionsInput;
+};
+
+
+export type MutationTestFeedUpdateArgs = {
+  count: Scalars['Float'];
+  feedId: Scalars['Float'];
+};
+
+
+export type MutationUnsubscribeByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationUpdateUserInfoArgs = {
+  userInfo: UserInfoInput;
+};
+
+
+export type MutationVerifyEmailArgs = {
+  token: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type Options = {
+  __typename?: 'Options';
+  attachmentsDefault?: Maybe<Scalars['Boolean']>;
+  customSubject?: Maybe<Scalars['String']>;
+  dailyDigestHour: Scalars['Float'];
+  itemBodyDefault: Scalars['Boolean'];
+  shareEnable: Scalars['Boolean'];
+  shareList?: Maybe<Array<ShareId>>;
+  themeDefault: Theme;
+  withContentTableDefault: Scalars['Boolean'];
+};
+
+export type OptionsInput = {
+  attachmentsDefault?: InputMaybe<Scalars['Boolean']>;
+  customSubject?: InputMaybe<Scalars['String']>;
+  dailyDigestHour?: InputMaybe<Scalars['Float']>;
+  itemBodyDefault?: InputMaybe<Scalars['Boolean']>;
+  shareEnable?: InputMaybe<Scalars['Boolean']>;
+  shareList?: InputMaybe<Array<Scalars['String']>>;
+  themeDefault?: InputMaybe<Scalars['String']>;
+  withContentTableDefault?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type OptionsResponse = {
+  __typename?: 'OptionsResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  options?: Maybe<Options>;
+};
+
+export type PaginatedItemsResponse = {
+  __typename?: 'PaginatedItemsResponse';
+  hasMore: Scalars['Boolean'];
+  items: Array<Item>;
+};
+
+export type PasswordResetInput = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  getFeedInfoByToken?: Maybe<UserFeed>;
+  importStatus?: Maybe<ImportStatusObject>;
+  me?: Maybe<User>;
+  myFeedItems: PaginatedItemsResponse;
+  myFeeds?: Maybe<Array<UserFeed>>;
+  myOptions: Options;
+  users?: Maybe<Array<User>>;
+};
+
+
+export type QueryGetFeedInfoByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type QueryMyFeedItemsArgs = {
+  feedId: Scalars['Float'];
+  filter?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
+};
+
+export enum ShareId {
+  Evernote = 'evernote',
+  Pocket = 'pocket',
+  Trello = 'trello'
+}
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  itemsCountUpdated: Array<UserFeedNewItemsCountResponse>;
+};
+
+export enum TernaryState {
+  Default = 'default',
+  Disable = 'disable',
+  Enable = 'enable'
+}
+
+export enum Theme {
+  Default = 'default',
+  Text = 'text'
+}
+
+export type User = {
+  __typename?: 'User';
+  createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  emailVerified: Scalars['Boolean'];
+  feeds: Array<UserFeed>;
+  id: Scalars['Float'];
+  locale: Scalars['String'];
+  options: Options;
+  role: Scalars['String'];
+  timeZone: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  userFeeds?: Maybe<Array<UserFeed>>;
+};
+
+export type UserFeed = {
+  __typename?: 'UserFeed';
+  activated: Scalars['Boolean'];
+  attachments: TernaryState;
+  createdAt: Scalars['DateTime'];
+  feed: Feed;
+  filter?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  itemBody: TernaryState;
+  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
+  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
+  newItemsCount: Scalars['Float'];
+  schedule: DigestSchedule;
+  theme: Theme;
+  title?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  withContentTable: TernaryState;
+};
+
+export type UserFeedNewItemsCountResponse = {
+  __typename?: 'UserFeedNewItemsCountResponse';
+  count: Scalars['Float'];
+  feedId: Scalars['Float'];
+};
+
+export type UserFeedOptionsInput = {
+  attachments?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<Scalars['String']>;
+  itemBody?: InputMaybe<Scalars['String']>;
+  schedule?: InputMaybe<Scalars['String']>;
+  theme?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  withContentTable?: InputMaybe<Scalars['String']>;
+};
+
+export type UserFeedResponse = {
+  __typename?: 'UserFeedResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  userFeed?: Maybe<UserFeed>;
+};
+
+export type UserInfoInput = {
+  locale?: InputMaybe<Scalars['String']>;
+  timeZone?: InputMaybe<Scalars['String']>;
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  user?: Maybe<User>;
+};
+
+export type FeedFieldsFragment = { __typename?: 'Feed', id: number, url: string, link?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, language?: string | null | undefined, favicon?: string | null | undefined, imageUrl?: string | null | undefined, imageTitle?: string | null | undefined, lastSuccessfulUpd: any, lastPubdate?: any | null | undefined, createdAt: any, updatedAt: any };
+
+export type ItemFieldsFragment = { __typename?: 'Item', id: number, guid?: string | null | undefined, pubdate?: any | null | undefined, link?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, summary?: string | null | undefined, imageUrl?: string | null | undefined, createdAt: any, enclosures?: Array<{ __typename?: 'Enclosure', url: string, length?: string | null | undefined, type?: string | null | undefined }> | null | undefined };
+
+export type OptionsFieldsFragment = { __typename?: 'Options', dailyDigestHour: number, withContentTableDefault: boolean, itemBodyDefault: boolean, attachmentsDefault?: boolean | null | undefined, themeDefault: Theme, customSubject?: string | null | undefined, shareEnable: boolean, shareList?: Array<ShareId> | null | undefined };
+
+export type UserFeedFieldsFragment = { __typename?: 'UserFeed', id: number, activated: boolean, title?: string | null | undefined, schedule: DigestSchedule, withContentTable: TernaryState, itemBody: TernaryState, attachments: TernaryState, theme: Theme, filter?: string | null | undefined, lastViewedItemDate?: any | null | undefined, lastDigestSentAt?: any | null | undefined, newItemsCount: number, createdAt: any, updatedAt: any };
+
+export type UserFieldsFragment = { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string };
+
+export type UsualUserResponseFragment = { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined };
 
 export type ActivateFeedMutationVariables = Exact<{
   token: Scalars['String'];
   userFeedId: Scalars['String'];
 }>;
 
-export type ActivateFeedMutation = { __typename?: 'Mutation' } & {
-  activateFeed: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-      } & UserFeedFieldsFragment
-    >;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-  };
-};
+
+export type ActivateFeedMutation = { __typename?: 'Mutation', activateFeed: { __typename?: 'UserFeedResponse', userFeed?: { __typename?: 'UserFeed', id: number, activated: boolean, title?: string | null | undefined, schedule: DigestSchedule, withContentTable: TernaryState, itemBody: TernaryState, attachments: TernaryState, theme: Theme, filter?: string | null | undefined, lastViewedItemDate?: any | null | undefined, lastDigestSentAt?: any | null | undefined, newItemsCount: number, createdAt: any, updatedAt: any, feed: { __typename?: 'Feed', id: number, url: string, title?: string | null | undefined } } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } };
 
 export type AddFeedToCurrentUserMutationVariables = Exact<{
-  feedOpts?: Maybe<UserFeedOptionsInput>;
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
   input: AddFeedInput;
 }>;
 
-export type AddFeedToCurrentUserMutation = { __typename?: 'Mutation' } & {
-  addFeedToCurrentUser: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & Pick<UserFeed, 'id' | 'activated'> & {
-          feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url'>;
-        }
-    >;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
-  };
-};
+
+export type AddFeedToCurrentUserMutation = { __typename?: 'Mutation', addFeedToCurrentUser: { __typename?: 'UserFeedResponse', userFeed?: { __typename?: 'UserFeed', id: number, activated: boolean, feed: { __typename?: 'Feed', id: number, url: string } } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined } };
 
 export type AddFeedWithEmailMutationVariables = Exact<{
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  userInfo?: Maybe<UserInfoInput>;
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  userInfo?: InputMaybe<UserInfoInput>;
   input: AddFeedEmailInput;
 }>;
 
-export type AddFeedWithEmailMutation = { __typename?: 'Mutation' } & {
-  addFeedWithEmail?: Maybe<
-    { __typename?: 'UserFeedResponse' } & {
-      userFeed?: Maybe<
-        { __typename?: 'UserFeed' } & {
-          feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-        } & UserFeedFieldsFragment
-      >;
-      errors?: Maybe<
-        Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-      >;
-    }
-  >;
-};
+
+export type AddFeedWithEmailMutation = { __typename?: 'Mutation', addFeedWithEmail?: { __typename?: 'UserFeedResponse', userFeed?: { __typename?: 'UserFeed', id: number, activated: boolean, title?: string | null | undefined, schedule: DigestSchedule, withContentTable: TernaryState, itemBody: TernaryState, attachments: TernaryState, theme: Theme, filter?: string | null | undefined, lastViewedItemDate?: any | null | undefined, lastDigestSentAt?: any | null | undefined, newItemsCount: number, createdAt: any, updatedAt: any, feed: { __typename?: 'Feed', id: number, url: string, title?: string | null | undefined } } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined } | null | undefined };
 
 export type DeleteMyFeedsMutationVariables = Exact<{
   ids: Array<Scalars['Float']> | Scalars['Float'];
 }>;
 
-export type DeleteMyFeedsMutation = { __typename?: 'Mutation' } & {
-  deleteMyFeeds: { __typename?: 'DeletedFeedResponse' } & Pick<DeletedFeedResponse, 'ids'> & {
-      errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-    };
-};
+
+export type DeleteMyFeedsMutation = { __typename?: 'Mutation', deleteMyFeeds: { __typename?: 'DeletedFeedResponse', ids?: Array<string> | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } };
+
+export type DeleteUserMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: { __typename?: 'MessageResponse', message: string } };
 
 export type SendFeedbackMutationVariables = Exact<{
   input: FeedbackInput;
 }>;
 
-export type SendFeedbackMutation = { __typename?: 'Mutation' } & {
-  feedback?: Maybe<
-    { __typename?: 'FeedbackResponse' } & Pick<FeedbackResponse, 'success'> & {
-        errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-      }
-  >;
-};
+
+export type SendFeedbackMutation = { __typename?: 'Mutation', feedback?: { __typename?: 'FeedbackResponse', success?: boolean | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } | null | undefined };
 
 export type LoginMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined } };
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
-};
 
-export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never }>;
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined } };
 
-export type RequestEmailVerificationMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'requestEmailVerification'
->;
+export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RequestEmailVerificationMutation = { __typename?: 'Mutation', requestEmailVerification: boolean };
 
 export type RequestPasswordResetMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
-export type RequestPasswordResetMutation = { __typename?: 'Mutation' } & {
-  requestPasswordReset: { __typename?: 'MessageResponse' } & Pick<MessageResponse, 'message'>;
-};
+
+export type RequestPasswordResetMutation = { __typename?: 'Mutation', requestPasswordReset: { __typename?: 'MessageResponse', message: string } };
 
 export type ResetPasswordMutationVariables = Exact<{
   input: PasswordResetInput;
 }>;
 
-export type ResetPasswordMutation = { __typename?: 'Mutation' } & {
-  resetPassword: { __typename?: 'UserResponse' } & {
-    user?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-  };
-};
+
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } };
 
 export type SetFeedOptionsMutationVariables = Exact<{
   id: Scalars['Float'];
   opts: UserFeedOptionsInput;
 }>;
 
-export type SetFeedOptionsMutation = { __typename?: 'Mutation' } & {
-  setFeedOptions: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<{ __typename?: 'UserFeed' } & UserFeedFieldsFragment>;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-  };
-};
+
+export type SetFeedOptionsMutation = { __typename?: 'Mutation', setFeedOptions: { __typename?: 'UserFeedResponse', userFeed?: { __typename?: 'UserFeed', id: number, activated: boolean, title?: string | null | undefined, schedule: DigestSchedule, withContentTable: TernaryState, itemBody: TernaryState, attachments: TernaryState, theme: Theme, filter?: string | null | undefined, lastViewedItemDate?: any | null | undefined, lastDigestSentAt?: any | null | undefined, newItemsCount: number, createdAt: any, updatedAt: any } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } };
 
 export type SetLastViewedItemDateMutationVariables = Exact<{
   itemId: Scalars['Float'];
   userFeedId: Scalars['Float'];
 }>;
 
-export type SetLastViewedItemDateMutation = { __typename?: 'Mutation' } & {
-  setLastViewedItemDate?: Maybe<
-    { __typename?: 'UserFeed' } & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
-  >;
-};
+
+export type SetLastViewedItemDateMutation = { __typename?: 'Mutation', setLastViewedItemDate?: { __typename?: 'UserFeed', id: number, lastViewedItemDate?: any | null | undefined, newItemsCount: number } | null | undefined };
 
 export type SetOptionsMutationVariables = Exact<{
   opts: OptionsInput;
 }>;
 
-export type SetOptionsMutation = { __typename?: 'Mutation' } & {
-  setOptions: { __typename?: 'OptionsResponse' } & {
-    options?: Maybe<{ __typename?: 'Options' } & OptionsFieldsFragment>;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
-  };
-};
+
+export type SetOptionsMutation = { __typename?: 'Mutation', setOptions: { __typename?: 'OptionsResponse', options?: { __typename?: 'Options', dailyDigestHour: number, withContentTableDefault: boolean, itemBodyDefault: boolean, attachmentsDefault?: boolean | null | undefined, themeDefault: Theme, customSubject?: string | null | undefined, shareEnable: boolean, shareList?: Array<ShareId> | null | undefined } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string, argument?: string | null | undefined }> | null | undefined } };
 
 export type UnsubscribeByTokenMutationVariables = Exact<{
   token: Scalars['String'];
   id: Scalars['String'];
 }>;
 
-export type UnsubscribeByTokenMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'unsubscribeByToken'
->;
+
+export type UnsubscribeByTokenMutation = { __typename?: 'Mutation', unsubscribeByToken: boolean };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   userInfo: UserInfoInput;
 }>;
 
-export type UpdateUserInfoMutation = { __typename?: 'Mutation' } & {
-  updateUserInfo: { __typename?: 'User' } & Pick<User, 'timeZone' | 'locale'>;
-};
+
+export type UpdateUserInfoMutation = { __typename?: 'Mutation', updateUserInfo: { __typename?: 'User', timeZone: string, locale: string } };
 
 export type VerifyEmailMutationVariables = Exact<{
   userId: Scalars['String'];
   token: Scalars['String'];
 }>;
 
-export type VerifyEmailMutation = { __typename?: 'Mutation' } & {
-  verifyEmail: { __typename?: 'UserResponse' } & {
-    user?: Maybe<{ __typename?: 'User' } & Pick<User, 'id' | 'email' | 'emailVerified'>>;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-  };
-};
+
+export type VerifyEmailMutation = { __typename?: 'Mutation', verifyEmail: { __typename?: 'UserResponse', user?: { __typename?: 'User', id: number, email: string, emailVerified: boolean } | null | undefined, errors?: Array<{ __typename?: 'ArgumentError', message: string }> | null | undefined } };
 
 export type GetFeedInfoByTokenQueryVariables = Exact<{
   id: Scalars['String'];
   token: Scalars['String'];
 }>;
 
-export type GetFeedInfoByTokenQuery = { __typename?: 'Query' } & {
-  getFeedInfoByToken?: Maybe<
-    { __typename?: 'UserFeed' } & { feed: { __typename?: 'Feed' } & Pick<Feed, 'title' | 'url'> }
-  >;
-};
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
+export type GetFeedInfoByTokenQuery = { __typename?: 'Query', getFeedInfoByToken?: { __typename?: 'UserFeed', feed: { __typename?: 'Feed', title?: string | null | undefined, url: string } } | null | undefined };
 
-export type MeQuery = { __typename?: 'Query' } & {
-  me?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-};
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type MeWithFeedsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeWithFeedsQuery = { __typename?: 'Query' } & {
-  me?: Maybe<
-    { __typename?: 'User' } & {
-      feeds: Array<
-        { __typename?: 'UserFeed' } & Pick<UserFeed, 'activated' | 'createdAt'> & {
-            feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-          }
-      >;
-    } & UserFieldsFragment
-  >;
-};
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string } | null | undefined };
 
-export type MeWithOptionsQueryVariables = Exact<{ [key: string]: never }>;
+export type MeWithFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type MeWithOptionsQuery = { __typename?: 'Query' } & {
-  me?: Maybe<
-    { __typename?: 'User' } & {
-      options: { __typename?: 'Options' } & OptionsFieldsFragment;
-    } & UserFieldsFragment
-  >;
-};
+
+export type MeWithFeedsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string, feeds: Array<{ __typename?: 'UserFeed', activated: boolean, createdAt: any, feed: { __typename?: 'Feed', id: number, url: string, link?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, language?: string | null | undefined, favicon?: string | null | undefined, imageUrl?: string | null | undefined, imageTitle?: string | null | undefined, lastSuccessfulUpd: any, lastPubdate?: any | null | undefined, createdAt: any, updatedAt: any } }> } | null | undefined };
+
+export type MeWithOptionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeWithOptionsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string, options: { __typename?: 'Options', dailyDigestHour: number, withContentTableDefault: boolean, itemBodyDefault: boolean, attachmentsDefault?: boolean | null | undefined, themeDefault: Theme, customSubject?: string | null | undefined, shareEnable: boolean, shareList?: Array<ShareId> | null | undefined } } | null | undefined };
 
 export type MyFeedItemsQueryVariables = Exact<{
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
   feedId: Scalars['Float'];
-  filter?: Maybe<Scalars['String']>;
+  filter?: InputMaybe<Scalars['String']>;
 }>;
 
-export type MyFeedItemsQuery = { __typename?: 'Query' } & {
-  myFeedItems: { __typename?: 'PaginatedItemsResponse' } & Pick<
-    PaginatedItemsResponse,
-    'hasMore'
-  > & { items: Array<{ __typename?: 'Item' } & ItemFieldsFragment> };
-};
 
-export type MyFeedsQueryVariables = Exact<{ [key: string]: never }>;
+export type MyFeedItemsQuery = { __typename?: 'Query', myFeedItems: { __typename?: 'PaginatedItemsResponse', hasMore: boolean, items: Array<{ __typename?: 'Item', id: number, guid?: string | null | undefined, pubdate?: any | null | undefined, link?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, summary?: string | null | undefined, imageUrl?: string | null | undefined, createdAt: any, enclosures?: Array<{ __typename?: 'Enclosure', url: string, length?: string | null | undefined, type?: string | null | undefined }> | null | undefined }> } };
 
-export type MyFeedsQuery = { __typename?: 'Query' } & {
-  myFeeds?: Maybe<
-    Array<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-      } & UserFeedFieldsFragment
-    >
-  >;
-};
+export type MyFeedsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type MyOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyOptionsQuery = { __typename?: 'Query' } & {
-  myOptions: { __typename?: 'Options' } & OptionsFieldsFragment;
-};
+export type MyFeedsQuery = { __typename?: 'Query', myFeeds?: Array<{ __typename?: 'UserFeed', id: number, activated: boolean, title?: string | null | undefined, schedule: DigestSchedule, withContentTable: TernaryState, itemBody: TernaryState, attachments: TernaryState, theme: Theme, filter?: string | null | undefined, lastViewedItemDate?: any | null | undefined, lastDigestSentAt?: any | null | undefined, newItemsCount: number, createdAt: any, updatedAt: any, feed: { __typename?: 'Feed', id: number, url: string, link?: string | null | undefined, title?: string | null | undefined, description?: string | null | undefined, language?: string | null | undefined, favicon?: string | null | undefined, imageUrl?: string | null | undefined, imageTitle?: string | null | undefined, lastSuccessfulUpd: any, lastPubdate?: any | null | undefined, createdAt: any, updatedAt: any } }> | null | undefined };
 
-export type UsersQueryVariables = Exact<{ [key: string]: never }>;
+export type MyOptionsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type UsersQuery = { __typename?: 'Query' } & {
-  users?: Maybe<Array<{ __typename?: 'User' } & UserFieldsFragment>>;
-};
+
+export type MyOptionsQuery = { __typename?: 'Query', myOptions: { __typename?: 'Options', dailyDigestHour: number, withContentTableDefault: boolean, itemBodyDefault: boolean, attachmentsDefault?: boolean | null | undefined, themeDefault: Theme, customSubject?: string | null | undefined, shareEnable: boolean, shareList?: Array<ShareId> | null | undefined } };
+
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users?: Array<{ __typename?: 'User', id: number, role: string, email: string, emailVerified: boolean, locale: string, timeZone: string }> | null | undefined };
 
 export const FeedFieldsFragmentDoc = gql`
-  fragment FeedFields on Feed {
-    id
-    url
-    link
-    title
-    description
-    language
-    favicon
-    imageUrl
-    imageTitle
-    lastSuccessfulUpd
-    lastPubdate
-    createdAt
-    updatedAt
-  }
-`;
+    fragment FeedFields on Feed {
+  id
+  url
+  link
+  title
+  description
+  language
+  favicon
+  imageUrl
+  imageTitle
+  lastSuccessfulUpd
+  lastPubdate
+  createdAt
+  updatedAt
+}
+    `;
 export const ItemFieldsFragmentDoc = gql`
-  fragment ItemFields on Item {
-    id
-    guid
-    pubdate
-    link
-    title
-    description
-    summary
-    imageUrl
-    enclosures {
-      url
-      length
-      type
-    }
-    createdAt
+    fragment ItemFields on Item {
+  id
+  guid
+  pubdate
+  link
+  title
+  description
+  summary
+  imageUrl
+  enclosures {
+    url
+    length
+    type
   }
-`;
+  createdAt
+}
+    `;
 export const OptionsFieldsFragmentDoc = gql`
-  fragment OptionsFields on Options {
-    dailyDigestHour
-    withContentTableDefault
-    itemBodyDefault
-    attachmentsDefault
-    themeDefault
-    customSubject
-    shareEnable
-    shareList
-  }
-`;
+    fragment OptionsFields on Options {
+  dailyDigestHour
+  withContentTableDefault
+  itemBodyDefault
+  attachmentsDefault
+  themeDefault
+  customSubject
+  shareEnable
+  shareList
+}
+    `;
 export const UserFeedFieldsFragmentDoc = gql`
-  fragment UserFeedFields on UserFeed {
-    id
-    activated
-    title
-    schedule
-    withContentTable
-    itemBody
-    attachments
-    theme
-    filter
-    lastViewedItemDate
-    lastDigestSentAt
-    newItemsCount
-    createdAt
-    updatedAt
-  }
-`;
+    fragment UserFeedFields on UserFeed {
+  id
+  activated
+  title
+  schedule
+  withContentTable
+  itemBody
+  attachments
+  theme
+  filter
+  lastViewedItemDate
+  lastDigestSentAt
+  newItemsCount
+  createdAt
+  updatedAt
+}
+    `;
 export const UserFieldsFragmentDoc = gql`
-  fragment UserFields on User {
-    id
-    role
-    email
-    emailVerified
-    locale
-    timeZone
-  }
-`;
+    fragment UserFields on User {
+  id
+  role
+  email
+  emailVerified
+  locale
+  timeZone
+}
+    `;
 export const UsualUserResponseFragmentDoc = gql`
-  fragment UsualUserResponse on UserResponse {
-    user {
-      ...UserFields
+    fragment UsualUserResponse on UserResponse {
+  user {
+    ...UserFields
+  }
+  errors {
+    message
+    argument
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+export const ActivateFeedDocument = gql`
+    mutation activateFeed($token: String!, $userFeedId: String!) {
+  activateFeed(token: $token, userFeedId: $userFeedId) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
+      }
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export const AddFeedToCurrentUserDocument = gql`
+    mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
+  addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
+    userFeed {
+      id
+      activated
+      feed {
+        id
+        url
+      }
     }
     errors {
       message
       argument
     }
   }
-  ${UserFieldsFragmentDoc}
-`;
-export const ActivateFeedDocument = gql`
-  mutation activateFeed($token: String!, $userFeedId: String!) {
-    activateFeed(token: $token, userFeedId: $userFeedId) {
-      userFeed {
-        ...UserFeedFields
-        feed {
-          id
-          url
-          title
-        }
-      }
-      errors {
-        message
-      }
-    }
-  }
-  ${UserFeedFieldsFragmentDoc}
-`;
-export const AddFeedToCurrentUserDocument = gql`
-  mutation addFeedToCurrentUser($feedOpts: UserFeedOptionsInput, $input: AddFeedInput!) {
-    addFeedToCurrentUser(input: $input, feedOpts: $feedOpts) {
-      userFeed {
-        id
-        activated
-        feed {
-          id
-          url
-        }
-      }
-      errors {
-        message
-        argument
-      }
-    }
-  }
-`;
+}
+    `;
 export const AddFeedWithEmailDocument = gql`
-  mutation addFeedWithEmail(
-    $feedOpts: UserFeedOptionsInput
-    $userInfo: UserInfoInput
-    $input: AddFeedEmailInput!
-  ) {
-    addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
-      userFeed {
-        ...UserFeedFields
-        feed {
-          id
-          url
-          title
-        }
-      }
-      errors {
-        message
-        argument
+    mutation addFeedWithEmail($feedOpts: UserFeedOptionsInput, $userInfo: UserInfoInput, $input: AddFeedEmailInput!) {
+  addFeedWithEmail(input: $input, userInfo: $userInfo, feedOpts: $feedOpts) {
+    userFeed {
+      ...UserFeedFields
+      feed {
+        id
+        url
+        title
       }
     }
+    errors {
+      message
+      argument
+    }
   }
-  ${UserFeedFieldsFragmentDoc}
-`;
+}
+    ${UserFeedFieldsFragmentDoc}`;
 export const DeleteMyFeedsDocument = gql`
-  mutation deleteMyFeeds($ids: [Float!]!) {
-    deleteMyFeeds(ids: $ids) {
-      ids
-      errors {
-        message
-      }
-    }
-  }
-`;
-export const SendFeedbackDocument = gql`
-  mutation sendFeedback($input: FeedbackInput!) {
-    feedback(input: $input) {
-      success
-      errors {
-        message
-      }
-    }
-  }
-`;
-export const LoginDocument = gql`
-  mutation login($email: String!, $password: String!) {
-    login(input: { email: $email, password: $password }) {
-      ...UsualUserResponse
-    }
-  }
-  ${UsualUserResponseFragmentDoc}
-`;
-export const RegisterDocument = gql`
-  mutation register($email: String!, $password: String!) {
-    register(input: { email: $email, password: $password }) {
-      ...UsualUserResponse
-    }
-  }
-  ${UsualUserResponseFragmentDoc}
-`;
-export const RequestEmailVerificationDocument = gql`
-  mutation requestEmailVerification {
-    requestEmailVerification
-  }
-`;
-export const RequestPasswordResetDocument = gql`
-  mutation requestPasswordReset($email: String!) {
-    requestPasswordReset(email: $email) {
+    mutation deleteMyFeeds($ids: [Float!]!) {
+  deleteMyFeeds(ids: $ids) {
+    ids
+    errors {
       message
     }
   }
-`;
+}
+    `;
+export const DeleteUserDocument = gql`
+    mutation deleteUser {
+  deleteUser {
+    message
+  }
+}
+    `;
+export const SendFeedbackDocument = gql`
+    mutation sendFeedback($input: FeedbackInput!) {
+  feedback(input: $input) {
+    success
+    errors {
+      message
+    }
+  }
+}
+    `;
+export const LoginDocument = gql`
+    mutation login($email: String!, $password: String!) {
+  login(input: {email: $email, password: $password}) {
+    ...UsualUserResponse
+  }
+}
+    ${UsualUserResponseFragmentDoc}`;
+export const RegisterDocument = gql`
+    mutation register($email: String!, $password: String!) {
+  register(input: {email: $email, password: $password}) {
+    ...UsualUserResponse
+  }
+}
+    ${UsualUserResponseFragmentDoc}`;
+export const RequestEmailVerificationDocument = gql`
+    mutation requestEmailVerification {
+  requestEmailVerification
+}
+    `;
+export const RequestPasswordResetDocument = gql`
+    mutation requestPasswordReset($email: String!) {
+  requestPasswordReset(email: $email) {
+    message
+  }
+}
+    `;
 export const ResetPasswordDocument = gql`
-  mutation resetPassword($input: PasswordResetInput!) {
-    resetPassword(input: $input) {
-      user {
-        ...UserFields
-      }
-      errors {
-        message
-      }
+    mutation resetPassword($input: PasswordResetInput!) {
+  resetPassword(input: $input) {
+    user {
+      ...UserFields
+    }
+    errors {
+      message
     }
   }
-  ${UserFieldsFragmentDoc}
-`;
+}
+    ${UserFieldsFragmentDoc}`;
 export const SetFeedOptionsDocument = gql`
-  mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
-    setFeedOptions(id: $id, opts: $opts) {
-      userFeed {
-        ...UserFeedFields
-      }
-      errors {
-        message
-      }
-    }
-  }
-  ${UserFeedFieldsFragmentDoc}
-`;
-export const SetLastViewedItemDateDocument = gql`
-  mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
-    setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
-      id
-      lastViewedItemDate
-      newItemsCount
-    }
-  }
-`;
-export const SetOptionsDocument = gql`
-  mutation setOptions($opts: OptionsInput!) {
-    setOptions(opts: $opts) {
-      options {
-        ...OptionsFields
-      }
-      errors {
-        message
-        argument
-      }
-    }
-  }
-  ${OptionsFieldsFragmentDoc}
-`;
-export const UnsubscribeByTokenDocument = gql`
-  mutation unsubscribeByToken($token: String!, $id: String!) {
-    unsubscribeByToken(token: $token, id: $id)
-  }
-`;
-export const UpdateUserInfoDocument = gql`
-  mutation updateUserInfo($userInfo: UserInfoInput!) {
-    updateUserInfo(userInfo: $userInfo) {
-      timeZone
-      locale
-    }
-  }
-`;
-export const VerifyEmailDocument = gql`
-  mutation verifyEmail($userId: String!, $token: String!) {
-    verifyEmail(userId: $userId, token: $token) {
-      user {
-        id
-        email
-        emailVerified
-      }
-      errors {
-        message
-      }
-    }
-  }
-`;
-export const GetFeedInfoByTokenDocument = gql`
-  query getFeedInfoByToken($id: String!, $token: String!) {
-    getFeedInfoByToken(id: $id, token: $token) {
-      feed {
-        title
-        url
-      }
-    }
-  }
-`;
-export const MeDocument = gql`
-  query me {
-    me {
-      ...UserFields
-    }
-  }
-  ${UserFieldsFragmentDoc}
-`;
-export const MeWithFeedsDocument = gql`
-  query meWithFeeds {
-    me {
-      ...UserFields
-      feeds {
-        activated
-        createdAt
-        feed {
-          ...FeedFields
-        }
-      }
-    }
-  }
-  ${UserFieldsFragmentDoc}
-  ${FeedFieldsFragmentDoc}
-`;
-export const MeWithOptionsDocument = gql`
-  query meWithOptions {
-    me {
-      ...UserFields
-      options {
-        ...OptionsFields
-      }
-    }
-  }
-  ${UserFieldsFragmentDoc}
-  ${OptionsFieldsFragmentDoc}
-`;
-export const MyFeedItemsDocument = gql`
-  query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
-    myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
-      items {
-        ...ItemFields
-      }
-      hasMore
-    }
-  }
-  ${ItemFieldsFragmentDoc}
-`;
-export const MyFeedsDocument = gql`
-  query myFeeds {
-    myFeeds {
+    mutation setFeedOptions($id: Float!, $opts: UserFeedOptionsInput!) {
+  setFeedOptions(id: $id, opts: $opts) {
+    userFeed {
       ...UserFeedFields
+    }
+    errors {
+      message
+    }
+  }
+}
+    ${UserFeedFieldsFragmentDoc}`;
+export const SetLastViewedItemDateDocument = gql`
+    mutation setLastViewedItemDate($itemId: Float!, $userFeedId: Float!) {
+  setLastViewedItemDate(itemId: $itemId, userFeedId: $userFeedId) {
+    id
+    lastViewedItemDate
+    newItemsCount
+  }
+}
+    `;
+export const SetOptionsDocument = gql`
+    mutation setOptions($opts: OptionsInput!) {
+  setOptions(opts: $opts) {
+    options {
+      ...OptionsFields
+    }
+    errors {
+      message
+      argument
+    }
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
+export const UnsubscribeByTokenDocument = gql`
+    mutation unsubscribeByToken($token: String!, $id: String!) {
+  unsubscribeByToken(token: $token, id: $id)
+}
+    `;
+export const UpdateUserInfoDocument = gql`
+    mutation updateUserInfo($userInfo: UserInfoInput!) {
+  updateUserInfo(userInfo: $userInfo) {
+    timeZone
+    locale
+  }
+}
+    `;
+export const VerifyEmailDocument = gql`
+    mutation verifyEmail($userId: String!, $token: String!) {
+  verifyEmail(userId: $userId, token: $token) {
+    user {
+      id
+      email
+      emailVerified
+    }
+    errors {
+      message
+    }
+  }
+}
+    `;
+export const GetFeedInfoByTokenDocument = gql`
+    query getFeedInfoByToken($id: String!, $token: String!) {
+  getFeedInfoByToken(id: $id, token: $token) {
+    feed {
+      title
+      url
+    }
+  }
+}
+    `;
+export const MeDocument = gql`
+    query me {
+  me {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
+export const MeWithFeedsDocument = gql`
+    query meWithFeeds {
+  me {
+    ...UserFields
+    feeds {
+      activated
+      createdAt
       feed {
         ...FeedFields
       }
     }
   }
-  ${UserFeedFieldsFragmentDoc}
-  ${FeedFieldsFragmentDoc}
-`;
-export const MyOptionsDocument = gql`
-  query myOptions {
-    myOptions {
+}
+    ${UserFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
+export const MeWithOptionsDocument = gql`
+    query meWithOptions {
+  me {
+    ...UserFields
+    options {
       ...OptionsFields
     }
   }
-  ${OptionsFieldsFragmentDoc}
-`;
-export const UsersDocument = gql`
-  query users {
-    users {
-      ...UserFields
+}
+    ${UserFieldsFragmentDoc}
+${OptionsFieldsFragmentDoc}`;
+export const MyFeedItemsDocument = gql`
+    query myFeedItems($skip: Float, $take: Float, $feedId: Float!, $filter: String) {
+  myFeedItems(skip: $skip, take: $take, feedId: $feedId, filter: $filter) {
+    items {
+      ...ItemFields
+    }
+    hasMore
+  }
+}
+    ${ItemFieldsFragmentDoc}`;
+export const MyFeedsDocument = gql`
+    query myFeeds {
+  myFeeds {
+    ...UserFeedFields
+    feed {
+      ...FeedFields
     }
   }
-  ${UserFieldsFragmentDoc}
-`;
+}
+    ${UserFeedFieldsFragmentDoc}
+${FeedFieldsFragmentDoc}`;
+export const MyOptionsDocument = gql`
+    query myOptions {
+  myOptions {
+    ...OptionsFields
+  }
+}
+    ${OptionsFieldsFragmentDoc}`;
+export const UsersDocument = gql`
+    query users {
+  users {
+    ...UserFields
+  }
+}
+    ${UserFieldsFragmentDoc}`;
 
-export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
 
-const defaultWrapper: SdkFunctionWrapper = (sdkFunction) => sdkFunction();
+
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
+
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    activateFeed(
-      variables: ActivateFeedMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<ActivateFeedMutation> {
-      return withWrapper(() =>
-        client.request<ActivateFeedMutation>(
-          print(ActivateFeedDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    activateFeed(variables: ActivateFeedMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ActivateFeedMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ActivateFeedMutation>(ActivateFeedDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'activateFeed');
     },
-    addFeedToCurrentUser(
-      variables: AddFeedToCurrentUserMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<AddFeedToCurrentUserMutation> {
-      return withWrapper(() =>
-        client.request<AddFeedToCurrentUserMutation>(
-          print(AddFeedToCurrentUserDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    addFeedToCurrentUser(variables: AddFeedToCurrentUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddFeedToCurrentUserMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddFeedToCurrentUserMutation>(AddFeedToCurrentUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'addFeedToCurrentUser');
     },
-    addFeedWithEmail(
-      variables: AddFeedWithEmailMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<AddFeedWithEmailMutation> {
-      return withWrapper(() =>
-        client.request<AddFeedWithEmailMutation>(
-          print(AddFeedWithEmailDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    addFeedWithEmail(variables: AddFeedWithEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddFeedWithEmailMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<AddFeedWithEmailMutation>(AddFeedWithEmailDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'addFeedWithEmail');
     },
-    deleteMyFeeds(
-      variables: DeleteMyFeedsMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<DeleteMyFeedsMutation> {
-      return withWrapper(() =>
-        client.request<DeleteMyFeedsMutation>(
-          print(DeleteMyFeedsDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    deleteMyFeeds(variables: DeleteMyFeedsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteMyFeedsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteMyFeedsMutation>(DeleteMyFeedsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'deleteMyFeeds');
     },
-    sendFeedback(
-      variables: SendFeedbackMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<SendFeedbackMutation> {
-      return withWrapper(() =>
-        client.request<SendFeedbackMutation>(
-          print(SendFeedbackDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    deleteUser(variables?: DeleteUserMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteUserMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteUserMutation>(DeleteUserDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'deleteUser');
     },
-    login(
-      variables: LoginMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<LoginMutation> {
-      return withWrapper(() =>
-        client.request<LoginMutation>(print(LoginDocument), variables, requestHeaders),
-      );
+    sendFeedback(variables: SendFeedbackMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SendFeedbackMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SendFeedbackMutation>(SendFeedbackDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'sendFeedback');
     },
-    register(
-      variables: RegisterMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<RegisterMutation> {
-      return withWrapper(() =>
-        client.request<RegisterMutation>(print(RegisterDocument), variables, requestHeaders),
-      );
+    login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'login');
     },
-    requestEmailVerification(
-      variables?: RequestEmailVerificationMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<RequestEmailVerificationMutation> {
-      return withWrapper(() =>
-        client.request<RequestEmailVerificationMutation>(
-          print(RequestEmailVerificationDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    register(variables: RegisterMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RegisterMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RegisterMutation>(RegisterDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'register');
     },
-    requestPasswordReset(
-      variables: RequestPasswordResetMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<RequestPasswordResetMutation> {
-      return withWrapper(() =>
-        client.request<RequestPasswordResetMutation>(
-          print(RequestPasswordResetDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    requestEmailVerification(variables?: RequestEmailVerificationMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RequestEmailVerificationMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RequestEmailVerificationMutation>(RequestEmailVerificationDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'requestEmailVerification');
     },
-    resetPassword(
-      variables: ResetPasswordMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<ResetPasswordMutation> {
-      return withWrapper(() =>
-        client.request<ResetPasswordMutation>(
-          print(ResetPasswordDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    requestPasswordReset(variables: RequestPasswordResetMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RequestPasswordResetMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RequestPasswordResetMutation>(RequestPasswordResetDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'requestPasswordReset');
     },
-    setFeedOptions(
-      variables: SetFeedOptionsMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<SetFeedOptionsMutation> {
-      return withWrapper(() =>
-        client.request<SetFeedOptionsMutation>(
-          print(SetFeedOptionsDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    resetPassword(variables: ResetPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ResetPasswordMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ResetPasswordMutation>(ResetPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'resetPassword');
     },
-    setLastViewedItemDate(
-      variables: SetLastViewedItemDateMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<SetLastViewedItemDateMutation> {
-      return withWrapper(() =>
-        client.request<SetLastViewedItemDateMutation>(
-          print(SetLastViewedItemDateDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    setFeedOptions(variables: SetFeedOptionsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetFeedOptionsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SetFeedOptionsMutation>(SetFeedOptionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'setFeedOptions');
     },
-    setOptions(
-      variables: SetOptionsMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<SetOptionsMutation> {
-      return withWrapper(() =>
-        client.request<SetOptionsMutation>(print(SetOptionsDocument), variables, requestHeaders),
-      );
+    setLastViewedItemDate(variables: SetLastViewedItemDateMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetLastViewedItemDateMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SetLastViewedItemDateMutation>(SetLastViewedItemDateDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'setLastViewedItemDate');
     },
-    unsubscribeByToken(
-      variables: UnsubscribeByTokenMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<UnsubscribeByTokenMutation> {
-      return withWrapper(() =>
-        client.request<UnsubscribeByTokenMutation>(
-          print(UnsubscribeByTokenDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    setOptions(variables: SetOptionsMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SetOptionsMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SetOptionsMutation>(SetOptionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'setOptions');
     },
-    updateUserInfo(
-      variables: UpdateUserInfoMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<UpdateUserInfoMutation> {
-      return withWrapper(() =>
-        client.request<UpdateUserInfoMutation>(
-          print(UpdateUserInfoDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    unsubscribeByToken(variables: UnsubscribeByTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UnsubscribeByTokenMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UnsubscribeByTokenMutation>(UnsubscribeByTokenDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'unsubscribeByToken');
     },
-    verifyEmail(
-      variables: VerifyEmailMutationVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<VerifyEmailMutation> {
-      return withWrapper(() =>
-        client.request<VerifyEmailMutation>(print(VerifyEmailDocument), variables, requestHeaders),
-      );
+    updateUserInfo(variables: UpdateUserInfoMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateUserInfoMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateUserInfoMutation>(UpdateUserInfoDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateUserInfo');
     },
-    getFeedInfoByToken(
-      variables: GetFeedInfoByTokenQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<GetFeedInfoByTokenQuery> {
-      return withWrapper(() =>
-        client.request<GetFeedInfoByTokenQuery>(
-          print(GetFeedInfoByTokenDocument),
-          variables,
-          requestHeaders,
-        ),
-      );
+    verifyEmail(variables: VerifyEmailMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<VerifyEmailMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<VerifyEmailMutation>(VerifyEmailDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'verifyEmail');
     },
-    me(
-      variables?: MeQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MeQuery> {
-      return withWrapper(() =>
-        client.request<MeQuery>(print(MeDocument), variables, requestHeaders),
-      );
+    getFeedInfoByToken(variables: GetFeedInfoByTokenQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetFeedInfoByTokenQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetFeedInfoByTokenQuery>(GetFeedInfoByTokenDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getFeedInfoByToken');
     },
-    meWithFeeds(
-      variables?: MeWithFeedsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MeWithFeedsQuery> {
-      return withWrapper(() =>
-        client.request<MeWithFeedsQuery>(print(MeWithFeedsDocument), variables, requestHeaders),
-      );
+    me(variables?: MeQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MeQuery>(MeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'me');
     },
-    meWithOptions(
-      variables?: MeWithOptionsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MeWithOptionsQuery> {
-      return withWrapper(() =>
-        client.request<MeWithOptionsQuery>(print(MeWithOptionsDocument), variables, requestHeaders),
-      );
+    meWithFeeds(variables?: MeWithFeedsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeWithFeedsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MeWithFeedsQuery>(MeWithFeedsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'meWithFeeds');
     },
-    myFeedItems(
-      variables: MyFeedItemsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MyFeedItemsQuery> {
-      return withWrapper(() =>
-        client.request<MyFeedItemsQuery>(print(MyFeedItemsDocument), variables, requestHeaders),
-      );
+    meWithOptions(variables?: MeWithOptionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MeWithOptionsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MeWithOptionsQuery>(MeWithOptionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'meWithOptions');
     },
-    myFeeds(
-      variables?: MyFeedsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MyFeedsQuery> {
-      return withWrapper(() =>
-        client.request<MyFeedsQuery>(print(MyFeedsDocument), variables, requestHeaders),
-      );
+    myFeedItems(variables: MyFeedItemsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyFeedItemsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MyFeedItemsQuery>(MyFeedItemsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'myFeedItems');
     },
-    myOptions(
-      variables?: MyOptionsQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<MyOptionsQuery> {
-      return withWrapper(() =>
-        client.request<MyOptionsQuery>(print(MyOptionsDocument), variables, requestHeaders),
-      );
+    myFeeds(variables?: MyFeedsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyFeedsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MyFeedsQuery>(MyFeedsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'myFeeds');
     },
-    users(
-      variables?: UsersQueryVariables,
-      requestHeaders?: Dom.RequestInit['headers'],
-    ): Promise<UsersQuery> {
-      return withWrapper(() =>
-        client.request<UsersQuery>(print(UsersDocument), variables, requestHeaders),
-      );
+    myOptions(variables?: MyOptionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<MyOptionsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<MyOptionsQuery>(MyOptionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'myOptions');
     },
+    users(variables?: UsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UsersQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UsersQuery>(UsersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'users');
+    }
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;

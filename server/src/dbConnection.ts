@@ -1,6 +1,5 @@
 import { createConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
+import { Enclosure, Feed, Item, Options, User, UserFeed, UsersToBeDeleted } from '#entities';
 import { IS_DEV, IS_TEST } from './constants.js';
 
 export const initDbConnection = async (logging?: boolean) => {
@@ -11,7 +10,7 @@ export const initDbConnection = async (logging?: boolean) => {
     migrations: IS_TEST ? undefined : ['./dist/migrations/*'],
     dropSchema: IS_TEST,
     synchronize: IS_TEST,
-    entities: [User, Feed, UserFeed, Item, Enclosure, Options],
+    entities: [User, Feed, UserFeed, Item, Enclosure, Options, UsersToBeDeleted],
   });
   if (!IS_TEST) await dbConnection.runMigrations();
 

@@ -2,7 +2,7 @@ import argon2 from 'argon2';
 import test from 'ava';
 import faker from 'faker';
 // eslint-disable-next-line import/extensions
-import { User } from '#entities';
+import { User, UsersToBeDeleted } from '#entities';
 import { getSdk } from '../graphql/generated.js';
 import { startTestServer, stopTestServer } from '../test-server.js';
 import { deleteUserWithEmail } from '../test-utils/dbQueries.js';
@@ -180,4 +180,20 @@ test.serial('input validation: login', async (t) => {
   await argErrorTest({ email: faker.internet.email(), password: '' }, 'password');
   await argErrorTest({ email: 'not an email', password: '32742374892374' }, 'email');
   await argErrorTest({ email: faker.internet.email(), password: 'short' }, 'password');
+});
+
+test.serial('delete user', async (t) => {
+  await registerUser();
+
+  const user = await User.findOne({ where: { email } });
+  t.is(user!.deleted, false)
+
+  const sdk = await getSdkWithLoggedInUser(email, password);
+  const resp = await sdk.deleteUser();
+  t.is(resp.deleteUser?.message, 'OK');
+
+  await user!.reload()
+  t.is(user!.deleted, true)
+
+  await t.notThrowsAsync(UsersToBeDeleted.findOneOrFail(user!.id))
 });
