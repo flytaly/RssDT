@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -15,196 +17,186 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  myFeedItems: PaginatedItemsResponse;
-  users?: Maybe<Array<User>>;
-  me?: Maybe<User>;
-  myOptions: Options;
-  myFeeds?: Maybe<Array<UserFeed>>;
-  getFeedInfoByToken?: Maybe<UserFeed>;
-  importStatus?: Maybe<ImportStatusObject>;
-};
-
-export type QueryMyFeedItemsArgs = {
-  feedId: Scalars['Float'];
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
-  filter?: Maybe<Scalars['String']>;
-};
-
-export type QueryGetFeedInfoByTokenArgs = {
-  id: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type PaginatedItemsResponse = {
-  __typename?: 'PaginatedItemsResponse';
-  items: Array<Item>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type Item = {
-  __typename?: 'Item';
-  id: Scalars['Float'];
-  guid?: Maybe<Scalars['String']>;
-  pubdate?: Maybe<Scalars['DateTime']>;
-  link?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  summary?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  feed: Feed;
-  enclosures?: Maybe<Array<Enclosure>>;
-  createdAt: Scalars['DateTime'];
-};
-
-export type Feed = {
-  __typename?: 'Feed';
-  id: Scalars['Float'];
-  url: Scalars['String'];
-  link?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  language?: Maybe<Scalars['String']>;
-  favicon?: Maybe<Scalars['String']>;
-  siteFavicon?: Maybe<Scalars['String']>;
-  siteIcon?: Maybe<Scalars['String']>;
-  imageUrl?: Maybe<Scalars['String']>;
-  imageTitle?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  lastSuccessfulUpd: Scalars['DateTime'];
-  lastPubdate?: Maybe<Scalars['DateTime']>;
-  userFeeds?: Maybe<Array<UserFeed>>;
-};
-
-export type UserFeed = {
-  __typename?: 'UserFeed';
-  id: Scalars['Float'];
-  user: User;
-  feed: Feed;
-  activated: Scalars['Boolean'];
-  title?: Maybe<Scalars['String']>;
-  schedule: DigestSchedule;
-  withContentTable: TernaryState;
-  itemBody: TernaryState;
-  attachments: TernaryState;
-  theme: Theme;
-  filter?: Maybe<Scalars['String']>;
-  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
-  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  newItemsCount: Scalars['Float'];
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['Float'];
+export type AddFeedEmailInput = {
   email: Scalars['String'];
-  emailVerified: Scalars['Boolean'];
-  role: Scalars['String'];
-  locale: Scalars['String'];
-  timeZone: Scalars['String'];
-  userFeeds?: Maybe<Array<UserFeed>>;
-  options: Options;
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  feeds: Array<UserFeed>;
+  feedUrl: Scalars['String'];
 };
 
-export type Options = {
-  __typename?: 'Options';
-  dailyDigestHour: Scalars['Float'];
-  withContentTableDefault: Scalars['Boolean'];
-  itemBodyDefault: Scalars['Boolean'];
-  attachmentsDefault?: Maybe<Scalars['Boolean']>;
-  themeDefault: Theme;
-  customSubject?: Maybe<Scalars['String']>;
-  shareEnable: Scalars['Boolean'];
-  shareList?: Maybe<Array<ShareId>>;
+export type AddFeedInput = {
+  feedUrl: Scalars['String'];
 };
 
-export enum Theme {
-  Default = 'default',
-  Text = 'text',
-}
+export type ArgumentError = {
+  __typename?: 'ArgumentError';
+  argument?: Maybe<Scalars['String']>;
+  message: Scalars['String'];
+};
 
-export enum ShareId {
-  Pocket = 'pocket',
-  Evernote = 'evernote',
-  Trello = 'trello',
-}
+export type DeletedFeedResponse = {
+  __typename?: 'DeletedFeedResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  ids?: Maybe<Array<Scalars['String']>>;
+};
 
 export enum DigestSchedule {
-  Realtime = 'realtime',
-  Everyhour = 'everyhour',
+  Daily = 'daily',
+  Disable = 'disable',
   Every2hours = 'every2hours',
   Every3hours = 'every3hours',
   Every6hours = 'every6hours',
   Every12hours = 'every12hours',
-  Daily = 'daily',
-  Disable = 'disable',
+  Everyhour = 'everyhour',
+  Realtime = 'realtime',
 }
 
-export enum TernaryState {
-  Enable = 'enable',
-  Disable = 'disable',
-  Default = 'default',
-}
+export type EmailPasswordInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
 
 export type Enclosure = {
   __typename?: 'Enclosure';
-  url: Scalars['String'];
   length?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
+  url: Scalars['String'];
 };
 
-export type ImportStatusObject = {
-  __typename?: 'ImportStatusObject';
-  state?: Maybe<ImportState>;
-  progress?: Maybe<Scalars['Float']>;
-  total?: Maybe<Scalars['Float']>;
-  result?: Maybe<Scalars['String']>;
+export type Feed = {
+  __typename?: 'Feed';
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  favicon?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  imageTitle?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
+  lastPubdate?: Maybe<Scalars['DateTime']>;
+  lastSuccessfulUpd: Scalars['DateTime'];
+  link?: Maybe<Scalars['String']>;
+  siteFavicon?: Maybe<Scalars['String']>;
+  siteIcon?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
+  userFeeds?: Maybe<Array<UserFeed>>;
+};
+
+export type FeedImport = {
+  schedule?: InputMaybe<DigestSchedule>;
+  title?: InputMaybe<Scalars['String']>;
+  url: Scalars['String'];
+};
+
+export type FeedbackInput = {
+  email: Scalars['String'];
+  text: Scalars['String'];
+};
+
+export type FeedbackResponse = {
+  __typename?: 'FeedbackResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
+};
+
+export type ImportFeedsResponse = {
+  __typename?: 'ImportFeedsResponse';
+  errors?: Maybe<Array<ArgumentError>>;
+  success?: Maybe<Scalars['Boolean']>;
 };
 
 export enum ImportState {
-  Importing = 'importing',
   Done = 'done',
+  Importing = 'importing',
 }
+
+export type ImportStatusObject = {
+  __typename?: 'ImportStatusObject';
+  progress?: Maybe<Scalars['Float']>;
+  result?: Maybe<Scalars['String']>;
+  state?: Maybe<ImportState>;
+  total?: Maybe<Scalars['Float']>;
+};
+
+export type Item = {
+  __typename?: 'Item';
+  createdAt: Scalars['DateTime'];
+  description?: Maybe<Scalars['String']>;
+  enclosures?: Maybe<Array<Enclosure>>;
+  feed: Feed;
+  guid?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  imageUrl?: Maybe<Scalars['String']>;
+  link?: Maybe<Scalars['String']>;
+  pubdate?: Maybe<Scalars['DateTime']>;
+  summary?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type MessageResponse = {
+  __typename?: 'MessageResponse';
+  message: Scalars['String'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
+  activateFeed: UserFeedResponse;
+  addFeedToCurrentUser: UserFeedResponse;
+  addFeedWithEmail?: Maybe<UserFeedResponse>;
+  deleteMyFeeds: DeletedFeedResponse;
+  deleteUser: MessageResponse;
   feedback?: Maybe<FeedbackResponse>;
+  importFeeds: ImportFeedsResponse;
+  login: UserResponse;
+  logout: Scalars['Boolean'];
   register: UserResponse;
   requestEmailVerification: Scalars['Boolean'];
   requestPasswordReset: MessageResponse;
   resetPassword: UserResponse;
-  verifyEmail: UserResponse;
-  login: UserResponse;
-  logout: Scalars['Boolean'];
-  updateUserInfo: User;
-  setOptions: OptionsResponse;
-  addFeedWithEmail?: Maybe<UserFeedResponse>;
-  addFeedToCurrentUser: UserFeedResponse;
-  activateFeed: UserFeedResponse;
   setFeedActivated: UserFeedResponse;
-  deleteMyFeeds: DeletedFeedResponse;
   setFeedOptions: UserFeedResponse;
-  unsubscribeByToken: Scalars['Boolean'];
   setLastViewedItemDate?: Maybe<UserFeed>;
+  setOptions: OptionsResponse;
   testFeedUpdate: Scalars['Boolean'];
-  importFeeds: ImportFeedsResponse;
+  unsubscribeByToken: Scalars['Boolean'];
+  updateUserInfo: User;
+  verifyEmail: UserResponse;
+};
+
+export type MutationActivateFeedArgs = {
+  token: Scalars['String'];
+  userFeedId: Scalars['String'];
+};
+
+export type MutationAddFeedToCurrentUserArgs = {
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  input: AddFeedInput;
+};
+
+export type MutationAddFeedWithEmailArgs = {
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  input: AddFeedEmailInput;
+  userInfo?: InputMaybe<UserInfoInput>;
+};
+
+export type MutationDeleteMyFeedsArgs = {
+  ids: Array<Scalars['Float']>;
 };
 
 export type MutationFeedbackArgs = {
   input: FeedbackInput;
 };
 
-export type MutationRegisterArgs = {
-  userInfo?: Maybe<UserInfoInput>;
+export type MutationImportFeedsArgs = {
+  feeds: Array<FeedImport>;
+};
+
+export type MutationLoginArgs = {
   input: EmailPasswordInput;
+};
+
+export type MutationRegisterArgs = {
+  input: EmailPasswordInput;
+  userInfo?: InputMaybe<UserInfoInput>;
 };
 
 export type MutationRequestPasswordResetArgs = {
@@ -215,55 +207,13 @@ export type MutationResetPasswordArgs = {
   input: PasswordResetInput;
 };
 
-export type MutationVerifyEmailArgs = {
-  userId: Scalars['String'];
-  token: Scalars['String'];
-};
-
-export type MutationLoginArgs = {
-  input: EmailPasswordInput;
-};
-
-export type MutationUpdateUserInfoArgs = {
-  userInfo: UserInfoInput;
-};
-
-export type MutationSetOptionsArgs = {
-  opts: OptionsInput;
-};
-
-export type MutationAddFeedWithEmailArgs = {
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  userInfo?: Maybe<UserInfoInput>;
-  input: AddFeedEmailInput;
-};
-
-export type MutationAddFeedToCurrentUserArgs = {
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  input: AddFeedInput;
-};
-
-export type MutationActivateFeedArgs = {
-  userFeedId: Scalars['String'];
-  token: Scalars['String'];
-};
-
 export type MutationSetFeedActivatedArgs = {
   userFeedId: Scalars['Float'];
 };
 
-export type MutationDeleteMyFeedsArgs = {
-  ids: Array<Scalars['Float']>;
-};
-
 export type MutationSetFeedOptionsArgs = {
-  opts: UserFeedOptionsInput;
   id: Scalars['Float'];
-};
-
-export type MutationUnsubscribeByTokenArgs = {
-  id: Scalars['String'];
-  token: Scalars['String'];
+  opts: UserFeedOptionsInput;
 };
 
 export type MutationSetLastViewedItemDateArgs = {
@@ -271,57 +221,50 @@ export type MutationSetLastViewedItemDateArgs = {
   userFeedId: Scalars['Float'];
 };
 
+export type MutationSetOptionsArgs = {
+  opts: OptionsInput;
+};
+
 export type MutationTestFeedUpdateArgs = {
   count: Scalars['Float'];
   feedId: Scalars['Float'];
 };
 
-export type MutationImportFeedsArgs = {
-  feeds: Array<FeedImport>;
+export type MutationUnsubscribeByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
 };
 
-export type FeedbackResponse = {
-  __typename?: 'FeedbackResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  success?: Maybe<Scalars['Boolean']>;
+export type MutationUpdateUserInfoArgs = {
+  userInfo: UserInfoInput;
 };
 
-export type ArgumentError = {
-  __typename?: 'ArgumentError';
-  argument?: Maybe<Scalars['String']>;
-  message: Scalars['String'];
-};
-
-export type FeedbackInput = {
-  email: Scalars['String'];
-  text: Scalars['String'];
-};
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  user?: Maybe<User>;
-};
-
-export type UserInfoInput = {
-  locale?: Maybe<Scalars['String']>;
-  timeZone?: Maybe<Scalars['String']>;
-};
-
-export type EmailPasswordInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-};
-
-export type MessageResponse = {
-  __typename?: 'MessageResponse';
-  message: Scalars['String'];
-};
-
-export type PasswordResetInput = {
-  password: Scalars['String'];
+export type MutationVerifyEmailArgs = {
   token: Scalars['String'];
   userId: Scalars['String'];
+};
+
+export type Options = {
+  __typename?: 'Options';
+  attachmentsDefault?: Maybe<Scalars['Boolean']>;
+  customSubject?: Maybe<Scalars['String']>;
+  dailyDigestHour: Scalars['Float'];
+  itemBodyDefault: Scalars['Boolean'];
+  shareEnable: Scalars['Boolean'];
+  shareList?: Maybe<Array<ShareId>>;
+  themeDefault: Theme;
+  withContentTableDefault: Scalars['Boolean'];
+};
+
+export type OptionsInput = {
+  attachmentsDefault?: InputMaybe<Scalars['Boolean']>;
+  customSubject?: InputMaybe<Scalars['String']>;
+  dailyDigestHour?: InputMaybe<Scalars['Float']>;
+  itemBodyDefault?: InputMaybe<Scalars['Boolean']>;
+  shareEnable?: InputMaybe<Scalars['Boolean']>;
+  shareList?: InputMaybe<Array<Scalars['String']>>;
+  themeDefault?: InputMaybe<Scalars['String']>;
+  withContentTableDefault?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type OptionsResponse = {
@@ -330,15 +273,112 @@ export type OptionsResponse = {
   options?: Maybe<Options>;
 };
 
-export type OptionsInput = {
-  dailyDigestHour?: Maybe<Scalars['Float']>;
-  customSubject?: Maybe<Scalars['String']>;
-  shareList?: Maybe<Array<Scalars['String']>>;
-  shareEnable?: Maybe<Scalars['Boolean']>;
-  withContentTableDefault?: Maybe<Scalars['Boolean']>;
-  itemBodyDefault?: Maybe<Scalars['Boolean']>;
-  attachmentsDefault?: Maybe<Scalars['Boolean']>;
-  themeDefault?: Maybe<Scalars['String']>;
+export type PaginatedItemsResponse = {
+  __typename?: 'PaginatedItemsResponse';
+  hasMore: Scalars['Boolean'];
+  items: Array<Item>;
+};
+
+export type PasswordResetInput = {
+  password: Scalars['String'];
+  token: Scalars['String'];
+  userId: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  getFeedInfoByToken?: Maybe<UserFeed>;
+  importStatus?: Maybe<ImportStatusObject>;
+  me?: Maybe<User>;
+  myFeedItems: PaginatedItemsResponse;
+  myFeeds?: Maybe<Array<UserFeed>>;
+  myOptions: Options;
+  users?: Maybe<Array<User>>;
+};
+
+export type QueryGetFeedInfoByTokenArgs = {
+  id: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type QueryMyFeedItemsArgs = {
+  feedId: Scalars['Float'];
+  filter?: InputMaybe<Scalars['String']>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
+};
+
+export enum ShareId {
+  Evernote = 'evernote',
+  Pocket = 'pocket',
+  Trello = 'trello',
+}
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  itemsCountUpdated: Array<UserFeedNewItemsCountResponse>;
+};
+
+export enum TernaryState {
+  Default = 'default',
+  Disable = 'disable',
+  Enable = 'enable',
+}
+
+export enum Theme {
+  Default = 'default',
+  Text = 'text',
+}
+
+export type User = {
+  __typename?: 'User';
+  createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  emailVerified: Scalars['Boolean'];
+  feeds: Array<UserFeed>;
+  id: Scalars['Float'];
+  locale: Scalars['String'];
+  options: Options;
+  role: Scalars['String'];
+  timeZone: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  userFeeds?: Maybe<Array<UserFeed>>;
+};
+
+export type UserFeed = {
+  __typename?: 'UserFeed';
+  activated: Scalars['Boolean'];
+  attachments: TernaryState;
+  createdAt: Scalars['DateTime'];
+  feed: Feed;
+  filter?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  itemBody: TernaryState;
+  lastDigestSentAt?: Maybe<Scalars['DateTime']>;
+  lastViewedItemDate?: Maybe<Scalars['DateTime']>;
+  newItemsCount: Scalars['Float'];
+  schedule: DigestSchedule;
+  theme: Theme;
+  title?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
+  user: User;
+  withContentTable: TernaryState;
+};
+
+export type UserFeedNewItemsCountResponse = {
+  __typename?: 'UserFeedNewItemsCountResponse';
+  count: Scalars['Float'];
+  feedId: Scalars['Float'];
+};
+
+export type UserFeedOptionsInput = {
+  attachments?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<Scalars['String']>;
+  itemBody?: InputMaybe<Scalars['String']>;
+  schedule?: InputMaybe<Scalars['String']>;
+  theme?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  withContentTable?: InputMaybe<Scalars['String']>;
 };
 
 export type UserFeedResponse = {
@@ -347,129 +387,115 @@ export type UserFeedResponse = {
   userFeed?: Maybe<UserFeed>;
 };
 
-export type UserFeedOptionsInput = {
-  title?: Maybe<Scalars['String']>;
-  schedule?: Maybe<Scalars['String']>;
-  withContentTable?: Maybe<Scalars['String']>;
-  itemBody?: Maybe<Scalars['String']>;
-  attachments?: Maybe<Scalars['String']>;
-  theme?: Maybe<Scalars['String']>;
-  filter?: Maybe<Scalars['String']>;
+export type UserInfoInput = {
+  locale?: InputMaybe<Scalars['String']>;
+  timeZone?: InputMaybe<Scalars['String']>;
 };
 
-export type AddFeedEmailInput = {
-  feedUrl: Scalars['String'];
-  email: Scalars['String'];
-};
-
-export type AddFeedInput = {
-  feedUrl: Scalars['String'];
-};
-
-export type DeletedFeedResponse = {
-  __typename?: 'DeletedFeedResponse';
+export type UserResponse = {
+  __typename?: 'UserResponse';
   errors?: Maybe<Array<ArgumentError>>;
-  ids?: Maybe<Array<Scalars['String']>>;
+  user?: Maybe<User>;
 };
 
-export type ImportFeedsResponse = {
-  __typename?: 'ImportFeedsResponse';
-  errors?: Maybe<Array<ArgumentError>>;
-  success?: Maybe<Scalars['Boolean']>;
+export type FeedFieldsFragment = {
+  __typename?: 'Feed';
+  id: number;
+  url: string;
+  link?: string | null | undefined;
+  title?: string | null | undefined;
+  description?: string | null | undefined;
+  language?: string | null | undefined;
+  favicon?: string | null | undefined;
+  siteIcon?: string | null | undefined;
+  siteFavicon?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  imageTitle?: string | null | undefined;
+  lastSuccessfulUpd: any;
+  lastPubdate?: any | null | undefined;
+  createdAt: any;
+  updatedAt: any;
 };
 
-export type FeedImport = {
-  url: Scalars['String'];
-  title?: Maybe<Scalars['String']>;
-  schedule?: Maybe<DigestSchedule>;
+export type ItemFieldsFragment = {
+  __typename?: 'Item';
+  id: number;
+  guid?: string | null | undefined;
+  pubdate?: any | null | undefined;
+  link?: string | null | undefined;
+  title?: string | null | undefined;
+  description?: string | null | undefined;
+  summary?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  createdAt: any;
+  enclosures?:
+    | Array<{
+        __typename?: 'Enclosure';
+        url: string;
+        length?: string | null | undefined;
+        type?: string | null | undefined;
+      }>
+    | null
+    | undefined;
 };
 
-export type Subscription = {
-  __typename?: 'Subscription';
-  itemsCountUpdated: Array<UserFeedNewItemsCountResponse>;
+export type OptionsFieldsFragment = {
+  __typename?: 'Options';
+  dailyDigestHour: number;
+  withContentTableDefault: boolean;
+  itemBodyDefault: boolean;
+  attachmentsDefault?: boolean | null | undefined;
+  themeDefault: Theme;
+  customSubject?: string | null | undefined;
+  shareEnable: boolean;
+  shareList?: Array<ShareId> | null | undefined;
 };
 
-export type UserFeedNewItemsCountResponse = {
-  __typename?: 'UserFeedNewItemsCountResponse';
-  feedId: Scalars['Float'];
-  count: Scalars['Float'];
+export type UserFeedFieldsFragment = {
+  __typename?: 'UserFeed';
+  id: number;
+  activated: boolean;
+  title?: string | null | undefined;
+  schedule: DigestSchedule;
+  withContentTable: TernaryState;
+  itemBody: TernaryState;
+  attachments: TernaryState;
+  theme: Theme;
+  filter?: string | null | undefined;
+  createdAt: any;
+  lastDigestSentAt?: any | null | undefined;
+  newItemsCount: number;
+  lastViewedItemDate?: any | null | undefined;
 };
 
-export type FeedFieldsFragment = { __typename?: 'Feed' } & Pick<
-  Feed,
-  | 'id'
-  | 'url'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'language'
-  | 'favicon'
-  | 'siteIcon'
-  | 'siteFavicon'
-  | 'imageUrl'
-  | 'imageTitle'
-  | 'lastSuccessfulUpd'
-  | 'lastPubdate'
-  | 'createdAt'
-  | 'updatedAt'
->;
+export type UserFieldsFragment = {
+  __typename?: 'User';
+  id: number;
+  role: string;
+  email: string;
+  emailVerified: boolean;
+  locale: string;
+  timeZone: string;
+};
 
-export type ItemFieldsFragment = { __typename?: 'Item' } & Pick<
-  Item,
-  | 'id'
-  | 'guid'
-  | 'pubdate'
-  | 'link'
-  | 'title'
-  | 'description'
-  | 'summary'
-  | 'imageUrl'
-  | 'createdAt'
-> & {
-    enclosures?: Maybe<
-      Array<{ __typename?: 'Enclosure' } & Pick<Enclosure, 'url' | 'length' | 'type'>>
-    >;
-  };
-
-export type OptionsFieldsFragment = { __typename?: 'Options' } & Pick<
-  Options,
-  | 'dailyDigestHour'
-  | 'withContentTableDefault'
-  | 'itemBodyDefault'
-  | 'attachmentsDefault'
-  | 'themeDefault'
-  | 'customSubject'
-  | 'shareEnable'
-  | 'shareList'
->;
-
-export type UserFeedFieldsFragment = { __typename?: 'UserFeed' } & Pick<
-  UserFeed,
-  | 'id'
-  | 'activated'
-  | 'title'
-  | 'schedule'
-  | 'withContentTable'
-  | 'itemBody'
-  | 'attachments'
-  | 'theme'
-  | 'filter'
-  | 'createdAt'
-  | 'lastDigestSentAt'
-  | 'newItemsCount'
-  | 'lastViewedItemDate'
->;
-
-export type UserFieldsFragment = { __typename?: 'User' } & Pick<
-  User,
-  'id' | 'role' | 'email' | 'emailVerified' | 'locale' | 'timeZone'
->;
-
-export type UsualUserResponseFragment = { __typename?: 'UserResponse' } & {
-  user?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
-  errors?: Maybe<
-    Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-  >;
+export type UsualUserResponseFragment = {
+  __typename?: 'UserResponse';
+  user?:
+    | {
+        __typename?: 'User';
+        id: number;
+        role: string;
+        email: string;
+        emailVerified: boolean;
+        locale: string;
+        timeZone: string;
+      }
+    | null
+    | undefined;
+  errors?:
+    | Array<{ __typename?: 'ArgumentError'; message: string; argument?: string | null | undefined }>
+    | null
+    | undefined;
 };
 
 export type ActivateFeedMutationVariables = Exact<{
@@ -477,76 +503,178 @@ export type ActivateFeedMutationVariables = Exact<{
   userFeedId: Scalars['String'];
 }>;
 
-export type ActivateFeedMutation = { __typename?: 'Mutation' } & {
-  activateFeed: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-      } & UserFeedFieldsFragment
-    >;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
+export type ActivateFeedMutation = {
+  __typename?: 'Mutation';
+  activateFeed: {
+    __typename?: 'UserFeedResponse';
+    userFeed?:
+      | {
+          __typename?: 'UserFeed';
+          id: number;
+          activated: boolean;
+          title?: string | null | undefined;
+          schedule: DigestSchedule;
+          withContentTable: TernaryState;
+          itemBody: TernaryState;
+          attachments: TernaryState;
+          theme: Theme;
+          filter?: string | null | undefined;
+          createdAt: any;
+          lastDigestSentAt?: any | null | undefined;
+          newItemsCount: number;
+          lastViewedItemDate?: any | null | undefined;
+          feed: { __typename?: 'Feed'; id: number; url: string; title?: string | null | undefined };
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
   };
 };
 
 export type AddFeedToCurrentUserMutationVariables = Exact<{
-  feedOpts?: Maybe<UserFeedOptionsInput>;
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
   input: AddFeedInput;
 }>;
 
-export type AddFeedToCurrentUserMutation = { __typename?: 'Mutation' } & {
-  addFeedToCurrentUser: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-      } & UserFeedFieldsFragment
-    >;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
+export type AddFeedToCurrentUserMutation = {
+  __typename?: 'Mutation';
+  addFeedToCurrentUser: {
+    __typename?: 'UserFeedResponse';
+    userFeed?:
+      | {
+          __typename?: 'UserFeed';
+          id: number;
+          activated: boolean;
+          title?: string | null | undefined;
+          schedule: DigestSchedule;
+          withContentTable: TernaryState;
+          itemBody: TernaryState;
+          attachments: TernaryState;
+          theme: Theme;
+          filter?: string | null | undefined;
+          createdAt: any;
+          lastDigestSentAt?: any | null | undefined;
+          newItemsCount: number;
+          lastViewedItemDate?: any | null | undefined;
+          feed: {
+            __typename?: 'Feed';
+            id: number;
+            url: string;
+            link?: string | null | undefined;
+            title?: string | null | undefined;
+            description?: string | null | undefined;
+            language?: string | null | undefined;
+            favicon?: string | null | undefined;
+            siteIcon?: string | null | undefined;
+            siteFavicon?: string | null | undefined;
+            imageUrl?: string | null | undefined;
+            imageTitle?: string | null | undefined;
+            lastSuccessfulUpd: any;
+            lastPubdate?: any | null | undefined;
+            createdAt: any;
+            updatedAt: any;
+          };
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
   };
 };
 
 export type AddFeedWithEmailMutationVariables = Exact<{
-  feedOpts?: Maybe<UserFeedOptionsInput>;
-  userInfo?: Maybe<UserInfoInput>;
+  feedOpts?: InputMaybe<UserFeedOptionsInput>;
+  userInfo?: InputMaybe<UserInfoInput>;
   input: AddFeedEmailInput;
 }>;
 
-export type AddFeedWithEmailMutation = { __typename?: 'Mutation' } & {
-  addFeedWithEmail?: Maybe<
-    { __typename?: 'UserFeedResponse' } & {
-      userFeed?: Maybe<
-        { __typename?: 'UserFeed' } & {
-          feed: { __typename?: 'Feed' } & Pick<Feed, 'id' | 'url' | 'title'>;
-        } & UserFeedFieldsFragment
-      >;
-      errors?: Maybe<
-        Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-      >;
-    }
-  >;
+export type AddFeedWithEmailMutation = {
+  __typename?: 'Mutation';
+  addFeedWithEmail?:
+    | {
+        __typename?: 'UserFeedResponse';
+        userFeed?:
+          | {
+              __typename?: 'UserFeed';
+              id: number;
+              activated: boolean;
+              title?: string | null | undefined;
+              schedule: DigestSchedule;
+              withContentTable: TernaryState;
+              itemBody: TernaryState;
+              attachments: TernaryState;
+              theme: Theme;
+              filter?: string | null | undefined;
+              createdAt: any;
+              lastDigestSentAt?: any | null | undefined;
+              newItemsCount: number;
+              lastViewedItemDate?: any | null | undefined;
+              feed: {
+                __typename?: 'Feed';
+                id: number;
+                url: string;
+                title?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+        errors?:
+          | Array<{
+              __typename?: 'ArgumentError';
+              message: string;
+              argument?: string | null | undefined;
+            }>
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
+
+export type DeleteMeMutationVariables = Exact<{ [key: string]: never }>;
+
+export type DeleteMeMutation = {
+  __typename?: 'Mutation';
+  deleteUser: { __typename?: 'MessageResponse'; message: string };
 };
 
 export type DeleteMyFeedsMutationVariables = Exact<{
   ids: Array<Scalars['Float']> | Scalars['Float'];
 }>;
 
-export type DeleteMyFeedsMutation = { __typename?: 'Mutation' } & {
-  deleteMyFeeds: { __typename?: 'DeletedFeedResponse' } & Pick<DeletedFeedResponse, 'ids'> & {
-      errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-    };
+export type DeleteMyFeedsMutation = {
+  __typename?: 'Mutation';
+  deleteMyFeeds: {
+    __typename?: 'DeletedFeedResponse';
+    ids?: Array<string> | null | undefined;
+    errors?: Array<{ __typename?: 'ArgumentError'; message: string }> | null | undefined;
+  };
 };
 
 export type ImportFeedsMutationVariables = Exact<{
   feedImport: Array<FeedImport> | FeedImport;
 }>;
 
-export type ImportFeedsMutation = { __typename?: 'Mutation' } & {
-  importFeeds: { __typename?: 'ImportFeedsResponse' } & Pick<ImportFeedsResponse, 'success'> & {
-      errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
-    };
+export type ImportFeedsMutation = {
+  __typename?: 'Mutation';
+  importFeeds: {
+    __typename?: 'ImportFeedsResponse';
+    success?: boolean | null | undefined;
+    errors?: Array<{ __typename?: 'ArgumentError'; message: string }> | null | undefined;
+  };
 };
 
 export type LoginMutationVariables = Exact<{
@@ -554,58 +682,137 @@ export type LoginMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
+export type LoginMutation = {
+  __typename?: 'Mutation';
+  login: {
+    __typename?: 'UserResponse';
+    user?:
+      | {
+          __typename?: 'User';
+          id: number;
+          role: string;
+          email: string;
+          emailVerified: boolean;
+          locale: string;
+          timeZone: string;
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
+  };
 };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
 
-export type LogoutMutation = { __typename?: 'Mutation' } & Pick<Mutation, 'logout'>;
+export type LogoutMutation = { __typename?: 'Mutation'; logout: boolean };
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
+export type RegisterMutation = {
+  __typename?: 'Mutation';
+  register: {
+    __typename?: 'UserResponse';
+    user?:
+      | {
+          __typename?: 'User';
+          id: number;
+          role: string;
+          email: string;
+          emailVerified: boolean;
+          locale: string;
+          timeZone: string;
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
+  };
 };
 
 export type RequestEmailVerificationMutationVariables = Exact<{ [key: string]: never }>;
 
-export type RequestEmailVerificationMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'requestEmailVerification'
->;
+export type RequestEmailVerificationMutation = {
+  __typename?: 'Mutation';
+  requestEmailVerification: boolean;
+};
 
 export type RequestPasswordResetMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
-export type RequestPasswordResetMutation = { __typename?: 'Mutation' } & {
-  requestPasswordReset: { __typename?: 'MessageResponse' } & Pick<MessageResponse, 'message'>;
+export type RequestPasswordResetMutation = {
+  __typename?: 'Mutation';
+  requestPasswordReset: { __typename?: 'MessageResponse'; message: string };
 };
 
 export type ResetPasswordMutationVariables = Exact<{
   input: PasswordResetInput;
 }>;
 
-export type ResetPasswordMutation = { __typename?: 'Mutation' } & {
-  resetPassword: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
+export type ResetPasswordMutation = {
+  __typename?: 'Mutation';
+  resetPassword: {
+    __typename?: 'UserResponse';
+    user?:
+      | {
+          __typename?: 'User';
+          id: number;
+          role: string;
+          email: string;
+          emailVerified: boolean;
+          locale: string;
+          timeZone: string;
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
+  };
 };
 
 export type SendFeedbackMutationVariables = Exact<{
   input: FeedbackInput;
 }>;
 
-export type SendFeedbackMutation = { __typename?: 'Mutation' } & {
-  feedback?: Maybe<
-    { __typename?: 'FeedbackResponse' } & Pick<FeedbackResponse, 'success'> & {
-        errors?: Maybe<
-          Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'argument' | 'message'>>
-        >;
+export type SendFeedbackMutation = {
+  __typename?: 'Mutation';
+  feedback?:
+    | {
+        __typename?: 'FeedbackResponse';
+        success?: boolean | null | undefined;
+        errors?:
+          | Array<{
+              __typename?: 'ArgumentError';
+              argument?: string | null | undefined;
+              message: string;
+            }>
+          | null
+          | undefined;
       }
-  >;
+    | null
+    | undefined;
 };
 
 export type SetFeedOptionsMutationVariables = Exact<{
@@ -613,10 +820,30 @@ export type SetFeedOptionsMutationVariables = Exact<{
   opts: UserFeedOptionsInput;
 }>;
 
-export type SetFeedOptionsMutation = { __typename?: 'Mutation' } & {
-  setFeedOptions: { __typename?: 'UserFeedResponse' } & {
-    userFeed?: Maybe<{ __typename?: 'UserFeed' } & UserFeedFieldsFragment>;
-    errors?: Maybe<Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message'>>>;
+export type SetFeedOptionsMutation = {
+  __typename?: 'Mutation';
+  setFeedOptions: {
+    __typename?: 'UserFeedResponse';
+    userFeed?:
+      | {
+          __typename?: 'UserFeed';
+          id: number;
+          activated: boolean;
+          title?: string | null | undefined;
+          schedule: DigestSchedule;
+          withContentTable: TernaryState;
+          itemBody: TernaryState;
+          attachments: TernaryState;
+          theme: Theme;
+          filter?: string | null | undefined;
+          createdAt: any;
+          lastDigestSentAt?: any | null | undefined;
+          newItemsCount: number;
+          lastViewedItemDate?: any | null | undefined;
+        }
+      | null
+      | undefined;
+    errors?: Array<{ __typename?: 'ArgumentError'; message: string }> | null | undefined;
   };
 };
 
@@ -625,22 +852,49 @@ export type SetLastViewedItemDateMutationVariables = Exact<{
   userFeedId: Scalars['Float'];
 }>;
 
-export type SetLastViewedItemDateMutation = { __typename?: 'Mutation' } & {
-  setLastViewedItemDate?: Maybe<
-    { __typename?: 'UserFeed' } & Pick<UserFeed, 'id' | 'lastViewedItemDate' | 'newItemsCount'>
-  >;
+export type SetLastViewedItemDateMutation = {
+  __typename?: 'Mutation';
+  setLastViewedItemDate?:
+    | {
+        __typename?: 'UserFeed';
+        id: number;
+        lastViewedItemDate?: any | null | undefined;
+        newItemsCount: number;
+      }
+    | null
+    | undefined;
 };
 
 export type SetOptionsMutationVariables = Exact<{
   opts: OptionsInput;
 }>;
 
-export type SetOptionsMutation = { __typename?: 'Mutation' } & {
-  setOptions: { __typename?: 'OptionsResponse' } & {
-    options?: Maybe<{ __typename?: 'Options' } & OptionsFieldsFragment>;
-    errors?: Maybe<
-      Array<{ __typename?: 'ArgumentError' } & Pick<ArgumentError, 'message' | 'argument'>>
-    >;
+export type SetOptionsMutation = {
+  __typename?: 'Mutation';
+  setOptions: {
+    __typename?: 'OptionsResponse';
+    options?:
+      | {
+          __typename?: 'Options';
+          dailyDigestHour: number;
+          withContentTableDefault: boolean;
+          itemBodyDefault: boolean;
+          attachmentsDefault?: boolean | null | undefined;
+          themeDefault: Theme;
+          customSubject?: string | null | undefined;
+          shareEnable: boolean;
+          shareList?: Array<ShareId> | null | undefined;
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
   };
 };
 
@@ -649,17 +903,15 @@ export type UnsubscribeByTokenMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
 
-export type UnsubscribeByTokenMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'unsubscribeByToken'
->;
+export type UnsubscribeByTokenMutation = { __typename?: 'Mutation'; unsubscribeByToken: boolean };
 
 export type UpdateUserInfoMutationVariables = Exact<{
   userInfo: UserInfoInput;
 }>;
 
-export type UpdateUserInfoMutation = { __typename?: 'Mutation' } & {
-  updateUserInfo: { __typename?: 'User' } & Pick<User, 'timeZone' | 'locale'>;
+export type UpdateUserInfoMutation = {
+  __typename?: 'Mutation';
+  updateUserInfo: { __typename?: 'User'; timeZone: string; locale: string };
 };
 
 export type VerifyEmailMutationVariables = Exact<{
@@ -667,8 +919,31 @@ export type VerifyEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
 
-export type VerifyEmailMutation = { __typename?: 'Mutation' } & {
-  verifyEmail: { __typename?: 'UserResponse' } & UsualUserResponseFragment;
+export type VerifyEmailMutation = {
+  __typename?: 'Mutation';
+  verifyEmail: {
+    __typename?: 'UserResponse';
+    user?:
+      | {
+          __typename?: 'User';
+          id: number;
+          role: string;
+          email: string;
+          emailVerified: boolean;
+          locale: string;
+          timeZone: string;
+        }
+      | null
+      | undefined;
+    errors?:
+      | Array<{
+          __typename?: 'ArgumentError';
+          message: string;
+          argument?: string | null | undefined;
+        }>
+      | null
+      | undefined;
+  };
 };
 
 export type GetFeedInfoByTokenQueryVariables = Exact<{
@@ -676,76 +951,163 @@ export type GetFeedInfoByTokenQueryVariables = Exact<{
   token: Scalars['String'];
 }>;
 
-export type GetFeedInfoByTokenQuery = { __typename?: 'Query' } & {
-  getFeedInfoByToken?: Maybe<
-    { __typename?: 'UserFeed' } & { feed: { __typename?: 'Feed' } & Pick<Feed, 'title' | 'url'> }
-  >;
+export type GetFeedInfoByTokenQuery = {
+  __typename?: 'Query';
+  getFeedInfoByToken?:
+    | {
+        __typename?: 'UserFeed';
+        feed: { __typename?: 'Feed'; title?: string | null | undefined; url: string };
+      }
+    | null
+    | undefined;
 };
 
 export type ImportStatusQueryVariables = Exact<{ [key: string]: never }>;
 
-export type ImportStatusQuery = { __typename?: 'Query' } & {
-  importStatus?: Maybe<
-    { __typename?: 'ImportStatusObject' } & Pick<
-      ImportStatusObject,
-      'state' | 'progress' | 'total' | 'result'
-    >
-  >;
+export type ImportStatusQuery = {
+  __typename?: 'Query';
+  importStatus?:
+    | {
+        __typename?: 'ImportStatusObject';
+        state?: ImportState | null | undefined;
+        progress?: number | null | undefined;
+        total?: number | null | undefined;
+        result?: string | null | undefined;
+      }
+    | null
+    | undefined;
 };
 
 export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeQuery = { __typename?: 'Query' } & {
-  me?: Maybe<{ __typename?: 'User' } & UserFieldsFragment>;
+export type MeQuery = {
+  __typename?: 'Query';
+  me?:
+    | {
+        __typename?: 'User';
+        id: number;
+        role: string;
+        email: string;
+        emailVerified: boolean;
+        locale: string;
+        timeZone: string;
+      }
+    | null
+    | undefined;
 };
 
 export type MyFeedItemsQueryVariables = Exact<{
-  skip?: Maybe<Scalars['Float']>;
-  take?: Maybe<Scalars['Float']>;
+  skip?: InputMaybe<Scalars['Float']>;
+  take?: InputMaybe<Scalars['Float']>;
   feedId: Scalars['Float'];
-  filter?: Maybe<Scalars['String']>;
+  filter?: InputMaybe<Scalars['String']>;
 }>;
 
-export type MyFeedItemsQuery = { __typename?: 'Query' } & {
-  myFeedItems: { __typename?: 'PaginatedItemsResponse' } & Pick<
-    PaginatedItemsResponse,
-    'hasMore'
-  > & { items: Array<{ __typename?: 'Item' } & ItemFieldsFragment> };
+export type MyFeedItemsQuery = {
+  __typename?: 'Query';
+  myFeedItems: {
+    __typename?: 'PaginatedItemsResponse';
+    hasMore: boolean;
+    items: Array<{
+      __typename?: 'Item';
+      id: number;
+      guid?: string | null | undefined;
+      pubdate?: any | null | undefined;
+      link?: string | null | undefined;
+      title?: string | null | undefined;
+      description?: string | null | undefined;
+      summary?: string | null | undefined;
+      imageUrl?: string | null | undefined;
+      createdAt: any;
+      enclosures?:
+        | Array<{
+            __typename?: 'Enclosure';
+            url: string;
+            length?: string | null | undefined;
+            type?: string | null | undefined;
+          }>
+        | null
+        | undefined;
+    }>;
+  };
 };
 
 export type MyFeedsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyFeedsQuery = { __typename?: 'Query' } & {
-  myFeeds?: Maybe<
-    Array<
-      { __typename?: 'UserFeed' } & {
-        feed: { __typename?: 'Feed' } & FeedFieldsFragment;
-      } & UserFeedFieldsFragment
-    >
-  >;
+export type MyFeedsQuery = {
+  __typename?: 'Query';
+  myFeeds?:
+    | Array<{
+        __typename?: 'UserFeed';
+        id: number;
+        activated: boolean;
+        title?: string | null | undefined;
+        schedule: DigestSchedule;
+        withContentTable: TernaryState;
+        itemBody: TernaryState;
+        attachments: TernaryState;
+        theme: Theme;
+        filter?: string | null | undefined;
+        createdAt: any;
+        lastDigestSentAt?: any | null | undefined;
+        newItemsCount: number;
+        lastViewedItemDate?: any | null | undefined;
+        feed: {
+          __typename?: 'Feed';
+          id: number;
+          url: string;
+          link?: string | null | undefined;
+          title?: string | null | undefined;
+          description?: string | null | undefined;
+          language?: string | null | undefined;
+          favicon?: string | null | undefined;
+          siteIcon?: string | null | undefined;
+          siteFavicon?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          imageTitle?: string | null | undefined;
+          lastSuccessfulUpd: any;
+          lastPubdate?: any | null | undefined;
+          createdAt: any;
+          updatedAt: any;
+        };
+      }>
+    | null
+    | undefined;
 };
 
 export type MyFeedsCountQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyFeedsCountQuery = { __typename?: 'Query' } & {
-  myFeeds?: Maybe<Array<{ __typename?: 'UserFeed' } & Pick<UserFeed, 'newItemsCount'>>>;
+export type MyFeedsCountQuery = {
+  __typename?: 'Query';
+  myFeeds?: Array<{ __typename?: 'UserFeed'; newItemsCount: number }> | null | undefined;
 };
 
 export type MyOptionsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MyOptionsQuery = { __typename?: 'Query' } & {
-  myOptions: { __typename?: 'Options' } & OptionsFieldsFragment;
+export type MyOptionsQuery = {
+  __typename?: 'Query';
+  myOptions: {
+    __typename?: 'Options';
+    dailyDigestHour: number;
+    withContentTableDefault: boolean;
+    itemBodyDefault: boolean;
+    attachmentsDefault?: boolean | null | undefined;
+    themeDefault: Theme;
+    customSubject?: string | null | undefined;
+    shareEnable: boolean;
+    shareList?: Array<ShareId> | null | undefined;
+  };
 };
 
 export type ItemsCountUpdatedSubscriptionVariables = Exact<{ [key: string]: never }>;
 
-export type ItemsCountUpdatedSubscription = { __typename?: 'Subscription' } & {
-  itemsCountUpdated: Array<
-    { __typename?: 'UserFeedNewItemsCountResponse' } & Pick<
-      UserFeedNewItemsCountResponse,
-      'feedId' | 'count'
-    >
-  >;
+export type ItemsCountUpdatedSubscription = {
+  __typename?: 'Subscription';
+  itemsCountUpdated: Array<{
+    __typename?: 'UserFeedNewItemsCountResponse';
+    feedId: number;
+    count: number;
+  }>;
 };
 
 export const FeedFieldsFragmentDoc = gql`
@@ -881,9 +1243,10 @@ export type ActivateFeedMutationFn = Apollo.MutationFunction<
 export function useActivateFeedMutation(
   baseOptions?: Apollo.MutationHookOptions<ActivateFeedMutation, ActivateFeedMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<ActivateFeedMutation, ActivateFeedMutationVariables>(
     ActivateFeedDocument,
-    baseOptions,
+    options,
   );
 }
 export type ActivateFeedMutationHookResult = ReturnType<typeof useActivateFeedMutation>;
@@ -939,9 +1302,10 @@ export function useAddFeedToCurrentUserMutation(
     AddFeedToCurrentUserMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<AddFeedToCurrentUserMutation, AddFeedToCurrentUserMutationVariables>(
     AddFeedToCurrentUserDocument,
-    baseOptions,
+    options,
   );
 }
 export type AddFeedToCurrentUserMutationHookResult = ReturnType<
@@ -1006,9 +1370,10 @@ export function useAddFeedWithEmailMutation(
     AddFeedWithEmailMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<AddFeedWithEmailMutation, AddFeedWithEmailMutationVariables>(
     AddFeedWithEmailDocument,
-    baseOptions,
+    options,
   );
 }
 export type AddFeedWithEmailMutationHookResult = ReturnType<typeof useAddFeedWithEmailMutation>;
@@ -1016,6 +1381,46 @@ export type AddFeedWithEmailMutationResult = Apollo.MutationResult<AddFeedWithEm
 export type AddFeedWithEmailMutationOptions = Apollo.BaseMutationOptions<
   AddFeedWithEmailMutation,
   AddFeedWithEmailMutationVariables
+>;
+export const DeleteMeDocument = gql`
+  mutation deleteMe {
+    deleteUser {
+      message
+    }
+  }
+`;
+export type DeleteMeMutationFn = Apollo.MutationFunction<
+  DeleteMeMutation,
+  DeleteMeMutationVariables
+>;
+
+/**
+ * __useDeleteMeMutation__
+ *
+ * To run a mutation, you first call `useDeleteMeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMeMutation, { data, loading, error }] = useDeleteMeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDeleteMeMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteMeMutation, DeleteMeMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteMeMutation, DeleteMeMutationVariables>(DeleteMeDocument, options);
+}
+export type DeleteMeMutationHookResult = ReturnType<typeof useDeleteMeMutation>;
+export type DeleteMeMutationResult = Apollo.MutationResult<DeleteMeMutation>;
+export type DeleteMeMutationOptions = Apollo.BaseMutationOptions<
+  DeleteMeMutation,
+  DeleteMeMutationVariables
 >;
 export const DeleteMyFeedsDocument = gql`
   mutation deleteMyFeeds($ids: [Float!]!) {
@@ -1052,9 +1457,10 @@ export type DeleteMyFeedsMutationFn = Apollo.MutationFunction<
 export function useDeleteMyFeedsMutation(
   baseOptions?: Apollo.MutationHookOptions<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<DeleteMyFeedsMutation, DeleteMyFeedsMutationVariables>(
     DeleteMyFeedsDocument,
-    baseOptions,
+    options,
   );
 }
 export type DeleteMyFeedsMutationHookResult = ReturnType<typeof useDeleteMyFeedsMutation>;
@@ -1098,9 +1504,10 @@ export type ImportFeedsMutationFn = Apollo.MutationFunction<
 export function useImportFeedsMutation(
   baseOptions?: Apollo.MutationHookOptions<ImportFeedsMutation, ImportFeedsMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<ImportFeedsMutation, ImportFeedsMutationVariables>(
     ImportFeedsDocument,
-    baseOptions,
+    options,
   );
 }
 export type ImportFeedsMutationHookResult = ReturnType<typeof useImportFeedsMutation>;
@@ -1140,7 +1547,8 @@ export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutati
 export function useLoginMutation(
   baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>,
 ) {
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
 }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
@@ -1174,7 +1582,8 @@ export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMut
 export function useLogoutMutation(
   baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>,
 ) {
-  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
 }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
@@ -1216,10 +1625,8 @@ export type RegisterMutationFn = Apollo.MutationFunction<
 export function useRegisterMutation(
   baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>,
 ) {
-  return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
-    RegisterDocument,
-    baseOptions,
-  );
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, options);
 }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
@@ -1259,10 +1666,11 @@ export function useRequestEmailVerificationMutation(
     RequestEmailVerificationMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
     RequestEmailVerificationMutation,
     RequestEmailVerificationMutationVariables
-  >(RequestEmailVerificationDocument, baseOptions);
+  >(RequestEmailVerificationDocument, options);
 }
 export type RequestEmailVerificationMutationHookResult = ReturnType<
   typeof useRequestEmailVerificationMutation
@@ -1308,9 +1716,10 @@ export function useRequestPasswordResetMutation(
     RequestPasswordResetMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>(
     RequestPasswordResetDocument,
-    baseOptions,
+    options,
   );
 }
 export type RequestPasswordResetMutationHookResult = ReturnType<
@@ -1355,9 +1764,10 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<
 export function useResetPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<ResetPasswordMutation, ResetPasswordMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<ResetPasswordMutation, ResetPasswordMutationVariables>(
     ResetPasswordDocument,
-    baseOptions,
+    options,
   );
 }
 export type ResetPasswordMutationHookResult = ReturnType<typeof useResetPasswordMutation>;
@@ -1402,9 +1812,10 @@ export type SendFeedbackMutationFn = Apollo.MutationFunction<
 export function useSendFeedbackMutation(
   baseOptions?: Apollo.MutationHookOptions<SendFeedbackMutation, SendFeedbackMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SendFeedbackMutation, SendFeedbackMutationVariables>(
     SendFeedbackDocument,
-    baseOptions,
+    options,
   );
 }
 export type SendFeedbackMutationHookResult = ReturnType<typeof useSendFeedbackMutation>;
@@ -1452,9 +1863,10 @@ export type SetFeedOptionsMutationFn = Apollo.MutationFunction<
 export function useSetFeedOptionsMutation(
   baseOptions?: Apollo.MutationHookOptions<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SetFeedOptionsMutation, SetFeedOptionsMutationVariables>(
     SetFeedOptionsDocument,
-    baseOptions,
+    options,
   );
 }
 export type SetFeedOptionsMutationHookResult = ReturnType<typeof useSetFeedOptionsMutation>;
@@ -1501,9 +1913,10 @@ export function useSetLastViewedItemDateMutation(
     SetLastViewedItemDateMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SetLastViewedItemDateMutation, SetLastViewedItemDateMutationVariables>(
     SetLastViewedItemDateDocument,
-    baseOptions,
+    options,
   );
 }
 export type SetLastViewedItemDateMutationHookResult = ReturnType<
@@ -1554,9 +1967,10 @@ export type SetOptionsMutationFn = Apollo.MutationFunction<
 export function useSetOptionsMutation(
   baseOptions?: Apollo.MutationHookOptions<SetOptionsMutation, SetOptionsMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<SetOptionsMutation, SetOptionsMutationVariables>(
     SetOptionsDocument,
-    baseOptions,
+    options,
   );
 }
 export type SetOptionsMutationHookResult = ReturnType<typeof useSetOptionsMutation>;
@@ -1599,9 +2013,10 @@ export function useUnsubscribeByTokenMutation(
     UnsubscribeByTokenMutationVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UnsubscribeByTokenMutation, UnsubscribeByTokenMutationVariables>(
     UnsubscribeByTokenDocument,
-    baseOptions,
+    options,
   );
 }
 export type UnsubscribeByTokenMutationHookResult = ReturnType<typeof useUnsubscribeByTokenMutation>;
@@ -1643,9 +2058,10 @@ export type UpdateUserInfoMutationFn = Apollo.MutationFunction<
 export function useUpdateUserInfoMutation(
   baseOptions?: Apollo.MutationHookOptions<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<UpdateUserInfoMutation, UpdateUserInfoMutationVariables>(
     UpdateUserInfoDocument,
-    baseOptions,
+    options,
   );
 }
 export type UpdateUserInfoMutationHookResult = ReturnType<typeof useUpdateUserInfoMutation>;
@@ -1688,9 +2104,10 @@ export type VerifyEmailMutationFn = Apollo.MutationFunction<
 export function useVerifyEmailMutation(
   baseOptions?: Apollo.MutationHookOptions<VerifyEmailMutation, VerifyEmailMutationVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<VerifyEmailMutation, VerifyEmailMutationVariables>(
     VerifyEmailDocument,
-    baseOptions,
+    options,
   );
 }
 export type VerifyEmailMutationHookResult = ReturnType<typeof useVerifyEmailMutation>;
@@ -1730,9 +2147,10 @@ export const GetFeedInfoByTokenDocument = gql`
 export function useGetFeedInfoByTokenQuery(
   baseOptions: Apollo.QueryHookOptions<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(
     GetFeedInfoByTokenDocument,
-    baseOptions,
+    options,
   );
 }
 export function useGetFeedInfoByTokenLazyQuery(
@@ -1741,9 +2159,10 @@ export function useGetFeedInfoByTokenLazyQuery(
     GetFeedInfoByTokenQueryVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<GetFeedInfoByTokenQuery, GetFeedInfoByTokenQueryVariables>(
     GetFeedInfoByTokenDocument,
-    baseOptions,
+    options,
   );
 }
 export type GetFeedInfoByTokenQueryHookResult = ReturnType<typeof useGetFeedInfoByTokenQuery>;
@@ -1783,17 +2202,19 @@ export const ImportStatusDocument = gql`
 export function useImportStatusQuery(
   baseOptions?: Apollo.QueryHookOptions<ImportStatusQuery, ImportStatusQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<ImportStatusQuery, ImportStatusQueryVariables>(
     ImportStatusDocument,
-    baseOptions,
+    options,
   );
 }
 export function useImportStatusLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<ImportStatusQuery, ImportStatusQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<ImportStatusQuery, ImportStatusQueryVariables>(
     ImportStatusDocument,
-    baseOptions,
+    options,
   );
 }
 export type ImportStatusQueryHookResult = ReturnType<typeof useImportStatusQuery>;
@@ -1827,12 +2248,14 @@ export const MeDocument = gql`
  * });
  */
 export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
 }
 export function useMeLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>,
 ) {
-  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
 }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
@@ -1871,17 +2294,16 @@ export const MyFeedItemsDocument = gql`
 export function useMyFeedItemsQuery(
   baseOptions: Apollo.QueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>,
 ) {
-  return Apollo.useQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(
-    MyFeedItemsDocument,
-    baseOptions,
-  );
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(MyFeedItemsDocument, options);
 }
 export function useMyFeedItemsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MyFeedItemsQuery, MyFeedItemsQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<MyFeedItemsQuery, MyFeedItemsQueryVariables>(
     MyFeedItemsDocument,
-    baseOptions,
+    options,
   );
 }
 export type MyFeedItemsQueryHookResult = ReturnType<typeof useMyFeedItemsQuery>;
@@ -1921,12 +2343,14 @@ export const MyFeedsDocument = gql`
 export function useMyFeedsQuery(
   baseOptions?: Apollo.QueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>,
 ) {
-  return Apollo.useQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, options);
 }
 export function useMyFeedsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsQuery, MyFeedsQueryVariables>,
 ) {
-  return Apollo.useLazyQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MyFeedsQuery, MyFeedsQueryVariables>(MyFeedsDocument, options);
 }
 export type MyFeedsQueryHookResult = ReturnType<typeof useMyFeedsQuery>;
 export type MyFeedsLazyQueryHookResult = ReturnType<typeof useMyFeedsLazyQuery>;
@@ -1957,17 +2381,19 @@ export const MyFeedsCountDocument = gql`
 export function useMyFeedsCountQuery(
   baseOptions?: Apollo.QueryHookOptions<MyFeedsCountQuery, MyFeedsCountQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<MyFeedsCountQuery, MyFeedsCountQueryVariables>(
     MyFeedsCountDocument,
-    baseOptions,
+    options,
   );
 }
 export function useMyFeedsCountLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MyFeedsCountQuery, MyFeedsCountQueryVariables>,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<MyFeedsCountQuery, MyFeedsCountQueryVariables>(
     MyFeedsCountDocument,
-    baseOptions,
+    options,
   );
 }
 export type MyFeedsCountQueryHookResult = ReturnType<typeof useMyFeedsCountQuery>;
@@ -2003,15 +2429,14 @@ export const MyOptionsDocument = gql`
 export function useMyOptionsQuery(
   baseOptions?: Apollo.QueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>,
 ) {
-  return Apollo.useQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, baseOptions);
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, options);
 }
 export function useMyOptionsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<MyOptionsQuery, MyOptionsQueryVariables>,
 ) {
-  return Apollo.useLazyQuery<MyOptionsQuery, MyOptionsQueryVariables>(
-    MyOptionsDocument,
-    baseOptions,
-  );
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MyOptionsQuery, MyOptionsQueryVariables>(MyOptionsDocument, options);
 }
 export type MyOptionsQueryHookResult = ReturnType<typeof useMyOptionsQuery>;
 export type MyOptionsLazyQueryHookResult = ReturnType<typeof useMyOptionsLazyQuery>;
@@ -2046,10 +2471,11 @@ export function useItemsCountUpdatedSubscription(
     ItemsCountUpdatedSubscriptionVariables
   >,
 ) {
+  const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSubscription<
     ItemsCountUpdatedSubscription,
     ItemsCountUpdatedSubscriptionVariables
-  >(ItemsCountUpdatedDocument, baseOptions);
+  >(ItemsCountUpdatedDocument, options);
 }
 export type ItemsCountUpdatedSubscriptionHookResult = ReturnType<
   typeof useItemsCountUpdatedSubscription

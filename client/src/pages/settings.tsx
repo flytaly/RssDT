@@ -14,11 +14,14 @@ import {
   Theme,
   useMeQuery,
   useMyOptionsQuery,
+  useDeleteMeMutation,
 } from '../generated/graphql';
 import shareProviders from '../share-providers';
 import useAuthRoute from '../hooks/use-auth-route';
 // import { ShareId } from '../types';
 import { useSetPartialOptionsMutation } from '../hooks/use-set-option-mutation';
+import Spinner from '../components/spinner';
+import { useRouter } from 'next/router';
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);
 
@@ -36,9 +39,13 @@ const SettingsPage: NextPage = () => {
   useAuthRoute();
   const meData = useMeQuery();
   const { data, loading } = useMyOptionsQuery();
+  const [deleteMe, deleteMeResult] = useDeleteMeMutation();
+  const router = useRouter();
   const [itemSaving, setItemSaving] = useState<Partial<Record<keyof OptionsInput, boolean>>>({});
   const [itemError, setItemError] = useState<Partial<Record<keyof OptionsInput, string>>>({});
   const [saveOptions] = useSetPartialOptionsMutation();
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [isDeleteDisabled, setIsDeleteDisabled] = useState(true);
 
   if (!meData.data?.me) return null;
   const { email, timeZone, locale } = meData.data.me;
@@ -67,15 +74,32 @@ const SettingsPage: NextPage = () => {
     await save('shareList', nextShare);
   };
 
+  const showAccDeletionBlock = () => {
+    setDeleteConfirmation(true);
+    setTimeout(() => setIsDeleteDisabled(false), 1000);
+  };
+
+  const hideAccDeletionBlock = () => {
+    setDeleteConfirmation(false);
+    setIsDeleteDisabled(true);
+  };
+
+  const deleteAndLogout = async () => {
+    const res = await deleteMe();
+    if (res.data?.deleteUser.message == 'OK') {
+      router.replace('/logout');
+    }
+  };
+
   return (
     <Layout>
       <MainCard big onlyWithVerifiedEmail>
-        <div className="w-full pb-4">
+        <div className="w-full pb-20">
           <SettingsNavBar />
           <div className="mx-auto w-160 max-w-full">
             <section className="flex flex-col p-4">
               <h2 id="info" className="font-bold text-base my-2 border-b border-gray-300">
-                Account Information
+                Account Information and Settings
               </h2>
               <Item title="Email">{email}</Item>
               <Item title="Timezone">{timeZone}</Item>
@@ -217,6 +241,49 @@ const SettingsPage: NextPage = () => {
                 </Item>
               </section>
             )}
+            <section className="mt-10">
+              <h2 id="actions" className="font-bold text-base my-2 border-b border-gray-300">
+                Actions
+              </h2>
+              <Item title="Deletion">
+                {!deleteConfirmation ? (
+                  <button
+                    type="button"
+                    onClick={showAccDeletionBlock}
+                    className="p-1 border-2 border-gray hover:text-red-600 hover:border-red-600 active:brightness-125"
+                  >
+                    Delete the account
+                  </button>
+                ) : (
+                  <div className="text-lg w-full text-center">
+                    <div className="font-bold text-red-600">
+                      Are you sure you want want to delete your account?
+                    </div>
+                    <div className="flex space-x-8 mt-4 justify-center">
+                      <button
+                        className="border-2 border-gray text-black px-2 hover:border-black active:border-gray"
+                        onClick={hideAccDeletionBlock || deleteMeResult.loading}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="border-2 border-red-600 text-red-600 px-2 hover:border-primary hover:text-primary active:brightness-125 disabled:text-gray-500 disabled:border-gray-500 transition-colors"
+                        onClick={() => deleteAndLogout()}
+                        disabled={isDeleteDisabled}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div className="mt-4 space-y-2">
+                      {deleteMeResult.loading ? <Spinner /> : null}
+                      <div>
+                        {deleteMeResult.data?.deleteUser.message || deleteMeResult.error?.message}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </Item>
+            </section>
           </div>
         </div>
       </MainCard>

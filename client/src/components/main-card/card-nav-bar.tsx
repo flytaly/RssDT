@@ -20,10 +20,10 @@ const CardNavBar: React.FC<{ title: string; routes: CardRoute[]; activePath: str
     <header className="flex justify-between items-start border-b border-gray pt-1 pb-2 pl-4 pr-2">
       <div>
         <div className="text-lg text-primary-dark font-bold">{title}</div>
-        <nav className="flex text-sm">
+        <nav className="flex text-sm space-x-4">
           {routes.map((r) => (
             <Link key={r.path} href={r.path}>
-              <a className={`mr-3 hover-underline-link ${r.path === activePath ? 'active' : ''}`}>
+              <a className={`hover-underline-link ${r.path === activePath ? 'active' : ''}`}>
                 {r.name}
               </a>
             </Link>

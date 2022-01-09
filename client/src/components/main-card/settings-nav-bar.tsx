@@ -11,6 +11,10 @@ const routes: CardRoute[] = [
     name: 'Digest settings',
     path: '/settings/#digest',
   },
+  {
+    name: 'Actions',
+    path: '/settings/#actions',
+  },
 ];
 
 const SettingsNavBar = () => {
