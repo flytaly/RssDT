@@ -1,8 +1,0 @@
-# syntax = edrevo/dockerfile-plus
-
-INCLUDE+ docker/Dockerfile.common
-
-EXPOSE 8080
-CMD ["pm2-runtime", "pm2.config.cjs", "--only", "api"]
-USER node
-

@@ -1,11 +1,10 @@
-FROM node:14
+FROM node:17
 
 # Create app directory
 WORKDIR /usr/src/app
 
 VOLUME /usr/src/app/log
 
-RUN npm install pm2 -g
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -21,3 +20,5 @@ COPY .env.production .env
 ENV NODE_ENV production
 
 RUN npm run build
+
+USER node
