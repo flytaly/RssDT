@@ -1,6 +1,6 @@
 import ioRedis from 'ioredis';
 import redisMock from 'ioredis-mock';
-import { IS_TEST } from './constants.js';
+import { IS_TEST, redisOptions } from './constants.js';
 
 const Redis = !IS_TEST ? ioRedis : redisMock;
 
@@ -9,11 +9,7 @@ const Redis = !IS_TEST ? ioRedis : redisMock;
 // Redis = require('ioredis-mock');
 // }
 
-export const redisOptions: ioRedis.RedisOptions = {
-  host: process.env.REDIS_HOST,
-  port: +process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-};
+export const createRedis = (opts: ioRedis.RedisOptions = {}) =>
+  new Redis({ redisOptions, ...opts });
 
-export const createRedis = () => new Redis(redisOptions);
 export const redis = createRedis();

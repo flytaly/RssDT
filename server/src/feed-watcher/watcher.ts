@@ -4,7 +4,8 @@ import PQueue from 'p-queue';
 import { throttleMultiplier } from '../constants.js';
 import { buildAndSendDigests } from '../digests/build-and-send.js';
 import { logger } from '../logger.js';
-import { createRedis, redisOptions } from '../redis.js';
+import { createRedis } from '../redis.js';
+import { redisOptions } from '../constants.js';
 import { NewItemsPayload, PubSubTopics } from '../resolvers/resolver-types/pubSubTopics.js';
 import { getFeedsToUpdate, updateFeedData } from './watcher-utils.js';
 

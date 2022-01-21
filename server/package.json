@@ -19,14 +19,17 @@
     "test:watch": "ava ./dist/**/*.test.js -v --serial --watch",
     "test:codegen": "graphql-codegen --config codegen.yml",
     "getEnvType": "npx gen-env-types .env -o src/types/env.d.ts -e .",
-    "feed-watcher": "node dist/feed-watcher/start-watcher.js | bunyan -o short",
-    "feed-watcher:dev": "nodemon dist/feed-watcher/start-watcher.js | bunyan -o short"
+    "feed-watcher": "node dist/feed-watcher/start-watcher.js",
+    "feed-watcher:dev": "nodemon dist/feed-watcher/start-watcher.js | bunyan -o short",
+    "mail-worker": "node dist/mail/mail.worker.js",
+    "mail-worker:dev": "node dist/mail/mail.worker.js | bunyan -o short"
   },
   "dependencies": {
     "@graphql-tools/schema": "^8.3.1",
     "apollo-server-express": "^3.6.1",
     "argon2": "^0.28.3",
     "axios": "^0.24.0",
+    "bullmq": "^1.64.2",
     "bunyan": "^1.8.15",
     "cheerio": "^1.0.0-rc.5",
     "connect-redis": "^6.0.0",

@@ -1,3 +1,4 @@
+import type Redis from 'ioredis';
 import { DigestSchedule } from './types/enums.js';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
@@ -31,6 +32,12 @@ export const scheduleHours: Record<DigestSchedule, number> = {
   every12hours: 12,
   daily: 24,
   disable: 0,
+};
+
+export const redisOptions: Redis.RedisOptions = {
+  host: process.env.REDIS_HOST,
+  port: +process.env.REDIS_PORT,
+  password: process.env.REDIS_PASSWORD,
 };
 
 export const UserAgent =
