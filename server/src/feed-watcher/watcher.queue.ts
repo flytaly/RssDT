@@ -14,13 +14,17 @@ export class WatcherQueue {
   queueMock: sinon.SinonMock;
 
   constructor(opts: QueueOptions = {}) {
+    const connection = opts?.connection
+      ? opts.connection
+      : createRedis({ maxRetriesPerRequest: null });
+
     this.queue = new Queue<UpdateFeed>(config.queueName, {
-      connection: createRedis({ maxRetriesPerRequest: null }),
       defaultJobOptions: {
         removeOnComplete: true,
         removeOnFail: true,
       },
       ...opts,
+      connection,
     });
 
     if (IS_TEST) {
@@ -32,8 +36,9 @@ export class WatcherQueue {
     await this.queue.add(jobName, data, jobOpts);
   }
 
-  async enqueueFeed(feed: { id: number | string; url: string; throttled: number }) {
+  async enqueueFeed(feed: { id: number | string; url: string; throttled: number }, log = true) {
     const id = String(feed.id);
+    if (log) logger.info({ url: feed.url }, 'Enqueue feed');
     return this.enqueue(
       'update-feed',
       { id, feedUrl: feed.url },

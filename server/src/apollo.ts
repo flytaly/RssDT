@@ -5,6 +5,7 @@ import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
 import { redisOptions } from './constants.js';
+import { WatcherQueue } from './feed-watcher/watcher.queue.js';
 import { createRedis } from './redis.js';
 import { FeedResolver } from './resolvers/feed.js';
 import { MailResolver } from './resolvers/mail.js';
@@ -26,6 +27,8 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
     pubSub: pubsub,
   });
 
+  const watcherQueue = new WatcherQueue({ connection: redis });
+
   const apolloServer = new ApolloServer({
     schema,
     plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
@@ -36,6 +39,7 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
         redis,
         itemCountLoader: createItemCountLoader(),
         pubsub,
+        watcherQueue,
       };
     },
   });

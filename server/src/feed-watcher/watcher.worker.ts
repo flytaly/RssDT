@@ -57,7 +57,7 @@ export async function start() {
 
   const feeds = await getFeedsToUpdate();
 
-  await Promise.all(feeds.map((f) => watcherQueue.enqueueFeed(f)));
+  await Promise.all(feeds.map((f) => watcherQueue.enqueueFeed(f, false)));
 
   logger.info('Feed watcher worker listening for jobs');
 

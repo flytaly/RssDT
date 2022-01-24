@@ -60,6 +60,7 @@ interface CreateUserFeedArgs {
   user?: User | null;
   userInfo?: UserInfo | null;
   feedOpts?: UserFeedOptionsInput;
+  onSuccess?: (uf: UserFeed, feed: Feed) => Promise<unknown>;
 }
 
 /** Creates userFeed record and upsert feed and user records based on url and email respectively */
@@ -69,6 +70,7 @@ export const createUserFeed = async ({
   user,
   userInfo,
   feedOpts,
+  onSuccess,
 }: CreateUserFeedArgs) => {
   if (!email && !user) throw new Error('Not enough arguments to create new user feed');
   const isLoggedIn = Boolean(!email && user);
@@ -121,7 +123,7 @@ export const createUserFeed = async ({
     }
     await qR.manager.save(userFeed);
     await qR.commitTransaction();
-    if (!activate && !IS_TEST) updateFeedIcons(feed, true); // update asynchronously without waiting
+    if (!activate && !IS_TEST) void updateFeedIcons(feed, true); // update asynchronously without waiting
   } catch (err) {
     const field = err.message === 'feed was already added' ? 'url' : '';
     errors = [new ArgumentError(field, err.message)];
@@ -129,6 +131,8 @@ export const createUserFeed = async ({
   } finally {
     await qR.release();
   }
+
+  if (onSuccess && !errors && userFeed) void onSuccess?.(userFeed, userFeed.feed as Feed);
 
   return { errors, userFeed: errors ? null : userFeed, feed, user };
 };

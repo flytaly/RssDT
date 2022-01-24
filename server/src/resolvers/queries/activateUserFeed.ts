@@ -2,9 +2,11 @@ import { getConnection } from 'typeorm';
 // eslint-disable-next-line import/extensions
 import { Feed, User, UserFeed } from '#entities';
 
-import { updateFeedData } from '../../feed-watcher/watcher-utils.js';
-
-export async function activateUserFeed(userFeedId: number, userId?: number) {
+export async function activateUserFeed(
+  userFeedId: number,
+  userId: number | null,
+  onSuccess?: (uf: UserFeed, feed: Feed) => Promise<unknown>,
+) {
   const qb = getConnection().createQueryBuilder();
 
   // Update UserFeed
@@ -31,8 +33,7 @@ export async function activateUserFeed(userFeedId: number, userId?: number) {
   // Update User
   await qb.update(User).set({ emailVerified: true }).where({ id: userFeed.userId }).execute();
 
-  // don't await intentionally
-  updateFeedData(feed.url, true);
+  await onSuccess?.(userFeed, feed);
 
   return { userFeed };
 }
