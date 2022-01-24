@@ -1,29 +1,55 @@
 import { QueueScheduler, Worker } from 'bullmq';
-import './mail.initialize.js';
-import { logger } from '../logger.js';
-import config from './config.js';
+import '../dotenv.js';
+import { initLogFiles, logger } from '../logger.js';
 import { createRedis } from '../redis.js';
+import config from './mail.config.js';
+import mailProcessor from './mail.processor.js';
 
-export const worker = new Worker(
-  config.queueName, //
-  __dirname + '/mail.proccessor.js',
-  {
+export let worker: Worker;
+export let scheduler: QueueScheduler;
+
+function createWorker() {
+  worker = new Worker(
+    config.queueName, //
+    mailProcessor,
+    {
+      connection: createRedis({ maxRetriesPerRequest: null }),
+      concurrency: config.concurrency,
+      limiter: config.limiter,
+    },
+  );
+
+  worker.on('failed', (job, err) => {
+    logger.error(err, job.data, 'job failed');
+  });
+
+  worker.on('error', (err) => {
+    logger.error(err, 'email worker error');
+  });
+
+  scheduler = new QueueScheduler(config.queueName, {
     connection: createRedis({ maxRetriesPerRequest: null }),
-    concurrency: config.concurrency,
-    limiter: config.limiter,
-  },
-);
+  });
+}
 
-worker.on('failed', (job, err) => {
-  logger.error(err, job.data, 'job failed');
-});
+export async function start() {
+  initLogFiles({ prefix: 'mail_', name: 'mail' });
 
-worker.on('error', (err) => {
-  logger.error(err, 'email worker error');
-});
+  createWorker();
 
-export const scheduler = new QueueScheduler(config.queueName, {
-  connection: config.connection,
-});
+  logger.info('Mail worker listening for jobs');
 
-logger.info('Mail worker listening for jobs');
+  const exit = async () => {
+    await worker.close();
+    await scheduler.close();
+    process.exit();
+  };
+
+  // catches ctrl+c event
+  process.on('SIGINT', exit);
+  // catches "kill pid" (for example: nodemon restart)
+  process.on('SIGUSR1', exit);
+  process.on('SIGUSR2', exit);
+}
+
+start();

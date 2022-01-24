@@ -1,6 +1,6 @@
 import { Queue } from 'bullmq';
 import type { JobsOptions, QueueOptions } from 'bullmq';
-import config from './config.js';
+import config from './mail.config.js';
 import type { SimpleMail } from './mail.interface';
 import { logger } from '../logger.js';
 import { createRedis } from '../redis.js';

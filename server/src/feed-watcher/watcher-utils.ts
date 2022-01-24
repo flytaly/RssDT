@@ -1,9 +1,16 @@
+import { Enclosure, Feed, IEnclosure, Item } from '#entities';
+import { RepeatOptions } from 'bullmq';
 import moment from 'moment';
 import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
-import { Enclosure, Feed, Item, IEnclosure } from '#entities';
-import { FEED_LOCK_URL_PREFIX, IS_TEST, maxItemsInFeed, maxOldItemsInFeed } from '../constants.js';
-import { getNewItems } from '../feed-parser/index.js';
+import {
+  feedUpdateInterval,
+  FEED_LOCK_URL_PREFIX,
+  IS_TEST,
+  maxItemsInFeed,
+  maxOldItemsInFeed,
+} from '../constants.js';
 import { createSanitizedItem } from '../feed-parser/filter-item.js';
+import { getNewItems } from '../feed-parser/index.js';
 import { logger } from '../logger.js';
 import { redis } from '../redis.js';
 
@@ -15,7 +22,7 @@ export type PartialFeed = {
   lastSuccessfulUpd: Date;
 };
 
-export let getFeedsToUpdate = (minutes = 4) =>
+export let getFeedsToUpdate = (minutes = 0) =>
   getConnection()
     .getRepository(Feed)
     .find({
@@ -27,12 +34,16 @@ export let getFeedsToUpdate = (minutes = 4) =>
       where: [
         {
           activated: true,
-          lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * minutes)),
+          ...(minutes
+            ? {
+                lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * minutes)),
+              }
+            : {}),
         },
       ],
     }) as Promise<PartialFeed[]>;
 
-enum Status {
+export enum Status {
   Success = 1,
   Fail = 0,
 }
@@ -105,15 +116,22 @@ export const deleteOldItems = async (
   return 0;
 };
 
-export let updateFeedData = async (url: string, skipRecent = false) => {
+export type UpdateFeedResult = readonly [Status, number, Feed | undefined | null];
+
+/**
+ * @param url - Feed URL
+ * @param skipRecent - skip update if the feed was already updated recently
+ */
+export let updateFeedData = async (url: string, skipRecent = false): Promise<UpdateFeedResult> => {
   let newItemsNum = 0;
   let deletedItemsNum = 0;
   let status: Status = Status.Fail;
+  if (!url) return [status, newItemsNum, null];
 
   const lockKey = FEED_LOCK_URL_PREFIX + url;
   if ((await redis.get(lockKey)) === 'lock') {
     logger.info({ url }, 'feed is locked. skip');
-    return [newItemsNum, deletedItemsNum] as const;
+    return [status, newItemsNum, null];
   }
   await redis.set(lockKey, 'lock', 'EX', 60 * 4);
 
@@ -148,13 +166,17 @@ export let updateFeedData = async (url: string, skipRecent = false) => {
       logger.error({ url }, `feed wasn't updated: ${error.message}`);
       if (IS_TEST) throw error;
 
-      feed.throttled = Math.min(10, feed.throttled + 1);
+      feed.throttled = Math.min(6, feed.throttled + 1);
       await feed.save();
     }
   }
 
   await redis.del(lockKey);
-  return [status, newItemsNum] as const;
+  return [status, newItemsNum, feed];
+};
+
+export const getFeedUpdateInterval = (throttled = 0): RepeatOptions['every'] => {
+  return throttled ? feedUpdateInterval * throttled : feedUpdateInterval;
 };
 
 export const mockWatcherUtils = ({

@@ -234,6 +234,7 @@ export class UserFeedResolver {
     // Get user feed ids to skip users without updates and pass ids inside context.
     // This way there would be only one db query.
     filter: async ({ payload, context }) => {
+      console.log('filter triggerred');
       const userId = (context as MyContext).req?.session?.userId;
       if (!userId) return false;
       const resp = await updatedFeedLoader.load({

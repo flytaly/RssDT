@@ -1,6 +1,4 @@
 import { Job } from 'bullmq';
-import './mail.initialize.js';
-// -------------
 import { logger } from '../logger.js';
 import type { SimpleMail } from './mail.interface';
 import { transport } from './transport.js';

@@ -1,0 +1,74 @@
+import type { JobsOptions, QueueOptions } from 'bullmq';
+import { BulkJobOptions, Queue, RepeatOptions } from 'bullmq';
+import sinon from 'sinon';
+import { IS_DEV, IS_TEST } from '../constants.js';
+import { logger } from '../logger.js';
+import { createRedis } from '../redis.js';
+import { getFeedUpdateInterval } from './watcher-utils.js';
+import config from './watcher.config.js';
+import { UpdateFeed } from './watcher.interface.js';
+
+export class WatcherQueue {
+  queue: Queue;
+
+  queueMock: sinon.SinonMock;
+
+  constructor(opts: QueueOptions = {}) {
+    this.queue = new Queue<UpdateFeed>(config.queueName, {
+      connection: createRedis({ maxRetriesPerRequest: null }),
+      defaultJobOptions: {
+        removeOnComplete: true,
+        removeOnFail: true,
+      },
+      ...opts,
+    });
+
+    if (IS_TEST) {
+      this.queueMock = sinon.mock(this.queue);
+    }
+  }
+
+  async enqueue(jobName: string, data: UpdateFeed, jobOpts?: JobsOptions) {
+    await this.queue.add(jobName, data, jobOpts);
+  }
+
+  async enqueueFeed(feed: { id: number | string; url: string; throttled: number }) {
+    const id = String(feed.id);
+    return this.enqueue(
+      'update-feed',
+      { id, feedUrl: feed.url },
+      {
+        repeat: {
+          jobId: id,
+          every: getFeedUpdateInterval(feed.throttled),
+          immediately: IS_DEV || undefined,
+        },
+      },
+    );
+  }
+
+  async addBulk(
+    jobs: {
+      name: string;
+      data: UpdateFeed;
+      opts?: BulkJobOptions;
+    }[] = [],
+  ) {
+    await this.queue.addBulk(jobs);
+
+    logger.info(`Enqueued ${jobs.length} feeds`);
+  }
+
+  async removeRepeatable(name: string, opts: RepeatOptions, jobId?: string) {
+    this.queue.removeRepeatable(name, opts, jobId);
+  }
+
+  async clearAllRepeatables() {
+    const jobs = await this.queue.getRepeatableJobs();
+    return Promise.all(jobs.map((j) => this.queue.removeRepeatableByKey(j.key)));
+  }
+
+  close() {
+    return this.queue.close();
+  }
+}

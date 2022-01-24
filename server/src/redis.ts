@@ -9,7 +9,7 @@ const Redis = !IS_TEST ? ioRedis : redisMock;
 // Redis = require('ioredis-mock');
 // }
 
-export const createRedis = (opts: ioRedis.RedisOptions = {}) =>
+export const createRedis = (opts: ioRedis.RedisOptions = {}): ioRedis.Redis =>
   new Redis({ redisOptions, ...opts });
 
 export const redis = createRedis();

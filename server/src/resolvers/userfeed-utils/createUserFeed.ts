@@ -62,9 +62,7 @@ interface CreateUserFeedArgs {
   feedOpts?: UserFeedOptionsInput;
 }
 
-/**
- * Creates userFeed record and upsert feed and user records based on url and email respectively.
- */
+/** Creates userFeed record and upsert feed and user records based on url and email respectively */
 export const createUserFeed = async ({
   url: $url,
   email,
