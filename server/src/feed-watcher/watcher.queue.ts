@@ -8,12 +8,23 @@ import { getFeedUpdateInterval } from './watcher-utils.js';
 import config from './watcher.config.js';
 import { UpdateFeed } from './watcher.interface.js';
 
+const createFakeQ = () =>
+  ({
+    add: sinon.fake(),
+    removeRepeatable: sinon.fake(),
+    removeRepeatableByKey: sinon.fake(),
+    getRepeatableJobs: sinon.fake(async () => []),
+  } as unknown as Queue);
+
 export class WatcherQueue {
   queue: Queue;
 
-  queueMock: sinon.SinonMock;
-
   constructor(opts: QueueOptions = {}) {
+    if (IS_TEST) {
+      this.queue = createFakeQ();
+      return;
+    }
+
     const connection = opts?.connection
       ? opts.connection
       : createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false });
@@ -26,10 +37,6 @@ export class WatcherQueue {
       ...opts,
       connection,
     });
-
-    if (IS_TEST) {
-      this.queueMock = sinon.mock(this.queue);
-    }
   }
 
   async enqueue(jobName: string, data: UpdateFeed, jobOpts?: JobsOptions) {
