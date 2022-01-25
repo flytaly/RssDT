@@ -13,7 +13,7 @@ function createWorker() {
     config.queueName, //
     mailProcessor,
     {
-      connection: createRedis({ maxRetriesPerRequest: null }),
+      connection: createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false }),
       concurrency: config.concurrency,
       limiter: config.limiter,
     },
@@ -28,7 +28,7 @@ function createWorker() {
   });
 
   scheduler = new QueueScheduler(config.queueName, {
-    connection: createRedis({ maxRetriesPerRequest: null }),
+    connection: createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false }),
   });
 }
 

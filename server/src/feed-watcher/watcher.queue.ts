@@ -16,7 +16,7 @@ export class WatcherQueue {
   constructor(opts: QueueOptions = {}) {
     const connection = opts?.connection
       ? opts.connection
-      : createRedis({ maxRetriesPerRequest: null });
+      : createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false });
 
     this.queue = new Queue<UpdateFeed>(config.queueName, {
       defaultJobOptions: {

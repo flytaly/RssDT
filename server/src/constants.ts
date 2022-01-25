@@ -34,11 +34,7 @@ export const scheduleHours: Record<DigestSchedule, number> = {
   disable: 0,
 };
 
-export const redisOptions: Redis.RedisOptions = {
-  host: process.env.REDIS_HOST,
-  port: +process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD,
-};
+export const redisUrl = process.env.REDIS_URL;
 
 export const UserAgent =
   'Mozilla/5.0 (X11; Linux x86_64) ' +

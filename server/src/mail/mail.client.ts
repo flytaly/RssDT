@@ -13,7 +13,10 @@ export class MailClient {
   constructor(opts: QueueOptions = {}) {
     if (IS_TEST) return;
     this.queue = new Queue<SimpleMail>(config.queueName, {
-      connection: createRedis({ maxRetriesPerRequest: null }),
+      connection: createRedis({
+        maxRetriesPerRequest: null,
+        enableReadyCheck: false,
+      }),
       defaultJobOptions: {
         attempts: 3,
         backoff: { type: 'exponential', delay: 1000 },
