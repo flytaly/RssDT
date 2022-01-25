@@ -18,13 +18,15 @@ export let pubSub: RedisPubSub;
 
 async function initQueue(clearJobs = true) {
   watcherQueue = new WatcherQueue();
-  pubSub = new RedisPubSub({ publisher: createRedis() });
+  pubSub = new RedisPubSub({
+    publisher: createRedis(),
+    subscriber: createRedis(),
+  });
   if (clearJobs) await watcherQueue.clearAllRepeatables();
 }
 
 async function createWorkerAndQueue(clearJobs = true) {
   await initQueue(clearJobs);
-
   worker = new Worker(
     config.queueName, //
     watcherProcessor(watcherQueue, pubSub),

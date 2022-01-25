@@ -2,7 +2,7 @@ import ioRedis from 'ioredis';
 import redisMock from 'ioredis-mock';
 import { IS_TEST } from './constants.js';
 
-const Redis  = !IS_TEST ? ioRedis : redisMock;
+const Redis = !IS_TEST ? ioRedis : redisMock;
 
 // if (IS_TEST) {
 // eslint-disable-next-line global-require
