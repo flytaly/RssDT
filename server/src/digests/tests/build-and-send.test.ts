@@ -90,6 +90,7 @@ test.serial(
     await generateItemEntity(feed.id, new Date(Date.now() - hour * 48));
     await buildAndSendDigests(feed.id);
 
+    // @ts-ignore
     const itemsPassed: Item[] = $composeDigest.lastCall.args[2];
     t.is(itemsPassed.length, newItems.length);
     const ids = new Set(newItems.map((i) => i.id));
@@ -107,6 +108,7 @@ test.serial('should filter items', async (t) => {
   await userFeed.save();
   await buildAndSendDigests(feed.id);
 
+  // @ts-ignore
   const itemsPassed: Item[] = $composeDigest.lastCall.args[2];
   t.is(itemsPassed.length, 2);
   const ids = new Set(newItems.map((i) => i.id).slice(1));

@@ -4,7 +4,8 @@ import { Express } from 'express';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
-import { createRedis, redisOptions } from './redis.js';
+import { WatcherQueue } from './feed-watcher/watcher.queue.js';
+import { createRedis } from './redis.js';
 import { FeedResolver } from './resolvers/feed.js';
 import { MailResolver } from './resolvers/mail.js';
 import { UserResolver } from './resolvers/user.js';
@@ -16,7 +17,6 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
   const pubsub = new RedisPubSub({
     publisher: createRedis(),
     subscriber: createRedis(),
-    connection: redisOptions,
   });
 
   const schema = await buildSchema({
@@ -24,6 +24,8 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
     validate: false,
     pubSub: pubsub,
   });
+
+  const watcherQueue = new WatcherQueue();
 
   const apolloServer = new ApolloServer({
     schema,
@@ -35,6 +37,7 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
         redis,
         itemCountLoader: createItemCountLoader(),
         pubsub,
+        watcherQueue,
       };
     },
   });

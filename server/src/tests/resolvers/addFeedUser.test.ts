@@ -52,6 +52,7 @@ async function getToken(email: string, userFeedId: number | string, t: Execution
   t.is(tokenAndId.userFeedId, String(userFeedId));
   return tokenAndId;
 }
+
 test.serial('add feed to user with not verified email and activate', async (t) => {
   const sdk = await getSdkWithLoggedInUser(testData.email, testData.password);
   const input = { feedUrl: testData.feed1.feedUrl };
@@ -61,10 +62,10 @@ test.serial('add feed to user with not verified email and activate', async (t) =
   t.falsy(errors);
   t.is(userFeed?.feed.url, testData.feed1.feedUrl);
   t.like(userFeed, { activated: false });
-
+  //
   const userFeedInDB = await UserFeed.findOne(userFeed?.id);
   t.true(uuid.validate(userFeedInDB!.unsubscribeToken));
-
+  //
   const tokenAndId = await getToken(testData.email, userFeed?.id!, t);
   const { activateFeed } = await sdk.activateFeed(tokenAndId);
   t.like(activateFeed.userFeed, { activated: true });

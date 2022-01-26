@@ -186,14 +186,14 @@ test.serial('delete user', async (t) => {
   await registerUser();
 
   const user = await User.findOne({ where: { email } });
-  t.is(user!.deleted, false)
+  t.is(user!.deleted, false);
 
   const sdk = await getSdkWithLoggedInUser(email, password);
   const resp = await sdk.deleteUser();
   t.is(resp.deleteUser?.message, 'OK');
 
-  await user!.reload()
-  t.is(user!.deleted, true)
+  await user!.reload();
+  t.is(user!.deleted, true);
 
-  await t.notThrowsAsync(UsersToBeDeleted.findOneOrFail(user!.id))
+  await t.notThrowsAsync(UsersToBeDeleted.findOneOrFail(user!.id));
 });

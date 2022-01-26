@@ -1,3 +1,4 @@
+import type Redis from 'ioredis';
 import { DigestSchedule } from './types/enums.js';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';
@@ -14,12 +15,12 @@ export const IMPORT_STATUS_PREFIX = 'import:';
 export const defaultLocale = 'en-US';
 export const defaultTimeZone = 'UTC';
 
-export const throttleMultiplier = 1000 * 60 * 8; // 8 min
-
 export const maxItemsInFeed = 500;
 export const maxItemsInDigest = 100;
 export const maxOldItemsInFeed = 30; // maximum number of items that was created more than one week ago
 export const maxItemsPerUser = 50;
+
+export const feedUpdateInterval = 1000 * 60 * 10;
 
 export const windowDuration = 3; // hours - duration of the window in which Daily digest could be sent
 export const scheduleHours: Record<DigestSchedule, number> = {
@@ -32,6 +33,8 @@ export const scheduleHours: Record<DigestSchedule, number> = {
   daily: 24,
   disable: 0,
 };
+
+export const redisUrl = process.env.REDIS_URL;
 
 export const UserAgent =
   'Mozilla/5.0 (X11; Linux x86_64) ' +

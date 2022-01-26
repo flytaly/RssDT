@@ -36,10 +36,13 @@ test.serial("update feed's data", async (t) => {
   ];
   const newMeta = { title: 'new Title', description: 'new description' };
   const fakeGetNewItems = sinon.fake(async () => ({ feedItems: newItems, feedMeta: newMeta }));
+  // @ts-ignore
   getNewItemsMock(fakeGetNewItems);
 
   await updateFeedData(feedUrl);
+  // @ts-ignore
   const url: string = fakeGetNewItems.lastCall.args[0];
+  // @ts-ignore
   const items: ItemWithPubdate[] = fakeGetNewItems.lastCall.args[1];
   t.is(url, feedUrl, 'feed url');
   t.is(items.length, oldItems.length, 'correct items length');

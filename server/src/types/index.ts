@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import type Session from 'express-session';
 import type { PubSubEngine } from 'graphql-subscriptions';
 import type { Redis } from 'ioredis';
+import type { WatcherQueue } from 'src/feed-watcher/watcher.queue.js';
 import type { createItemCountLoader } from '../utils/createItemCountLoader.js';
 
 export enum Role {
@@ -21,6 +22,7 @@ export type MyContext = {
   redis: Redis;
   itemCountLoader: ReturnType<typeof createItemCountLoader>;
   pubsub: PubSubEngine;
+  watcherQueue: WatcherQueue;
 };
 
 export type WSContext = Pick<MyContext, 'req'>;

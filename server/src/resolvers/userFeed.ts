@@ -14,7 +14,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 // eslint-disable-next-line import/extensions
-import { User, UserFeed } from '#entities';
+import { Feed, User, UserFeed } from '#entities';
 
 import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants.js';
 import { auth } from '../middlewares/auth.js';
@@ -47,6 +47,7 @@ import {
 import { createUserFeed } from './userfeed-utils/createUserFeed.js';
 import { launchFeedsImport } from './userfeed-utils/importFeeds.js';
 import { ImportStatus, ImportStatusObject } from './userfeed-utils/ImportStatus.js';
+import { updateFeedData } from '../feed-watcher/watcher-utils.js';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
 
@@ -95,7 +96,7 @@ export class UserFeedResolver {
   async addFeedToCurrentUser(
     @Arg('input') { feedUrl: url }: AddFeedInput,
     @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
-    @Ctx() { req, redis }: MyContext,
+    @Ctx() { req, redis, watcherQueue }: MyContext,
   ) {
     const { userId } = req.session;
     const userWithCount = await getUserAndCountFeeds({ userId });
@@ -104,6 +105,7 @@ export class UserFeedResolver {
       email: null,
       user: userWithCount,
       feedOpts,
+      onSuccess: (_, f: Feed) => watcherQueue.enqueueFeed(f),
     });
     if (errors) return { errors };
 
@@ -122,14 +124,17 @@ export class UserFeedResolver {
   async activateFeed(
     @Arg('token') token: string,
     @Arg('userFeedId') userFeedId: string,
-    @Ctx() { redis }: MyContext,
+    @Ctx() { redis, watcherQueue }: MyContext,
   ) {
     const key = SUBSCRIPTION_CONFIRM_PREFIX + token;
     const id = await redis.get(key);
     if (id !== userFeedId) {
       return { errors: [new ArgumentError('token', 'wrong or expired token')] };
     }
-    const result = await activateUserFeed(parseInt(userFeedId));
+    const result = await activateUserFeed(parseInt(userFeedId), null, async (_, f) => {
+      void updateFeedData(f.url, true);
+      await watcherQueue.enqueueFeed(f);
+    });
     await redis.del(key);
     return result;
   }
@@ -138,13 +143,16 @@ export class UserFeedResolver {
     that wasn't yet activated */
   @UseMiddleware(auth())
   @Mutation(() => UserFeedResponse)
-  async setFeedActivated(@Arg('userFeedId') userFeedId: number, @Ctx() { req }: MyContext) {
+  async setFeedActivated(
+    @Arg('userFeedId') userFeedId: number,
+    @Ctx() { req, watcherQueue }: MyContext,
+  ) {
     const { userId } = req.session;
     const user = await User.findOne(userId);
     if (!user?.emailVerified) {
       return { errors: [{ message: "user didn't verified email" }] };
     }
-    return activateUserFeed(userFeedId, userId);
+    return activateUserFeed(userFeedId, userId, (_, f) => watcherQueue.enqueueFeed(f));
   }
 
   /* Delete feed from current user */
@@ -234,6 +242,7 @@ export class UserFeedResolver {
     // Get user feed ids to skip users without updates and pass ids inside context.
     // This way there would be only one db query.
     filter: async ({ payload, context }) => {
+      console.log('filter triggerred');
       const userId = (context as MyContext).req?.session?.userId;
       if (!userId) return false;
       const resp = await updatedFeedLoader.load({
