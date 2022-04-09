@@ -103,7 +103,7 @@
     "faker": "^5.5.2",
     "graphql-request": "^3.4.0",
     "maildev": "^1.1.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "nock": "^13.2.2",
     "nodemailer-mock": "^1.5.8",
     "nodemon": "^2.0.7",
