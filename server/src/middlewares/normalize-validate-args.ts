@@ -39,7 +39,7 @@ export const normalizes: Record<InputType, Function> = {
   feedbackText: (arg: string) => arg?.trim(),
   feedUrl: (arg: string) => {
     return normalizeUrl(arg, {
-      defaultProtocol: 'https://',
+      defaultProtocol: 'https',
     });
   },
   locale: (locale: string) => {

@@ -107,7 +107,7 @@ export async function getFeedStream(
   // Don't find url if it's an xml page
   if (!xmlDeclaration && tryFindFeedUrl) {
     await importNormalizer();
-    const normUrl = (url_: string) => normalizeUrl(url_, { defaultProtocol: 'https://' });
+    const normUrl = (url_: string) => normalizeUrl(url_, { defaultProtocol: 'https' });
     feedUrl = findFeedUrl(body, url, normUrl);
     if (feedUrl) return getFeedStream(feedUrl, options, false);
   }
