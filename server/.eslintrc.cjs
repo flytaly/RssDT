@@ -14,7 +14,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/no-mutable-exports': 'off',
-    'import/extensions': ['error', 'ignorePackages'],
+    /* 'import/extensions': ['error', 'ignorePackages'], */
+    'import/extensions': 'off',
     'class-methods-use-this': 'off',
     'no-underscore-dangle': 'off',
     'no-param-reassign': 'off',
