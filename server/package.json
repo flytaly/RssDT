@@ -120,6 +120,7 @@
   "author": "",
   "license": "ISC",
   "imports": {
-    "#entities": "./dist/entities/index.js"
+    "#entities": "./dist/entities/index.js",
+    "#root/*": "./dist/*"
   }
 }

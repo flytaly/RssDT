@@ -1,3 +1,4 @@
+import { db } from '#root/db/db.js';
 import { Request, Response } from 'express';
 import type Session from 'express-session';
 import type { PubSubEngine } from 'graphql-subscriptions';
@@ -23,6 +24,7 @@ export type MyContext = {
   itemCountLoader: ReturnType<typeof createItemCountLoader>;
   pubsub: PubSubEngine;
   watcherQueue: WatcherQueue;
+  db: typeof db;
 };
 
 export type WSContext = Pick<MyContext, 'req'>;

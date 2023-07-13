@@ -23,7 +23,8 @@
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "paths": {
-      "#entities": ["./src/entities/index.ts"]
+      "#entities": ["./src/entities/index.ts"],
+      "#root/*": ["./src/*"]
     }
   },
   "exclude": ["node_modules", "**/__mocks__/*"],

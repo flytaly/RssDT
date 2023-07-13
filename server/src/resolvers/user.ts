@@ -1,4 +1,8 @@
+// eslint-disable-next-line import/extensions
+import { Options, User, UserFeed } from '#entities';
+import { users } from '#root/db/schema.js';
 import argon2 from 'argon2';
+import { eq } from 'drizzle-orm';
 import {
   Arg,
   Ctx,
@@ -11,9 +15,6 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-// eslint-disable-next-line import/extensions
-import { Options, User, UserFeed } from '#entities';
-
 import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants.js';
 import { logger } from '../logger.js';
 import { auth } from '../middlewares/auth.js';
@@ -23,17 +24,17 @@ import { MyContext, ReqWithSession, Role } from '../types/index.js';
 import { activateAllUserFeeds } from './queries/activateAllUserFeeds.js';
 import { createUser } from './queries/createUser.js';
 import { getUserFeeds } from './queries/getUserFeeds.js';
+import { setUserDeleted } from './queries/setUserDeleted.js';
 import { updateUser } from './queries/updateUser.js';
 import { updateUserOptions } from './queries/updateUserOptions.js';
-import { ArgumentError } from './resolver-types/errors.js';
 import { resetPasswordEmail, verificationEmail } from './resolver-types/confirmationMail.js';
+import { ArgumentError } from './resolver-types/errors.js';
 import {
   EmailPasswordInput,
   OptionsInput,
   PasswordResetInput,
   UserInfoInput,
 } from './resolver-types/inputs.js';
-import { setUserDeleted } from './queries/setUserDeleted.js';
 
 const setSession = (req: ReqWithSession, userId: number, role = Role.USER) => {
   req.session.userId = userId;
@@ -79,11 +80,14 @@ export class UserResolver {
 
   @UseMiddleware(auth())
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req }: MyContext) {
+  async me(@Ctx() { req, db }: MyContext) {
     if (!req.session.userId) return null;
-    const user = await User.findOne(req.session.userId);
-    if (user?.deleted) return null;
-    return user;
+    const userList = await db.query.users.findMany({
+      with: { options: true },
+      where: eq(users.id, req.session.userId),
+    });
+    if (userList[0]?.deleted) return null;
+    return userList[0];
   }
 
   @UseMiddleware(auth())

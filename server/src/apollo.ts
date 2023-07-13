@@ -4,6 +4,7 @@ import { Express } from 'express';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { Redis } from 'ioredis';
 import { buildSchema } from 'type-graphql';
+import { db } from '#root/db/db.js';
 import { WatcherQueue } from './feed-watcher/watcher.queue.js';
 import { createRedis } from './redis.js';
 import { FeedResolver } from './resolvers/feed.js';
@@ -38,6 +39,7 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
         itemCountLoader: createItemCountLoader(),
         pubsub,
         watcherQueue,
+        db,
       };
     },
   });
