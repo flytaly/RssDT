@@ -28,11 +28,12 @@ export const user = pgTable('user', {
   deleted: boolean('deleted'),
 });
 
-export const optionsRelations = relations(user, ({ one }) => ({
+export const userRelations = relations(user, ({ one, many }) => ({
   options: one(options, {
     fields: [user.id],
     references: [options.userId],
   }),
+  userFeeds: many(userFeed),
 }));
 
 export const themeEnum = pgEnum('theme', ['default', 'text']);
@@ -85,6 +86,7 @@ export const feed = pgTable('feed', {
 
 export const feedRelations = relations(feed, ({ many }) => ({
   items: many(item),
+  userFeeds: many(userFeed),
 }));
 
 export const item = pgTable('item', {
@@ -120,5 +122,63 @@ export const enclosureRelations = relations(enclosure, ({ one }) => ({
   item: one(item, {
     fields: [enclosure.id],
     references: [item.id],
+  }),
+}));
+
+export const digestScheduleEnum = pgEnum('digestSchedule', [
+  'realtime',
+  'everyhour',
+  'every2hours',
+  'every3hours',
+  'every6hours',
+  'every12hours',
+  'daily',
+  'disable',
+]);
+
+export const ternaryState = pgEnum('ternaryState', ['enable', 'disable', 'default']);
+
+export const userFeed = pgTable('user_feed', {
+  id: serial('id').primaryKey(),
+  activated: boolean('activated').default(false).notNull(),
+  title: varchar('title', { length: 50 }),
+  schedule: digestScheduleEnum('schedule').default('disable').notNull(),
+  withContentTable: ternaryState('withContentTable').default('default').notNull(),
+  itemBody: ternaryState('itemBody').default('default').notNull(),
+  attachments: ternaryState('attachments').default('default').notNull(),
+  theme: themeEnum('theme').default('default').notNull(),
+  filter: varchar('filter', { length: 250 }),
+  lastDigestSentAt: timestamp('lastDigestSentAt'),
+  lastViewedItemDate: timestamp('lastViewedItemDate'),
+  createdAt: timestamp('createdAt').defaultNow().notNull(),
+  updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+
+  // ===
+  userId: integer('userId').references(() => user.id, { onDelete: 'cascade' }),
+  feedId: integer('feedId').references(() => feed.id, { onDelete: 'cascade' }),
+  wasFilteredAt: timestamp('wasFilteredAt'),
+  unsubscribeToken: varchar('unsubscribeToken', { length: 100 }),
+});
+
+export const userFeedRelations = relations(userFeed, ({ one }) => ({
+  user: one(user, {
+    fields: [userFeed.userId],
+    references: [user.id],
+  }),
+  feed: one(feed, {
+    fields: [userFeed.feedId],
+    references: [feed.id],
+  }),
+}));
+
+export const userToBeDeleted = pgTable('user_to_be_deleted', {
+  userId: integer('userId').references(() => user.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('createdAt').defaultNow().notNull(),
+});
+
+export const userToBeDeletedRelations = relations(userToBeDeleted, ({ one }) => ({
+  user: one(user, {
+    fields: [userToBeDeleted.userId],
+    references: [user.id],
   }),
 }));
