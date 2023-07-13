@@ -1,16 +1,16 @@
 import '../dotenv.js';
 import { db } from './db.js';
-import { user } from './schema.js';
+import { users } from './schema.js';
 
 async function selectTest() {
-  /* return db.select().from(user) */
-  /* return db.query.user.findMany({ with: { options: true } }); */
-  /* return db.query.feed.findMany({ */
+  /* return db.select().from(users); */
+  /* return db.query.users.findMany({ with: { options: true } }); */
+  /* return db.query.feeds.findMany({ */
   /*   limit: 2, */
   /*   with: { items: { limit: 2, with: { enclosures: true } } }, */
   /* }); */
-  /* return db.query.user.findMany({ with: { userFeeds: true } }); */
-  return db.query.userFeed.findMany();
+  /* return db.query.users.findMany({ with: { userFeeds: true } }); */
+  return db.query.userFeeds.findMany();
 }
 
 selectTest().then((x) => {

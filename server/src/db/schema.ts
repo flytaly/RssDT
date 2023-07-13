@@ -12,7 +12,7 @@ import {
 import { InferModel, relations } from 'drizzle-orm';
 import { defaultLocale, defaultTimeZone } from '../constants';
 
-export const user = pgTable('user', {
+export const users = pgTable('user', {
   id: serial('id').primaryKey(),
   email: varchar('email', { length: 256 }).notNull().unique(),
   emailVerified: boolean('emailVerified').default(false).notNull(),
@@ -28,19 +28,19 @@ export const user = pgTable('user', {
   deleted: boolean('deleted'),
 });
 
-export const userRelations = relations(user, ({ one, many }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   options: one(options, {
-    fields: [user.id],
+    fields: [users.id],
     references: [options.userId],
   }),
-  userFeeds: many(userFeed),
+  userFeeds: many(userFeeds),
 }));
 
 export const themeEnum = pgEnum('theme', ['default', 'text']);
 
 export const options = pgTable('options', {
   userId: integer('userId')
-    .references(() => user.id, { onDelete: 'cascade' })
+    .references(() => users.id, { onDelete: 'cascade' })
     .primaryKey(),
   dailyDigestHour: integer('dailyDigestHour').default(18).notNull(),
   withContentTableDefault: boolean('withContentTableDefault').default(false),
@@ -52,10 +52,10 @@ export const options = pgTable('options', {
   shareList: varchar('shareList', { length: 25 }).array(),
 });
 
-export type User = InferModel<typeof user>;
-export type NewUser = InferModel<typeof user, 'insert'>;
+export type User = InferModel<typeof users>;
+export type NewUser = InferModel<typeof users, 'insert'>;
 
-export const feed = pgTable('feed', {
+export const feeds = pgTable('feed', {
   id: serial('id').primaryKey(),
   url: varchar('url', { length: 2048 }).unique().notNull(),
   link: varchar('link', { length: 2048 }),
@@ -84,14 +84,14 @@ export const feed = pgTable('feed', {
   /* items?: IItem[]; */
 });
 
-export const feedRelations = relations(feed, ({ many }) => ({
-  items: many(item),
-  userFeeds: many(userFeed),
+export const feedsRelations = relations(feeds, ({ many }) => ({
+  items: many(items),
+  userFeeds: many(userFeeds),
 }));
 
-export const item = pgTable('item', {
+export const items = pgTable('item', {
   id: serial('id').primaryKey(),
-  feedId: integer('feedId').references(() => feed.id, { onDelete: 'cascade' }),
+  feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),
   guid: varchar('guid', { length: 2048 }),
   pubdate: timestamp('pubdate'),
   link: varchar('link', { length: 2048 }),
@@ -102,32 +102,31 @@ export const item = pgTable('item', {
   createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
-export const itemsRelations = relations(item, ({ one, many }) => ({
-  feed: one(feed, {
-    fields: [item.feedId],
-    references: [feed.id],
+export const itemsRelations = relations(items, ({ one, many }) => ({
+  feed: one(feeds, {
+    fields: [items.feedId],
+    references: [feeds.id],
   }),
-  enclosures: many(enclosure),
+  enclosures: many(enclosures),
 }));
 
-export const enclosure = pgTable('enclosure', {
+export const enclosures = pgTable('enclosure', {
   id: serial('id').primaryKey(),
   url: varchar('url', { length: 2048 }),
   length: varchar('length', { length: 100 }),
   type: varchar('type', { length: 20 }),
-  itemId: integer('itemId').references(() => item.id, { onDelete: 'cascade' }),
+  itemId: integer('itemId').references(() => items.id, { onDelete: 'cascade' }),
 });
 
-export const enclosureRelations = relations(enclosure, ({ one }) => ({
-  item: one(item, {
-    fields: [enclosure.id],
-    references: [item.id],
+export const enclosuresRelations = relations(enclosures, ({ one }) => ({
+  item: one(items, {
+    fields: [enclosures.id],
+    references: [items.id],
   }),
 }));
 
 export const digestScheduleEnum = pgEnum('digestSchedule', [
   'realtime',
-  'everyhour',
   'every2hours',
   'every3hours',
   'every6hours',
@@ -138,7 +137,7 @@ export const digestScheduleEnum = pgEnum('digestSchedule', [
 
 export const ternaryState = pgEnum('ternaryState', ['enable', 'disable', 'default']);
 
-export const userFeed = pgTable('user_feed', {
+export const userFeeds = pgTable('user_feed', {
   id: serial('id').primaryKey(),
   activated: boolean('activated').default(false).notNull(),
   title: varchar('title', { length: 50 }),
@@ -154,31 +153,31 @@ export const userFeed = pgTable('user_feed', {
   updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 
   // ===
-  userId: integer('userId').references(() => user.id, { onDelete: 'cascade' }),
-  feedId: integer('feedId').references(() => feed.id, { onDelete: 'cascade' }),
+  userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
+  feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),
   wasFilteredAt: timestamp('wasFilteredAt'),
   unsubscribeToken: varchar('unsubscribeToken', { length: 100 }),
 });
 
-export const userFeedRelations = relations(userFeed, ({ one }) => ({
-  user: one(user, {
-    fields: [userFeed.userId],
-    references: [user.id],
+export const userFeedsRelations = relations(userFeeds, ({ one }) => ({
+  user: one(users, {
+    fields: [userFeeds.userId],
+    references: [users.id],
   }),
-  feed: one(feed, {
-    fields: [userFeed.feedId],
-    references: [feed.id],
+  feed: one(feeds, {
+    fields: [userFeeds.feedId],
+    references: [feeds.id],
   }),
 }));
 
-export const userToBeDeleted = pgTable('user_to_be_deleted', {
-  userId: integer('userId').references(() => user.id, { onDelete: 'cascade' }),
+export const usersToBeDeleted = pgTable('user_to_be_deleted', {
+  userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
   createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
-export const userToBeDeletedRelations = relations(userToBeDeleted, ({ one }) => ({
-  user: one(user, {
-    fields: [userToBeDeleted.userId],
-    references: [user.id],
+export const userToBeDeletedRelations = relations(usersToBeDeleted, ({ one }) => ({
+  user: one(users, {
+    fields: [usersToBeDeleted.userId],
+    references: [users.id],
   }),
 }));

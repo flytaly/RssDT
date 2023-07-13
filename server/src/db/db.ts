@@ -1,3 +1,4 @@
+import { IS_DEV } from '#root/constants.js';
 import { Logger } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
@@ -15,4 +16,4 @@ class QLogger implements Logger {
 
 const logger = new QLogger();
 
-export const db = drizzle(pool, { schema, logger });
+export const db = drizzle(pool, { schema, logger: IS_DEV ? logger : undefined });
