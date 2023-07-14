@@ -157,8 +157,12 @@ export const userFeeds = pgTable('user_feed', {
   updatedAt: timestamp('updatedAt').defaultNow().notNull(),
 
   // ===
-  userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
-  feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),
+  userId: integer('userId')
+    .references(() => users.id, { onDelete: 'cascade' })
+    .notNull(),
+  feedId: integer('feedId')
+    .references(() => feeds.id, { onDelete: 'cascade' })
+    .notNull(),
   wasFilteredAt: timestamp('wasFilteredAt'),
   unsubscribeToken: varchar('unsubscribeToken', { length: 100 }),
 });

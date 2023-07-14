@@ -171,7 +171,7 @@ export class UserResolver {
 
     await redis.del(key);
     setSession(req, user.id, user.role);
-    await activateAllUserFeeds(user.id);
+    await activateAllUserFeeds(db, user.id);
     return { user };
   }
 
@@ -188,7 +188,7 @@ export class UserResolver {
     }
     await redis.del(key);
     const userIdInt = parseInt(userId);
-    await activateAllUserFeeds(userIdInt);
+    await activateAllUserFeeds(db, userIdInt);
     return updateUser(db, userIdInt, { emailVerified: true });
   }
 
