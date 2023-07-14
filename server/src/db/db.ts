@@ -17,3 +17,5 @@ class QLogger implements Logger {
 const logger = new QLogger();
 
 export const db = drizzle(pool, { schema, logger: IS_DEV ? logger : undefined });
+
+export type DB = typeof db;

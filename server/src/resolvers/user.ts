@@ -74,8 +74,8 @@ export class UserResolver {
 
   @UseMiddleware(auth(Role.ADMIN))
   @Query(() => [User], { nullable: true })
-  users() {
-    return User.find();
+  users(@Ctx() { db }: MyContext) {
+    return db.query.users.findMany();
   }
 
   @UseMiddleware(auth())
@@ -112,15 +112,14 @@ export class UserResolver {
   async register(
     @Arg('input') input: EmailPasswordInput,
     @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput,
-    @Ctx() { req, redis }: MyContext,
+    @Ctx() { req, redis, db }: MyContext,
   ) {
     const { password: plainPassword, email } = input;
     const password = await argon2.hash(plainPassword);
-    const { error, user } = await createUser({
+    const { error, user } = await createUser(db, {
       ...(userInfo || {}),
       password,
       email,
-      options: Options.create(),
     });
     if (error) return { errors: [error] };
     if (!user) return null;
@@ -132,8 +131,9 @@ export class UserResolver {
 
   @UseMiddleware(auth(), rateLimit(3, 60))
   @Mutation(() => Boolean)
-  async requestEmailVerification(@Ctx() { redis, req }: MyContext) {
-    const user = await User.findOne(req.session.userId);
+  async requestEmailVerification(@Ctx() { redis, req, db }: MyContext) {
+    const userList = await db.select().from(users).where(eq(users.id, req.session.userId));
+    const user = userList[0];
     if (!user) return false;
     await verificationEmail(redis, user.id, user.email);
     return true;
@@ -141,8 +141,9 @@ export class UserResolver {
 
   @UseMiddleware(rateLimit(3, 60))
   @Mutation(() => MessageResponse)
-  async requestPasswordReset(@Arg('email') email: string, @Ctx() { redis }: MyContext) {
-    const user = await User.findOne({ where: { email } });
+  async requestPasswordReset(@Arg('email') email: string, @Ctx() { redis, db }: MyContext) {
+    const selected = await db.select().from(users).where(eq(users.email, email));
+    const user = selected[0];
     if (!user) return { message: "User doesn't exist" };
     await resetPasswordEmail(redis, user.id, user.email);
     return { message: 'OK' };
@@ -152,7 +153,7 @@ export class UserResolver {
   @NormalizeAndValidateArgs([PasswordResetInput, 'input'])
   @Mutation(() => UserResponse)
   async resetPassword(
-    @Ctx() { redis, req }: MyContext,
+    @Ctx() { redis, req, db }: MyContext,
     @Arg('input') { userId, token, password: plainPassword }: PasswordResetInput,
   ) {
     const key = PASSWORD_RESET_PREFIX + token;
@@ -162,7 +163,7 @@ export class UserResolver {
     }
 
     const password = await argon2.hash(plainPassword);
-    const { user } = await updateUser(parseInt(userId), {
+    const { user } = await updateUser(db, parseInt(userId), {
       password,
       emailVerified: true,
       deleted: false,
@@ -176,7 +177,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async verifyEmail(
-    @Ctx() { redis }: MyContext,
+    @Ctx() { redis, db }: MyContext,
     @Arg('token') token: string,
     @Arg('userId') userId: string,
   ) {
@@ -188,15 +189,16 @@ export class UserResolver {
     await redis.del(key);
     const userIdInt = parseInt(userId);
     await activateAllUserFeeds(userIdInt);
-    return updateUser(userIdInt, { emailVerified: true });
+    return updateUser(db, userIdInt, { emailVerified: true });
   }
 
   @UseMiddleware(rateLimit(3, 2))
   @NormalizeAndValidateArgs([EmailPasswordInput, 'input'])
   @Mutation(() => UserResponse)
-  async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req }: MyContext) {
+  async login(@Arg('input') input: EmailPasswordInput, @Ctx() { req, db }: MyContext) {
     const { password: plainPassword, email } = input;
-    const user = await User.findOne({ where: { email } });
+    const userList = await db.select().from(users).where(eq(users.email, email));
+    const user = userList[0];
     if (!user || user.deleted) {
       return { errors: [new ArgumentError('email', "User with such email doesn't exist")] };
     }
@@ -230,21 +232,22 @@ export class UserResolver {
   @NormalizeAndValidateArgs([UserInfoInput, 'userInfo'])
   @Mutation(() => User)
   async updateUserInfo(
-    @Ctx() { req }: MyContext,
+    @Ctx() { req, db }: MyContext,
     @Arg('userInfo') { locale, timeZone }: UserInfoInput,
   ) {
-    const user = await User.findOne(req.session.userId);
-    if (!req.session.userId || !user) return null;
-    if (locale) user.locale = locale;
-    if (timeZone) user.timeZone = timeZone;
-    return user.save();
+    if (!req.session.userId) return null;
+    const { user } = await updateUser(db, req.session.userId, {
+      locale: locale || undefined,
+      timeZone: timeZone || undefined,
+    });
+    return user;
   }
 
   @UseMiddleware(auth())
   @NormalizeAndValidateArgs([OptionsInput, 'opts'])
   @Mutation(() => OptionsResponse)
-  async setOptions(@Ctx() { req }: MyContext, @Arg('opts') opts: OptionsInput) {
-    return updateUserOptions(req.session.userId, opts);
+  async setOptions(@Ctx() { req, db }: MyContext, @Arg('opts') opts: OptionsInput) {
+    return updateUserOptions(db, req.session.userId, opts);
   }
 
   @UseMiddleware(auth())

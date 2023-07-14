@@ -1,15 +1,12 @@
-import { getConnection } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-// eslint-disable-next-line import/extensions
-import { User } from '#entities';
+import { DB } from '#root/db/db.js';
+import { User, users } from '#root/db/schema.js';
+import { eq } from 'drizzle-orm';
 
-export async function updateUser(id: number, values: QueryDeepPartialEntity<User>) {
-  const result = await getConnection()
-    .createQueryBuilder()
-    .update(User)
+export async function updateUser(db: DB, id: number, values: Partial<User>) {
+  const result = await db //
+    .update(users)
     .set(values)
-    .where('id = :id', { id })
-    .returning('*')
-    .execute();
-  return { user: result.raw[0] as User };
+    .where(eq(users.id, id))
+    .returning();
+  return { user: result[0] as User };
 }

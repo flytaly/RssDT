@@ -11,13 +11,14 @@ import {
 } from 'drizzle-orm/pg-core';
 import { InferModel, relations } from 'drizzle-orm';
 import { defaultLocale, defaultTimeZone } from '../constants';
+import { Role } from '#root/types/index.js';
 
 export const users = pgTable('user', {
   id: serial('id').primaryKey(),
   email: varchar('email', { length: 256 }).notNull().unique(),
   emailVerified: boolean('emailVerified').default(false).notNull(),
-  role: text('role', { enum: ['USER', 'ADMIN'] })
-    .default('USER')
+  role: text('role', { enum: [Role.USER, Role.ADMIN] })
+    .default(Role.USER)
     .notNull(),
   locale: varchar('locale', { length: 200 }).default(defaultLocale),
   timeZone: varchar('timeZone', { length: 100 }).default(defaultTimeZone),
