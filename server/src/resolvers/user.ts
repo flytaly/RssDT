@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/extensions
 import { Options, User, UserFeed } from '#entities';
-import { users } from '#root/db/schema.js';
+import { users, options, NewOptions } from '#root/db/schema.js';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import {
@@ -92,15 +92,18 @@ export class UserResolver {
 
   @UseMiddleware(auth())
   @Query(() => Options)
-  async myOptions(@Ctx() { req }: MyContext) {
+  async myOptions(@Ctx() { req, db }: MyContext) {
     const { userId } = req.session;
-    const result = await Options.findOne({ where: { userId } });
-    if (!result) {
-      const options = Options.create({ userId });
-      options.save();
-      return options;
-    }
-    return result;
+
+    const optsList = await db.query.options.findMany({
+      where: eq(options.userId, userId),
+    });
+
+    if (optsList[0]) return optsList[0];
+
+    const newOpts: NewOptions = { userId };
+    const insertedOpts = await db.insert(options).values(newOpts).returning();
+    return insertedOpts[0]!;
   }
 
   @UseMiddleware(rateLimit(10, 60 * 60))

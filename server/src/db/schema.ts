@@ -36,6 +36,9 @@ export const usersRelations = relations(users, ({ one, many }) => ({
   userFeeds: many(userFeeds),
 }));
 
+export type User = InferModel<typeof users>;
+export type NewUser = InferModel<typeof users, 'insert'>;
+
 export const themeEnum = pgEnum('theme', ['default', 'text']);
 
 export const options = pgTable('options', {
@@ -52,8 +55,8 @@ export const options = pgTable('options', {
   shareList: varchar('shareList', { length: 25 }).array(),
 });
 
-export type User = InferModel<typeof users>;
-export type NewUser = InferModel<typeof users, 'insert'>;
+export type Options = InferModel<typeof options>;
+export type NewOptions = InferModel<typeof options, 'insert'>;
 
 export const feeds = pgTable('feed', {
   id: serial('id').primaryKey(),
