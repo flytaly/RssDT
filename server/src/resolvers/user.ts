@@ -252,8 +252,8 @@ export class UserResolver {
 
   @UseMiddleware(auth())
   @Mutation(() => MessageResponse)
-  async deleteUser(@Ctx() { req, res }: MyContext) {
-    const msg = await setUserDeleted({ userId: req.session.userId });
+  async deleteUser(@Ctx() { req, res, db }: MyContext) {
+    const msg = await setUserDeleted(db, req.session.userId);
 
     await new Promise((resolve) =>
       req.session.destroy(() => resolve(res.clearCookie(COOKIE_NAME))),

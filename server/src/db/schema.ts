@@ -174,7 +174,7 @@ export const userFeedsRelations = relations(userFeeds, ({ one }) => ({
   }),
 }));
 
-export const usersToBeDeleted = pgTable('user_to_be_deleted', {
+export const usersToBeDeleted = pgTable('users_to_be_deleted', {
   userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
   createdAt: timestamp('createdAt').defaultNow().notNull(),
 });

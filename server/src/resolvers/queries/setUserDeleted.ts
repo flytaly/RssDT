@@ -1,21 +1,14 @@
-import { getManager } from 'typeorm';
-import { User, UsersToBeDeleted } from '#entities';
+import { DB } from '#root/db/db.js';
+import { users, usersToBeDeleted } from '#root/db/schema.js';
+import { eq } from 'drizzle-orm';
 
 /** Set user.deleted = true and add reference to the user into the deleting queue. */
-export const setUserDeleted = async ({ userId }: { userId: number }) => {
+export const setUserDeleted = async (db: DB, userId: number) => {
   if (!userId) return;
   try {
-    await getManager().transaction(async (manager) => {
-      await manager
-        .createQueryBuilder()
-        .update(User)
-        .set({ deleted: true })
-        .where('id = :id', { id: userId })
-        .execute();
-
-      const deleteQueue = new UsersToBeDeleted();
-      deleteQueue.userId = userId;
-      await manager.save(deleteQueue);
+    await db.transaction(async (tx) => {
+      await tx.update(users).set({ deleted: true }).where(eq(users.id, userId));
+      await tx.insert(usersToBeDeleted).values({ userId }).execute();
     });
   } catch (error) {
     return error?.message;
