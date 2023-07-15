@@ -55,8 +55,8 @@ const updatedFeedLoader = createUpdatedFeedLoader();
 export class UserFeedResolver {
   @UseMiddleware(auth())
   @Query(() => [UserFeed], { nullable: true })
-  async myFeeds(@Ctx() { req }: MyContext) {
-    return getUserFeeds(req.session.userId);
+  async myFeeds(@Ctx() { db, req }: MyContext) {
+    return getUserFeeds(db, req.session.userId);
   }
 
   /* Add feed digest to user with given email. If user doesn't exist

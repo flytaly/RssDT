@@ -67,9 +67,9 @@ class MessageResponse {
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => [UserFeed])
-  async feeds(@Root() root: User) {
+  async feeds(@Root() root: User, @Ctx() { db }: MyContext) {
     if (!root.id) return null;
-    return getUserFeeds(root.id);
+    return getUserFeeds(db, root.id);
   }
 
   @UseMiddleware(auth(Role.ADMIN))
