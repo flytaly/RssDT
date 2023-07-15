@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { DigestSchedule } from '#root/types/enums.js';
+import { Role } from '#root/types/index.js';
+import { InferModel, relations } from 'drizzle-orm';
 import {
+  boolean,
+  integer,
+  pgEnum,
   pgTable,
   serial,
   text,
   timestamp,
   varchar,
-  boolean,
-  integer,
-  pgEnum,
 } from 'drizzle-orm/pg-core';
-import { InferModel, relations } from 'drizzle-orm';
 import { defaultLocale, defaultTimeZone } from '../constants';
-import { Role } from '#root/types/index.js';
 
 export const users = pgTable('user', {
   id: serial('id').primaryKey(),
@@ -93,6 +94,9 @@ export const feedsRelations = relations(feeds, ({ many }) => ({
   userFeeds: many(userFeeds),
 }));
 
+export type Feed = InferModel<typeof feeds>;
+export type NewFeed = InferModel<typeof feeds, 'insert'>;
+
 export const items = pgTable('item', {
   id: serial('id').primaryKey(),
   feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),
@@ -130,13 +134,14 @@ export const enclosuresRelations = relations(enclosures, ({ one }) => ({
 }));
 
 export const digestScheduleEnum = pgEnum('digestSchedule', [
-  'realtime',
-  'every2hours',
-  'every3hours',
-  'every6hours',
-  'every12hours',
-  'daily',
-  'disable',
+  DigestSchedule.realtime,
+  DigestSchedule.everyhour,
+  DigestSchedule.every2hours,
+  DigestSchedule.every3hours,
+  DigestSchedule.every6hours,
+  DigestSchedule.every12hours,
+  DigestSchedule.daily,
+  DigestSchedule.disable,
 ]);
 
 export const ternaryState = pgEnum('ternaryState', ['enable', 'disable', 'default']);
@@ -145,7 +150,7 @@ export const userFeeds = pgTable('user_feed', {
   id: serial('id').primaryKey(),
   activated: boolean('activated').default(false).notNull(),
   title: varchar('title', { length: 50 }),
-  schedule: digestScheduleEnum('schedule').default('disable').notNull(),
+  schedule: digestScheduleEnum('schedule').default(DigestSchedule.disable).notNull(),
   withContentTable: ternaryState('withContentTable').default('default').notNull(),
   itemBody: ternaryState('itemBody').default('default').notNull(),
   attachments: ternaryState('attachments').default('default').notNull(),
@@ -177,6 +182,9 @@ export const userFeedsRelations = relations(userFeeds, ({ one }) => ({
     references: [feeds.id],
   }),
 }));
+
+export type UserFeed = InferModel<typeof userFeeds>;
+export type NewUserFeed = InferModel<typeof userFeeds, 'insert'>;
 
 export const usersToBeDeleted = pgTable('users_to_be_deleted', {
   userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
