@@ -97,6 +97,18 @@ export const feedsRelations = relations(feeds, ({ many }) => ({
 export type Feed = InferModel<typeof feeds>;
 export type NewFeed = InferModel<typeof feeds, 'insert'>;
 
+export function updateLastPubdateFromItems(
+  feed: Feed | NewFeed,
+  items: Array<{ pubdate?: Date | null }>,
+) {
+  const lastPubdate = items.reduce<Date | null>((prevDate, { pubdate }) => {
+    if (!pubdate) return prevDate;
+    return !prevDate || pubdate > prevDate ? pubdate : prevDate;
+  }, null);
+  if (lastPubdate) feed.lastPubdate = lastPubdate;
+  return feed;
+}
+
 export const items = pgTable('item', {
   id: serial('id').primaryKey(),
   feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),

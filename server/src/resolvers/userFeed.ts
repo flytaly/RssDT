@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/extensions
+import { User, UserFeed } from '#entities';
+import { Feed } from '#root/db/schema.js';
 import {
   Arg,
   Args,
@@ -13,15 +16,13 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Feed, User, UserFeed } from '#entities';
-
 import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants.js';
+import { updateFeedData } from '../feed-watcher/watcher-utils.js';
 import { auth } from '../middlewares/auth.js';
 import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
 import { rateLimit } from '../middlewares/rate-limit.js';
-import { MyContext, Role } from '../types/index.js';
 import { DigestSchedule } from '../types/enums.js';
+import { MyContext, Role } from '../types/index.js';
 import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader.js';
 import { activateUserFeed } from './queries/activateUserFeed.js';
 import { getUserAndCountFeeds } from './queries/countUserFeeds.js';
@@ -47,7 +48,6 @@ import {
 import { createUserFeed } from './userfeed-utils/createUserFeed.js';
 import { launchFeedsImport } from './userfeed-utils/importFeeds.js';
 import { ImportStatus, ImportStatusObject } from './userfeed-utils/ImportStatus.js';
-import { updateFeedData } from '../feed-watcher/watcher-utils.js';
 
 const updatedFeedLoader = createUpdatedFeedLoader();
 
@@ -59,8 +59,10 @@ export class UserFeedResolver {
     return getUserFeeds(db, req.session.userId);
   }
 
-  /* Add feed digest to user with given email. If user doesn't exist
-    this mutation creates new account without password. */
+  /**
+   * Adds a feed digest to a user with the given email.
+   * If the user does not exist, this mutation creates a new account without a password.
+   * */
   @UseMiddleware(rateLimit(20, 60 * 10))
   @NormalizeAndValidateArgs([AddFeedEmailInput, 'input'], [UserInfoInput, 'userInfo'])
   @Mutation(() => UserFeedResponse, { nullable: true })
@@ -68,25 +70,32 @@ export class UserFeedResolver {
     @Arg('input') { email, feedUrl: url }: AddFeedEmailInput,
     @Arg('userInfo', { nullable: true }) userInfo: UserInfoInput,
     @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
-    @Ctx() { redis }: MyContext,
+    @Ctx() { db, redis }: MyContext,
   ) {
     feedOpts = feedOpts || {};
     if (!feedOpts.schedule || feedOpts.schedule === DigestSchedule.disable) {
       feedOpts.schedule = DigestSchedule.daily;
     }
-    const userWithCount = await getUserAndCountFeeds({ email });
+
+    const userWithCount = await getUserAndCountFeeds(db, { email });
     if (userWithCount && userWithCount.countFeeds >= maxItemsPerUser) {
       return { errors: [new ArgumentError('feeds', 'Too many feeds')] };
     }
 
-    const results = await createUserFeed({ url, email, user: userWithCount, userInfo, feedOpts });
+    const results = await createUserFeed(db, {
+      url,
+      email,
+      user: userWithCount,
+      userInfo,
+      feedOpts,
+    });
     if (results.errors) return { errors: results.errors };
 
     const { title } = results.feed!;
     const { id: userFeedId, schedule: digestType } = results.userFeed!;
-    await subscriptionVerifyEmail(redis, { email, title, userFeedId, digestType });
+    await subscriptionVerifyEmail(redis, { email, title: title || '', userFeedId, digestType });
 
-    return { userFeed: results.userFeed };
+    return { userFeed: { ...results.userFeed, feed: results.feed } };
   }
 
   /* Add feed to current user account */
@@ -96,11 +105,12 @@ export class UserFeedResolver {
   async addFeedToCurrentUser(
     @Arg('input') { feedUrl: url }: AddFeedInput,
     @Arg('feedOpts', { nullable: true }) feedOpts: UserFeedOptionsInput,
-    @Ctx() { req, redis, watcherQueue }: MyContext,
+    @Ctx() { req, redis, watcherQueue, db }: MyContext,
   ) {
     const { userId } = req.session;
-    const userWithCount = await getUserAndCountFeeds({ userId });
-    const { errors, userFeed, feed, user } = await createUserFeed({
+
+    const userWithCount = await getUserAndCountFeeds(db, { userId });
+    const { errors, userFeed, feed, user } = await createUserFeed(db, {
       url,
       email: null,
       user: userWithCount,
@@ -112,12 +122,12 @@ export class UserFeedResolver {
     if (userFeed?.schedule !== 'disable' && !user?.emailVerified) {
       await subscriptionVerifyEmail(redis, {
         email: user!.email,
-        title: feed!.title,
+        title: feed!.title || '',
         userFeedId: userFeed!.id,
         digestType: userFeed!.schedule,
       });
     }
-    return { userFeed };
+    return { userFeed: { ...userFeed, feed } };
   }
 
   @Mutation(() => UserFeedResponse)
@@ -132,6 +142,7 @@ export class UserFeedResolver {
       return { errors: [new ArgumentError('token', 'wrong or expired token')] };
     }
     const result = await activateUserFeed(parseInt(userFeedId), null, async (_, f) => {
+      if (!f) return;
       void updateFeedData(f.url, true);
       await watcherQueue.enqueueFeed(f);
     });
@@ -140,7 +151,7 @@ export class UserFeedResolver {
   }
 
   /**  If user has verified their email they can activate anonymously added feed
-    that wasn't yet activated */
+              that wasn't yet activated */
   @UseMiddleware(auth())
   @Mutation(() => UserFeedResponse)
   async setFeedActivated(
