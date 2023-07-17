@@ -122,6 +122,9 @@ export const items = pgTable('item', {
   createdAt: timestamp('createdAt').defaultNow().notNull(),
 });
 
+export type Item = InferModel<typeof items>;
+export type NewItem = InferModel<typeof items, 'insert'>;
+
 export const itemsRelations = relations(items, ({ one, many }) => ({
   feed: one(feeds, {
     fields: [items.feedId],
@@ -144,6 +147,9 @@ export const enclosuresRelations = relations(enclosures, ({ one }) => ({
     references: [items.id],
   }),
 }));
+
+export type Enclosure = InferModel<typeof enclosures>;
+export type NewEnclosure = InferModel<typeof enclosures, 'insert'>;
 
 export const digestScheduleEnum = pgEnum('digestSchedule', [
   DigestSchedule.realtime,

@@ -10,6 +10,7 @@ import { startTestServer, stopTestServer } from '../test-server.js';
 import '../test-utils/connection.js';
 import { generateItem, generateMeta } from '../test-utils/generate-feed.js';
 import { generateUserAndGetSdk } from '../test-utils/login.js';
+import { db } from '#root/db/db.js';
 
 let sdk: ReturnType<typeof getSdk>;
 let testData: {
@@ -62,9 +63,10 @@ async function generateTestData() {
   const itemsToSave = generateItems(itemTitlesList.length)
     .map((item) => createSanitizedItem(item, feed.id))
     .map((item, idx) => ({ ...item, title: itemTitlesList[idx] })) as Item[];
-  await insertNewItems(itemsToSave);
+  await insertNewItems(db, itemsToSave);
   const items = await updateItemsCreationDate(itemsToSave);
   const itemsGuids = [...itemsToSave.map((i) => i.guid!)];
+  console.log(items, itemsToSave);
   testData = { feed, itemsGuids, user, items, userFeed };
 }
 

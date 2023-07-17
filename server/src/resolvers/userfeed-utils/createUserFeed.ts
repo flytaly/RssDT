@@ -11,7 +11,8 @@ import {
   userFeeds,
   users,
 } from '#root/db/schema.js';
-import { filterMeta } from '#root/feed-parser/filter-item.js';
+import { createSanitizedItem, filterMeta } from '#root/feed-parser/filter-item.js';
+import { insertNewItems } from '#root/feed-watcher/watcher-utils.js';
 import { createUser } from '#root/resolvers/queries/createUser.js';
 import { and, eq } from 'drizzle-orm';
 import FeedParser from 'feedparser';
@@ -82,9 +83,8 @@ async function createFeed(tx: DB, { url, activate, feedMeta, feedItems = [] }: C
     const inserted = await tx.insert(feeds).values(newFeed).returning();
     const feed = inserted[0];
     if (feedItems?.length) {
-      // TODO:
-      /* const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id)); */
-      /* await insertNewItems(itemsToSave, queryRunner); */
+      const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
+      await insertNewItems(tx, itemsToSave);
     }
     return feed;
   }

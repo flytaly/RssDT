@@ -1,7 +1,9 @@
-import { Enclosure, Feed, IEnclosure, Item } from '#entities';
+import { Feed, Item } from '#entities';
+import { db, type DB } from '#root/db/db.js';
+import { enclosures, items, NewEnclosure } from '#root/db/schema.js';
 import { RepeatOptions } from 'bullmq';
 import moment from 'moment';
-import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
+import { getConnection, getManager, LessThan } from 'typeorm';
 import {
   feedUpdateInterval,
   FEED_LOCK_URL_PREFIX,
@@ -9,7 +11,7 @@ import {
   maxItemsInFeed,
   maxOldItemsInFeed,
 } from '../constants.js';
-import { createSanitizedItem } from '../feed-parser/filter-item.js';
+import { createSanitizedItem, NewItemWithEnclosures } from '../feed-parser/filter-item.js';
 import { getNewItems } from '../feed-parser/index.js';
 import { logger } from '../logger.js';
 import { redis } from '../redis.js';
@@ -62,19 +64,23 @@ const getItemsWithPubDate = (feedId: number) =>
     }[]
   >;
 
-export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) => {
-  const qB = queryRunner
-    ? queryRunner.manager.createQueryBuilder()
-    : getConnection().createQueryBuilder();
-  const result = await qB.insert().into(Item).values(items).execute();
-  const encs: IEnclosure[] = [];
-  items.forEach(({ enclosures }) => {
-    if (enclosures?.length) {
-      encs.push(...enclosures);
-    }
+export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
+  const inserted = await connection
+    .insert(items)
+    .values(insertingItems)
+    .returning({ itemId: items.id });
+  const encs: NewEnclosure[] = [];
+
+  insertingItems.forEach((item, index) => {
+    if (!item.enclosures?.length) return;
+    const enc = item.enclosures.map((e) => ({
+      ...e,
+      itemId: inserted[index].itemId,
+    }));
+    encs.push(...enc);
   });
-  await qB.insert().into(Enclosure).values(encs).execute();
-  return result;
+
+  await connection.insert(enclosures).values(encs).execute();
 };
 
 /**
@@ -155,7 +161,7 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
       await feed.save();
       if (feedItems?.length) {
         const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
-        await insertNewItems(itemsToSave);
+        await insertNewItems(db, itemsToSave);
         const deleted = await deleteOldItems(feed.id);
         deletedItemsNum += deleted;
         newItemsNum += itemsToSave.length;

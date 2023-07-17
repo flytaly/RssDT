@@ -1,3 +1,4 @@
+import '#root/dotenv.js';
 import { IS_DEV } from '#root/constants.js';
 import { Logger } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
