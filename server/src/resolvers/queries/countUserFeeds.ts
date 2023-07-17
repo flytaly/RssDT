@@ -36,7 +36,7 @@ export const getUserAndCountFeeds = async (db: DB, { userId, email }: UserIdArgs
       countFeeds: sql<number>`count(${userFeeds.userId})`,
     }) //
     .from(users)
-    .innerJoin(userFeeds, eq(users.id, userFeeds.userId))
+    .leftJoin(userFeeds, eq(users.id, userFeeds.userId))
     .groupBy(users.id)
     .where(where)) as UserWithFeedCount[];
 
