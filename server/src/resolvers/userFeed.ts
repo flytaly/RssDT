@@ -1,6 +1,6 @@
-// eslint-disable-next-line import/extensions
 import { User, UserFeed } from '#entities';
-import { Feed } from '#root/db/schema.js';
+import { Feed, users } from '#root/db/schema.js';
+import { eq } from 'drizzle-orm';
 import {
   Arg,
   Args,
@@ -134,36 +134,56 @@ export class UserFeedResolver {
   async activateFeed(
     @Arg('token') token: string,
     @Arg('userFeedId') userFeedId: string,
-    @Ctx() { redis, watcherQueue }: MyContext,
+    @Ctx() { redis, watcherQueue, db }: MyContext,
   ) {
     const key = SUBSCRIPTION_CONFIRM_PREFIX + token;
     const id = await redis.get(key);
     if (id !== userFeedId) {
       return { errors: [new ArgumentError('token', 'wrong or expired token')] };
     }
-    const result = await activateUserFeed(parseInt(userFeedId), null, async (_, f) => {
-      if (!f) return;
-      void updateFeedData(f.url, true);
-      await watcherQueue.enqueueFeed(f);
+
+    const result = await activateUserFeed(db, {
+      userFeedId: parseInt(userFeedId),
+      onSuccess: async (_, f) => {
+        if (!f) return;
+        void updateFeedData(f.url, true);
+        await watcherQueue.enqueueFeed(f);
+      },
     });
+
+    if (result.errors || !result.userFeed) return { errors: result.errors };
+
+    // + verify email
+    await db
+      .update(users)
+      .set({ emailVerified: true })
+      .where(eq(users.id, result.userFeed.userId))
+      .execute();
+
     await redis.del(key);
     return result;
   }
 
-  /**  If user has verified their email they can activate anonymously added feed
-              that wasn't yet activated */
+  /**
+   * If user has verified their email they can activate
+   * anonymously added feed that wasn't yet activated
+   * */
   @UseMiddleware(auth())
   @Mutation(() => UserFeedResponse)
   async setFeedActivated(
     @Arg('userFeedId') userFeedId: number,
-    @Ctx() { req, watcherQueue }: MyContext,
+    @Ctx() { req, db, watcherQueue }: MyContext,
   ) {
     const { userId } = req.session;
     const user = await User.findOne(userId);
     if (!user?.emailVerified) {
       return { errors: [{ message: "user didn't verified email" }] };
     }
-    return activateUserFeed(userFeedId, userId, (_, f) => watcherQueue.enqueueFeed(f));
+    return activateUserFeed(db, {
+      userFeedId,
+      userId,
+      onSuccess: (_, f) => watcherQueue.enqueueFeed(f),
+    });
   }
 
   /* Delete feed from current user */
