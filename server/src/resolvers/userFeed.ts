@@ -213,31 +213,26 @@ export class UserFeedResolver {
     @Arg('opts') opts: UserFeedOptionsInput,
     @Ctx() { req, db }: MyContext,
   ) {
-    // const updateDigestTime = opts.schedule && opts.schedule !== DigestSchedule.disable;
-    // const valuesToSet: QueryDeepPartialEntity<UserFeed> = updateDigestTime
-    //   ? { ...opts, lastDigestSentAt: new Date() }
-    //   : opts;
     const updatedRows = await db
       .update(userFeeds)
       .set(opts)
       .where(and(eq(userFeeds.id, id), eq(userFeeds.userId, req.session.userId)))
       .returning();
-
-    /* const result = await getConnection() */
-    /*   .createQueryBuilder() */
-    /*   .update(UserFeed) */
-    /*   .set(opts) */
-    /*   .where('id = :id', { id }) */
-    /*   .andWhere('userId = :userId', { userId: req.session.userId }) */
-    /*   .returning('*') */
-    /*   .execute(); */
     return { userFeed: updatedRows[0] };
   }
 
   @Query(() => UserFeed, { nullable: true })
-  async getFeedInfoByToken(@Arg('token') token: string, @Arg('id') id: string) {
+  async getFeedInfoByToken(
+    @Arg('token') token: string,
+    @Arg('id') id: string,
+    @Ctx() { db }: MyContext,
+  ) {
     if (!token || !id) return null;
-    return UserFeed.findOne({ unsubscribeToken: token, id: Number(id) }, { relations: ['feed'] });
+    const selected = await db.query.userFeeds.findMany({
+      with: { feed: true },
+      where: and(eq(userFeeds.unsubscribeToken, token), eq(userFeeds.id, Number(id))),
+    });
+    return selected[0];
   }
 
   @Mutation(() => Boolean)
