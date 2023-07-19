@@ -1,6 +1,6 @@
 import { User, UserFeed } from '#entities';
-import { Feed, users } from '#root/db/schema.js';
-import { eq } from 'drizzle-orm';
+import { Feed, users, userFeeds } from '#root/db/schema.js';
+import { eq, inArray, and } from 'drizzle-orm';
 import {
   Arg,
   Args,
@@ -186,23 +186,19 @@ export class UserFeedResolver {
     });
   }
 
-  /* Delete feed from current user */
+  /* Delete feeds from current user */
   @UseMiddleware(auth())
   @Mutation(() => DeletedFeedResponse)
   async deleteMyFeeds(
     @Args() { ids }: DeleteFeedArgs, //
-    @Ctx() { req }: MyContext,
+    @Ctx() { req, db }: MyContext,
   ) {
     try {
-      const result = await getConnection()
-        .getRepository(UserFeed)
-        .createQueryBuilder('uf')
-        .delete()
-        .where('userId = :userId', { userId: req.session.userId })
-        .andWhereInIds(ids)
-        .returning('id')
-        .execute();
-      return { ids: result.raw.map((r: UserFeed) => r.id) };
+      const results = await db
+        .delete(userFeeds)
+        .where(and(inArray(userFeeds.id, ids), eq(userFeeds.userId, req.session.userId)))
+        .returning({ id: userFeeds.id });
+      return { ids: results.map((r) => r.id) };
     } catch (error) {
       console.error(`Couldn't delete: ${error.message}`);
       return { errors: [new ArgumentError('ids', "Couldn't delete")] };
