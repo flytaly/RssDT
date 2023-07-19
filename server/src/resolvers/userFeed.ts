@@ -236,17 +236,18 @@ export class UserFeedResolver {
   }
 
   @Mutation(() => Boolean)
-  async unsubscribeByToken(@Arg('token') token: string, @Arg('id') id: string) {
+  async unsubscribeByToken(
+    @Arg('token') token: string,
+    @Arg('id') id: string,
+    @Ctx() { db }: MyContext,
+  ) {
     if (!token || !id) return false;
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(UserFeed)
+    const updatedRows = await db
+      .update(userFeeds)
       .set({ schedule: DigestSchedule.disable })
-      .where('id = :id', { id })
-      .andWhere('unsubscribeToken = :token', { token })
-      .execute();
-    if (result?.affected) return true;
-    return false;
+      .where(and(eq(userFeeds.unsubscribeToken, token), eq(userFeeds.id, Number(id))))
+      .returning();
+    return updatedRows.length > 0;
   }
 
   @UseMiddleware(auth())
