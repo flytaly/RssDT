@@ -209,24 +209,29 @@ export class UserFeedResolver {
   @NormalizeAndValidateArgs([UserFeedOptionsInput, 'opts'])
   @Mutation(() => UserFeedResponse)
   async setFeedOptions(
-    @Ctx() { req }: MyContext,
     @Arg('id') id: number,
     @Arg('opts') opts: UserFeedOptionsInput,
+    @Ctx() { req, db }: MyContext,
   ) {
     // const updateDigestTime = opts.schedule && opts.schedule !== DigestSchedule.disable;
     // const valuesToSet: QueryDeepPartialEntity<UserFeed> = updateDigestTime
     //   ? { ...opts, lastDigestSentAt: new Date() }
     //   : opts;
-
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(UserFeed)
+    const updatedRows = await db
+      .update(userFeeds)
       .set(opts)
-      .where('id = :id', { id })
-      .andWhere('userId = :userId', { userId: req.session.userId })
-      .returning('*')
-      .execute();
-    return { userFeed: result.raw[0] as UserFeed };
+      .where(and(eq(userFeeds.id, id), eq(userFeeds.userId, req.session.userId)))
+      .returning();
+
+    /* const result = await getConnection() */
+    /*   .createQueryBuilder() */
+    /*   .update(UserFeed) */
+    /*   .set(opts) */
+    /*   .where('id = :id', { id }) */
+    /*   .andWhere('userId = :userId', { userId: req.session.userId }) */
+    /*   .returning('*') */
+    /*   .execute(); */
+    return { userFeed: updatedRows[0] };
   }
 
   @Query(() => UserFeed, { nullable: true })
