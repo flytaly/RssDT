@@ -1,6 +1,14 @@
 import { User, UserFeed } from '#entities';
-import { Feed, users, userFeeds } from '#root/db/schema.js';
-import { eq, inArray, and } from 'drizzle-orm';
+import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '#root/constants.js';
+import { Feed, userFeeds, users } from '#root/db/schema.js';
+import { updateFeedData } from '#root/feed-watcher/watcher-utils.js';
+import { auth } from '#root/middlewares/auth.js';
+import { NormalizeAndValidateArgs } from '#root/middlewares/normalize-validate-args.js';
+import { rateLimit } from '#root/middlewares/rate-limit.js';
+import { DigestSchedule } from '#root/types/enums.js';
+import { MyContext, Role } from '#root/types/index.js';
+import { createUpdatedFeedLoader } from '#root/utils/createUpdatedFeedLoader.js';
+import { and, eq, inArray } from 'drizzle-orm';
 import {
   Arg,
   Args,
@@ -15,15 +23,6 @@ import {
   Subscription,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
-import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '../constants.js';
-import { updateFeedData } from '../feed-watcher/watcher-utils.js';
-import { auth } from '../middlewares/auth.js';
-import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
-import { rateLimit } from '../middlewares/rate-limit.js';
-import { DigestSchedule } from '../types/enums.js';
-import { MyContext, Role } from '../types/index.js';
-import { createUpdatedFeedLoader } from '../utils/createUpdatedFeedLoader.js';
 import { activateUserFeed } from './queries/activateUserFeed.js';
 import { getUserAndCountFeeds } from './queries/countUserFeeds.js';
 import { getUserFeeds } from './queries/getUserFeeds.js';
@@ -255,10 +254,10 @@ export class UserFeedResolver {
   async setLastViewedItemDate(
     @Arg('userFeedId') userFeedId: number,
     @Arg('itemId') itemId: number,
-    @Ctx() { req }: MyContext,
+    @Ctx() { req, db }: MyContext,
   ) {
     const { userId } = req.session;
-    return setLastViewedItemDate({ itemId, userFeedId, userId });
+    return setLastViewedItemDate(db, { itemId, userFeedId, userId });
   }
 
   @FieldResolver(() => Number)
