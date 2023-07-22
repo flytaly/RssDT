@@ -1,3 +1,7 @@
+import { Feed, Item } from '#entities';
+import { items, userFeeds } from '#root/db/schema.js';
+import { and, desc, eq, sql } from 'drizzle-orm';
+import PgTsquery from 'pg-tsquery';
 import {
   Args,
   ArgsType,
@@ -8,10 +12,6 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
-import PgTsquery from 'pg-tsquery';
-// eslint-disable-next-line import/extensions
-import { Feed, Item, UserFeed } from '#entities';
 import { auth } from '../middlewares/auth.js';
 import { MyContext } from '../types/index.js';
 
@@ -50,36 +50,38 @@ export class FeedResolver {
   @Query(() => PaginatedItemsResponse)
   async myFeedItems(
     @Args() { skip = 0, take = 10, feedId, filter }: ItemsArgs, //
-    @Ctx() { req }: MyContext,
+    @Ctx() { req, db }: MyContext,
   ) {
     if (filter && filter.length > 250) throw new Error('too long');
 
-    const uf = await UserFeed.findOne({
-      where: { feedId, userId: req.session.userId },
-    });
-
-    if (!uf) throw new Error("couldn't find the feed");
-    const actualTake = Math.min(40, Math.max(1, take));
-    const actualTakePlusOne = actualTake + 1;
-    let dbQuery = getConnection() //
-      .getRepository(Item)
-      .createQueryBuilder('item')
+    const selectedFeeds = await db
       .select()
-      .where('item.feedId = :feedId', { feedId })
-      .leftJoinAndSelect('item.enclosures', 'enclosure', 'enclosure.itemId=item.id')
-      .take(actualTakePlusOne)
-      .skip(skip)
-      .orderBy('item.createdAt', 'DESC')
-      .addOrderBy('item.pubdate', 'DESC');
+      .from(userFeeds)
+      .where(and(eq(userFeeds.userId, req.session.userId), eq(userFeeds.feedId, feedId)));
+
+    if (!selectedFeeds.length) throw new Error("couldn't find the feed");
+
+    const limit = Math.min(40, Math.max(1, take));
+    const limitPlusOne = limit + 1;
+
+    const where = sql`${items.feedId} = ${feedId}`;
 
     if (filter) {
-      dbQuery = dbQuery.andWhere('to_tsvector(item.title) @@ to_tsquery(:query)', {
-        query: pgTsquery(filter),
-      });
+      const query = pgTsquery(filter);
+      where.append(sql` AND to_tsvector(${items.title}) @@ to_tsquery(${query})`);
     }
-    const items = await dbQuery.getMany();
 
-    const hasMore = items.length === actualTakePlusOne;
-    return { items: items.splice(0, actualTake), hasMore };
+    const results = await db.query.items.findMany({
+      where,
+      with: { enclosures: true },
+      orderBy: [desc(items.createdAt), desc(items.pubdate)],
+      limit: limitPlusOne,
+      offset: skip,
+    });
+
+    const selectedItems = results;
+
+    const hasMore = selectedItems.length === limitPlusOne;
+    return { items: selectedItems.splice(0, limit), hasMore };
   }
 }

@@ -143,7 +143,7 @@ export const enclosures = pgTable('enclosure', {
 
 export const enclosuresRelations = relations(enclosures, ({ one }) => ({
   item: one(items, {
-    fields: [enclosures.id],
+    fields: [enclosures.itemId],
     references: [items.id],
   }),
 }));
