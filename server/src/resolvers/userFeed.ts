@@ -174,7 +174,8 @@ export class UserFeedResolver {
     @Ctx() { req, db, watcherQueue }: MyContext,
   ) {
     const { userId } = req.session;
-    const user = await User.findOne(userId);
+    const selectedUsers = await db.select().from(users).where(eq(users.id, userId));
+    const user = selectedUsers[0];
     if (!user?.emailVerified) {
       return { errors: [{ message: "user didn't verified email" }] };
     }
