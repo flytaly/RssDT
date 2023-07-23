@@ -36,9 +36,10 @@ interface CreateUserFeedArgs {
   onSuccess?: (uf: UserFeed, feed: Feed) => Promise<unknown>;
 }
 
-async function upsertUser(tx: DB, email: string, userInfo: UserInfo | null = {}): Promise<User> {
+async function upsertUser(tx: DB, email: string, userInfo?: UserInfo | null): Promise<User> {
   const selected = await tx.select().from(users).where(eq(users.email, email!)).execute();
-  if (!selected.length && userInfo) {
+  if (selected.length) {
+    if (!userInfo) return selected[0];
     const uList = await tx
       .update(users)
       .set({ ...userInfo })
