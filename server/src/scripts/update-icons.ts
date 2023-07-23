@@ -1,45 +1,58 @@
 /* eslint-disable no-await-in-loop */
-import PQueue from 'p-queue';
-// eslint-disable-next-line import/extensions
-import { Feed } from '#entities';
 import 'reflect-metadata';
-import { initDbConnection } from '../dbConnection.js';
-import '../dotenv.js';
-import { updateFeedIcons } from '../utils/updateFeedIcons.js';
+import { sql, eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import PQueue from 'p-queue';
+import { Pool } from 'pg';
+import '#root/dotenv.js';
+import * as schema from '#root/db/schema.js';
+import { updateFeedIcons } from '#root/utils/updateFeedIcons.js';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 async function updateIcons() {
-  const conn = await initDbConnection(false);
-  const take = 10;
+  const db = drizzle(pool, { schema });
+
+  const limit = 10;
   const concurrency = 3;
-  let skip = 0;
+  let offset = 0;
 
   const queue = new PQueue({ concurrency });
-  console.log('total :', await Feed.count());
+  const total = await db.select({ count: sql<number>`count(*)` }).from(schema.feeds);
+  console.log('total :', total[0]?.count);
 
-  let feedsBatch = await Feed.find({ skip, take });
+  async function getNextBatch(_offset: number) {
+    return db.select().from(schema.feeds).limit(limit).offset(_offset);
+  }
+
+  let feedsBatch = await getNextBatch(offset);
+
   while (feedsBatch.length) {
     queue.addAll(
       feedsBatch.map((f) => () => {
         console.log(`update ${f.id}: ${f.link}`);
-        return updateFeedIcons(f, true);
+        return updateFeedIcons(f, db);
       }),
     );
     // TODO:
     // await queue.onSizeLessThan(3);
     await queue.onIdle();
-    skip += take;
-    feedsBatch = await Feed.find({ skip, take });
+    offset += limit;
+    feedsBatch = await getNextBatch(offset);
   }
   await queue.onIdle();
-  await conn.close();
+  pool.end();
 }
 
 async function updateOneIcon(id: number) {
-  const conn = await initDbConnection(false);
-  const f = await Feed.findOne(id);
+  const db = drizzle(pool, { schema });
+
+  const selected = await db.select().from(schema.feeds).where(eq(schema.feeds.id, id)).execute();
+  const f = selected[0];
   console.log(`update ${id}: ${f?.link}`);
-  await updateFeedIcons(f, true);
-  conn.close();
+  await updateFeedIcons(f, db);
+
+  pool.end();
 }
 
 const id = process.argv.slice(2)[0];
