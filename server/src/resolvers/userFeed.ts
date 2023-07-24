@@ -1,4 +1,4 @@
-import { User, UserFeed } from '#entities';
+import { UserFeed } from '#entities';
 import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '#root/constants.js';
 import { Feed, userFeeds, users } from '#root/db/schema.js';
 import { updateFeedData } from '#root/feed-watcher/watcher-utils.js';
@@ -304,8 +304,8 @@ export class UserFeedResolver {
 
   @UseMiddleware(auth())
   @Mutation(() => ImportFeedsResponse)
-  async importFeeds(@Args() { feeds }: ImportFeedsArgs, @Ctx() { req }: MyContext) {
-    return launchFeedsImport(feeds, req.session.userId);
+  async importFeeds(@Args() { feeds }: ImportFeedsArgs, @Ctx() { req, db }: MyContext) {
+    return launchFeedsImport(db, feeds, req.session.userId);
   }
 
   @UseMiddleware(auth())
