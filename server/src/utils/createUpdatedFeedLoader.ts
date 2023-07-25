@@ -1,8 +1,9 @@
-/* eslint-disable import/no-cycle */
 import DataLoader from 'dataloader';
-import { getConnection } from 'typeorm';
-import { NewItemsPayload } from '../resolvers/resolver-types/pubSubTopics.js';
-import { UserFeedNewItemsCountResponse } from '../resolvers/resolver-types/userFeedTypes.js';
+import { and, eq, inArray } from 'drizzle-orm';
+import { db } from '#root/db/db.js';
+import { feeds, userFeeds } from '#root/db/schema.js';
+import { NewItemsPayload } from '#root/resolvers/resolver-types/pubSubTopics.js';
+import { UserFeedNewItemsCountResponse } from '#root/resolvers/resolver-types/userFeedTypes.js';
 
 export const createUpdatedFeedLoader = () =>
   new DataLoader<
@@ -10,19 +11,18 @@ export const createUpdatedFeedLoader = () =>
     UserFeedNewItemsCountResponse[]
   >(async (keys) => {
     const { mapFeedToCount } = keys[0];
-    const feedIds = Object.keys(mapFeedToCount);
+    const feedIds = Object.keys(mapFeedToCount).map((k) => Number(k));
     const userIds = keys.map((k) => k.userId);
-    const result: Array<{
-      feedId: number;
-      userId: number;
-      userFeedId: number;
-    }> = await getConnection()
-      .createQueryBuilder()
-      .select('f."id" as "feedId", uf."userId" as "userId", uf."id" as "userFeedId"')
-      .from('feed', 'f')
-      .innerJoin('user_feed', 'uf', `uf."feedId" = f."id"`)
-      .whereInIds(feedIds)
-      .andWhere(`uf."userId" in (${userIds.join(', ')})`)
+
+    const result = await db
+      .select({
+        feedId: feeds.id,
+        userId: userFeeds.userId,
+        userFeedId: userFeeds.id,
+      })
+      .from(feeds)
+      .where(and(inArray(feeds.id, feedIds), inArray(userFeeds.userId, userIds)))
+      .innerJoin(userFeeds, eq(userFeeds.feedId, feeds.id))
       .execute();
 
     const mapUserIdToResponse: Record<number, UserFeedNewItemsCountResponse[]> = {};

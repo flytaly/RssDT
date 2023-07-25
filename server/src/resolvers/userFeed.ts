@@ -269,16 +269,15 @@ export class UserFeedResolver {
   @Subscription(() => [UserFeedNewItemsCountResponse], {
     // Get user feed ids to skip users without updates and pass ids inside context.
     // This way there would be only one db query.
-    filter: async ({ payload, context }) => {
-      console.log('filter triggerred');
-      const userId = (context as MyContext).req?.session?.userId;
+    filter: async ({ payload, context }: { payload: NewItemsPayload; context: MyContext }) => {
+      const userId = context.req?.session?.userId;
       if (!userId) return false;
       const resp = await updatedFeedLoader.load({
         userId: userId,
         mapFeedToCount: payload,
       });
       if (resp) {
-        (context as any).itemsCountUpdate = resp;
+        context.itemsCountUpdate = resp;
         return true;
       }
       return false;
@@ -286,7 +285,7 @@ export class UserFeedResolver {
     topics: PubSubTopics.newItems,
   })
   async itemsCountUpdated(@Ctx() ctx: MyContext) {
-    return (ctx as any).itemsCountUpdate;
+    return ctx.itemsCountUpdate;
   }
 
   @UseMiddleware(auth(Role.ADMIN))
