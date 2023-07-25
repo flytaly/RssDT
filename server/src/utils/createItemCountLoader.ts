@@ -1,23 +1,23 @@
 import DataLoader from 'dataloader';
-import { getConnection } from 'typeorm';
+import { inArray, sql } from 'drizzle-orm';
+import { db } from '#root/db/db.js';
+import { items, userFeeds } from '#root/db/schema.js';
 
 export const createItemCountLoader = () =>
   new DataLoader<number, number>(async (userFeedIds) => {
-    const result: Array<{ id: number; count: number }> = await getConnection()
-      .createQueryBuilder()
-      .select('uf."id" as id, COUNT(1) as count')
-      .from('user_feed', 'uf')
-      .innerJoin(
-        'item',
-        'items',
-        `uf."feedId" = items."feedId"
-        AND (
-          uf."lastViewedItemDate" IS NULL
-          OR items."createdAt" > uf."lastViewedItemDate"
-        )`,
-      )
-      .whereInIds(userFeedIds)
-      .groupBy('uf."id"')
+    const joinQuery = sql`${userFeeds.feedId} = ${items.feedId}
+                AND (${userFeeds.lastViewedItemDate} IS NULL
+                OR ${items.createdAt} > ${userFeeds.lastViewedItemDate})`;
+
+    const result = await db
+      .select({
+        id: userFeeds.id,
+        count: sql<number>`COUNT(1)`,
+      })
+      .from(userFeeds)
+      .innerJoin(items, joinQuery)
+      .where(inArray(userFeeds.id, [...userFeedIds]))
+      .groupBy(userFeeds.id)
       .execute();
 
     const userFeedIdToCount: Record<number, number> = {};
