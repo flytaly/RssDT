@@ -1,20 +1,21 @@
 import { Feed, Item } from '#entities';
-import { db, type DB } from '#root/db/db.js';
-import { enclosures, items, NewEnclosure } from '#root/db/schema.js';
-import { RepeatOptions } from 'bullmq';
-import moment from 'moment';
-import { getConnection, getManager, LessThan } from 'typeorm';
 import {
   feedUpdateInterval,
   FEED_LOCK_URL_PREFIX,
   IS_TEST,
   maxItemsInFeed,
   maxOldItemsInFeed,
-} from '../constants.js';
-import { createSanitizedItem, NewItemWithEnclosures } from '../feed-parser/filter-item.js';
-import { getNewItems } from '../feed-parser/index.js';
-import { logger } from '../logger.js';
-import { redis } from '../redis.js';
+} from '#root/constants.js';
+import { db, type DB } from '#root/db/db.js';
+import { enclosures, feeds, items, NewEnclosure } from '#root/db/schema.js';
+import { createSanitizedItem, NewItemWithEnclosures } from '#root/feed-parser/filter-item.js';
+import { getNewItems } from '#root/feed-parser/index.js';
+import { logger } from '#root/logger.js';
+import { redis } from '#root/redis.js';
+import { RepeatOptions } from 'bullmq';
+import { asc, sql } from 'drizzle-orm';
+import moment from 'moment';
+import { getConnection, getManager, LessThan } from 'typeorm';
 
 export type PartialFeed = {
   id: number;
@@ -24,26 +25,25 @@ export type PartialFeed = {
   lastSuccessfulUpd: Date;
 };
 
-export let getFeedsToUpdate = (minutes = 0) =>
-  getConnection()
-    .getRepository(Feed)
-    .find({
-      select: ['id', 'url', 'throttled', 'lastUpdAttempt', 'lastSuccessfulUpd'],
-      order: {
-        throttled: 'ASC',
-        lastUpdAttempt: 'ASC',
-      },
-      where: [
-        {
-          activated: true,
-          ...(minutes
-            ? {
-                lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * minutes)),
-              }
-            : {}),
-        },
-      ],
-    }) as Promise<PartialFeed[]>;
+export async function getFeedsToUpdate(minutes = 0) {
+  const where = sql`${feeds.activated} = true`;
+  if (minutes) {
+    const date = new Date(Date.now() - 1000 * 60 * minutes);
+    where.append(sql` AND ${feeds.lastUpdAttempt} < ${date}`);
+  }
+
+  return db
+    .select({
+      id: feeds.id,
+      url: feeds.url,
+      throttled: feeds.throttled,
+      lastUpdAttempt: feeds.lastUpdAttempt,
+      lastSuccessfulUpd: feeds.lastSuccessfulUpd,
+    })
+    .from(feeds)
+    .where(where)
+    .orderBy(sql`${feeds.throttled} asc, ${feeds.lastUpdAttempt} asc`);
+}
 
 export enum Status {
   Success = 1,
