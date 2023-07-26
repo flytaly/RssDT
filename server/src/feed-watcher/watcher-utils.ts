@@ -13,9 +13,9 @@ import { getNewItems } from '#root/feed-parser/index.js';
 import { logger } from '#root/logger.js';
 import { redis } from '#root/redis.js';
 import { RepeatOptions } from 'bullmq';
-import { asc, sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm';
 import moment from 'moment';
-import { getConnection, getManager, LessThan } from 'typeorm';
+import { getManager, LessThan } from 'typeorm';
 
 export type PartialFeed = {
   id: number;
@@ -25,7 +25,7 @@ export type PartialFeed = {
   lastSuccessfulUpd: Date;
 };
 
-export async function getFeedsToUpdate(minutes = 0) {
+export let getFeedsToUpdate = async (minutes = 0) => {
   const where = sql`${feeds.activated} = true`;
   if (minutes) {
     const date = new Date(Date.now() - 1000 * 60 * minutes);
@@ -43,7 +43,7 @@ export async function getFeedsToUpdate(minutes = 0) {
     .from(feeds)
     .where(where)
     .orderBy(sql`${feeds.throttled} asc, ${feeds.lastUpdAttempt} asc`);
-}
+};
 
 export enum Status {
   Success = 1,
@@ -51,18 +51,16 @@ export enum Status {
 }
 
 const getItemsWithPubDate = (feedId: number) =>
-  getConnection()
-    .createQueryBuilder(Item, 'item')
-    .select(['item.pubdate', 'item.guid', 'item.title'])
-    .where('item.feedId = :id', { id: feedId })
-    .orderBy('pubdate', 'DESC')
-    .take(50)
-    .getMany() as Promise<
-    {
-      guid: string;
-      pubdate: Date;
-    }[]
-  >;
+  db
+    .select({
+      title: items.title,
+      pubdate: items.pubdate,
+      guid: items.guid,
+    })
+    .from(items)
+    .where(sql`${items.feedId} = ${feedId}`)
+    .orderBy(sql`${items.pubdate} desc`)
+    .limit(50);
 
 export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
   const inserted = await connection

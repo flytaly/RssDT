@@ -26,7 +26,7 @@ axiosInstance.defaults.timeout = 20000;
 
 export type ItemWithPubdate = {
   pubdate: Date | null;
-  guid: string;
+  guid: string | null;
 };
 
 /**
