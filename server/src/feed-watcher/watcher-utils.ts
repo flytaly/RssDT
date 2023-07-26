@@ -1,4 +1,3 @@
-import { Feed } from '#entities';
 import {
   feedUpdateInterval,
   FEED_LOCK_URL_PREFIX,
@@ -7,15 +6,25 @@ import {
   maxOldItemsInFeed,
 } from '#root/constants.js';
 import { db, type DB } from '#root/db/db.js';
-import { enclosures, feeds, items, NewEnclosure } from '#root/db/schema.js';
-import { createSanitizedItem, NewItemWithEnclosures } from '#root/feed-parser/filter-item.js';
+import {
+  enclosures,
+  Feed,
+  feeds,
+  items,
+  NewEnclosure,
+  updateLastPubdateFromItems,
+} from '#root/db/schema.js';
+import {
+  createSanitizedItem,
+  filterMeta,
+  NewItemWithEnclosures,
+} from '#root/feed-parser/filter-item.js';
 import { getNewItems } from '#root/feed-parser/index.js';
 import { logger } from '#root/logger.js';
 import { redis } from '#root/redis.js';
 import { RepeatOptions } from 'bullmq';
 import { sql } from 'drizzle-orm';
 import moment from 'moment';
-import { getManager, LessThan } from 'typeorm';
 
 export type PartialFeed = {
   id: number;
@@ -138,12 +147,12 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
   }
   await redis.set(lockKey, 'lock', 'EX', 60 * 4);
 
-  const feed = await Feed.findOne({
-    where: {
-      url,
-      ...(skipRecent ? { lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * 4)) } : {}),
-    },
-  });
+  const where = sql`${feeds.url} = ${url}`;
+  if (skipRecent) {
+    where.append(sql` AND ${feeds.lastUpdAttempt} < ${new Date(Date.now() - 1000 * 60 * 4)}`);
+  }
+  const selected = await db.select().from(feeds).where(where).execute();
+  let feed = selected[0];
 
   if (feed) {
     const ts = new Date();
@@ -151,11 +160,16 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
     try {
       const prevItems = await getItemsWithPubDate(feed.id);
       const { feedItems, feedMeta } = await getNewItems(url, prevItems);
-      feed.addMeta(feedMeta);
+      Object.assign(feed, filterMeta(feedMeta));
+      updateLastPubdateFromItems(feed, feedItems);
       feed.lastSuccessfulUpd = ts;
       feed.throttled = Math.max(0, feed.throttled - 2);
-      feed.updateLastPubdate(feedItems);
-      await feed.save();
+      const updated = await db
+        .update(feeds)
+        .set(feed)
+        .where(sql`${feeds.id} = ${feed.id}`)
+        .returning();
+      feed = updated[0];
       if (feedItems?.length) {
         const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
         await insertNewItems(db, itemsToSave);
@@ -169,8 +183,13 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
       logger.error({ url }, `feed wasn't updated: ${error.message}`);
       if (IS_TEST) throw error;
 
-      feed.throttled = Math.min(6, feed.throttled + 1);
-      await feed.save();
+      const throttled = Math.min(6, feed.throttled + 1);
+      const updated = await db
+        .update(feeds)
+        .set({ throttled })
+        .where(sql`${feeds.id} = ${feed.id}`)
+        .returning();
+      feed = updated[0];
     }
   }
 
