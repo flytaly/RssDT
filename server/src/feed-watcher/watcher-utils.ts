@@ -1,4 +1,4 @@
-import { Feed, Item } from '#entities';
+import { Feed } from '#entities';
 import {
   feedUpdateInterval,
   FEED_LOCK_URL_PREFIX,
@@ -90,34 +90,33 @@ export const deleteOldItems = async (
   limitTotal = maxItemsInFeed,
   limitWeekOld = maxOldItemsInFeed,
 ) => {
-  if (feedId) {
-    const [, deletedNum] = await getManager().query(`
-        DELETE FROM item
-        WHERE item."feedId" = ${feedId}
-        AND item."id" IN ((
-                SELECT it."id"
-                FROM item it
+  if (!feedId) return 0;
+  const query = sql`
+        DELETE FROM ${items}
+        WHERE ${items.feedId} = ${feedId}
+        AND ${items.id} IN ((
+            SELECT ${items.id}
+            FROM ${items}
+            WHERE
+                ${items.feedId} = ${feedId}
+            ORDER BY
+                ${items.createdAt} DESC,
+                ${items.pubdate} DESC
+            OFFSET ${limitTotal}
+        ) UNION (
+                SELECT ${items.id}
+                FROM ${items}
                 WHERE
-                    it."feedId" = ${feedId}
+                    ${items.feedId} = ${feedId}
+                    AND ${items.createdAt} <= ${moment().subtract(1, 'week').toDate()}
                 ORDER BY
-                    it."createdAt" DESC,
-                    it."pubdate" DESC
-                OFFSET ${limitTotal}
-            ) UNION (
-                SELECT it."id"
-                FROM item it
-                WHERE
-                    it."feedId" = ${feedId}
-                    AND it."createdAt" <= '${moment().subtract(1, 'week').toISOString()}'
-                ORDER BY
-                    it."createdAt" DESC,
-                    it."pubdate" DESC
+                    ${items.createdAt} DESC,
+                    ${items.pubdate} DESC
                 OFFSET ${limitWeekOld}
-            ));
-    `);
-    return deletedNum as number;
-  }
-  return 0;
+        ));
+    `;
+  const results = await db.execute(query);
+  return results.rowCount;
 };
 
 export type UpdateFeedResult = readonly [Status, number, Feed | undefined | null];
