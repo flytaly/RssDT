@@ -1,10 +1,8 @@
-import { NewEnclosure, NewItem as NewFeedItem } from '#root/db/schema.js';
+import { NewEnclosure, NewItemWithEnclosures } from '#root/db/schema.js';
 import { Item, Meta } from 'feedparser';
 import pick from 'lodash.pick';
 import sanitizeHtml from 'sanitize-html';
 import { FeedMeta } from '../types/index.js';
-
-export type NewItemWithEnclosures = NewFeedItem & { enclosures?: NewEnclosure[] };
 
 export function filterMeta(feedMeta?: Meta): FeedMeta {
   if (!feedMeta) return {} as FeedMeta;

@@ -1,8 +1,7 @@
+import { scheduleHours, windowDuration } from '#root/constants.js';
+import { UserFeedWithOpts } from '#root/db/schema.js';
+import { DigestSchedule } from '#root/types/enums.js';
 import { DateTime } from 'luxon';
-// eslint-disable-next-line import/extensions
-import { UserFeed } from '#entities';
-import { scheduleHours, windowDuration } from '../constants.js';
-import { DigestSchedule } from '../types/enums.js';
 
 /**
  * Checks if the current userFeed is ready to be sent as a digest.
@@ -15,7 +14,7 @@ import { DigestSchedule } from '../types/enums.js';
  * and since 14:40 < 15:00 this userFeed is "ready".
  */
 
-export let isFeedReady = (userFeed: UserFeed) => {
+export let isFeedReady = (userFeed: UserFeedWithOpts) => {
   const { lastDigestSentAt, schedule, user } = userFeed;
   if (user.deleted) return false;
   if (schedule === DigestSchedule.disable) return false;

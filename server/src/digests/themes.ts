@@ -1,10 +1,9 @@
+import { Item } from '#root/db/schema.js';
+import { Theme } from '#root/types/enums.js';
+import { EnclosureWithTitle, Share } from '#root/types/index.js';
 import fs from 'fs';
-import path from 'path';
 import Handlebars from 'handlebars';
-import { EnclosureWithTitle, Share } from '../types/index.js';
-import { Theme } from '../types/enums.js';
-// eslint-disable-next-line import/extensions
-import { IItem } from '#entities';
+import path from 'path';
 
 const themeFolders = {
   default: path.resolve(`./static/mail-templates/digest-default`),
@@ -15,7 +14,7 @@ const compileHbsPart = (pathStr: string, part: string) =>
 
 type HTMLMailThemeTmp = {
   header: HandlebarsTemplateDelegate<{ title: string; digestName: string }>;
-  contentTable: HandlebarsTemplateDelegate<{ items: IItem[] }>;
+  contentTable: HandlebarsTemplateDelegate<{ items: Item[] }>;
   item: HandlebarsTemplateDelegate<{
     id: string | number;
     title?: string;
