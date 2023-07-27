@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { DigestSchedule } from '#root/types/enums.js';
+import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
 import { Role } from '#root/types/index.js';
 import { InferModel, relations } from 'drizzle-orm';
 import {
@@ -21,8 +21,8 @@ export const users = pgTable('user', {
   role: text('role', { enum: [Role.USER, Role.ADMIN] })
     .default(Role.USER)
     .notNull(),
-  locale: varchar('locale', { length: 200 }).default(defaultLocale),
-  timeZone: varchar('timeZone', { length: 100 }).default(defaultTimeZone),
+  locale: varchar('locale', { length: 200 }).default(defaultLocale).notNull(),
+  timeZone: varchar('timeZone', { length: 100 }).default(defaultTimeZone).notNull(),
   createdAt: timestamp('createdAt').defaultNow().notNull(),
   updatedAt: timestamp('updatedAt').defaultNow().notNull(),
   // ====
@@ -41,17 +41,17 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 export type User = InferModel<typeof users>;
 export type NewUser = InferModel<typeof users, 'insert'>;
 
-export const themeEnum = pgEnum('theme', ['default', 'text']);
+export const themeEnum = pgEnum('theme', [Theme.default, Theme.text]);
 
 export const options = pgTable('options', {
   userId: integer('userId')
     .references(() => users.id, { onDelete: 'cascade' })
     .primaryKey(),
   dailyDigestHour: integer('dailyDigestHour').default(18).notNull(),
-  withContentTableDefault: boolean('withContentTableDefault').default(false),
-  itemBodyDefault: boolean('itemBodyDefault').default(true),
-  attachmentsDefault: boolean('attachmentsDefault').default(true),
-  themeDefault: themeEnum('themeDefault').default('default').notNull(),
+  withContentTableDefault: boolean('withContentTableDefault').default(false).notNull(),
+  itemBodyDefault: boolean('itemBodyDefault').default(true).notNull(),
+  attachmentsDefault: boolean('attachmentsDefault').default(true).notNull(),
+  themeDefault: themeEnum('themeDefault').default(Theme.default).notNull(),
   customSubject: varchar('customSubject', { length: 150 }),
   shareEnable: boolean('shareEnable').default(true).notNull(),
   shareList: varchar('shareList', { length: 25 }).array(),
@@ -124,6 +124,8 @@ export const items = pgTable('item', {
 
 export type Item = InferModel<typeof items>;
 export type NewItem = InferModel<typeof items, 'insert'>;
+export type ItemWithEnclosures = Item & { enclosures: Enclosure[] };
+export type NewItemWithEnclosures = NewItem & { enclosures?: NewEnclosure[] };
 
 export const itemsRelations = relations(items, ({ one, many }) => ({
   feed: one(feeds, {
@@ -162,17 +164,21 @@ export const digestScheduleEnum = pgEnum('digestSchedule', [
   DigestSchedule.disable,
 ]);
 
-export const ternaryState = pgEnum('ternaryState', ['enable', 'disable', 'default']);
+export const ternaryState = pgEnum('ternaryState', [
+  TernaryState.enable,
+  TernaryState.disable,
+  TernaryState.default,
+]);
 
 export const userFeeds = pgTable('user_feed', {
   id: serial('id').primaryKey(),
   activated: boolean('activated').default(false).notNull(),
   title: varchar('title', { length: 50 }),
   schedule: digestScheduleEnum('schedule').default(DigestSchedule.disable).notNull(),
-  withContentTable: ternaryState('withContentTable').default('default').notNull(),
-  itemBody: ternaryState('itemBody').default('default').notNull(),
-  attachments: ternaryState('attachments').default('default').notNull(),
-  theme: themeEnum('theme').default('default').notNull(),
+  withContentTable: ternaryState('withContentTable').default(TernaryState.default).notNull(),
+  itemBody: ternaryState('itemBody').default(TernaryState.default).notNull(),
+  attachments: ternaryState('attachments').default(TernaryState.default).notNull(),
+  theme: themeEnum('theme').default(Theme.default).notNull(),
   filter: varchar('filter', { length: 250 }),
   lastDigestSentAt: timestamp('lastDigestSentAt'),
   lastViewedItemDate: timestamp('lastViewedItemDate'),
@@ -187,7 +193,7 @@ export const userFeeds = pgTable('user_feed', {
     .references(() => feeds.id, { onDelete: 'cascade' })
     .notNull(),
   wasFilteredAt: timestamp('wasFilteredAt'),
-  unsubscribeToken: varchar('unsubscribeToken', { length: 100 }),
+  unsubscribeToken: varchar('unsubscribeToken', { length: 100 }).notNull(),
 });
 
 export const userFeedsRelations = relations(userFeeds, ({ one }) => ({
@@ -203,6 +209,7 @@ export const userFeedsRelations = relations(userFeeds, ({ one }) => ({
 
 export type UserFeed = InferModel<typeof userFeeds>;
 export type NewUserFeed = InferModel<typeof userFeeds, 'insert'>;
+export type UserFeedWithOpts = UserFeed & { user: User & { options: Options } };
 
 export const usersToBeDeleted = pgTable('users_to_be_deleted', {
   userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
