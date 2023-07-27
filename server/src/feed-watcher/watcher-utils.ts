@@ -12,13 +12,10 @@ import {
   feeds,
   items,
   NewEnclosure,
+  NewItemWithEnclosures,
   updateLastPubdateFromItems,
 } from '#root/db/schema.js';
-import {
-  createSanitizedItem,
-  filterMeta,
-  NewItemWithEnclosures,
-} from '#root/feed-parser/filter-item.js';
+import { createSanitizedItem, filterMeta } from '#root/feed-parser/filter-item.js';
 import { getNewItems } from '#root/feed-parser/index.js';
 import { logger } from '#root/logger.js';
 import { redis } from '#root/redis.js';
@@ -72,12 +69,13 @@ const getItemsWithPubDate = (feedId: number) =>
     .limit(50);
 
 export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
+  if (insertingItems.length === 0) return;
   const inserted = await connection
     .insert(items)
     .values(insertingItems)
     .returning({ itemId: items.id });
-  const encs: NewEnclosure[] = [];
 
+  const encs: NewEnclosure[] = [];
   insertingItems.forEach((item, index) => {
     if (!item.enclosures?.length) return;
     const enc = item.enclosures.map((e) => ({
@@ -86,7 +84,7 @@ export const insertNewItems = async (connection: DB, insertingItems: NewItemWith
     }));
     encs.push(...enc);
   });
-
+  if (encs.length === 0) return;
   await connection.insert(enclosures).values(encs).execute();
 };
 
