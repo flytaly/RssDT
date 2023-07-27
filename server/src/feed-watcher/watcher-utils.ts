@@ -12,6 +12,7 @@ import {
   feeds,
   items,
   NewEnclosure,
+  NewFeed,
   NewItemWithEnclosures,
   updateLastPubdateFromItems,
 } from '#root/db/schema.js';
@@ -70,22 +71,29 @@ const getItemsWithPubDate = (feedId: number) =>
 
 export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
   if (insertingItems.length === 0) return;
+
+  const itemEnclosures: (NewEnclosure[] | null)[] = [];
+  insertingItems.forEach((item) => {
+    itemEnclosures.push(item.enclosures || null);
+    // NOTE: Delete enclosures, so it won't cause errors with drizzle-orm:
+    // `Cannot read properties of undefined (reading 'name')``
+    delete item.enclosures;
+  });
+
   const inserted = await connection
     .insert(items)
     .values(insertingItems)
     .returning({ itemId: items.id });
 
-  const encs: NewEnclosure[] = [];
-  insertingItems.forEach((item, index) => {
-    if (!item.enclosures?.length) return;
-    const enc = item.enclosures.map((e) => ({
-      ...e,
-      itemId: inserted[index].itemId,
-    }));
-    encs.push(...enc);
+  const insertingEncs: NewEnclosure[] = [];
+  itemEnclosures.forEach((encs, index) => {
+    encs?.forEach((e) => {
+      e.itemId = inserted[index].itemId;
+      insertingEncs.push(e);
+    });
   });
-  if (encs.length === 0) return;
-  await connection.insert(enclosures).values(encs).execute();
+  if (insertingEncs.length === 0) return;
+  await connection.insert(enclosures).values(insertingEncs).execute();
 };
 
 /**
@@ -158,13 +166,16 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
     try {
       const prevItems = await getItemsWithPubDate(feed.id);
       const { feedItems, feedMeta } = await getNewItems(url, prevItems);
-      Object.assign(feed, filterMeta(feedMeta));
-      updateLastPubdateFromItems(feed, feedItems);
-      feed.lastSuccessfulUpd = ts;
-      feed.throttled = Math.max(0, feed.throttled - 2);
+      const feedUpdate: NewFeed = {
+        ...filterMeta(feedMeta),
+        url: feed.url,
+        lastSuccessfulUpd: ts,
+        throttled: Math.max(0, feed.throttled - 2),
+      };
+      updateLastPubdateFromItems(feedUpdate, feedItems);
       const updated = await db
         .update(feeds)
-        .set(feed)
+        .set(feedUpdate)
         .where(sql`${feeds.id} = ${feed.id}`)
         .returning();
       feed = updated[0];
@@ -178,7 +189,7 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
       status = Status.Success;
       logger.info({ url, newItemsNum, deletedItemsNum }, `feed was updated`);
     } catch (error) {
-      logger.error({ url }, `feed wasn't updated: ${error.message}`);
+      logger.error({ url }, `feed wasn't updated: ${error.message} ${error.stack}`);
       if (IS_TEST) throw error;
 
       const throttled = Math.min(6, feed.throttled + 1);
