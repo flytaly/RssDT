@@ -1,21 +1,32 @@
 import 'reflect-metadata';
-import '../../dotenv.js';
 import test from 'ava';
 import { SendMailOptions } from 'nodemailer';
 import sinon from 'sinon';
-// eslint-disable-next-line import/extensions
-import { Feed, Item, User, UserFeed } from '#entities';
+import { eq } from 'drizzle-orm';
+import '#root/dotenv.js';
+import { db } from '#root/db/db.js';
+import {
+  Feed,
+  Item,
+  Options,
+  User,
+  UserFeed,
+  UserFeedWithOpts,
+  feeds,
+  items,
+  userFeeds,
+  users,
+} from '#root/db/schema.js';
+import { buildAndSendDigests } from '#root/digests/build-and-send.js';
+import { composeDigestMock } from '#root/digests/compose-mail.js';
+import { composeEmailSubject } from '#root/digests/compose-subject.js';
+import { isFeedReadyMock } from '#root/digests/is-feed-ready.js';
+import { transportMock } from '#root/mail/transport.js';
+import { closeTestConnection, runTestConnection } from '#root/tests/test-utils/connection.js';
+import { generateItemEntity, generateUserWithFeed } from '#root/tests/test-utils/generate-feed.js';
+import { DigestSchedule } from '#root/types/enums.js';
 
-import { transportMock } from '../../mail/transport.js';
-import { closeTestConnection, runTestConnection } from '../../tests/test-utils/connection.js';
-import { generateItemEntity, generateUserWithFeed } from '../../tests/test-utils/generate-feed.js';
-import { DigestSchedule } from '../../types/enums.js';
-import { buildAndSendDigests } from '../build-and-send.js';
-import { composeDigestMock } from '../compose-mail.js';
-import { composeEmailSubject } from '../compose-subject.js';
-import { isFeedReadyMock } from '../is-feed-ready.js';
-
-let user: User;
+let user: User & { options: Options };
 let feed: Feed;
 let userFeed: UserFeed;
 
@@ -26,11 +37,18 @@ const $composeDigest = sinon.fake(() => ({ text: 'text', html: 'html', errors: [
 const hour = 1000 * 60 * 60;
 const newItems: Item[] = [];
 const oldItems: Item[] = [];
+
 const createItems = async () => {
   const now = Date.now();
   const lastDigestTime = now - hour * 24;
   userFeed.lastDigestSentAt = new Date(lastDigestTime);
-  await userFeed.save();
+
+  await db
+    .update(userFeeds)
+    .set({ lastDigestSentAt: userFeed.lastDigestSentAt })
+    .where(eq(userFeeds.id, userFeed.id))
+    .execute();
+
   const item = (time: number) => generateItemEntity(feed.id, new Date(time));
   oldItems.push(await item(lastDigestTime - hour * 2));
   oldItems.push(await item(lastDigestTime - hour * 1.5));
@@ -50,8 +68,8 @@ test.before(async () => {
   composeDigestMock($composeDigest);
 });
 test.after(async () => {
-  await user.remove();
-  await feed.remove();
+  await db.delete(users).where(eq(users.id, user.id)).execute();
+  await db.delete(feeds).where(eq(feeds.id, feed.id)).execute();
   await closeTestConnection();
 });
 
@@ -64,11 +82,11 @@ test.afterEach(() => {
 test.serial('get new items and send digest mail', async (t) => {
   await buildAndSendDigests(feed.id);
 
-  const uf: UserFeed = $isFeedReady.lastCall.firstArg;
+  const uf: UserFeedWithOpts = $isFeedReady.lastCall.firstArg;
   t.is(uf.schedule, DigestSchedule.daily);
   t.is(uf.user.options.dailyDigestHour, 18);
 
-  t.truthy($sendMail.called, 'sendMail called');
+  t.truthy($sendMail.called, 'sendMail should be called');
   const m: SendMailOptions = $sendMail.lastCall.firstArg;
   const expectedMailOpts: SendMailOptions = {
     from: process.env.MAIL_FROM,
@@ -83,9 +101,15 @@ test.serial('get new items and send digest mail', async (t) => {
 test.serial(
   'should not send too old items even if they were created after the last digest',
   async (t) => {
-    userFeed.lastDigestSentAt = new Date(0);
-    userFeed.lastViewedItemDate = new Date(0);
-    await userFeed.save();
+    await db
+      .update(userFeeds)
+      .set({
+        lastDigestSentAt: new Date(0),
+        lastViewedItemDate: new Date(0),
+      })
+      .where(eq(userFeeds.id, userFeed.id))
+      .execute();
+
     // save very old item
     await generateItemEntity(feed.id, new Date(Date.now() - hour * 48));
     await buildAndSendDigests(feed.id);
@@ -102,10 +126,15 @@ test.serial('should filter items', async (t) => {
   newItems[0].title = 'Wrong title ';
   newItems[1].title = 'Correct title ';
   newItems[2].title = 'Another correct title ';
-  await Promise.all(newItems.map((i) => i.save()));
-  userFeed.lastDigestSentAt = new Date(0);
-  userFeed.filter = 'correct title';
-  await userFeed.save();
+  const updates = newItems.map((i) =>
+    db.update(items).set({ title: i.title }).where(eq(items.id, i.id)).execute(),
+  );
+  await Promise.all(updates);
+  await db
+    .update(userFeeds)
+    .set({ lastDigestSentAt: new Date(0), filter: 'correct title' })
+    .where(eq(userFeeds.id, userFeed.id))
+    .execute();
   await buildAndSendDigests(feed.id);
 
   // @ts-ignore
