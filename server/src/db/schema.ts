@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
 import { Role } from '#root/types/index.js';
-import { InferModel, relations } from 'drizzle-orm';
+import { InferModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
+  customType,
   integer,
   pgEnum,
   pgTable,
@@ -13,6 +14,23 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { defaultLocale, defaultTimeZone } from '../constants';
+
+const timestampTZ = customType<{
+  data: Date;
+  driverData: string;
+  config: { withTimezone: boolean; precision?: number };
+}>({
+  dataType(/* config */) {
+    /* const precision = typeof config.precision !== 'undefined' ? ` (${config.precision})` : ''; */
+    /* return `timestamp${precision}${config.withTimezone ? ' with time zone' : ''}`; */
+    return `timestamp with time zone`;
+  },
+  fromDriver(value: string): Date {
+    return new Date(value);
+  },
+});
+
+const now = sql`now()`;
 
 export const users = pgTable('user', {
   id: serial('id').primaryKey(),
@@ -113,13 +131,13 @@ export const items = pgTable('item', {
   id: serial('id').primaryKey(),
   feedId: integer('feedId').references(() => feeds.id, { onDelete: 'cascade' }),
   guid: varchar('guid', { length: 2048 }),
-  pubdate: timestamp('pubdate'),
+  pubdate: timestampTZ('pubdate'),
   link: varchar('link', { length: 2048 }),
   title: varchar('title', { length: 2048 }),
   description: text('description'),
   summary: text('summary').default(''),
   imageUrl: varchar('imageUrl', { length: 2048 }),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
+  createdAt: timestampTZ('createdAt').default(now).notNull(),
 });
 
 export type Item = InferModel<typeof items>;
@@ -180,10 +198,10 @@ export const userFeeds = pgTable('user_feed', {
   attachments: ternaryState('attachments').default(TernaryState.default).notNull(),
   theme: themeEnum('theme').default(Theme.default).notNull(),
   filter: varchar('filter', { length: 250 }),
-  lastDigestSentAt: timestamp('lastDigestSentAt'),
-  lastViewedItemDate: timestamp('lastViewedItemDate'),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+  lastDigestSentAt: timestampTZ('lastDigestSentAt'),
+  lastViewedItemDate: timestampTZ('lastViewedItemDate'),
+  createdAt: timestampTZ('createdAt').default(now).notNull(),
+  updatedAt: timestampTZ('updatedAt').default(now).notNull(),
 
   // ===
   userId: integer('userId')
@@ -192,7 +210,7 @@ export const userFeeds = pgTable('user_feed', {
   feedId: integer('feedId')
     .references(() => feeds.id, { onDelete: 'cascade' })
     .notNull(),
-  wasFilteredAt: timestamp('wasFilteredAt'),
+  wasFilteredAt: timestampTZ('wasFilteredAt'),
   unsubscribeToken: varchar('unsubscribeToken', { length: 100 }).notNull(),
 });
 
@@ -213,7 +231,7 @@ export type UserFeedWithOpts = UserFeed & { user: User & { options: Options } };
 
 export const usersToBeDeleted = pgTable('users_to_be_deleted', {
   userId: integer('userId').references(() => users.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
+  createdAt: timestampTZ('createdAt').default(now).notNull(),
 });
 
 export const userToBeDeletedRelations = relations(usersToBeDeleted, ({ one }) => ({
