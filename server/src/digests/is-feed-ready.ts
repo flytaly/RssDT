@@ -13,7 +13,6 @@ import { DateTime } from 'luxon';
  * and lastDigestSentAt=14:40 then the previous suitable hour is 15
  * and since 14:40 < 15:00 this userFeed is "ready".
  */
-
 export let isFeedReady = (userFeed: UserFeedWithOpts) => {
   const { lastDigestSentAt, schedule, user } = userFeed;
   if (user.deleted) return false;

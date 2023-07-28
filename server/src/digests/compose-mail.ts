@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { Enclosure, Feed, Item, ItemWithEnclosures, UserFeedWithOpts } from '#root/db/schema.js';
 import { DateTime } from 'luxon';
 import mjml2html from 'mjml';

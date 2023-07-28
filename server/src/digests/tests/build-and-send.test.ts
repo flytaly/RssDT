@@ -1,9 +1,6 @@
-import 'reflect-metadata';
-import test from 'ava';
-import { SendMailOptions } from 'nodemailer';
-import sinon from 'sinon';
-import { eq } from 'drizzle-orm';
 import '#root/dotenv.js';
+import 'reflect-metadata';
+
 import { db } from '#root/db/db.js';
 import {
   Feed,
@@ -25,6 +22,10 @@ import { transportMock } from '#root/mail/transport.js';
 import { closeTestConnection, runTestConnection } from '#root/tests/test-utils/connection.js';
 import { generateItemEntity, generateUserWithFeed } from '#root/tests/test-utils/generate-feed.js';
 import { DigestSchedule } from '#root/types/enums.js';
+import test from 'ava';
+import { eq } from 'drizzle-orm';
+import { SendMailOptions } from 'nodemailer';
+import sinon from 'sinon';
 
 let user: User & { options: Options };
 let feed: Feed;

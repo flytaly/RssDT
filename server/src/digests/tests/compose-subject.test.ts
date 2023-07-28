@@ -1,8 +1,9 @@
-import test from 'ava';
 import 'reflect-metadata';
-import { DigestSchedule } from '../../types/enums.js';
-import { composeEmailSubject, tokens } from '../compose-subject.js';
-import { digestNames } from '../digest-names.js';
+
+import { composeEmailSubject, tokens } from '#root/digests/compose-subject.js';
+import { digestNames } from '#root/digests/digest-names.js';
+import { DigestSchedule } from '#root/types/enums.js';
+import test from 'ava';
 
 const subjects = [
   {
