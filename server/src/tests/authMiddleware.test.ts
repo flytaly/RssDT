@@ -1,8 +1,9 @@
+import { db } from '#root/db/db.js';
+import { getSdk } from '#root/tests/graphql/generated.js';
+import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
+import getTestClient from '#root/tests/test-utils/getClient.js';
+import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
 import test from 'ava';
-import { getSdk } from './graphql/generated.js';
-import { startTestServer, stopTestServer } from './test-server.js';
-import getTestClient from './test-utils/getClient.js';
-import { generateUserAndGetSdk } from './test-utils/login.js';
 
 test.before(() => startTestServer());
 test.after(() => stopTestServer());
@@ -19,7 +20,7 @@ test.serial('Authentication Error', async (t) => {
 });
 
 test.serial('Forbidden Error', async (t) => {
-  const { sdk } = await generateUserAndGetSdk();
+  const { sdk } = await createUserAndGetSdk(db);
   const err = await t.throwsAsync(sdk.users());
   t.regex(err?.message || '', /forbidden/);
 });

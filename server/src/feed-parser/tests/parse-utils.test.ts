@@ -1,9 +1,14 @@
-import { Readable } from 'stream';
-import nock from 'nock';
+import {
+  checkFeedInfo,
+  getFeedStream,
+  getNewItems,
+  parseFeed,
+} from '#root/feed-parser/parse-utils.js';
 import test from 'ava';
+import nock from 'nock';
+import { Readable } from 'stream';
 import { feeds } from './mocks/feeds.js';
 import { pages } from './mocks/pages-with-feed.js';
-import { getFeedStream, checkFeedInfo, getNewItems, parseFeed } from '../parse-utils.js';
 
 test.afterEach(() => {
   nock.cleanAll();
