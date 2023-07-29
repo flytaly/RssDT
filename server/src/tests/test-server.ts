@@ -1,12 +1,13 @@
+import '#root/dotenv.js';
 import 'reflect-metadata';
+
+import { initApolloServer } from '#root/apollo.js';
+import { initDbConnection } from '#root/dbConnection.js';
+import { redis } from '#root/redis.js';
+import { initSession } from '#root/session.js';
+import { importNormalizer } from '#root/utils/normalizer.js';
 import express from 'express';
 import MailDev from 'maildev';
-import '../dotenv.js';
-import { initApolloServer } from '../apollo.js';
-import { initDbConnection } from '../dbConnection.js';
-import { redis } from '../redis.js';
-import { initSession } from '../session.js';
-import { importNormalizer } from '../utils/normalizer.js';
 
 const startMail = (debug = false) => {
   const maildev = new MailDev({

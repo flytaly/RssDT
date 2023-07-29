@@ -15,8 +15,8 @@ import {
 } from '#root/db/schema.js';
 import { db } from '#root/db/db.js';
 
-import { DigestSchedule } from '../../types/enums.js';
-import { FeedItem, FeedMeta } from '../../types/index.js';
+import { DigestSchedule } from '#root/types/enums.js';
+import { FeedItem, FeedMeta } from '#root/types/index.js';
 
 export const generateMeta = (): FeedMeta => ({
   title: faker.commerce.productName(),
