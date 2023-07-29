@@ -10,7 +10,6 @@ import {
   pgTable,
   serial,
   text,
-  timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
 import { defaultLocale, defaultTimeZone } from '../constants';

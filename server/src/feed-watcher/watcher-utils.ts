@@ -70,7 +70,7 @@ const getItemsWithPubDate = (feedId: number) =>
     .limit(50);
 
 export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
-  if (insertingItems.length === 0) return;
+  if (insertingItems.length === 0) return [];
 
   const itemEnclosures: (NewEnclosure[] | null)[] = [];
   insertingItems.forEach((item) => {
@@ -92,8 +92,12 @@ export const insertNewItems = async (connection: DB, insertingItems: NewItemWith
       insertingEncs.push(e);
     });
   });
-  if (insertingEncs.length === 0) return;
-  await connection.insert(enclosures).values(insertingEncs).execute();
+
+  if (insertingEncs.length > 0) {
+    await connection.insert(enclosures).values(insertingEncs).execute();
+  }
+
+  return inserted;
 };
 
 /**
