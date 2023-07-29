@@ -26,7 +26,7 @@ export const DateTimeFix = new GraphQLScalarType({
   description:
     'The javascript `Date` as string. Type represents date and time as the ISO Date string.',
   serialize(value: string | Date) {
-    if (typeof value === 'string' && Date.parse(value) !== NaN) {
+    if (typeof value === 'string' && !isNaN(Date.parse(value))) {
       return value;
     }
     if (!(value instanceof Date)) {
