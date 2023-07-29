@@ -1,24 +1,24 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import '#root/dotenv.js';
+import 'reflect-metadata';
+
+import { Feed } from '#root/db/schema';
+import { buildAndSendDigestsMock } from '#root/digests/build-and-send.js';
+import {
+  PartialFeed,
+  Status,
+  getFeedUpdateInterval,
+  mockWatcherUtils,
+} from '#root/feed-watcher/watcher-utils.js';
+import { UpdateFeed } from '#root/feed-watcher/watcher.interface.js';
+import createProcessor from '#root/feed-watcher/watcher.processor.js';
+import { WatcherQueue } from '#root/feed-watcher/watcher.queue.js';
+import { PubSubTopics } from '#root/resolvers/resolver-types/pubSubTopics.js';
 import test from 'ava';
 import { Job } from 'bullmq';
 import faker from 'faker';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import sinon from 'sinon';
-import '../../dotenv.js';
-import { buildAndSendDigestsMock } from '../../digests/build-and-send.js';
-import { PubSubTopics } from '../../resolvers/resolver-types/pubSubTopics.js';
-import { closeTestConnection, runTestConnection } from '../../tests/test-utils/connection.js';
-import { getFeedUpdateInterval, mockWatcherUtils, PartialFeed } from '../watcher-utils.js';
-import { UpdateFeed } from '../watcher.interface.js';
-import createProcessor from '../watcher.processor.js';
-import { WatcherQueue } from '../watcher.queue.js';
-
-test.before(async () => {
-  await runTestConnection();
-});
-
-test.after(async () => {
-  await closeTestConnection();
-});
 
 function createPartialFeed({ throttled = 0 } = {}) {
   const ts = new Date(Date.now() - 60000);
@@ -32,7 +32,6 @@ function createPartialFeed({ throttled = 0 } = {}) {
   return feed;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const buildAndSendDigestsFake = sinon.fake(async (_: number) => {});
 buildAndSendDigestsMock(buildAndSendDigestsFake);
 
@@ -56,19 +55,25 @@ function makeJob({ id, url, throttle }: { id: string | number; url: string; thro
   return job;
 }
 
-test.serial('update feed fail', async (t) => {
+function mockUpdateResult(status: Status, newItemsNum: number, feed: PartialFeed) {
+  mockWatcherUtils({
+    updateFeedDataMock: sinon.fake(
+      async (url: string, skipRecent = false) => [status, newItemsNum, feed as Feed] as const,
+    ),
+  });
+}
+
+test('update feed fail', async (t) => {
   const { processor, feed } = makeMocks({ throttled: 0 });
-  // @ts-ignore
-  mockWatcherUtils({ updateFeedDataMock: sinon.fake(async () => [0, 0, feed]) });
+  mockUpdateResult(Status.Fail, 0, feed);
   const job = makeJob({ id: feed.id, url: feed.url, throttle: 0 });
   await processor(job);
   t.true(buildAndSendDigestsFake.args.flat().includes(feed.id));
 });
 
-test.serial('update feed fail, increase throttled value', async (t) => {
+test('update feed fail, increase throttled value', async (t) => {
   const { processor, feed, wq } = makeMocks({ throttled: 2 });
-  // @ts-ignore
-  mockWatcherUtils({ updateFeedDataMock: sinon.fake(async () => [0, 0, feed]) });
+  mockUpdateResult(Status.Fail, 0, feed);
   const id = String(feed.id);
   const job = makeJob({ id: feed.id, url: feed.url, throttle: 0 });
   const remove = wq.queue.removeRepeatable as unknown as sinon.SinonSpy;
@@ -83,28 +88,28 @@ test.serial('update feed fail, increase throttled value', async (t) => {
   t.true(buildAndSendDigestsFake.args.flat().includes(feed.id));
 });
 
-test.serial('update feed success', async (t) => {
+test('update feed success', async (t) => {
   const { processor, feed, pubsub } = makeMocks({ throttled: 0 });
-  // @ts-ignore
-  mockWatcherUtils({ updateFeedDataMock: sinon.fake(async () => [1, 12, feed]) });
+  const count = 12;
+  mockUpdateResult(Status.Success, count, feed);
   const id = String(feed.id);
   const job = makeJob({ id: feed.id, url: feed.url, throttle: 0 });
   await processor(job);
-  t.true(pubsub.publish.calledOnceWith(PubSubTopics.newItems, { [id]: { count: 12 } }));
+  t.true(pubsub.publish.calledOnceWith(PubSubTopics.newItems, { [id]: { count } }));
   t.true(buildAndSendDigestsFake.args.flat().includes(feed.id));
 });
 
-test.serial('update feed success, decrease throttled value', async (t) => {
+test('update feed success, decrease throttled value', async (t) => {
   const { processor, feed, wq, pubsub } = makeMocks({ throttled: 2 });
-  // @ts-ignore
-  mockWatcherUtils({ updateFeedDataMock: sinon.fake(async () => [1, 12, feed]) });
+  const count = 12;
+  mockUpdateResult(Status.Success, count, feed);
   const id = String(feed.id);
   const job = makeJob({ id: feed.id, url: feed.url, throttle: 6 });
   const remove = wq.queue.removeRepeatable as unknown as sinon.SinonSpy;
   const enqueue = wq.queue.add as unknown as sinon.SinonSpy;
   await processor(job);
   t.deepEqual(remove.args, [['update-feed', job.opts.repeat, id]]);
-  t.true(pubsub.publish.calledOnceWith(PubSubTopics.newItems, { [id]: { count: 12 } }));
+  t.true(pubsub.publish.calledOnceWith(PubSubTopics.newItems, { [id]: { count } }));
   const nextInterval = getFeedUpdateInterval(2);
   t.deepEqual(enqueue.args, [
     ['update-feed', job.data, { repeat: { jobId: id, every: nextInterval } }],
