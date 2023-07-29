@@ -41,8 +41,8 @@ export const users = pgTable('user', {
     .notNull(),
   locale: varchar('locale', { length: 200 }).default(defaultLocale).notNull(),
   timeZone: varchar('timeZone', { length: 100 }).default(defaultTimeZone).notNull(),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt').defaultNow().notNull(),
+  createdAt: timestampTZ('createdAt').default(now).notNull(),
+  updatedAt: timestampTZ('updatedAt').default(now).notNull(),
   // ====
   password: varchar('password', { length: 256 }),
   deleted: boolean('deleted'),
@@ -93,15 +93,15 @@ export const feeds = pgTable('feed', {
   siteIcon: varchar('siteIcon', { length: 2048 }),
   imageUrl: varchar('imageUrl', { length: 2048 }),
   imageTitle: varchar('imageTitle', { length: 1000 }),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt').defaultNow().notNull(),
-  lastSuccessfulUpd: timestamp('lastSuccessfulUpd').default(new Date(0)).notNull(),
-  lastPubdate: timestamp('lastPubdate').default(new Date(0)),
+  createdAt: timestampTZ('createdAt').default(now).notNull(),
+  updatedAt: timestampTZ('updatedAt').default(now).notNull(),
+  lastSuccessfulUpd: timestampTZ('lastSuccessfulUpd').default(new Date(0)).notNull(),
+  lastPubdate: timestampTZ('lastPubdate').default(new Date(0)),
 
   // ===
   /** Activated means that it was added by user with confirmed email */
   activated: boolean('activated').default(false),
-  lastUpdAttempt: timestamp('lastUpdAttempt').default(new Date(0)).notNull(),
+  lastUpdAttempt: timestampTZ('lastUpdAttempt').default(new Date(0)).notNull(),
   throttled: integer('throttled').default(0).notNull(),
   /* @OneToMany('Item', 'feed', { nullable: true }) */
   /* items?: IItem[]; */

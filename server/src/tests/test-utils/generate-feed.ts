@@ -1,8 +1,5 @@
 import faker from 'faker';
 import nock from 'nock';
-import { DeepPartial } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Enclosure, Feed, Item, Options, UserFeed } from '#entities';
 
 import {
   NewFeed,

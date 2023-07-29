@@ -14,6 +14,7 @@ import {
   getEmailByAddress,
   getPasswordResetData,
 } from '../test-utils/test-emails.js';
+import { db } from '#root/db/db.js';
 
 test.before(() => startTestServer());
 
@@ -27,7 +28,7 @@ const password = faker.internet.password(8);
 const sdkAnonym = getSdk(getTestClient().client);
 
 const registerUser = async () => {
-  await deleteUserWithEmail(email);
+  await deleteUserWithEmail(db, email);
   return sdkAnonym.register({ email, password });
 };
 
