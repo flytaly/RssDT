@@ -1,9 +1,9 @@
+import { getSdk } from '#root/tests/graphql/generated.js';
+import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
+import getTestClient from '#root/tests/test-utils/getClient.js';
+import { getEmailByAddress } from '#root/tests/test-utils/test-emails.js';
 import test from 'ava';
 import faker from 'faker';
-import { getSdk } from '../graphql/generated.js';
-import { startTestServer, stopTestServer } from '../test-server.js';
-import getTestClient from '../test-utils/getClient.js';
-import { getEmailByAddress } from '../test-utils/test-emails.js';
 
 const sdk: ReturnType<typeof getSdk> = getSdk(getTestClient().client);
 test.before(() => startTestServer());

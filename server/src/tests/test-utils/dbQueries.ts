@@ -1,10 +1,13 @@
 import { DB } from '#root/db/db.js';
-import { feeds, users } from '#root/db/schema.js';
+import { feeds, users, usersToBeDeleted } from '#root/db/schema.js';
 import { eq } from 'drizzle-orm';
 import { importNormalizer, normalizeUrl } from '#root/utils/normalizer.js';
 
-export function deleteUserWithEmail(db: DB, email: string) {
-  return db.delete(users).where(eq(users.email, email)).execute();
+export async function deleteUserWithEmail(db: DB, email: string) {
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
+  if (!user) return;
+  await db.delete(usersToBeDeleted).where(eq(usersToBeDeleted.userId, user.id)).execute();
+  await db.delete(users).where(eq(users.id, user.id)).execute();
 }
 
 export async function deleteFeedWithUrl(db: DB, url: string) {
