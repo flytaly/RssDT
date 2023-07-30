@@ -22,7 +22,9 @@
     "feed-watcher:dev": "nodemon dist/feed-watcher/watcher.worker.js | bunyan -o short",
     "mail-worker": "node dist/mail/mail.worker.js",
     "mail-worker:dev": "node dist/mail/mail.worker.js | bunyan -o short",
-    "generate-migration": "drizzle-kit generate:pg --out migrations --schema src/db/schema.ts"
+    "generate-migration": "drizzle-kit generate:pg --out drizzle --schema src/db/schema.ts",
+    "migrate": "node dist/scripts/migrate.js",
+    "migrate:test": "NODE_ENV=test npm run migrate"
   },
   "dependencies": {
     "@graphql-tools/schema": "^8.3.1",
