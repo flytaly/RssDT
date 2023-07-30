@@ -19,7 +19,6 @@ import { composeDigestMock } from '#root/digests/compose-mail.js';
 import { composeEmailSubject } from '#root/digests/compose-subject.js';
 import { isFeedReadyMock } from '#root/digests/is-feed-ready.js';
 import { transportMock } from '#root/mail/transport.js';
-import { closeTestConnection, runTestConnection } from '#root/tests/test-utils/connection.js';
 import { generateItemEntity, generateUserWithFeed } from '#root/tests/test-utils/generate-feed.js';
 import { DigestSchedule } from '#root/types/enums.js';
 import test from 'ava';
@@ -60,18 +59,16 @@ const createItems = async () => {
 };
 
 test.before(async () => {
-  await runTestConnection();
-
   ({ user, feed, userFeed } = await generateUserWithFeed());
   await createItems();
   isFeedReadyMock($isFeedReady);
   transportMock({ sendMail: $sendMail });
   composeDigestMock($composeDigest);
 });
+
 test.after(async () => {
   await db.delete(users).where(eq(users.id, user.id)).execute();
   await db.delete(feeds).where(eq(feeds.id, feed.id)).execute();
-  await closeTestConnection();
 });
 
 test.afterEach(() => {

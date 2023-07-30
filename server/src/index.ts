@@ -11,8 +11,10 @@ import { redis } from './redis.js';
 import { initSession } from './session.js';
 import { importNormalizer } from './utils/normalizer.js';
 import { initWSServer } from './ws-server.js';
+import { migrateDB } from './db/db.js';
 
 const entry = async () => {
+  /* await migrateDB(); */
   const app = express();
   app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));

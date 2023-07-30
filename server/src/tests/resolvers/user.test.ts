@@ -193,7 +193,7 @@ test.serial('delete user', async (t) => {
 
   let user = await db.query.users.findFirst({ where: eq(users.email, email) });
 
-  t.is(user!.deleted, false);
+  t.falsy(user!.deleted);
 
   const sdk = await getSdkWithLoggedInUser(email, password);
   const resp = await sdk.deleteUser();

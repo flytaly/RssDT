@@ -1,8 +1,7 @@
 import { Options, User, UserFeed, UserFeedWithOpts } from '#root/db/schema.js';
 import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
-import { DeepPartial } from 'typeorm/common/DeepPartial';
 
-export function createDefaultUserFeed(ufOptions: DeepPartial<UserFeed> = {}) {
+export function createDefaultUserFeed(ufOptions: Partial<UserFeed> = {}) {
   const uf = {
     theme: Theme.default,
     schedule: DigestSchedule.daily,
