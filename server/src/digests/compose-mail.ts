@@ -4,7 +4,7 @@ import mjml2html from 'mjml';
 import sanitizeHtml from 'sanitize-html';
 import url from 'url';
 import { TernaryState } from '../types/enums.js';
-import { EnclosureWithTitle, Share } from '../types/index.js';
+import { EnclosureWithTitle, Share } from '#root/types/index.js';
 import { digestNames } from './digest-names.js';
 import shareProviders from './share.js';
 import themes, { HTMLMailTheme } from './themes.js';

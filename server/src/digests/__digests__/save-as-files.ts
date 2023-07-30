@@ -1,31 +1,29 @@
+import '#root/dotenv.js';
 import 'reflect-metadata';
-import '../../dotenv.js';
+
 import fs from 'fs';
-import { Connection } from 'typeorm';
 // import { dirname } from 'path';
 // import { fileURLToPath } from 'url';
-// eslint-disable-next-line import/extensions
-import { Feed } from '#entities';
-import { initDbConnection } from '../../dbConnection.js';
-import { composeDigest } from '../compose-mail.js';
+import { db } from '#root/db/db.js';
+import { composeDigest } from '#root/digests/compose-mail.js';
 import { createDefaultUserFeed } from './utils.js';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 
-let db: Connection;
-
 /** Convert feeds to html digest ans save in the directory.
  * Useful for tests */
-async function generateDigestsAndSave() {
-  db = await initDbConnection();
-  const feedsWithItems = await Feed.find({ take: 2, relations: ['items'] });
+async function generateDigestsAndSave(limit = 10) {
+  const feedsWithItems = await db.query.feeds.findMany({
+    limit,
+    with: { items: { with: { enclosures: true } } },
+  });
   try {
     feedsWithItems.forEach((feed, idx) => {
       const uf = createDefaultUserFeed();
 
-      const { html, text, errors } = composeDigest(uf, feed, feed.items!);
+      const { html, text, errors } = composeDigest(uf, feed, feed.items);
       if (errors?.length) {
         console.log('errors:', errors);
         return;
@@ -35,6 +33,7 @@ async function generateDigestsAndSave() {
         fs.mkdirSync(outputDir);
       }
       const filename = `${idx}-${new URL(feed.url).hostname}`;
+      console.log(`Output dir: ${outputDir}`);
       if (html) {
         fs.writeFileSync(`${outputDir}/${filename}.html`, html);
         console.log(`saved: ${filename}.html. Items: ${feed.items?.length} `);
@@ -49,9 +48,4 @@ async function generateDigestsAndSave() {
   }
 }
 
-async function run() {
-  await generateDigestsAndSave();
-  await db.close();
-}
-
-run();
+generateDigestsAndSave().catch(console.error);

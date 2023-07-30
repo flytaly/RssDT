@@ -1,10 +1,9 @@
+import { Options, User, UserFeed, UserFeedWithOpts } from '#root/db/schema.js';
+import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
 import { DeepPartial } from 'typeorm/common/DeepPartial';
-// eslint-disable-next-line import/extensions
-import { Options, User, UserFeed } from '#entities';
-import { Theme, DigestSchedule, TernaryState } from '../../types/enums.js';
 
 export function createDefaultUserFeed(ufOptions: DeepPartial<UserFeed> = {}) {
-  const uf = UserFeed.create({
+  const uf = {
     theme: Theme.default,
     schedule: DigestSchedule.daily,
     withContentTable: TernaryState.enable,
@@ -12,10 +11,14 @@ export function createDefaultUserFeed(ufOptions: DeepPartial<UserFeed> = {}) {
     attachments: TernaryState.enable,
     unsubscribeToken: 'unsubscribe-token',
     ...ufOptions,
-  });
-  const user = User.create({ locale: 'ru-RU', timeZone: 'Europe/Moscow' });
-  const options = Options.create({ shareEnable: true });
-  user.options = options;
-  uf.user = user;
-  return uf;
+  } as UserFeed;
+  const user = { locale: 'ru-RU', timeZone: 'Europe/Moscow' } as User;
+  const opts = {
+    shareEnable: true,
+    themeDefault: Theme.default,
+    attachmentsDefault: true,
+    itemBodyDefault: true,
+    withContentTableDefault: true,
+  } as Options;
+  return { ...uf, user: { ...user, options: opts } } as UserFeedWithOpts;
 }
