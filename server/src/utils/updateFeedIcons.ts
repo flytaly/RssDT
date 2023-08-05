@@ -1,13 +1,14 @@
-// eslint-disable-next-line import/extensions
-import { Feed } from '#entities';
+import { DB } from '#root/db/db.js';
+import { Feed, feeds, NewFeed } from '#root/db/schema.js';
 import {
   fetchPageContent,
   getIconsFromBesticonServer,
   getIconsFromPage,
   ImageInfo,
-} from '../feed-parser/get-icons.js';
+} from '#root/feed-parser/get-icons.js';
+import { eq } from 'drizzle-orm';
 
-export async function updateFeedIcons(feed?: Feed, save = true) {
+export async function updateFeedIcons(feed?: Feed | NewFeed, db?: DB | null) {
   const { BESTICON_URL } = process.env;
   if (!feed) return;
   try {
@@ -26,7 +27,7 @@ export async function updateFeedIcons(feed?: Feed, save = true) {
     if (!favicon && !icon) return;
     if (favicon?.url) feed.siteFavicon = favicon.url;
     if (icon?.url) feed.siteIcon = icon.url;
-    if (save) await feed.save();
+    if (db && feed.id) await db.update(feeds).set(feed).where(eq(feeds.id, feed.id));
   } catch (error: any) {
     console.error(feed?.link, error.message);
   }

@@ -1,45 +1,37 @@
-import { getConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Feed, UserFeed } from '#entities';
+import { type DB } from '#root/db/db';
+import { feeds, userFeeds } from '#root/db/schema.js';
+import { updateFeedData } from '#root/feed-watcher/watcher-utils.js';
+import { logger } from '#root/logger.js';
+import { and, eq, inArray, sql } from 'drizzle-orm';
 
-import { updateFeedData } from '../../feed-watcher/watcher-utils.js';
-import { logger } from '../../logger.js';
-
-export async function activateAllUserFeeds(userId: number) {
+export async function activateAllUserFeeds(db: DB, userId: number) {
   try {
-    const qb = getConnection().createQueryBuilder();
+    const { userFeedList, feedList } = await db.transaction(async (tx) => {
+      // Update UserFeeds
+      const updateUserFeeds = await tx
+        .update(userFeeds)
+        .set({ activated: true })
+        .where(sql`${userFeeds.userId} = ${userId} and ${userFeeds.activated} = false`)
+        .returning();
+      if (!updateUserFeeds.length) return {};
 
-    // Update UserFeed
-    const updResult = await qb
-      .update(UserFeed)
-      .set({ activated: true })
-      .where({ userId, activated: false })
-      .returning('*')
-      .execute();
-    if (!updResult.raw.length) return null;
-    const userFeeds = updResult.raw as UserFeed[];
+      // Update Feed
+      const feedIds = updateUserFeeds.map((uf) => uf.feedId);
+      const updatedFeeds = await tx
+        .update(feeds)
+        .set({ activated: true })
+        .where(and(inArray(feeds.id, feedIds), eq(feeds.activated, false)))
+        .returning({ id: feeds.id, url: feeds.url });
 
-    // Update Feed
-    const feedUpdResult = await qb
-      .update(Feed)
-      .set({ activated: true })
-      .where(userFeeds.map((uf) => ({ id: uf.feedId, activated: false })))
-      .returning('id, url')
-      .execute();
+      return { userFeedList: updateUserFeeds, feedList: updatedFeeds };
+    });
+    if (!feedList?.length || !userFeedList?.length) return null;
 
-    if (!feedUpdResult.raw.length) return null;
-    const feeds = feedUpdResult.raw as Feed[];
+    void Promise.all(feedList.map((f) => updateFeedData(f.url))).catch((e) => logger.error(e));
 
-    const feedsToUpdate = feeds.map(({ url, id }) => ({
-      url,
-      userFeed: userFeeds.find((uf) => uf.feedId === id),
-    }));
-
-    Promise.all(feedsToUpdate.map(({ url }) => updateFeedData(url))).catch((e) => logger.error(e));
-
-    return feedUpdResult;
+    return feedList;
   } catch (error) {
     logger.error(error);
+    return null;
   }
-  return null;
 }

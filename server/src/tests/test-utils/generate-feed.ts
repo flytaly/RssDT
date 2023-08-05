@@ -1,11 +1,22 @@
 import faker from 'faker';
 import nock from 'nock';
-import { DeepPartial } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Enclosure, Feed, Item, Options, User, UserFeed } from '#entities';
 
-import { FeedItem, FeedMeta } from '../../types/index.js';
-import { DigestSchedule } from '../../types/enums.js';
+import {
+  NewFeed,
+  users,
+  options,
+  userFeeds,
+  feeds,
+  items,
+  NewOptions,
+  NewUser,
+  NewUserFeed,
+  enclosures,
+} from '#root/db/schema.js';
+import { db } from '#root/db/db.js';
+
+import { DigestSchedule } from '#root/types/enums.js';
+import { FeedItem, FeedMeta } from '#root/types/index.js';
 
 export const generateMeta = (): FeedMeta => ({
   title: faker.commerce.productName(),
@@ -36,17 +47,17 @@ export const generateItem = (pubdate = new Date()): FeedItem => ({
 export const generateFeed = ({
   feedUrl,
   meta,
-  items,
+  feedItems: feedItems,
 }: {
   feedUrl?: string;
   meta?: Partial<FeedMeta>;
-  items?: Partial<FeedItem>[];
+  feedItems?: Partial<FeedItem>[];
 } = {}) => {
   const now = Date.now();
   const day = 1000 * 60 * 60 * 24;
   if (!meta) meta = generateMeta();
-  if (!items)
-    items = [
+  if (!feedItems)
+    feedItems = [
       generateItem(new Date(now - 2 * day)),
       generateItem(new Date(now - day)),
       generateItem(new Date(now)),
@@ -64,7 +75,7 @@ export const generateFeed = ({
       <url>${meta.imageUrl}</url>
     </image>`;
 
-  items?.forEach((item) => {
+  feedItems?.forEach((item) => {
     text += `<item>
         <title>${item.title}</title>
         <description>${item.description}</description>
@@ -81,49 +92,80 @@ export const generateFeed = ({
   text += '</channel></rss>';
 
   const mockRequests = () => nock(feedUrl!).persist().get('/').reply(200, text);
-  return { text, meta, items, feedUrl, mockRequests };
+  return { text, meta, items: feedItems, feedUrl, mockRequests };
 };
 
-export const generateFeedEntity = async (entityLike: DeepPartial<Feed> = {}) => {
-  const feed = Feed.create({
-    ...generateMeta(),
-    url: `${faker.internet.url()}/feed.rss`,
-    activated: true,
-    ...entityLike,
-  });
-  return feed.save();
+export const generateFeedEntity = async (partialFeed: Partial<NewFeed> = {}) => {
+  const createdFeeds = await db
+    .insert(feeds)
+    .values({
+      ...generateMeta(),
+      url: `${faker.internet.url()}/feed.rss`,
+      activated: true,
+      ...partialFeed,
+    })
+    .returning();
+
+  return createdFeeds[0];
 };
 
 export const generateItemEntity = async (feedId: number, pubdate?: Date) => {
-  const item = Item.create(generateItem(pubdate));
-  if (pubdate) item.createdAt = pubdate;
-  item.feedId = feedId;
-  item.enclosures = item.enclosures?.map((enc) => Enclosure.create({ ...enc }));
-  return item.save();
+  const genItem = generateItem(pubdate);
+  const encs = genItem.enclosures;
+  delete genItem.enclosures;
+
+  const createdItems = await db
+    .insert(items)
+    .values({ ...genItem, feedId, ...(pubdate ? { createdAt: pubdate } : {}) })
+    .returning();
+  const item = createdItems[0];
+  if (!encs) return item;
+
+  const encsToInsert = encs.map((e) => ({ ...e, itemId: item.id }));
+  const createdEnclosures = await db.insert(enclosures).values(encsToInsert).returning();
+
+  return { ...item, enclosures: createdEnclosures };
 };
 
 export const generateUserWithFeed = async (
-  entityLikeUser: DeepPartial<User> = {},
-  entityLikeOptions: DeepPartial<Options> = {},
-  entityLikeUserFeed: DeepPartial<UserFeed> = {},
-  entityLikeFeed: DeepPartial<Feed> = {},
+  partialUser: Partial<NewUser> = {},
+  partialOpts: Partial<NewOptions> = {},
+  partialUserFeed: Partial<NewUserFeed> = {},
+  partialFeed: Partial<NewFeed> = {},
 ) => {
-  const user = User.create({
-    emailVerified: true,
-    email: faker.internet.email(),
-    ...entityLikeUser,
-  });
-  user.options = Options.create({ ...entityLikeOptions });
-  const feed = await generateFeedEntity(entityLikeFeed);
-  const userFeed = UserFeed.create({
-    schedule: DigestSchedule.daily,
-    activated: true,
-    ...entityLikeUserFeed,
-  });
-  userFeed.user = user;
-  userFeed.feed = feed;
-  user.userFeeds = [userFeed];
-  await user.save();
-  await userFeed.save();
-  return { user, feed, userFeed };
+  const createdUsers = await db
+    .insert(users)
+    .values({
+      emailVerified: true,
+      email: faker.internet.email(),
+      ...partialUser,
+    })
+    .returning();
+  const user = createdUsers[0];
+
+  const createdOptions = await db
+    .insert(options)
+    .values({
+      userId: user.id,
+      ...partialOpts,
+    })
+    .returning();
+  const opts = createdOptions[0];
+
+  const feed = await generateFeedEntity(partialFeed);
+
+  const createdUserFeeds = await db
+    .insert(userFeeds)
+    .values({
+      schedule: DigestSchedule.daily,
+      activated: true,
+      feedId: feed.id,
+      userId: user.id,
+      unsubscribeToken: 'unsub-token',
+      ...partialUserFeed,
+    })
+    .returning();
+  const userFeed = createdUserFeeds[0];
+
+  return { user: { ...user, options: opts }, feed, userFeed };
 };

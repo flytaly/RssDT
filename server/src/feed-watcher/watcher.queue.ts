@@ -44,6 +44,7 @@ export class WatcherQueue {
   }
 
   async enqueueFeed(feed: { id: number | string; url: string; throttled: number }, log = true) {
+    if (!feed?.id) return;
     const id = String(feed.id);
     if (log) logger.info({ url: feed.url }, 'Enqueue feed');
     return this.enqueue(

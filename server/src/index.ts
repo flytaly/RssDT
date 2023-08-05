@@ -1,18 +1,20 @@
 // ! __reflect-metadata__ and __dotenv__ imports have to stay at the top
 import 'reflect-metadata';
 import './dotenv.js';
+
 import cors from 'cors';
 import express from 'express';
 import http from 'http';
 import { initApolloServer } from './apollo.js';
-import { initDbConnection } from './dbConnection.js';
 import { initLogFiles, logger } from './logger.js';
 import { redis } from './redis.js';
 import { initSession } from './session.js';
 import { importNormalizer } from './utils/normalizer.js';
 import { initWSServer } from './ws-server.js';
+import { migrateDB } from './db/db.js';
 
 const entry = async () => {
+  /* await migrateDB(); */
   const app = express();
   app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
@@ -21,7 +23,6 @@ const entry = async () => {
   initLogFiles({ prefix: 'api_', name: 'api' });
 
   const sessionMiddleware = initSession(app, redis);
-  const dbConnection = await initDbConnection();
   const { apolloServer, pubsub, schema } = await initApolloServer(app, redis);
 
   const server = http.createServer(app);
@@ -33,7 +34,6 @@ const entry = async () => {
   initWSServer({ schema, sessionMiddleware, server });
 
   const exit = async () => {
-    await dbConnection.close();
     await pubsub.close();
     await apolloServer.stop();
     process.exit();

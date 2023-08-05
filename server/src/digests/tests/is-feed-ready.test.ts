@@ -1,12 +1,11 @@
+import '#root/dotenv.js';
 import 'reflect-metadata';
-import '../../dotenv.js';
-import sinon from 'sinon';
+
+import { Options, User, UserFeed, UserFeedWithOpts } from '#root/db/schema.js';
+import { isFeedReady } from '#root/digests/is-feed-ready.js';
+import { DigestSchedule } from '#root/types/enums.js';
 import test from 'ava';
-// eslint-disable-next-line import/extensions
-import { Options, User, UserFeed } from '#entities';
-import { isFeedReady } from '../is-feed-ready.js';
-import { closeTestConnection, runTestConnection } from '../../tests/test-utils/connection.js';
-import { DigestSchedule } from '../../types/enums.js';
+import sinon from 'sinon';
 
 interface MockSettings {
   digestHour?: number;
@@ -14,29 +13,29 @@ interface MockSettings {
   schedule?: DigestSchedule;
 }
 
+type PartialUserFeedWithOpts = Partial<UserFeed> & {
+  user: Partial<User> & {
+    options: Partial<Options>;
+  };
+};
+
 function makeMockUserFeed({ digestHour = 18, timeZone = 'UTC', schedule }: MockSettings = {}) {
-  const userFeed = new UserFeed();
-  const user = new User();
-  const options = new Options();
+  const userFeed: PartialUserFeedWithOpts = {
+    user: {
+      timeZone,
+      options: {
+        dailyDigestHour: digestHour,
+      },
+    },
+  };
   if (schedule) userFeed.schedule = schedule;
-  options.dailyDigestHour = digestHour;
-  user.timeZone = timeZone;
-  user.options = options;
-  userFeed.user = user;
   return userFeed;
 }
 
-test.before(async () => {
-  await runTestConnection();
-});
-test.after(async () => {
-  await closeTestConnection();
-});
-
-function ready(uF: UserFeed, now: string, prevDigestTime: string) {
+function ready(uF: PartialUserFeedWithOpts, now: string, prevDigestTime: string) {
   uF.lastDigestSentAt = new Date(prevDigestTime);
   const clock = sinon.useFakeTimers(new Date(now));
-  const result = isFeedReady(uF);
+  const result = isFeedReady(uF as unknown as UserFeedWithOpts);
   clock.restore();
   return result;
 }
@@ -87,6 +86,7 @@ test('daily digest (18:00)', (t) => {
   t.is(ready(uF, '2020-05-31T05:00:00.00Z', '2020-05-30T21:04:00.00Z'), false, 'too late');
   t.is(ready(uF, '2020-06-02T14:00:00.00Z', '2020-05-30T18:04:00.00Z'), false, 'too early');
 });
+
 test('daily digest (13:00)', (t) => {
   const uF = makeMockUserFeed({ digestHour: 13, schedule: DigestSchedule.daily });
   t.is(ready(uF, '2020-05-30T13:30:00.00Z', '2020-05-29T13:04:00.00Z'), true);

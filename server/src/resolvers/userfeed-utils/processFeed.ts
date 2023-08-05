@@ -1,22 +1,32 @@
+import { DB } from '#root/db/db';
+import { feeds } from '#root/db/schema.js';
+import { getFeedStream, parseFeed } from '#root/feed-parser/index.js';
+import { logger } from '#root/logger.js';
+import { ArgumentError } from '#root/resolvers/resolver-types/errors.js';
+import { eq, or } from 'drizzle-orm';
 import FeedParser from 'feedparser';
-// eslint-disable-next-line import/extensions
-import { Feed } from '#entities';
-import { getFeedStream, parseFeed } from '../../feed-parser/index.js';
-import { logger } from '../../logger.js';
-import { ArgumentError } from '../resolver-types/errors.js';
 
 export const getFeedVariations = (url: string) => {
-  const urlsArray = [{ url }];
+  const urlsArray = [eq(feeds.url, url)];
   const httpsUrl = url.replace(/^http:\/\//, 'https://');
   if (httpsUrl !== url) {
-    urlsArray.push({ url: httpsUrl });
+    urlsArray.push(eq(feeds.url, httpsUrl));
   }
   return urlsArray;
 };
 
-export async function processFeed(url: string) {
-  let feed = await Feed.findOne<Feed>({ where: getFeedVariations(url) });
-  if (feed) return { feed };
+export async function selectFeed(db: DB, url: string) {
+  let selected = await db
+    .select()
+    .from(feeds)
+    .where(or(...getFeedVariations(url)));
+  return selected[0];
+}
+/** Selects feed from database or fetches information about it if it doesn't exist in DB. */
+export async function processFeed(db: DB, url: string) {
+  let feed = await selectFeed(db, url);
+  if (feed) return { feed, url: feed.url };
+
   let feedMeta: FeedParser.Meta;
   let feedItems: FeedParser.Item[];
   let newUrl: string = url;
@@ -32,10 +42,10 @@ export async function processFeed(url: string) {
     logger.error(`Couldn't get access to feed: ${url}. ${e.code} ${e.message}`);
     return { errors: [new ArgumentError('url', `Couldn't get access to feed`)] };
   }
-  // actual url of the feed
+  // try selecting again with the actual url of the feed
   if (newUrl !== url) {
     url = newUrl;
-    feed = await Feed.findOne<Feed>({ where: getFeedVariations(url) });
+    feed = await selectFeed(db, url);
   }
   return { feedMeta, feedItems, url, feed };
 }

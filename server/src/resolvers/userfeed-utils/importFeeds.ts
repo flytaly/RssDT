@@ -1,9 +1,9 @@
+import { maxItemsPerUser } from '#root/constants.js';
+import { type DB } from '#root/db/db.js';
+import { User } from '#root/db/schema.js';
+import { logger } from '#root/logger.js';
+import { normalizes, validates } from '#root/middlewares/normalize-validate-args.js';
 import PQueue from 'p-queue';
-// eslint-disable-next-line import/extensions
-import { User } from '#entities';
-import { maxItemsPerUser } from '../../constants.js';
-import { logger } from '../../logger.js';
-import { normalizes, validates } from '../../middlewares/normalize-validate-args.js';
 import { getUserAndCountFeeds } from '../queries/countUserFeeds.js';
 import { ArgumentError } from '../resolver-types/errors.js';
 import { FeedImport, ImportFeedsResponse } from '../resolver-types/userFeedTypes.js';
@@ -18,12 +18,12 @@ export type FeedImportResult = {
   error?: string;
 };
 
-async function importFeed(feed: FeedImport, user: User): Promise<FeedImportResult> {
+async function importFeed(db: DB, feed: FeedImport, user: User): Promise<FeedImportResult> {
   const { schedule, title } = feed;
   const url = normalizes.feedUrl(feed.url);
   const val = validates.feedUrl.validate(url);
   if (val.error) return { url, error: val.error.message };
-  const results = await createUserFeed({
+  const results = await createUserFeed(db, {
     url,
     user,
     feedOpts: {
@@ -37,6 +37,7 @@ async function importFeed(feed: FeedImport, user: User): Promise<FeedImportResul
 }
 
 export async function launchFeedsImport(
+  db: DB,
   feeds: FeedImport[],
   userId: number,
 ): Promise<ImportFeedsResponse> {
@@ -48,7 +49,7 @@ export async function launchFeedsImport(
   if (feeds.length > maxItemsPerUser)
     return { errors: [new ArgumentError('feeds', 'Too many feeds')] };
 
-  const userWithCount = await getUserAndCountFeeds({ userId });
+  const userWithCount = await getUserAndCountFeeds(db, { userId });
   if (!userWithCount) throw new Error("Couln't find user");
   if (!userWithCount.emailVerified) {
     return { errors: [new ArgumentError(null, "Account isn't verified")] };
@@ -61,7 +62,7 @@ export async function launchFeedsImport(
   updateQueue
     .addAll(
       feeds.map((f) => async () => {
-        const result = await importFeed(f, userWithCount);
+        const result = await importFeed(db, f, userWithCount);
         await status.incr();
         return result;
       }),

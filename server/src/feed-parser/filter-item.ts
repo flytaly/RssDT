@@ -1,9 +1,7 @@
-/* eslint-disable import/no-cycle */
-import { Meta, Item } from 'feedparser';
-import sanitizeHtml from 'sanitize-html';
+import { NewEnclosure, NewItemWithEnclosures } from '#root/db/schema.js';
+import { Item, Meta } from 'feedparser';
 import pick from 'lodash.pick';
-// eslint-disable-next-line import/extensions
-import { Item as FeedItem, Enclosure } from '#entities';
+import sanitizeHtml from 'sanitize-html';
 import { FeedMeta } from '../types/index.js';
 
 export function filterMeta(feedMeta?: Meta): FeedMeta {
@@ -50,7 +48,7 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
 
   const fields = ['title', 'description', 'summary', 'pubdate', 'link', 'guid'];
 
-  const resultItem = new FeedItem();
+  const resultItem: NewItemWithEnclosures = {};
   Object.assign(resultItem, pick(item, fields));
   if (item.image && item.image.url) {
     resultItem.imageUrl = item.image.url;
@@ -59,9 +57,8 @@ export function createSanitizedItem(item: Partial<Item>, feedId?: number) {
   const encFields = ['url', 'type', 'length'];
   if (item.enclosures && item.enclosures.length) {
     resultItem.enclosures = item.enclosures.map((e) => {
-      const enc = new Enclosure();
+      const enc: NewEnclosure = {};
       Object.assign(enc, pick(e, encFields));
-      enc.item = resultItem;
       return enc;
     });
   }

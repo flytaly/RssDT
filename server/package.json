@@ -21,7 +21,10 @@
     "feed-watcher": "node dist/feed-watcher/watcher.worker.js",
     "feed-watcher:dev": "nodemon dist/feed-watcher/watcher.worker.js | bunyan -o short",
     "mail-worker": "node dist/mail/mail.worker.js",
-    "mail-worker:dev": "node dist/mail/mail.worker.js | bunyan -o short"
+    "mail-worker:dev": "node dist/mail/mail.worker.js | bunyan -o short",
+    "generate-migration": "drizzle-kit generate:pg --out drizzle --schema src/db/schema.ts",
+    "migrate": "node dist/scripts/migrate.js",
+    "migrate:test": "NODE_ENV=test npm run migrate"
   },
   "dependencies": {
     "@graphql-tools/schema": "^8.3.1",
@@ -35,6 +38,7 @@
     "cors": "^2.8.5",
     "dataloader": "^2.0.0",
     "dotenv-safe": "^8.2.0",
+    "drizzle-orm": "^0.27.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "feedparser": "^2.2.10",
@@ -54,7 +58,7 @@
     "nodemailer": "^6.5.0",
     "normalize-url": "^8.0.0",
     "p-queue": "^6.6.2",
-    "pg": "^8.5.1",
+    "pg": "^8.11.1",
     "pg-tsquery": "^8.2.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
@@ -62,7 +66,6 @@
     "sinon": "^12.0.1",
     "ts-node": "^10.4.0",
     "type-graphql": "^1.1.1",
-    "typeorm": "^0.2.32",
     "uuid": "^8.3.2",
     "ws": "^8.4.0"
   },
@@ -86,6 +89,7 @@
     "@types/maildev": "^0.0.3",
     "@types/mjml": "^4.7.0",
     "@types/nodemailer": "^6.4.1",
+    "@types/pg": "^8.10.2",
     "@types/sanitize-html": "^2.6.1",
     "@types/sinon": "^10.0.6",
     "@types/uuid": "^8.3.4",
@@ -94,6 +98,7 @@
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "ava": "^4.0.1",
     "class-validator": "^0.13.1",
+    "drizzle-kit": "^0.19.10",
     "eslint": "^8.6.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^8.1.0",
@@ -116,6 +121,7 @@
   "author": "",
   "license": "ISC",
   "imports": {
-    "#entities": "./dist/entities/index.js"
+    "#entities": "./dist/entities/index.js",
+    "#root/*": "./dist/*"
   }
 }

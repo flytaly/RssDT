@@ -1,49 +1,57 @@
-import { getConnection, Not } from 'typeorm';
+import { db } from '#root/db/db.js';
+import { items, userFeeds, UserFeedWithOpts, ItemWithEnclosures } from '#root/db/schema.js';
+import { DigestSchedule } from '#root/types/enums.js';
+import { sql } from 'drizzle-orm';
 import PgTsquery from 'pg-tsquery';
-// eslint-disable-next-line import/extensions
-import { Item, UserFeed } from '#entities';
-import { DigestSchedule } from '../types/enums.js';
+import { logger } from '#root/logger.js';
 
 const pgTsquery = PgTsquery();
 
 export async function userFeedsWithDigests(feedId: number) {
-  return UserFeed.find({
-    where: { feedId, activated: true, schedule: Not(DigestSchedule.disable) },
-    loadEagerRelations: true,
-    relations: ['user'],
-  });
+  const whereQuery = sql`${userFeeds.feedId} = ${feedId} AND ${userFeeds.activated} = true`;
+  whereQuery.append(sql` AND NOT ${userFeeds.schedule} = ${DigestSchedule.disable}`);
+  return db.query.userFeeds.findMany({
+    where: whereQuery,
+    with: {
+      user: {
+        with: {
+          options: true,
+        },
+      },
+    },
+  }) as Promise<UserFeedWithOpts[]>;
 }
 
 type GetItemsOptions = {
   limit?: number;
   usePubDate?: boolean;
-  filter?: string;
+  filter?: string | null;
 };
 
 export async function getItemsNewerThan(
   feedId: number,
-  time: Date | string,
+  time: Date,
   { limit, usePubDate = false, filter }: GetItemsOptions,
 ) {
-  let dbQuery = getConnection() //
-    .getRepository(Item)
-    .createQueryBuilder('item')
-    .where('item.feedId = :feedId', { feedId })
-    .andWhere('item.createdAt > :time', { time })
-    .leftJoinAndSelect('item.enclosures', 'enclosure')
-    .orderBy('item.createdAt', 'DESC')
-    .addOrderBy('item.pubdate', 'DESC')
-    .take(limit);
+  logger.info({ feedId, time: time, limit, usePubDate });
+
+  const where = sql`${items.feedId} = ${feedId} AND ${items.createdAt} > ${time}`;
 
   if (usePubDate) {
-    dbQuery = dbQuery.andWhere('item.pubdate > :time', { time });
+    where.append(sql` AND ${items.pubdate} > ${time}`);
   }
 
   if (filter) {
-    dbQuery = dbQuery.andWhere('to_tsvector(item.title) @@ to_tsquery(:query)', {
-      query: pgTsquery(filter),
-    });
+    const query = pgTsquery(filter);
+    where.append(sql` AND to_tsvector(${items.title}) @@ to_tsquery(${query})`);
   }
 
-  return dbQuery.getMany();
+  const itemsWithEnc = (await db.query.items.findMany({
+    with: { enclosures: true },
+    orderBy: sql`${items.createdAt} desc, ${items.pubdate} desc`,
+    where,
+    limit,
+  })) as ItemWithEnclosures[];
+
+  return itemsWithEnc;
 }

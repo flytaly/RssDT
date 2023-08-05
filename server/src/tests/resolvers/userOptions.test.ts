@@ -1,23 +1,23 @@
-import 'reflect-metadata';
+import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
+
+import { defaultLocale, defaultTimeZone } from '#root/constants.js';
+import { db } from '#root/db/db.js';
+import { Options, User } from '#root/db/schema.js';
+import { OptionsInput } from '#root/resolvers/resolver-types/inputs.js';
+import { getSdk } from '#root/tests/graphql/generated.js';
+import getTestClient from '#root/tests/test-utils/getClient.js';
+import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
+import { Theme } from '#root/types/enums.js';
 import test from 'ava';
 import faker from 'faker';
-// eslint-disable-next-line import/extensions
-import { User } from '#entities';
-import { defaultLocale, defaultTimeZone } from '../../constants.js';
-import { OptionsInput } from '../../resolvers/resolver-types/inputs.js';
-import { Theme } from '../../types/enums.js';
-import { getSdk } from '../graphql/generated.js';
-import { startTestServer, stopTestServer } from '../test-server.js';
-import getTestClient from '../test-utils/getClient.js';
-import { generateUserAndGetSdk } from '../test-utils/login.js';
 
-let user: User;
+let user: User & { options: Options };
 let sdk: ReturnType<typeof getSdk>;
 let sdkAnon: ReturnType<typeof getSdk>;
 
 test.before(async () => {
   await startTestServer();
-  ({ user, sdk } = await generateUserAndGetSdk());
+  ({ user, sdk } = await createUserAndGetSdk(db));
   sdkAnon = getSdk(getTestClient().client);
 });
 

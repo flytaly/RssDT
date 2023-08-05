@@ -1,18 +1,28 @@
-import { Enclosure, Feed, IEnclosure, Item } from '#entities';
-import { RepeatOptions } from 'bullmq';
-import moment from 'moment';
-import { getConnection, getManager, LessThan, QueryRunner } from 'typeorm';
 import {
   feedUpdateInterval,
   FEED_LOCK_URL_PREFIX,
   IS_TEST,
   maxItemsInFeed,
   maxOldItemsInFeed,
-} from '../constants.js';
-import { createSanitizedItem } from '../feed-parser/filter-item.js';
-import { getNewItems } from '../feed-parser/index.js';
-import { logger } from '../logger.js';
-import { redis } from '../redis.js';
+} from '#root/constants.js';
+import { db, type DB } from '#root/db/db.js';
+import {
+  enclosures,
+  Feed,
+  feeds,
+  items,
+  NewEnclosure,
+  NewFeed,
+  NewItemWithEnclosures,
+  updateLastPubdateFromItems,
+} from '#root/db/schema.js';
+import { createSanitizedItem, filterMeta } from '#root/feed-parser/filter-item.js';
+import { getNewItems } from '#root/feed-parser/index.js';
+import { logger } from '#root/logger.js';
+import { redis } from '#root/redis.js';
+import { RepeatOptions } from 'bullmq';
+import { sql } from 'drizzle-orm';
+import moment from 'moment';
 
 export type PartialFeed = {
   id: number;
@@ -22,26 +32,25 @@ export type PartialFeed = {
   lastSuccessfulUpd: Date;
 };
 
-export let getFeedsToUpdate = (minutes = 0) =>
-  getConnection()
-    .getRepository(Feed)
-    .find({
-      select: ['id', 'url', 'throttled', 'lastUpdAttempt', 'lastSuccessfulUpd'],
-      order: {
-        throttled: 'ASC',
-        lastUpdAttempt: 'ASC',
-      },
-      where: [
-        {
-          activated: true,
-          ...(minutes
-            ? {
-                lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * minutes)),
-              }
-            : {}),
-        },
-      ],
-    }) as Promise<PartialFeed[]>;
+export let getFeedsToUpdate = async (minutes = 0) => {
+  const where = sql`${feeds.activated} = true`;
+  if (minutes) {
+    const date = new Date(Date.now() - 1000 * 60 * minutes);
+    where.append(sql` AND ${feeds.lastUpdAttempt} < ${date}`);
+  }
+
+  return db
+    .select({
+      id: feeds.id,
+      url: feeds.url,
+      throttled: feeds.throttled,
+      lastUpdAttempt: feeds.lastUpdAttempt,
+      lastSuccessfulUpd: feeds.lastSuccessfulUpd,
+    })
+    .from(feeds)
+    .where(where)
+    .orderBy(sql`${feeds.throttled} asc, ${feeds.lastUpdAttempt} asc`);
+};
 
 export enum Status {
   Success = 1,
@@ -49,32 +58,46 @@ export enum Status {
 }
 
 const getItemsWithPubDate = (feedId: number) =>
-  getConnection()
-    .createQueryBuilder(Item, 'item')
-    .select(['item.pubdate', 'item.guid', 'item.title'])
-    .where('item.feedId = :id', { id: feedId })
-    .orderBy('pubdate', 'DESC')
-    .take(50)
-    .getMany() as Promise<
-    {
-      guid: string;
-      pubdate: Date;
-    }[]
-  >;
+  db
+    .select({
+      title: items.title,
+      pubdate: items.pubdate,
+      guid: items.guid,
+    })
+    .from(items)
+    .where(sql`${items.feedId} = ${feedId}`)
+    .orderBy(sql`${items.pubdate} desc`)
+    .limit(50);
 
-export const insertNewItems = async (items: Item[], queryRunner?: QueryRunner) => {
-  const qB = queryRunner
-    ? queryRunner.manager.createQueryBuilder()
-    : getConnection().createQueryBuilder();
-  const result = await qB.insert().into(Item).values(items).execute();
-  const encs: IEnclosure[] = [];
-  items.forEach(({ enclosures }) => {
-    if (enclosures?.length) {
-      encs.push(...enclosures);
-    }
+export const insertNewItems = async (connection: DB, insertingItems: NewItemWithEnclosures[]) => {
+  if (insertingItems.length === 0) return [];
+
+  const itemEnclosures: (NewEnclosure[] | null)[] = [];
+  insertingItems.forEach((item) => {
+    itemEnclosures.push(item.enclosures || null);
+    // NOTE: Delete enclosures, so it won't cause errors with drizzle-orm:
+    // `Cannot read properties of undefined (reading 'name')``
+    delete item.enclosures;
   });
-  await qB.insert().into(Enclosure).values(encs).execute();
-  return result;
+
+  const inserted = await connection
+    .insert(items)
+    .values(insertingItems)
+    .returning({ itemId: items.id });
+
+  const insertingEncs: NewEnclosure[] = [];
+  itemEnclosures.forEach((encs, index) => {
+    encs?.forEach((e) => {
+      e.itemId = inserted[index].itemId;
+      insertingEncs.push(e);
+    });
+  });
+
+  if (insertingEncs.length > 0) {
+    await connection.insert(enclosures).values(insertingEncs).execute();
+  }
+
+  return inserted;
 };
 
 /**
@@ -86,34 +109,33 @@ export const deleteOldItems = async (
   limitTotal = maxItemsInFeed,
   limitWeekOld = maxOldItemsInFeed,
 ) => {
-  if (feedId) {
-    const [, deletedNum] = await getManager().query(`
-        DELETE FROM item
-        WHERE item."feedId" = ${feedId}
-        AND item."id" IN ((
-                SELECT it."id"
-                FROM item it
+  if (!feedId) return 0;
+  const query = sql`
+        DELETE FROM ${items}
+        WHERE ${items.feedId} = ${feedId}
+        AND ${items.id} IN ((
+            SELECT ${items.id}
+            FROM ${items}
+            WHERE
+                ${items.feedId} = ${feedId}
+            ORDER BY
+                ${items.createdAt} DESC,
+                ${items.pubdate} DESC
+            OFFSET ${limitTotal}
+        ) UNION (
+                SELECT ${items.id}
+                FROM ${items}
                 WHERE
-                    it."feedId" = ${feedId}
+                    ${items.feedId} = ${feedId}
+                    AND ${items.createdAt} <= ${moment().subtract(1, 'week').toDate()}
                 ORDER BY
-                    it."createdAt" DESC,
-                    it."pubdate" DESC
-                OFFSET ${limitTotal}
-            ) UNION (
-                SELECT it."id"
-                FROM item it
-                WHERE
-                    it."feedId" = ${feedId}
-                    AND it."createdAt" <= '${moment().subtract(1, 'week').toISOString()}'
-                ORDER BY
-                    it."createdAt" DESC,
-                    it."pubdate" DESC
+                    ${items.createdAt} DESC,
+                    ${items.pubdate} DESC
                 OFFSET ${limitWeekOld}
-            ));
-    `);
-    return deletedNum as number;
-  }
-  return 0;
+        ));
+    `;
+  const results = await db.execute(query);
+  return results.rowCount;
 };
 
 export type UpdateFeedResult = readonly [Status, number, Feed | undefined | null];
@@ -135,12 +157,12 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
   }
   await redis.set(lockKey, 'lock', 'EX', 60 * 4);
 
-  const feed = await Feed.findOne({
-    where: {
-      url,
-      ...(skipRecent ? { lastUpdAttempt: LessThan(new Date(Date.now() - 1000 * 60 * 4)) } : {}),
-    },
-  });
+  const where = sql`${feeds.url} = ${url}`;
+  if (skipRecent) {
+    where.append(sql` AND ${feeds.lastUpdAttempt} < ${new Date(Date.now() - 1000 * 60 * 4)}`);
+  }
+  const selected = await db.select().from(feeds).where(where).execute();
+  let feed = selected[0];
 
   if (feed) {
     const ts = new Date();
@@ -148,14 +170,22 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
     try {
       const prevItems = await getItemsWithPubDate(feed.id);
       const { feedItems, feedMeta } = await getNewItems(url, prevItems);
-      feed.addMeta(feedMeta);
-      feed.lastSuccessfulUpd = ts;
-      feed.throttled = Math.max(0, feed.throttled - 2);
-      feed.updateLastPubdate(feedItems);
-      await feed.save();
+      const feedUpdate: NewFeed = {
+        ...filterMeta(feedMeta),
+        url: feed.url,
+        lastSuccessfulUpd: ts,
+        throttled: Math.max(0, feed.throttled - 2),
+      };
+      updateLastPubdateFromItems(feedUpdate, feedItems);
+      const updated = await db
+        .update(feeds)
+        .set(feedUpdate)
+        .where(sql`${feeds.id} = ${feed.id}`)
+        .returning();
+      feed = updated[0];
       if (feedItems?.length) {
         const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
-        await insertNewItems(itemsToSave);
+        await insertNewItems(db, itemsToSave);
         const deleted = await deleteOldItems(feed.id);
         deletedItemsNum += deleted;
         newItemsNum += itemsToSave.length;
@@ -163,11 +193,16 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
       status = Status.Success;
       logger.info({ url, newItemsNum, deletedItemsNum }, `feed was updated`);
     } catch (error) {
-      logger.error({ url }, `feed wasn't updated: ${error.message}`);
+      logger.error({ url }, `feed wasn't updated: ${error.message} ${error.stack}`);
       if (IS_TEST) throw error;
 
-      feed.throttled = Math.min(6, feed.throttled + 1);
-      await feed.save();
+      const throttled = Math.min(6, feed.throttled + 1);
+      const updated = await db
+        .update(feeds)
+        .set({ throttled })
+        .where(sql`${feeds.id} = ${feed.id}`)
+        .returning();
+      feed = updated[0];
     }
   }
 

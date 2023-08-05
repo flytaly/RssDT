@@ -1,14 +1,12 @@
-import { DeepPartial, getConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Options } from '#entities';
+import { DB } from '#root/db/db.js';
+import { Options, options } from '#root/db/schema.js';
+import { eq } from 'drizzle-orm';
 
-export async function updateUserOptions(userId: number, values: DeepPartial<Options>) {
-  const result = await getConnection()
-    .createQueryBuilder()
-    .update(Options)
+export async function updateUserOptions(db: DB, userId: number, values: Partial<Options>) {
+  const result = await db //
+    .update(options)
     .set(values)
-    .where('userId = :id', { id: userId })
-    .returning('*')
-    .execute();
-  return { options: result.raw[0] as Options };
+    .where(eq(options.userId, userId))
+    .returning();
+  return { options: result[0] };
 }

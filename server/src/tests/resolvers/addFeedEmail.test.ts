@@ -1,31 +1,35 @@
-import test, { ExecutionContext } from 'ava';
-import faker from 'faker';
-import nock from 'nock';
-import * as uuid from 'uuid';
-// eslint-disable-next-line import/extensions
-import { User, UserFeed } from '#entities';
+import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
+
+import { db } from '#root/db/db.js';
+import { userFeeds, users } from '#root/db/schema.js';
 import {
   AddFeedEmailInput,
   UserFeedOptionsInput,
   UserInfoInput,
-} from '../../resolvers/resolver-types/inputs.js';
-import { DigestSchedule } from '../../types/enums.js';
-import { getSdk } from '../graphql/generated.js';
-import { startTestServer, stopTestServer } from '../test-server.js';
-import { generateFeed } from '../test-utils/generate-feed.js';
-import getTestClient from '../test-utils/getClient.js';
+} from '#root/resolvers/resolver-types/inputs.js';
+import { DigestSchedule } from '#root/types/enums.js';
+import test, { ExecutionContext } from 'ava';
+import { SQL, eq } from 'drizzle-orm';
+import faker from 'faker';
+import nock from 'nock';
+import * as uuid from 'uuid';
+import { getSdk } from '#root/tests/graphql/generated.js';
+import { generateFeed } from '#root/tests/test-utils/generate-feed.js';
+import getTestClient from '#root/tests/test-utils/getClient.js';
 import {
   deleteEmails,
   getEmailByAddress,
   getSubscriptionConfirmData,
-} from '../test-utils/test-emails.js';
+} from '#root/tests/test-utils/test-emails.js';
 
 let testData: {
   feed: ReturnType<typeof generateFeed>;
   input: AddFeedEmailInput;
   userInfo: UserInfoInput;
 };
+
 const sdk = getSdk(getTestClient().client);
+
 test.before(async () => {
   await startTestServer();
 
@@ -34,10 +38,12 @@ test.before(async () => {
   const input = { feedUrl: feed.feedUrl, email: faker.internet.email().toLowerCase() };
   testData = { feed, input, userInfo: { locale: 'de', timeZone: 'Europe/Berlin' } };
 });
+
 test.after(() => {
   nock.cleanAll();
   return stopTestServer();
 });
+
 test.afterEach(async () => {
   await deleteEmails();
 });
@@ -51,6 +57,13 @@ async function getToken(email: string, userFeedId: number | string, t: Execution
   return tokenAndId;
 }
 
+async function getUserFeed(where: SQL<unknown>) {
+  return db.query.userFeeds.findFirst({
+    with: { user: true, feed: true },
+    where,
+  });
+}
+
 test.serial('addFeedWithEmail: create user, feed, send mail', async (t) => {
   const { userInfo, input } = testData;
 
@@ -60,7 +73,7 @@ test.serial('addFeedWithEmail: create user, feed, send mail', async (t) => {
   t.falsy(errors);
   t.truthy(userFeed);
 
-  const dbUserFeed = await UserFeed.findOne(userFeed!.id, { relations: ['user', 'feed'] });
+  const dbUserFeed = await getUserFeed(eq(userFeeds.id, userFeed!.id));
   const expectedUf = { ...feedOpts, schedule: DigestSchedule.daily, activated: false };
   t.like(dbUserFeed, expectedUf, 'cannot disable digests');
   t.like(dbUserFeed?.user, { ...userInfo, emailVerified: false }, 'email should be not verified');
@@ -85,7 +98,7 @@ test.serial('activateFeed: activate feed', async (t) => {
 
   const { activateFeed } = await sdk.activateFeed(tokenAndId);
   t.like(activateFeed.userFeed, { activated: true });
-  const dbUserFeed = await UserFeed.findOne(feedId, { relations: ['user', 'feed'] });
+  const dbUserFeed = await getUserFeed(eq(userFeeds.id, feedId!));
   t.like(dbUserFeed, { activated: true });
   t.like(dbUserFeed?.user, { emailVerified: true });
   t.like(dbUserFeed?.feed, { activated: true });
@@ -107,8 +120,8 @@ test.serial('addFeedWithEmail: add another feed to the same user', async (t) => 
   t.falsy(addFeedWithEmail!.errors);
   t.is(addFeedWithEmail!.userFeed?.feed.url, feed2.feedUrl);
   t.like(addFeedWithEmail?.userFeed, { activated: false });
-  const user = await User.findOne({ where: { email } });
-  const uFeed = await UserFeed.find({ where: { userId: user?.id }, relations: ['feed'] });
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
+  const uFeed = await db.query.userFeeds.findMany({ where: eq(userFeeds.userId, user!.id) });
   t.is(uFeed.length, 2);
 });
 

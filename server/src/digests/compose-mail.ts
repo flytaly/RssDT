@@ -1,11 +1,10 @@
+import { Enclosure, Feed, Item, ItemWithEnclosures, UserFeedWithOpts } from '#root/db/schema.js';
 import { DateTime } from 'luxon';
 import mjml2html from 'mjml';
-import url from 'url';
 import sanitizeHtml from 'sanitize-html';
-// eslint-disable-next-line import/extensions
-import { Feed, UserFeed, IEnclosure, IItem } from '#entities';
-import { EnclosureWithTitle, Share } from '../types/index.js';
+import url from 'url';
 import { TernaryState } from '../types/enums.js';
+import { EnclosureWithTitle, Share } from '#root/types/index.js';
 import { digestNames } from './digest-names.js';
 import shareProviders from './share.js';
 import themes, { HTMLMailTheme } from './themes.js';
@@ -30,25 +29,29 @@ const imagesTypes = [
 ];
 
 /** Enclosures url could be too long. This function reduces them to filename and saves them as 'title' property. */
-const addTitlesToEnclosures = (enclosures?: IEnclosure[]) =>
+const addTitlesToEnclosures = (enclosures?: Enclosure[]) =>
   enclosures
     ? enclosures.reduce((acc, enc) => {
-        const noSlashUrl = enc.url?.endsWith('/') ? enc.url.slice(0, enc.url.length - 1) : enc.url;
+        if (!enc.url) return acc;
+        const noSlashUrl = enc.url.endsWith('/') ? enc.url.slice(0, enc.url.length - 1) : enc.url;
         const { pathname } = url.parse(noSlashUrl);
         const filename = pathname?.split('/').pop();
 
-        acc.push({ ...enc, title: filename || enc.url });
+        acc.push({ ...enc, title: filename || enc.url || '' });
         return acc;
       }, [] as EnclosureWithTitle[])
     : [];
 
-const getImageFromEnclosures = (enclosures?: IEnclosure[]) => {
+const getImageFromEnclosures = (enclosures?: Enclosure[]) => {
   const enc = enclosures?.find(({ type }) => imagesTypes.includes(type || ''));
-  if (enc) return enc.url;
-  return '';
+  return enc?.url || '';
 };
 
-export const composeHTML = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
+export const composeHTML = (
+  userFeed: UserFeedWithOpts,
+  feed: Feed,
+  items: Array<Item & { enclosures: Enclosure[] }>,
+) => {
   const { user } = userFeed;
   const { options } = userFeed.user;
   const withToC = ternaryToBool(userFeed.withContentTable, options.withContentTableDefault);
@@ -85,12 +88,12 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
       acc +
       theme.item({
         id,
-        title,
-        link,
+        title: title || undefined,
+        link: link || undefined,
         imageUrl,
         date,
         enclosures,
-        content,
+        content: content || undefined,
         share,
       })
     );
@@ -103,7 +106,7 @@ export const composeHTML = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
   return mjml2html(resultStr);
 };
 
-export const composeText = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
+export const composeText = (userFeed: UserFeedWithOpts, feed: Feed, items: Item[]) => {
   const { user } = userFeed;
   const { options } = userFeed.user;
   // const withToC = ternaryToBool(userFeed.withContentTable, options.withContentTableDefault);
@@ -134,7 +137,11 @@ You are receiving this digest because you subscribed to it on FeedMailu.com
   return result;
 };
 
-export let composeDigest = (userFeed: UserFeed, feed: Feed, items: IItem[]) => {
+export let composeDigest = (
+  userFeed: UserFeedWithOpts,
+  feed: Feed,
+  items: ItemWithEnclosures[],
+) => {
   if (!userFeed?.user?.options) {
     return { errors: [{ message: 'userFeed should have user and user.options objects' }] };
   }

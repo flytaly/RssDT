@@ -1,9 +1,9 @@
 import 'reflect-metadata';
 import '../dotenv.js';
+
 import { QueueScheduler, Worker } from 'bullmq';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { IS_TEST } from '../constants.js';
-import { initDbConnection } from '../dbConnection.js';
 import { initLogFiles, logger } from '../logger.js';
 import { createRedis, redis } from '../redis.js';
 import { getFeedsToUpdate } from './watcher-utils.js';
@@ -53,8 +53,6 @@ async function createWorkerAndQueue(clearJobs = true) {
 export async function start() {
   initLogFiles({ prefix: 'watcher_', name: 'watcher' });
 
-  const db = await initDbConnection(false);
-
   await createWorkerAndQueue(true);
 
   const feeds = await getFeedsToUpdate();
@@ -67,7 +65,6 @@ export async function start() {
     await watcherQueue.close();
     await worker.close();
     await scheduler.close();
-    await db.close();
     redis.disconnect();
     process.exit();
   };

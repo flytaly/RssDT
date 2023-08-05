@@ -1,37 +1,31 @@
-import { getManager } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { UserFeed } from '#entities';
+import { DB } from '#root/db/db';
+import { items, userFeeds } from '#root/db/schema.js';
+import { sql } from 'drizzle-orm';
 
-export const setLastViewedItemDate = async ({
-  itemId,
-  userFeedId,
-  userId,
-}: {
+interface Args {
   itemId: number;
   userFeedId: number;
   userId: number;
-}) => {
-  const result = await getManager().query(
-    `
-        UPDATE
-            "user_feed" AS uf
-        SET
-          "updatedAt" = CURRENT_TIMESTAMP,
-          "lastViewedItemDate" = Item."createdAt"
-        FROM
-          (
-            SELECT item."createdAt"
-            FROM item
-            WHERE item.id = $1
-          ) AS Item
-        WHERE
-          uf."id" = $2
-          AND uf."userId" = $3
-        RETURNING *
-    `,
-    [itemId, userFeedId, userId],
-  );
+}
 
-  if (!result[1]) return null;
-  return result[0][0] as UserFeed;
+export const setLastViewedItemDate = async (db: DB, { itemId, userFeedId, userId }: Args) => {
+  const query = sql`
+      UPDATE ${userFeeds}
+      SET
+          "${sql.raw(userFeeds.updatedAt.name)}" = CURRENT_TIMESTAMP,
+          "${sql.raw(userFeeds.lastViewedItemDate.name)}" = it."createdAt"
+      FROM
+         (
+           SELECT ${items.createdAt}
+           FROM ${items}
+           WHERE ${items.id} = ${itemId}
+         ) AS it
+       WHERE
+          ${userFeeds.id} = ${userFeedId}
+         AND ${userFeeds.userId} = ${userId}
+       RETURNING *
+  `;
+
+  const results = await db.execute(query);
+  return results.rows[0] || null;
 };

@@ -1,21 +1,19 @@
-import { getConnection } from 'typeorm';
-import { Feed, User } from '#entities';
-import { importNormalizer, normalizeUrl } from '../../utils/normalizer.js';
+import { DB } from '#root/db/db.js';
+import { feeds, users, usersToBeDeleted } from '#root/db/schema.js';
+import { eq } from 'drizzle-orm';
+import { importNormalizer, normalizeUrl } from '#root/utils/normalizer.js';
 
-export const deleteUserWithEmail = (email: string) =>
-  getConnection()
-    .createQueryBuilder()
-    .delete()
-    .from(User)
-    .where('email = :email', { email })
-    .execute();
+export async function deleteUserWithEmail(db: DB, email: string) {
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
+  if (!user) return;
+  await db.delete(usersToBeDeleted).where(eq(usersToBeDeleted.userId, user.id)).execute();
+  await db.delete(users).where(eq(users.id, user.id)).execute();
+}
 
-export const deleteFeedWithUrl = async (url: string) => {
+export async function deleteFeedWithUrl(db: DB, url: string) {
   await importNormalizer();
-  return getConnection()
-    .createQueryBuilder()
-    .delete()
-    .from(Feed)
-    .where('url = :url', { url: normalizeUrl(url) }) //
+  await db
+    .delete(feeds)
+    .where(eq(feeds.url, normalizeUrl(url)))
     .execute();
-};
+}

@@ -1,33 +1,39 @@
-import argon2 from 'argon2';
-import test from 'ava';
-import faker from 'faker';
-// eslint-disable-next-line import/extensions
-import { User, UsersToBeDeleted } from '#entities';
-import { getSdk } from '../graphql/generated.js';
-import { startTestServer, stopTestServer } from '../test-server.js';
-import { deleteUserWithEmail } from '../test-utils/dbQueries.js';
-import getTestClient from '../test-utils/getClient.js';
-import { getSdkWithLoggedInUser } from '../test-utils/login.js';
+import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
+
+import { db } from '#root/db/db.js';
+import { users, usersToBeDeleted } from '#root/db/schema.js';
+import { getSdk } from '#root/tests/graphql/generated.js';
+import { deleteUserWithEmail } from '#root/tests/test-utils/dbQueries.js';
+import getTestClient from '#root/tests/test-utils/getClient.js';
+import { getSdkWithLoggedInUser } from '#root/tests/test-utils/login.js';
 import {
   deleteEmails,
   getConfirmRegisterData,
   getEmailByAddress,
   getPasswordResetData,
-} from '../test-utils/test-emails.js';
+} from '#root/tests/test-utils/test-emails.js';
+import argon2 from 'argon2';
+import test from 'ava';
+import { eq } from 'drizzle-orm';
+import faker from 'faker';
+
+const email = faker.internet.email().toLowerCase();
+const password = faker.internet.password(8);
+const sdkAnonym = getSdk(getTestClient().client);
 
 test.before(() => startTestServer());
 
 test.afterEach(async () => {
   await deleteEmails();
 });
-test.after(() => stopTestServer());
 
-const email = faker.internet.email().toLowerCase();
-const password = faker.internet.password(8);
-const sdkAnonym = getSdk(getTestClient().client);
+test.after(async () => {
+  await deleteUserWithEmail(db, email);
+  return stopTestServer();
+});
 
 const registerUser = async () => {
-  await deleteUserWithEmail(email);
+  await deleteUserWithEmail(db, email);
   return sdkAnonym.register({ email, password });
 };
 
@@ -45,7 +51,7 @@ test.serial('register: create user and return cookie', async (t) => {
 });
 
 test.serial('register: should hash password', async (t) => {
-  const user = await User.findOne({ where: { email } });
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
   t.truthy(await argon2.verify(user!.password!, password));
 });
 
@@ -99,7 +105,7 @@ test.serial('requestPasswordReset: reset password flow', async (t) => {
   const r = await sdk.resetPassword({ input: { ...tokenAndId, password: newPass } });
   t.like(r.resetPassword.user, { email });
 
-  const userRecord = await User.findOne(tokenAndId.userId);
+  const userRecord = await db.query.users.findFirst({ where: eq(users.id, +tokenAndId.userId) });
   t.true(await argon2.verify(userRecord!.password!, newPass));
 });
 
@@ -185,15 +191,19 @@ test.serial('input validation: login', async (t) => {
 test.serial('delete user', async (t) => {
   await registerUser();
 
-  const user = await User.findOne({ where: { email } });
-  t.is(user!.deleted, false);
+  let user = await db.query.users.findFirst({ where: eq(users.email, email) });
+
+  t.falsy(user!.deleted);
 
   const sdk = await getSdkWithLoggedInUser(email, password);
   const resp = await sdk.deleteUser();
   t.is(resp.deleteUser?.message, 'OK');
 
-  await user!.reload();
-  t.is(user!.deleted, true);
+  const userAfter = await db.query.users.findFirst({ where: eq(users.email, email) });
+  t.is(userAfter?.deleted, true);
 
-  await t.notThrowsAsync(UsersToBeDeleted.findOneOrFail(user!.id));
+  const deletedUser = await db.query.usersToBeDeleted.findFirst({
+    where: eq(usersToBeDeleted.userId, user!.id),
+  });
+  t.truthy(deletedUser);
 });

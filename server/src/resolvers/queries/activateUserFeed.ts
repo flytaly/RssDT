@@ -1,39 +1,38 @@
-import { getConnection } from 'typeorm';
-// eslint-disable-next-line import/extensions
-import { Feed, User, UserFeed } from '#entities';
+import { DB } from '#root/db/db.js';
+import { Feed, feeds, UserFeed, userFeeds } from '#root/db/schema.js';
+import { sql } from 'drizzle-orm';
+
+interface ActivateUserFeedArgs {
+  userFeedId: number;
+  userId?: number | null;
+  onSuccess?: (uf: UserFeed, feed: Feed) => Promise<unknown>;
+}
 
 export async function activateUserFeed(
-  userFeedId: number,
-  userId: number | null,
-  onSuccess?: (uf: UserFeed, feed: Feed) => Promise<unknown>,
+  db: DB,
+  { userFeedId, userId, onSuccess }: ActivateUserFeedArgs,
 ) {
-  const qb = getConnection().createQueryBuilder();
-
-  // Update UserFeed
-  const updResult = await qb
-    .update(UserFeed)
-    .set({ activated: true })
-    .where({ id: userFeedId, ...(userId ? { userId } : {}) })
-    .returning('*')
-    .execute();
-  if (!updResult.raw.length) return { errors: [{ message: "couldn't activate feed" }] };
-  const userFeed = updResult.raw[0] as UserFeed;
-  userFeed.activated = true;
+  // Update userFeed
+  const whereSql = sql`${userFeeds.id} = ${userFeedId}`;
+  if (userId) {
+    whereSql.append(sql` AND ${userFeeds.userId} = ${userId}`);
+  }
+  const updatedUF = await db
+    .update(userFeeds)
+    .set({ activated: true }) //
+    .where(whereSql)
+    .returning();
+  const userFeed = updatedUF[0];
+  if (!userFeed) return { errors: [{ message: "couldn't activate feed" }] };
 
   // Update Feed
-  const feedUpdResult = await qb
-    .update(Feed)
+  const updatedFeeds = await db
+    .update(feeds)
     .set({ activated: true })
-    .where({ id: userFeed.feedId, activated: false })
-    .returning('*')
-    .execute();
-  const feed = feedUpdResult.raw[0] as Feed;
-  userFeed.feed = feed;
+    .where(sql`${feeds.id} = ${userFeed.feedId} AND ${feeds.activated} = false`)
+    .returning();
 
-  // Update User
-  await qb.update(User).set({ emailVerified: true }).where({ id: userFeed.userId }).execute();
+  await onSuccess?.(userFeed, updatedFeeds[0]);
 
-  await onSuccess?.(userFeed, feed);
-
-  return { userFeed };
+  return { userFeed: { ...userFeed, feed: updatedFeeds[0] } };
 }
