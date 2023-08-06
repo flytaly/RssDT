@@ -19,7 +19,7 @@ const NavLink: React.FC<NavLinkProps> = ({ className = '', href, title, icon }) 
   const router = useRouter();
   return (
     <li className={className}>
-      <Link href={href}>
+      <Link href={href} className="hover-underline-link">
         {icon ? (
           <button
             type="button"
@@ -30,7 +30,7 @@ const NavLink: React.FC<NavLinkProps> = ({ className = '', href, title, icon }) 
             {icon}
           </button>
         ) : (
-          <a className="hover-underline-link">{title}</a>
+          <span>{title}</span>
         )}
       </Link>
     </li>
@@ -38,8 +38,8 @@ const NavLink: React.FC<NavLinkProps> = ({ className = '', href, title, icon }) 
 };
 const SubNavLink: React.FC<NavLinkProps> = ({ className = '', href, title }) => (
   <li className={className}>
-    <Link href={href}>
-      <a className="block hover:bg-primary hover:bg-opacity-30 p-2">{title}</a>
+    <Link href={href} className="block hover:bg-primary hover:bg-opacity-30 p-2">
+      {title}
     </Link>
   </li>
 );

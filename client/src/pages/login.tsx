@@ -17,8 +17,8 @@ const initialMessages: MessageItem[] = [
     content: (
       <>
         <span>To reset or create new password&nbsp;</span>
-        <Link href="request-reset">
-          <a className="text-primary underline">click here</a>
+        <Link href="request-reset" className="text-primary underline">
+          click here
         </Link>
       </>
     ),

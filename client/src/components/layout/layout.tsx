@@ -19,11 +19,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="mt-auto" />
           <footer className="text-center text-sm text-gray-400 mt-8 mb-3 space-x-2">
             <span>{currentYear}</span>
-            <Link href="/help">
-              <a className="hover:underline">Help</a>
+            <Link href="/help" className="hover:underline">
+              Help
             </Link>
-            <Link href="/contacts">
-              <a className="hover:underline">Contacts</a>
+            <Link href="/contacts" className="hover:underline">
+              Contacts
             </Link>
           </footer>
         </div>

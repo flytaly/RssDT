@@ -85,8 +85,8 @@ const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
             required
           />
           <div className="w-full text-right mb-3">
-            <Link href="/request-reset">
-              <a className="text-xs underline">I forgot or don&apos;t have password</a>
+            <Link href="/request-reset" className="text-xs underline">
+              I forgot or don&apos;t have password
             </Link>
           </div>
           <button

@@ -183,8 +183,8 @@ const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
                   />
                 </Cell>
                 <Cell name="Feed">
-                  <Link href={`/feed/${uf.id}`}>
-                    <a className="underline">{uf.title || uf.feed.title}</a>
+                  <Link href={`/feed/${uf.id}`} className="underline">
+                    {uf.title || uf.feed.title}
                   </Link>
                 </Cell>
                 <Cell className="text-xs" name="Added">

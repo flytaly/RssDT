@@ -22,10 +22,12 @@ const CardNavBar: React.FC<{ title: string; routes: CardRoute[]; activePath: str
         <div className="text-lg text-primary-dark font-bold">{title}</div>
         <nav className="flex text-sm space-x-4">
           {routes.map((r) => (
-            <Link key={r.path} href={r.path}>
-              <a className={`hover-underline-link ${r.path === activePath ? 'active' : ''}`}>
-                {r.name}
-              </a>
+            <Link
+              key={r.path}
+              href={r.path}
+              className={`hover-underline-link ${r.path === activePath ? 'active' : ''}`}
+            >
+              {r.name}
             </Link>
           ))}
         </nav>

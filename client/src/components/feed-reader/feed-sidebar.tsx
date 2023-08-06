@@ -47,32 +47,31 @@ const FeedSidebar: React.FC<FeedSidebarProps> = ({
         const bg = uf.id === id ? `bg-secondary` : '';
         return (
           <li key={uf.id} title={`${uf.newItemsCount || 0} new items`}>
-            <Link href={`/feed/${uf.id}`}>
-              <a
-                className={`group flex items-center pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
-                onClick={() => onSidebarClose?.()}
-              >
-                {uf.feed.siteFavicon ? (
-                  <img className="h-4 w-4 mr-1" src={uf.feed.siteFavicon} />
-                ) : (
-                  <span className="h-4 w-4 mr-1 flex-shrink-0" />
-                )}
+            <Link
+              href={`/feed/${uf.id}`}
+              className={`group flex items-center pl-3 focus:ring-2 focus:ring-secondary whitespace-nowrap w-full ${font} ${bg}`}
+              onClick={() => onSidebarClose?.()}
+            >
+              {uf.feed.siteFavicon ? (
+                <img className="h-4 w-4 mr-1" src={uf.feed.siteFavicon} />
+              ) : (
+                <span className="h-4 w-4 mr-1 flex-shrink-0" />
+              )}
 
-                <span className="overflow-ellipsis overflow-hidden group-hover:underline">
-                  {uf.title || uf.feed.title || uf.feed.url}
-                </span>
-                {hasNew ? (
-                  <>
-                    <div
-                      className="flex-shrink-0 ml-1 mt-1 w-1 h-1 rounded-full bg-gray-200
+              <span className="overflow-ellipsis overflow-hidden group-hover:underline">
+                {uf.title || uf.feed.title || uf.feed.url}
+              </span>
+              {hasNew ? (
+                <>
+                  <div
+                    className="flex-shrink-0 ml-1 mt-1 w-1 h-1 rounded-full bg-gray-200
                   bg-opacity-70 group-hover:bg-opacity-100"
-                    />
-                    <div className="group-hover:text-white text-xs text-gray-400 self-center ml-auto">
-                      {uf.newItemsCount}
-                    </div>
-                  </>
-                ) : null}
-              </a>
+                  />
+                  <div className="group-hover:text-white text-xs text-gray-400 self-center ml-auto">
+                    {uf.newItemsCount}
+                  </div>
+                </>
+              ) : null}
             </Link>
           </li>
         );

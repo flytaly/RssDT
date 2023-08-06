@@ -62,8 +62,8 @@ const FeedContent: React.FC<{
               onChange={debounce(handleSearch, 800)}
             />
             <div>
-              <Link href="/help#filter">
-                <a className="underline text-xs">search syntax</a>
+              <Link href="/help#filter" className="underline text-xs">
+                search syntax
               </Link>
             </div>
           </div>

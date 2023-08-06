@@ -59,8 +59,8 @@ const Overview: React.FC<OverviewProps> = ({ feeds, setSidebarModalOpen }) => {
                   <img className="inline mr-1 w-6 h-6" src={siteFavicon} />
                 )}
 
-                <Link href={`/feed/${f.id}`}>
-                  <a className="inline font-bold hover:underline">{displayTitle}</a>
+                <Link href={`/feed/${f.id}`} className="inline font-bold hover:underline">
+                  {displayTitle}
                 </Link>
                 <div className="text-xs">{f.feed.description?.slice(0, 100)}</div>
               </li>

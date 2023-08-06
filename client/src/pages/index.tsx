@@ -25,12 +25,12 @@ const ifLogoutMsg: MessageItem[] = [
     content: (
       <span>
         <span>To read or manage your feeds </span>
-        <Link href="/login">
-          <a className="underline text-primary">log in</a>
+        <Link href="/login" className="underline text-primary">
+          log in
         </Link>
         {' or '}
-        <Link href="/register">
-          <a className="underline text-primary">register</a>
+        <Link href="/register" className="underline text-primary">
+          register
         </Link>
       </span>
     ),

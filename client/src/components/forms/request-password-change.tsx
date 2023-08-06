@@ -62,8 +62,8 @@ const RequestPasswordChangeForm: React.FC<RequestPassProps> = ({ setMessages }) 
             required
           />
           <div className="w-full text-right mb-3">
-            <Link href="/login">
-              <a className="text-xs underline">← back to log in form</a>
+            <Link href="/login" className="text-xs underline">
+              ← back to log in form
             </Link>
           </div>
           <button

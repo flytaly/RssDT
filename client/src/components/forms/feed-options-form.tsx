@@ -159,8 +159,8 @@ const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
               <span className="text-xs">
                 Words and phrases separated by commas that should be contained in the titles of the
                 items.
-                <Link href="/help#filter">
-                  <a className="underline ml-1">More info</a>
+                <Link href="/help#filter" className="underline ml-1">
+                  More info
                 </Link>
               </span>
             </div>
