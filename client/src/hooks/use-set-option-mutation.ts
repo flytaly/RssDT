@@ -5,7 +5,7 @@ import {
   OptionsInput,
   SetOptionsMutation,
   useSetOptionsMutation,
-} from '../generated/graphql';
+} from '@/generated/graphql';
 
 type OptionsKey = keyof OptionsInput;
 

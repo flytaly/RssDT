@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
-import MaximizeIcon from '../../../public/static/maximize.svg';
 
-import { AppStateDispatchCtx } from '../app-context';
+import MaximizeIcon from '@/../public/static/maximize.svg';
+import { AppStateDispatchCtx } from '@/components/app-context';
 
 export type CardRoute = {
   name: string;

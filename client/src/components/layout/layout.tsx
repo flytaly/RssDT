@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import React from 'react';
-import Meta from '../meta';
+
+import Meta from '@/components/meta';
+
 import Header from './header';
 
 interface LayoutProps {

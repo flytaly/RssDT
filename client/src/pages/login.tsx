@@ -1,12 +1,13 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import LoginForm from '../components/forms/log-in-form';
-import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/main-card/animated-message';
-import FormSide from '../components/main-card/form-side';
-import MessagesSide from '../components/main-card/messages-side';
-import MainCard from '../components/main-card/main-card';
+
+import LoginForm from '@/components/forms/log-in-form';
+import Layout from '@/components/layout/layout';
+import { MessageItem } from '@/components/main-card/animated-message';
+import FormSide from '@/components/main-card/form-side';
+import MainCard from '@/components/main-card/main-card';
+import MessagesSide from '@/components/main-card/messages-side';
 
 const initialMessages: MessageItem[] = [
   {

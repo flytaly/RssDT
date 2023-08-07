@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import mailgo from 'mailgo';
 import { Formik } from 'formik';
-import { string, object } from 'yup';
-import MailIcon from '../../public/static/envelope.svg';
-import GithubIcon from '../../public/static/github.svg';
-import { useSendFeedbackMutation } from '../generated/graphql';
+import mailgo from 'mailgo';
+import { useEffect } from 'react';
+import { object, string } from 'yup';
+
+import MailIcon from '@/../public/static/envelope.svg';
+import GithubIcon from '@/../public/static/github.svg';
+import { useSendFeedbackMutation } from '@/generated/graphql';
 
 const validationSchema = object().shape({
   email: string().email('Invalid email address').required('The field is required'),

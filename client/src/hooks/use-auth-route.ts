@@ -1,7 +1,8 @@
 import Router from 'next/router';
 import { useEffect } from 'react';
-import { MeDocument, MeQuery, useMeQuery, useUpdateUserInfoMutation } from '../generated/graphql';
-import { getUserLocaleInfo } from '../utils/user-locale';
+
+import { MeDocument, MeQuery, useMeQuery, useUpdateUserInfoMutation } from '@/generated/graphql';
+import { getUserLocaleInfo } from '@/utils/user-locale';
 
 /**
  * Redirect if user isn't authenticated.

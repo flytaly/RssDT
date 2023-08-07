@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from 'react';
+
 import {
   ImportState,
   ImportStatusObject,
   useImportFeedsMutation,
   useImportStatusQuery,
-} from '../generated/graphql';
-import { useDropArea } from '../hooks/use-droparea';
-import { getFeedsFromOpml, getFeedsFromText } from '../utils/import-utils';
+} from '@/generated/graphql';
+import { useDropArea } from '@/hooks/use-droparea';
+import { getFeedsFromOpml, getFeedsFromText } from '@/utils/import-utils';
 
 async function getFeeds(file: File) {
   if (file.name.endsWith('.opml') || file.type === 'text/xml') {

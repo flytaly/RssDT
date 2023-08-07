@@ -12,8 +12,10 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { useMemo } from 'react';
-import { PaginatedItemsResponse } from '../generated/graphql';
-import { isServer } from '../utils/is-server';
+
+import { PaginatedItemsResponse } from '@/generated/graphql';
+import { isServer } from '@/utils/is-server';
+
 import { createWsLink } from './websocket-link';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';

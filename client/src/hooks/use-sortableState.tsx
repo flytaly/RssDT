@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import SortUpIcon from '../../public/static/sort-up.svg';
-import SortDownIcon from '../../public/static/sort-down.svg';
-import SortIcon from '../../public/static/sort.svg';
-import { UserFeed } from '../generated/graphql';
-import { periodToNum } from '../types';
+
+import SortDownIcon from '@/../public/static/sort-down.svg';
+import SortUpIcon from '@/../public/static/sort-up.svg';
+import SortIcon from '@/../public/static/sort.svg';
+import { UserFeed } from '@/generated/graphql';
+import { periodToNum } from '@/types';
 
 export type SortableColumn =
   | 'title'

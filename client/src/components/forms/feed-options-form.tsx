@@ -1,6 +1,10 @@
 import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
+
+import InputUnderline, { InputUnderlineProps } from './input-underline';
+import SelectUnderline, { SelectProps } from './select-underline';
+import EmailIcon from '../../../public/static/envelope.svg';
 import {
   TernaryState,
   Theme,
@@ -10,9 +14,6 @@ import {
 } from '../../generated/graphql';
 import { DigestSchedule, periodNames } from '../../types';
 import GraphQLError from '../graphql-error';
-import InputUnderline, { InputUnderlineProps } from './input-underline';
-import SelectUnderline, { SelectProps } from './select-underline';
-import EmailIcon from '../../../public/static/envelope.svg';
 
 interface InputProps {
   children: React.ReactNode;

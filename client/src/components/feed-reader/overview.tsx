@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
 import Link from 'next/link';
-import BarsIcon from '../../../public/static/bars.svg';
-import { useItemsCountUpdatedSubscription, UserFeed } from '../../generated/graphql';
-import { createUpdateOnNewItems } from '../../utils/update-unread-count';
+import React, { useMemo } from 'react';
+
+import BarsIcon from '@/../public/static/bars.svg';
+import { useItemsCountUpdatedSubscription, UserFeed } from '@/generated/graphql';
+import { createUpdateOnNewItems } from '@/utils/update-unread-count';
 
 interface OverviewProps {
   feeds: UserFeed[];

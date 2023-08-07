@@ -1,16 +1,18 @@
-import React from 'react';
 import { Formik } from 'formik';
+import React from 'react';
 import * as Yup from 'yup';
+
+import ClockIcon from '@/../public/static/clock.svg';
+import MailIcon from '@/../public/static/envelope.svg';
+import RssSquareIcon from '@/../public/static/rss-square.svg';
+import GraphQLError from '@/components/graphql-error';
+import { MessageItem } from '@/components/main-card/animated-message';
+import { useAddFeedWithEmailMutation } from '@/generated/graphql';
+import { periodNames as names, DigestSchedule } from '@/types';
+import { getUserLocaleInfo } from '@/utils/user-locale';
+
 import InputWithIcon from './input-with-icon';
-import RssSquareIcon from '../../../public/static/rss-square.svg';
-import MailIcon from '../../../public/static/envelope.svg';
-import ClockIcon from '../../../public/static/clock.svg';
 import SelectWithIcon from './select-with-icon';
-import { periodNames as names, DigestSchedule } from '../../types';
-import { useAddFeedWithEmailMutation } from '../../generated/graphql';
-import { MessageItem } from '../main-card/animated-message';
-import GraphQLError from '../graphql-error';
-import { getUserLocaleInfo } from '../../utils/user-locale';
 
 // VALIDATION
 const AddFeedSchema = Yup.object().shape({

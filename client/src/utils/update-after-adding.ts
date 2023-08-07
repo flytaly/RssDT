@@ -1,5 +1,6 @@
 import { MutationUpdaterFn } from '@apollo/client';
-import { AddFeedToCurrentUserMutation, MyFeedsQuery, MyFeedsDocument } from '../generated/graphql';
+
+import { AddFeedToCurrentUserMutation, MyFeedsQuery, MyFeedsDocument } from '@/generated/graphql';
 
 export const updateAfterAdding: MutationUpdaterFn<AddFeedToCurrentUserMutation> = (
   cache,

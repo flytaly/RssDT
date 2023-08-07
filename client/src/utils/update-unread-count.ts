@@ -1,11 +1,12 @@
 import { gql, OnSubscriptionDataOptions } from '@apollo/client';
+
 import {
   ItemsCountUpdatedSubscription,
   MyFeedItemsQuery,
   MyFeedsDocument,
   MyFeedsQuery,
-} from '../generated/graphql';
-import { PaginatedItemsRef } from '../lib/apollo-client';
+} from '@/generated/graphql';
+import { PaginatedItemsRef } from '@/lib/apollo-client';
 
 export const createUpdateOnNewItems =
   (currentUserFeedId?: number, onNewItems?: () => void) =>

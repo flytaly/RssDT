@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+
 import { CommonProps, useInputClasses } from './common';
 
 interface SelectWithIconProps extends CommonProps {

@@ -1,5 +1,5 @@
-import { DigestSchedule } from '../generated/graphql';
-import { periodNames as digestNames } from '../types';
+import { DigestSchedule } from '@/generated/graphql';
+import { periodNames as digestNames } from '@/types';
 
 export const tokens = {
   title: '{{title}}',

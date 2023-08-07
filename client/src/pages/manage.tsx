@@ -1,12 +1,13 @@
 import { NextPage } from 'next';
 import React from 'react';
-import FeedTable from '../components/feed-table';
-import Layout from '../components/layout/layout';
-import FeedNavBar from '../components/main-card/feed-nav-bar';
-import MainCard from '../components/main-card/main-card';
-import Spinner from '../components/spinner';
-import { useMyFeedsQuery, UserFeed } from '../generated/graphql';
-import useRedirectUnauthorized from '../hooks/use-auth-route';
+
+import FeedTable from '@/components/feed-table';
+import Layout from '@/components/layout/layout';
+import FeedNavBar from '@/components/main-card/feed-nav-bar';
+import MainCard from '@/components/main-card/main-card';
+import Spinner from '@/components/spinner';
+import { useMyFeedsQuery, UserFeed } from '@/generated/graphql';
+import useRedirectUnauthorized from '@/hooks/use-auth-route';
 
 const FeedManager: NextPage = () => {
   useRedirectUnauthorized();

@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { AppStateCtx } from '../app-context';
-import EmailVerificationWarning from '../../email-verification-warning';
-import { useMeQuery } from '../../generated/graphql';
-import { isServer } from '../../utils/is-server';
+
+import { AppStateCtx } from '@/components/app-context';
+import EmailVerificationWarning from '@/email-verification-warning';
+import { useMeQuery } from '@/generated/graphql';
+import { isServer } from '@/utils/is-server';
 
 interface MainCardProps {
   big?: boolean;

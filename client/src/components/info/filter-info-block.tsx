@@ -1,5 +1,7 @@
 import React from 'react';
-import SearchIcon from '../../../public/static/search.svg';
+
+import SearchIcon from '@/../public/static/search.svg';
+
 import PrimaryLink from './primary-link';
 
 const FilterInfoBlock = () => {

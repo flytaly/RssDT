@@ -2,10 +2,12 @@ import { Formik } from 'formik';
 import { useRouter } from 'next/dist/client/router';
 import React from 'react';
 import * as Yup from 'yup';
-import PasswordIcon from '../../../public/static/key.svg';
-import { MeDocument, MeQuery, useResetPasswordMutation } from '../../generated/graphql';
-import GraphQLError from '../graphql-error';
-import { MessageItem } from '../main-card/animated-message';
+
+import PasswordIcon from '@/../public/static/key.svg';
+import GraphQLError from '@/components/graphql-error';
+import { MessageItem } from '@/components/main-card/animated-message';
+import { MeDocument, MeQuery, useResetPasswordMutation } from '@/generated/graphql';
+
 import InputWithIcon from './input-with-icon';
 
 // VALIDATION

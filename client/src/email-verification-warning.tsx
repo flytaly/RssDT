@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useRequestEmailVerificationMutation } from './generated/graphql';
+
+import { useRequestEmailVerificationMutation } from '@/generated/graphql';
 
 const EmailVerificationWarning = () => {
   const [resendEmail, { loading, error }] = useRequestEmailVerificationMutation();

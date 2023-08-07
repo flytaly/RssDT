@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
-import { getAppElement } from '../../utils/get-app-element';
+
+import { getAppElement } from '@/utils/get-app-element';
 
 const customStyles = (right: boolean): Modal.Styles => ({
   overlay: {

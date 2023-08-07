@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { getAppElement } from '../../utils/get-app-element';
+
+import { getAppElement } from '@/utils/get-app-element';
 
 const customStyles: Modal.Styles = {
   overlay: {

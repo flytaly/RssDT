@@ -1,15 +1,17 @@
 import React, { RefObject, useCallback, useState } from 'react';
-import MailIcon from '../../../public/static/mail.svg';
-import EditIcon from '../../../public/static/edit.svg';
-import ItemBigIcon from '../../../public/static/item-big.svg';
-import ItemMediumIcon from '../../../public/static/item-middle.svg';
-import ItemSmallIcon from '../../../public/static/item-small.svg';
-import ExtLinkIcon from '../../../public/static/external-link.svg';
-import SearchIcon from '../../../public/static/search.svg';
-import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '../../generated/graphql';
-import { clamp } from '../../utils/clamp';
-import usePopup from '../../hooks/use-popup';
-import EditFeedModal from '../modals/edit-feed-modal';
+
+import EditIcon from '@/../public/static/edit.svg';
+import ExtLinkIcon from '@/../public/static/external-link.svg';
+import ItemBigIcon from '@/../public/static/item-big.svg';
+import ItemMediumIcon from '@/../public/static/item-middle.svg';
+import ItemSmallIcon from '@/../public/static/item-small.svg';
+import MailIcon from '@/../public/static/mail.svg';
+import SearchIcon from '@/../public/static/search.svg';
+import EditFeedModal from '@/components/modals/edit-feed-modal';
+import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '@/generated/graphql';
+import usePopup from '@/hooks/use-popup';
+import { clamp } from '@/utils/clamp';
+
 import { ItemViewId, ItemViews, ReaderOptions } from './reader-options';
 
 const ViewIcon = ({ viewId, className }: { viewId: ItemViewId; className?: string }) => {

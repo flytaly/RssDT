@@ -2,10 +2,12 @@ import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import * as Yup from 'yup';
-import MailIcon from '../../../public/static/envelope.svg';
-import { useRequestPasswordResetMutation } from '../../generated/graphql';
-import GraphQLError from '../graphql-error';
-import { MessageItem } from '../main-card/animated-message';
+
+import MailIcon from '@/../public/static/envelope.svg';
+import GraphQLError from '@/components/graphql-error';
+import { MessageItem } from '@/components/main-card/animated-message';
+import { useRequestPasswordResetMutation } from '@/generated/graphql';
+
 import InputWithIcon from './input-with-icon';
 
 // VALIDATION

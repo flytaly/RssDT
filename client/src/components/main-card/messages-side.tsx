@@ -1,5 +1,7 @@
 import React from 'react';
-import MessageBlock from '../message-block';
+
+import MessageBlock from '@/components/message-block';
+
 import { MessageItem } from './animated-message';
 
 interface MessagesSideProps {

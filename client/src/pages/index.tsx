@@ -1,13 +1,14 @@
 import { NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import AddDigestFeedForm from '../components/forms/add-digest-feed-form';
-import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/main-card/animated-message';
-import FormSide from '../components/main-card/form-side';
-import MainCard from '../components/main-card/main-card';
-import MessagesSide from '../components/main-card/messages-side';
-import { useMeQuery } from '../generated/graphql';
+
+import AddDigestFeedForm from '@/components/forms/add-digest-feed-form';
+import Layout from '@/components/layout/layout';
+import { MessageItem } from '@/components/main-card/animated-message';
+import FormSide from '@/components/main-card/form-side';
+import MainCard from '@/components/main-card/main-card';
+import MessagesSide from '@/components/main-card/messages-side';
+import { useMeQuery } from '@/generated/graphql';
 
 const infoMessages: MessageItem[] = [
   {

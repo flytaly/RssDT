@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import MailIcon from '../../../public/static/mail.svg';
-import HelpCircle from '../../../public/static/help-circle.svg';
-import SettingsIcon from '../../../public/static/settings.svg';
-import ProfileIcon from '../../../public/static/user-circle-solid.svg';
-import { useMeQuery } from '../../generated/graphql';
-import Spinner from '../spinner';
+
+import HelpCircle from '@/../public/static/help-circle.svg';
+import MailIcon from '@/../public/static/mail.svg';
+import SettingsIcon from '@/../public/static/settings.svg';
+import ProfileIcon from '@/../public/static/user-circle-solid.svg';
+import Spinner from '@/components/spinner';
+import { useMeQuery } from '@/generated/graphql';
 
 interface NavLinkProps {
   href: string;

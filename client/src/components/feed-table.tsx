@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
-import EditIcon from '../../public/static/edit.svg';
-import TrashIcon from '../../public/static/trash.svg';
-import { useDeleteMyFeedsMutation, UserFeed } from '../generated/graphql';
-import { SortableColumn, useSortableState } from '../hooks/use-sortableState';
-import { periodNames } from '../types';
-import { updateAfterDelete as update } from '../utils/update-after-delete';
-import CheckBox from './forms/checkbox';
-import AddFeedModal from './modals/add-feed-modal';
-import ConfirmModal from './modals/confirm-modal';
-import EditFeedModal from './modals/edit-feed-modal';
+
+import EditIcon from '@/../public/static/edit.svg';
+import TrashIcon from '@/../public/static/trash.svg';
+import CheckBox from '@/components/forms/checkbox';
+import AddFeedModal from '@/components/modals/add-feed-modal';
+import ConfirmModal from '@/components/modals/confirm-modal';
+import EditFeedModal from '@/components/modals/edit-feed-modal';
+import { useDeleteMyFeedsMutation, UserFeed } from '@/generated/graphql';
+import { SortableColumn, useSortableState } from '@/hooks/use-sortableState';
+import { periodNames } from '@/types';
+import { updateAfterDelete as update } from '@/utils/update-after-delete';
 
 type FeedTableProps = {
   feeds: Array<UserFeed>;

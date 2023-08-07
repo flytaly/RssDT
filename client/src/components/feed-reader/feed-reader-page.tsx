@@ -1,8 +1,10 @@
 import { NextPage } from 'next';
 import React, { useEffect } from 'react';
-import Layout from '../layout/layout';
-import FeedNavBar from '../main-card/feed-nav-bar';
-import MainCard from '../main-card/main-card';
+
+import Layout from '@/components/layout/layout';
+import FeedNavBar from '@/components/main-card/feed-nav-bar';
+import MainCard from '@/components/main-card/main-card';
+
 import FeedReader from './feed-reader';
 
 const FeedReaderPage: NextPage<{ id?: number }> = ({ id }) => {

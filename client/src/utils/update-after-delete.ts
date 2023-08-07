@@ -1,5 +1,6 @@
 import { MutationUpdaterFn } from '@apollo/client';
-import { DeleteMyFeedsMutation, MyFeedsDocument, MyFeedsQuery } from '../generated/graphql';
+
+import { DeleteMyFeedsMutation, MyFeedsDocument, MyFeedsQuery } from '@/generated/graphql';
 
 export const updateAfterDelete: MutationUpdaterFn<DeleteMyFeedsMutation> | undefined = (
   cache,

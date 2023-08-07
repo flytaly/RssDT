@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import ViewItemModal from '@/components/modals/view-item-modal';
+import Spinner from '@/components/spinner';
 import {
   FeedFieldsFragment,
   ItemFieldsFragment,
   useMyFeedItemsQuery,
   UserFeedFieldsFragment,
   useSetLastViewedItemDateMutation,
-} from '../../generated/graphql';
-import ViewItemModal from '../modals/view-item-modal';
-import Spinner from '../spinner';
+} from '@/generated/graphql';
+
 import FeedItem, { fontSizes } from './feed-item';
 import FeedItemContent from './feed-item-content';
 import { ReaderOptions } from './reader-options';

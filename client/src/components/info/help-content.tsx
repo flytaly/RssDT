@@ -1,7 +1,8 @@
 import React from 'react';
-import PrimaryLink from './primary-link';
+
 import DigestInfoBlock from './digest-info-block';
 import FilterInfoBlock from './filter-info-block';
+import PrimaryLink from './primary-link';
 
 type HelpSection = {
   id: string;

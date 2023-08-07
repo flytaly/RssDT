@@ -2,9 +2,10 @@ import { ApolloProvider } from '@apollo/client';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import type { PathHistory } from '../types';
-import { AppStateProvider } from '../components/app-context';
-import { useApollo } from '../lib/apollo-client';
+
+import { AppStateProvider } from '@/components/app-context';
+import { useApollo } from '@/lib/apollo-client';
+import type { PathHistory } from '@/types';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -1,15 +1,16 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
 import React from 'react';
-import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/main-card/animated-message';
-import MessagesSide from '../components/main-card/messages-side';
-import MainCard from '../components/main-card/main-card';
+
+import Layout from '@/components/layout/layout';
+import { MessageItem } from '@/components/main-card/animated-message';
+import MainCard from '@/components/main-card/main-card';
+import MessagesSide from '@/components/main-card/messages-side';
 import {
   GetFeedInfoByTokenDocument,
   GetFeedInfoByTokenQuery,
   useUnsubscribeByTokenMutation,
-} from '../generated/graphql';
-import { initializeApollo } from '../lib/apollo-client';
+} from '@/generated/graphql';
+import { initializeApollo } from '@/lib/apollo-client';
 
 const wrongQueryMsg: MessageItem = {
   key: 'query-error',

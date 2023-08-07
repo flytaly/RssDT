@@ -1,16 +1,17 @@
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { useRouter } from 'next/dist/client/router';
 import React, { useEffect } from 'react';
-import Layout from '../components/layout/layout';
-import { MessageItem } from '../components/main-card/animated-message';
-import MainCard from '../components/main-card/main-card';
-import MessagesSide from '../components/main-card/messages-side';
+
+import Layout from '@/components/layout/layout';
+import { MessageItem } from '@/components/main-card/animated-message';
+import MainCard from '@/components/main-card/main-card';
+import MessagesSide from '@/components/main-card/messages-side';
 import {
   MeDocument,
   MeQuery,
   useVerifyEmailMutation,
   VerifyEmailMutation,
-} from '../generated/graphql';
+} from '@/generated/graphql';
 
 type ConfirmRegisterProps = { id?: string; token?: string };
 

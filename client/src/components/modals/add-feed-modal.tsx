@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
-import { useAddFeedToCurrentUserMutation } from '../../generated/graphql';
-import { DigestDisable, DigestSchedule, periodNames } from '../../types';
-import { getAppElement } from '../../utils/get-app-element';
-import { updateAfterAdding as update } from '../../utils/update-after-adding';
-import InputUnderline from '../forms/input-underline';
-import SelectUnderline from '../forms/select-underline';
+
+import InputUnderline from '@/components/forms/input-underline';
+import SelectUnderline from '@/components/forms/select-underline';
+import { useAddFeedToCurrentUserMutation } from '@/generated/graphql';
+import { DigestDisable, DigestSchedule, periodNames } from '@/types';
+import { getAppElement } from '@/utils/get-app-element';
+import { updateAfterAdding as update } from '@/utils/update-after-adding';
 
 interface AddFeedModalProps {
   isOpen: boolean;

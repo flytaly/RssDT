@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useMyFeedsQuery, UserFeed } from '../../generated/graphql';
-import AddFeedModal from '../modals/add-feed-modal';
-import ModalSidebar from '../modals/modal-sidebar';
-import FeedSidebar from './feed-sidebar';
+
+import AddFeedModal from '@/components/modals/add-feed-modal';
+import ModalSidebar from '@/components/modals/modal-sidebar';
+import { useMyFeedsQuery, UserFeed } from '@/generated/graphql';
+
 import FeedContent from './feed-content';
+import FeedSidebar from './feed-sidebar';
 import Overview from './overview';
 
 const FeedReader = ({ id }: { id?: number }) => {

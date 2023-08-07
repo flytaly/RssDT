@@ -1,5 +1,6 @@
-import React from 'react';
 import Image from 'next/image';
+import React from 'react';
+
 import PrimaryLink from './primary-link';
 
 const DigestInfoBlock = () => {

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ItemFieldsFragment } from '../../generated/graphql';
+
+import { ItemFieldsFragment } from '@/generated/graphql';
+
 import FeedItemContent from './feed-item-content';
 import { ReaderOptions } from './reader-options';
 

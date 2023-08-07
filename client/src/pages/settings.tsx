@@ -1,12 +1,15 @@
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { LabeledCheckbox } from '../components/forms/checkbox';
-import EditEmailSubject from '../components/forms/edit-email-subject';
-import SelectUnderline from '../components/forms/select-underline';
-import Layout from '../components/layout/layout';
-import MainCard from '../components/main-card/main-card';
-import SettingsNavBar from '../components/main-card/settings-nav-bar';
-import Item from '../components/settings-item';
+
+import { LabeledCheckbox } from '@/components/forms/checkbox';
+import EditEmailSubject from '@/components/forms/edit-email-subject';
+import SelectUnderline from '@/components/forms/select-underline';
+import Layout from '@/components/layout/layout';
+import MainCard from '@/components/main-card/main-card';
+import SettingsNavBar from '@/components/main-card/settings-nav-bar';
+import Item from '@/components/settings-item';
+import Spinner from '@/components/spinner';
 import {
   Options,
   OptionsInput,
@@ -15,13 +18,11 @@ import {
   useMeQuery,
   useMyOptionsQuery,
   useDeleteMeMutation,
-} from '../generated/graphql';
-import shareProviders from '../share-providers';
-import useAuthRoute from '../hooks/use-auth-route';
-// import { ShareId } from '../types';
-import { useSetPartialOptionsMutation } from '../hooks/use-set-option-mutation';
-import Spinner from '../components/spinner';
-import { useRouter } from 'next/router';
+} from '@/generated/graphql';
+import useAuthRoute from '@/hooks/use-auth-route';
+// import { ShareId } from '@/types';
+import { useSetPartialOptionsMutation } from '@/hooks/use-set-option-mutation';
+import shareProviders from '@/share-providers';
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);
 

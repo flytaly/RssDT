@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { isServer } from '../../utils/is-server';
+
+import { isServer } from '@/utils/is-server';
 
 export type ItemViewId = 'full' | 'medium' | 'collapsed';
 export const ItemViews: Record<ItemViewId, string> = {

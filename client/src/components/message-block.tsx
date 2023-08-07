@@ -1,7 +1,11 @@
 import React from 'react';
-import AnimatedMessage, { MessageItem, useEmergeTransition } from './main-card/animated-message';
-import AlertCircleIcon from '../../public/static/alert-circle.svg';
-import CheckCircleIcon from '../../public/static/check-circle.svg';
+
+import AlertCircleIcon from '@/../public/static/alert-circle.svg';
+import CheckCircleIcon from '@/../public/static/check-circle.svg';
+import AnimatedMessage, {
+  MessageItem,
+  useEmergeTransition,
+} from '@/components/main-card/animated-message';
 
 interface MessageBlockProps {
   items: MessageItem[];

@@ -1,15 +1,12 @@
-import React, { RefObject, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import {
-  DigestSchedule,
-  FeedFieldsFragment,
-  UserFeedFieldsFragment,
-} from '../../generated/graphql';
-import Spinner from '../spinner';
-import XIcon from '../../../public/static/x.svg';
-import MoreIcon from '../../../public/static/more-horizontal.svg';
-import usePopup from '../../hooks/use-popup';
+import React, { RefObject, useMemo, useState } from 'react';
+
+import MoreIcon from '@/../public/static/more-horizontal.svg';
+import XIcon from '@/../public/static/x.svg';
+import Spinner from '@/components/spinner';
+import { DigestSchedule, FeedFieldsFragment, UserFeedFieldsFragment } from '@/generated/graphql';
+import usePopup from '@/hooks/use-popup';
 
 interface FeedSidebarProps {
   feeds?: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
