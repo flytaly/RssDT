@@ -10,7 +10,7 @@ interface EditEmailSubjectProps {
   onSave?: (value: string) => {};
 }
 
-const EditEmailSubject: React.FC<EditEmailSubjectProps> = ({ value, loading, onSave }) => {
+const EditEmailSubject = ({ value, loading, onSave }: EditEmailSubjectProps) => {
   const [subject, setSubject] = useState(value || defaultTemplate);
   const example = {
     feedTitle: 'Feed Title',

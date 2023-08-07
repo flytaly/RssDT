@@ -15,7 +15,7 @@ interface NavLinkProps {
   className?: string;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ className = '', href, title, icon }) => {
+const NavLink = ({ className = '', href, title, icon }: NavLinkProps) => {
   const router = useRouter();
   return (
     <li className={className}>
@@ -36,7 +36,7 @@ const NavLink: React.FC<NavLinkProps> = ({ className = '', href, title, icon }) 
     </li>
   );
 };
-const SubNavLink: React.FC<NavLinkProps> = ({ className = '', href, title }) => (
+const SubNavLink = ({ className = '', href, title }: NavLinkProps) => (
   <li className={className}>
     <Link href={href} className="block hover:bg-primary hover:bg-opacity-30 p-2">
       {title}

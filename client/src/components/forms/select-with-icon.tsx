@@ -6,7 +6,7 @@ interface SelectWithIconProps extends CommonProps {
   defaultValue: string | number | readonly string[] | undefined;
 }
 
-const SelectWithIcon: React.FC<SelectWithIconProps> = ({
+const SelectWithIcon = ({
   children,
   defaultValue,
   error = '',
@@ -17,7 +17,7 @@ const SelectWithIcon: React.FC<SelectWithIconProps> = ({
   onFocus,
   title = '',
   touched = false,
-}) => {
+}: SelectWithIconProps) => {
   const inputEl = useRef<HTMLSelectElement>(null);
 
   const { classes, setIsFocused } = useInputClasses();

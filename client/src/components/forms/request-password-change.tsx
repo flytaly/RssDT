@@ -17,7 +17,7 @@ interface RequestPassProps {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
 
-const RequestPasswordChangeForm: React.FC<RequestPassProps> = ({ setMessages }) => {
+const RequestPasswordChangeForm = ({ setMessages }: RequestPassProps) => {
   const [requestPassword] = useRequestPasswordResetMutation();
   const [wasSuccess, setWasSuccess] = useState(false);
   return (

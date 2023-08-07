@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
   url: Yup.string().url('Invalid feed address').required('The field is required'),
 });
 
-const AddFeedModal: React.FC<AddFeedModalProps> = ({ isOpen, closeModal }) => {
+const AddFeedModal = ({ isOpen, closeModal }: AddFeedModalProps) => {
   const [addFeed] = useAddFeedToCurrentUserMutation();
   const [errorMsg, setErrorMsg] = useState('');
   const closingDuration = 100;

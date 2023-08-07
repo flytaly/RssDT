@@ -12,7 +12,7 @@ interface FeedItemProps {
 
 export const fontSizes = ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl'];
 
-const FeedItem: React.FC<FeedItemProps> = ({ item, readerOpts, onItemClick, isNew }) => {
+const FeedItem = ({ item, readerOpts, onItemClick, isNew }: FeedItemProps) => {
   const [isOverflown, setIsOverflown] = useState(false);
   const ref = useRef<HTMLElement>(null);
 

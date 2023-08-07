@@ -12,7 +12,7 @@ import usePopup from '../../hooks/use-popup';
 import EditFeedModal from '../modals/edit-feed-modal';
 import { ItemViewId, ItemViews, ReaderOptions } from './reader-options';
 
-const ViewIcon: React.FC<{ viewId: ItemViewId; className?: string }> = ({ viewId, className }) => {
+const ViewIcon = ({ viewId, className }: { viewId: ItemViewId; className?: string }) => {
   if (viewId === 'collapsed') return <ItemSmallIcon className={className} />;
   if (viewId === 'medium') return <ItemMediumIcon className={className} />;
   return <ItemBigIcon className={className} />;
@@ -25,12 +25,7 @@ interface FeedHeaderProps {
   toggleSearch?: () => void;
 }
 
-const FeedHeader: React.FC<FeedHeaderProps> = ({
-  userFeed,
-  readerOpts,
-  setReaderOpts,
-  toggleSearch,
-}) => {
+const FeedHeader = ({ userFeed, readerOpts, setReaderOpts, toggleSearch }: FeedHeaderProps) => {
   const [editFeedModal, setEditFeedModal] = useState(false);
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const [isViewOptsOpen, setIsViewOptsOpen] = useState(false);

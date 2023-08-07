@@ -10,11 +10,7 @@ interface MainCardProps {
   onlyWithVerifiedEmail?: boolean;
 }
 
-const MainCard: React.FC<MainCardProps> = ({
-  children,
-  big = false,
-  onlyWithVerifiedEmail = false,
-}) => {
+const MainCard = ({ children, big = false, onlyWithVerifiedEmail = false }: MainCardProps) => {
   const { fullWidth } = useContext(AppStateCtx);
   const { data, loading } = useMeQuery({ ssr: false });
 

@@ -13,9 +13,10 @@ interface FooterBtnProps {
   Icon: React.FC<React.SVGAttributes<SVGElement>>;
   text: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  children?: React.ReactNode;
 }
 
-const FooterBtnList: React.FC<FooterBtnProps> = ({ Icon, text, children }) => {
+const FooterBtnList = ({ Icon, text, children }: FooterBtnProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { anchorRef } = usePopup(
     isOpen,
@@ -52,7 +53,7 @@ interface FeedItemContentProps {
   isNew?: boolean;
 }
 
-const FeedItemContent: React.FC<FeedItemContentProps> = ({
+const FeedItemContent = ({
   item,
   containerClassName = '',
   bodyClassName = '',
@@ -61,7 +62,7 @@ const FeedItemContent: React.FC<FeedItemContentProps> = ({
   bottomGradient = false,
   bodyClickHandler,
   isNew = false,
-}) => {
+}: FeedItemContentProps) => {
   const onKeyPress = (e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Enter' || e.key === ' ') {
       bodyClickHandler?.(item.id);

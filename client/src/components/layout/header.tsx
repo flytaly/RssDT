@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import NavBar from './nav-bar';
 
-const Header: React.FC = () => {
+const Header = () => {
   return (
     <header className="flex justify-between items-center bg-primary-light rounded-lg py-0.5 px-2 mb-3">
       <Link href="/" className="inline-flex">

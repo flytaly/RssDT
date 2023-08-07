@@ -18,12 +18,7 @@ interface FeedSidebarProps {
   onSidebarClose?: () => void;
 }
 
-const FeedSidebar: React.FC<FeedSidebarProps> = ({
-  feeds,
-  loading,
-  onAddFeedClick,
-  onSidebarClose,
-}) => {
+const FeedSidebar = ({ feeds, loading, onAddFeedClick, onSidebarClose }: FeedSidebarProps) => {
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
   const [hideEmailFeeds, setHideEmailFeeds] = useState(false);

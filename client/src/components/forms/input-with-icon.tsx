@@ -7,7 +7,7 @@ interface InputWithIconProps extends CommonProps {
   required?: boolean;
 }
 
-const InputWithIcon: React.FC<InputWithIconProps> = ({
+const InputWithIcon = ({
   error = '',
   IconSVG,
   id,
@@ -16,7 +16,7 @@ const InputWithIcon: React.FC<InputWithIconProps> = ({
   title = '',
   touched = false,
   ...restProps
-}) => {
+}: InputWithIconProps) => {
   const inputEl = useRef<HTMLInputElement>(null);
 
   const { classes, setIsFocused } = useInputClasses();

@@ -1,12 +1,14 @@
 import React from 'react';
 import Spinner from './spinner';
 
-const Item: React.FC<{ title: React.ReactNode; error?: string; saving?: boolean }> = ({
-  children,
-  title,
-  error,
-  saving,
-}) => (
+interface ItemProps {
+  title: React.ReactNode;
+  error?: string;
+  saving?: boolean;
+  children: React.ReactNode;
+}
+
+const Item = ({ children, title, error, saving }: ItemProps) => (
   <article className="relative my-2 py-2 border-b border-gray-300">
     <h3 className="font-semibold mb-1">{title}</h3>
     <div className="font-light text-sm">{children}</div>

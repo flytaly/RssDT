@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import PrimaryLink from './primary-link';
 
-const DigestInfoBlock: React.FC = () => {
+const DigestInfoBlock = () => {
   return (
     <div className="space-y-7">
       <article>

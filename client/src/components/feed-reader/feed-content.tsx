@@ -8,10 +8,13 @@ import FeedHeader from './feed-header';
 import FeedItems from './feed-items';
 import { useLocalState } from './reader-options';
 
-const FeedContent: React.FC<{
+const FeedContent = ({
+  userFeed,
+  setSidebarModalOpen,
+}: {
   userFeed: UserFeed;
   setSidebarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ userFeed, setSidebarModalOpen }) => {
+}) => {
   const [showSearch, setShowSearch] = useState(false);
   const [readerOpts, setReaderOpts] = useLocalState();
   const [searchFilter, setSearchFilter] = useState('');

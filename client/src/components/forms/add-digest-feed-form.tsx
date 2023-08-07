@@ -38,7 +38,7 @@ function makeSuccessMessage(email: string, title: string, schedule: DigestSchedu
   return { key: `success${Math.random() * 1000}`, content, type: 'success' } as MessageItem;
 }
 
-const AddDigestFeedForm: React.FC<AddDigestFeedFormProps> = ({ email = '', setMessages }) => {
+const AddDigestFeedForm = ({ email = '', setMessages }: AddDigestFeedFormProps) => {
   const [addFeed] = useAddFeedWithEmailMutation();
 
   return (

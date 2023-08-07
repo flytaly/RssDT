@@ -22,7 +22,7 @@ interface SetPasswordProps {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
 
-const SetPasswordForm: React.FC<SetPasswordProps> = ({ setMessages, token, userId }) => {
+const SetPasswordForm = ({ setMessages, token, userId }: SetPasswordProps) => {
   const [resetPassword] = useResetPasswordMutation();
   const router = useRouter();
   const disabled = !token || !userId;

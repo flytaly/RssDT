@@ -37,7 +37,7 @@ const customStyles: Modal.Styles = {
   },
 };
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({
+const ConfirmModal = ({
   isOpen,
   closeModal,
   contentLabel,
@@ -45,7 +45,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   error = null,
   onConfirm,
   disableButtons = false,
-}) => {
+}: ConfirmModalProps) => {
   const closingDuration = 100;
   const springProps = useSpring({
     transform: isOpen ? 'scale3d(1,1,1)' : 'scale3d(0,0,0)',

@@ -6,7 +6,7 @@ import FeedSidebar from './feed-sidebar';
 import FeedContent from './feed-content';
 import Overview from './overview';
 
-const FeedReader: React.FC<{ id?: number }> = ({ id }) => {
+const FeedReader = ({ id }: { id?: number }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
   const { data, loading } = useMyFeedsQuery({ ssr: false });

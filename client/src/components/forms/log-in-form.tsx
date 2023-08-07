@@ -20,7 +20,7 @@ interface LoginProps {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
 
-const LoginForm: React.FC<LoginProps> = ({ setMessages }) => {
+const LoginForm = ({ setMessages }: LoginProps) => {
   const [logIn] = useLoginMutation();
   const router = useRouter();
   return (

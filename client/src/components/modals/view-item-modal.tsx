@@ -29,10 +29,11 @@ const customStyles: Modal.Styles = {
 
 interface ViewItemModalProps {
   isOpen: boolean;
+  children: React.ReactNode;
   onRequestClose: () => any;
 }
 
-const ViewItemModal: React.FC<ViewItemModalProps> = ({ isOpen, onRequestClose, children }) => {
+const ViewItemModal = ({ isOpen, onRequestClose, children }: ViewItemModalProps) => {
   return (
     <Modal
       appElement={getAppElement(false)}

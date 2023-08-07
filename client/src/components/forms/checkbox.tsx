@@ -5,14 +5,7 @@ interface CheckBoxProps
   id: string;
 }
 
-const CheckBox: React.FC<CheckBoxProps> = ({
-  id,
-  className,
-  title,
-  checked,
-  disabled,
-  ...props
-}) => {
+const CheckBox = ({ id, className, title, checked, disabled, ...props }: CheckBoxProps) => {
   return (
     <div className="flex items-center">
       <input className="absolute opacity-0" id={id} type="checkbox" checked={checked} {...props} />
@@ -37,12 +30,7 @@ interface LabeledCheckboxProps extends CheckBoxProps {
   labelContent: React.ReactNode;
 }
 
-export const LabeledCheckbox: React.FC<LabeledCheckboxProps> = ({
-  id,
-  labelContent,
-  disabled,
-  ...props
-}) => (
+export const LabeledCheckbox = ({ id, labelContent, disabled, ...props }: LabeledCheckboxProps) => (
   <div className="flex items-center">
     <CheckBox id={id} disabled={disabled} {...props} />
     <label htmlFor={id} className={`ml-1 ${disabled ? 'opacity-50' : ''}`}>

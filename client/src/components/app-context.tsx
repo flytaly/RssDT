@@ -8,7 +8,7 @@ export const AppStateCtx = createContext<AppState>(initialState);
 export const AppStateDispatchCtx = createContext<Dispatch<SetStateAction<AppState>>>(() => {});
 
 const StateStorageKey = 'app-state';
-export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppStateProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, setState] = useState(initialState);
 
   useEffect(() => {

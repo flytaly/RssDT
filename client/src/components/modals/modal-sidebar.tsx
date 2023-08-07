@@ -37,13 +37,13 @@ interface ModalSidebarProps {
   right?: boolean;
 }
 
-const ModalSidebar: React.FC<ModalSidebarProps> = ({
+const ModalSidebar = ({
   isOpen,
   closeModal,
   children,
   contentLabel,
   right = true,
-}) => {
+}: ModalSidebarProps) => {
   const closingDuration = 100;
   const translate = right ? 'translate3d(100%, 0, 0)' : 'translate3d(-100%, 0, 0)';
   const springProps = useSpring({

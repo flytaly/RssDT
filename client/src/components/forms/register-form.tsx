@@ -22,7 +22,7 @@ interface LoginProps {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
 }
 
-const RegisterForm: React.FC<LoginProps> = ({ setMessages }) => {
+const RegisterForm = ({ setMessages }: LoginProps) => {
   const [register] = useRegisterMutation();
   const router = useRouter();
   return (

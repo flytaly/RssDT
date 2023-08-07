@@ -2,7 +2,7 @@ import React from 'react';
 import SearchIcon from '../../../public/static/search.svg';
 import PrimaryLink from './primary-link';
 
-const FilterInfoBlock: React.FC = () => {
+const FilterInfoBlock = () => {
   return (
     <div>
       It&apos;s possible to filter items based on their titles. Filter query should consist of words

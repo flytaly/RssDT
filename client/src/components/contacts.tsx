@@ -11,7 +11,7 @@ const validationSchema = object().shape({
   text: string().max(10000).required('The field is required'),
 });
 
-const Contacts: React.FC = () => {
+const Contacts = () => {
   const [sendFeedback, { data }] = useSendFeedbackMutation();
   const isSuccess = data?.feedback?.success;
   useEffect(() => {

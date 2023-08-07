@@ -34,7 +34,7 @@ const helpArticles: HelpSection[] = [
   },
 ];
 
-const HelpContent: React.FC = () => {
+const HelpContent = () => {
   return (
     <div className="flex flex-col sm:flex-row mb-4">
       <aside className="sm:sticky top-0 self-start text-sm px-3 py-3 m-2 w-full sm:w-72">

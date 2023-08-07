@@ -23,13 +23,7 @@ interface FeedItemsProps {
 
 const take = 10;
 
-const FeedItems: React.FC<FeedItemsProps> = ({
-  feed,
-  readerOpts,
-  filter,
-  showRefetchBtn,
-  onRefetchEnd,
-}) => {
+const FeedItems = ({ feed, readerOpts, filter, showRefetchBtn, onRefetchEnd }: FeedItemsProps) => {
   const [showItemInModal, setShowItemInModal] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 0 });
   const { data, loading, fetchMore, error, refetch } = useMyFeedItemsQuery({

@@ -22,7 +22,7 @@ interface CellProps {
   className?: string;
 }
 
-const Cell: React.FC<CellProps> = ({ children, className = '', name = '', header = false }) => {
+const Cell = ({ children, className = '', name = '', header = false }: CellProps) => {
   return React.createElement(
     header ? 'th' : 'td',
     { className: `feed-table-column ${className}`, 'data-name': name },
@@ -34,7 +34,7 @@ interface RowProps {
   children: React.ReactNode;
   isOdd?: boolean;
 }
-const Row: React.FC<RowProps> = ({ children, isOdd = true }) => (
+const Row = ({ children, isOdd = true }: RowProps) => (
   <tr
     className={`grid feed-table-template gap-2 py-4 sm:py-1 hover:bg-primary-2 ${
       isOdd ? '' : 'bg-gray-200'
@@ -44,13 +44,13 @@ const Row: React.FC<RowProps> = ({ children, isOdd = true }) => (
   </tr>
 );
 
-const HeaderRow: React.FC = ({ children }) => (
+const HeaderRow = ({ children }) => (
   <tr className="feed-table-template hidden sm:grid gap-2 font-bold  py-4 sm:py-1 hover:bg-primary-2">
     {children}
   </tr>
 );
 
-const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ feeds, error }) => (
+const ConfirmDeleteMsg = ({ feeds, error }: { feeds: UserFeed[]; error?: string }) => (
   <div>
     Are you sure you want to delete the feeds:{' '}
     <ul className="max-h-32 overflow-auto text-sm">
@@ -67,7 +67,7 @@ const ConfirmDeleteMsg: React.FC<{ feeds: UserFeed[]; error?: string }> = ({ fee
 const formatDigestDate = (date?: string) => (date ? new Date(date).toLocaleString() : '-');
 const formatCreatedDate = (date: string) => new Date(date).toLocaleDateString();
 
-const FeedTable: React.FC<FeedTableProps> = ({ feeds }) => {
+const FeedTable = ({ feeds }: FeedTableProps) => {
   const [feedsToDelete, setFeedsToDelete] = useState<UserFeed[]>([]);
   const [editingFeed, setEditingFeed] = useState<UserFeed | null>(null);
   const [deleteError, setDeleteError] = useState('');

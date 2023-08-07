@@ -27,13 +27,13 @@ interface AnimatedMessageProps {
   type?: MessageType;
 }
 
-const AnimatedMessage: React.FC<AnimatedMessageProps> = ({
+const AnimatedMessage = ({
   children,
   style,
   text,
   withline = false,
   type,
-}) => {
+}: AnimatedMessageProps) => {
   let colors = 'shadow-message hover:shadow-message-darker';
   if (type === 'error') {
     colors = 'text-error shadow-message-err hover:shadow-message-err-darker';

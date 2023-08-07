@@ -9,10 +9,14 @@ export type CardRoute = {
   path: string;
 };
 
-const CardNavBar: React.FC<{ title: string; routes: CardRoute[]; activePath: string }> = ({
+const CardNavBar = ({
   routes,
   title,
   activePath,
+}: {
+  title: string;
+  routes: CardRoute[];
+  activePath: string;
 }) => {
   const dispatch = useContext(AppStateDispatchCtx);
   const toggleWidth = () => dispatch((prev) => ({ ...prev, fullWidth: !prev.fullWidth }));

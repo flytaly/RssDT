@@ -7,7 +7,7 @@ interface MessageBlockProps {
   items: MessageItem[];
 }
 
-const MessageBlock: React.FC<MessageBlockProps> = ({ items }) => {
+const MessageBlock = ({ items }: MessageBlockProps) => {
   const transitions = useEmergeTransition(items);
 
   const fragment = transitions((style, item) => {

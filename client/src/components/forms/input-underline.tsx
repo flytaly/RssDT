@@ -5,7 +5,7 @@ export type InputUnderlineProps = React.DetailedHTMLProps<
   HTMLInputElement
 >;
 
-const InputUnderline: React.FC<InputUnderlineProps> = ({ className, ...props }) => {
+const InputUnderline = ({ className, ...props }: InputUnderlineProps) => {
   return (
     <input
       className={`bg-transparent border-b-2 border-gray-500 focus:border-primary placeholder-gray-700 focus:bg-white hover:bg-white ${className}`}

@@ -11,14 +11,14 @@ interface EditFeedModalProps {
   feed: UserFeed | null;
 }
 
-const InfoRow: React.FC<{ title: string }> = ({ title, children }) => (
+const InfoRow = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="flex items-center mb-3">
     <b className="font-medium">{title}</b>
     <div className="flex-1 ml-3 p-1 border-b-2 border-gray-500 overflow-auto">{children}</div>
   </div>
 );
 
-const EditFeedModal: React.FC<EditFeedModalProps> = ({ isOpen, closeModal, feed }) => {
+const EditFeedModal = ({ isOpen, closeModal, feed }: EditFeedModalProps) => {
   const imageUrl = feed?.feed.imageUrl || feed?.feed.siteIcon;
   return (
     <ModalSidebar

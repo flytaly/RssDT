@@ -9,7 +9,7 @@ interface OverviewProps {
   setSidebarModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Overview: React.FC<OverviewProps> = ({ feeds, setSidebarModalOpen }) => {
+const Overview = ({ feeds, setSidebarModalOpen }: OverviewProps) => {
   useItemsCountUpdatedSubscription({ onSubscriptionData: createUpdateOnNewItems() });
 
   const feedsSorted = useMemo(() => {

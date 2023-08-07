@@ -14,15 +14,12 @@ import InputUnderline, { InputUnderlineProps } from './input-underline';
 import SelectUnderline, { SelectProps } from './select-underline';
 import EmailIcon from '../../../public/static/envelope.svg';
 
-interface FeedOptionsFormProps {
-  feed: UserFeed | null;
+interface InputProps {
+  children: React.ReactNode;
+  title: string;
 }
 
-const LabeledSelect: React.FC<{ title: string } | SelectProps> = ({
-  title,
-  children,
-  ...props
-}) => (
+const LabeledSelect = ({ title, children, ...props }: InputProps | SelectProps) => (
   <label className="flex mb-3">
     <b className="font-medium" style={{ minWidth: '40%' }}>
       {title}
@@ -33,11 +30,7 @@ const LabeledSelect: React.FC<{ title: string } | SelectProps> = ({
   </label>
 );
 
-const LabeledInput: React.FC<{ title: string } | InputUnderlineProps> = ({
-  title,
-  children,
-  ...props
-}) => (
+const LabeledInput = ({ title, children, ...props }: InputProps | InputUnderlineProps) => (
   <label className="flex mb-3">
     <b className="font-medium" style={{ minWidth: '30%' }}>
       {title}
@@ -50,7 +43,11 @@ const LabeledInput: React.FC<{ title: string } | InputUnderlineProps> = ({
   </label>
 );
 
-const FeedOptionsForm: React.FC<FeedOptionsFormProps> = ({ feed }) => {
+interface FeedOptionsFormProps {
+  feed: UserFeed | null;
+}
+
+const FeedOptionsForm = ({ feed }: FeedOptionsFormProps) => {
   const { data } = useMyOptionsQuery();
   const { withContentTableDefault, attachmentsDefault, itemBodyDefault } = data?.myOptions || {};
   const [setOptions] = useSetFeedOptionsMutation();

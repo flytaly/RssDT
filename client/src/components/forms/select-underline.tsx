@@ -5,7 +5,7 @@ export type SelectProps = React.DetailedHTMLProps<
   HTMLSelectElement
 >;
 
-const SelectUnderline: React.FC<SelectProps> = ({ className, ...props }) => {
+const SelectUnderline = ({ className, ...props }: SelectProps) => {
   return (
     <select
       className={`select w-full border-b-2 border-gray-500 focus:border-primary

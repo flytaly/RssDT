@@ -6,7 +6,7 @@ interface MessagesSideProps {
   items: MessageItem[];
 }
 
-const MessagesSide: React.FC<MessagesSideProps> = ({ items }) => {
+const MessagesSide = ({ items }: MessagesSideProps) => {
   return (
     <section className="relative flex-grow flex flex-col items-center rounded-md p-3 md:w-1/2">
       <MessageBlock items={items} />
