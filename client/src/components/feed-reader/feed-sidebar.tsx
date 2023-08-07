@@ -48,7 +48,11 @@ const FeedSidebar = ({ feeds, loading, onAddFeedClick, onSidebarClose }: FeedSid
               onClick={() => onSidebarClose?.()}
             >
               {uf.feed.siteFavicon ? (
-                <img className="h-4 w-4 mr-1" src={uf.feed.siteFavicon} />
+                <img
+                  className="h-4 w-4 mr-1"
+                  src={uf.feed.siteFavicon}
+                  alt={`${uf.feed.title} favicon`}
+                />
               ) : (
                 <span className="h-4 w-4 mr-1 flex-shrink-0" />
               )}

@@ -51,12 +51,14 @@ const Overview = ({ feeds, setSidebarModalOpen }: OverviewProps) => {
                     {`${f.newItemsCount} new items`}
                   </div>
                 ) : null}
-                {f.feed.siteIcon && <img className="inline mr-1 w-9 h-9" src={f.feed.siteIcon} />}
+                {f.feed.siteIcon && (
+                  <img className="inline mr-1 w-9 h-9" src={f.feed.siteIcon} alt="site icon" />
+                )}
                 {!siteIcon && !siteFavicon && (
                   <span className="text-3xl font-bold">{title[0]}</span>
                 )}
                 {!siteIcon && siteFavicon && (
-                  <img className="inline mr-1 w-6 h-6" src={siteFavicon} />
+                  <img className="inline mr-1 w-6 h-6" src={siteFavicon} alt="site icon" />
                 )}
 
                 <Link href={`/feed/${f.id}`} className="inline font-bold hover:underline">

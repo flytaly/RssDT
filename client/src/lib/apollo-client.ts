@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 /* From example: https://github.com/vercel/next.js/tree/canary/examples/with-apollo */
 import {
   ApolloClient,

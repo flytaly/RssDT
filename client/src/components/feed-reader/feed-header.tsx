@@ -55,7 +55,11 @@ const FeedHeader = ({ userFeed, readerOpts, setReaderOpts, toggleSearch }: FeedH
         <div className="flex items-baseline flex-1 space-x-1 flex-wrap max-w-full">
           <h3 className="flex items-center font-bold text-lg overflow-hidden whitespace-nowrap overflow-ellipsis max-w-full">
             {userFeed.feed.siteFavicon && (
-              <img className="h-4 w-4 mr-2" src={userFeed.feed.siteFavicon} />
+              <img
+                className="h-4 w-4 mr-2"
+                src={userFeed.feed.siteFavicon}
+                alt={`${userFeed.feed.title} favicon`}
+              />
             )}
             {userFeed.title || userFeed.feed.title || userFeed.feed.url}
           </h3>

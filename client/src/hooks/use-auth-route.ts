@@ -26,7 +26,6 @@ const useAuthRoute = () => {
           update: (cache, result) => {
             const res = result?.data?.updateUserInfo;
             if (!res?.locale) return;
-            // eslint-disable-next-line @typescript-eslint/no-shadow
             const { locale, timeZone } = res;
             const prevMeQuery = cache.readQuery<MeQuery>({ query: MeDocument });
             cache.writeQuery<MeQuery>({
