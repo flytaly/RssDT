@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import HelpCircle from '@/../public/static/help-circle.svg';
@@ -17,26 +16,19 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ className = '', href, title, icon }: NavLinkProps) => {
-  const router = useRouter();
   return (
     <li className={className}>
-      <Link href={href} className="hover-underline-link">
-        {icon ? (
-          <button
-            type="button"
-            className="icon-btn flex items-center"
-            title={title}
-            onClick={() => router.push(href)}
-          >
-            {icon}
-          </button>
-        ) : (
-          <span>{title}</span>
-        )}
+      <Link
+        href={href}
+        className="hover-underline-link flex items-center hover:text-primary-dark icon-btn"
+        title={title}
+      >
+        {icon || title}
       </Link>
     </li>
   );
 };
+
 const SubNavLink = ({ className = '', href, title }: NavLinkProps) => (
   <li className={className}>
     <Link href={href} className="block hover:bg-primary hover:bg-opacity-30 p-2">
@@ -47,44 +39,41 @@ const SubNavLink = ({ className = '', href, title }: NavLinkProps) => (
 
 const NavBar = () => {
   const { data, loading } = useMeQuery({ ssr: false });
-  let content: JSX.Element | null = null;
+  let links: JSX.Element | null = null;
 
   const help = <HelpCircle className="h-5" />;
-  if (!loading) {
-    if (data?.me) {
-      content = (
-        <>
-          <NavLink href="/feed" title="Reader" />
-          <NavLink href="/manage" title="Manage" icon={<MailIcon className="h-5" />} />
-          {/* <NavLink className="hidden sm:block" href="/settings" title="Settings" /> */}
-          <NavLink href="/settings" title="Settings" icon={<SettingsIcon className="h-5" />} />
-          <NavLink href="/help" title="Help" icon={help} />
-          <li>
-            <div className="group relative flex">
-              <button type="button" className="icon-btn ">
-                <ProfileIcon className="h-5" />
-              </button>
-              <ul className="hidden group-hover:block absolute top-full right-0 bg-primary-light bg-opacity-80 z-40 rounded-sm shadow-message hover:shadow-message-darker">
-                {/* <SubNavLink className="block sm:hidden" href="/settings" title="Settings" /> */}
-                <SubNavLink href="/logout" title="Logout" />
-              </ul>
-            </div>
-          </li>
-        </>
-      );
-    } else {
-      content = (
-        <>
-          <NavLink href="/login" title="Log in" />
-          <NavLink href="/register" title="Register" />
-          <NavLink href="/help" title="Help" icon={help} />
-        </>
-      );
-    }
+  if (loading) return <Spinner />;
+  if (data?.me) {
+    links = (
+      <>
+        <NavLink href="/feed" title="Reader" />
+        <NavLink href="/manage" title="Manage" icon={<MailIcon className="h-5" />} />
+        <NavLink href="/settings" title="Settings" icon={<SettingsIcon className="h-5" />} />
+        <NavLink href="/help" title="Help" icon={help} />
+        <li>
+          <div className="group relative flex">
+            <button type="button" className="icon-btn ">
+              <ProfileIcon className="h-5" />
+            </button>
+            <ul className="hidden group-hover:block absolute top-full right-0 bg-primary-light bg-opacity-80 z-40 rounded-sm shadow-message hover:shadow-message-darker">
+              <SubNavLink href="/logout" title="Logout" />
+            </ul>
+          </div>
+        </li>
+      </>
+    );
+  } else {
+    links = (
+      <>
+        <NavLink href="/login" title="Log in" />
+        <NavLink href="/register" title="Register" />
+        <NavLink href="/help" title="Help" icon={help} />
+      </>
+    );
   }
   return (
     <nav>
-      {loading ? <Spinner /> : <ul className="flex items-center space-x-2 text-sm">{content}</ul>}
+      <ul className="flex items-center space-x-2 text-sm">{links}</ul>
     </nav>
   );
 };
