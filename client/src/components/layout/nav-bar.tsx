@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 
@@ -5,8 +7,6 @@ import HelpCircle from '@/../public/static/help-circle.svg';
 import MailIcon from '@/../public/static/mail.svg';
 import SettingsIcon from '@/../public/static/settings.svg';
 import ProfileIcon from '@/../public/static/user-circle-solid.svg';
-import Spinner from '@/components/spinner';
-import { useMeQuery } from '@/generated/graphql';
 
 interface NavLinkProps {
   href: string;
@@ -37,15 +37,19 @@ const SubNavLink = ({ className = '', href, title }: NavLinkProps) => (
   </li>
 );
 
-const NavBar = () => {
-  const { data, loading } = useMeQuery({ ssr: false });
-  let links: JSX.Element | null = null;
+const NavWrapper = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <nav>
+      <ul className="flex items-center space-x-2 text-sm">{children}</ul>
+    </nav>
+  );
+};
 
+const NavBar = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const help = <HelpCircle className="h-5" />;
-  if (loading) return <Spinner />;
-  if (data?.me) {
-    links = (
-      <>
+  if (isLoggedIn) {
+    return (
+      <NavWrapper>
         <NavLink href="/feed" title="Reader" />
         <NavLink href="/manage" title="Manage" icon={<MailIcon className="h-5" />} />
         <NavLink href="/settings" title="Settings" icon={<SettingsIcon className="h-5" />} />
@@ -60,21 +64,15 @@ const NavBar = () => {
             </ul>
           </div>
         </li>
-      </>
-    );
-  } else {
-    links = (
-      <>
-        <NavLink href="/login" title="Log in" />
-        <NavLink href="/register" title="Register" />
-        <NavLink href="/help" title="Help" icon={help} />
-      </>
+      </NavWrapper>
     );
   }
   return (
-    <nav>
-      <ul className="flex items-center space-x-2 text-sm">{links}</ul>
-    </nav>
+    <NavWrapper>
+      <NavLink href="/login" title="Log in" />
+      <NavLink href="/register" title="Register" />
+      <NavLink href="/help" title="Help" icon={help} />
+    </NavWrapper>
   );
 };
 
