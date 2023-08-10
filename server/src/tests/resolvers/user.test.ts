@@ -55,9 +55,9 @@ test.serial('register: should hash password', async (t) => {
   t.truthy(await argon2.verify(user!.password!, password));
 });
 
-test.serial('me: throw without cookie', async (t) => {
-  const error = await t.throwsAsync(sdkAnonym.me());
-  t.regex(error?.message || '', /not authenticated/);
+test.serial('me: return null without cookie', async (t) => {
+  const { me } = await sdkAnonym.me();
+  t.is(me, null);
 });
 
 test.serial('register: user already exist error', async (t) => {

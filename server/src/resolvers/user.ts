@@ -78,7 +78,6 @@ export class UserResolver {
     return db.query.users.findMany();
   }
 
-  @UseMiddleware(auth())
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, db }: MyContext) {
     if (!req.session.userId) return null;

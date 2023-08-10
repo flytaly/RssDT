@@ -14,7 +14,6 @@ test.serial('Authentication Error', async (t) => {
     const err = await t.throwsAsync(query);
     t.regex(err?.message || '', /not authenticated/);
   };
-  await expectAuthError(sdk.me());
   await expectAuthError(sdk.addFeedToCurrentUser({ input: { feedUrl: 'http://feed.com' } }));
   await expectAuthError(sdk.users());
 });
