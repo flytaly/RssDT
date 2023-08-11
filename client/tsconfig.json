@@ -23,7 +23,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "strict": true // necessary for zod
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

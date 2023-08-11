@@ -10,6 +10,7 @@ import { getGQLClient, getQueryClient } from '@/app/getQueryClient';
 import Meta from '@/components/meta';
 
 import Header from './header';
+import MainCard from './main-card';
 import Providers from './providers';
 
 const inter = Inter({ subsets: ['latin'] });

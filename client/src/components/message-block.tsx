@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 
 import AlertCircleIcon from '@/../public/static/alert-circle.svg';
