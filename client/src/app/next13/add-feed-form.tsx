@@ -1,30 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import { ZodFormattedError } from 'zod';
 
 import ClockIcon from '@/../public/static/clock.svg';
 import MailIcon from '@/../public/static/envelope.svg';
 import RssSquareIcon from '@/../public/static/rss-square.svg';
-import { addFeedAction } from '@/app/_actions';
+import { ValidationError, addFeedAnonAction, addFeedLoggedInAction } from '@/app/_actions';
 import { DigestSchedule, periodNames as names } from '@/types';
 
 import InputWithIcon from './icon-input';
 import SelectWithIcon from './icon-select';
-
-type ValidationError = ZodFormattedError<
-  { url: string; email: string; digest: string },
-  string
-> | null;
 
 export function AddFeedForm({ email }: { email?: string }) {
   const [validationError, setValidationError] = useState<ValidationError>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function processForm(data: FormData) {
-    const results = await addFeedAction(data);
-    setValidationError(results.error);
+    const isLoggedIn = !!email;
+    let action = isLoggedIn ? addFeedLoggedInAction : addFeedAnonAction;
+    const result = await action(data);
+    if (!result) return;
+
+    setValidationError(result.error);
     setIsSubmitting(false);
+    if (result.response) {
+      console.log(result.response);
+    }
   }
 
   return (
