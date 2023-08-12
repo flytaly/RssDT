@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import { getGQLClient } from '@/app/getQueryClient';
+import { getGQLClient } from '@/app/gqlClient.client';
 import MainCard from '@/app/main-card';
 import { MessageItem } from '@/components/main-card/animated-message';
 import FormSide from '@/components/main-card/form-side';

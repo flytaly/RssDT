@@ -6,7 +6,8 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';
 
-import { getGQLClient, getQueryClient } from '@/app/getQueryClient';
+import { getQueryClient } from '@/app/getQueryClient';
+import { getGQLClient } from '@/app/gqlClient.server';
 import Meta from '@/components/meta';
 
 import Header from './header';
