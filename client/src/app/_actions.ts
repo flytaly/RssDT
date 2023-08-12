@@ -2,15 +2,18 @@
 
 import { z } from 'zod';
 
+import { DigestSchedule } from '@/types';
+
 const AddFeedSchema = z.object({
   url: z.string().url('Invalid feed address'),
   email: z.string().email('Invalid email address'),
+  digest: z.nativeEnum(DigestSchedule),
 });
 
 export async function addFeedAction(data: FormData) {
-  const { url, email } = Object.fromEntries(data);
+  const { url, email, digest } = Object.fromEntries(data);
 
-  const validation = await AddFeedSchema.safeParseAsync({ url, email });
+  const validation = await AddFeedSchema.safeParseAsync({ url, email, digest });
 
   if (!validation.success) {
     return { error: validation.error.format() };

@@ -12,9 +12,12 @@ import { DigestSchedule, periodNames as names } from '@/types';
 import InputWithIcon from './icon-input';
 import SelectWithIcon from './icon-select';
 
-type ValidationError = ZodFormattedError<{ url: string; email: string }, string> | null;
+type ValidationError = ZodFormattedError<
+  { url: string; email: string; digest: string },
+  string
+> | null;
 
-export function AddFeedForm() {
+export function AddFeedForm({ email }: { email?: string }) {
   const [validationError, setValidationError] = useState<ValidationError>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,15 +45,18 @@ export function AddFeedForm() {
         id="email"
         name="email"
         IconSVG={MailIcon}
+        value={email}
+        readOnly={!!email}
         placeholder="Email"
         title="Email address"
         error={validationError?.email?._errors[0]}
       />
       <SelectWithIcon
         id="digest"
+        name="digest"
         IconSVG={ClockIcon}
         defaultValue={DigestSchedule.daily}
-        /* error={errors.digest} */
+        error={validationError?.digest?._errors[0]}
         disabled={isSubmitting}
       >
         {Object.values(DigestSchedule).map((sc) => (

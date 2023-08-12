@@ -63,7 +63,8 @@ input {
     @apply text-gray-400;
   }
 
-  input[disabled] {
+  input[disabled],
+  input[readonly] {
     @apply text-gray-500;
   }
 }
