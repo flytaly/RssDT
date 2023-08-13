@@ -54,7 +54,6 @@ export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps
     if (!result) return;
 
     setValidationError(result.error);
-    setIsSubmitting(false);
     if (!result.response || !setMessages) return;
 
     const { errors, userFeed } = result.response;
@@ -73,11 +72,22 @@ export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps
     formRef.current?.reset();
   }
 
+  async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await processForm(new FormData(e.target as HTMLFormElement));
+    } catch (err) {
+      setMessages?.([{ key: 'erorr', text: (err as Error)?.message, type: 'error' }]);
+    }
+    setIsSubmitting(false);
+  }
+
   return (
     <form
       className="flex flex-col w-full"
-      action={processForm}
-      onSubmit={() => setIsSubmitting(true)}
+      action={!!email ? addFeedLoggedInAction : addFeedAnonAction}
+      onSubmit={submitHandler}
       ref={formRef}
     >
       <InputWithIcon
