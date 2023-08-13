@@ -49,7 +49,7 @@ export default function Page() {
   const isLoggedOut = !isLoading && !email;
   const [messages, setMessages] = useState<MessageItem[]>([]);
 
-  const items = infoMessages.concat(!isLoggedOut ? nonLoggedInMessages : [], messages);
+  const items = infoMessages.concat(isLoggedOut ? nonLoggedInMessages : [], messages);
 
   return (
     <MainCard>
