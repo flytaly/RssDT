@@ -1,19 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import ClockIcon from '@/../public/static/clock.svg';
 import MailIcon from '@/../public/static/envelope.svg';
 import RssSquareIcon from '@/../public/static/rss-square.svg';
 import { ValidationError, addFeedAnonAction, addFeedLoggedInAction } from '@/app/_actions';
+import { MessageItem } from '@/components/main-card/animated-message';
+import { ArgumentError } from '@/gql/generated';
 import { DigestSchedule, periodNames as names } from '@/types';
 
 import InputWithIcon from './icon-input';
 import SelectWithIcon from './icon-select';
 
-export function AddFeedForm({ email }: { email?: string }) {
+function getErrorMessages(errors: ArgumentError[]) {
+  const errMessages: MessageItem[] = errors.map((e, idx) => ({
+    key: `error_${idx + Math.random()}`,
+    text: e.message,
+    type: 'error',
+  }));
+  return errMessages;
+}
+
+function makeSuccessMessage(title: string, schedule: DigestSchedule, email?: string | null) {
+  const content = (
+    <span>
+      <div>
+        <b>{title}</b>
+        <span> [</span>
+        <b>{`${names[schedule as unknown as DigestSchedule]} digest`}</b>
+        <span>] </span>
+      </div>
+      {email && <div>{`Activation link has been sent to ${email}.`}</div>}
+    </span>
+  );
+  return { key: `success${Math.random() * 1000}`, content, type: 'success' } as MessageItem;
+}
+
+interface AddDigestFeedFormProps {
+  email?: string;
+  setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;
+}
+
+export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps) {
   const [validationError, setValidationError] = useState<ValidationError>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function processForm(data: FormData) {
     const isLoggedIn = !!email;
@@ -23,9 +55,22 @@ export function AddFeedForm({ email }: { email?: string }) {
 
     setValidationError(result.error);
     setIsSubmitting(false);
-    if (result.response) {
-      console.log(result.response);
+    if (!result.response || !setMessages) return;
+
+    const { errors, userFeed } = result.response;
+    if (errors) {
+      return setMessages(getErrorMessages(errors));
     }
+    if (!userFeed) return;
+
+    setMessages([
+      makeSuccessMessage(
+        userFeed.feed?.title || '',
+        userFeed.schedule as unknown as DigestSchedule,
+        isLoggedIn ? null : data.get('email')?.toString() || '',
+      ),
+    ]);
+    formRef.current?.reset();
   }
 
   return (
@@ -33,6 +78,7 @@ export function AddFeedForm({ email }: { email?: string }) {
       className="flex flex-col w-full"
       action={processForm}
       onSubmit={() => setIsSubmitting(true)}
+      ref={formRef}
     >
       <InputWithIcon
         id="feed-url"
