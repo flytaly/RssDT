@@ -16,6 +16,7 @@ const RegisterSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email address').required('The field is required'),
   password: Yup.string().min(8).max(100).required('The field is required'),
   confirm: Yup.string()
+    //@ts-ignore
     .oneOf([Yup.ref('password'), null], "Passwords don't match")
     .required('Confirm Password is required'),
 });

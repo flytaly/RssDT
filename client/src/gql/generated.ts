@@ -1,4 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
+//@ts-ignore
 import { GraphQLClientRequestHeaders } from 'graphql-request/build/cjs/types';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;

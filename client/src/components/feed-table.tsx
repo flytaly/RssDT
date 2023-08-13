@@ -45,7 +45,7 @@ const Row = ({ children, isOdd = true }: RowProps) => (
   </tr>
 );
 
-const HeaderRow = ({ children }) => (
+const HeaderRow = ({ children }: { children: React.ReactNode }) => (
   <tr className="feed-table-template hidden sm:grid gap-2 font-bold  py-4 sm:py-1 hover:bg-primary-2">
     {children}
   </tr>

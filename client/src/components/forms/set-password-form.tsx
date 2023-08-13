@@ -14,6 +14,7 @@ import InputWithIcon from './input-with-icon';
 const SetPasswordSchema = Yup.object().shape({
   password: Yup.string().min(8).max(100).required('Password is required'),
   confirm: Yup.string()
+    // @ts-ignore
     .oneOf([Yup.ref('password'), null], "Passwords don't match")
     .required('Confirm Password is required'),
 });

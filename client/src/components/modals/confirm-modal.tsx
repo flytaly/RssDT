@@ -9,8 +9,8 @@ interface ConfirmModalProps {
   closeModal: () => void;
   contentLabel?: string;
   onConfirm: () => void;
-  message?: JSX.Element;
-  error?: JSX.Element | string;
+  message?: JSX.Element | null;
+  error?: JSX.Element | string | null;
   disableButtons?: boolean;
 }
 

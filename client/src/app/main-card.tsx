@@ -8,12 +8,12 @@ interface MainCardProps {
   onlyWithVerifiedEmail?: boolean;
 }
 
-const MainCard = ({ children, big = false, onlyWithVerifiedEmail = false }: MainCardProps) => {
+const MainCard = ({ children, big = false }: MainCardProps) => {
   const baseWidth = big ? 'big-card-w' : 'small-card-w';
   const width = false ? 'w-screen' : '';
   const grow = big ? 'flex-1' : '';
   /* const showWarning = !isServer() && !loading && onlyWithVerifiedEmail && !data?.me?.emailVerified; */
-  const showWarning = false;
+  /* const showWarning = false; */
 
   return (
     <article

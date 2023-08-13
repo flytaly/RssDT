@@ -58,7 +58,7 @@ const config: Config = {
         'message-success': '0rem 5px 10px 0px var(--success-shadow)',
         'message-success-darker': '0rem 5px 10px 0px var(--success-shadow-hover)',
       },
-      gradientColorStops: (theme) => ({
+      gradientColorStops: ({ theme }) => ({
         ...theme('colors'),
         gradFrom: 'hsl(321, 65%, 40%)',
         gradTo: 'hsl(321, 65%, 10%)',
