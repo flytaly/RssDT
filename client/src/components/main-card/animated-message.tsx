@@ -44,13 +44,13 @@ const AnimatedMessage = ({
   return (
     <animated.div
       style={style}
-      className={`group flex items-center text-sm p-2 my-2 mx-2 w-full rounded-md break-words bg-gray-50 ${colors}`}
+      className={`group flex text-sm p-2 my-2 mx-2 w-full rounded-md break-words bg-gray-50 max-h-36 overflow-y-auto ${colors}`}
     >
       {withline ? (
         <div className="flex-shrink-0 bg-gray group-hover:bg-primary h-full w-1 mr-2 rounded-xl" />
       ) : null}
       {children}
-      {text ? <span>{text}</span> : null}
+      {text ? <span className="break-all">{text}</span> : null}
     </animated.div>
   );
 };
