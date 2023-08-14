@@ -10,12 +10,12 @@ import {
   addFeedAnonAction,
   addFeedLoggedInAction,
 } from '@/app/actions/add-feed';
+import InputWithIcon from '@/app/components/forms/icon-input';
+import SelectWithIcon from '@/app/components/forms/icon-select';
+import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
 import { ArgumentError } from '@/gql/generated';
 import { DigestSchedule, periodNames as names } from '@/types';
-
-import InputWithIcon from '../components/forms/icon-input';
-import SelectWithIcon from '../components/forms/icon-select';
 
 function getErrorMessages(errors: ArgumentError[]) {
   const errMessages: MessageItem[] = errors.map((e, idx) => ({
@@ -48,7 +48,6 @@ interface AddDigestFeedFormProps {
 
 export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps) {
   const [validationError, setValidationError] = useState<AddFeedValidationError>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
   async function processForm(data: FormData) {
@@ -76,16 +75,7 @@ export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps
     formRef.current?.reset();
   }
 
-  async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await processForm(new FormData(e.target as HTMLFormElement));
-    } catch (err) {
-      setMessages?.([{ key: 'erorr', text: (err as Error)?.message, type: 'error' }]);
-    }
-    setIsSubmitting(false);
-  }
+  const { isSubmitting, submitHandler } = useSubmitHandler(processForm, setMessages);
 
   return (
     <form

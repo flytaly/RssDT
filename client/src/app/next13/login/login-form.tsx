@@ -7,6 +7,7 @@ import MailIcon from '@/../public/static/envelope.svg';
 import PasswordIcon from '@/../public/static/key.svg';
 import { loginAction, LoginValidationError } from '@/app/actions/login';
 import InputWithIcon from '@/app/components/forms/icon-input';
+import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
 
 interface LoginProps {
@@ -14,7 +15,6 @@ interface LoginProps {
 }
 
 export default function LoginForm({ setMessages }: LoginProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationError, setValidationError] = useState<LoginValidationError>(null);
   const router = useRouter();
 
@@ -34,16 +34,7 @@ export default function LoginForm({ setMessages }: LoginProps) {
     router.push('/manage');
   }
 
-  async function submitHandler(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await processForm(new FormData(e.target as HTMLFormElement));
-    } catch (err) {
-      setMessages?.([{ key: 'erorr', text: (err as Error)?.message, type: 'error' }]);
-    }
-    setIsSubmitting(false);
-  }
+  const { isSubmitting, submitHandler } = useSubmitHandler(processForm, setMessages);
 
   return (
     <form className="flex flex-col w-full" action={loginAction} onSubmit={submitHandler}>
