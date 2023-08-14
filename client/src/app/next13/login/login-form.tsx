@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -58,6 +59,11 @@ export default function LoginForm({ setMessages }: LoginProps) {
         min={8}
         required
       />
+      <div className="w-full text-right mb-3">
+        <Link href="/request-reset" className="text-xs underline">
+          I forgot or don&apos;t have password
+        </Link>
+      </div>
       <button
         type="submit"
         className="submit-btn w-full text-xl tracking-wider"
