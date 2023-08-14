@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { MessageItem } from '@/components/main-card/animated-message';
 
 export function useSubmitHandler(
-  processForm: (data: FormData) => Promise<void>,
+  processFormAction: (data: FormData) => Promise<void>,
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>,
 ) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -12,7 +12,7 @@ export function useSubmitHandler(
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await processForm(new FormData(e.target as HTMLFormElement));
+      await processFormAction(new FormData(e.target as HTMLFormElement));
     } catch (err) {
       setMessages?.([{ key: 'erorr', text: (err as Error)?.message, type: 'error' }]);
     }
