@@ -8,9 +8,9 @@ import { getGQLClient } from '@/app/gqlClient.client';
 import MainCard from '@/app/main-card';
 import { MessageItem } from '@/components/main-card/animated-message';
 import FormSide from '@/components/main-card/form-side';
-import MessageBlock from '@/components/message-block';
+import MessagesSide from '@/components/main-card/messages-side';
 
-import { AddDigestFeedForm } from './add-feed-form';
+import { AddDigestFeedForm } from './add-digest-feed-form';
 
 const infoMessages: MessageItem[] = [
   {
@@ -53,9 +53,7 @@ export default function Page() {
 
   return (
     <MainCard>
-      <section className="relative flex-grow flex flex-col items-center rounded-md p-3 md:w-1/2">
-        <MessageBlock items={items} />
-      </section>
+      <MessagesSide items={items} />
       <FormSide>
         <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
         <AddDigestFeedForm email={email} setMessages={setMessages} />

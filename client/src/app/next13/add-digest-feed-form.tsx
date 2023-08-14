@@ -5,13 +5,17 @@ import { useRef, useState } from 'react';
 import ClockIcon from '@/../public/static/clock.svg';
 import MailIcon from '@/../public/static/envelope.svg';
 import RssSquareIcon from '@/../public/static/rss-square.svg';
-import { ValidationError, addFeedAnonAction, addFeedLoggedInAction } from '@/app/_actions';
+import {
+  AddFeedValidationError,
+  addFeedAnonAction,
+  addFeedLoggedInAction,
+} from '@/app/actions/add-feed';
 import { MessageItem } from '@/components/main-card/animated-message';
 import { ArgumentError } from '@/gql/generated';
 import { DigestSchedule, periodNames as names } from '@/types';
 
-import InputWithIcon from './icon-input';
-import SelectWithIcon from './icon-select';
+import InputWithIcon from '../components/forms/icon-input';
+import SelectWithIcon from '../components/forms/icon-select';
 
 function getErrorMessages(errors: ArgumentError[]) {
   const errMessages: MessageItem[] = errors.map((e, idx) => ({
@@ -43,7 +47,7 @@ interface AddDigestFeedFormProps {
 }
 
 export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps) {
-  const [validationError, setValidationError] = useState<ValidationError>(null);
+  const [validationError, setValidationError] = useState<AddFeedValidationError>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 

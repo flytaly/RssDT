@@ -4,7 +4,7 @@ import { ZodFormattedError, z } from 'zod';
 
 import { DigestSchedule } from '@/types';
 
-import { getGQLClient } from './gqlClient.server';
+import { getGQLClient } from '../gqlClient.server';
 
 const AddFeedSchema = z.object({
   url: z.string().url('Invalid feed address'),
@@ -12,7 +12,7 @@ const AddFeedSchema = z.object({
   digest: z.nativeEnum(DigestSchedule),
 });
 
-export type ValidationError = ZodFormattedError<
+export type AddFeedValidationError = ZodFormattedError<
   { url: string; email: string; digest: string },
   string
 > | null;
