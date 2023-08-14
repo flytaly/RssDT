@@ -1,4 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [pathHistory, setPathHistory] = useState<PathHistory>({ currentPath: '', prevPath: '' });
+  const [queryClient] = useState(() => new QueryClient());
   const apolloClient = useApollo(pageProps);
   const router = useRouter();
 
@@ -20,7 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AppStateProvider>
       <ApolloProvider client={apolloClient}>
-        <Component pathHistory={pathHistory} {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component pathHistory={pathHistory} {...pageProps} />
+        </QueryClientProvider>
       </ApolloProvider>
     </AppStateProvider>
   );
