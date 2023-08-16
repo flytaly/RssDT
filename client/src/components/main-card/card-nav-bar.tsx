@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import React, { useContext } from 'react';
 
@@ -16,7 +18,7 @@ const CardNavBar = ({
 }: {
   title: string;
   routes: CardRoute[];
-  activePath: string;
+  activePath: string | null;
 }) => {
   const dispatch = useContext(AppStateDispatchCtx);
   const toggleWidth = () => dispatch((prev) => ({ ...prev, fullWidth: !prev.fullWidth }));
