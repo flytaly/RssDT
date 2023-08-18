@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { getGQLClient } from '@/app/gqlClient.client';
-import MainCard from '@/app/main-card';
+import SmallCard from '@/app/small-card';
 import { MessageItem } from '@/components/main-card/animated-message';
 import FormSide from '@/components/main-card/form-side';
 import MessagesSide from '@/components/main-card/messages-side';
@@ -52,12 +52,12 @@ export default function Page() {
   const items = infoMessages.concat(isLoggedOut ? nonLoggedInMessages : [], messages);
 
   return (
-    <MainCard>
+    <SmallCard>
       <MessagesSide items={items} />
       <FormSide>
         <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
         <AddDigestFeedForm email={email} setMessages={setMessages} />
       </FormSide>
-    </MainCard>
+    </SmallCard>
   );
 }
