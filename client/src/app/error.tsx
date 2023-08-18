@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import MainCard from './main-card';
+import MainCard from './components/card/small-card';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   useEffect(() => {

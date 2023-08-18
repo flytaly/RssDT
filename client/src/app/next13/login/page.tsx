@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-import SmallCard from '@/app/small-card';
+import SmallCard from '@/app/components/card/small-card';
 import { MessageItem } from '@/components/main-card/animated-message';
 import FormSide from '@/components/main-card/form-side';
 import MessagesSide from '@/components/main-card/messages-side';

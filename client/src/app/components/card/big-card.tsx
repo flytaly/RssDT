@@ -4,10 +4,11 @@ interface CardProps {
   big?: boolean;
   children: React.ReactNode;
   onlyWithVerifiedEmail?: boolean;
+  span?: boolean;
 }
 
-export default function MainCard({ children }: CardProps) {
-  const width = false ? 'w-screen' : '';
+export default function BigCard({ children, span = false }: CardProps) {
+  const width = span ? 'w-screen' : '';
   /* const showWarning = !isServer() && !loading && onlyWithVerifiedEmail && !data?.me?.emailVerified; */
   /* const showWarning = false; */
   return (
