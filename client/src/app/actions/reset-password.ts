@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/app/gqlClient.server';
+import { getGQLClient } from '@/app/lib/gqlClient.server';
 
 const ResetPasswordSchema = z
   .object({

@@ -4,7 +4,7 @@ import { ZodFormattedError, z } from 'zod';
 
 import { DigestSchedule } from '@/types';
 
-import { getGQLClient } from '../gqlClient.server';
+import { getGQLClient } from '../lib/gqlClient.server';
 
 const AddFeedSchema = z.object({
   url: z.string().url('Invalid feed address'),

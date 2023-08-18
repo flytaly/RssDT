@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getGQLClient } from '@/app/gqlClient.client';
+import { getGQLClient } from '@/app/lib/gqlClient.client';
 import NavBar from '@/components/layout/nav-bar';
 import Spinner from '@/components/spinner';
 

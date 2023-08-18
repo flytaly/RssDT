@@ -1,14 +1,16 @@
-import { NextPage } from 'next';
-import Link from 'next/link';
-import React, { useState } from 'react';
+'use client';
 
-import AddDigestFeedForm from '@/components/forms/add-digest-feed-form';
-import Layout from '@/components/layout/layout';
+import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useState } from 'react';
+
+import SmallCard from '@/app/components/card/small-card';
+import { getGQLClient } from '@/app/lib/gqlClient.client';
 import { MessageItem } from '@/components/main-card/animated-message';
 import FormSide from '@/components/main-card/form-side';
-import MainCard from '@/components/main-card/main-card';
 import MessagesSide from '@/components/main-card/messages-side';
-import { useMeQuery } from '@/generated/graphql';
+
+import { AddDigestFeedForm } from './add-digest-feed-form';
 
 const infoMessages: MessageItem[] = [
   {
@@ -21,7 +23,7 @@ const infoMessages: MessageItem[] = [
   },
 ];
 
-const ifLogoutMsg: MessageItem[] = [
+const nonLoggedInMessages: MessageItem[] = [
   {
     content: (
       <span>
@@ -39,22 +41,23 @@ const ifLogoutMsg: MessageItem[] = [
   },
 ];
 
-const Home: NextPage = () => {
-  const { data, loading } = useMeQuery({ ssr: false });
+export default function Page() {
+  const { data, isLoading } = useQuery(['me'], async () => getGQLClient().me(), {
+    retry: false,
+  });
+  const email = data?.me?.email;
+  const isLoggedOut = !isLoading && !email;
   const [messages, setMessages] = useState<MessageItem[]>([]);
 
-  const items = [...infoMessages, ...(!loading && !data?.me ? ifLogoutMsg : []), ...messages];
-  return (
-    <Layout>
-      <MainCard>
-        <MessagesSide items={items} />
-        <FormSide>
-          <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
-          <AddDigestFeedForm email={data?.me?.email} setMessages={setMessages} />
-        </FormSide>
-      </MainCard>
-    </Layout>
-  );
-};
+  const items = infoMessages.concat(isLoggedOut ? nonLoggedInMessages : [], messages);
 
-export default Home;
+  return (
+    <SmallCard>
+      <MessagesSide items={items} />
+      <FormSide>
+        <h2 className="text-xl font-bold mb-4 text-center">Add a feed</h2>
+        <AddDigestFeedForm email={email} setMessages={setMessages} />
+      </FormSide>
+    </SmallCard>
+  );
+}
