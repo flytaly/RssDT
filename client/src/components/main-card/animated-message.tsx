@@ -50,7 +50,7 @@ const AnimatedMessage = ({
         <div className="flex-shrink-0 bg-gray group-hover:bg-primary h-full w-1 mr-2 rounded-xl" />
       ) : null}
       {children}
-      {text ? <span className="break-all">{text}</span> : null}
+      {text ? <span className={text?.length > 200 ? 'break-all' : ''}>{text}</span> : null}
     </animated.div>
   );
 };
