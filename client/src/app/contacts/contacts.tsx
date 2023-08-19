@@ -1,5 +1,6 @@
 'use client';
 
+import { useMutation } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import mailgo from 'mailgo';
 import { useEffect } from 'react';
@@ -7,7 +8,9 @@ import { object, string } from 'yup';
 
 import MailIcon from '@/../public/static/envelope.svg';
 import GithubIcon from '@/../public/static/github.svg';
-import { useSendFeedbackMutation } from '@/generated/graphql';
+import { FeedbackInput } from '@/gql/generated';
+
+import { getGQLClient } from '../lib/gqlClient.client';
 
 const validationSchema = object().shape({
   email: string().email('Invalid email address').required('The field is required'),
@@ -15,7 +18,10 @@ const validationSchema = object().shape({
 });
 
 const Contacts = () => {
-  const [sendFeedback, { data }] = useSendFeedbackMutation();
+  const { mutateAsync: sendFeedback, data } = useMutation((input: FeedbackInput) =>
+    getGQLClient().sendFeedback({ input }),
+  );
+
   const isSuccess = data?.feedback?.success;
   useEffect(() => {
     mailgo();
@@ -50,9 +56,9 @@ const Contacts = () => {
         onSubmit={async (input, actions) => {
           actions.setSubmitting(true);
           try {
-            const result = await sendFeedback({ variables: { input } });
-            if (result.data?.feedback?.success) actions.resetForm();
-            const errors = result.data?.feedback?.errors;
+            const result = await sendFeedback(input);
+            if (result.feedback?.success) actions.resetForm();
+            const errors = result.feedback?.errors;
             if (errors) {
               const err = errors[0];
               if (err.argument === 'email') actions.setErrors({ email: err.message });
