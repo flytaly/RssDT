@@ -14,6 +14,7 @@ const initialMessages: MessageItem[] = [
   {
     text: 'Log in to manage your feeds or change settings',
     key: 'login-message',
+    static: true,
   },
   {
     content: (

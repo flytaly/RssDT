@@ -16,6 +16,7 @@ const infoMessages: MessageItem[] = [
   {
     text: 'FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
     key: 'intro-message',
+    static: true,
   },
   {
     text: 'To start receiving digests just enter an address of the desired feed, email, and digest period',

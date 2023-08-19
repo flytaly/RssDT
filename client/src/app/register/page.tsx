@@ -13,6 +13,7 @@ const initialMessages: MessageItem[] = [
   {
     text: 'Enter email and password to create account',
     key: 'register-message',
+    static: true,
   },
 ];
 

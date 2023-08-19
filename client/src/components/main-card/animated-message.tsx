@@ -8,16 +8,20 @@ export type MessageItem = {
   text?: string;
   content?: JSX.Element;
   type?: MessageType;
+  static?: boolean;
 };
 
-export const useEmergeTransition = (items: MessageItem[]) =>
-  useTransition(items, {
+export const useEmergeTransition = (items: MessageItem[]) => {
+  const from = { transform: 'translate3d(0, 100%, 0)', opacity: 0 };
+  return useTransition(items, {
     keys: (item) => item.key,
     config: { mass: 1, friction: 12 },
-    from: { transform: 'translate3d(0, 100%, 0)', opacity: 0 },
+    from,
     enter: { transform: 'translate3d(0, 0, 0)', opacity: 1 },
     leave: { transform: 'translate3d(0, 0, 0)' },
+    initial: (item: MessageItem) => (item.static ? null : from),
   });
+};
 
 interface AnimatedMessageProps {
   children: React.ReactNode;

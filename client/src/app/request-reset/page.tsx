@@ -13,6 +13,7 @@ const initialMessages: MessageItem[] = [
   {
     key: 'request-pass-info',
     text: 'To reset password enter your email',
+    static: true,
   },
 ];
 
