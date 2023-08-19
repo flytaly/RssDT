@@ -29,7 +29,7 @@ export async function activateUserFeed(
   const updatedFeeds = await db
     .update(feeds)
     .set({ activated: true })
-    .where(sql`${feeds.id} = ${userFeed.feedId} AND ${feeds.activated} = false`)
+    .where(sql`${feeds.id} = ${userFeed.feedId}`) // Activate even if feed was activated so it will be returned
     .returning();
 
   await onSuccess?.(userFeed, updatedFeeds[0]);
