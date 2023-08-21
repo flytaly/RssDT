@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -18,6 +19,7 @@ interface LoginProps {
 export default function LoginForm({ setMessages }: LoginProps) {
   const [validationError, setValidationError] = useState<LoginValidationError>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   async function processForm(data: FormData) {
     const result = await loginAction(data);
@@ -32,6 +34,7 @@ export default function LoginForm({ setMessages }: LoginProps) {
       setMessages?.([{ type: 'error', key: 'error', text: errors?.[0].message }]);
       return;
     }
+    queryClient.invalidateQueries({ queryKey: ['me'] });
     router.push('/manage');
   }
 
