@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 
 import { useRequestEmailVerificationMutation } from '@/generated/graphql';
