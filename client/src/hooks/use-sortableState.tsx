@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import SortDownIcon from '@/../public/static/sort-down.svg';
 import SortUpIcon from '@/../public/static/sort-up.svg';
 import SortIcon from '@/../public/static/sort.svg';
-import { UserFeed } from '@/generated/graphql';
+import { UserFeed } from '@/gql/generated';
 import { periodToNum } from '@/types';
 
 export type SortableColumn =
@@ -13,11 +13,13 @@ export type SortableColumn =
   | 'item_pubdate'
   | 'digest_schedule'
   | null;
+
 export enum SortDirection {
   'Default' = 0,
   'Desc' = 1,
   'Asc' = 2,
 }
+
 export type SortState = {
   col?: SortableColumn;
   dir: SortDirection;
@@ -28,6 +30,7 @@ const compareFn = (a: any, b: any, dirCoeff: 1 | -1 = 1) => {
   if (a > b) return 1 * dirCoeff;
   return 0;
 };
+
 const getTs = (a: string) => (a ? new Date(a).getTime() : 0);
 
 const sortUserFeeds = (feeds: UserFeed[], col: SortableColumn, dir: SortDirection) => {
