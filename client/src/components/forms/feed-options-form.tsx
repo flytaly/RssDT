@@ -1,19 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
 import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
+import EmailIcon from '@/../public/static/envelope.svg';
+import { getGQLClient } from '@/app/lib/gqlClient.client';
+import { useSetFeedOptionsMutation } from '@/app/lib/mutations/set-feed-options';
+import GraphQLError from '@/components/graphql-error';
+import { TernaryState, Theme, UserFeed } from '@/gql/generated';
+import { DigestSchedule, periodNames } from '@/types';
+
 import InputUnderline, { InputUnderlineProps } from './input-underline';
 import SelectUnderline, { SelectProps } from './select-underline';
-import EmailIcon from '../../../public/static/envelope.svg';
-import {
-  TernaryState,
-  Theme,
-  useMyOptionsQuery,
-  UserFeed,
-  useSetFeedOptionsMutation,
-} from '../../generated/graphql';
-import { DigestSchedule, periodNames } from '../../types';
-import GraphQLError from '../graphql-error';
 
 interface InputProps {
   children: React.ReactNode;
@@ -48,17 +46,18 @@ interface FeedOptionsFormProps {
   feed: UserFeed | null;
 }
 
-const FeedOptionsForm = ({ feed }: FeedOptionsFormProps) => {
-  const { data } = useMyOptionsQuery();
-  const { withContentTableDefault, attachmentsDefault, itemBodyDefault } = data?.myOptions || {};
-  const [setOptions] = useSetFeedOptionsMutation();
-  const [errorMsg, setErrorMsg] = useState('');
+const formatDefault = (defaultValue?: boolean | null) => {
+  return defaultValue === undefined || defaultValue === null
+    ? 'Default'
+    : `Default (${defaultValue ? 'Enable' : 'Disable'})`;
+};
 
-  const formatDefault = (defaultValue?: boolean | null) => {
-    return defaultValue === undefined || defaultValue === null
-      ? 'Default'
-      : `Default (${defaultValue ? 'Enable' : 'Disable'})`;
-  };
+const FeedOptionsForm = ({ feed }: FeedOptionsFormProps) => {
+  const { data } = useQuery(['myOptions'], () => getGQLClient().myOptions());
+  const { withContentTableDefault, attachmentsDefault, itemBodyDefault } = data?.myOptions || {};
+
+  const setOptsMutation = useSetFeedOptionsMutation();
+  const [errorMsg, setErrorMsg] = useState('');
 
   if (!feed) return null;
   const { id, attachments, itemBody, schedule, theme, withContentTable, filter, title } = feed;
@@ -68,8 +67,8 @@ const FeedOptionsForm = ({ feed }: FeedOptionsFormProps) => {
       onSubmit={async (opts, { setSubmitting }) => {
         setSubmitting(true);
         try {
-          const res = await setOptions({ variables: { id, opts } });
-          setErrorMsg(res.data?.setFeedOptions.errors?.[0].message || '');
+          const res = await setOptsMutation.mutateAsync({ id, opts });
+          setErrorMsg(res?.errors?.[0].message || '');
         } catch (error) {
           setErrorMsg((error as { message: string }).message);
         }
