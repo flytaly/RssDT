@@ -13,7 +13,7 @@ import { UserFeed } from '@/gql/generated';
 import { SortableColumn, useSortableState } from '@/hooks/use-sortableState';
 import { periodNames } from '@/types';
 
-import useDeleteFeedsMutation from './useDeleteMyFeeds';
+import useDeleteFeedsMutation from '../lib/mutations/delete-my-feeds';
 
 type FeedTableProps = {
   feeds: Array<UserFeed>;

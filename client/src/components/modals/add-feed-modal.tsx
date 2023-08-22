@@ -1,15 +1,16 @@
+'use client';
+
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
 
+import { useAddFeedToCurrentUserMutation } from '@/app/lib/mutations/add-feed-user';
 import InputUnderline from '@/components/forms/input-underline';
 import SelectUnderline from '@/components/forms/select-underline';
-import { useAddFeedToCurrentUserMutation } from '@/generated/graphql';
 import { DigestDisable, DigestSchedule, periodNames } from '@/types';
 import { getAppElement } from '@/utils/get-app-element';
-import { updateAfterAdding as update } from '@/utils/update-after-adding';
 
 interface AddFeedModalProps {
   isOpen: boolean;
@@ -46,16 +47,19 @@ const validationSchema = Yup.object().shape({
 });
 
 const AddFeedModal = ({ isOpen, closeModal }: AddFeedModalProps) => {
-  const [addFeed] = useAddFeedToCurrentUserMutation();
+  const addFeedMutation = useAddFeedToCurrentUserMutation();
+
   const [errorMsg, setErrorMsg] = useState('');
   const closingDuration = 100;
   const springProps = useSpring({
     transform: isOpen ? 'scale3d(1,1,1)' : 'scale3d(0,0,0)',
     config: { tension: 400, friction: 30, duration: isOpen ? undefined : closingDuration },
   });
+
   useEffect(() => {
     if (isOpen) setErrorMsg('');
   }, [isOpen]);
+
   return (
     <Modal
       appElement={getAppElement()}
@@ -76,15 +80,17 @@ const AddFeedModal = ({ isOpen, closeModal }: AddFeedModalProps) => {
           initialValues={{ url: 'https://', digest: DigestDisable }}
           onSubmit={async ({ url, digest }) => {
             try {
-              const { data } = await addFeed({
-                variables: { input: { feedUrl: url }, feedOpts: { schedule: digest } },
-                update,
+              const data = await addFeedMutation.mutateAsync({
+                feedUrl: url,
+                feedOpts: { schedule: digest },
               });
-              if (data?.addFeedToCurrentUser.errors)
+              if (data?.addFeedToCurrentUser.errors) {
                 setErrorMsg(data?.addFeedToCurrentUser.errors[0].message);
-              else closeModal();
+                return;
+              }
+              closeModal();
             } catch (error) {
-              setErrorMsg((error as { message: string }).message);
+              setErrorMsg((error as Error).message);
             }
           }}
         >
