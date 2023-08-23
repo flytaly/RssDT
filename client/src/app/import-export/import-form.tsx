@@ -1,15 +1,15 @@
+import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useCallback, useState } from 'react';
 
-import {
-  ImportState,
-  ImportStatusObject,
-  useImportFeedsMutation,
-  useImportStatusQuery,
-} from '@/generated/graphql';
+import { getGQLClient } from '@/app/lib/gqlClient.client';
+import Spinner from '@/components/spinner';
+import { FeedImport, ImportState, ImportStatusObject } from '@/gql/generated';
 import { useDropArea } from '@/hooks/use-droparea';
 import { getFeedsFromOpml, getFeedsFromText } from '@/utils/import-utils';
 
-async function getFeeds(file: File) {
+
+async function getFeeds(file?: File) {
+  if (!file) return [];
   if (file.name.endsWith('.opml') || file.type === 'text/xml') {
     const content = await file.text();
     const feeds = await getFeedsFromOpml(content);
@@ -40,35 +40,43 @@ function getResultMessages(status: ImportStatusObject): ImportResults {
       if (parsed.length) {
         errors.push(...parsed);
       }
-    } catch {
-      //
+    } catch (e) {
+      console.error('Parsing error', e);
     }
   }
   const num = total ? total - errors.length : 0;
   return { message: `${num} out of ${total} feeds were imported.`, errors };
 }
 
-export const ImportForm = () => {
+export function ImportForm() {
   const [isImporting, setIsImporting] = useState(false);
   const [impResult, setImpResult] = useState<ImportResults>({ message: null });
-  const [importFeeds, { error, data, loading: l1 }] = useImportFeedsMutation();
-  const errorMessage = error?.message || data?.importFeeds.errors?.[0].message;
-
-  const {
-    data: status,
-    stopPolling,
-    loading: l2,
-  } = useImportStatusQuery({
-    ssr: false,
-    fetchPolicy: 'no-cache',
-    notifyOnNetworkStatusChange: true,
-    pollInterval: isImporting ? 2000 : 0,
+  const [errorMessage, setErrorMessage] = useState('');
+  const { isLoading, mutateAsync } = useMutation({
+    mutationFn: async (feedImport: FeedImport | FeedImport[]) => {
+      return getGQLClient().importFeeds({ feedImport });
+    },
+    onError: (err) => setErrorMessage((err as Error).message),
+    onSuccess: (res) => {
+      if (res.importFeeds.errors) {
+        setErrorMessage(res.importFeeds.errors[0].message);
+        return;
+      }
+    },
   });
+
+  const { data: status, isLoading: isLoadingStatus } = useQuery(
+    ['importStatus'],
+    async () => {
+      console.log('check status', new Date().toLocaleTimeString());
+      return getGQLClient().importStatus();
+    },
+    { refetchInterval: isImporting ? 2000 : false },
+  );
 
   const importState = status?.importStatus?.state;
 
-  if (!l1 && !l2 && importState === ImportState.Done) {
-    stopPolling();
+  if (!isLoading && !isLoadingStatus && importState === ImportState.Done) {
     if (isImporting) setIsImporting(false);
     if (!isImporting && !impResult.message) {
       setImpResult(getResultMessages(status!.importStatus!));
@@ -82,18 +90,26 @@ export const ImportForm = () => {
     async (fl?: FileList | null) => {
       if (!fl) return;
       const feedImport = await getFeeds(fl[0]);
+      if (!feedImport.length) return;
       try {
         setIsImporting(true);
         setImpResult({ message: null, errors: [] });
-        await importFeeds({ variables: { feedImport } });
+        await mutateAsync(feedImport);
       } catch {
         setIsImporting(false);
       }
     },
-    [importFeeds],
+    [mutateAsync],
   );
 
   const { dropAreaRef, isHovered } = useDropArea({ onFilesDrop, disable: isImporting });
+
+  let progressMessage = '';
+
+  if (isImporting && status?.importStatus) {
+    const { total, progress } = status.importStatus;
+    progressMessage = total ? `${progress || 0}/${total}` : '';
+  }
 
   return (
     <div className="px-3 py-5 w-full">
@@ -105,9 +121,10 @@ export const ImportForm = () => {
           } ${isImporting ? 'cursor-default' : 'cursor-pointer'}`}
         >
           {isImporting ? (
-            <div className="text-center">
+            <div className="text-center flex flex-col items-center">
               <p>Importing feeds</p>
-              <p>{`${status?.importStatus?.progress}/${status?.importStatus?.total}`}</p>
+              <p>{progressMessage}</p>
+              <Spinner />
             </div>
           ) : (
             <div>
@@ -147,4 +164,4 @@ export const ImportForm = () => {
       ) : null}
     </div>
   );
-};
+}

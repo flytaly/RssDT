@@ -4,12 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 
 import BigCard from '@/app/components/card/big-card';
 import FeedNavBar from '@/app/components/card/feed-nav-bar';
+import { useRedirectUnauthorized } from '@/app/hooks/useRedirectUnauthorized';
+import { getGQLClient } from '@/app/lib/gqlClient.client';
 import Spinner from '@/components/spinner';
 import { UserFeed } from '@/gql/generated';
 
 import FeedTable from './feed-table';
-import { useRedirectUnauthorized } from '../hooks/useRedirectUnauthorized';
-import { getGQLClient } from '../lib/gqlClient.client';
 
 export default function Manage() {
   const me = useRedirectUnauthorized();
