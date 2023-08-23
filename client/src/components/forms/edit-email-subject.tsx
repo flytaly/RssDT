@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import XCircle from '@/../public/static/x-circle.svg';
-import { DigestSchedule } from '@/generated/graphql';
+import { DigestSchedule } from '@/gql/generated';
 import { composeEmailSubject, defaultTemplate } from '@/utils/compose-subject';
 
 import InputUnderline from './input-underline';
