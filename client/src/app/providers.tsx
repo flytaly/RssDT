@@ -8,7 +8,16 @@ import { AppStateProvider } from '@/components/app-context';
 import { useApollo } from '@/lib/apollo-client';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  );
   const apolloClient = useApollo({});
 
   return (
