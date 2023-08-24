@@ -1,25 +1,29 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React, { RefObject, useMemo, useState } from 'react';
+import { RefObject, useMemo, useState } from 'react';
 
 import MoreIcon from '@/../public/static/more-horizontal.svg';
 import XIcon from '@/../public/static/x.svg';
 import Spinner from '@/components/spinner';
-import { DigestSchedule, FeedFieldsFragment, UserFeedFieldsFragment } from '@/generated/graphql';
+import { DigestSchedule, FeedFieldsFragment, UserFeedFieldsFragment } from '@/gql/generated';
 import usePopup from '@/hooks/use-popup';
 
 interface FeedSidebarProps {
   feeds?: Array<{ feed: FeedFieldsFragment } & UserFeedFieldsFragment>;
   loading?: boolean;
+  feedId?: number;
   onAddFeedClick?: () => void;
   onSidebarClose?: () => void;
 }
 
-const FeedSidebar = ({ feeds, loading, onAddFeedClick, onSidebarClose }: FeedSidebarProps) => {
-  const router = useRouter();
+const FeedSidebar = ({
+  feeds,
+  loading,
+  onAddFeedClick,
+  onSidebarClose,
+  feedId,
+}: FeedSidebarProps) => {
   const [showOptions, setShowOptions] = useState(false);
   const [hideEmailFeeds, setHideEmailFeeds] = useState(false);
-  const id = router.query.id ? parseInt(router.query.id as string) : null;
   const feedsSorted = useMemo(() => {
     const $feeds = hideEmailFeeds
       ? feeds?.filter((f) => !f.schedule || f.schedule === DigestSchedule.Disable)
@@ -36,7 +40,7 @@ const FeedSidebar = ({ feeds, loading, onAddFeedClick, onSidebarClose }: FeedSid
       {feedsSorted?.map((uf) => {
         const hasNew = uf.newItemsCount > 0;
         const font = hasNew ? 'font-semibold text-white' : 'font-light text-gray-200';
-        const bg = uf.id === id ? `bg-secondary` : '';
+        const bg = uf.id === feedId ? `bg-secondary` : '';
         return (
           <li key={uf.id} title={`${uf.newItemsCount || 0} new items`}>
             <Link

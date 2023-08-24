@@ -28,9 +28,9 @@ const FeedContent = ({
     setHasNewItems(false);
   }, [userFeed.id]);
 
-  useItemsCountUpdatedSubscription({
-    onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id, () => setHasNewItems(true)),
-  });
+  /* useItemsCountUpdatedSubscription({ */
+  /*   onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id, () => setHasNewItems(true)), */
+  /* }); */
 
   const toggleSearch = () => setShowSearch((s) => !s);
 

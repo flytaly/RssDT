@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
+import { getGQLClient } from '@/app/lib/gqlClient.client';
 import AddFeedModal from '@/components/modals/add-feed-modal';
 import ModalSidebar from '@/components/modals/modal-sidebar';
-import { useMyFeedsQuery, UserFeed } from '@/generated/graphql';
+import { UserFeed } from '@/gql/generated';
 
 import FeedContent from './feed-content';
 import FeedSidebar from './feed-sidebar';
@@ -11,9 +13,9 @@ import Overview from './overview';
 const FeedReader = ({ id }: { id?: number }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
-  const { data, loading } = useMyFeedsQuery({ ssr: false });
+  const { data, isLoading } = useQuery(['myFeeds'], async () => getGQLClient().myFeeds());
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
-  const userFeed = id && !loading ? myFeeds.find((uf) => uf.id === id) : null;
+  const userFeed = id && !isLoading ? myFeeds.find((uf) => uf.id === id) : null;
 
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">
@@ -21,8 +23,9 @@ const FeedReader = ({ id }: { id?: number }) => {
         <div className="flex-shrink-0">
           <FeedSidebar
             feeds={myFeeds}
-            loading={loading}
+            loading={isLoading}
             onAddFeedClick={() => setAddFeedModalOpen(true)}
+            feedId={id}
           />
           ;
         </div>
@@ -47,7 +50,7 @@ const FeedReader = ({ id }: { id?: number }) => {
       >
         <FeedSidebar
           feeds={myFeeds}
-          loading={loading}
+          loading={isLoading}
           onAddFeedClick={() => setAddFeedModalOpen(true)}
           onSidebarClose={() => setSidebarModalOpen(false)}
         />

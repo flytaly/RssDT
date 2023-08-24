@@ -1,12 +1,13 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
+import { getGQLClient } from '@/app/lib/gqlClient.client';
 import ViewItemModal from '@/components/modals/view-item-modal';
 import Spinner from '@/components/spinner';
 import {
   FeedFieldsFragment,
   ItemFieldsFragment,
-  useMyFeedItemsQuery,
   UserFeedFieldsFragment,
   useSetLastViewedItemDateMutation,
 } from '@/generated/graphql';
@@ -28,10 +29,24 @@ const take = 10;
 const FeedItems = ({ feed, readerOpts, filter, showRefetchBtn, onRefetchEnd }: FeedItemsProps) => {
   const [showItemInModal, setShowItemInModal] = useState<number | null>(null);
   const { ref, inView } = useInView({ threshold: 0 });
-  const { data, loading, fetchMore, error, refetch } = useMyFeedItemsQuery({
-    notifyOnNetworkStatusChange: true,
-    variables: { feedId: feed.feed.id, skip: 0, take, filter },
-  });
+
+  const { data, isLoading, error, isError, hasNextPage, fetchNextPage, isFetching } =
+    useInfiniteQuery({
+      queryKey: ['myFeedItems', feed.feed.id, filter],
+      queryFn: async ({ pageParam = 0 }: { pageParam?: number }) => {
+        return getGQLClient().myFeedItems({
+          feedId: feed.feed.id,
+          skip: pageParam,
+          take: take,
+          filter,
+        });
+      },
+      getNextPageParam: (_, pages) => {
+        if (!pages.at(-1)?.myFeedItems.hasMore) return undefined;
+        return pages.length * take;
+      },
+    });
+
   const [setItemDate, setItemDateStatus] = useSetLastViewedItemDateMutation();
 
   const newItemDate = React.useMemo(
@@ -42,14 +57,19 @@ const FeedItems = ({ feed, readerOpts, filter, showRefetchBtn, onRefetchEnd }: F
     [feed.id],
   );
 
-  const items: ItemFieldsFragment[] = data?.myFeedItems.items || [];
-  const hasMore = data?.myFeedItems.hasMore && !loading && !error;
+  const items = React.useMemo(() => {
+    const itm = data?.pages.flatMap((page) => page.myFeedItems.items) || [];
+    // filter duplicates
+    return itm.filter((item, index, self) => self.findIndex((i) => i.id === item.id) === index);
+  }, [data]);
 
-  if (inView && hasMore) {
-    fetchMore({ variables: { feedId: feed.feed.id, skip: items.length, take } }).catch((e) =>
-      console.error(e),
-    );
-  }
+  const hasMore = hasNextPage && !isLoading && !isFetching && !isError;
+
+  useEffect(() => {
+    if (hasMore && inView) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasMore, inView]);
 
   const modalItem = showItemInModal && items.find((it) => it.id === showItemInModal);
 
@@ -81,21 +101,21 @@ const FeedItems = ({ feed, readerOpts, filter, showRefetchBtn, onRefetchEnd }: F
             className="btn bg-white text-black"
             type="button"
             onClick={async () => {
-              await refetch();
+              /* await refetch(); */
               onRefetchEnd?.();
             }}
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading ? <Spinner /> : <span className="mx-1">Load new items</span>}
+            {isLoading ? <Spinner /> : <span className="mx-1">Load new items</span>}
           </button>
         </div>
       ) : null}
-      {error ? (
+      {isError ? (
         <div className="border-2 border-error shadow-message-err self-center p-3 mt-3">
-          {error.message}
+          {(error as Error).message}
         </div>
       ) : null}
-      {!items.length && !loading && (
+      {!items.length && !isLoading && (
         <div className="self-center font-bold">
           {!filter ? "The feed doesn't have items" : "Couldn't find posts that match your query"}
         </div>
@@ -112,7 +132,7 @@ const FeedItems = ({ feed, readerOpts, filter, showRefetchBtn, onRefetchEnd }: F
 
       {hasMore ? <div ref={ref} className="h-0" /> : null}
 
-      {loading ? <Spinner className="h-6 self-center" /> : null}
+      {isLoading || isFetching ? <Spinner className="h-6 self-center" /> : null}
       <ViewItemModal isOpen={!!modalItem} onRequestClose={() => setShowItemInModal(null)}>
         {modalItem ? (
           <FeedItemContent

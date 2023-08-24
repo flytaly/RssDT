@@ -11,7 +11,7 @@ interface OverviewProps {
 }
 
 const Overview = ({ feeds, setSidebarModalOpen }: OverviewProps) => {
-  useItemsCountUpdatedSubscription({ onSubscriptionData: createUpdateOnNewItems() });
+  /* useItemsCountUpdatedSubscription({ onSubscriptionData: createUpdateOnNewItems() }); */
 
   const feedsSorted = useMemo(() => {
     const unread = feeds?.filter((f) => f.newItemsCount) || [];
