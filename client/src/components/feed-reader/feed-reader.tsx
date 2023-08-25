@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
+import useItemsCountUpdatedSubscription from '@/app/hooks/useItemsCountUpdate';
 import { getGQLClient } from '@/app/lib/gqlClient.client';
 import AddFeedModal from '@/components/modals/add-feed-modal';
 import ModalSidebar from '@/components/modals/modal-sidebar';
@@ -16,6 +17,8 @@ const FeedReader = ({ id }: { id?: number }) => {
   const { data, isLoading } = useQuery(['myFeeds'], async () => getGQLClient().myFeeds());
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const userFeed = id && !isLoading ? myFeeds.find((uf) => uf.id === id) : null;
+
+  useItemsCountUpdatedSubscription();
 
   return (
     <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">

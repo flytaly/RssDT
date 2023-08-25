@@ -21,7 +21,7 @@ interface WSServerArgs {
 export function initWSServer({ schema, sessionMiddleware, server }: WSServerArgs) {
   const graphqlWs = new WebSocketServer({ server, path: '/graphql' });
 
-  useServer(
+  const cleanup = useServer(
     {
       schema,
 
@@ -43,7 +43,7 @@ export function initWSServer({ schema, sessionMiddleware, server }: WSServerArgs
     graphqlWs,
   );
 
-  return graphqlWs;
+  return cleanup;
 }
 
 /**

@@ -19,17 +19,11 @@ const FeedContent = ({
   const [showSearch, setShowSearch] = useState(false);
   const [readerOpts, setReaderOpts] = useLocalState();
   const [searchFilter, setSearchFilter] = useState('');
-  const [hasNewItems, setHasNewItems] = useState(false);
 
   useEffect(() => {
     setShowSearch(false);
     setSearchFilter('');
-    setHasNewItems(false);
   }, [userFeed.id]);
-
-  /* useItemsCountUpdatedSubscription({ */
-  /*   onSubscriptionData: createUpdateOnNewItems(userFeed?.feed.id, () => setHasNewItems(true)), */
-  /* }); */
 
   const toggleSearch = () => setShowSearch((s) => !s);
 
@@ -73,13 +67,7 @@ const FeedContent = ({
           </div>
         ) : null}
       </div>
-      <FeedItems
-        feed={userFeed}
-        readerOpts={readerOpts}
-        filter={searchFilter}
-        showRefetchBtn={hasNewItems}
-        onRefetchEnd={() => setHasNewItems(false)}
-      />
+      <FeedItems feed={userFeed} readerOpts={readerOpts} filter={searchFilter} />
     </>
   );
 };

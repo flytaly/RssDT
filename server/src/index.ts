@@ -11,7 +11,6 @@ import { redis } from './redis.js';
 import { initSession } from './session.js';
 import { importNormalizer } from './utils/normalizer.js';
 import { initWSServer } from './ws-server.js';
-import { migrateDB } from './db/db.js';
 
 const entry = async () => {
   /* await migrateDB(); */
@@ -31,10 +30,11 @@ const entry = async () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
   });
 
-  initWSServer({ schema, sessionMiddleware, server });
+  const wsCleanup = initWSServer({ schema, sessionMiddleware, server });
 
   const exit = async () => {
     await pubsub.close();
+    await wsCleanup.dispose();
     await apolloServer.stop();
     process.exit();
   };

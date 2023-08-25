@@ -43,7 +43,6 @@ export default function useSetLastViewedItemDate(
     const prevDate = new Date(lastViewedItemDate);
     const lastDate = new Date(newestItem.createdAt);
     if (prevDate < lastDate) {
-      console.log('should update date');
       mutate({ itemId: newestItem.id, userFeedId: id });
     }
   }, [id, isError, isLoading, isSuccess, lastViewedItemDate, mutate, newestItem]);
