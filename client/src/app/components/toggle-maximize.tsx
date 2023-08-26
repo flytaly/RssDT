@@ -1,11 +1,12 @@
 'use client';
 
+import { useContext } from 'react';
+
 import MaximizeIcon from '@/../public/static/maximize.svg';
+import { WidthToggleCtx } from '@/app/components/card/toggleable-card';
 
 export default function ToggleMaximize() {
-  const toggleWidth = () => {
-    console.log('TODO: toggle width');
-  };
+  const toggleWidth = useContext(WidthToggleCtx);
   return (
     <button
       type="button"

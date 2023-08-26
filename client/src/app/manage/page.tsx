@@ -2,7 +2,6 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import BigCard from '@/app/components/card/big-card';
 import FeedNavBar from '@/app/components/card/feed-nav-bar';
 import { useRedirectUnauthorized } from '@/app/hooks/useRedirectUnauthorized';
 import { getGQLClient } from '@/app/lib/gqlClient.client';
@@ -10,6 +9,7 @@ import Spinner from '@/components/spinner';
 import { UserFeed } from '@/gql/generated';
 
 import FeedTable from './feed-table';
+import ToggleableCard from '../components/card/toggleable-card';
 
 export default function Manage() {
   const me = useRedirectUnauthorized();
@@ -21,7 +21,7 @@ export default function Manage() {
   const myFeeds = (data?.myFeeds || []) as UserFeed[];
 
   return (
-    <BigCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
+    <ToggleableCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
       <div className="w-full">
         <FeedNavBar />
         <div className="flex flex-col w-full p-4">
@@ -33,6 +33,6 @@ export default function Manage() {
           )}
         </div>
       </div>
-    </BigCard>
+    </ToggleableCard>
   );
 }

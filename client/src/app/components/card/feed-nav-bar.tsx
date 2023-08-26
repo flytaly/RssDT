@@ -1,4 +1,4 @@
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import React from 'react';
 
 import CardNavBar, { CardRoute } from './nav-bar';
@@ -18,9 +18,21 @@ const routes: CardRoute[] = [
   },
 ];
 
+function getRoutes(params?: string) {
+  if (!params) return routes;
+  return routes.map((r) => ({ ...r, path: r.path + params }));
+}
+
 const FeedNavBar = () => {
   const pathname = usePathname();
-  return <CardNavBar title="Feeds" routes={routes} activePath={pathname} />;
+  const params = useSearchParams();
+  const stretch = params?.get('stretch');
+
+  const updatedRoutes = getRoutes(stretch ? '?stretch=true' : '');
+
+  return (
+    <CardNavBar title="Feeds" routes={updatedRoutes} activePath={pathname} withMaximize={true} />
+  );
 };
 
 export default FeedNavBar;

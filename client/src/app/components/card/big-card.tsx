@@ -4,15 +4,15 @@ interface CardProps {
   big?: boolean;
   children: React.ReactNode;
   verificationWarning?: boolean;
-  span?: boolean;
+  stretch?: boolean;
 }
 
 export default function BigCard({
   children,
-  span = false,
+  stretch = false,
   verificationWarning = false,
 }: CardProps) {
-  const width = span ? 'w-screen' : '';
+  const width = stretch ? 'w-screen' : '';
   return (
     <article
       id="card-root"

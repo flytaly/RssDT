@@ -10,6 +10,7 @@ import { DigestSchedule, UserFeed } from '@/gql/generated';
 
 import BigCard from '../components/card/big-card';
 import FeedNavBar from '../components/card/feed-nav-bar';
+import ToggleableCard from '../components/card/toggleable-card';
 import { useRedirectUnauthorized } from '../hooks/useRedirectUnauthorized';
 import { getGQLClient } from '../lib/gqlClient.client';
 
@@ -69,7 +70,7 @@ export default function ImportExport() {
   }, [data?.myFeeds]);
 
   return (
-    <BigCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
+    <ToggleableCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
       <div className="w-full ">
         <FeedNavBar />
         <div className="flex flex-col sm:flex-row w-full max-w-5xl p-4 mx-auto">
@@ -91,6 +92,6 @@ export default function ImportExport() {
           </div>
         </div>
       </div>
-    </BigCard>
+    </ToggleableCard>
   );
 }
