@@ -1,17 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
-import { useRequestEmailVerificationMutation } from '@/generated/graphql';
+import { getGQLClient } from './app/lib/gqlClient.client';
 
 const EmailVerificationWarning = () => {
-  const [resendEmail, { loading, error }] = useRequestEmailVerificationMutation();
-
-  const [status, setStatus] = useState<'success' | 'error' | null>(null);
+  const { mutateAsync, isLoading, error, isError, isSuccess, data } = useMutation({
+    mutationFn: async () => {
+      return getGQLClient().requestEmailVerification();
+    },
+  });
 
   let buttonText = 'Send activation link again';
-  if (loading) buttonText = 'Sending activation link...';
-  if (status === 'success') buttonText = 'Activation link has been sent';
+  if (isLoading) buttonText = 'Sending activation link...';
+  if (isSuccess && data.requestEmailVerification) buttonText = 'Activation link has been sent';
 
   return (
     <div className="absolute flex justify-center items-start w-full h-full bg-white bg-opacity-50 z-20 ">
@@ -23,20 +25,15 @@ const EmailVerificationWarning = () => {
         <button
           type="button"
           onClick={() => {
-            resendEmail()
-              .then(() => setStatus('success'))
-              .catch((err) => {
-                setStatus('error');
-                console.error(err);
-              });
+            mutateAsync();
           }}
           className={`mt-4 ${status === 'success' ? 'cursor-default' : 'underline'}`}
-          disabled={status === 'success' || loading}
+          disabled={status === 'success' || isLoading}
         >
           {buttonText}
         </button>
-        {status === 'error' && error?.message ? (
-          <div className="text-error p-2 mt-2">{error?.message}</div>
+        {isError && (error as Error)?.message ? (
+          <div className="text-error p-2 mt-2">{(error as Error)?.message}</div>
         ) : null}
       </div>
     </div>
