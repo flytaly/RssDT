@@ -268,7 +268,7 @@ export default function SettingsPage() {
                   <div className="flex space-x-8 mt-4 justify-center">
                     <button
                       className="border-2 border-gray text-black px-2 hover:border-black active:border-gray"
-                      onClick={hideAccDeletionBlock || deleteMeResult.loading}
+                      onClick={hideAccDeletionBlock}
                     >
                       Cancel
                     </button>
