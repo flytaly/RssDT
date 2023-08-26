@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { createContext, useCallback, useState } from 'react';
 
 import BigCard from './big-card';
@@ -14,9 +15,9 @@ type CardState = { fullWidth: boolean };
 export const WidthToggleCtx = createContext(() => {});
 
 export default function ToggleableCard({ children, verificationWarning = false }: CardProps) {
+  const params = useSearchParams();
+  const stretch = params?.get('stretch');
   const [state, setState] = useState<CardState>(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const stretch = urlParams.get('stretch');
     return { fullWidth: stretch === 'true' };
   });
 
