@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import XCircle from '@/../public/static/x-circle.svg';
 import { DigestSchedule } from '@/gql/generated';
-
-import InputUnderline from './input-underline';
-
 import { composeEmailSubject, defaultTemplate } from '@/utils/compose-subject';
 
+import InputUnderline from './input-underline';
 
 interface EditEmailSubjectProps {
   value?: string | null;

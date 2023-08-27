@@ -2,7 +2,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 
-import { getGQLClient } from './app/lib/gqlClient.client';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 const EmailVerificationWarning = () => {
   const { mutateAsync, isLoading, error, isError, isSuccess, data } = useMutation({
