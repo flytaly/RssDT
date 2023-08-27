@@ -1,4 +1,4 @@
-import SpinnerIcon from '@/../public/static/spinner.svg';
+import SpinnerIcon from '@/assets/spinner.svg';
 
 const Spinner = ({ className = '' }: { className?: string }) => {
   return (

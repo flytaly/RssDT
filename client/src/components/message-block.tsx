@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 
-import AlertCircleIcon from '@/../public/static/alert-circle.svg';
-import CheckCircleIcon from '@/../public/static/check-circle.svg';
+import AlertCircleIcon from '@/assets/alert-circle.svg';
+import CheckCircleIcon from '@/assets/check-circle.svg';
 import AnimatedMessage, {
   MessageItem,
   useEmergeTransition,

@@ -2,7 +2,7 @@ import debounce from 'lodash.debounce';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-import BarsIcon from '@/../public/static/bars.svg';
+import BarsIcon from '@/assets/bars.svg';
 import { UserFeed } from '@/gql/generated';
 
 import FeedHeader from './feed-header';

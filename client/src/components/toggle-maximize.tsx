@@ -2,7 +2,7 @@
 
 import { useContext } from 'react';
 
-import MaximizeIcon from '@/../public/static/maximize.svg';
+import MaximizeIcon from '@/assets/maximize.svg';
 import { WidthToggleCtx } from '@/components/card/toggleable-card';
 
 export default function ToggleMaximize() {

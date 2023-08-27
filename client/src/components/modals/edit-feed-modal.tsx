@@ -1,7 +1,7 @@
 import React from 'react';
 
-import ArrowLeftIcon from '@/../public/static/arrow-left.svg';
-import InfoIcon from '@/../public/static/info.svg';
+import ArrowLeftIcon from '@/assets/arrow-left.svg';
+import InfoIcon from '@/assets/info.svg';
 import FeedOptionsForm from '@/components/forms/feed-options-form';
 import { UserFeed } from '@/gql/generated';
 

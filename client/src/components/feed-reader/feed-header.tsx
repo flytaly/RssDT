@@ -1,12 +1,12 @@
 import React, { RefObject, useCallback, useState } from 'react';
 
-import EditIcon from '@/../public/static/edit.svg';
-import ExtLinkIcon from '@/../public/static/external-link.svg';
-import ItemBigIcon from '@/../public/static/item-big.svg';
-import ItemMediumIcon from '@/../public/static/item-middle.svg';
-import ItemSmallIcon from '@/../public/static/item-small.svg';
-import MailIcon from '@/../public/static/mail.svg';
-import SearchIcon from '@/../public/static/search.svg';
+import EditIcon from '@/assets/edit.svg';
+import ExtLinkIcon from '@/assets/external-link.svg';
+import ItemBigIcon from '@/assets/item-big.svg';
+import ItemMediumIcon from '@/assets/item-middle.svg';
+import ItemSmallIcon from '@/assets/item-small.svg';
+import MailIcon from '@/assets/mail.svg';
+import SearchIcon from '@/assets/search.svg';
 import EditFeedModal from '@/components/modals/edit-feed-modal';
 import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '@/gql/generated';
 import usePopup from '@/hooks/use-popup';

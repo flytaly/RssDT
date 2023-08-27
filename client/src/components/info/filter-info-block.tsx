@@ -1,4 +1,4 @@
-import SearchIcon from '@/../public/static/search.svg';
+import SearchIcon from '@/assets/search.svg';
 
 import PrimaryLink from './primary-link';
 

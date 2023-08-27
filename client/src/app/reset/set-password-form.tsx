@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import PasswordIcon from '@/../public/static/key.svg';
+import PasswordIcon from '@/assets/key.svg';
 import { resetPasswordAction, ResetPasswordValidationError } from '@/app/actions/reset-password';
 import { MessageItem } from '@/components/card/animated-message';
 import InputWithIcon from '@/components/forms/icon-input';

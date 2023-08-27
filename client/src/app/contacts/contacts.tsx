@@ -6,8 +6,8 @@ import mailgo from 'mailgo';
 import { useEffect } from 'react';
 import { object, string } from 'yup';
 
-import MailIcon from '@/../public/static/envelope.svg';
-import GithubIcon from '@/../public/static/github.svg';
+import MailIcon from '@/assets/envelope.svg';
+import GithubIcon from '@/assets/github.svg';
 import { FeedbackInput } from '@/gql/generated';
 import { getGQLClient } from '@/lib/gqlClient.client';
 

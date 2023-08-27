@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { RefObject, useMemo, useState } from 'react';
 
-import MoreIcon from '@/../public/static/more-horizontal.svg';
-import XIcon from '@/../public/static/x.svg';
+import MoreIcon from '@/assets/more-horizontal.svg';
+import XIcon from '@/assets/x.svg';
 import Spinner from '@/components/spinner';
 import { DigestSchedule, FeedFieldsFragment, UserFeedFieldsFragment } from '@/gql/generated';
 import usePopup from '@/hooks/use-popup';

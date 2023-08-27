@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { useMemo } from 'react';
 
-import BarsIcon from '@/../public/static/bars.svg';
+import BarsIcon from '@/assets/bars.svg';
 import { UserFeed } from '@/gql/generated';
 
 interface OverviewProps {

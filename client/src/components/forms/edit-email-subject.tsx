@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import XCircle from '@/../public/static/x-circle.svg';
+import XCircle from '@/assets/x-circle.svg';
 import { DigestSchedule } from '@/gql/generated';
 import { composeEmailSubject, defaultTemplate } from '@/utils/compose-subject';
 

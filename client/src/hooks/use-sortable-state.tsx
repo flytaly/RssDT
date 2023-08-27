@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import SortDownIcon from '@/../public/static/sort-down.svg';
-import SortUpIcon from '@/../public/static/sort-up.svg';
-import SortIcon from '@/../public/static/sort.svg';
+import SortDownIcon from '@/assets/sort-down.svg';
+import SortUpIcon from '@/assets/sort-up.svg';
+import SortIcon from '@/assets/sort.svg';
 import { UserFeed } from '@/gql/generated';
 import { periodToNum } from '@/types';
 

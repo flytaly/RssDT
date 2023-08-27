@@ -2,9 +2,9 @@
 
 import { useRef, useState } from 'react';
 
-import ClockIcon from '@/../public/static/clock.svg';
-import MailIcon from '@/../public/static/envelope.svg';
-import RssSquareIcon from '@/../public/static/rss-square.svg';
+import ClockIcon from '@/assets/clock.svg';
+import MailIcon from '@/assets/envelope.svg';
+import RssSquareIcon from '@/assets/rss-square.svg';
 import {
   AddFeedValidationError,
   addFeedAnonAction,

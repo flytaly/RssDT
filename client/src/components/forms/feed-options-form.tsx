@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import EmailIcon from '@/../public/static/envelope.svg';
+import EmailIcon from '@/assets/envelope.svg';
 import GraphQLError from '@/components/graphql-error';
 import { TernaryState, Theme, UserFeed } from '@/gql/generated';
 import { getGQLClient } from '@/lib/gqlClient.client';

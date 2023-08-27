@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-import MailIcon from '@/../public/static/envelope.svg';
-import PasswordIcon from '@/../public/static/key.svg';
+import MailIcon from '@/assets/envelope.svg';
+import PasswordIcon from '@/assets/key.svg';
 import { loginAction, LoginValidationError } from '@/app/actions/login';
 import { MessageItem } from '@/components/card/animated-message';
 import InputWithIcon from '@/components/forms/icon-input';

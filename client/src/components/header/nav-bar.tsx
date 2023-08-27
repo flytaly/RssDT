@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-import HelpCircle from '@/../public/static/help-circle.svg';
-import MailIcon from '@/../public/static/mail.svg';
-import SettingsIcon from '@/../public/static/settings.svg';
-import ProfileIcon from '@/../public/static/user-circle-solid.svg';
+import HelpCircle from '@/assets/help-circle.svg';
+import MailIcon from '@/assets/mail.svg';
+import SettingsIcon from '@/assets/settings.svg';
+import ProfileIcon from '@/assets/user-circle-solid.svg';
 import { getGQLClient } from '@/lib/gqlClient.client';
 
 interface NavLinkProps {

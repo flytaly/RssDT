@@ -1,7 +1,7 @@
 import React, { RefObject, useCallback, useState } from 'react';
 
-import PaperClipIcon from '@/../public/static/paperclip.svg';
-import ShareIcon from '@/../public/static/share-2.svg';
+import PaperClipIcon from '@/assets/paperclip.svg';
+import ShareIcon from '@/assets/share-2.svg';
 import { Item, ItemFieldsFragment } from '@/gql/generated';
 import usePopup from '@/hooks/use-popup';
 import shareProviders from '@/share-providers';

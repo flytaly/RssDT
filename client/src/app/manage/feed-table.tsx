@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 
-import EditIcon from '@/../public/static/edit.svg';
-import TrashIcon from '@/../public/static/trash.svg';
+import EditIcon from '@/assets/edit.svg';
+import TrashIcon from '@/assets/trash.svg';
 import CheckBox from '@/components/forms/checkbox';
 import AddFeedModal from '@/components/modals/add-feed-modal';
 import ConfirmModal from '@/components/modals/confirm-modal';
