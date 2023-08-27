@@ -2,8 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
 import { MeQuery, UserInfoInput } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
 import { getUserLocaleInfo } from '@/utils/user-locale';
 
 /**

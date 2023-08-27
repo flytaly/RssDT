@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import MainCard from './components/card/small-card';
+import SmallCard from '@/components/card/small-card';
 
 export default function Error({ error, reset }: { error: Error; reset: () => void }) {
   useEffect(() => {
@@ -10,7 +10,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
   }, [error]);
 
   return (
-    <MainCard>
+    <SmallCard>
       <div className="flex flex-col justify-center items-center m-auto gap-4 p-4">
         <h2>Something went wrong!</h2>
         <div className="p-2 border border-error">{error.message}</div>
@@ -24,6 +24,6 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
           Try again
         </button>
       </div>
-    </MainCard>
+    </SmallCard>
   );
 }

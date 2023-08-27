@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/app/lib/gqlClient.server';
+import { getGQLClient } from '@/lib/gqlClient.server';
 
 const RegisterSchema = z
   .object({

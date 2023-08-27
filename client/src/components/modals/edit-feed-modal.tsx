@@ -3,9 +3,11 @@ import React from 'react';
 import ArrowLeftIcon from '@/../public/static/arrow-left.svg';
 import InfoIcon from '@/../public/static/info.svg';
 import FeedOptionsForm from '@/components/forms/feed-options-form';
-import { UserFeed } from '@/generated/graphql';
 
 import ModalSidebar from './modal-sidebar';
+
+import { UserFeed } from '@/generated/graphql';
+
 
 interface EditFeedModalProps {
   isOpen: boolean;

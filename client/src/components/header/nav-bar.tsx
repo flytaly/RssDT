@@ -9,7 +9,7 @@ import HelpCircle from '@/../public/static/help-circle.svg';
 import MailIcon from '@/../public/static/mail.svg';
 import SettingsIcon from '@/../public/static/settings.svg';
 import ProfileIcon from '@/../public/static/user-circle-solid.svg';
-import { getGQLClient } from '@/app/lib/gqlClient.client';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 interface NavLinkProps {
   href: string;

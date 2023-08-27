@@ -4,11 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import SmallCard from '@/app/components/card/small-card';
-import { getGQLClient } from '@/app/lib/gqlClient.client';
-import { MessageItem } from '@/components/main-card/animated-message';
-import FormSide from '@/components/main-card/form-side';
-import MessagesSide from '@/components/main-card/messages-side';
+import { MessageItem } from '@/components/card/animated-message';
+import FormSide from '@/components/card/form-side';
+import MessagesSide from '@/components/card/messages-side';
+import SmallCard from '@/components/card/small-card';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 import { AddDigestFeedForm } from './add-digest-feed-form';
 

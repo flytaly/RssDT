@@ -3,11 +3,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import SmallCard from '@/app/components/card/small-card';
-import { getGQLClient } from '@/app/lib/gqlClient.client';
-import { MessageItem } from '@/components/main-card/animated-message';
-import MessagesSide from '@/components/main-card/messages-side';
+import { MessageItem } from '@/components/card/animated-message';
+import MessagesSide from '@/components/card/messages-side';
+import SmallCard from '@/components/card/small-card';
 import { ActivateFeedMutation } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 const notEnoughInfoMsg: MessageItem = {
   key: 'query-error',

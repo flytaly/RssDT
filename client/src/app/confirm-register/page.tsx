@@ -4,12 +4,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-import SmallCard from '@/app/components/card/small-card';
-import { MessageItem } from '@/components/main-card/animated-message';
-import MessagesSide from '@/components/main-card/messages-side';
+import { type MessageItem } from '@/components/card/animated-message';
+import MessagesSide from '@/components/card/messages-side';
+import SmallCard from '@/components/card/small-card';
 import { VerifyEmailMutation } from '@/gql/generated';
-
-import { getGQLClient } from '../lib/gqlClient.client';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 const notEnoughInfoMsg: MessageItem = {
   key: 'query-error',

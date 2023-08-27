@@ -6,11 +6,11 @@ import { headers } from 'next/headers';
 import Link from 'next/link';
 import React from 'react';
 
-import { getQueryClient } from '@/app/lib/getQueryClient';
-import { getGQLClient } from '@/app/lib/gqlClient.server';
+import Header from '@/components/header/header';
 import Meta from '@/components/meta';
+import { getQueryClient } from '@/lib/getQueryClient';
+import { getGQLClient } from '@/lib/gqlClient.server';
 
-import Header from './header';
 import Providers from './providers';
 
 const inter = Inter({ subsets: ['latin'] });

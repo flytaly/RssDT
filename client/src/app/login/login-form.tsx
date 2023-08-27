@@ -8,8 +8,8 @@ import React, { useState } from 'react';
 import MailIcon from '@/../public/static/envelope.svg';
 import PasswordIcon from '@/../public/static/key.svg';
 import { loginAction, LoginValidationError } from '@/app/actions/login';
-import InputWithIcon from '@/app/components/forms/icon-input';
-import { MessageItem } from '@/components/main-card/animated-message';
+import { MessageItem } from '@/components/card/animated-message';
+import InputWithIcon from '@/components/forms/icon-input';
 import { useSubmitHandler } from '@/hooks/use-submit-handler';
 
 interface LoginProps {

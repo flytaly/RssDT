@@ -1,13 +1,13 @@
 import { InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
 import {
   FeedFieldsFragment,
   MyFeedItemsQuery,
   MyFeedsQuery,
   UserFeedFieldsFragment,
 } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 export type UserFeedWithFeed = { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
 

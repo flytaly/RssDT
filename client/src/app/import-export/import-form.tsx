@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useCallback, useState } from 'react';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
 import Spinner from '@/components/spinner';
 import { FeedImport, ImportState, ImportStatusObject } from '@/gql/generated';
 import { useDropArea } from '@/hooks/use-droparea';
+import { getGQLClient } from '@/lib/gqlClient.client';
 import { getFeedsFromOpml, getFeedsFromText } from '@/utils/import-utils';
 
 

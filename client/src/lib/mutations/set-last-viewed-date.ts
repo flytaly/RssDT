@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
 import { ItemFieldsFragment, MyFeedsQuery, UserFeedFieldsFragment } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 export default function useSetLastViewedItemDate(
   userFeed: UserFeedFieldsFragment,

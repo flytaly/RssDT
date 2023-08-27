@@ -11,9 +11,8 @@ import ConfirmModal from '@/components/modals/confirm-modal';
 import EditFeedModal from '@/components/modals/edit-feed-modal';
 import { UserFeed } from '@/gql/generated';
 import { SortableColumn, useSortableState } from '@/hooks/use-sortable-state';
+import useDeleteFeedsMutation from '@/lib/mutations/delete-my-feeds';
 import { periodNames } from '@/types';
-
-import useDeleteFeedsMutation from '../lib/mutations/delete-my-feeds';
 
 type FeedTableProps = {
   feeds: Array<UserFeed>;

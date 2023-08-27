@@ -4,10 +4,10 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 
 import EmailIcon from '@/../public/static/envelope.svg';
-import { getGQLClient } from '@/app/lib/gqlClient.client';
-import { useSetFeedOptionsMutation } from '@/app/lib/mutations/set-feed-options';
 import GraphQLError from '@/components/graphql-error';
 import { TernaryState, Theme, UserFeed } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
+import { useSetFeedOptionsMutation } from '@/lib/mutations/set-feed-options';
 import { DigestSchedule, periodNames } from '@/types';
 
 import InputUnderline, { InputUnderlineProps } from './input-underline';

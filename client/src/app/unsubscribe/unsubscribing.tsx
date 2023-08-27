@@ -2,10 +2,9 @@
 
 import { useMutation } from '@tanstack/react-query';
 
-import { MessageItem } from '@/components/main-card/animated-message';
-import MessagesSide from '@/components/main-card/messages-side';
-
-import { getGQLClient } from '../lib/gqlClient.client';
+import { MessageItem } from '@/components/card/animated-message';
+import MessagesSide from '@/components/card/messages-side';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 export default function Unsubscribing({
   token,

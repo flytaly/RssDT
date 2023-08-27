@@ -10,9 +10,9 @@ import {
   addFeedAnonAction,
   addFeedLoggedInAction,
 } from '@/app/actions/add-feed';
-import InputWithIcon from '@/app/components/forms/icon-input';
-import SelectWithIcon from '@/app/components/forms/icon-select';
-import { MessageItem } from '@/components/main-card/animated-message';
+import { MessageItem } from '@/components/card/animated-message';
+import InputWithIcon from '@/components/forms/icon-input';
+import SelectWithIcon from '@/components/forms/icon-select';
 import { ArgumentError } from '@/gql/generated';
 import { useSubmitHandler } from '@/hooks/use-submit-handler';
 import { DigestSchedule, periodNames as names } from '@/types';

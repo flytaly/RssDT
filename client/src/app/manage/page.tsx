@@ -2,14 +2,14 @@
 
 import { useQuery } from '@tanstack/react-query';
 
-import FeedNavBar from '@/app/components/card/feed-nav-bar';
-import { getGQLClient } from '@/app/lib/gqlClient.client';
+import FeedNavBar from '@/components/card/feed-nav-bar';
 import Spinner from '@/components/spinner';
 import { UserFeed } from '@/gql/generated';
 import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 import FeedTable from './feed-table';
-import ToggleableCard from '../components/card/toggleable-card';
+import ToggleableCard from '../../components/card/toggleable-card';
 
 export default function Manage() {
   const me = useRedirectUnauthorized();

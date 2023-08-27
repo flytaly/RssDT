@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import useSetLastViewedItemDate from '@/app/lib/mutations/set-last-viewed-date';
 import ViewItemModal from '@/components/modals/view-item-modal';
 import Spinner from '@/components/spinner';
+import useSetLastViewedItemDate from '@/lib/mutations/set-last-viewed-date';
 
 import FeedItem, { fontSizes } from './feed-item';
 import FeedItemContent from './feed-item-content';

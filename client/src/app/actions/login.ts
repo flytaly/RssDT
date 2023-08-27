@@ -2,7 +2,7 @@
 
 import { z, ZodFormattedError } from 'zod';
 
-import { getGQLClient } from '../lib/gqlClient.server';
+import { getGQLClient } from '@/lib/gqlClient.server';
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),

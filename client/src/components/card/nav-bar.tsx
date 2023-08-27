@@ -1,27 +1,25 @@
-'use client';
-
 import Link from 'next/link';
-import React, { useContext } from 'react';
 
-import MaximizeIcon from '@/../public/static/maximize.svg';
-import { AppStateDispatchCtx } from '@/components/app-context';
+import ToggleMaximize from '@/components/toggle-maximize';
 
 export type CardRoute = {
   name: string;
   path: string;
 };
 
-const CardNavBar = ({
-  routes,
-  title,
-  activePath,
-}: {
+export type CardNavBarProps = {
   title: string;
   routes: CardRoute[];
   activePath: string | null;
-}) => {
-  const dispatch = useContext(AppStateDispatchCtx);
-  const toggleWidth = () => dispatch((prev) => ({ ...prev, fullWidth: !prev.fullWidth }));
+  withMaximize?: boolean;
+};
+
+export default function CardNavBar({
+  routes,
+  title,
+  activePath,
+  withMaximize = false,
+}: CardNavBarProps) {
   return (
     <header className="flex justify-between items-start border-b border-gray pt-1 pb-2 pl-4 pr-2">
       <div>
@@ -38,16 +36,7 @@ const CardNavBar = ({
           ))}
         </nav>
       </div>
-      <button
-        type="button"
-        onClick={toggleWidth}
-        title="Toggle width"
-        className="icon-btn text-gray-700 hover:text-primary"
-      >
-        <MaximizeIcon className="w-5" />
-      </button>
+      {withMaximize && <ToggleMaximize />}
     </header>
   );
-};
-
-export default CardNavBar;
+}

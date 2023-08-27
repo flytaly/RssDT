@@ -1,5 +1,5 @@
-import BigCard from '@/app/components/card/big-card';
-import InfoNavBar from '@/app/components/card/info-nav-bar';
+import BigCard from '@/components/card/big-card';
+import InfoNavBar from '@/components/card/info-nav-bar';
 
 import HelpContent from './help-content';
 

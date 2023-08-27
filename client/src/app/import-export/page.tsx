@@ -5,14 +5,12 @@ import opml from 'opml-generator';
 import React from 'react';
 
 import { ImportForm } from '@/app/import-export/import-form';
+import FeedNavBar from '@/components/card/feed-nav-bar';
+import ToggleableCard from '@/components/card/toggleable-card';
 import Spinner from '@/components/spinner';
 import { DigestSchedule, UserFeed } from '@/gql/generated';
-
-import { useRedirectUnauthorized } from '../../hooks/use-redirect-auth';
-import BigCard from '../components/card/big-card';
-import FeedNavBar from '../components/card/feed-nav-bar';
-import ToggleableCard from '../components/card/toggleable-card';
-import { getGQLClient } from '../lib/gqlClient.client';
+import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 function downloadText(text: string, filename = 'file.txt', type = 'plain') {
   const element = document.createElement('a');

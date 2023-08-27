@@ -1,9 +1,9 @@
-import SmallCard from '@/app/components/card/small-card';
-import { MessageItem } from '@/components/main-card/animated-message';
-import MessagesSide from '@/components/main-card/messages-side';
+import { MessageItem } from '@/components/card/animated-message';
+import MessagesSide from '@/components/card/messages-side';
+import SmallCard from '@/components/card/small-card';
+import { getGQLClient } from '@/lib/gqlClient.server';
 
 import Unsubscribing from './unsubscribing';
-import { getGQLClient } from '../lib/gqlClient.server';
 
 const notEnoughInfoMsg: MessageItem = {
   key: 'query-error',

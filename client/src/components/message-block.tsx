@@ -6,7 +6,7 @@ import CheckCircleIcon from '@/../public/static/check-circle.svg';
 import AnimatedMessage, {
   MessageItem,
   useEmergeTransition,
-} from '@/components/main-card/animated-message';
+} from '@/components/card/animated-message';
 
 interface MessageBlockProps {
   items: MessageItem[];

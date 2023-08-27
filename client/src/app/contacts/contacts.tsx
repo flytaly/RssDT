@@ -9,8 +9,7 @@ import { object, string } from 'yup';
 import MailIcon from '@/../public/static/envelope.svg';
 import GithubIcon from '@/../public/static/github.svg';
 import { FeedbackInput } from '@/gql/generated';
-
-import { getGQLClient } from '../lib/gqlClient.client';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 const validationSchema = object().shape({
   email: string().email('Invalid email address').required('The field is required'),

@@ -6,9 +6,9 @@ import Modal from 'react-modal';
 import { animated, useSpring } from 'react-spring';
 import * as Yup from 'yup';
 
-import { useAddFeedToCurrentUserMutation } from '@/app/lib/mutations/add-feed-user';
 import InputUnderline from '@/components/forms/input-underline';
 import SelectUnderline from '@/components/forms/select-underline';
+import { useAddFeedToCurrentUserMutation } from '@/lib/mutations/add-feed-user';
 import { DigestDisable, DigestSchedule, periodNames } from '@/types';
 import { getAppElement } from '@/utils/get-app-element';
 

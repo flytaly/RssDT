@@ -5,9 +5,10 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
-import NavBar from '@/components/layout/nav-bar';
 import Spinner from '@/components/spinner';
+import { getGQLClient } from '@/lib/gqlClient.client';
+
+import NavBar from './nav-bar';
 
 const Header = () => {
   const { data, isLoading, isSuccess } = useQuery(['me'], async () => getGQLClient().me(), {

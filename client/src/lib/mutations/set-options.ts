@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { getGQLClient } from '@/app/lib/gqlClient.client';
 import { MyOptionsQuery, OptionsInput } from '@/gql/generated';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 export function useSetOptionsMutation() {
   const queryKey = ['myOptions'];

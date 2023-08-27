@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { MessageItem } from '@/components/main-card/animated-message';
+import { MessageItem } from '@/components/card/animated-message';
 
 export function useSubmitHandler(
   processFormAction: (data: FormData) => Promise<void>,

@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import PasswordIcon from '@/../public/static/key.svg';
 import { resetPasswordAction, ResetPasswordValidationError } from '@/app/actions/reset-password';
-import InputWithIcon from '@/app/components/forms/icon-input';
-import { MessageItem } from '@/components/main-card/animated-message';
+import { MessageItem } from '@/components/card/animated-message';
+import InputWithIcon from '@/components/forms/icon-input';
 import { useSubmitHandler } from '@/hooks/use-submit-handler';
 
 interface SetPasswordProps {

@@ -1,6 +1,6 @@
 import { opmlToJSON } from 'opml-to-json';
 
-import { DigestSchedule, FeedImport } from '@/generated/graphql';
+import { DigestSchedule, FeedImport } from '@/gql/generated';
 
 type OpmlItem = {
   title?: string;
