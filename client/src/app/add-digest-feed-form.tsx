@@ -2,14 +2,14 @@
 
 import { useRef, useState } from 'react';
 
-import ClockIcon from '@/assets/clock.svg';
-import MailIcon from '@/assets/envelope.svg';
-import RssSquareIcon from '@/assets/rss-square.svg';
 import {
   AddFeedValidationError,
   addFeedAnonAction,
   addFeedLoggedInAction,
 } from '@/app/actions/add-feed';
+import ClockIcon from '@/assets/clock.svg';
+import MailIcon from '@/assets/envelope.svg';
+import RssSquareIcon from '@/assets/rss-square.svg';
 import { MessageItem } from '@/components/card/animated-message';
 import InputWithIcon from '@/components/forms/icon-input';
 import SelectWithIcon from '@/components/forms/icon-select';

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-import MailIcon from '@/assets/envelope.svg';
 import { requestResetAction, RequestResetValidationError } from '@/app/actions/request-reset';
+import MailIcon from '@/assets/envelope.svg';
 import { MessageItem } from '@/components/card/animated-message';
 import InputWithIcon from '@/components/forms/icon-input';
 import { useSubmitHandler } from '@/hooks/use-submit-handler';

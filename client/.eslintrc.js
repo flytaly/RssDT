@@ -6,7 +6,7 @@ module.exports = {
     'plugin:import/recommended',
     'plugin:import/typescript',
   ],
-  ignorePatterns: ['**/generated/graphql.ts'],
+  ignorePatterns: ['**/gql/generated.ts'],
   rules: {
     '@next/next/no-img-element': 'off',
 
