@@ -2,8 +2,7 @@ import Link from 'next/link';
 import React, { useMemo } from 'react';
 
 import BarsIcon from '@/../public/static/bars.svg';
-import { useItemsCountUpdatedSubscription, UserFeed } from '@/generated/graphql';
-import { createUpdateOnNewItems } from '@/utils/update-unread-count';
+import { UserFeed } from '@/gql/generated';
 
 interface OverviewProps {
   feeds: UserFeed[];

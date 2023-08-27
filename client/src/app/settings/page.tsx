@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import BigCard from '@/app/components/card/big-card';
 import SettingsNavBar from '@/app/components/card/settings-nav-bar';
-import { useRedirectUnauthorized } from '@/app/hooks/useRedirectUnauthorized';
 import { getGQLClient } from '@/app/lib/gqlClient.client';
 import { useSetOptionsMutation } from '@/app/lib/mutations/set-options';
 import { LabeledCheckbox } from '@/components/forms/checkbox';
@@ -14,6 +13,7 @@ import SelectUnderline from '@/components/forms/select-underline';
 import Item from '@/components/settings-item';
 import Spinner from '@/components/spinner';
 import { Options, OptionsInput, ShareId, Theme } from '@/gql/generated';
+import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
 import shareProviders from '@/share-providers';
 
 const range = (start = 0, stop = 23) => Array.from({ length: stop - start + 1 }, (_, i) => i);

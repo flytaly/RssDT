@@ -2,7 +2,7 @@
 
 import FeedNavBar from '@/app/components/card/feed-nav-bar';
 import ToggleableCard from '@/app/components/card/toggleable-card';
-import { useRedirectUnauthorized } from '@/app/hooks/useRedirectUnauthorized';
+import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
 
 export default function FeedLayout({ children }: { children: React.ReactNode }) {
   const me = useRedirectUnauthorized();

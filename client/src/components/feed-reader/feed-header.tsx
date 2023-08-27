@@ -8,7 +8,7 @@ import ItemSmallIcon from '@/../public/static/item-small.svg';
 import MailIcon from '@/../public/static/mail.svg';
 import SearchIcon from '@/../public/static/search.svg';
 import EditFeedModal from '@/components/modals/edit-feed-modal';
-import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '@/generated/graphql';
+import { FeedFieldsFragment, UserFeed, UserFeedFieldsFragment } from '@/gql/generated';
 import usePopup from '@/hooks/use-popup';
 import { clamp } from '@/utils/clamp';
 

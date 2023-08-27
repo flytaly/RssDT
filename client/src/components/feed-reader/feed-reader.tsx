@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import useItemsCountUpdatedSubscription from '@/app/hooks/useItemsCountUpdate';
 import { getGQLClient } from '@/app/lib/gqlClient.client';
 import AddFeedModal from '@/components/modals/add-feed-modal';
 import ModalSidebar from '@/components/modals/modal-sidebar';
 import { UserFeed } from '@/gql/generated';
+import useItemsCountUpdatedSubscription from '@/hooks/use-items-count-update';
 
 import FeedContent from './feed-content';
 import FeedSidebar from './feed-sidebar';

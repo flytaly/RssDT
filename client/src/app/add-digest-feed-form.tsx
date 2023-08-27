@@ -12,9 +12,9 @@ import {
 } from '@/app/actions/add-feed';
 import InputWithIcon from '@/app/components/forms/icon-input';
 import SelectWithIcon from '@/app/components/forms/icon-select';
-import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
 import { ArgumentError } from '@/gql/generated';
+import { useSubmitHandler } from '@/hooks/use-submit-handler';
 import { DigestSchedule, periodNames as names } from '@/types';
 
 function getErrorMessages(errors: ArgumentError[]) {

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import BarsIcon from '@/../public/static/bars.svg';
-import { UserFeed } from '@/generated/graphql';
+import { UserFeed } from '@/gql/generated';
 
 import FeedHeader from './feed-header';
 import FeedItems from './feed-items';

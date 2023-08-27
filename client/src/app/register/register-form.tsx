@@ -5,8 +5,8 @@ import MailIcon from '@/../public/static/envelope.svg';
 import PasswordIcon from '@/../public/static/key.svg';
 import { RegisterValidationError, registerAction } from '@/app/actions/register';
 import InputWithIcon from '@/app/components/forms/icon-input';
-import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
+import { useSubmitHandler } from '@/hooks/use-submit-handler';
 
 interface Props {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;

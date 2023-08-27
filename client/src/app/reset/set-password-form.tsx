@@ -4,8 +4,8 @@ import { useState } from 'react';
 import PasswordIcon from '@/../public/static/key.svg';
 import { resetPasswordAction, ResetPasswordValidationError } from '@/app/actions/reset-password';
 import InputWithIcon from '@/app/components/forms/icon-input';
-import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
+import { useSubmitHandler } from '@/hooks/use-submit-handler';
 
 interface SetPasswordProps {
   token: string;

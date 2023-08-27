@@ -10,7 +10,7 @@ import AddFeedModal from '@/components/modals/add-feed-modal';
 import ConfirmModal from '@/components/modals/confirm-modal';
 import EditFeedModal from '@/components/modals/edit-feed-modal';
 import { UserFeed } from '@/gql/generated';
-import { SortableColumn, useSortableState } from '@/hooks/use-sortableState';
+import { SortableColumn, useSortableState } from '@/hooks/use-sortable-state';
 import { periodNames } from '@/types';
 
 import useDeleteFeedsMutation from '../lib/mutations/delete-my-feeds';

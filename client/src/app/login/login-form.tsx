@@ -9,8 +9,8 @@ import MailIcon from '@/../public/static/envelope.svg';
 import PasswordIcon from '@/../public/static/key.svg';
 import { loginAction, LoginValidationError } from '@/app/actions/login';
 import InputWithIcon from '@/app/components/forms/icon-input';
-import { useSubmitHandler } from '@/app/hooks/useSubmitHandler';
 import { MessageItem } from '@/components/main-card/animated-message';
+import { useSubmitHandler } from '@/hooks/use-submit-handler';
 
 interface LoginProps {
   setMessages?: React.Dispatch<React.SetStateAction<MessageItem[]>>;

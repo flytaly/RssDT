@@ -8,10 +8,10 @@ import { ImportForm } from '@/app/import-export/import-form';
 import Spinner from '@/components/spinner';
 import { DigestSchedule, UserFeed } from '@/gql/generated';
 
+import { useRedirectUnauthorized } from '../../hooks/use-redirect-auth';
 import BigCard from '../components/card/big-card';
 import FeedNavBar from '../components/card/feed-nav-bar';
 import ToggleableCard from '../components/card/toggleable-card';
-import { useRedirectUnauthorized } from '../hooks/useRedirectUnauthorized';
 import { getGQLClient } from '../lib/gqlClient.client';
 
 function downloadText(text: string, filename = 'file.txt', type = 'plain') {

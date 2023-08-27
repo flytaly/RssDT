@@ -1,4 +1,4 @@
-import { ShareId } from '@/generated/graphql';
+import { ShareId } from '@/gql/generated';
 
 type DigestShare = {
   id: ShareId;
