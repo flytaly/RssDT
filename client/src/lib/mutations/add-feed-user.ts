@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { UserFeedOptionsInput, type MyFeedsQuery } from '@/gql/generated';
-
-import { getGQLClient } from '../gqlClient.client';
+import { getGQLClient } from '@/lib/gqlClient.client';
 
 export function useAddFeedToCurrentUserMutation() {
   const queryClient = useQueryClient();
