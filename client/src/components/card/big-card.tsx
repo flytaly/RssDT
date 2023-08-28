@@ -1,4 +1,4 @@
-import EmailVerificationWarning from '@/email-verification-warning';
+import EmailVerificationWarning from '@/verification-warning';
 
 interface CardProps {
   big?: boolean;

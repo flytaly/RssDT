@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-import { loginAction, LoginValidationError } from '@/app/actions/login';
+import { loginAction, LoginValidationError } from '@/app/(actions)/login';
 import MailIcon from '@/assets/envelope.svg';
 import PasswordIcon from '@/assets/key.svg';
 import { MessageItem } from '@/components/card/animated-message';

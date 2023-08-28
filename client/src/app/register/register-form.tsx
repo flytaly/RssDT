@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { RegisterValidationError, registerAction } from '@/app/actions/register';
+import { RegisterValidationError, registerAction } from '@/app/(actions)/register';
 import MailIcon from '@/assets/envelope.svg';
 import PasswordIcon from '@/assets/key.svg';
 import { MessageItem } from '@/components/card/animated-message';

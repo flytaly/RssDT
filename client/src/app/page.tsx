@@ -10,7 +10,7 @@ import MessagesSide from '@/components/card/messages-side';
 import SmallCard from '@/components/card/small-card';
 import { getGQLClient } from '@/lib/gqlClient.client';
 
-import { AddDigestFeedForm } from './add-digest-feed-form';
+import { AddDigestFeedForm } from './add-digest-form';
 
 const infoMessages: MessageItem[] = [
   {

@@ -6,7 +6,7 @@ import {
   AddFeedValidationError,
   addFeedAnonAction,
   addFeedLoggedInAction,
-} from '@/app/actions/add-feed';
+} from '@/app/(actions)/add-feed';
 import ClockIcon from '@/assets/clock.svg';
 import MailIcon from '@/assets/envelope.svg';
 import RssSquareIcon from '@/assets/rss-square.svg';
