@@ -4,12 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import opml from 'opml-generator';
 import React from 'react';
 
-import { ImportForm } from '@/app/import-export/import-form';
-import FeedNavBar from '@/components/card/feed-nav-bar';
-import ToggleableCard from '@/components/card/toggleable-card';
+import { ImportForm } from '@/app/feed/import-export/import-form';
 import Spinner from '@/components/spinner';
 import { DigestSchedule, UserFeed } from '@/gql/generated';
-import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
 import { getGQLClient } from '@/lib/gqlClient.client';
 
 function downloadText(text: string, filename = 'file.txt', type = 'plain') {
@@ -54,7 +51,6 @@ function ExportButtons({ myFeeds }: { myFeeds: UserFeed[] }) {
 }
 
 export default function ImportExport() {
-  const me = useRedirectUnauthorized();
   const { data, isLoading } = useQuery(['myFeeds'], async () => getGQLClient().myFeeds());
 
   // sort
@@ -68,28 +64,23 @@ export default function ImportExport() {
   }, [data?.myFeeds]);
 
   return (
-    <ToggleableCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
-      <div className="w-full ">
-        <FeedNavBar />
-        <div className="flex flex-col sm:flex-row w-full max-w-5xl p-4 mx-auto">
-          <div className="flex-1 p-3">
-            <h2 className="font-bold text-base text-center">Import</h2>
-            <ImportForm />
-          </div>
-          <div className="flex-1 p-3">
-            <h2 className="font-bold text-base text-center">Export</h2>
-            <ul className="py-4">
-              <li>
-                <b>Export as text</b> - export feeds as text file with one feed&apos;s url per line.
-              </li>
-              <li>
-                <b>Export as OPML</b> - export feeds as OPML file.
-              </li>
-            </ul>
-            {isLoading ? <Spinner /> : <ExportButtons myFeeds={myFeeds} />}
-          </div>
-        </div>
+    <div className="flex flex-col sm:flex-row w-full max-w-5xl p-4 mx-auto">
+      <div className="flex-1 p-3">
+        <h2 className="font-bold text-base text-center">Import</h2>
+        <ImportForm />
       </div>
-    </ToggleableCard>
+      <div className="flex-1 p-3">
+        <h2 className="font-bold text-base text-center">Export</h2>
+        <ul className="py-4">
+          <li>
+            <b>Export as text</b> - export feeds as text file with one feed&apos;s url per line.
+          </li>
+          <li>
+            <b>Export as OPML</b> - export feeds as OPML file.
+          </li>
+        </ul>
+        {isLoading ? <Spinner /> : <ExportButtons myFeeds={myFeeds} />}
+      </div>
+    </div>
   );
 }

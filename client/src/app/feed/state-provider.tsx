@@ -7,7 +7,7 @@ import { useRedirectUnauthorized } from '@/hooks/use-redirect-auth';
 
 import { AppStateCtx, type AppState } from './app-state';
 
-export default function ToggleTest({
+export default function AppStateProvider({
   children,
   initialState,
 }: {

@@ -1,7 +1,5 @@
 import Link from 'next/link';
 
-import ToggleMaximize from '@/components/toggle-maximize';
-
 export type CardRoute = {
   name: string;
   path: string;
@@ -11,15 +9,10 @@ export type CardNavBarProps = {
   title: string;
   routes: CardRoute[];
   activePath: string | null;
-  withMaximize?: boolean;
+  children?: React.ReactNode;
 };
 
-export default function CardNavBar({
-  routes,
-  title,
-  activePath,
-  withMaximize = false,
-}: CardNavBarProps) {
+export default function CardNavBar({ routes, title, activePath, children }: CardNavBarProps) {
   return (
     <header className="flex justify-between items-start border-b border-gray pt-1 pb-2 pl-4 pr-2">
       <div>
@@ -36,7 +29,7 @@ export default function CardNavBar({
           ))}
         </nav>
       </div>
-      {withMaximize && <ToggleMaximize />}
+      {children}
     </header>
   );
 }

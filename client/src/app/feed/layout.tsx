@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import FeedNavBar from '@/components/card/feed-nav-bar';
+import FeedNavBar from '@/app/feed/(components)/feed-nav-bar';
 
 import { AppState } from './app-state';
 import StateProvider from './state-provider';
