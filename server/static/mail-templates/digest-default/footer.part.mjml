@@ -8,11 +8,11 @@
                 <mj-text padding-top="0px" padding-bottom="10px" font-size="12px" align="center">
                     <div>
                         You are receiving this digest because you subscribed to it on
-                        <a href="https://feedmailu.com">FeedMailu.com</a>
+                        <a href="https://rssdt.com">RssDT.com</a>
                     </div>
                     <div>
                         <a href="{{unsubscribeUrl}}">Unsubscribe</a> or
-                        <a href="https://feedmailu.com/manage">manage feeds</a>
+                        <a href="https://rssdt.com/manage">manage feeds</a>
                     </div>
                 </mj-text>
             </mj-column>

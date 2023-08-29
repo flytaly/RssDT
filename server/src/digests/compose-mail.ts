@@ -131,7 +131,7 @@ export const composeText = (userFeed: UserFeedWithOpts, feed: Feed, items: Item[
 
   // footer
   result += `\n\n========
-You are receiving this digest because you subscribed to it on FeedMailu.com
+You are receiving this digest because you subscribed to it on RssDT.com
 \nUnsubscribe: ${getUnsubscribeUrl(userFeed.unsubscribeToken, userFeed.id)}`;
 
   return result;
