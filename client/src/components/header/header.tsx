@@ -22,7 +22,7 @@ const Header = () => {
         <div>
           <Image src="/static/icon-black.png" width={25} height={25} alt="logo" />
         </div>
-        <h1 className="inline-block font-bold ml-1 text-lg">FeedMailu</h1>
+        <h1 className="inline-block font-bold ml-1 text-lg">RssDT</h1>
       </Link>
       {isLoading ? <Spinner /> : <NavBar isLoggedIn={isLoggedIn} />}
     </header>

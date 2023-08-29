@@ -31,7 +31,7 @@ const Contacts = () => {
       <div>
         <a
           className="inline-flex items-baseline underline hover:text-primary"
-          href="https://github.com/flytaly/feedmailu"
+          href="https://github.com/flytaly/rssdt"
           target="_blank"
           rel="noreferrer"
         >
@@ -41,7 +41,7 @@ const Contacts = () => {
         <div>
           <a
             className="inline-flex items-baseline underline hover:text-primary mt-3"
-            href="mailto:support@feedmailu.com"
+            href="mailto:support@rssdt.com"
           >
             <MailIcon className="h-4 w-auto self-center mr-1" />
             <span>Write me</span>

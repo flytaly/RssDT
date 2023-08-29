@@ -14,7 +14,7 @@ import { AddDigestFeedForm } from './add-digest-form';
 
 const infoMessages: MessageItem[] = [
   {
-    text: 'FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
+    text: 'RssDT is an RSS/Atom reader that also can aggregate your feeds into digests and send them to you via email.',
     key: 'intro-message',
     static: true,
   },

@@ -16,10 +16,10 @@ const helpArticles: HelpSection[] = [
     title: 'About',
     body: (
       <span>
-        FeedMailu is an RSS/Atom reader that also can aggregate your feeds into digests and send
-        them to you via email. To start receiving digests just enter an address of the desired feed,
-        email, and digest period on the <PrimaryLink href="/settings">start page</PrimaryLink>. To
-        use feed reader you should <PrimaryLink href="/register">register</PrimaryLink>.
+        RssDT is an RSS/Atom reader that also can aggregate your feeds into digests and send them to
+        you via email. To start receiving digests just enter an address of the desired feed, email,
+        and digest period on the <PrimaryLink href="/settings">start page</PrimaryLink>. To use feed
+        reader you should <PrimaryLink href="/register">register</PrimaryLink>.
       </span>
     ),
   },
