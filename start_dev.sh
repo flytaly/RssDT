@@ -5,6 +5,6 @@ PROJECT_DIR=$(dirname "$SCRIPT")
 
 export PROJECT_DIR
 
-"$PROJECT_DIR/db_and_mail.sh"
+"$PROJECT_DIR/start_db_and_mail.sh"
 kitty --session "$PROJECT_DIR/kitty-session.conf" &
 disown

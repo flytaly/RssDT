@@ -26,8 +26,8 @@ fi
 mailPort=1025
 output="$(lsof -i:${mailPort})"
 if [[ -z $output ]]; then
-	echo -e "Launch ${CYAN}mailcatcher${NC}"
-	mailcatcher
+	echo -e "Launch ${CYAN}MailHog${NC}"
+	MailHog &
 else
 	echo -e "${CYAN}Port ${mailPort}${NC} is already in use"
 fi
