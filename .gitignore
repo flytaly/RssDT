@@ -12,3 +12,5 @@ coverage/
 dist/
 *.tsbuildinfo
 dump.rdb
+
+postgres-data/

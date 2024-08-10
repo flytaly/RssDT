@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  db-dev:
+    env_file: .env
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 512mb
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+  db-test:
+    env_file: .env.testing
+    image: postgres
+    environment:
+      POSTGRES_DB: rssdt_test
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: password
+    ports:
+      - 5433:5432
+
+  # redis fork
+  valkey:
+    image: 'bitnami/valkey:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+
+  # development mail server
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+
+  iconserver:
+    image: matthiasluedtke/iconserver
+    ports:
+      - 3001:8080
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080

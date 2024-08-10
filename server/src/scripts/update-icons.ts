@@ -4,11 +4,14 @@ import { sql, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import PQueue from 'p-queue';
 import { Pool } from 'pg';
+
 import '#root/dotenv.js';
+
 import * as schema from '#root/db/schema.js';
 import { updateFeedIcons } from '#root/utils/updateFeedIcons.js';
+import { getPGCredentials } from '#root/pg-connection.js';
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool(getPGCredentials());
 
 async function updateIcons() {
   const db = drizzle(pool, { schema });

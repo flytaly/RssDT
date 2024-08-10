@@ -4,10 +4,9 @@ import { Logger } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import * as schema from './schema.js';
+import { getPGCredentials } from '#root/pg-connection.js';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+const pool = new Pool(getPGCredentials());
 
 class QLogger implements Logger {
   logQuery(query: string, params: unknown[]): void {
