@@ -1,4 +1,3 @@
-import type Redis from 'ioredis';
 import { DigestSchedule } from './types/enums.js';
 
 export const IS_PROD = process.env.NODE_ENV === 'production';

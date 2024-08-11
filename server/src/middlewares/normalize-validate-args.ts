@@ -32,8 +32,11 @@ export const validates: Record<InputType, AnySchema> = {
   userFeedTitle: Joi.string().max(50).optional().allow(null),
 };
 
-const pass = (arg: any) => arg;
-export const normalizes: Record<InputType, Function> = {
+const pass = (arg: unknown) => arg;
+
+type Normalizer<T> = (arg: T) => T | null | undefined;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const normalizers: Record<InputType, Normalizer<any>> = {
   email: (arg: string) => arg?.trim().toLowerCase(),
   password: (arg: string) => arg?.trim(),
   feedbackText: (arg: string) => arg?.trim(),
@@ -48,7 +51,7 @@ export const normalizes: Record<InputType, Function> = {
     try {
       const dt = DateTime.fromObject({}, { locale });
       result = dt.resolvedLocaleOptions().locale;
-    } catch (error) {
+    } catch {
       //
     }
     return result || defaultLocale;
@@ -61,7 +64,7 @@ export const normalizes: Record<InputType, Function> = {
   customSubject: pass,
   dailyDigestHour: pass,
   userFeedTitle: (arg: string) => arg?.trim() || null,
-};
+} as const;
 
 export function NormalizedInput(inputType: InputType): PropertyDecorator {
   return (target, propertyKey) => {
@@ -69,7 +72,7 @@ export function NormalizedInput(inputType: InputType): PropertyDecorator {
     const normalizeMeta = {
       ...(Reflect.getMetadata(NORM_METADATA_KEY, classConstructor) || {}),
     };
-    normalizeMeta[propertyKey] = normalizes[inputType];
+    normalizeMeta[propertyKey] = normalizers[inputType];
     Reflect.defineMetadata(NORM_METADATA_KEY, normalizeMeta, classConstructor);
   };
 }
@@ -92,7 +95,7 @@ export function InputMetadata(inputType: InputType): PropertyDecorator {
   };
 }
 
-type SchemaAndPath = [InputSchema: Object, path: string];
+type SchemaAndPath = [InputSchema: object, path: string];
 
 export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): MethodDecorator {
   return createMethodDecorator(async ({ args }, next) => {

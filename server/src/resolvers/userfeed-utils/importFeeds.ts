@@ -2,7 +2,7 @@ import { maxItemsPerUser } from '#root/constants.js';
 import { type DB } from '#root/db/db.js';
 import { User } from '#root/db/schema.js';
 import { logger } from '#root/logger.js';
-import { normalizes, validates } from '#root/middlewares/normalize-validate-args.js';
+import { normalizers, validates } from '#root/middlewares/normalize-validate-args.js';
 import PQueue from 'p-queue';
 import { getUserAndCountFeeds } from '../queries/countUserFeeds.js';
 import { ArgumentError } from '../resolver-types/errors.js';
@@ -20,7 +20,7 @@ export type FeedImportResult = {
 
 async function importFeed(db: DB, feed: FeedImport, user: User): Promise<FeedImportResult> {
   const { schedule, title } = feed;
-  const url = normalizes.feedUrl(feed.url);
+  const url = normalizers.feedUrl(feed.url);
   const val = validates.feedUrl.validate(url);
   if (val.error) return { url, error: val.error.message };
   const results = await createUserFeed(db, {

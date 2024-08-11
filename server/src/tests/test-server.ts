@@ -16,10 +16,11 @@ const startMail = (debug = false) => {
   });
   maildev.listen(() => {});
   return maildev as unknown as typeof maildev & {
-    close: Function;
+    close: () => void;
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let onClose: () => Promise<any>;
 
 export async function startTestServer({ debug }: { debug?: boolean } = {}) {

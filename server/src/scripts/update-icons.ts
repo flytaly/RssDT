@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop */
+ 
 import 'reflect-metadata';
 import { sql, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';

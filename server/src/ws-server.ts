@@ -28,6 +28,7 @@ export function initWSServer({ schema, sessionMiddleware, server }: WSServerArgs
       context: ({ extra }) => ({ req: extra.request } as WSContext),
 
       onConnect: ({ extra }) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         sessionMiddleware(extra.request as any, {} as any, () => {});
       },
 
@@ -36,7 +37,7 @@ export function initWSServer({ schema, sessionMiddleware, server }: WSServerArgs
         if (!req?.session?.userId) {
           throw new Error('Not authenticated');
         }
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
         return allowOnlySub(schema, msg);
       },
     },

@@ -11,7 +11,7 @@ import { transport } from '#root/mail/transport.js';
 import fs from 'node:fs';
 import { createDefaultUserFeed } from './utils.js';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 

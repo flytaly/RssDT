@@ -80,6 +80,7 @@ test.serial('addFeedWithEmail: create user, feed, send mail', async (t) => {
   t.like(dbUserFeed?.feed, { url: testData.feed.feedUrl, activated: false }, "feed isn't activate");
   t.true(uuid.validate(dbUserFeed!.unsubscribeToken));
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   await getToken(input.email, userFeed?.id!, t);
 });
 
@@ -88,6 +89,7 @@ test.serial("addFeedWithEmail: should send another mail if feed wasn't activated
   const { userFeed, errors } = addFeedWithEmail!;
   t.falsy(errors);
   t.like(userFeed, { activated: false });
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   await getToken(testData.input.email, userFeed?.id!, t);
 });
 

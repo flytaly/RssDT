@@ -191,7 +191,7 @@ test.serial('input validation: login', async (t) => {
 test.serial('delete user', async (t) => {
   await registerUser();
 
-  let user = await db.query.users.findFirst({ where: eq(users.email, email) });
+  const user = await db.query.users.findFirst({ where: eq(users.email, email) });
 
   t.falsy(user!.deleted);
 

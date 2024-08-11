@@ -4,7 +4,6 @@ import { IS_TEST } from './constants.js';
 
 const logPath = `./log`;
 
-// eslint-disable-next-line import/no-mutable-exports
 export let logger: bunyan;
 
 if (IS_TEST) {

@@ -24,7 +24,7 @@ export async function resetPasswordEmail(redis: Redis, userId: number, email: st
   return sendPasswordReset(email, token, userId);
 }
 
-interface PartialConfirmFeedProps extends Omit<ConfirmFeedProps, 'token'> {}
+type PartialConfirmFeedProps = Omit<ConfirmFeedProps, 'token'>;
 
 export async function subscriptionVerifyEmail(redis: Redis, props: PartialConfirmFeedProps) {
   const token = uuidv4();

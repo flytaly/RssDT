@@ -28,7 +28,8 @@ export async function updateFeedIcons(feed?: Feed | NewFeed, db?: DB | null) {
     if (favicon?.url) feed.siteFavicon = favicon.url;
     if (icon?.url) feed.siteIcon = icon.url;
     if (db && feed.id) await db.update(feeds).set(feed).where(eq(feeds.id, feed.id));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.error(feed?.link, error.message);
+    console.error(feed?.link, error?.message);
   }
 }

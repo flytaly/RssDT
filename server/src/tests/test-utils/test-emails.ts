@@ -31,7 +31,7 @@ type MailDevEmail = {
       fileName: string;
       generatedFileName: string;
       contentId: string;
-      stream: Object;
+      stream: object;
       checksum: string;
     },
   ];
@@ -50,6 +50,7 @@ export const getEmails = async () => {
 
 export const getEmailByAddress = async (address: string) => {
   const emails: MailDevEmail[] = await getEmails();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return emails.find((e: any) => e.headers.to === address);
 };
 

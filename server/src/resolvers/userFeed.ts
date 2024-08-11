@@ -292,7 +292,7 @@ export class UserFeedResolver {
   @Mutation(() => Boolean)
   async testFeedUpdate(
     @Arg('feedId') feedId: number,
-    @Arg('count') count: Number,
+    @Arg('count') count: number,
     @PubSub() pubSub: PubSubEngine,
   ) {
     await pubSub.publish(PubSubTopics.newItems, {

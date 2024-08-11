@@ -158,7 +158,9 @@ test.serial('newItemsCount: 3 unread items', async (t) => {
   t.is(response.myFeeds?.[0].newItemsCount, 3);
 });
 
-const pick = (arr: any[], indexes: number[]) => indexes.map((idx) => arr[idx]);
+function pick<T>(arr: T[], indexes: number[]) {
+  return indexes.map((idx) => arr[idx]);
+}
 
 const expectFilteredItems = async (
   filter: string,

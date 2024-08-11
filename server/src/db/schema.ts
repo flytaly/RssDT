@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
+ 
 import 'reflect-metadata';
 import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
 import { Role } from '#root/types/index.js';

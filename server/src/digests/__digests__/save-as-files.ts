@@ -8,7 +8,7 @@ import { db } from '#root/db/db.js';
 import { composeDigest } from '#root/digests/compose-mail.js';
 import { createDefaultUserFeed } from './utils.js';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
+ 
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 

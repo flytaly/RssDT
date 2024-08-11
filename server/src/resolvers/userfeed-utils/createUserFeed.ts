@@ -108,7 +108,7 @@ async function upsertUserFeed(
   tx: DB,
   { feed, activate, userFeed, feedOpts, userId }: UpsertUserFeedArgs,
 ) {
-  userFeed = userFeed || { userId: userId, feedId: feed.id };
+  userFeed = userFeed || ({ userId: userId, feedId: feed.id } as UserFeed);
   userFeed.activated = userFeed.activated || activate;
   userFeed.lastViewedItemDate = new Date();
   if (!userFeed.unsubscribeToken) userFeed.unsubscribeToken = uuidv4();
@@ -137,7 +137,9 @@ export const createUserFeed = async (
 ) => {
   if (!email && !user) throw new Error('Not enough arguments to create new user feed');
   const isLoggedIn = Boolean(!email && user);
-  let { feed, errors, url, feedMeta, feedItems } = await processFeed(db, $url);
+  const processedFeed = await processFeed(db, $url);
+  let { feed, errors } = processedFeed;
+  const { url, feedMeta, feedItems } = processedFeed;
   if (errors) return { errors };
 
   let userFeed: UserFeed | undefined;

@@ -51,7 +51,7 @@ test.serial("update feed's data", async (t) => {
   const existingItemsPassed = fakeGetNewItems.lastCall.args[1];
   t.is(urlPassed, feedUrl, 'feed url');
   t.is(existingItemsPassed?.length, oldItems.length, 'correct items length');
-  const sorted = oldItems.sort((a, b) => b.pubdate?.getTime()! - a.pubdate?.getTime()!);
+  const sorted = oldItems.sort((a, b) => b.pubdate?.getTime() - a.pubdate?.getTime());
   existingItemsPassed?.forEach((i, idx) => t.is(i.guid, sorted[idx].guid));
 
   const selectedFeeds = await db.query.feeds.findMany({

@@ -56,7 +56,7 @@ export class ImportStatus {
       total,
       result: '',
     };
-    await redis.hmset(this.key, status as any);
+    await redis.hmset(this.key, status);
     await this.expire();
   }
 

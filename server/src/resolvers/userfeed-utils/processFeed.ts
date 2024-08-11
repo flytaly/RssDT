@@ -16,7 +16,7 @@ export const getFeedVariations = (url: string) => {
 };
 
 export async function selectFeed(db: DB, url: string) {
-  let selected = await db
+  const selected = await db
     .select()
     .from(feeds)
     .where(or(...getFeedVariations(url)));

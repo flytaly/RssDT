@@ -1,5 +1,5 @@
-import { ObjectType, Field, ArgsType, InputType } from 'type-graphql';
-// eslint-disable-next-line import/extensions
+import { ArgsType, Field, InputType, ObjectType } from 'type-graphql';
+
 import { UserFeed } from '#entities';
 import { DigestSchedule } from '../../types/enums.js';
 import { ArgumentError } from './errors.js';

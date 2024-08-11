@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import { Options, User, UserFeed } from '#entities';
 import { users, options, NewOptions } from '#root/db/schema.js';
 import argon2 from 'argon2';

@@ -77,7 +77,7 @@ test.serial('add feed to user with not verified email and activate', async (t) =
     where: eq(userFeeds.id, userFeed!.id),
   });
   t.true(uuid.validate(userFeedInDB!.unsubscribeToken));
-  //
+  // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
   const tokenAndId = await getToken(testData.email, userFeed?.id!, t);
   const { activateFeed } = await sdk.activateFeed(tokenAndId);
   t.like(activateFeed.userFeed, { activated: true });

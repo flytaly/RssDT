@@ -82,7 +82,7 @@ const normalizeEncoding = (
   if (encoding && encoding.toLowerCase() !== 'utf-8') {
     try {
       body = iconv.decode(bodyBuf as Buffer, encoding);
-    } catch (err) {
+    } catch {
       // detected encoding is not supported, leave it as it is
     }
   }
