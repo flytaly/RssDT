@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import type Session from 'express-session';
-import type { PubSubEngine } from 'graphql-subscriptions';
 import type { Redis } from 'ioredis';
+
 import { db } from '#root/db/db.js';
 import type { WatcherQueue } from '#root/feed-watcher/watcher.queue.js';
 import { UserFeedNewItemsCountResponse } from '#root/resolvers/resolver-types/userFeedTypes.js';
 import type { createItemCountLoader } from '#root/utils/createItemCountLoader.js';
+import { PubSub } from 'type-graphql';
 
 export enum Role {
   USER = 'USER',
@@ -23,7 +24,7 @@ export type MyContext = {
   res: Response;
   redis: Redis;
   itemCountLoader: ReturnType<typeof createItemCountLoader>;
-  pubsub: PubSubEngine;
+  pubsub: PubSub;
   itemsCountUpdate?: UserFeedNewItemsCountResponse[];
   watcherQueue: WatcherQueue;
   db: typeof db;

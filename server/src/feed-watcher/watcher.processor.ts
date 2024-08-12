@@ -1,12 +1,13 @@
 import { Job } from 'bullmq';
-import { RedisPubSub } from 'graphql-redis-subscriptions';
+import { PubSub } from 'type-graphql';
+
 import { buildAndSendDigests } from '../digests/build-and-send.js';
 import { PubSubTopics } from '../resolvers/resolver-types/pubSubTopics.js';
 import { getFeedUpdateInterval, Status, updateFeedData } from './watcher-utils.js';
 import { UpdateFeed } from './watcher.interface.js';
 import { WatcherQueue } from './watcher.queue.js';
 
-export default (watcherQueue: WatcherQueue, pubSub: RedisPubSub) => async (job: Job<UpdateFeed>) => {
+export default (watcherQueue: WatcherQueue, pubSub: PubSub) => async (job: Job<UpdateFeed>) => {
   const { id, feedUrl } = job.data;
 
   const [status, newItemsCount, feed] = await updateFeedData(feedUrl, true);
@@ -24,7 +25,7 @@ export default (watcherQueue: WatcherQueue, pubSub: RedisPubSub) => async (job: 
 
   if (status === Status.Success) {
     if (newItemsCount) {
-      await pubSub.publish(PubSubTopics.newItems, { [id]: { count: newItemsCount } });
+      pubSub.publish(PubSubTopics.newItems, { [id]: { count: newItemsCount } });
     }
   }
 

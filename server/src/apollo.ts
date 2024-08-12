@@ -1,23 +1,22 @@
-// import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { db } from '#root/db/db.js';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import cors from 'cors';
 import express from 'express';
 import { GraphQLScalarType } from 'graphql';
-import { RedisPubSub } from 'graphql-redis-subscriptions';
 import http from 'http';
 import { buildSchema } from 'type-graphql';
+
+import { db } from '#root/db/db.js';
 import { WatcherQueue } from './feed-watcher/watcher.queue.js';
-import { createRedis, redis } from './redis.js';
+import { pubSub, redis } from './redis.js';
 import { FeedResolver } from './resolvers/feed.js';
 import { MailResolver } from './resolvers/mail.js';
 import { UserResolver } from './resolvers/user.js';
 import { UserFeedResolver } from './resolvers/userFeed.js';
+import { initSession } from './session.js';
 import { MyContext, ReqWithSession } from './types/index.js';
 import { createItemCountLoader } from './utils/createItemCountLoader.js';
-import { initSession } from './session.js';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
 /**
  * Fix "unable to serialize value as it's not an instance of 'date'" error.
@@ -41,17 +40,10 @@ export const DateTimeFix = new GraphQLScalarType({
 });
 
 export const initApolloServer = async () => {
-  const pubsub = new RedisPubSub({
-    publisher: createRedis(),
-    subscriber: createRedis(),
-  });
-
   const schema = await buildSchema({
     resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
     validate: false,
-    // TODO: fix
-    // @ts-ignore
-    pubSub: pubsub,
+    pubSub: pubSub,
     scalarsMap: [{ type: Date, scalar: DateTimeFix }],
   });
 
@@ -89,7 +81,7 @@ export const initApolloServer = async () => {
           res,
           redis,
           itemCountLoader: createItemCountLoader(),
-          pubsub,
+          pubsub: pubSub,
           watcherQueue,
           db,
         };
@@ -97,5 +89,5 @@ export const initApolloServer = async () => {
     }),
   );
 
-  return { apolloServer, pubsub, schema, sessionMiddleware, httpServer };
+  return { apolloServer, schema, sessionMiddleware, httpServer };
 };

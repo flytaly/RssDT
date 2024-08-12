@@ -2,10 +2,9 @@ import 'reflect-metadata';
 import '../dotenv.js';
 
 import { Queue, Worker } from 'bullmq';
-import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { IS_TEST } from '../constants.js';
 import { initLogFiles, logger } from '../logger.js';
-import { createRedis, redis } from '../redis.js';
+import { createRedis, pubSub, redis } from '../redis.js';
 import { getFeedsToUpdate } from './watcher-utils.js';
 import config from './watcher.config.js';
 import watcherProcessor from './watcher.processor.js';
@@ -14,14 +13,9 @@ import { WatcherQueue } from './watcher.queue.js';
 export let worker: Worker;
 export let queue: Queue;
 export let watcherQueue: WatcherQueue;
-export let pubSub: RedisPubSub;
 
 async function initQueue(clearJobs = true) {
   watcherQueue = new WatcherQueue();
-  pubSub = new RedisPubSub({
-    publisher: createRedis(),
-    subscriber: createRedis(),
-  });
   if (clearJobs) await watcherQueue.clearAllRepeatables();
 }
 

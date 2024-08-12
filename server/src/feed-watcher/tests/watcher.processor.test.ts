@@ -17,8 +17,8 @@ import { PubSubTopics } from '#root/resolvers/resolver-types/pubSubTopics.js';
 import test from 'ava';
 import { Job } from 'bullmq';
 import { faker } from '@faker-js/faker';
-import { RedisPubSub } from 'graphql-redis-subscriptions';
 import sinon from 'sinon';
+import { PubSub } from 'type-graphql';
 
 function createPartialFeed({ throttled = 0 } = {}) {
   const ts = new Date(Date.now() - 60000);
@@ -39,7 +39,7 @@ function makeMocks({ throttled = 0 } = {}) {
   const feed = createPartialFeed({ throttled });
   const wq = new WatcherQueue();
   const pubsub = { publish: sinon.fake() };
-  const processor = createProcessor(wq, pubsub as unknown as RedisPubSub);
+  const processor = createProcessor(wq, pubsub as unknown as PubSub);
   return { processor, pubsub, wq, feed };
 }
 

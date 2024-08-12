@@ -13,7 +13,7 @@ const entry = async () => {
   await importNormalizer();
   initLogFiles({ prefix: 'api_', name: 'api' });
 
-  const { apolloServer, pubsub, schema, httpServer, sessionMiddleware } = await initApolloServer();
+  const { apolloServer, schema, httpServer, sessionMiddleware } = await initApolloServer();
 
   httpServer.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
@@ -23,7 +23,6 @@ const entry = async () => {
 
   const exit = async () => {
     await apolloServer.stop();
-    await pubsub.close();
     await wsCleanup.dispose();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     process.exit();

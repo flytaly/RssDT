@@ -25,7 +25,7 @@ export async function startTestServer({ debug }: { debug?: boolean } = {}) {
   const { PORT } = process.env;
 
   await importNormalizer();
-  const { apolloServer, pubsub, httpServer } = await initApolloServer();
+  const { apolloServer, httpServer } = await initApolloServer();
   httpServer.listen(PORT, () => {
     if (debug) console.log(`🚀 start server on port: ${PORT} for testing`);
   });
@@ -36,7 +36,6 @@ export async function startTestServer({ debug }: { debug?: boolean } = {}) {
   const maildev = startMail(debug);
 
   onClose = async () => {
-    await pubsub.close();
     await apolloServer.stop();
     maildev.close();
     if (debug) console.log('connections closed');

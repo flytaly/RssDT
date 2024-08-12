@@ -1,3 +1,10 @@
+import argon2 from 'argon2';
+import test, { ExecutionContext } from 'ava';
+import { eq } from 'drizzle-orm';
+import { faker } from '@faker-js/faker';
+import nock from 'nock';
+import * as uuid from 'uuid';
+
 import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
 
 import { db } from '#root/db/db.js';
@@ -12,12 +19,6 @@ import {
   getSubscriptionConfirmData,
 } from '#root/tests/test-utils/test-emails.js';
 import { DigestSchedule } from '#root/types/enums.js';
-import argon2 from 'argon2';
-import test, { ExecutionContext } from 'ava';
-import { eq } from 'drizzle-orm';
-import { faker } from '@faker-js/faker';
-import nock from 'nock';
-import * as uuid from 'uuid';
 
 let testData: {
   feed1: ReturnType<typeof generateFeed>;
@@ -135,9 +136,10 @@ test.serial('feed should have lastPubdate timestamp', async (t) => {
 test.serial("meWithFeeds: should return user's feeds", async (t) => {
   const sdk = await getSdkWithLoggedInUser(testData.email, testData.password);
   const { me } = await sdk.meWithFeeds();
-  t.is(me?.feeds.length, 2);
-  t.like(me?.feeds[0].feed, { url: testData.feed1.feedUrl });
-  t.like(me?.feeds[1].feed, { url: testData.feed2.feedUrl });
+  const feedUrls = me?.feeds?.map((f) => f.feed.url);
+  t.is(feedUrls?.length, 2);
+  t.truthy(feedUrls?.includes(testData.feed1.feedUrl));
+  t.truthy(feedUrls?.includes(testData.feed2.feedUrl));
 });
 
 test.serial('should update feed after activation and fetch items', async (t) => {
