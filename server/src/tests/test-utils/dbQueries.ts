@@ -1,7 +1,7 @@
 import { DB } from '#root/db/db.js';
 import { feeds, users, usersToBeDeleted } from '#root/db/schema.js';
 import { eq } from 'drizzle-orm';
-import { importNormalizer, normalizeUrl } from '#root/utils/normalizer.js';
+import {normalizeUrl } from '#root/utils/normalizer.js';
 
 export async function deleteUserWithEmail(db: DB, email: string) {
   const user = await db.query.users.findFirst({ where: eq(users.email, email) });
@@ -11,7 +11,6 @@ export async function deleteUserWithEmail(db: DB, email: string) {
 }
 
 export async function deleteFeedWithUrl(db: DB, url: string) {
-  await importNormalizer();
   await db
     .delete(feeds)
     .where(eq(feeds.url, normalizeUrl(url)))

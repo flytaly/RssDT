@@ -1,8 +1,9 @@
-import { type DB } from '#root/db/db';
+import { and, eq, inArray, sql } from 'drizzle-orm';
+
+import { type DB } from '#root/db/db.js';
 import { feeds, userFeeds } from '#root/db/schema.js';
 import { updateFeedData } from '#root/feed-watcher/watcher-utils.js';
 import { logger } from '#root/logger.js';
-import { and, eq, inArray, sql } from 'drizzle-orm';
 
 export async function activateAllUserFeeds(db: DB, userId: number) {
   try {

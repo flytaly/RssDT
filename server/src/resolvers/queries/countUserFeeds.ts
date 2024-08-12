@@ -1,6 +1,7 @@
-import { DB } from '#root/db/db';
-import { User, userFeeds, users } from '#root/db/schema.js';
 import { eq, sql } from 'drizzle-orm';
+
+import { DB } from '#root/db/db.js';
+import { User, userFeeds, users } from '#root/db/schema.js';
 
 type UserWithFeedCount = User & {
   countFeeds: number;

@@ -1,3 +1,7 @@
+import { faker } from '@faker-js/faker';
+import test, { ExecutionContext } from 'ava';
+import { eq } from 'drizzle-orm';
+
 import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
 
 import { db } from '#root/db/db.js';
@@ -7,10 +11,7 @@ import { insertNewItems } from '#root/feed-watcher/watcher-utils.js';
 import { getSdk } from '#root/tests/graphql/generated.js';
 import { generateItem, generateMeta } from '#root/tests/test-utils/generate-feed.js';
 import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
-import test, { ExecutionContext } from 'ava';
-import { eq } from 'drizzle-orm';
-import { faker } from '@faker-js/faker';
-import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
+import { deleteFeedWithUrl, deleteUserWithEmail } from '#root/tests/test-utils/dbQueries.js';
 
 let sdk: ReturnType<typeof getSdk>;
 let testData: {

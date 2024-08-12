@@ -2,9 +2,7 @@
   "name": "rssdt-server",
   "version": "2.0.0",
   "description": "",
-  "engines": {
-    "node": ">=13"
-  },
+  "type": "module",
   "scripts": {
     "watch": "tsc -w",
     "build": "rimraf dist && tsc",
@@ -17,7 +15,7 @@
     "prettier:write": "prettier --write ./src",
     "test": "ava **/*.test.js --serial",
     "test:watch": "ava ./dist/**/*.test.js -v --serial --watch",
-    "test:codegen": "graphql-codegen --config codegen.yml",
+    "test:codegen": "graphql-codegen-esm  --config codegen.ts",
     "getEnvType": "npx gen-env-types .env -o src/types/env.d.ts -e .",
     "feed-watcher": "node dist/feed-watcher/watcher.worker.js",
     "feed-watcher:dev": "nodemon dist/feed-watcher/watcher.worker.js | bunyan -o short",
@@ -59,7 +57,7 @@
     "mjml": "^4.15.3",
     "nodemailer": "^6.9.14",
     "normalize-url": "^8.0.1",
-    "p-queue": "^6.6.2",
+    "p-queue": "^8.0.1",
     "pg": "^8.12.0",
     "pg-tsquery": "^8.4.2",
     "reflect-metadata": "^0.2.2",

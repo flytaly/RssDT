@@ -4,13 +4,11 @@ import './dotenv.js';
 
 import { initApolloServer } from './apollo.js';
 import { initLogFiles, logger } from './logger.js';
-import { importNormalizer } from './utils/normalizer.js';
 import { initWSServer } from './ws-server.js';
 
 const entry = async () => {
   /* await migrateDB(); */
 
-  await importNormalizer();
   initLogFiles({ prefix: 'api_', name: 'api' });
 
   const { apolloServer, schema, httpServer, sessionMiddleware } = await initApolloServer();

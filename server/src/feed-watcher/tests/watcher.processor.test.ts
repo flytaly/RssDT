@@ -2,7 +2,13 @@
 import '#root/dotenv.js';
 import 'reflect-metadata';
 
-import { Feed } from '#root/db/schema';
+import { faker } from '@faker-js/faker';
+import test from 'ava';
+import { Job } from 'bullmq';
+import sinon from 'sinon';
+import { PubSub } from 'type-graphql';
+
+import { Feed } from '#root/db/schema.js';
 import { buildAndSendDigestsMock } from '#root/digests/build-and-send.js';
 import {
   PartialFeed,
@@ -14,11 +20,6 @@ import { UpdateFeed } from '#root/feed-watcher/watcher.interface.js';
 import createProcessor from '#root/feed-watcher/watcher.processor.js';
 import { WatcherQueue } from '#root/feed-watcher/watcher.queue.js';
 import { PubSubTopics } from '#root/resolvers/resolver-types/pubSubTopics.js';
-import test from 'ava';
-import { Job } from 'bullmq';
-import { faker } from '@faker-js/faker';
-import sinon from 'sinon';
-import { PubSub } from 'type-graphql';
 
 function createPartialFeed({ throttled = 0 } = {}) {
   const ts = new Date(Date.now() - 60000);

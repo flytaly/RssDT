@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import FeedParser, { Item, Meta } from 'feedparser';
 import iconv from 'iconv-lite';
 import jsdom from 'jsdom';
-import { importNormalizer, normalizeUrl } from '../utils/normalizer.js';
+import { normalizeUrl } from '../utils/normalizer.js';
 import { Readable } from 'stream';
 import { maxItemsInFeed } from '../constants.js';
 
@@ -106,7 +106,6 @@ export async function getFeedStream(
 
   // Don't find url if it's an xml page
   if (!xmlDeclaration && tryFindFeedUrl) {
-    await importNormalizer();
     const normUrl = (url_: string) => normalizeUrl(url_, { defaultProtocol: 'https' });
     feedUrl = findFeedUrl(body, url, normUrl);
     if (feedUrl) return getFeedStream(feedUrl, options, false);

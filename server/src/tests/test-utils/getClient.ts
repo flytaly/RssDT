@@ -2,7 +2,7 @@ import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 import type { ASTNode } from 'graphql';
 import { print } from 'graphql';
 import { GraphQLClient, RequestDocument, Variables, RequestOptions } from 'graphql-request';
-import { VariablesAndRequestHeadersArgs } from 'graphql-request/build/esm/types';
+import { VariablesAndRequestHeadersArgs } from 'node_modules/graphql-request/build/esm/types.js';
 
 const getTestClient = () => {
   const client = new GraphQLClient(`http://localhost:${process.env.PORT}/graphql`);

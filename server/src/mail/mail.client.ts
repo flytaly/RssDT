@@ -1,10 +1,11 @@
-import { Queue } from 'bullmq';
 import type { JobsOptions, QueueOptions } from 'bullmq';
-import config from './mail.config.js';
-import type { SimpleMail } from './mail.interface';
+import { Queue } from 'bullmq';
+
+import { IS_TEST } from '../constants.js';
 import { logger } from '../logger.js';
 import { createRedis } from '../redis.js';
-import { IS_TEST } from '../constants.js';
+import config from './mail.config.js';
+import type { SimpleMail } from './mail.interface.js';
 import { transport } from './transport.js';
 
 export class MailClient {

@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import MailDev from 'maildev';
 
 import { initApolloServer } from '#root/apollo.js';
-import { importNormalizer } from '#root/utils/normalizer.js';
 
 const startMail = (debug = false) => {
   const maildev = new MailDev({
@@ -24,7 +23,6 @@ let onClose: () => Promise<any>;
 export async function startTestServer({ debug }: { debug?: boolean } = {}) {
   const { PORT } = process.env;
 
-  await importNormalizer();
   const { apolloServer, httpServer } = await initApolloServer();
   httpServer.listen(PORT, () => {
     if (debug) console.log(`🚀 start server on port: ${PORT} for testing`);

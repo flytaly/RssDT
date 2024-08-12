@@ -1,10 +1,11 @@
-import { DB } from '#root/db/db';
+import { eq, or } from 'drizzle-orm';
+import FeedParser from 'feedparser';
+
+import { DB } from '#root/db/db.js';
 import { feeds } from '#root/db/schema.js';
 import { getFeedStream, parseFeed } from '#root/feed-parser/index.js';
 import { logger } from '#root/logger.js';
 import { ArgumentError } from '#root/resolvers/resolver-types/errors.js';
-import { eq, or } from 'drizzle-orm';
-import FeedParser from 'feedparser';
 
 export const getFeedVariations = (url: string) => {
   const urlsArray = [eq(feeds.url, url)];

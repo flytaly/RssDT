@@ -1,10 +1,10 @@
 import { Express } from 'express';
 import session from 'express-session';
 import RedisStore from 'connect-redis';
-import Redis from 'ioredis';
 import { COOKIE_NAME, IS_PROD } from './constants.js';
+import Redis from 'ioredis';
 
-export const initSession = (app: Express, redis: Redis) => {
+export const initSession = (app: Express, redis: Redis.Redis) => {
   const sessionMiddleware = session({
     store: new RedisStore({
       client: redis,

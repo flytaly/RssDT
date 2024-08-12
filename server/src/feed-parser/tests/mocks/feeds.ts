@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path /* { dirname } */ from 'path';
-// import { fileURLToPath } from 'url';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
- 
-// const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function readXMLFilesInDir(dir: string) {
   const files = fs.readdirSync(path.join(__dirname, dir));

@@ -1,7 +1,5 @@
- 
 import 'reflect-metadata';
-import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
-import { Role } from '#root/types/index.js';
+
 import { InferModel, relations, sql } from 'drizzle-orm';
 import {
   boolean,
@@ -13,7 +11,10 @@ import {
   text,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { defaultLocale, defaultTimeZone } from '../constants';
+import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
+import { Role } from '#root/types/index.js';
+
+import { defaultLocale, defaultTimeZone } from '../constants.js';
 
 const timestampTZ = customType<{
   data: Date;

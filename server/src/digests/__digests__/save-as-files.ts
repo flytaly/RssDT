@@ -7,9 +7,10 @@ import fs from 'fs';
 import { db } from '#root/db/db.js';
 import { composeDigest } from '#root/digests/compose-mail.js';
 import { createDefaultUserFeed } from './utils.js';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
- 
-// const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const outputDir = `${__dirname}/output`;
 
 /** Convert feeds to html digest ans save in the directory.

@@ -1,6 +1,7 @@
-import { DB } from '#root/db/db';
-import { items, userFeeds } from '#root/db/schema.js';
 import { sql } from 'drizzle-orm';
+
+import { DB } from '#root/db/db.js';
+import { items, userFeeds } from '#root/db/schema.js';
 
 interface Args {
   itemId: number;
