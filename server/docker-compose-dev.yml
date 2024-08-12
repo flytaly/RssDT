@@ -50,4 +50,4 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 3002:8080

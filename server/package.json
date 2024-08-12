@@ -11,6 +11,7 @@
     "dev": "run-p start:dev mail-worker:dev",
     "start": "node dist/index.js",
     "start:dev": "nodemon dist/index.js -L | bunyan -o short",
+    "start:docker-dev": "docker-compose -f docker-compose-dev.yml up",
     "lint": "eslint ./src",
     "prettier:check": "prettier --check ./src",
     "prettier:write": "prettier --write ./src",
