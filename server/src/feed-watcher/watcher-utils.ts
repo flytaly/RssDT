@@ -187,7 +187,7 @@ export let updateFeedData = async (url: string, skipRecent = false): Promise<Upd
         const itemsToSave = feedItems.map((item) => createSanitizedItem(item, feed.id));
         await insertNewItems(db, itemsToSave);
         const deleted = await deleteOldItems(feed.id);
-        deletedItemsNum += deleted;
+        deletedItemsNum += deleted || 0;
         newItemsNum += itemsToSave.length;
       }
       status = Status.Success;
