@@ -19,7 +19,7 @@ const createFakeQ = () =>
 export class WatcherQueue {
   queue: Queue;
 
-  constructor(opts: QueueOptions = {}) {
+  constructor(opts: Partial<QueueOptions> = {}) {
     if (IS_TEST) {
       this.queue = createFakeQ();
       return;

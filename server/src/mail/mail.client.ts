@@ -10,7 +10,7 @@ import { transport } from './transport.js';
 export class MailClient {
   private queue: Queue;
 
-  constructor(opts: QueueOptions = {}) {
+  constructor(opts: Partial<QueueOptions> = {}) {
     if (IS_TEST) return;
     this.queue = new Queue<SimpleMail>(config.queueName, {
       connection: createRedis({

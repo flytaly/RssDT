@@ -1,4 +1,4 @@
-import { QueueScheduler, Worker } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import '../dotenv.js';
 import { initLogFiles, logger } from '../logger.js';
 import { createRedis } from '../redis.js';
@@ -6,7 +6,7 @@ import config from './mail.config.js';
 import mailProcessor from './mail.processor.js';
 
 export let worker: Worker;
-export let scheduler: QueueScheduler;
+export let queue: Queue;
 
 function createWorker() {
   worker = new Worker(
@@ -20,14 +20,14 @@ function createWorker() {
   );
 
   worker.on('failed', (job, err) => {
-    logger.error(err, job.data, 'job failed');
+    logger.error(err, job?.data, 'job failed');
   });
 
   worker.on('error', (err) => {
     logger.error(err, 'email worker error');
   });
 
-  scheduler = new QueueScheduler(config.queueName, {
+  queue = new Queue(config.queueName, {
     connection: createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false }),
   });
 }
@@ -41,7 +41,7 @@ export async function start() {
 
   const exit = async () => {
     await worker.close();
-    await scheduler.close();
+    await queue.close();
     process.exit();
   };
 

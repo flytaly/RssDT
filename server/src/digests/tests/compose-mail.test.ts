@@ -14,7 +14,7 @@ import {
 import { composeDigest } from '#root/digests/compose-mail.js';
 import { DigestSchedule, TernaryState, Theme } from '#root/types/enums.js';
 import test from 'ava';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import { DateTime } from 'luxon';
 
 const encImgUrl = 'http://somesite.com/path/enc-img.jpg';

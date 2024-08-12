@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import '../dotenv.js';
 
-import { QueueScheduler, Worker } from 'bullmq';
+import { Queue, Worker } from 'bullmq';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { IS_TEST } from '../constants.js';
 import { initLogFiles, logger } from '../logger.js';
@@ -12,7 +12,7 @@ import watcherProcessor from './watcher.processor.js';
 import { WatcherQueue } from './watcher.queue.js';
 
 export let worker: Worker;
-export let scheduler: QueueScheduler;
+export let queue: Queue;
 export let watcherQueue: WatcherQueue;
 export let pubSub: RedisPubSub;
 
@@ -38,14 +38,14 @@ async function createWorkerAndQueue(clearJobs = true) {
   );
 
   worker.on('failed', (job, err) => {
-    logger.error(err, job.data, 'job failed');
+    logger.error(err, job?.data, 'job failed');
   });
 
   worker.on('error', (err) => {
     logger.error(err, 'email worker error');
   });
 
-  scheduler = new QueueScheduler(config.queueName, {
+  queue = new Queue(config.queueName, {
     connection: createRedis({ maxRetriesPerRequest: null, enableReadyCheck: false }),
   });
 }
@@ -64,7 +64,7 @@ export async function start() {
   const exit = async () => {
     await watcherQueue.close();
     await worker.close();
-    await scheduler.close();
+    await queue.close();
     redis.disconnect();
     process.exit();
   };
