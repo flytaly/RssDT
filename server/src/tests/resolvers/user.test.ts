@@ -15,10 +15,10 @@ import {
 import argon2 from 'argon2';
 import test from 'ava';
 import { eq } from 'drizzle-orm';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 const email = faker.internet.email().toLowerCase();
-const password = faker.internet.password(8);
+const password = faker.internet.password({ length: 8 });
 const sdkAnonym = getSdk(getTestClient().client);
 
 test.before(() => startTestServer());
@@ -93,7 +93,7 @@ test.serial('requestPasswordReset: reset password flow', async (t) => {
   await registerUser();
   await deleteEmails();
 
-  const newPass = faker.internet.password(10);
+  const newPass = faker.internet.password({ length: 10 });
 
   const sdk = await getSdkWithLoggedInUser(email, password);
   const { requestPasswordReset } = await sdk.requestPasswordReset({ email });

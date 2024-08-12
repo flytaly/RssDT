@@ -9,7 +9,7 @@ import { generateItem, generateMeta } from '#root/tests/test-utils/generate-feed
 import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
 import test, { ExecutionContext } from 'ava';
 import { eq } from 'drizzle-orm';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { deleteFeedWithUrl, deleteUserWithEmail } from '../test-utils/dbQueries';
 
 let sdk: ReturnType<typeof getSdk>;

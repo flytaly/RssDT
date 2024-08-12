@@ -10,7 +10,7 @@ import {
 import { DigestSchedule } from '#root/types/enums.js';
 import test, { ExecutionContext } from 'ava';
 import { SQL, eq } from 'drizzle-orm';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import nock from 'nock';
 import * as uuid from 'uuid';
 import { getSdk } from '#root/tests/graphql/generated.js';
@@ -77,7 +77,11 @@ test.serial('addFeedWithEmail: create user, feed, send mail', async (t) => {
   const expectedUf = { ...feedOpts, schedule: DigestSchedule.daily, activated: false };
   t.like(dbUserFeed, expectedUf, 'cannot disable digests');
   t.like(dbUserFeed?.user, { ...userInfo, emailVerified: false }, 'email should be not verified');
-  t.like(dbUserFeed?.feed, { url: testData.feed.feedUrl, activated: false }, "feed isn't activate");
+  t.like(
+    dbUserFeed?.feed,
+    { url: testData.feed.feedUrl, activated: false },
+    'feed should be not activated',
+  );
   t.true(uuid.validate(dbUserFeed!.unsubscribeToken));
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain

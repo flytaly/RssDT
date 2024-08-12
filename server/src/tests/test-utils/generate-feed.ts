@@ -1,4 +1,4 @@
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import nock from 'nock';
 
 import {
@@ -23,7 +23,7 @@ export const generateMeta = (): FeedMeta => ({
   description: faker.commerce.productDescription(),
   link: faker.internet.url(),
   language: 'en',
-  imageUrl: faker.image.imageUrl(),
+  imageUrl: faker.image.url(),
   imageTitle: 'image',
 });
 
@@ -34,10 +34,10 @@ export const generateItem = (pubdate = new Date()): FeedItem => ({
   pubdate,
   link: faker.internet.url(),
   guid: faker.internet.url(),
-  imageUrl: faker.image.imageUrl(),
+  imageUrl: faker.image.url(),
   enclosures: [
     {
-      url: faker.image.imageUrl(),
+      url: faker.image.url(),
       type: 'image/jpeg',
       length: '400',
     },
@@ -62,7 +62,7 @@ export const generateFeed = ({
       generateItem(new Date(now - day)),
       generateItem(new Date(now)),
     ];
-  if (!feedUrl) feedUrl = faker.internet.url();
+  if (!feedUrl) feedUrl = faker.internet.url({ appendSlash: false });
   let text = `<?xml version="1.0" encoding="utf-8"?>
 <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
   <channel>

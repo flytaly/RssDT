@@ -9,7 +9,7 @@ import getTestClient from '#root/tests/test-utils/getClient.js';
 import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
 import { Theme } from '#root/types/enums.js';
 import test from 'ava';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 let user: User & { options: Options };
 let sdk: ReturnType<typeof getSdk>;
@@ -76,7 +76,7 @@ test('setOptions: not authenticated', async (t) => {
 });
 
 test('validation', async (t) => {
-  const r1 = await sdk.setOptions({ opts: { customSubject: faker.random.alpha({ count: 51 }) } });
+  const r1 = await sdk.setOptions({ opts: { customSubject: faker.string.alpha({ length: 51 }) } });
   t.is(
     r1.setOptions.errors?.[0].message,
     '"customSubject" length must be less than or equal to 50 characters long',

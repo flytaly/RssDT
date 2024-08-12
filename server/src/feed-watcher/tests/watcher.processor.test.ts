@@ -16,7 +16,7 @@ import { WatcherQueue } from '#root/feed-watcher/watcher.queue.js';
 import { PubSubTopics } from '#root/resolvers/resolver-types/pubSubTopics.js';
 import test from 'ava';
 import { Job } from 'bullmq';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import sinon from 'sinon';
 
@@ -24,7 +24,7 @@ function createPartialFeed({ throttled = 0 } = {}) {
   const ts = new Date(Date.now() - 60000);
   const feed: PartialFeed = {
     url: `${faker.internet.url()}/feed.rss`,
-    id: faker.datatype.number(),
+    id: faker.number.int(),
     throttled: throttled || 0,
     lastSuccessfulUpd: ts,
     lastUpdAttempt: ts,
@@ -58,7 +58,7 @@ function makeJob({ id, url, throttle }: { id: string | number; url: string; thro
 function mockUpdateResult(status: Status, newItemsNum: number, feed: PartialFeed) {
   mockWatcherUtils({
     updateFeedDataMock: sinon.fake(
-      async (url: string, skipRecent = false) => [status, newItemsNum, feed as Feed] as const,
+      async (_url: string, _skipRecent = false) => [status, newItemsNum, feed as Feed] as const,
     ),
   });
 }

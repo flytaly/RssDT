@@ -9,7 +9,7 @@ import { deleteFeedWithUrl } from '#root/tests/test-utils/dbQueries.js';
 import { generateItem, generateMeta } from '#root/tests/test-utils/generate-feed.js';
 import test from 'ava';
 import { eq } from 'drizzle-orm';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import type { Item as FeedParserItem, Meta as FeedParserMeta } from 'feedparser';
 import sinon from 'sinon';
 

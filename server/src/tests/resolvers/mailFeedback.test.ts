@@ -3,7 +3,7 @@ import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
 import getTestClient from '#root/tests/test-utils/getClient.js';
 import { getEmailByAddress } from '#root/tests/test-utils/test-emails.js';
 import test from 'ava';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 
 const sdk: ReturnType<typeof getSdk> = getSdk(getTestClient().client);
 test.before(() => startTestServer());

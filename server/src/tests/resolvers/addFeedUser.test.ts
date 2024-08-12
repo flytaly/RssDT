@@ -15,7 +15,7 @@ import { DigestSchedule } from '#root/types/enums.js';
 import argon2 from 'argon2';
 import test, { ExecutionContext } from 'ava';
 import { eq } from 'drizzle-orm';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import nock from 'nock';
 import * as uuid from 'uuid';
 
@@ -35,7 +35,7 @@ test.before(async () => {
   feed1.mockRequests();
   feed2.mockRequests();
   const email = faker.internet.email().toLowerCase();
-  const password = faker.internet.password(10);
+  const password = faker.internet.password({ length: 10 });
   const userInfo: UserInfoInput = { locale: 'de', timeZone: 'Europe/Berlin' };
   testData = { feed1, feed2, email, password, userInfo };
   const newUser: NewUser = { email, password: await argon2.hash(password) };
