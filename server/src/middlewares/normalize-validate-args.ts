@@ -1,5 +1,5 @@
 import Joi, { AnySchema } from 'joi';
-import { createMethodDecorator } from 'type-graphql';
+import { createMethodMiddlewareDecorator } from 'type-graphql';
 import { DateTime } from 'luxon';
 import { ArgumentError } from '../resolvers/resolver-types/errors.js';
 import { defaultLocale, defaultTimeZone } from '../constants.js';
@@ -98,7 +98,7 @@ export function InputMetadata(inputType: InputType): PropertyDecorator {
 type SchemaAndPath = [InputSchema: object, path: string];
 
 export function NormalizeAndValidateArgs(...schemasWithPaths: SchemaAndPath[]): MethodDecorator {
-  return createMethodDecorator(async ({ args }, next) => {
+  return createMethodMiddlewareDecorator(async ({ args }, next) => {
     for (const [InputSchema, path] of schemasWithPaths) {
       const argsObj = path ? args[path] : args;
       if (!argsObj) return next();

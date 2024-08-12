@@ -1,19 +1,23 @@
+// import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { db } from '#root/db/db.js';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { ApolloServer } from 'apollo-server-express';
-import { Express } from 'express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+import express from 'express';
 import { GraphQLScalarType } from 'graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import { Redis } from 'ioredis';
+import http from 'http';
 import { buildSchema } from 'type-graphql';
 import { WatcherQueue } from './feed-watcher/watcher.queue.js';
-import { createRedis } from './redis.js';
+import { createRedis, redis } from './redis.js';
 import { FeedResolver } from './resolvers/feed.js';
 import { MailResolver } from './resolvers/mail.js';
 import { UserResolver } from './resolvers/user.js';
 import { UserFeedResolver } from './resolvers/userFeed.js';
 import { MyContext, ReqWithSession } from './types/index.js';
 import { createItemCountLoader } from './utils/createItemCountLoader.js';
+import { initSession } from './session.js';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 
 /**
  * Fix "unable to serialize value as it's not an instance of 'date'" error.
@@ -25,7 +29,7 @@ export const DateTimeFix = new GraphQLScalarType({
   name: 'DateTimeFix',
   description:
     'The javascript `Date` as string. Type represents date and time as the ISO Date string.',
-  serialize(value: string | Date) {
+  serialize(value: unknown) {
     if (typeof value === 'string' && !isNaN(Date.parse(value))) {
       return value;
     }
@@ -36,7 +40,7 @@ export const DateTimeFix = new GraphQLScalarType({
   },
 });
 
-export const initApolloServer = async (app: Express, redis: Redis) => {
+export const initApolloServer = async () => {
   const pubsub = new RedisPubSub({
     publisher: createRedis(),
     subscriber: createRedis(),
@@ -45,34 +49,53 @@ export const initApolloServer = async (app: Express, redis: Redis) => {
   const schema = await buildSchema({
     resolvers: [UserResolver, UserFeedResolver, FeedResolver, MailResolver],
     validate: false,
+    // TODO: fix
+    // @ts-ignore
     pubSub: pubsub,
     scalarsMap: [{ type: Date, scalar: DateTimeFix }],
   });
 
-  const watcherQueue = new WatcherQueue();
+  const app = express();
+  app.set('trust proxy', 1);
+  app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+  const sessionMiddleware = initSession(app, redis);
 
-  const apolloServer = new ApolloServer({
+  // Our httpServer handles incoming requests to our Express app.
+  // Below, we tell Apollo Server to "drain" this httpServer,
+  // enabling our servers to shut down gracefully.
+  const httpServer = http.createServer(app);
+
+  const apolloServer = new ApolloServer<MyContext>({
     schema,
-    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-    context: ({ req, res }): MyContext => {
-      return {
-        req: req as ReqWithSession,
-        res,
-        redis,
-        itemCountLoader: createItemCountLoader(),
-        pubsub,
-        watcherQueue,
-        db,
-      };
-    },
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
+  // Ensure we wait for our server to start
   await apolloServer.start();
 
-  apolloServer.applyMiddleware({
-    app,
-    cors: { origin: process.env.FRONTEND_URL, credentials: true },
-  });
+  const watcherQueue = new WatcherQueue();
+  // Set up our Express middleware to handle CORS, body parsing,
+  // and our expressMiddleware function.
+  app.use(
+    '/',
+    cors<cors.CorsRequest>({ origin: process.env.FRONTEND_URL, credentials: true }),
+    express.json(),
+    // expressMiddleware accepts the same arguments:
+    // an Apollo Server instance and optional configuration options
+    expressMiddleware(apolloServer, {
+      context: async ({ req, res }): Promise<MyContext> => {
+        return {
+          req: req as ReqWithSession,
+          res,
+          redis,
+          itemCountLoader: createItemCountLoader(),
+          pubsub,
+          watcherQueue,
+          db,
+        };
+      },
+    }),
+  );
 
-  return { apolloServer, pubsub, schema };
+  return { apolloServer, pubsub, schema, sessionMiddleware, httpServer };
 };

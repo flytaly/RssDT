@@ -1,5 +1,3 @@
-import { Options, User, UserFeed } from '#entities';
-import { users, options, NewOptions } from '#root/db/schema.js';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import {
@@ -14,12 +12,16 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '../constants.js';
-import { logger } from '../logger.js';
-import { auth } from '../middlewares/auth.js';
-import { NormalizeAndValidateArgs } from '../middlewares/normalize-validate-args.js';
-import { rateLimit } from '../middlewares/rate-limit.js';
-import { MyContext, ReqWithSession, Role } from '../types/index.js';
+
+import { Options, User, UserFeed } from '#entities';
+import { NewOptions, options, users } from '#root/db/schema.js';
+
+import { COOKIE_NAME, EMAIL_CONFIRM_PREFIX, PASSWORD_RESET_PREFIX } from '#root/constants.js';
+import { logger } from '#root/logger.js';
+import { auth } from '#root/middlewares/auth.js';
+import { NormalizeAndValidateArgs } from '#root/middlewares/normalize-validate-args.js';
+import { rateLimit } from '#root/middlewares/rate-limit.js';
+import { MyContext, ReqWithSession, Role } from '#root/types/index.js';
 import { activateAllUserFeeds } from './queries/activateAllUserFeeds.js';
 import { createUser } from './queries/createUser.js';
 import { getUserFeeds } from './queries/getUserFeeds.js';

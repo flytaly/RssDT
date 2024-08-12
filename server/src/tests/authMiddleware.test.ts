@@ -4,6 +4,7 @@ import { startTestServer, stopTestServer } from '#root/tests/test-server.js';
 import getTestClient from '#root/tests/test-utils/getClient.js';
 import { createUserAndGetSdk } from '#root/tests/test-utils/login.js';
 import test from 'ava';
+import { GraphQLError } from 'graphql';
 
 test.before(() => startTestServer());
 test.after(() => stopTestServer());
@@ -12,7 +13,7 @@ test.serial('Authentication Error', async (t) => {
   const sdk = getSdk(getTestClient().client);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const expectAuthError = async (query: Promise<any>) => {
-    const err = await t.throwsAsync(query);
+    const err = (await t.throwsAsync(query)) as GraphQLError;
     t.regex(err?.message || '', /not authenticated/);
   };
   await expectAuthError(sdk.addFeedToCurrentUser({ input: { feedUrl: 'http://feed.com' } }));

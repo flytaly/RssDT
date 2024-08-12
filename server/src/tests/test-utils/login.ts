@@ -4,6 +4,7 @@ import { getSdk } from '#root/tests/graphql/generated.js';
 import argon2 from 'argon2';
 import { faker } from '@faker-js/faker';
 import getTestClient from './getClient.js';
+import { eq } from 'drizzle-orm';
 
 export const getSdkWithLoggedInUser = async (email: string, password: string) => {
   const { client, lastHeaders } = getTestClient();
@@ -19,6 +20,7 @@ export const getSdkWithLoggedInUser = async (email: string, password: string) =>
 export const createUserAndGetSdk = async (db: DB, email?: string, password?: string) => {
   password = password || faker.internet.password({ length: 8 });
   email = email || faker.internet.email().toLowerCase();
+  await db.delete(users).where(eq(users.email, email));
   const insertedUsers = await db
     .insert(users)
     .values({

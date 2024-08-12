@@ -2,40 +2,30 @@
 import 'reflect-metadata';
 import './dotenv.js';
 
-import cors from 'cors';
-import express from 'express';
-import http from 'http';
 import { initApolloServer } from './apollo.js';
 import { initLogFiles, logger } from './logger.js';
-import { redis } from './redis.js';
-import { initSession } from './session.js';
 import { importNormalizer } from './utils/normalizer.js';
 import { initWSServer } from './ws-server.js';
 
 const entry = async () => {
   /* await migrateDB(); */
-  const app = express();
-  app.set('trust proxy', 1);
-  app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
   await importNormalizer();
   initLogFiles({ prefix: 'api_', name: 'api' });
 
-  const sessionMiddleware = initSession(app, redis);
-  const { apolloServer, pubsub, schema } = await initApolloServer(app, redis);
+  const { apolloServer, pubsub, schema, httpServer, sessionMiddleware } = await initApolloServer();
 
-  const server = http.createServer(app);
-
-  server.listen(process.env.PORT, () => {
+  httpServer.listen(process.env.PORT, () => {
     logger.info(`server started on localhost:${process.env.PORT}`);
   });
 
-  const wsCleanup = initWSServer({ schema, sessionMiddleware, server });
+  const wsCleanup = initWSServer({ schema, sessionMiddleware, server: httpServer });
 
   const exit = async () => {
+    await apolloServer.stop();
     await pubsub.close();
     await wsCleanup.dispose();
-    await apolloServer.stop();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     process.exit();
   };
 

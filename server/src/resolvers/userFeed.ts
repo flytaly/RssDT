@@ -1,3 +1,17 @@
+import { and, eq, inArray } from 'drizzle-orm';
+import {
+  Arg,
+  Args,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+  Subscription,
+  UseMiddleware,
+} from 'type-graphql';
+
 import { UserFeed } from '#entities';
 import { maxItemsPerUser, SUBSCRIPTION_CONFIRM_PREFIX } from '#root/constants.js';
 import { Feed, userFeeds, users } from '#root/db/schema.js';
@@ -8,21 +22,6 @@ import { rateLimit } from '#root/middlewares/rate-limit.js';
 import { DigestSchedule } from '#root/types/enums.js';
 import { MyContext, Role } from '#root/types/index.js';
 import { createUpdatedFeedLoader } from '#root/utils/createUpdatedFeedLoader.js';
-import { and, eq, inArray } from 'drizzle-orm';
-import {
-  Arg,
-  Args,
-  Ctx,
-  FieldResolver,
-  Mutation,
-  PubSub,
-  PubSubEngine,
-  Query,
-  Resolver,
-  Root,
-  Subscription,
-  UseMiddleware,
-} from 'type-graphql';
 import { activateUserFeed } from './queries/activateUserFeed.js';
 import { getUserAndCountFeeds } from './queries/countUserFeeds.js';
 import { getUserFeeds } from './queries/getUserFeeds.js';
@@ -293,9 +292,9 @@ export class UserFeedResolver {
   async testFeedUpdate(
     @Arg('feedId') feedId: number,
     @Arg('count') count: number,
-    @PubSub() pubSub: PubSubEngine,
+    @Ctx() { pubsub }: MyContext,
   ) {
-    await pubSub.publish(PubSubTopics.newItems, {
+    await pubsub.publish(PubSubTopics.newItems, {
       [feedId]: { count },
     } as NewItemsPayload);
     return true;

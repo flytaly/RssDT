@@ -1,16 +1,21 @@
-import { AuthenticationError, ForbiddenError } from 'apollo-server-express';
+import { GraphQLError } from 'graphql';
 import { MiddlewareFn } from 'type-graphql';
-import { Role, MyContext } from '../types/index.js';
+
+import { MyContext, Role } from '../types/index.js';
 
 export const auth =
   (role = Role.USER): MiddlewareFn<MyContext> =>
   ({ context }, next) => {
     if (!context.req.session.userId) {
-      throw new AuthenticationError('not authenticated');
+      throw new GraphQLError('not authenticated', {
+        extensions: { code: 'UNAUTHENTICATED' },
+      });
     }
 
     if (role === Role.ADMIN && context.req.session.role !== Role.ADMIN) {
-      throw new ForbiddenError('forbidden');
+      throw new GraphQLError('forbidden', {
+        extensions: { code: 'FORBIDDEN' },
+      });
     }
 
     return next();

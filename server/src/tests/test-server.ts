@@ -1,12 +1,10 @@
 import '#root/dotenv.js';
 import 'reflect-metadata';
 
-import { initApolloServer } from '#root/apollo.js';
-import { redis } from '#root/redis.js';
-import { initSession } from '#root/session.js';
-import { importNormalizer } from '#root/utils/normalizer.js';
-import express from 'express';
 import MailDev from 'maildev';
+
+import { initApolloServer } from '#root/apollo.js';
+import { importNormalizer } from '#root/utils/normalizer.js';
 
 const startMail = (debug = false) => {
   const maildev = new MailDev({
@@ -26,17 +24,14 @@ let onClose: () => Promise<any>;
 export async function startTestServer({ debug }: { debug?: boolean } = {}) {
   const { PORT } = process.env;
 
-  const app = express();
-
   await importNormalizer();
-  /* const sessionMiddleware =  */ initSession(app, redis);
-  const { apolloServer, pubsub } = await initApolloServer(app, redis);
-  const server = app.listen(PORT, () => {
+  const { apolloServer, pubsub, httpServer } = await initApolloServer();
+  httpServer.listen(PORT, () => {
     if (debug) console.log(`🚀 start server on port: ${PORT} for testing`);
   });
 
-  server.keepAliveTimeout = 0;
-  server.timeout = 1000;
+  httpServer.keepAliveTimeout = 0;
+  httpServer.timeout = 1000;
 
   const maildev = startMail(debug);
 
