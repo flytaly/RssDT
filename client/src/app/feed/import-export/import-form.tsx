@@ -7,7 +7,6 @@ import { useDropArea } from '@/hooks/use-droparea';
 import { getGQLClient } from '@/lib/gqlClient.client';
 import { getFeedsFromOpml, getFeedsFromText } from '@/utils/import-utils';
 
-
 async function getFeeds(file?: File) {
   if (!file) return [];
   if (file.name.endsWith('.opml') || file.type === 'text/xml') {
@@ -52,7 +51,7 @@ export function ImportForm() {
   const [isImporting, setIsImporting] = useState(false);
   const [impResult, setImpResult] = useState<ImportResults>({ message: null });
   const [errorMessage, setErrorMessage] = useState('');
-  const { isLoading, mutateAsync } = useMutation({
+  const { isPending, mutateAsync } = useMutation({
     mutationFn: async (feedImport: FeedImport | FeedImport[]) => {
       return getGQLClient().importFeeds({ feedImport });
     },
@@ -65,18 +64,18 @@ export function ImportForm() {
     },
   });
 
-  const { data: status, isLoading: isLoadingStatus } = useQuery(
-    ['importStatus'],
-    async () => {
+  const { data: status, isPending: isLoadingStatus } = useQuery({
+    queryKey: ['importStatus'],
+    queryFn: async () => {
       console.log('check status', new Date().toLocaleTimeString());
       return getGQLClient().importStatus();
     },
-    { refetchInterval: isImporting ? 2000 : false },
-  );
+    refetchInterval: isImporting ? 2000 : false,
+  });
 
   const importState = status?.importStatus?.state;
 
-  if (!isLoading && !isLoadingStatus && importState === ImportState.Done) {
+  if (!isPending && !isLoadingStatus && importState === ImportState.Done) {
     if (isImporting) setIsImporting(false);
     if (!isImporting && !impResult.message) {
       setImpResult(getResultMessages(status!.importStatus!));

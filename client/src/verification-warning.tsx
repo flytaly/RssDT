@@ -5,14 +5,14 @@ import { useMutation } from '@tanstack/react-query';
 import { getGQLClient } from '@/lib/gqlClient.client';
 
 const EmailVerificationWarning = () => {
-  const { mutateAsync, isLoading, error, isError, isSuccess, data } = useMutation({
+  const { mutateAsync, isPending, error, isError, isSuccess, data } = useMutation({
     mutationFn: async () => {
       return getGQLClient().requestEmailVerification();
     },
   });
 
   let buttonText = 'Send activation link again';
-  if (isLoading) buttonText = 'Sending activation link...';
+  if (isPending) buttonText = 'Sending activation link...';
   if (isSuccess && data.requestEmailVerification) buttonText = 'Activation link has been sent';
 
   return (
@@ -28,7 +28,7 @@ const EmailVerificationWarning = () => {
             mutateAsync();
           }}
           className={`mt-4 ${status === 'success' ? 'cursor-default' : 'underline'}`}
-          disabled={status === 'success' || isLoading}
+          disabled={status === 'success' || isPending}
         >
           {buttonText}
         </button>

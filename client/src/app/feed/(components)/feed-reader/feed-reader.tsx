@@ -14,9 +14,14 @@ import Overview from './overview';
 const FeedReader = ({ id }: { id?: number }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
-  const { data, isLoading } = useQuery(['myFeeds'], async () => getGQLClient().myFeeds());
+  let AAAA = 'hi';
+  const { data, isPending } = useQuery({
+    queryKey: ['myFeeds'],
+    queryFn: () => getGQLClient().myFeeds(),
+    enabled: !id,
+  });
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
-  const userFeed = id && !isLoading ? myFeeds.find((uf) => uf.id === id) : null;
+  const userFeed = id && !isPending ? myFeeds.find((uf) => uf.id === id) : null;
 
   useItemsCountUpdatedSubscription();
 
@@ -26,7 +31,7 @@ const FeedReader = ({ id }: { id?: number }) => {
         <div className="flex-shrink-0">
           <FeedSidebar
             feeds={myFeeds}
-            loading={isLoading}
+            loading={isPending}
             onAddFeedClick={() => setAddFeedModalOpen(true)}
             feedId={id}
           />
@@ -53,7 +58,7 @@ const FeedReader = ({ id }: { id?: number }) => {
       >
         <FeedSidebar
           feeds={myFeeds}
-          loading={isLoading}
+          loading={isPending}
           onAddFeedClick={() => setAddFeedModalOpen(true)}
           onSidebarClose={() => setSidebarModalOpen(false)}
         />

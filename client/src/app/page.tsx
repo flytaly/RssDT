@@ -43,11 +43,13 @@ const nonLoggedInMessages: MessageItem[] = [
 ];
 
 export default function Page() {
-  const { data, isLoading } = useQuery(['me'], async () => getGQLClient().me(), {
+  const { data, isPending } = useQuery({
+    queryKey: ['me'],
+    queryFn: async () => getGQLClient().me(),
     retry: false,
   });
   const email = data?.me?.email;
-  const isLoggedOut = !isLoading && !email;
+  const isLoggedOut = !isPending && !email;
   const [messages, setMessages] = useState<MessageItem[]>([]);
 
   const items = infoMessages.concat(isLoggedOut ? nonLoggedInMessages : [], messages);

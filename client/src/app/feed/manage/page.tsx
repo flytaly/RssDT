@@ -9,8 +9,11 @@ import { getGQLClient } from '@/lib/gqlClient.client';
 import FeedTable from './feed-table';
 
 export default function Manage() {
-  const { data, isLoading } = useQuery(['myFeeds'], async () => {
-    return getGQLClient().myFeeds();
+  const { data, isPending } = useQuery({
+    queryKey: ['myFeeds'],
+    queryFn: async () => {
+      return getGQLClient().myFeeds();
+    },
   });
 
   const myFeeds = (data?.myFeeds || []) as UserFeed[];
@@ -18,7 +21,7 @@ export default function Manage() {
   return (
     <div className="flex flex-col w-full p-4">
       <h2 className="font-bold text-base">Edit feed digests</h2>
-      {isLoading ? ( //
+      {isPending ? ( //
         <Spinner className="flex justify-center" />
       ) : (
         <FeedTable feeds={myFeeds} />

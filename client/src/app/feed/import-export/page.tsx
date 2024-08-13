@@ -51,7 +51,12 @@ function ExportButtons({ myFeeds }: { myFeeds: UserFeed[] }) {
 }
 
 export default function ImportExport() {
-  const { data, isLoading } = useQuery(['myFeeds'], async () => getGQLClient().myFeeds());
+  const { data, isPending } = useQuery({
+    queryKey: ['myFeeds'],
+    queryFn: async () => {
+      return getGQLClient().myFeeds();
+    },
+  });
 
   // sort
   const myFeeds = React.useMemo(() => {
@@ -79,7 +84,7 @@ export default function ImportExport() {
             <b>Export as OPML</b> - export feeds as OPML file.
           </li>
         </ul>
-        {isLoading ? <Spinner /> : <ExportButtons myFeeds={myFeeds} />}
+        {isPending ? <Spinner /> : <ExportButtons myFeeds={myFeeds} />}
       </div>
     </div>
   );

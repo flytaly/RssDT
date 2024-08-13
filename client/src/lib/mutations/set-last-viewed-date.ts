@@ -10,7 +10,7 @@ export default function useSetLastViewedItemDate(
 ) {
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, isError, isSuccess } = useMutation({
+  const { isPending, mutate, isError, isSuccess } = useMutation({
     mutationFn: ({ itemId, userFeedId }: { itemId: number; userFeedId: number }) => {
       return getGQLClient().setLastViewedItemDate({
         itemId,
@@ -39,11 +39,11 @@ export default function useSetLastViewedItemDate(
   const { id, lastViewedItemDate } = userFeed;
 
   useEffect(() => {
-    if (!newestItem || isLoading || isError || isSuccess) return;
+    if (!newestItem || isPending || isError || isSuccess) return;
     const prevDate = new Date(lastViewedItemDate);
     const lastDate = new Date(newestItem.createdAt);
     if (prevDate < lastDate) {
       mutate({ itemId: newestItem.id, userFeedId: id });
     }
-  }, [id, isError, isLoading, isSuccess, lastViewedItemDate, mutate, newestItem]);
+  }, [id, isError, isPending, isSuccess, lastViewedItemDate, mutate, newestItem]);
 }

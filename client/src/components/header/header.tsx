@@ -11,7 +11,9 @@ import { getGQLClient } from '@/lib/gqlClient.client';
 import NavBar from './nav-bar';
 
 const Header = () => {
-  const { data, isLoading, isSuccess } = useQuery(['me'], async () => getGQLClient().me(), {
+  const { data, isPending, isSuccess } = useQuery({
+    queryKey: ['me'],
+    queryFn: async () => getGQLClient().me(),
     retry: false,
   });
   let isLoggedIn = isSuccess && !!data?.me;
@@ -24,7 +26,7 @@ const Header = () => {
         </div>
         <h1 className="inline-block font-bold ml-1 text-lg">RssDT</h1>
       </Link>
-      {isLoading ? <Spinner /> : <NavBar isLoggedIn={isLoggedIn} />}
+      {isPending ? <Spinner /> : <NavBar isLoggedIn={isLoggedIn} />}
     </header>
   );
 };

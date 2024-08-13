@@ -30,7 +30,10 @@ const shareIdsList = shareProviders.map(({ id }) => id);
 
 export default function SettingsPage() {
   const me = useRedirectUnauthorized();
-  const { data, isLoading } = useQuery(['myOptions'], async () => getGQLClient().myOptions());
+  const { data, isPending } = useQuery({
+    queryKey: ['myOptions'],
+    queryFn: async () => getGQLClient().myOptions(),
+  });
   const deleteMe = useMutation({
     mutationFn: async () => {
       return getGQLClient().deleteMe();
@@ -108,7 +111,7 @@ export default function SettingsPage() {
             <Item title="Timezone">{timeZone}</Item>
             <Item title="Locale">{locale}</Item>
           </section>
-          {isLoading ? (
+          {isPending ? (
             <div className="flex flex-col items-center gap-2">
               <span>Loading</span>
               <Spinner />

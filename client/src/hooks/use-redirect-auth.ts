@@ -11,7 +11,9 @@ import { getUserLocaleInfo } from '@/utils/user-locale';
  * Also check user's locale and timeZone and update information on the server.
  */
 export function useRedirectUnauthorized() {
-  const { data, isLoading } = useQuery(['me'], async () => getGQLClient().me(), {
+  const { data, isPending } = useQuery({
+    queryKey: ['me'],
+    queryFn: async () => getGQLClient().me(),
     retry: false,
   });
   const router = useRouter();
@@ -30,18 +32,18 @@ export function useRedirectUnauthorized() {
   });
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isPending) return;
     if (!data?.me) {
       router.push('/login');
       return;
     }
-    if (updateInfo.isSuccess || updateInfo.isError || updateInfo.isLoading) return;
+    if (updateInfo.isSuccess || updateInfo.isError || updateInfo.isPending) return;
     const info = getUserLocaleInfo();
     if (!info) return;
     const { locale, timeZone } = info;
     if (locale === data.me.locale && timeZone === data.me.timeZone) return;
     updateInfo.mutate({ locale, timeZone });
-  }, [data?.me, isLoading, router, updateInfo]);
+  }, [data?.me, isPending, router, updateInfo]);
 
-  return { me: data?.me, isLoading };
+  return { me: data?.me, isPending };
 }

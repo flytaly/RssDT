@@ -53,7 +53,10 @@ const formatDefault = (defaultValue?: boolean | null) => {
 };
 
 const FeedOptionsForm = ({ feed }: FeedOptionsFormProps) => {
-  const { data } = useQuery(['myOptions'], () => getGQLClient().myOptions());
+  const { data } = useQuery({
+    queryKey: ['myOptions'],
+    queryFn: () => getGQLClient().myOptions(),
+  });
   const { withContentTableDefault, attachmentsDefault, itemBodyDefault } = data?.myOptions || {};
 
   const setOptsMutation = useSetFeedOptionsMutation();

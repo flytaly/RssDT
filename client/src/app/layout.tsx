@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { Hydrate, dehydrate } from '@tanstack/react-query';
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
 import Link from 'next/link';
@@ -40,19 +40,24 @@ const Footer = () => {
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const gqlClient = getGQLClient();
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(['me'], async () => gqlClient.me({}, { cookie: getCookie() }));
+  await queryClient.prefetchQuery({
+    queryKey: ['me'],
+    queryFn: async () => {
+      return gqlClient.me({}, { cookie: getCookie() });
+    },
+  });
   return (
     <html lang="en">
       <body className={inter.className}>
         <Providers>
           <div className="flex justify-center max-w-screen min-h-screen bg-gradient-to-b from-gradFrom to-gradTo bg-fixed pt-2">
             <div className="flex flex-col flex-grow max-w-max">
-              <Hydrate state={dehydrate(queryClient)}>
+              <HydrationBoundary state={dehydrate(queryClient)}>
                 <Header />
                 {children}
                 <div className="mt-auto" />
                 <Footer />
-              </Hydrate>
+              </HydrationBoundary>
             </div>
           </div>
         </Providers>
