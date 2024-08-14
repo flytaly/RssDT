@@ -1,5 +1,3 @@
-'use server';
-
 import { GraphQLClient } from 'graphql-request';
 import { cookies, headers } from 'next/headers';
 import { cache } from 'react';
@@ -8,7 +6,7 @@ import { getSdk } from '@/gql/generated';
 
 const COOKIE_NAME = 'qid';
 
-export const getGQLClient = cache(() => {
+export const getGQLServerClient = cache(() => {
   return getSdk(
     new GraphQLClient('http://localhost:4000/graphql', {
       credentials: 'include',

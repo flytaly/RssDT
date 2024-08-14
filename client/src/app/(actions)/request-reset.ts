@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 const RegisterSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -19,7 +19,7 @@ export async function requestResetAction(data: FormData) {
     return { error: validation.error.format(), response: null };
   }
 
-  const { requestPasswordReset } = await getGQLClient().RequestPasswordReset({
+  const { requestPasswordReset } = await getGQLServerClient().RequestPasswordReset({
     email: email.toString(),
   });
 

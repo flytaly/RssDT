@@ -14,7 +14,6 @@ import Overview from './overview';
 const FeedReader = ({ id }: { id?: number }) => {
   const [sidebarModalOpen, setSidebarModalOpen] = useState(false);
   const [addFeedModalOpen, setAddFeedModalOpen] = useState(false);
-  let AAAA = 'hi';
   const { data, isPending } = useQuery({
     queryKey: ['myFeeds'],
     queryFn: () => getGQLClient().myFeeds(),

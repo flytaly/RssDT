@@ -1,7 +1,7 @@
 import { MessageItem } from '@/components/card/animated-message';
 import MessagesSide from '@/components/card/messages-side';
 import SmallCard from '@/components/card/small-card';
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 import Unsubscribing from './unsubscribing';
 
@@ -35,7 +35,7 @@ export default async function Unsubscribe({
     );
   }
 
-  const info = await getGQLClient().getFeedInfoByToken({ id, token });
+  const info = await getGQLServerClient().getFeedInfoByToken({ id, token });
   if (!info.getFeedInfoByToken?.feed) {
     return (
       <Wrapper>

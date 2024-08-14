@@ -2,7 +2,7 @@
 
 import { z, ZodFormattedError } from 'zod';
 
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -23,7 +23,7 @@ export async function loginAction(data: FormData) {
     return { error: validation.error.format(), response: null };
   }
 
-  const { login } = await getGQLClient().login({
+  const { login } = await getGQLServerClient().login({
     email: email.toString(),
     password: password.toString(),
   });

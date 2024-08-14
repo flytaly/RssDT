@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 import { DigestSchedule } from '@/types';
 
 const AddFeedSchema = z.object({
@@ -34,7 +34,7 @@ export async function addFeedAnonAction(data: FormData) {
     return { error, response: null };
   }
 
-  const { addFeedWithEmail } = await getGQLClient().addFeedWithEmail({
+  const { addFeedWithEmail } = await getGQLServerClient().addFeedWithEmail({
     input: { feedUrl, email },
     feedOpts: { schedule },
   });
@@ -49,7 +49,7 @@ export async function addFeedLoggedInAction(data: FormData) {
     return { error, response: null };
   }
 
-  const { addFeedToCurrentUser } = await getGQLClient().addFeedToCurrentUser({
+  const { addFeedToCurrentUser } = await getGQLServerClient().addFeedToCurrentUser({
     input: { feedUrl },
     feedOpts: { schedule },
   });

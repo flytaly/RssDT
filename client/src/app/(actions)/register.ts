@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 const RegisterSchema = z
   .object({
@@ -29,7 +29,7 @@ export async function registerAction(data: FormData) {
     return { error: validation.error.format(), response: null };
   }
 
-  const { register } = await getGQLClient().register({
+  const { register } = await getGQLServerClient().register({
     email: email.toString(),
     password: password.toString(),
   });

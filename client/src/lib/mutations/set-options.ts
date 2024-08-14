@@ -6,7 +6,6 @@ import { getGQLClient } from '@/lib/gqlClient.client';
 export function useSetOptionsMutation() {
   const queryKey = ['myOptions'];
   const queryClient = useQueryClient();
-  const gqlClient = getGQLClient();
   const mut = useMutation({
     onMutate: async (newOpts) => {
       // Cancel any outgoing refetches
@@ -26,7 +25,7 @@ export function useSetOptionsMutation() {
       return { previousOptions };
     },
 
-    mutationFn: async (opts: OptionsInput) => gqlClient.setOptions({ opts }),
+    mutationFn: async (opts: OptionsInput) => getGQLClient().setOptions({ opts }),
 
     onError: (_, __, context) => {
       queryClient.setQueryData(queryKey, context?.previousOptions);

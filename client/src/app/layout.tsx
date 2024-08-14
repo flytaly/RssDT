@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
 import Link from 'next/link';
@@ -7,8 +7,7 @@ import React from 'react';
 
 import Header from '@/components/header/header';
 import { metadata } from '@/components/meta';
-import { getQueryClient } from '@/lib/getQueryClient';
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 import Providers from './providers';
 
@@ -38,8 +37,8 @@ const Footer = () => {
 };
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const gqlClient = getGQLClient();
-  const queryClient = getQueryClient();
+  const gqlClient = await getGQLServerClient();
+  const queryClient = new QueryClient();
   await queryClient.prefetchQuery({
     queryKey: ['me'],
     queryFn: async () => {

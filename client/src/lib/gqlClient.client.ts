@@ -9,6 +9,10 @@ type WithSDK = {
 };
 
 export const getGQLClient = () => {
+  if (typeof window === 'undefined') {
+    console.warn('This function should not be called on server side');
+  }
+
   if (typeof window !== 'undefined' && (window as unknown as WithSDK).gqlClient) {
     return (window as unknown as WithSDK).gqlClient;
   }

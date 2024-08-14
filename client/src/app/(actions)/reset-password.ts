@@ -2,7 +2,7 @@
 
 import { ZodFormattedError, z } from 'zod';
 
-import { getGQLClient } from '@/lib/gqlClient.server';
+import { getGQLServerClient } from '@/lib/gqlClient.server';
 
 const ResetPasswordSchema = z
   .object({
@@ -28,7 +28,7 @@ export async function resetPasswordAction(data: FormData) {
     return { error: validation.error.format(), response: null };
   }
 
-  const { resetPassword } = await getGQLClient().resetPassword({
+  const { resetPassword } = await getGQLServerClient().resetPassword({
     input: { password: password.toString(), token: token.toString(), userId: userId.toString() },
   });
 
