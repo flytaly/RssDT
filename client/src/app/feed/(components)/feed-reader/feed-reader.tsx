@@ -25,7 +25,7 @@ const FeedReader = ({ id }: { id?: number }) => {
   useItemsCountUpdatedSubscription();
 
   return (
-    <section className="block md:reader-layout flex-grow bg-gray-200 limit-width">
+    <section className="block md:grid grid-cols-[minmax(11rem,0.8fr)_minmax(25rem,3.2fr)] grid-rows-[min-content_1fr] flex-grow bg-gray-200 limit-width">
       <aside className="hidden md:flex flex-col row-span-2 bg-sidebar">
         <div className="flex-shrink-0">
           <FeedSidebar
@@ -45,9 +45,11 @@ const FeedReader = ({ id }: { id?: number }) => {
           <div className="w-px h-full bg-gray-100 bg-opacity-50 group-hover:bg-opacity-100" />
         </button>
       </aside>
-      {userFeed ? (
-        <FeedContent userFeed={userFeed as UserFeed} setSidebarModalOpen={setSidebarModalOpen} />
-      ) : null}
+      <div className="max-w-full">
+        {userFeed ? (
+          <FeedContent userFeed={userFeed as UserFeed} setSidebarModalOpen={setSidebarModalOpen} />
+        ) : null}
+      </div>
       {!id && <Overview setSidebarModalOpen={setSidebarModalOpen} feeds={myFeeds as UserFeed[]} />}
       <ModalSidebar
         isOpen={sidebarModalOpen}
