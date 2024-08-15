@@ -1,11 +1,17 @@
 module.exports = {
-  plugins: [, 'import'],
+  plugins: ['import', '@typescript-eslint'],
   extends: [
-    'eslint-config-next',
-    'prettier',
+    'next/core-web-vitals',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
-    'plugin:import/typescript',
   ],
+  settings: {
+    next: {
+      rootDir: 'src',
+    },
+  },
+  parser: '@typescript-eslint/parser',
   ignorePatterns: ['**/gql/generated.ts'],
   rules: {
     '@next/next/no-img-element': 'off',

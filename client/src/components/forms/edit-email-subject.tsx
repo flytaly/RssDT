@@ -9,7 +9,7 @@ import InputUnderline from './input-underline';
 interface EditEmailSubjectProps {
   value?: string | null;
   loading?: boolean;
-  onSave?: (value: string) => {};
+  onSave?: (value: string) => unknown;
 }
 
 const EditEmailSubject = ({ value, loading, onSave }: EditEmailSubjectProps) => {

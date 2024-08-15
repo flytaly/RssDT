@@ -31,7 +31,7 @@ const customStyles: Modal.Styles = {
 interface ViewItemModalProps {
   isOpen: boolean;
   children: React.ReactNode;
-  onRequestClose: () => any;
+  onRequestClose: () => unknown;
 }
 
 const ViewItemModal = ({ isOpen, onRequestClose, children }: ViewItemModalProps) => {

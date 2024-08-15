@@ -25,7 +25,7 @@ export const useEmergeTransition = (items: MessageItem[]) => {
 
 interface AnimatedMessageProps {
   children: React.ReactNode;
-  style?: any;
+  style?: unknown;
   text?: string;
   withline?: boolean;
   type?: MessageType;

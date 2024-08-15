@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const usePopup = (isOpen: Boolean, onClose: () => void) => {
+const usePopup = (isOpen: boolean, onClose: () => void) => {
   const anchorRef = useRef<HTMLElement>(null);
 
   useEffect(() => {

@@ -25,7 +25,7 @@ export type SortState = {
   dir: SortDirection;
 };
 
-const compareFn = (a: any, b: any, dirCoeff: 1 | -1 = 1) => {
+const compareFn = (a: string | number, b: string | number, dirCoeff: 1 | -1 = 1) => {
   if (a < b) return -1 * dirCoeff;
   if (a > b) return 1 * dirCoeff;
   return 0;

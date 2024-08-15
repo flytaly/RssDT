@@ -51,7 +51,7 @@ export default function SettingsPage() {
   const { email, timeZone, locale } = me.me;
   const opts = data?.myOptions;
 
-  const save = async (name: keyof OptionsInput, value: any) => {
+  const save = async (name: keyof OptionsInput, value: unknown) => {
     setItemSaving({ [name]: true });
     const { setOptions } = await saveOptionsMutation.mutateAsync({
       [name]: value,

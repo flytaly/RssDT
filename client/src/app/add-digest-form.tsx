@@ -52,7 +52,7 @@ export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps
 
   async function processForm(data: FormData) {
     const isLoggedIn = !!email;
-    let action = isLoggedIn ? addFeedLoggedInAction : addFeedAnonAction;
+    const action = isLoggedIn ? addFeedLoggedInAction : addFeedAnonAction;
     const result = await action(data);
     if (!result) return;
 
@@ -80,7 +80,7 @@ export function AddDigestFeedForm({ email, setMessages }: AddDigestFeedFormProps
   return (
     <form
       className="flex flex-col w-full"
-      action={!!email ? addFeedLoggedInAction : addFeedAnonAction}
+      action={email ? addFeedLoggedInAction : addFeedAnonAction}
       onSubmit={submitHandler}
       ref={formRef}
     >

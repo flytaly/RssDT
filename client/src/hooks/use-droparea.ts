@@ -5,7 +5,7 @@ export function useDropArea({
   onFilesDrop,
   disable = false,
 }: {
-  onFilesDrop: (fl?: FileList) => any;
+  onFilesDrop: (fl?: FileList) => unknown;
   disable?: boolean;
 }) {
   const dropAreaRef = useRef<HTMLElement>(null);
