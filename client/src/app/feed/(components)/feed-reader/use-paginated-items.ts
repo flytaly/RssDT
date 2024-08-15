@@ -1,4 +1,4 @@
-import { InfiniteData, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, QueryClient, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
 
 import {
@@ -8,6 +8,17 @@ import {
   UserFeedFieldsFragment,
 } from '@/gql/generated';
 import { getGQLClient } from '@/lib/gqlClient.client';
+
+function resetNewItemsCount(queryClient: QueryClient, userFeed: UserFeedWithFeed) {
+  queryClient.setQueryData<MyFeedsQuery>(['myFeeds'], (oldData) => {
+    if (!oldData?.myFeeds) return oldData;
+    const updated = oldData.myFeeds.map((uf) => {
+      if (uf.id !== userFeed.id) return uf;
+      return { ...uf, newItemsCount: 0 };
+    });
+    return { ...oldData, myFeeds: updated };
+  });
+}
 
 export type UserFeedWithFeed = { feed: FeedFieldsFragment } & UserFeedFieldsFragment;
 
@@ -20,16 +31,21 @@ export function usePaginatedItems(userFeed: UserFeedWithFeed, filter?: string | 
   const queryClient = useQueryClient();
   const queryKey = ['myFeedItems', userFeed.feed.id, filter];
 
-  const { data, isLoading, error, isError, hasNextPage, fetchNextPage, isFetching, isSuccess } =
+  const { isLoading, data, error, isError, hasNextPage, fetchNextPage, isFetching } =
     useInfiniteQuery({
       queryKey,
       queryFn: async ({ pageParam }) => {
-        return getGQLClient().myFeedItems({
+        const result = await getGQLClient().myFeedItems({
           feedId: userFeed.feed.id,
           skip: pageParam,
           take: TAKE,
           filter,
         });
+        if (pageParam === 0) {
+          // reset newItemsCount if we are on the first page
+          resetNewItemsCount(queryClient, userFeed);
+        }
+        return result;
       },
       initialPageParam: 0,
       getNextPageParam: (_, pages) => {
@@ -37,20 +53,6 @@ export function usePaginatedItems(userFeed: UserFeedWithFeed, filter?: string | 
         return pages.length * TAKE;
       },
     });
-
-  useEffect(() => {
-    if (!isSuccess) return;
-    if (data.pageParams.length > 1) return;
-    // reset newItemsCount if it is the first page
-    queryClient.setQueryData<MyFeedsQuery>(['myFeeds'], (oldData) => {
-      if (!oldData?.myFeeds) return oldData;
-      const updated = oldData.myFeeds.map((uf) => {
-        if (uf.id !== userFeed.id) return uf;
-        return { ...uf, newItemsCount: 0 };
-      });
-      return { ...oldData, myFeeds: updated };
-    });
-  }, [isSuccess, data, userFeed.id, queryClient]);
 
   const items = React.useMemo(() => {
     const itm = data?.pages.flatMap((page) => page.myFeedItems.items) || [];
@@ -68,7 +70,7 @@ export function usePaginatedItems(userFeed: UserFeedWithFeed, filter?: string | 
         pageParams: data.pageParams.slice(0, 1),
       };
     });
-    queryClient.invalidateQueries({ queryKey: [queryKey] });
+    queryClient.invalidateQueries({ queryKey, refetchType: 'active' });
   };
 
   return {

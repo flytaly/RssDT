@@ -17,7 +17,6 @@ const FeedReader = ({ id }: { id?: number }) => {
   const { data, isPending } = useQuery({
     queryKey: ['myFeeds'],
     queryFn: () => getGQLClient().myFeeds(),
-    enabled: !id,
   });
   const myFeeds = data?.myFeeds || ([] as UserFeed[]);
   const userFeed = id && !isPending ? myFeeds.find((uf) => uf.id === id) : null;
