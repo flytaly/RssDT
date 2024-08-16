@@ -1,10 +1,10 @@
 {
-  "version": "5",
-  "dialect": "pg",
-  "id": "0b7cc702-fa9e-4f77-a1cf-6078a32f278f",
+  "id": "dd8bfba5-1c93-482a-a8eb-497e85a61d5c",
   "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "enclosure": {
+    "public.enclosure": {
       "name": "enclosure",
       "schema": "",
       "columns": {
@@ -58,7 +58,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "feed": {
+    "public.feed": {
       "name": "feed",
       "schema": "",
       "columns": {
@@ -193,7 +193,7 @@
         }
       }
     },
-    "item": {
+    "public.item": {
       "name": "item",
       "schema": "",
       "columns": {
@@ -279,7 +279,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "options": {
+    "public.options": {
       "name": "options",
       "schema": "",
       "columns": {
@@ -320,6 +320,7 @@
         "themeDefault": {
           "name": "themeDefault",
           "type": "theme",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'default'"
@@ -363,7 +364,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user_feed": {
+    "public.user_feed": {
       "name": "user_feed",
       "schema": "",
       "columns": {
@@ -389,6 +390,7 @@
         "schedule": {
           "name": "schedule",
           "type": "digestSchedule",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'disable'"
@@ -396,6 +398,7 @@
         "withContentTable": {
           "name": "withContentTable",
           "type": "ternaryState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'default'"
@@ -403,6 +406,7 @@
         "itemBody": {
           "name": "itemBody",
           "type": "ternaryState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'default'"
@@ -410,6 +414,7 @@
         "attachments": {
           "name": "attachments",
           "type": "ternaryState",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'default'"
@@ -417,6 +422,7 @@
         "theme": {
           "name": "theme",
           "type": "theme",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'default'"
@@ -510,7 +516,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
+    "public.user": {
       "name": "user",
       "schema": "",
       "columns": {
@@ -594,7 +600,7 @@
         }
       }
     },
-    "users_to_be_deleted": {
+    "public.users_to_be_deleted": {
       "name": "users_to_be_deleted",
       "schema": "",
       "columns": {
@@ -633,39 +639,43 @@
     }
   },
   "enums": {
-    "digestSchedule": {
+    "public.digestSchedule": {
       "name": "digestSchedule",
-      "values": {
-        "realtime": "realtime",
-        "everyhour": "everyhour",
-        "every2hours": "every2hours",
-        "every3hours": "every3hours",
-        "every6hours": "every6hours",
-        "every12hours": "every12hours",
-        "daily": "daily",
-        "disable": "disable"
-      }
+      "schema": "public",
+      "values": [
+        "realtime",
+        "everyhour",
+        "every2hours",
+        "every3hours",
+        "every6hours",
+        "every12hours",
+        "daily",
+        "disable"
+      ]
     },
-    "ternaryState": {
+    "public.ternaryState": {
       "name": "ternaryState",
-      "values": {
-        "enable": "enable",
-        "disable": "disable",
-        "default": "default"
-      }
+      "schema": "public",
+      "values": [
+        "enable",
+        "disable",
+        "default"
+      ]
     },
-    "theme": {
+    "public.theme": {
       "name": "theme",
-      "values": {
-        "default": "default",
-        "text": "text"
-      }
+      "schema": "public",
+      "values": [
+        "default",
+        "text"
+      ]
     }
   },
   "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   }
 }

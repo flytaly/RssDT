@@ -1,17 +1,17 @@
 DO $$ BEGIN
- CREATE TYPE "digestSchedule" AS ENUM('realtime', 'everyhour', 'every2hours', 'every3hours', 'every6hours', 'every12hours', 'daily', 'disable');
+ CREATE TYPE "public"."digestSchedule" AS ENUM('realtime', 'everyhour', 'every2hours', 'every3hours', 'every6hours', 'every12hours', 'daily', 'disable');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "ternaryState" AS ENUM('enable', 'disable', 'default');
+ CREATE TYPE "public"."ternaryState" AS ENUM('enable', 'disable', 'default');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "theme" AS ENUM('default', 'text');
+ CREATE TYPE "public"."theme" AS ENUM('default', 'text');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -111,37 +111,37 @@ CREATE TABLE IF NOT EXISTS "users_to_be_deleted" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "enclosure" ADD CONSTRAINT "enclosure_itemId_item_id_fk" FOREIGN KEY ("itemId") REFERENCES "item"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "enclosure" ADD CONSTRAINT "enclosure_itemId_item_id_fk" FOREIGN KEY ("itemId") REFERENCES "public"."item"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "item" ADD CONSTRAINT "item_feedId_feed_id_fk" FOREIGN KEY ("feedId") REFERENCES "feed"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "item" ADD CONSTRAINT "item_feedId_feed_id_fk" FOREIGN KEY ("feedId") REFERENCES "public"."feed"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "options" ADD CONSTRAINT "options_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "options" ADD CONSTRAINT "options_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_feed" ADD CONSTRAINT "user_feed_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "user_feed" ADD CONSTRAINT "user_feed_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "user_feed" ADD CONSTRAINT "user_feed_feedId_feed_id_fk" FOREIGN KEY ("feedId") REFERENCES "feed"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "user_feed" ADD CONSTRAINT "user_feed_feedId_feed_id_fk" FOREIGN KEY ("feedId") REFERENCES "public"."feed"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "users_to_be_deleted" ADD CONSTRAINT "users_to_be_deleted_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "users_to_be_deleted" ADD CONSTRAINT "users_to_be_deleted_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

@@ -6,6 +6,6 @@ import { getPGCredentials } from './src/pg-connection.js';
 export default {
   schema: './src/db/schema.ts',
   out: './drizzle',
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: getPGCredentials(),
 } as Config;
