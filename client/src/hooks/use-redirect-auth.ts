@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { redirect, RedirectType, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { MeQuery, UserInfoInput } from '@/gql/generated';
@@ -11,7 +11,7 @@ import { getUserLocaleInfo } from '@/utils/user-locale';
  * Also check user's locale and timeZone and update information on the server.
  */
 export function useRedirectUnauthorized() {
-  const { data, isPending } = useQuery({
+  const { data, isPending, isSuccess } = useQuery({
     queryKey: ['me'],
     queryFn: async () => getGQLClient().me(),
     retry: false,
@@ -30,6 +30,10 @@ export function useRedirectUnauthorized() {
       });
     },
   });
+
+  if (isSuccess && !data?.me) {
+    redirect('/login', RedirectType.replace);
+  }
 
   useEffect(() => {
     if (isPending) return;
