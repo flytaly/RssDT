@@ -7,7 +7,6 @@ import { UserFeed } from '@/gql/generated';
 
 import ModalSidebar from './modal-sidebar';
 
-
 interface EditFeedModalProps {
   isOpen: boolean;
   closeModal: () => void;
