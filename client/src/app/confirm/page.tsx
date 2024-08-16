@@ -40,7 +40,7 @@ export default function Confirm({
 }: {
   searchParams: { id?: string; token?: string };
 }) {
-  const { mutateAsync, isLoading, isError, error, data } = useMutation({
+  const { mutateAsync, isPending, isError, error, data } = useMutation({
     mutationFn: async () => getGQLClient().activateFeed({ token: token!, userFeedId: id! }),
   });
 
@@ -62,7 +62,7 @@ export default function Confirm({
     <SmallCard>
       <div className="flex flex-col items-center w-full text-center p-4">
         <h2 className="text-xl font-bold mb-4 text-center">Confirm feed</h2>
-        {isLoading ? <b>Confirming</b> : null}
+        {isPending ? <b>Confirming</b> : null}
         <MessagesSide items={messages} />
       </div>
     </SmallCard>

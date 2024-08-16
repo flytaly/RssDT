@@ -13,7 +13,7 @@ export default function Unsubscribing({
   token: string;
   userFeedId: string;
 }) {
-  const { isSuccess, isError, mutate, isLoading, data, error } = useMutation({
+  const { isSuccess, isError, mutate, isPending, data, error } = useMutation({
     mutationFn: async () => getGQLClient().unsubscribeByToken({ token, id }),
   });
 
@@ -37,9 +37,9 @@ export default function Unsubscribing({
         onClick={() => {
           mutate();
         }}
-        disabled={isLoading || isSuccess}
+        disabled={isPending || isSuccess}
       >
-        {isLoading ? 'Unsubscribing' : ' Unsubscribe'}
+        {isPending ? 'Unsubscribing' : ' Unsubscribe'}
       </button>
       <MessagesSide items={messages} />
     </>

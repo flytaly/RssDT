@@ -237,7 +237,7 @@ export default function FeedTable({ feeds }: FeedTableProps) {
           }
           closeModal();
         }}
-        disableButtons={deleteMutation.isLoading}
+        disableButtons={deleteMutation.isPending}
         error={deleteError}
         message={<ConfirmDeleteMsg feeds={feedsToDelete} />}
       />

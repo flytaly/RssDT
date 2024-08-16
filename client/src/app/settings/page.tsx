@@ -94,12 +94,14 @@ export default function SettingsPage() {
   const deleteAndLogout = async () => {
     const res = await deleteMe.mutateAsync();
     if (res.deleteUser.message == 'OK') {
-      queryClient.invalidateQueries(['me']);
+      queryClient.invalidateQueries({
+        queryKey: ['me'],
+      });
     }
   };
 
   return (
-    <BigCard verificationWarning={!me.isLoading && !me.me?.emailVerified}>
+    <BigCard verificationWarning={!me.isPending && !me.me?.emailVerified}>
       <div className="w-full pb-20">
         <SettingsNavBar />
         <div className="mx-auto w-160 max-w-full">
@@ -284,7 +286,7 @@ export default function SettingsPage() {
                     </button>
                   </div>
                   <div className="mt-4 space-y-2">
-                    {deleteMe.isLoading ? <Spinner /> : null}
+                    {deleteMe.isPending ? <Spinner /> : null}
                     <div>
                       {deleteMe.data?.deleteUser.message || (deleteMe.error as Error)?.message}
                     </div>

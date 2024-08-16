@@ -47,7 +47,7 @@ export default function ConfirmRegister({
 }: {
   searchParams: { id?: string; token?: string };
 }) {
-  const { mutate, isLoading, isError, error, data } = useMutation({
+  const { mutate, isPending, isError, error, data } = useMutation({
     mutationFn: async () => getGQLClient().verifyEmail({ token: token!, userId: id! }),
   });
 
@@ -83,7 +83,7 @@ export default function ConfirmRegister({
     <SmallCard>
       <div className="flex flex-col items-center w-full text-center p-4">
         <h2 className="text-xl font-bold mb-4 text-center">Confirm email</h2>
-        {isLoading ? <b>Confirming</b> : null}
+        {isPending ? <b>Confirming</b> : null}
         <MessagesSide items={messages} />
       </div>
     </SmallCard>

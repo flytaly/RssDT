@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { getGQLClient } from '@/lib/gqlClient.client';
 
 const EmailVerificationWarning = () => {
-  const { mutateAsync, isPending, error, isError, isSuccess, data } = useMutation({
+  const { mutateAsync, isPending, error, isError, isSuccess, data, status } = useMutation({
     mutationFn: async () => {
       return getGQLClient().requestEmailVerification();
     },

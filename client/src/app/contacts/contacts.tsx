@@ -17,9 +17,9 @@ const validationSchema = object().shape({
 });
 
 const Contacts = () => {
-  const { mutateAsync: sendFeedback, data } = useMutation((input: FeedbackInput) =>
-    getGQLClient().sendFeedback({ input }),
-  );
+  const { mutateAsync: sendFeedback, data } = useMutation({
+    mutationFn: async (input: FeedbackInput) => getGQLClient().sendFeedback({ input }),
+  });
 
   const isSuccess = data?.feedback?.success;
   useEffect(() => {

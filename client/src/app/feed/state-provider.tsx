@@ -15,7 +15,7 @@ export default function AppStateProvider({
   children: React.ReactNode;
 }) {
   const me = useRedirectUnauthorized();
-  const showWarning = !me.isLoading && !me.me?.emailVerified;
+  const showWarning = !me.isPending && !me.me?.emailVerified;
 
   const [state, setState] = useState<AppState>(initialState);
   const appState = { state, setState };
