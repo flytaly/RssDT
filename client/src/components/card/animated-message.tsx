@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { useTransition, animated } from 'react-spring';
 
 export type MessageType = 'error' | 'success' | 'default';
@@ -25,7 +25,7 @@ export const useEmergeTransition = (items: MessageItem[]) => {
 
 interface AnimatedMessageProps {
   children: React.ReactNode;
-  style?: unknown;
+  style?: CSSProperties;
   text?: string;
   withline?: boolean;
   type?: MessageType;

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 import AlertCircleIcon from '@/assets/alert-circle.svg';
 import CheckCircleIcon from '@/assets/check-circle.svg';
@@ -22,7 +22,7 @@ const MessageBlock = ({ items }: MessageBlockProps) => {
     return (
       <AnimatedMessage
         key={item.key}
-        style={style}
+        style={style as unknown as CSSProperties}
         text={item.text}
         type={item.type}
         withline={item.type !== 'error' && item.type !== 'success'}
