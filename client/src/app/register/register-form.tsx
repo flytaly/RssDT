@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -15,6 +16,7 @@ interface Props {
 export default function RegisterForm({ setMessages }: Props) {
   const [validationError, setValidationError] = useState<RegisterValidationError>(null);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   async function processForm(data: FormData) {
     const result = await registerAction(data);
@@ -29,6 +31,7 @@ export default function RegisterForm({ setMessages }: Props) {
       setMessages?.([{ type: 'error', key: 'error', text: errors?.[0].message }]);
       return;
     }
+    queryClient.invalidateQueries({ queryKey: ['me'] });
     router.push('/manage');
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -51,6 +51,8 @@ export default function ConfirmRegister({
     mutationFn: async () => getGQLClient().verifyEmail({ token: token!, userId: id! }),
   });
 
+  const queryClient = useQueryClient();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -63,11 +65,12 @@ export default function ConfirmRegister({
     let tmId: number;
     if (data?.verifyEmail.user) {
       tmId = window.setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['me'] });
         router.push('/manage');
       }, 1500);
     }
     return () => clearTimeout(tmId);
-  }, [data?.verifyEmail.user, router]);
+  }, [data?.verifyEmail.user, router, queryClient]);
 
   const messages: MessageItem[] = [];
   if (!id || !token) messages.push(notEnoughInfoMsg);
