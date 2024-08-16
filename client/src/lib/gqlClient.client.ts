@@ -2,6 +2,7 @@
 
 import { GraphQLClient } from 'graphql-request';
 
+import { API_URL } from '@/constants';
 import { getSdk } from '@/gql/generated';
 
 type WithSDK = {
@@ -18,7 +19,7 @@ export const getGQLClient = () => {
   }
 
   const client = getSdk(
-    new GraphQLClient('http://localhost:4000/graphql', {
+    new GraphQLClient(API_URL, {
       credentials: 'include',
     }),
   );

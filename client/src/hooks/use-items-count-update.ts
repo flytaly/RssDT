@@ -3,9 +3,8 @@ import { gql } from 'graphql-request';
 import { createClient } from 'graphql-ws';
 import { useEffect } from 'react';
 
-import { MyFeedsQuery, ItemsCountUpdatedSubscription } from '@/gql/generated';
-
-const WS_URL = process.env.NEXT_PUBLIC_WS_API_URL!;
+import { WS_API_URL } from '@/constants';
+import { ItemsCountUpdatedSubscription, MyFeedsQuery } from '@/gql/generated';
 
 const query = gql`
   subscription itemsCountUpdated {
@@ -20,7 +19,7 @@ export default function useItemsCountUpdatedSubscription() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const client = createClient({ url: WS_URL });
+    const client = createClient({ url: WS_API_URL });
 
     (async () => {
       const subscription = client.iterate<ItemsCountUpdatedSubscription>({ query });
