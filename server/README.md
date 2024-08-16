@@ -60,3 +60,8 @@ npm run watch # compile TypeScript into /dist and watch for changes
 npm run dev # start server and mail worker in development mode
 npm run feed-watcher:dev # start feed-watcher worker
 ```
+
+#### Local Mail server
+
+To test sending emails, you can use a local email server, such as [MailHog](https://github.com/mailhog/MailHog).
+It also included in development Docker Compose file, with a default address for the web interface at `http://localhost:8025`.
