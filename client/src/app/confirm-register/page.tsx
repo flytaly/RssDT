@@ -47,7 +47,7 @@ export default function ConfirmRegister({
 }: {
   searchParams: { id?: string; token?: string };
 }) {
-  const { mutate, isPending, isError, error, data } = useMutation({
+  const { mutate, isPending, isError, error, data, status } = useMutation({
     mutationFn: async () => getGQLClient().verifyEmail({ token: token!, userId: id! }),
   });
 
@@ -56,10 +56,10 @@ export default function ConfirmRegister({
   const router = useRouter();
 
   useEffect(() => {
-    if (token && id) {
+    if (token && id && status === 'idle') {
       mutate();
     }
-  }, [token, id, mutate]);
+  }, [token, id, mutate, status]);
 
   useEffect(() => {
     let tmId: number;
@@ -67,7 +67,7 @@ export default function ConfirmRegister({
       tmId = window.setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ['me'] });
         router.push('/manage');
-      }, 1500);
+      }, 1200);
     }
     return () => clearTimeout(tmId);
   }, [data?.verifyEmail.user, router, queryClient]);
@@ -78,6 +78,7 @@ export default function ConfirmRegister({
   if (data?.verifyEmail) {
     messages.push(...getMessages(data));
   }
+
   if (isError) {
     messages.push({ type: 'error', text: (error as Error).message, key: 'graphqlError' });
   }
